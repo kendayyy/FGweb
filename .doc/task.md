@@ -6,7 +6,7 @@
 >
 > **Architecture:** npm workspace, frontend SPA riêng, backend REST/realtime riêng, PostgreSQL là nguồn dữ liệu nghiệp vụ, Redis phục vụ session coordination/queue/presence. LiveKit SFU xử lý media; âm thanh/video không đi qua Socket.IO. Worker backend riêng xử lý notifications/reminders.
 >
-> **Tech Stack đã chốt ở T00:** Node24, TypeScript, React+Vite, Tailwind, TanStack Query, React Router, NestJS, Better Auth (Google/Discord), Drizzle+PostgreSQL, Redis/BullMQ, Socket.IO, self-hosted LiveKit, Nodemailer, Web Push. Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn; người dùng chốt trần chi phí trước khi chạy paid tests/chi tiêu, dự toán tại T41.
+> **Tech Stack đã chốt ở T00:** Node24, TypeScript, React+Vite, Tailwind, TanStack Query, React Router, NestJS, Better Auth (Discord), Drizzle+PostgreSQL, Redis/BullMQ, Socket.IO, self-hosted LiveKit, Nodemailer, Web Push. Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn; người dùng chốt trần chi phí trước khi chạy paid tests/chi tiêu, dự toán tại T41.
 >
 > **Spec:** [01-product-spec.md](./01-product-spec.md). Spec đã duyệt và các quyết định bổ sung ghi trong đó là nguồn chuẩn. Task không được tự ghi đè spec.
 >
@@ -91,7 +91,7 @@ Tất cả đường dẫn task dưới đây tương đối với `E:/FGweb`; m
 | database/contracts | drizzle-orm, pg, zod |
 | development/testing | typescript, vite, @vitejs/plugin-react, vite-plugin-pwa, workbox-window, drizzle-kit, tsx, ts-node, jest, ts-jest, supertest, vitest, @testing-library/react, @testing-library/user-event, @testing-library/jest-dom, @playwright/test, eslint, typescript-eslint, @types/* cần thiết |
 
-Không dùng Arctic vì tài liệu hiện ghi deprecated. Dùng Better Auth Google/Discord providers và Drizzle adapter. Không dựng lại OAuth thủ công.
+Không dùng Arctic vì tài liệu hiện ghi deprecated. Dùng Better Auth Discord provider và Drizzle adapter. Không dựng lại OAuth thủ công.
 
 T01 chọn phiên bản **stable không prerelease**, NestJS12 theo docs hiện tại, TypeScript tương thích toàn toolchain; kiểm peer deps/engines, khóa exact versions bằng lockfile và ghi version thực tế. LiveKit/Postgres/Redis/Caddy Docker images khóa version/digest, không dùng `:latest`. Dự kiến PostgreSQL17 và Redis7. Phiên bản chỉ được đổi cùng compatibility test; không cài thêm framework giữa task mà không cập nhật inventory.
 
@@ -102,7 +102,6 @@ Không cài CLI global cho dự án. Playwright browsers và LiveKit CLI load-te
 | Dịch vụ | Chuẩn bị | Smoke trước code nghiệp vụ |
 | --- | --- | --- |
 | PostgreSQL/Redis | connection URLs; local compose và persistence | connect, ping, tạo/xóa dữ liệu probe riêng |
-| Google OAuth | client ID/secret, origin và callback `/api/auth/callback/google` trên local/staging/prod | đối chiếu client và redirect config; endpoints reachable; login thật kiểm lại T08 |
 | Discord OAuth | client ID/secret, callback `/api/auth/callback/discord`, scopes identify/email | đối chiếu app/redirect/scopes; không gọi token giả thành pass |
 | LiveKit | ws/public URL, API key/secret, signed webhook URL, TURN/TLS | server health, create/delete test room, issue probe token; real tracks kiểm T28–T30 |
 | Email SMTP | host/port/TLS, sender, credential, mailbox test của người dùng | Nodemailer verify kết nối/auth; delivery thật kiểm T35 |
@@ -111,7 +110,7 @@ Không cài CLI global cho dự án. Playwright browsers và LiveKit CLI load-te
 
 API là dịch vụ được đăng ký/cấu hình/tích hợp, không phải “thư viện cần cài”. Không cần Riot/Steam/game account APIs vì rank/tên game là người dùng tự khai.
 
-Env tối thiểu: DATABASE_URL, REDIS_URL, PUBLIC_ORIGIN, BETTER_AUTH_URL, BETTER_AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, UPLOAD_ROOT. UPLOAD_ROOT trỏ vào runtime volume của dự án.
+Env tối thiểu: DATABASE_URL, REDIS_URL, PUBLIC_ORIGIN, BETTER_AUTH_URL, BETTER_AUTH_SECRET, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, UPLOAD_ROOT. UPLOAD_ROOT trỏ vào runtime volume của dự án.
 
 Scripts root phải được T01–T02 cung cấp: `lint`, `typecheck`, `build`, `test`, `verify`, `test:e2e`, `env:check`, `services:smoke`, `task:check`, `verify:staging`, `backup:test`, `restore:test`, `load:api`, `load:chat`, `load:media`, `load:network`. Scripts thuộc task chưa làm phải fail với “not implemented”, không trả exit0 giả. Test workspace: frontend/database/contracts/worker dùng Vitest run; api dùng Jest/ts-jest và Supertest. E2E dùng Playwright với backend/DB/services thật.
 
@@ -121,7 +120,7 @@ Scripts root phải được T01–T02 cung cấp: `lint`, `typecheck`, `build`,
 
 - Tên website FG; frontend giữ thiết kế đã duyệt theo 02-frontend-design.md, dùng Inter self-host và shared tokens/components. Không tự đổi phong cách giữa các task.
 - 7 game, **một Lobby/game**, chat tìm bạn và tán gẫu; “+1 flex” là ví dụ, không là cú pháp.
-- Guest xem Lobby/thẻ; tương tác cần Google/Discord login; onboarding không bắt rank.
+- Guest xem Lobby/thẻ; tương tác cần Discord login; onboarding không bắt rank.
 - Cards cạnh chat desktop, mobile tabs; rank/vai trò tham khảo, chủ đội duyệt.
 - Kết bạn hai chiều; DM không cần friendship; có block/report.
 - Room lâu dài giữ chat, có public/private, tùy chỉnh lời mời và từng quyền helper.
@@ -196,7 +195,7 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 | T05 | DATABASE | Schema chat, quan hệ bạn bè và chặn | T04 |
 | T06 | DATABASE | Schema phòng, quyền, buổi chơi và tuyển đội | T05 |
 | T07 | DATABASE | Schema cuộc gọi, thông báo và quản trị | T06 |
-| T08 | BACKEND | Đăng nhập Google/Discord và session guard | T07 |
+| T08 | BACKEND | Đăng nhập Discord và session guard | T07 |
 | T09 | FRONTEND | Đăng nhập, đăng xuất và guest guards | T08 |
 | T10 | BACKEND | API hồ sơ và sở thích game | T09 |
 | T11 | FRONTEND | Hồ sơ, chỉnh sửa và tích hợp onboarding thật | T10 |
@@ -260,8 +259,8 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 
 **Tạo cho task sau:** npm run env:check; npm run services:smoke; npm run task:check -- Txx; task ledger và quy tắc code-only.
 
-- [ ] **RED / kiểm tra cần có:** Test check-env từ chối thiếu keys nhưng không in bí mật; task-check từ chối task chưa đủ tiền nhiệm, spec đổi hash, đường dẫn ngoài code hoặc exit != 0. Google/Discord chứng minh cấu hình client/callback; SMTP verify không gửi email. Không giả vờ đã test đăng nhập/push end-to-end.
-- [ ] **Build:** Đọc/duy trì AGENTS.md đã chuẩn bị và .agents/rules theo .doc/03-antigravity-rules.md, không overwrite để xóa giới hạn. Đăng ký Google/Discord OAuth; cấu hình LiveKit, SMTP, VAPID và PUBLIC_ORIGIN. Viết script chỉ sau dependencies đã cài. verify-task kiểm tra task trước, bằng chứng mới, SHA spec và file allowlist, không tự đánh PASS.
+- [ ] **RED / kiểm tra cần có:** Test check-env từ chối thiếu keys nhưng không in bí mật; task-check từ chối task chưa đủ tiền nhiệm, spec đổi hash, đường dẫn ngoài code hoặc exit != 0. Discord chứng minh cấu hình client/callback; SMTP verify không gửi email. Không giả vờ đã test đăng nhập/push end-to-end.
+- [ ] **Build:** Đọc/duy trì AGENTS.md đã chuẩn bị và .agents/rules theo .doc/03-antigravity-rules.md, không overwrite để xóa giới hạn. Đăng ký Discord OAuth; cấu hình LiveKit, SMTP, VAPID và PUBLIC_ORIGIN. Viết script chỉ sau dependencies đã cài. verify-task kiểm tra task trước, bằng chứng mới, SHA spec và file allowlist, không tự đánh PASS.
 - [ ] **PASS:** npm run env:check; npm run services:smoke; npm run task:check -- T03
 
 ### T03 — Khóa kiểu dữ liệu, REST và realtime trước triển khai
@@ -314,13 +313,13 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 - [ ] **Build:** Index unique active call membership theo user, 3 publish slots/call cấp trong transaction; notification/outbox dedup keys; soft delete giữ audit. Migration không public hóa dữ liệu private.
 - [ ] **PASS:** npm run test --workspace @fg/database -- test/call-outbox.test.ts
 
-### T08 — Đăng nhập Google/Discord và session guard
+### T08 — Đăng nhập Discord và session guard
 
 **Phần:** BACKEND. **Files:** code/apps/api/src/modules/auth/; code/apps/api/src/common/{session.guard,csrf.guard}.ts; code/apps/api/test/auth.integration.spec.ts
 
 **Tạo cho task sau:** OAuth social sign-in; GET /api/v1/me; guard requireSession/requireAdmin/requireOnboarded.
 
-- [ ] **RED / kiểm tra cần có:** auth.integration.spec.ts: guest đọc public được nhưng mutation401; callback state sai bị từ chối; logout session không dùng lại; banned user403; login Google và Discord thật xác nhận riêng ở browser với tài khoản test.
+- [ ] **RED / kiểm tra cần có:** auth.integration.spec.ts: guest đọc public được nhưng mutation401; callback state sai bị từ chối; logout session không dùng lại; banned user403; login Discord thật xác nhận riêng ở browser với tài khoản test.
 - [ ] **Build:** Mount Better Auth qua Node handler theo docs version lock; same-origin cookie HttpOnly, Secure ở HTTPS, kiểm tra origin của mutation; không đăng nhập email/password. Không tự ghép tài khoản chỉ vì email giống nhau; link provider cần session xác thực.
 - [ ] **PASS:** npm run test --workspace @fg/api -- --runInBand test/auth.integration.spec.ts
 
@@ -330,7 +329,7 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 
 **Tạo cho task sau:** Trang login, guest/private guards, logout, loading/error states.
 
-- [ ] **RED / kiểm tra cần có:** auth.test.tsx: Google/Discord redirect đúng; session loading không nháy nội dung riêng; denied OAuth có retry; logout xóa cache private và đóng socket/call; guest route trả login CTA.
+- [ ] **RED / kiểm tra cần có:** auth.test.tsx: Discord redirect đúng; session loading không nháy nội dung riêng; denied OAuth có retry; logout xóa cache private và đóng socket/call; guest route trả login CTA.
 - [ ] **Build:** Dựng Inter self-host, shared CSS tokens và components theo 02-frontend-design.md rồi auth UI mang tên FG; onboarding ở T11 sau API T10. Session pending không render nội dung private; visitor vẫn xem Lobby public.
 - [ ] **PASS:** npm run test --workspace @fg/web -- test/auth.test.tsx
 
@@ -716,7 +715,7 @@ Nếu Antigravity bị ngắt giữa chừng, không dựa vào lời kể của
 - [Vite: yêu cầu Node và setup](https://vite.dev/guide/).
 - [NestJS: hướng dẫn migration và yêu cầu tương thích](https://docs.nestjs.com/migration-guide).
 - [Better Auth: installation/Drizzle adapter](https://better-auth.com/docs/installation).
-- [Better Auth: Google](https://www.better-auth.com/docs/authentication/google) và [Discord](https://better-auth.com/docs/authentication/discord).
+- [Better Auth: Discord](https://better-auth.com/docs/authentication/discord).
 - [Drizzle: PostgreSQL setup](https://orm.drizzle.team/docs/get-started).
 - [LiveKit: self-hosting](https://docs.livekit.io/transport/self-hosting/) và [distributed Redis](https://docs.livekit.io/transport/self-hosting/distributed/).
 - [LiveKit: subscriptions/adaptive stream](https://docs.livekit.io/guides/room/receive) và [benchmark lk load-test](https://docs.livekit.io/transport/self-hosting/benchmark).
@@ -730,7 +729,7 @@ Ngày kiểm tra:04/10/2026. Phiên bản hiện thực được khóa tại T01
 
 - Tất cả 45 tasks PASS theo ledger và evidence hợp lệ.
 - Spec coverage không thiếu phần; UI actual được review so mockup đã duyệt.
-- Login thật cả Google/Discord, DB migrations/restore thật, chat/recruit atomic, permissions/private assets, calls/live qua SFU thật.
+- Login Discord thật, DB migrations/restore thật, chat/recruit atomic, permissions/private assets, calls/live qua SFU thật.
 - Push trên iPhone installed PWA và Android thật; email delivery test thật; opt-out/revoke được kiểm.
 - Đủ1.000 call/live concurrent trên staging đo được, có chi phí và SLO bằng chứng.
 - Không source/config/tests nằm ngoài code, không secrets trong bundle/log/repo.

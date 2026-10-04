@@ -41,7 +41,7 @@ Khách chưa đăng nhập được xem Lobby, chat chung và thẻ tìm đội.
 
 ## 3. Tài khoản, hồ sơ và kết bạn
 
-Đăng nhập bằng Google và Discord (dùng Better Auth Google & Discord providers).
+Đăng nhập bằng Discord (dùng Better Auth Discord provider).
 
 Lần đầu đăng nhập, người dùng chọn biệt danh, ảnh đại diện và các game quan tâm rồi có thể vào Lobby. Có thể dùng ảnh từ tài khoản đăng nhập. Không bắt buộc hoàn thiện hồ sơ game trước khi chat hoặc tìm đội.
 
@@ -165,7 +165,7 @@ Quy định xử lý tập tin hình ảnh tải lên:
 
 ### Kịch bản nghiệm thu chính
 1. Khách xem Lobby và thẻ tuyển nhưng không thể gửi tin hoặc xin vào đội; chat riêng/phòng nhóm không bị lộ.
-2. Đăng nhập bằng Google/Discord, hoàn thành hồ sơ ban đầu rồi vào Lobby mà không bắt buộc khai rank.
+2. Đăng nhập bằng Discord, hoàn thành hồ sơ ban đầu rồi vào Lobby mà không bắt buộc khai rank.
 3. Tin chat cập nhật trực tiếp; tải lịch sử, gửi ảnh, trả lời và @nhắc tên hoạt động đúng quyền.
 4. Từ Lobby có thể xem hồ sơ, nhắn riêng chưa kết bạn, gửi/chấp nhận lời mời kết bạn và chặn/báo cáo.
 5. Chủ đội duyệt yêu cầu dù hồ sơ không đáp ứng rank tham khảo; thẻ và số chỗ được cập nhật nhất quán.
@@ -181,10 +181,10 @@ Quy định xử lý tập tin hình ảnh tải lên:
 
 ## 10. Quyết định baseline T00 và các cổng hoạt động tiếp theo
 
-**Tech Stack đã phê duyệt:** Frontend (React, Vite, Tailwind CSS, Inter font self-host), Backend API (NestJS, Node24, TypeScript), Database (PostgreSQL, Drizzle ORM), Cache & Queue (Redis, BullMQ), Auth (Better Auth Google & Discord providers), Realtime (Socket.IO), Media (Self-hosted LiveKit SFU), Worker/Delivery (Nodemailer SMTP, Web Push VAPID). Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn.
+**Tech Stack đã phê duyệt:** Frontend (React, Vite, Tailwind CSS, Inter font self-host), Backend API (NestJS, Node24, TypeScript), Database (PostgreSQL, Drizzle ORM), Cache & Queue (Redis, BullMQ), Auth (Better Auth Discord provider), Realtime (Socket.IO), Media (Self-hosted LiveKit SFU), Worker/Delivery (Nodemailer SMTP, Web Push VAPID). Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn.
 
 Các đề xuất kỹ thuật và nghiệp vụ cho T00 đã được người dùng phê duyệt chính thức ngày 04/10/2026. Danh mục các cổng chuẩn bị và hoạt động tiếp theo:
-1. **T02 Setup Gate**: Đăng ký và cấu hình các thông số OAuth Client ID/Secret (Google, Discord), SMTP server credentials, VAPID keys và PUBLIC_ORIGIN thực tế trước T02.
+1. **T02 Setup Gate**: Đăng ký và cấu hình các thông số OAuth Client ID/Secret (Discord), SMTP server credentials, VAPID keys và PUBLIC_ORIGIN thực tế trước T02.
 2. **T41 Operational Cost Gate**: Đo đạc lưu lượng thực tế, dự toán chi phí traffic/egress/TURN và trình người dùng phê duyệt trần chi phí (cost ceiling) trước khi thực hiện kiểm thử tải trả phí hoặc chi tiêu hạ tầng.
 3. **Kế hoạch vận hành**: Thời điểm ra mắt chính thức và quy chế biên tập/kiểm duyệt nội dung cộng đồng sẽ do bộ phận vận hành chốt ở các giai đoạn sau; các chi tiết kỹ thuật cụ thể vẫn được định nghĩa bởi contracts và ACL từng task.
 4. Tên FG và phong cách mockup đã được duyệt; áp dụng [02-frontend-design.md](./02-frontend-design.md) khi xây các màn hình chi tiết.
@@ -197,3 +197,7 @@ Các đề xuất kỹ thuật và nghiệp vụ cho T00 đã được người 
 - [MDN — Dữ liệu tương thích getDisplayMedia](https://github.com/mdn/browser-compat-data/blob/main/api/MediaDevices.json).
 
 Khả năng nền tảng được kiểm tra ngày 04/10/2026; cần kiểm tra lại khi triển khai và trên thiết bị thực tế.
+
+## 12. Lịch sử thay đổi đã được chủ sản phẩm xác nhận
+
+- 04/10/2026 — AUTH-CHANGE-01: Người dùng yêu cầu bỏ đăng nhập Google. FG chỉ hỗ trợ đăng nhập Discord; cập nhật T02, T08, T09 và nghiệm thu tương ứng. Better Auth, onboarding và session guard giữ theo phạm vi đã chốt. Client Secret không lưu trong tài liệu hoặc evidence.

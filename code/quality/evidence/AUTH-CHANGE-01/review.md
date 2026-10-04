@@ -1,0 +1,5 @@
+# AUTH-CHANGE-01 — Discord only
+User instruction 2026-10-04: bỏ đăng nhập bằng google đi. Google OAuth removed from current spec, task dependencies/env requirements/auth tests/release criteria and setup rule. YouTube provider URLs remain valid; Google hostname in YouTube documentation is unrelated to login.
+T00 original reviewed state preserved in Git/evidence. This authorized requirement amendment establishes current baseline hashes; no feature task passed retroactively. T01 interrupted for amendment, remains IN_PROGRESS. T02/T08/T09/T39/T42 will use Discord-only acceptance.
+User supplied Discord client information in chat. Secret is deliberately NOT copied to source, prompts, evidence or environment. User asked to rotate it and enter replacement locally. Client ID may be configured locally; do not print secrets. Credentials still unverified.
+Verification: search current spec/task/rule for Google login/env names and stale dual-provider references; verify new spec/task hashes plus unchanged design/mockups. No auth implementation exists yet.
