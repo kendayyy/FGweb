@@ -1,0 +1,162 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/contracts.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/contracts.test.ts (10 tests | 7 failed) 46ms
+   ❯ FG Contracts Specs & Behavior Tests (Refactor Loop 2) (10)
+     ❯ A. Cursor & Browser Encoding (Gap A) (2)
+       × ListMessagesQuerySchema rejects junk cursor strings 19ms
+       × encodeChatCursor and decodeChatCursor work cleanly in browser context without Buffer 1ms
+     ❯ B. Structural Constraints & Membership Separation (Gap B) (3)
+       × PlaySessionSchema requires scheduledAt when timingType is scheduledAt 3ms
+       × RecruitmentSchema enforces currentPlayers <= playerCapacity 3ms
+     ❯ D. Types, GameDTO & URL Validations (Gap D) (4)
+       × rejects external live URLs with userinfo credentials or non-standard ports 6ms
+       × CreateMessageRequestSchema rejects whitespace-only clientMessageId 3ms
+       × NotificationSchema strictly rejects mismatched notification type and data payload 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > A. Cursor & Browser Encoding (Gap A) > ListMessagesQuerySchema rejects junk cursor strings
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:38:92
+     36|   describe('A. Cursor & Browser Encoding (Gap A)', () => {
+     37|     it('ListMessagesQuerySchema rejects junk cursor strings', () => {
+     38|       expect(ListMessagesQuerySchema.safeParse({ cursor: 'junk_invalid…
+       |                                                                                            ^
+     39|       expect(ListMessagesQuerySchema.safeParse({ cursor: '   ' }).succ…
+     40|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > A. Cursor & Browser Encoding (Gap A) > encodeChatCursor and decodeChatCursor work cleanly in browser context without Buffer
+ReferenceError: Buffer is not defined
+ ❯ encodeChatCursor src/messages.ts:47:3
+     45|
+     46| export function encodeChatCursor(cursor: ChatCursor): string {
+     47|   return Buffer.from(JSON.stringify(cursor)).toString('base64url');
+       |   ^
+     48| }
+     49|
+ ❯ test/contracts.test.ts:50:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > B. Structural Constraints & Membership Separation (Gap B) > PlaySessionSchema requires scheduledAt when timingType is scheduledAt
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:72:69
+     70|         updatedAt: '2026-10-05T00:00:00.000Z',
+     71|       };
+     72|       expect(PlaySessionSchema.safeParse(invalidScheduled).success).to…
+       |                                                                     ^
+     73|
+     74|       const validHistoricalEnded = {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > B. Structural Constraints & Membership Separation (Gap B) > RecruitmentSchema enforces currentPlayers <= playerCapacity
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:97:73
+     95|         updatedAt: '2026-10-05T00:00:00.000Z',
+     96|       };
+     97|       expect(RecruitmentSchema.safeParse(invalidPlayersExceed).success…
+       |                                                                         ^
+     98|     });
+     99|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > D. Types, GameDTO & URL Validations (Gap D) > rejects external live URLs with userinfo credentials or non-standard ports
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:183:70
+    181|         createdAt: '2026-10-05T00:00:00.000Z',
+    182|       };
+    183|       expect(ExternalLiveSchema.safeParse(alternatePortUrl).success).t…
+       |                                                                      ^
+    184|     });
+    185|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > D. Types, GameDTO & URL Validations (Gap D) > CreateMessageRequestSchema rejects whitespace-only clientMessageId
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:191:65
+    189|         clientMessageId: '   ',
+    190|       };
+    191|       expect(CreateMessageRequestSchema.safeParse(msg).success).toBe(f…
+       |                                                                 ^
+    192|     });
+    193|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 2) > D. Types, GameDTO & URL Validations (Gap D) > NotificationSchema strictly rejects mismatched notification type and data payload
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:208:76
+    206|         createdAt: '2026-10-05T00:00:00.000Z',
+    207|       };
+    208|       expect(NotificationSchema.safeParse(mismatchedNotification).succ…
+       |                                                                            ^
+    209|     });
+    210|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 3 passed (10)
+   Start at  00:26:31
+   Duration  945ms (transform 48%, import 40%, tests 8%, worker 3%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/contracts.test.ts

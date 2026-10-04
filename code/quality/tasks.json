@@ -322,18 +322,160 @@
     },
     {
       "id": "T03",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T02"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": []
+      "inputsHash": "d773b292796c9621ca9d938027111f93c7fe68d4",
+      "outputsHash": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "files": {
+          "packages/contracts/src/auth.ts": "4756ce51e00fe95763a5145c3151df85fb567c01da78e32c68c34307a9421045",
+          "packages/contracts/src/calls.ts": "5c38997a2a23874bc919355381cff5adea6a03e79d1fb4d05f74d92089a150d8",
+          "packages/contracts/src/common.ts": "625f6cade600111067d7b0653792f9c87c9bd8bf54aa354643b1937d3900a988",
+          "packages/contracts/src/index.ts": "2d4c07d5d9745492714a222618db4ecc632b66fd8b8d92c77da8c15f6bd6f1c9",
+          "packages/contracts/src/messages.ts": "2fae79a64b49dca39ee2b8de696ac1b8c47b8bbdcf421253700081fcc1d9749f",
+          "packages/contracts/src/moderation.ts": "8f7af99e8be4c704c3d8c95df98669d92c77b6203a7f9ab0e9fa1ec749bb8a20",
+          "packages/contracts/src/notifications.ts": "c50be9345e7162ac9beb42fac0cf9d7872d211fcbce1a3e02cd56d795fa2ac95",
+          "packages/contracts/src/profiles.ts": "fbfd1546edcf4a1c9a45c914571372d44cd1d75433032fe2dfe0dd83903c0d72",
+          "packages/contracts/src/rooms.ts": "ffe5b25b25239b6b73fa021b8b6de8bd8ed2dbb4f839d8f9711f29f59e7c3ee2",
+          "packages/contracts/src/teams.ts": "9d339039a7458a96ed1d18d3541700c1f23b42995f248b18f092b819ded06dca",
+          "packages/contracts/test/contracts.test.ts": "2582f81b1029b29dc60c3e42f3cb39de539a67312c887e93f68382ad7702d7d3",
+          "packages/contracts/test/exports.test.ts": "256d65d25893cdf296549b629977c3d2b1dc5ac650e7f676c4ab8a9f2c47dc67",
+          "packages/contracts/test/loop2-regressions.test.ts": "3f43b11b019fec60f3be778a80ac8a1d41d60b0926ca9efeb5c1e887f870649e",
+          "packages/contracts/test/repair.test.ts": "a14d514e96dda1186ca457c6bb6f7caf2502197557b523770bd8894c6f47b71f",
+          "packages/contracts/vitest.config.ts": "71942dc3528bfd5127dce632121839359489b9ab25554dbfc54927955a8e7fdf",
+          "quality/api-contract.md": "79d48a10ca9cde5b3f3a73a5146452161566bc52ff0a7c97b38bcc4976056ce8",
+          "package.json": "40f7fd05d7ca8559aae9e4d01df1e56d6415ff34f9523190605dd622d18cf73d",
+          "quality/evidence/T03/codex-review.test.mjs": "07fc5676e7796624c5eb6e33fdd5ea2b8db0a4385e90807c6bf58280ab3f4bb8"
+        }
+      },
+      "commands": [
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run test --workspace @fg/contracts -- test/contracts.test.ts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:41:45.981Z",
+          "completedAt": "2026-10-04T17:41:48.572Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-acceptance.txt",
+          "evidenceSha256": "a7dc6b3893fbe9e093b546d5fe3dcbd942774b642415aeceacd6b09267adfe10"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run build --workspace @fg/contracts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:41:48.575Z",
+          "completedAt": "2026-10-04T17:41:55.430Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-build.txt",
+          "evidenceSha256": "7c96070e2dee1fe34fa5ebbe0769540b26c561496a0a6e1d3a474f9c393fbf86"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run test --workspace @fg/contracts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:41:55.431Z",
+          "completedAt": "2026-10-04T17:41:58.790Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-all-contracts.txt",
+          "evidenceSha256": "25e3915fbbfbf4082b55aae92a8d41ef0bd445350574c08f91a7df4acb22f973"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe --test quality/evidence/T03/codex-review.test.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:41:58.790Z",
+          "completedAt": "2026-10-04T17:41:59.439Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-three-regressions.txt",
+          "evidenceSha256": "a8dbea6edf219fa696fa84dfa341bfd43548b9adc47a143b04bd51180588b3ec"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js exec --workspace @fg/contracts -- tsc --noEmit",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:41:59.439Z",
+          "completedAt": "2026-10-04T17:42:06.771Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-typecheck.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run lint",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:42:06.772Z",
+          "completedAt": "2026-10-04T17:42:11.062Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-lint.txt",
+          "evidenceSha256": "6ba41d3386946f3480608c0bcb80bb893d785c187db4178012a840ea9081d89b"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run test:setup:t02",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:42:11.062Z",
+          "completedAt": "2026-10-04T17:42:12.340Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-setup-regression.txt",
+          "evidenceSha256": "f5e055beba16295a20b5e1ee4eb9a888d0d579e1ff5f8a79f0665923c2190eb7"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js exec -- tsc --project .cache/t03-tests-tsconfig.json --noEmit",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:48:21.262Z",
+          "completedAt": "2026-10-04T17:48:31.260Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-tests-typecheck.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe quality/evidence/T01/jest-probe.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:48:31.263Z",
+          "completedAt": "2026-10-04T17:48:35.951Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-runner-jest-probe.txt",
+          "evidenceSha256": "ceaa2cae1492faaa9d735bd149c6650b74d89f8feae976b5adc88fd4b31f001b"
+        },
+        {
+          "command": "C:\\Program Files\\nodejs\\node.exe C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run lint",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:48:35.952Z",
+          "completedAt": "2026-10-04T17:48:39.784Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T03/final-final-lint.txt",
+          "evidenceSha256": "6ba41d3386946f3480608c0bcb80bb893d785c187db4178012a840ea9081d89b"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T03/codex-review.md",
+        "quality/evidence/T03/final-verification.json",
+        "quality/evidence/T03/codex-repair-red.txt",
+        "quality/evidence/T03/codex-review.txt",
+        "quality/evidence/T03/final-three-regressions.txt"
+      ],
+      "startedAt": "2026-10-04T17:10:16.162Z",
+      "completedAt": "2026-10-04T17:48:39.787Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "packages/contracts/src/**",
+        "packages/contracts/test/**",
+        "packages/contracts/vitest.config.ts",
+        "quality/api-contract.md",
+        "quality/evidence/T03/**",
+        "package.json"
+      ],
+      "antigravity": {
+        "conversationId": "e21796a3-9ce9-427d-b30b-91e2b5149514",
+        "model": "Gemini 3.6 Flash (High)",
+        "refactorLoops": 2,
+        "result": "blocked after independent deep review"
+      },
+      "repairExecutor": "Codex direct repair explicitly approved via four-item user instruction",
+      "diagnostics": [
+        {
+          "command": "npm test",
+          "exitCode": 1,
+          "evidencePath": "quality/evidence/T03/root-suite-routing-fixed.txt",
+          "result": "Vitest29PASS; correct API-only Jest runner reports no API tests yet"
+        }
+      ]
     },
     {
       "id": "T04",
@@ -956,6 +1098,26 @@
       "evidencePath": "quality/evidence/AUTH-CHANGE-01/review.md",
       "preservesOriginalT00Evidence": true,
       "id": "AUTH-CHANGE-01"
+    }
+  ],
+  "followups": [
+    {
+      "id": "T01-FIX2",
+      "originalTask": "T01",
+      "status": "PASS",
+      "problem": "Root Jest scans Vitest contracts and node:test setup suites instead of API workspace",
+      "scope": [
+        "package.json"
+      ],
+      "acceptance": "Root vitest runs applicable projects; Jest runs only API workspace; no passWithNoTests or skipped tests",
+      "evidence": [
+        "quality/evidence/T03/root-suite.txt",
+        "quality/evidence/T03/root-suite-routing-fixed.txt",
+        "quality/evidence/T03/final-runner-jest-probe.txt"
+      ],
+      "orderedBefore": "T04",
+      "createdAt": "2026-10-04T17:45:49.507Z",
+      "result": "API-only Jest routing verified; future API feature suite not yet implemented"
     }
   ]
 }

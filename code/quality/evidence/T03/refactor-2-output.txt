@@ -1,0 +1,40 @@
+### Báo cáo hoàn tất FG Task T03 (Refactor Loop 2 - Final)
+
+Đã hoàn thành toàn bộ các yêu cầu sửa đổi trong **Loop 2** cho Task T03 tại workspace `E:/FGweb/code`.
+
+---
+
+### 1. Chi tiết khắc phục theo 5 nhóm vấn đề (A - E)
+
+- **A. Chat Cursor & Browser Compatibility**:
+  - `ListMessagesQuerySchema` và `LobbyMessagesQuerySchema` tích hợp `ValidatedChatCursorStringSchema`: Từ chối trực tiếp các chuỗi cursor không hợp lệ (`junk`, rỗng hoặc chứa khoảng trắng).
+  - `encodeChatCursor` và `decodeChatCursor` được viết lại hoàn toàn bằng các **Standard Web APIs** (`TextEncoder`, `TextDecoder`, `btoa`, `atob`), không phụ thuộc vào `Buffer` của Node.js, giúp mã nguồn chạy an toàn 100% trên cả Trình duyệt lẫn Node24 runtime.
+  - Bổ sung Unit test mô phỏng môi trường trình duyệt (xóa `Buffer` khỏi `globalThis` trong `try...finally`) để xác nhận mã hóa/giải mã các chuỗi Unicode Opaque ID thành công.
+
+- **B. Ràng buộc cấu trúc (Structural Constraints) & Tách biệt quyền**:
+  - `PlaySessionSchema` (stored DTO): Yêu cầu bắt buộc phải có `scheduledAt` khi `timingType === 'scheduledAt'`; cấm `scheduledAt` khi `timingType === 'now'`. Cho phép parse thành công các session lịch sử đã kết thúc (`ENDED`).
+  - `RecruitmentSchema` (stored DTO): Bắt buộc `currentPlayers <= playerCapacity`; kiểm tra thuộc tính Roblox (`experienceName`, `experienceUrl`) chỉ cho phép với game Roblox, bắt buộc giao thức HTTPS, domain `roblox.com` (hoặc subdomain) và cấm port không chuẩn (ngoại trừ 443).
+  - Khôi phục test tách biệt vai trò: Roster item parse thành CallParticipant báo lỗi và ngược lại; Guest từ chối có RoomMember role.
+
+- **C. Complete ApiEndpointRegistry & ACL Metadata**:
+  - `ApiEndpointRegistry` được bổ sung đầy đủ tất cả các REST API endpoints v1 (`POST /recruitments`, `GET /rooms/:id/members`, `DELETE /conversations/:id/messages/:messageId`, `POST /calls/:id/participants/:userId/stop-publish`, ...).
+  - Khai báo kiểu phân quyền rõ ràng (`EndpointAuthLevel`): `'Public'`, `'Authenticated'`, `'RoomOwner'`, `'RoomHelperOrOwner'`, `'CallParticipant'`, `'Admin'`, `'OwnUserOrTarget'`.
+  - Phân định rõ ràng ACL cho Public Lobby vs Private Conversation/Room.
+
+- **D. Types & Data Content**:
+  - `GameSchema` bổ sung `lobbyRoomId: IdSchema` liên kết với Lobby room chính thức của từng game.
+  - `CreateMessageRequestSchema` từ chối `clientMessageId` chứa toàn khoảng trắng; hỗ trợ `mentionedUserIds`.
+  - `NotificationSchema` sử dụng `discriminatedUnion('type', ...)` kiểm tra chặt chẽ sự tương ứng giữa `type` và dữ liệu `data` đính kèm.
+
+- **E. Evidence & Process Verification**:
+  - Thực thi **Test-First (RED Phase)** trước khi áp dụng code fixes, trích xuất output trực tiếp ra file: [loop2-red.txt](file:///E:/FGweb/code/quality/evidence/T03/loop2-red.txt) (7 tests failed đúng dự kiến).
+  - Áp dụng mã nguồn hoàn chỉnh, thực thi **GREEN Phase**, trích xuất output trực tiếp ra file: [loop2-green.txt](file:///E:/FGweb/code/quality/evidence/T03/loop2-green.txt) (10/10 tests passed).
+  - Chạy đầy đủ bộ test workspace: **11/11 tests passed** (bao gồm [exports.test.ts](file:///E:/FGweb/code/packages/contracts/test/exports.test.ts) kiểm tra entrypoint `./dist/index.js` sau khi build).
+  - `npm run build --workspace @fg/contracts` -> **Exit code 0**.
+  - `npm exec --workspace @fg/contracts -- tsc --noEmit` -> **Exit code 0**.
+  - `npm run lint` -> **Exit code 0** (0 error, 0 warning).
+  - Lưu trữ lịch sử evidence cũ (`codex-recovered-loop1-red-result.txt`, `summary.json`, `execution.log`).
+
+---
+
+Ready for Codex deep review.

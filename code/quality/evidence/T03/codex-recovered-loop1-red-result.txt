@@ -1,0 +1,113 @@
+Recovered verbatim from transcript step106: actual RED exit 1. Original agent log was a summary; this file retains available terminal output.
+Created At: 2026-10-05T00:19:01+07:00
+Completed At: 2026-10-05T00:19:05+07:00
+
+The command exited with code 1.
+Output:
+<truncated 1 lines>
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:105:49
+    103|       expect(IdSchema.safeParse('usr_123').success).toBe(true);
+    104|       expect(IdSchema.safeParse('').success).toBe(false);
+    105|       expect(IdSchema.safeParse('   ').success).toBe(false);
+       |                                                 ^
+    106|     });
+    107|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 1) > 4. CustomStatus, Presence, ID, Time, and Cursor Validity > ChatCursor serializes and deserializes correctly, rejecting malformed inputs
+TypeError: encodeChatCursor is not a function
+ ❯ test/contracts.test.ts:112:23
+    110|       const cursorObj = { createdAt: validIso, id: 'msg_100' };
+    111|
+    112|       const encoded = encodeChatCursor(cursorObj);
+       |                       ^
+    113|       expect(typeof encoded).toBe('string');
+    114|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 1) > 5. Recruitment Timing Discrimination & Roblox Rules > timingType now forbids scheduledAt; timingType scheduledAt requires scheduledAt
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:158:61
+    156|         scheduledAt: '2026-10-05T14:00:00.000Z',
+    157|       };
+    158|       expect(schemaWithClock.safeParse(invalidNow).success).toBe(false…
+       |                                                             ^
+    159|
+    160|       const missingScheduled = {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Sp
+<truncated 4225 bytes>
+⎯⎯⎯[12/14]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 1) > 11. Notification Types & Email Category Preferences > validates NotificationPreferencesSchema email restrictions
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/contracts.test.ts:390:81
+    388|         DM: { inApp: true, push: true, email: true }, // Email not all…
+    389|       };
+    390|       expect(NotificationPreferencesSchema.safeParse(invalidEmailOnDm)…
+       |                                                                                 ^
+    391|     });
+    392|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+ FAIL  test/contracts.test.ts > FG Contracts Specs & Behavior Tests (Refactor Loop 1) > 12. API Contract Completeness & Registry > exports API_CONTRACT_VERSION1 and ApiEndpointRegistry
+AssertionError: expected undefined to be '1.0.0' // Object.is equality
+
+- Expected:
+"1.0.0"
+
++ Received:
+undefined
+
+ ❯ test/contracts.test.ts:396:37
+    394|   describe('12. API Contract Completeness & Registry', () => {
+    395|     it('exports API_CONTRACT_VERSION1 and ApiEndpointRegistry', () => {
+    396|       expect(API_CONTRACT_VERSION1).toBe('1.0.0');
+       |                                     ^
+    397|       expect(Array.isArray(ApiEndpointRegistry)).toBe(true);
+    398|       expect(ApiEndpointRegistry.length).toBeGreaterThan(15);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/14]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  14 failed | 6 passed (20)
+   Start at  00:19:04
+   Duration  790ms (transform 45%, import 39%, tests 14%, worker 3%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/contracts.test.ts
+
+

@@ -8,4 +8,5 @@
 | Local services ready | T01 | final-readiness.txt/final-compose.txt | PASS |
 | Frontend/database tooling compatible | T01 | final-vite.txt/final-drizzle.txt | PASS |
 | External services/credentials/task gate | T02 | quality/evidence/T02/verification.json and review.md; real service smoke and task gate | PASS |
-| Product features, media1000, PWA, release | T03–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+| Shared API/realtime contracts | T03 | quality/evidence/T03/final-verification.json,29contracts+3regression | PASS |
+| Product features, media1000, PWA, release | T04–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |

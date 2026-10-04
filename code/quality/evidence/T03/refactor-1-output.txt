@@ -1,0 +1,63 @@
+### Báo cáo xử lý FG Task T03 (Refactor Loop 1)
+
+Đã sửa đổi toàn bộ **9 lỗ hổng đặc tả và kiểm thử** theo phản hồi review của Codex cho task T03. Workspace tại `E:/FGweb/code`.
+
+---
+
+### 1. Tổng hợp các điểm đã khắc phục
+
+1. **`common.ts` / `auth.ts` / `profiles.ts`**:
+   - Loại bỏ `OFFLINE` khỏi `CustomStatusSchema`. Khởi tạo `PresenceStatusSchema` riêng (`ONLINE`, `OFFLINE`).
+   - `IdSchema` bổ sung validation từ chối chuỗi chứa toàn khoảng trắng (`trim().length > 0`).
+   - `AuthSessionMetadataSchema` chỉ xuất thông tin phiên an toàn (`id`, `userId`, `expiresAt`, `createdAt`). Tuyệt đối không lộ `sessionToken` qua public DTO; Better Auth quản lý cookie bảo mật.
+   - `PublicProfileSchema.parse()` tự động lược bỏ (strip) các thuộc tính riêng tư (`email`, `discordId`, `emailVerified`) khi parse dữ liệu thực tế.
+
+2. **`teams.ts`**:
+   - Loại bỏ `.default('Flex')` ở trường `mode` (chỉ dùng chuỗi tự do required).
+   - Phân loại thời gian `CreateRecruitmentSchema`: `timingType: 'now'` cấm `scheduledAt`; `timingType: 'scheduledAt'` bắt buộc có `scheduledAt` tương lai (tương quan với clock được truyền).
+   - `PlaySessionSchema` và `RecruitmentSchema` lưu trữ cho phép đọc dữ liệu lịch sử đã qua hạn.
+   - Trường Roblox (`experienceName`, `experienceUrl`) chỉ cho phép khi `gameTitle === 'Roblox'`. Đường dẫn `experienceUrl` bắt buộc sử dụng giao thức HTTPS và domain thuộc `roblox.com` (hoặc subdomain), từ chối userinfo / non-HTTPS / domain giả mạo.
+
+3. **`rooms.ts`**:
+   - `RoomMemberSchema` kiểm tra phân quyền chặt chẽ: `role: 'HELPER'` bị cấm cấp các quyền tối cao của Owner (`OWNER_TRANSFER`, `ROOM_DISSOLVE`). `role: 'MEMBER'` bị cấm cấp bất kỳ elevated permission nào.
+   - Thêm runtime test kiểm tra giới hạn sức chứa thành viên phòng `memberCount` (50 hợp lệ, 51 thất bại).
+
+4. **`calls.ts`**:
+   - `ExternalLiveSchema` kiểm tra domain của nhà cung cấp stream: `youtube` bắt buộc thuộc `youtube.com`/`youtu.be`; `twitch` bắt buộc thuộc `twitch.tv`/`twitch.com`. Từ chối HTTP, userinfo credentials hoặc spoof domain.
+   - `CallGroupSchema` kiểm tra điều kiện `publisherCount <= participantCount`.
+
+5. **`messages.ts` / `common.ts`**:
+   - `CreateMessageRequestSchema` bắt buộc có `clientMessageId` (non-empty); từ chối tin nhắn có `content` rỗng/chỉ chứa khoảng trắng ngoại trừ khi có kèm ảnh đính kèm.
+   - `UploadImageMetadataSchema` giới hạn độ phân giải <= 20 Megapixels (`width * height <= 20,000,000`), kích thước file <= 5MiB, cấm định dạng SVG/GIF.
+   - Cung cấp hàm mã hóa/giải mã cursor `encodeChatCursor` và `decodeChatCursor` (kèm validation Zod).
+   - Kiểu `MessageDTO` được suy luận trực tiếp từ `MessageSchema` và hỗ trợ mảng `mentions`/`mentionedUserIds`.
+
+6. **`notifications.ts`**:
+   - Bổ sung loại `ROOM_INVITE` và `JOIN_REQUEST` tách biệt với `JOIN_REQUEST_RESULT` và `TEAM_INVITE`.
+   - Định nghĩa typed target payloads cho từng loại thông báo (`DMNotificationDataSchema`, `MentionNotificationDataSchema`, `RoomInviteNotificationDataSchema`, ...).
+   - `NotificationPreferencesSchema` chỉ cho phép bật thông báo Email ở các mục được spec phê duyệt (`FRIEND_INVITE`, `ROOM_INVITE`, `TEAM_INVITE`, `REMINDER_10MIN`).
+
+7. **Contract Completeness & Registry**:
+   - Xuất `API_CONTRACT_VERSION1 = '1.0.0'`.
+   - Xuất `GameSchema` & `GameDTO`.
+   - Xuất `SocketEventSchemaMap` đầy đủ cho 9 sự kiện realtime Socket.IO.
+   - Định nghĩa và xuất `ApiEndpointRegistry` liên kết đầy đủ method, path, auth level (`Public` | `Authenticated` | `RoomOwner` | `Admin`), request schema và response schema cho tất cả các endpoint REST API v1.
+
+8. **`api-contract.md` Updates**:
+   - Cập nhật chính xác ACL phân quyền Guest vs Authenticated User vs Room Owner vs Admin.
+   - Ghi nhận chi tiết bảng Error Codes (401, 403, 404, 409, 422, 429), Realtime events, và REST endpoints registry.
+
+---
+
+### 2. Kết quả kiểm thử & Bằng chứng (Evidence Logs)
+
+- **RED Phase Log**: [red-test.log](file:///E:/FGweb/code/quality/evidence/T03/red-test.log) (Ghi nhận 14 ca kiểm thử thất bại đúng kỳ vọng khi áp dụng bộ test rào cản mới trước khi triển khai code).
+- **GREEN Phase Log**: [green-test.log](file:///E:/FGweb/code/quality/evidence/T03/green-test.log) (Ghi nhận 21/21 ca kiểm thử đơn vị và compiled entrypoint passed 100%).
+- **Build**: `npm run build --workspace @fg/contracts` -> **Exit code 0**.
+- **Typecheck**: `npm exec --workspace @fg/contracts -- tsc --noEmit` -> **Exit code 0**.
+- **Lint**: `npm run lint` -> **Exit code 0** (0 errors, 0 warnings).
+- **Evidence Summary**: [summary.json](file:///E:/FGweb/code/quality/evidence/T03/summary.json).
+
+---
+
+Ready for Codex deep review.

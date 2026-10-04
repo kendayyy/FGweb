@@ -1,0 +1,79 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/repair.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/repair.test.ts (4 tests | 4 failed) 27ms
+   ❯ User approved T03 repairs (4)
+     × a schema reused between requests reads the injected clock again 13ms
+     × private room endpoints require membership and own-room lists authentication 7ms
+     × public recruitment query cannot request closed or private cards 1ms
+     × Lobby query accepts all seven games and rejects others 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/repair.test.ts > User approved T03 repairs > a schema reused between requests reads the injected clock again
+TypeError: nowDate.getTime is not a function
+ ❯ src/teams.ts:202:84
+    200|         } else {
+    201|           const scheduledDate = new Date(data.scheduledAt);
+    202|           if (isNaN(scheduledDate.getTime()) || scheduledDate.getTime(…
+       |                                                                                    ^
+    203|             ctx.addIssue({
+    204|               code: z.ZodIssueCode.custom,
+ ❯ Internals.check ../../node_modules/zod/v4/core/api.js:998:16
+ ❯ runChecks ../../node_modules/zod/v4/core/schemas.js:51:35
+
+ ❯ Internals.inst._zod.run ../../node_modules/zod/v4/core/schemas.js:118:20
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  00:37:34
+   Duration  751ms (transform 49%, import 43%, tests 6%, worker 3%)
+ ❯ Module.<anonymous> ../../node_modules/zod/v4/core/parse.js:43:32
+ ❯ _.safeParse ../../node_modules/zod/v4/classic/schemas.js:141:22
+ ❯ test/repair.test.ts:5:177
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/repair.test.ts > User approved T03 repairs > private room endpoints require membership and own-room lists authentication
+AssertionError: expected 'Public' to be 'Authenticated' // Object.is equality
+
+Expected: "Authenticated"
+Received: "Public"
+
+ ❯ test/repair.test.ts:6:174
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/repair.test.ts > User approved T03 repairs > public recruitment query cannot request closed or private cards
+AssertionError: expected undefined to be defined
+ ❯ test/repair.test.ts:7:198
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/repair.test.ts > User approved T03 repairs > Lobby query accepts all seven games and rejects others
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/repair.test.ts:8:251
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/repair.test.ts

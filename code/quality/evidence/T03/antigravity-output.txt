@@ -1,0 +1,60 @@
+### Báo cáo thực hiện FG Task T03
+
+Đã hoàn thành triển khai duy nhất **Task T03: Data Contracts, API Schemas & Realtime Event Definitions** tại workspace `E:/FGweb/code`.
+
+---
+
+### 1. Các file đã tạo/cập nhật (Vi phạm ranh giới: KHÔNG)
+- **Source contracts (`packages/contracts/src/`)**:
+  - [common.ts](file:///E:/FGweb/code/packages/contracts/src/common.ts): IDs (opaque non-empty string), IsoDateTime (UTC ISO Z), GameTitle (7 game whitelist), ErrorCode (HTTP mapping), SocketEventNames, Page<T>, PlayerCapacity (1..10), CustomStatus.
+  - [auth.ts](file:///E:/FGweb/code/packages/contracts/src/auth.ts): Discord-only auth provider validation, MeDTO & AuthSession.
+  - [profiles.ts](file:///E:/FGweb/code/packages/contracts/src/profiles.ts): UserSummary, GameProfileDTO, Public ProfileDTO (ẩn email/credentials/discordId), Private ProfileDTO, OnboardingRequest & UpdateProfileRequest.
+  - [messages.ts](file:///E:/FGweb/code/packages/contracts/src/messages.ts): MessageDTO (chat cursor `createdAt, id`), AttachmentDTO (JPG/PNG/WebP, max 5MiB), CreateMessageRequest & ListMessagesQuery.
+  - [rooms.ts](file:///E:/FGweb/code/packages/contracts/src/rooms.ts): RoomDTO (max 50 thành viên), RoomSettingsDTO (PUBLIC/PRIVATE, OWNER_APPROVAL/DIRECT_MEMBER), Permission enum, HelperPermission (`MANAGE_CHAT`, `MANAGE_CALLS`, `MANAGE_RECRUITMENT`, `MANAGE_MEMBERS`), RoomMemberDTO.
+  - [teams.ts](file:///E:/FGweb/code/packages/contracts/src/teams.ts): PlaySessionDTO (SCHEDULED/ACTIVE/ENDED), RecruitmentDTO (OPEN/CLOSED, thẻ tuyển Roblox kinh nghiệm), CreateRecruitmentSchema (kiểm tra `scheduledAt` tương lai qua clock injected nhưng cho phép đọc lịch sử quá hạn), JoinRequestDTO, InvitationDTO (discriminated union theo target `ROOM` vs `PLAY_SESSION`).
+  - [calls.ts](file:///E:/FGweb/code/packages/contracts/src/calls.ts): CallGroupDTO (giới hạn 10 participant max, 3 publisher max), ExternalLiveDTO (max 1 stream/call, YouTube/Twitch), CallParticipantDTO, CallJoinDTO.
+  - [notifications.ts](file:///E:/FGweb/code/packages/contracts/src/notifications.ts): NotificationDTO (6 loại thông báo), NotificationPreferencesDTO, WebPushSubscriptionDTO.
+  - [moderation.ts](file:///E:/FGweb/code/packages/contracts/src/moderation.ts): ReportDTO (USER/MESSAGE), BlockDTO, AdminUserActionRequest.
+  - [index.ts](file:///E:/FGweb/code/packages/contracts/src/index.ts): Re-export toàn bộ package manifest `@fg/contracts`.
+- **Cấu hình & Test (`packages/contracts/`)**:
+  - [vitest.config.ts](file:///E:/FGweb/code/packages/contracts/vitest.config.ts): Minimal Vitest config cho workspace `@fg/contracts`.
+  - [contracts.test.ts](file:///E:/FGweb/code/packages/contracts/test/contracts.test.ts): Behavior unit tests kiểm tra toàn bộ yêu cầu bất biến.
+  - [exports.test.ts](file:///E:/FGweb/code/packages/contracts/test/exports.test.ts): Unit test kiểm tra compiled package entrypoint `./dist/index.js`.
+- **Tài liệu & Evidence**:
+  - [api-contract.md](file:///E:/FGweb/code/quality/api-contract.md): Đặc tả API v1 chi tiết nhóm method, path, request/response DTOs, auth permissions, error codes, Socket.IO events.
+  - [execution.log](file:///E:/FGweb/code/quality/evidence/T03/execution.log): Log quá trình chạy lệnh, exit codes và kết quả.
+  - [summary.json](file:///E:/FGweb/code/quality/evidence/T03/summary.json): File bằng chứng ghi nhận hashes, exit codes, timestamps.
+
+---
+
+### 2. Kết quả kiểm thử thực tế (TEST-FIRST)
+
+1. **Giai đoạn RED**:
+   - Chạy `npm run test --workspace @fg/contracts -- test/contracts.test.ts` trước khi triển khai schemas. Test thất bại đúng dự kiến do chưa xuất module (`Cannot find module '../src/index.js'`).
+2. **Giai đoạn PASS**:
+   - `npm run test --workspace @fg/contracts -- test/contracts.test.ts`: **13/13 tests PASS**.
+   - `npm run build --workspace @fg/contracts`: Biến dịch TypeScript sang `./dist` thành công (Exit code 0).
+   - `npm run test --workspace @fg/contracts`: **14/14 tests PASS** (bao gồm test compiled entrypoint `./dist/index.js`).
+   - `npm exec --workspace @fg/contracts -- tsc --noEmit`: Typecheck workspace thành công, không có lỗi kiểu.
+   - `npm run lint`: ESLint workspace chạy qua 100% không báo lỗi.
+
+---
+
+### 3. Các yêu cầu nghiệp vụ và bất biến đã kiểm tra thành công
+- **Game whitelist**: Chỉ chấp nhận đúng 7 game chính thức, từ chối tên game ngoài danh mục.
+- **Error mapping**: Cho ra đúng mã HTTP (401, 403, 404, 409, 422, 429).
+- **Socket event names**: Đầy đủ các sự kiện realtime khớp Mục 5 của spec.
+- **Bảo mật profile**: Public profile loại trừ email, discordId và thông tin riêng tư.
+- **Phân tách thực thể**: Roster member, Room member và Call participant hoàn toàn tách biệt; Guest không có quyền membership.
+- **Giới hạn capacity**: Enforce 1..10 cho `playerCapacity`, max 50 cho Room, max 10 cho Call participants, max 3 cho screen publishers.
+- **Thẻ hẹn giờ (Scheduled)**: Validate future date khi tạo mới, không làm fail parse dữ liệu lịch sử.
+- **Discriminated payload**: Phân biệt rõ lời mời `ROOM` và `PLAY_SESSION`.
+
+---
+
+### 4. Trạng thái task & Chuyển giao
+- **Deviations / Blockers**: Không có.
+- **Trạng thái**: Local verification PASS, sẵn sàng cho Codex deep review.
+- **Ledger**: Không tự sửa hay đóng PASS trong `quality/tasks.json` (chờ Codex review). Không tự động chuyển sang T04.
+
+Ready for Codex deep review.
