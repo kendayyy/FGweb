@@ -1,0 +1,34 @@
+name: fg-local
+services:
+  postgres:
+    image: postgres:17-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Generate infra/.env.local first}
+      POSTGRES_DB: ${POSTGRES_DB:?Generate infra/.env.local first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Generate infra/.env.local first}
+    ports: ["127.0.0.1:55432:5432"]
+    volumes: ["../.runtime/services/postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    environment:
+      REDISCLI_AUTH: ${REDISCLI_AUTH:?Generate infra/.env.local first}
+    ports: ["127.0.0.1:56379:6379"]
+    volumes:
+      - ../.runtime/services/redis:/data
+      - ../.runtime/services/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -qx PONG"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  livekit:
+    image: livekit/livekit-server:v1.8.4@sha256:621fd87bd64a0c83e1f2418ee0323eb920d00acdd73e5f79b303c64f6cc532af
+    command: ["--config", "/etc/livekit.yaml"]
+    ports: ["127.0.0.1:57880:7880", "127.0.0.1:57881:7881", "127.0.0.1:57882:7882/udp"]
+    volumes: ["../.runtime/services/livekit.yaml:/etc/livekit.yaml:ro"]

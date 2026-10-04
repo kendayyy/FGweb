@@ -1,0 +1,24 @@
+=== T01 PREPARATION RED PROBE ===
+Timestamp: 2026-10-04T12:49:32.042Z
+Cwd: E:\FGweb\code
+
+--- Check 1: Root & Workspace Package Manifests ---
+RED: Missing manifest package.json
+RED: Missing manifest apps/web/package.json
+RED: Missing manifest apps/api/package.json
+RED: Missing manifest apps/worker/package.json
+RED: Missing manifest packages/contracts/package.json
+RED: Missing manifest packages/database/package.json
+
+--- Check 2: Docker Containers ---
+RED: Docker compose check failed: Command failed: docker compose -f infra/compose.local.yml ps
+compose file "E:\\FGweb\\code\\infra\\compose.local.yml" is invalid: open E:\FGweb\code\infra\compose.local.yml: The system cannot find the path specified.
+
+
+--- Check 3: Port Reachability ---
+RED: PostgreSQL port 5432 is CLOSED
+RED: Redis port 6379 is CLOSED
+RED: LiveKit port 7880 is CLOSED
+
+--- Check 4: Playwright Cache ---
+RED: Missing Playwright browser cache at .cache/ms-playwright

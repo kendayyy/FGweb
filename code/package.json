@@ -1,0 +1,56 @@
+{
+  "name": "fg-root",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build": "node -e \"console.error('Root build entrypoint not implemented yet (owned by feature tasks)'); process.exit(1);\"",
+    "test": "vitest run && jest",
+    "test:e2e": "playwright test",
+    "verify": "node quality/evidence/T01/run-setup-probes.mjs",
+    "env:check": "node -e \"console.error('env:check script not implemented yet (owned by T02)'); process.exit(1);\"",
+    "services:smoke": "node -e \"console.error('services:smoke script not implemented yet (owned by T02)'); process.exit(1);\"",
+    "task:check": "node -e \"console.error('task:check script not implemented yet (owned by T02)'); process.exit(1);\"",
+    "verify:staging": "node -e \"console.error('verify:staging script not implemented yet (owned by T40)'); process.exit(1);\"",
+    "backup:test": "node -e \"console.error('backup:test script not implemented yet (owned by T40)'); process.exit(1);\"",
+    "restore:test": "node -e \"console.error('restore:test script not implemented yet (owned by T40)'); process.exit(1);\"",
+    "load:api": "node -e \"console.error('load:api script not implemented yet (owned by T41)'); process.exit(1);\"",
+    "load:chat": "node -e \"console.error('load:chat script not implemented yet (owned by T41)'); process.exit(1);\"",
+    "load:media": "node -e \"console.error('load:media script not implemented yet (owned by T41)'); process.exit(1);\"",
+    "load:network": "node -e \"console.error('load:network script not implemented yet (owned by T41)'); process.exit(1);\"",
+    "test:setup": "node --test quality/evidence/T01/probe-failures.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.0.0",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "eslint": "10.12.0",
+    "jest": "30.5.2",
+    "ts-node": "10.9.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.0",
+    "vitest": "5.0.3",
+    "@eslint/js": "10.0.1",
+    "globals": "17.4.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "msgpackr-extract@3.0.4": true,
+    "@parcel/watcher@2.6.0": true,
+    "unrs-resolver@1.12.2": true
+  },
+  "type": "module",
+  "overrides": {
+    "esbuild": "0.28.2"
+  }
+}

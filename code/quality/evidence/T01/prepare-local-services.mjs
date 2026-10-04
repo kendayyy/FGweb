@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { randomBytes } from 'node:crypto';
+import { parseEnv } from 'node:util';
+import assert from 'node:assert/strict';
+const runtime = path.resolve('.runtime/services');
+fs.mkdirSync(runtime, { recursive: true });
+for (const dir of ['postgres','redis']) fs.mkdirSync(path.join(runtime, dir), { recursive: true });
+const secret = () => randomBytes(32).toString('hex');
+const credentials = fs.existsSync('infra/.env.local') ? parseEnv(fs.readFileSync('infra/.env.local', 'utf8')) : { POSTGRES_USER: 'fg_local', POSTGRES_DB: 'fg_local', POSTGRES_PASSWORD: secret(), REDISCLI_AUTH: secret(), LIVEKIT_API_KEY: 'FG'+randomBytes(12).toString('hex'), LIVEKIT_API_SECRET: secret() };
+for (const name of ['POSTGRES_USER','POSTGRES_DB','POSTGRES_PASSWORD','REDISCLI_AUTH','LIVEKIT_API_KEY','LIVEKIT_API_SECRET']) assert.match(credentials[name] || '', /^[a-zA-Z0-9_]+$/, 'invalid generated local configuration');
+fs.writeFileSync('infra/.env.local', Object.entries(credentials).map(([k,v]) => `${k}=${v}`).join('\n')+'\n', { mode: 0o600 });
+fs.writeFileSync(path.join(runtime, 'redis.conf'), `bind 0.0.0.0\nappendonly yes\nrequirepass ${credentials.REDISCLI_AUTH}\n`, { mode: 0o600 });
+fs.writeFileSync(path.join(runtime, 'livekit.yaml'), `port: 7880\nbind_addresses: ["0.0.0.0"]\nrtc:\n  tcp_port: 7881\n  udp_port: 7882\n  use_external_ip: false\nkeys:\n  ${credentials.LIVEKIT_API_KEY}: ${credentials.LIVEKIT_API_SECRET}\nlogging:\n  level: warn\n`, { mode: 0o600 });
+console.log('Local credentials and service configuration generated in ignored project files (values not displayed).');
