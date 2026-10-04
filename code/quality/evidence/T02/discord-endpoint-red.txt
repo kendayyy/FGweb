@@ -1,0 +1,38 @@
+✖ configured services authenticate using compatible provider endpoints (4868.0133ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5012.7741
+
+✖ failing tests:
+
+test at quality\evidence\T02\services.integration.test.mjs:2:1
+✖ configured services authenticate using compatible provider endpoints (4868.0133ms)
+  AssertionError [ERR_ASSERTION]: PASS: PostgreSQL authenticated isolated transaction
+  PASS: Redis authenticated isolated expiring key
+  PASS: LiveKit health, temporary room and signed token
+  PASS: SMTP TLS connection and authentication; no email sent
+  PASS: VAPID local key pair configuration; push not yet tested
+  PASS: YouTube embed provider reachable; playback deferred to T32
+  PASS: Twitch embed provider reachable; playback deferred to T32
+  FAIL: Discord client credential and configured callback; login not yet tested (HTTP 401)
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T02/services.integration.test.mjs:2:189)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

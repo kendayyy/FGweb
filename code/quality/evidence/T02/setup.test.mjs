@@ -1,0 +1,33 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { randomBytes, createECDH, createHash } from 'node:crypto';
+const directory=fs.mkdtempSync(path.resolve('.cache/t02-tests-'));
+const ecdh=createECDH('prime256v1'); ecdh.generateKeys();
+const valid={DATABASE_URL:'postgresql://user:password@127.0.0.1:55432/fg',REDIS_URL:'redis://:password@127.0.0.1:56379',PUBLIC_ORIGIN:'http://localhost:5173',BETTER_AUTH_URL:'http://localhost:5173',BETTER_AUTH_SECRET:randomBytes(32).toString('hex'),DISCORD_CLIENT_ID:'123456789012345678',DISCORD_CLIENT_SECRET:'test-secret-private',LIVEKIT_URL:'ws://127.0.0.1:57880',LIVEKIT_API_KEY:'test-key',LIVEKIT_API_SECRET:'test-private-key',SMTP_HOST:'smtp.gmail.com',SMTP_PORT:'465',SMTP_USER:'fg@example.com',SMTP_PASSWORD:'private-test-password',SMTP_FROM:'fg@example.com',VAPID_PUBLIC_KEY:ecdh.getPublicKey().toString('base64url'),VAPID_PRIVATE_KEY:ecdh.getPrivateKey().toString('base64url'),VAPID_SUBJECT:'mailto:fg@example.com',UPLOAD_ROOT:'.runtime/uploads'};
+function runEnv(values){const file=path.join(directory,'test.env');fs.writeFileSync(file,Object.entries(values).map(([k,v])=>`${k}=${v}`).join('\n'));return spawnSync(process.execPath,['scripts/check-env.mjs','--file',file],{encoding:'utf8'});}
+test('valid complete config succeeds without exposing secrets',()=>{const result=runEnv(valid);assert.equal(result.status,0,result.stderr);assert.ok(!result.stdout.includes(valid.SMTP_PASSWORD));});
+test('missing credentials fail without printing supplied secrets',()=>{const result=runEnv({...valid,DISCORD_CLIENT_SECRET:''});assert.equal(result.status,1);assert.match(result.stderr,/DISCORD_CLIENT_SECRET/);assert.ok(!result.stderr.includes(valid.SMTP_PASSWORD));});
+test('outside-code uploads rejected',()=>assert.equal(runEnv({...valid,UPLOAD_ROOT:'../outside'}).status,1));
+test('origin mismatch and invalid VAPID key pair rejected',()=>{assert.equal(runEnv({...valid,BETTER_AUTH_URL:'http://localhost:3000'}).status,1);assert.equal(runEnv({...valid,VAPID_PRIVATE_KEY:randomBytes(32).toString('base64url')}).status,1);});
+test('gate refuses missing prerequisites, changed spec, failed evidence and path escapes',async()=>{
+ const {checkGate}=await import('../../../scripts/verify-task.mjs');
+ const root=path.join(directory,'gate');fs.mkdirSync(path.join(root,'quality'),{recursive:true});fs.writeFileSync(path.join(root,'quality/proof.txt'),'PASS');fs.writeFileSync(path.join(root,'output.txt'),'result');
+ const sha=v=>createHash('sha256').update(v).digest('hex');
+ const first={id:'T01',status:'PASS',dependencies:[],specSha256:'baseline',startedAt:'2026-10-04T00:00:00Z',completedAt:'2026-10-04T01:00:00Z',writeAllowlist:['output.txt','quality/**'],outputsHash:{files:{'output.txt':sha('result')}},commands:[{exitCode:0,evidencePath:'quality/proof.txt',evidenceSha256:sha('PASS'),startedAt:'2026-10-04T00:10:00Z',completedAt:'2026-10-04T00:11:00Z'}],evidencePaths:['quality/proof.txt']};
+ const next={id:'T02',status:'NOT_STARTED',dependencies:['T01'],specSha256:'baseline',writeAllowlist:['scripts/**']};
+ const opts={root,tasks:[first,next],id:'T02',specHash:'baseline',requestedPaths:['scripts/check-env.mjs']};
+ assert.doesNotThrow(()=>checkGate(opts));
+ assert.throws(()=>checkGate({...opts,tasks:[{...first,status:'BLOCKED'},next]}));
+ assert.throws(()=>checkGate({...opts,specHash:'changed'}));
+ assert.throws(()=>checkGate({...opts,tasks:[{...first,commands:[{...first.commands[0],exitCode:1}]},next]}));
+ assert.throws(()=>checkGate({...opts,requestedPaths:['../outside']}));
+ assert.throws(()=>checkGate({...opts,tasks:[{...first,commands:[{...first.commands[0],startedAt:'2026-10-03T00:00:00Z',completedAt:'2026-10-03T01:00:00Z'}]},next]}));
+ assert.throws(()=>checkGate({...opts,tasks:[{...first,commands:[{...first.commands[0],startedAt:'invalid'}]},next]}));
+ assert.throws(()=>checkGate({...opts,tasks:[{...first,commands:[{exitCode:0}]},next]}));
+ assert.throws(()=>checkGate({...opts,requestedPaths:['apps/web/source.ts']}));
+ fs.writeFileSync(path.join(root,'output.txt'),'tampered');assert.throws(()=>checkGate(opts));
+ fs.writeFileSync(path.join(root,'output.txt'),'result');fs.writeFileSync(path.join(root,'quality/proof.txt'),'tampered');assert.throws(()=>checkGate(opts));
+});

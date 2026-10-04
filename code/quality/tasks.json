@@ -213,22 +213,111 @@
     },
     {
       "id": "T02",
-      "status": "BLOCKED",
+      "status": "PASS",
       "dependencies": [
         "T01"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [
-        "quality/T02-setup-guide.md"
+      "inputsHash": "64aab5c50b1a2f139eb990cae430c7800e0d4be441579153f3264b6f3977b0b1",
+      "outputsHash": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "files": {
+          "package.json": "3008219698a8382c96e41a6475a3f907fc79f7272701f28f577e8539f8e736f9",
+          "scripts/check-env.mjs": "bb150014ebc624bf948e6011416a4692080e06ce9209dffaab3e2a7c18864780",
+          "scripts/smoke-services.mjs": "0221f31e5706881b412c253f764a631d1030b62ebb06d9ab0c89c9023b496fec",
+          "scripts/verify-task.mjs": "a840d9b75189bc51907480296b5f01f0146baf36e05504619080cbb4a9ac447e",
+          "quality/evidence/T02/prepare-env.mjs": "2031eed5cb9289ce934281a0700f9419a6280b8d0d8784433e31fc715f571919",
+          "quality/evidence/T02/record-verification.mjs": "817cbb7b83a62e0ff82ec44ae62499364a2173de2e1c4bc81266eaef8918b254",
+          "quality/evidence/T02/services.integration.test.mjs": "c553f8c2808f2169717d63f7f5808a1295b61b4d4e55513e5e12788f062f48df",
+          "quality/evidence/T02/setup.test.mjs": "963a022b07621b21fd44a6df72e670dd87e2f7543dfd36524dc5574ce7c86cfe"
+        }
+      },
+      "commands": [
+        {
+          "command": "npm run env:check",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:06:42.857Z",
+          "completedAt": "2026-10-04T17:06:43.491Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/env.txt",
+          "evidenceSha256": "1c273b0bd26c82ec7e014bf8a2e58bcdbdda85d90bf4b2320b5e628eb720ee8c"
+        },
+        {
+          "command": "npm run test:setup:t02",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:06:43.495Z",
+          "completedAt": "2026-10-04T17:06:44.810Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/tests.txt",
+          "evidenceSha256": "a5083b32293d7475d24fc805da02059c1d84292a3dc5ab92c7dae4b5b6294db2"
+        },
+        {
+          "command": "npm run lint",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:06:44.810Z",
+          "completedAt": "2026-10-04T17:06:49.495Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/lint.txt",
+          "evidenceSha256": "6ba41d3386946f3480608c0bcb80bb893d785c187db4178012a840ea9081d89b"
+        },
+        {
+          "command": "npm run typecheck",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:06:49.495Z",
+          "completedAt": "2026-10-04T17:06:53.704Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/typecheck.txt",
+          "evidenceSha256": "8fa1cf5506304e8abac55868e7f1a136c9b1dde57a3981a382da4c21ea129a6f"
+        },
+        {
+          "command": "npm run services:smoke",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:06:53.704Z",
+          "completedAt": "2026-10-04T17:06:59.006Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/smoke.txt",
+          "evidenceSha256": "0bbf080414ef2048fbd578749edff4f90ea20a6ae9058738c227e63ba647c1ca"
+        },
+        {
+          "command": "node --test quality/evidence/T02/services.integration.test.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:07:40.596Z",
+          "completedAt": "2026-10-04T17:07:45.374Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/integration-final.txt",
+          "evidenceSha256": "f6df04c6107f2c579effc6103074fd3dca2efb6f17657c15ad763a6f07e26e4e"
+        },
+        {
+          "command": "npm run task:check -- T03",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-04T17:07:45.379Z",
+          "completedAt": "2026-10-04T17:07:46.074Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T02/gate-t03.txt",
+          "evidenceSha256": "65fb53d7592c3420f9bc22fde9beec7eb8172b1dd81189676b4f05bb1afb816e"
+        }
       ],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": [
-        "Missing SMTP host/auth/sender and VAPID contact",
-        "Discord secret/callback configuration still unverified"
+      "evidencePaths": [
+        "quality/evidence/T02/review.md",
+        "quality/evidence/T02/verification.json",
+        "quality/evidence/T02/provider-config-confirmation.json",
+        "quality/evidence/T02/discord-endpoint-red.txt",
+        "quality/evidence/T02/discord-endpoint-green.txt"
+      ],
+      "startedAt": "2026-10-04T16:49:43.669Z",
+      "completedAt": "2026-10-04T17:07:46.074Z",
+      "blockers": [],
+      "writeAllowlist": [
+        ".env.example",
+        ".env.local",
+        "package.json",
+        "scripts/**",
+        "quality/evidence/T02/**",
+        "quality/tasks.json",
+        "quality/dependency-lock.md",
+        "quality/T02-setup-guide.md",
+        "quality/spec-coverage.md",
+        "AGENTS.md"
       ]
     },
     {

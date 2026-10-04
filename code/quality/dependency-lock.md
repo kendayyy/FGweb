@@ -152,3 +152,7 @@ Start: `docker compose --env-file infra/.env.local -f infra/compose.local.yml up
 Project npmcache .cache/npm; browser cache .cache/ms-playwright; runtime .runtime/services. Install browser with node quality/evidence/T01/install-browser.mjs. Product application build/test entrypoints are not ready until owning feature tasks, and missing implementation fails explicitly. T01 probes are setup only.
 
 Evidence: quality/evidence/T01/verification.json, final-*.txt, output-hashes.json.
+
+## T02 configured local services
+
+Discord only, authenticated SMTP Gmail TLS465, generated local Better Auth/VAPID keys, PostgreSQL/Redis/LiveKit from existing local service credentials. Actual probes and limits: quality/evidence/T02/review.md. No dependency version changes.
