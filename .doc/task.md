@@ -6,7 +6,7 @@
 >
 > **Architecture:** npm workspace, frontend SPA riêng, backend REST/realtime riêng, PostgreSQL là nguồn dữ liệu nghiệp vụ, Redis phục vụ session coordination/queue/presence. LiveKit SFU xử lý media; âm thanh/video không đi qua Socket.IO. Worker backend riêng xử lý notifications/reminders.
 >
-> **Tech Stack đề xuất, phải chốt ở T00:** Node24, TypeScript, React+Vite, Tailwind, TanStack Query, React Router, NestJS, Better Auth, Drizzle+PostgreSQL, Redis/BullMQ, Socket.IO, LiveKit, Nodemailer, Web Push. Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn.
+> **Tech Stack đã chốt ở T00:** Node24, TypeScript, React+Vite, Tailwind, TanStack Query, React Router, NestJS, Better Auth (Google/Discord), Drizzle+PostgreSQL, Redis/BullMQ, Socket.IO, self-hosted LiveKit, Nodemailer, Web Push. Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn; người dùng chốt trần chi phí trước khi chạy paid tests/chi tiêu, dự toán tại T41.
 >
 > **Spec:** [01-product-spec.md](./01-product-spec.md). Spec đã duyệt và các quyết định bổ sung ghi trong đó là nguồn chuẩn. Task không được tự ghi đè spec.
 >
@@ -135,27 +135,27 @@ Scripts root phải được T01–T02 cung cấp: `lint`, `typecheck`, `build`,
 - IN_APP/PUSH/EMAIL tùy chọn riêng; PWA iOS push16.4+ installed + explicit consent.
 - Đủ tính năng ngay v1;1.000 người gọi/live đồng thời; không giảm mục tiêu xuống200 để giảm chi phí.
 
-### Mặc định đề xuất cần người dùng xác nhận tại T00
+### Quyết định mặc định đã được người dùng phê duyệt tại T00
 
-Đây là bản đề xuất để review, không phải Antigravity có quyền tự chọn thay người dùng. Nếu được chỉnh, cập nhật spec và toàn bộ task/contract/test liên quan trước T01.
+Toàn bộ các mục đề xuất đã được người dùng chốt với câu trả lời "tôi chốt" ngày 04/10/2026. Spec và các task đã được cập nhật đồng bộ trước T01.
 
-| Điểm còn mở | Đề xuất để khóa |
+| Hạng mục | Quy định đã chốt |
 | --- | --- |
 | Giao diện — ĐÃ DUYỆT | Tên FG; giữ bố cục, màu và typography hai mockup theo 02-frontend-design.md. Không hỏi lại hoặc tự redesign; ảnh minh họa không là asset có license |
 | Tech stack | Stack mục 3; media self-hosted LiveKit có thể nhiều node theo benchmark, chưa chọn/mua VPS |
-| Room lâu dài | Max50member/room; roster capacity do owner chọn1–10; đây không phải giới hạn game chính thức |
-| Thẻ từng game | gameId, free-text mode, title, playerCapacity, now/scheduledAt, requirementText; Roblox thêm experienceName/URL; rank/role không hard gate |
+| Room lâu dài | Max50member/room; playerCapacity (tổng quy mô đội gồm chủ đội) do owner chọn1–10; đây không phải giới hạn game chính thức |
+| Thẻ từng game | gameId, free-text mode, title, playerCapacity (tổng đội gồm chủ đội), now/scheduledAt, requirementText; Roblox thêm experienceName/URL; rank/role không hard gate |
 | Phòng private | Chuyển PRIVATE đóng public recruitments; không đổi member/history |
 | Lời mời | OWNER_APPROVAL mặc định; ROOM invite chỉ vào phòng; PLAY_SESSION invite mới xét roster/active slot |
-| Lịch hẹn | Người đã duyệt giữ chỗ hẹn; start do owner/helper, cấp active slots atomic; nếu bất kỳ conflict thì chưa start, không tự loại người khỏi đội khác |
+| Lịch hẹn | Người đã duyệt giữ chỗ hẹn; start thủ công bởi owner/helper có quyền MANAGE_RECRUITMENT, giờ hẹn không tự start, cấp active slots atomic; nếu bất kỳ conflict thì chưa start, không tự loại người khỏi đội khác |
 | Call | Một user ở một call tại một thời điểm; vào call khác cần rời call cũ; xem không khóa active team slot |
 | Disconnect | Explicit leave đóng call ngay khi trống; mất mạng grace30s, sau đó cleanup/reconcile; heartbeat15s, presence TTL45s |
 | Live ngoài | Một source/call do current member đặt; viewers chọn tab phía mình; không sync playback và không relay qua SFU |
-| Notifications | In-app/push cho DM, mentions, friend/team invitations, requests/results, reminders; email lời mời và reminders; reminder trước10phút; không mỗi tin Lobby |
+| Notifications | In-app/push cho DM, mentions, friend/team invitations, requests/results, reminders; email cho lời mời (bạn bè, đội/phòng) và reminders; reminder trước10phút; không mỗi tin Lobby |
 | Block | Chặn DM/invite mới; Lobby ẩn nội dung từ người bị chặn ở phía người chặn; không tự kick khỏi room hoặc xóa lịch sử |
 | Upload | JPG/PNG/WebP tối đa5MiB và20MP, re-encode WebP; attachment quyền theo conversation; không SVG/GIF trong v1 |
-| Hiệu năng | p95 REST<500ms, chat delivery<1s, call join<3s, lỗi<1%, audio packet loss<2% trong bài tải; chất lượng âm thanh cần nghe thật |
-| Chi phí | Dự toán từ traffic/egress/TURN đo được; người dùng chốt trần chi phí chạy paid tests và vận hành sau khi thấy dự toán |
+| Hiệu năng | p95 REST<500ms, p95 chat delivery<1s, p95 call join<3s, lỗi<1%, audio packet loss<2% trong bài tải; chất lượng âm thanh cần nghe thật |
+| Chi phí | Dự toán từ traffic/egress/TURN đo được; người dùng chốt trần chi phí trước khi chạy paid tests và chi tiêu vận hành sau khi thấy dự toán |
 
 ### Review focus — phải có test sở hữu
 

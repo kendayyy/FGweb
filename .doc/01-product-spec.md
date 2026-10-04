@@ -1,7 +1,7 @@
 # FG — Đặc tả sản phẩm
 
 Ngày cập nhật: 04/10/2026.
-Trạng thái: Bản nháp để cùng chủ sản phẩm hoàn thiện. Các mục ghi “cần chốt” chưa phải yêu cầu đã được phê duyệt.
+Trạng thái: Đã phê duyệt chính thức (T00 Baseline). Người dùng đã chốt toàn bộ gói đề xuất kỹ thuật và nghiệp vụ vào ngày 04/10/2026.
 
 Tên website đã chốt: **FG**. Người dùng đã duyệt phong cách hai mockup: giữ màu sắc, typography và bố cục khi build frontend. Hướng dẫn triển khai hình thức ở [02-frontend-design.md](./02-frontend-design.md); đây là tài liệu thiết kế đi cùng spec.
 
@@ -11,11 +11,11 @@ Website dành cho game thủ Việt Nam, giải quyết hai nhu cầu có ưu ti
 
 Bản ra mắt đầu tiên gồm Lobby, tìm đội, hồ sơ, kết bạn, nhắn riêng, phòng nhóm lâu dài, gọi thoại, chia sẻ màn hình, xem live ngoài, PWA và thông báo. Không tách gọi thoại/live sang đợt phát hành sau.
 
-Hỗ trợ máy tính và điện thoại. Ưu tiên chi phí vận hành thấp nhất có thể; chưa có ngân sách tháng cố định. Mục tiêu tải là 1.000 người đồng thời dùng gọi thoại hoặc xem live, không chỉ 1.000 người mở website. Mục tiêu này phải được kiểm thử; chưa có xác nhận khả năng đáp ứng hoặc dự toán hạ tầng.
+Hỗ trợ máy tính và điện thoại. Ưu tiên chi phí vận hành thấp nhất có thể; người dùng chưa chọn ngân sách tháng cố định và sẽ duyệt trần chi phí (cost ceiling) sau khi có số liệu dự toán đo được từ traffic/egress/TURN thực tế trước khi chạy các bài kiểm thử tải trả phí hoặc chi tiêu ở T41 (gate vận hành trì hoãn này không chặn T00/T01). Mục tiêu tải là 1.000 người đồng thời dùng gọi thoại hoặc xem live (1.000 media concurrent target), không chỉ 1.000 người mở website. Mục tiêu này bắt buộc phải được kiểm thử thực tế tại T41.
 
 ## 2. Game và Lobby
 
-Các game ban đầu:
+Danh mục 7 game chính thức đã được phê duyệt:
 
 - Liên Minh Huyền Thoại.
 - Valorant.
@@ -24,8 +24,6 @@ Các game ban đầu:
 - Roblox.
 - Liên Quân Mobile.
 - Free Fire.
-
-Tên TFT và Dota 2 được chuẩn hóa từ cách gọi trong trao đổi; cần xác nhận khi chốt danh mục game chính thức.
 
 Mỗi game có một phòng chat chung tên **Lobby**, là nơi trung tâm để cộng đồng gặp nhau, tìm bạn chơi, bàn luận về game và tán gẫu. Phiên bản đầu không chia thêm các kênh theo chủ đề hoặc chế độ.
 
@@ -43,37 +41,41 @@ Khách chưa đăng nhập được xem Lobby, chat chung và thẻ tìm đội.
 
 ## 3. Tài khoản, hồ sơ và kết bạn
 
-Đăng nhập bằng Google và Discord.
+Đăng nhập bằng Google và Discord (dùng Better Auth Google & Discord providers).
 
 Lần đầu đăng nhập, người dùng chọn biệt danh, ảnh đại diện và các game quan tâm rồi có thể vào Lobby. Có thể dùng ảnh từ tài khoản đăng nhập. Không bắt buộc hoàn thiện hồ sơ game trước khi chat hoặc tìm đội.
 
-Hồ sơ gồm tên, ảnh, giới thiệu; thông tin riêng từng game gồm tên trong game, rank nếu có, vai trò, giờ chơi và phong cách chơi. Thông tin bổ sung sau. Chưa đưa đánh giá sau trận vào bản đầu.
+Hồ sơ gồm tên, ảnh, giới thiệu; thông tin riêng từng game gồm tên trong game, rank nếu có, vai trò, giờ chơi và phong cách chơi. Thông tin chi tiết và cơ chế riêng tư hồ sơ nâng cao tiếp tục được quy định cụ thể bởi API contracts và ACL ở các task tương ứng (như T04, T10). Chưa đưa đánh giá sau trận vào bản đầu.
 
-Kết bạn cần hai bên đồng ý. Có nhắn riêng và mời bạn vào đội. Nhắn riêng không yêu cầu kết bạn trước. Có chức năng chặn và báo cáo.
+Kết bạn cần hai bên đồng ý. Có nhắn riêng và mời bạn vào đội. Nhắn riêng không yêu cầu kết bạn trước.
+
+Chức năng chặn: Chặn người dùng dừng gửi tin nhắn riêng (DM) mới và lời mời mới. Trong Lobby, nội dung tin nhắn từ người bị chặn bị ẩn cục bộ ở phía người chặn (locally hidden). Chặn không tự động kick người dùng khỏi phòng nhóm lâu dài hoặc xóa lịch sử chat cũ. Có chức năng báo cáo người dùng/tin nhắn vi phạm.
 
 ## 4. Tìm đội và lượt chơi
 
 ### Thẻ tìm đội
 
-Thẻ hỗ trợ chơi ngay hoặc hẹn giờ chơi sau. Thẻ thể hiện chủ đội, game, chế độ/nội dung muốn chơi, số người cần và yêu cầu tham gia. Chi tiết trường theo từng game cần được đặc tả tiếp; Roblox cần làm rõ trò chơi cụ thể bên trong Roblox.
+Thẻ hỗ trợ chơi ngay (`now`) hoặc hẹn giờ chơi sau (`scheduledAt`). Các trường chuẩn của thẻ gồm: `gameId`, chế độ chơi tự do (`mode` free-text), tiêu đề (`title`), tổng số người trong đội (`playerCapacity` - bao gồm cả chủ đội, ví dụ 5 cho đội 5 người), thời điểm (`now` hoặc `scheduledAt`), văn bản yêu cầu (`requirementText`). Riêng đối với game Roblox, bổ sung thêm tên trải nghiệm (`experienceName`) và đường dẫn (`experienceUrl`).
 
-Người dùng gửi yêu cầu, chủ đội xem hồ sơ rồi chấp nhận hoặc từ chối. Rank/vai trò trên thẻ là yêu cầu tham khảo; không ngăn người chưa đáp ứng gửi yêu cầu.
+Rank và vai trò trên thẻ là yêu cầu tham khảo (advisory rank/role); không tạo hard gate ngăn người chưa đáp ứng gửi yêu cầu. Người dùng gửi yêu cầu, chủ đội xem hồ sơ rồi chấp nhận hoặc từ chối.
 
-Ưu tiên giúp người chơi tìm đội phù hợp đang thiếu người trước khi tạo lượt tuyển mới. Cách tính độ phù hợp và sắp xếp danh sách cần chốt.
+Danh sách tuyển đội ưu tiên hiển thị và gợi ý các thẻ tuyển công khai (`OPEN PUBLIC recruitments`) đúng game và chế độ chơi đang thiếu ít người nhất (gần đủ đội nhất). Sắp xếp danh sách cố định (stable tiebreak) dựa trên thời gian cập nhật `updatedAt` mới nhất và `id`.
 
 ### Tránh tuyển trùng khi chơi ngay
 
 - Một người được giữ nhiều phòng nhóm lâu dài.
 - Có thể gửi nhiều yêu cầu vào đội chơi ngay.
 - Khi được nhận vào một đội chơi ngay, tự hủy các yêu cầu chơi ngay còn lại.
-- Mỗi người chỉ tham gia hoặc tuyển cho một đội chơi ngay đang hoạt động.
+- Mỗi người chỉ tham gia hoặc tuyển cho một đội chơi ngay đang hoạt động (`active_play_slots`).
 - Chủ đội bấm “Kết thúc buổi chơi” để kết thúc lượt chơi.
 - Thành viên có thể tự rời lượt chơi mà vẫn giữ tư cách thành viên phòng.
 - Kết thúc hoặc rời lượt chơi giải phóng người dùng để tìm/tuyển đội chơi ngay khác.
 
-Quy tắc đội chơi ngay không được áp dụng cho việc chỉ vào xem live. Cách chuyển đội hẹn giờ sang lượt chơi đang hoạt động cần chốt.
+Quy tắc đội chơi ngay không được áp dụng cho việc chỉ vào xem live.
 
-Đã xác nhận trong trao đổi tiếp theo: thành viên bấm tham gia buổi chơi, chủ đội duyệt danh sách người thuộc đội chơi; người chỉ vào gọi hoặc xem live không được tính vào đội chơi.
+Đối với đội hẹn giờ (`scheduledAt`): những người chơi được duyệt sẽ giữ chỗ hẹn trong danh sách (reserve scheduled roster). Buổi chơi chỉ được bắt đầu khi chủ đội hoặc người hỗ trợ có quyền `MANAGE_RECRUITMENT` bấm bắt đầu (`start`) thủ công; thời gian đến giờ hẹn đơn thuần không tự động bắt đầu buổi chơi. Khi người có quyền bấm bắt đầu (`start`), hệ thống thực hiện phân bổ các suất hoạt động (`active_play_slots`) một cách nguyên tử (atomically). Nếu bất kỳ thành viên nào gặp xung đột (đang thuộc active play session khác), toàn bộ lệnh start bị hủy bỏ (abort) và không tự loại người dùng khỏi đội khác.
+
+Thành viên bấm tham gia buổi chơi, chủ đội duyệt danh sách người thuộc đội chơi; người chỉ vào gọi hoặc xem live không được tính vào đội chơi.
 
 ## 5. Phòng nhóm lâu dài
 
@@ -86,20 +88,17 @@ Hai chế độ phòng:
 | Chế độ | Khả năng tìm thấy và tham gia |
 | --- | --- |
 | Công khai | Có thể mở thẻ tuyển cạnh Lobby; người ngoài xin tham gia. Nội dung chat phòng chỉ thành viên xem. |
-| Riêng | Không hiện trong danh sách tìm đội; nhận thành viên qua lời mời. |
+| Riêng | Không hiện trong danh sách tìm đội; nhận thành viên qua lời mời. Chuyển phòng sang chế độ riêng tư (`PRIVATE`) tự động đóng các thẻ tuyển công khai (`CLOSED`), bảo toàn danh sách thành viên và lịch sử chat. |
 
-Chuyển công khai/riêng và tự đóng thẻ tuyển khi chuyển sang riêng là đề xuất trong trao đổi, chưa được xác nhận riêng.
+Phân quyền mời và tham gia:
 
-Chủ phòng cấu hình quyền mời:
+- Mặc định quy trình tham gia là chủ phòng duyệt (`OWNER_APPROVAL`): thành viên mời bạn; người được mời đồng ý rồi chờ chủ phòng duyệt.
+- Lời mời trực tiếp (`DIRECT_MEMBER`): người được mời đồng ý là vào phòng nếu còn chỗ.
+- Lời mời từ chính chủ đội cần người được mời đồng ý. Phân biệt rõ lời mời vào phòng (`ROOM` invitation - chỉ cấp membership) và lời mời vào buổi chơi (`PLAY_SESSION` invitation - kiểm tra và cấp roster/active slot).
 
-- Chủ phòng duyệt: thành viên mời bạn; người được mời đồng ý rồi chờ chủ phòng duyệt.
-- Thành viên được mời trực tiếp: người được mời đồng ý là vào đội nếu còn chỗ.
-
-Mặc định chủ phòng duyệt là đề xuất, cần xác nhận. Lời mời từ chính chủ đội cần người được mời đồng ý; tác động tới giới hạn đội chơi ngay phải được kiểm tra.
+Sức chứa phòng lâu dài tối đa 50 thành viên (`max50`). Quy mô đội chơi (`playerCapacity`) do chủ phòng cấu hình từ 1 đến 10 thành viên (`owner roster 1-10`), hoàn toàn độc lập với giới hạn cuộc gọi.
 
 Thành viên tự rời phòng. Chủ phòng muốn rời có thể chuyển quyền cho thành viên khác hoặc giải tán phòng. Nếu chỉ còn chủ phòng, rời phòng sẽ đóng phòng.
-
-Số thành viên tối đa của phòng lâu dài chưa được chốt; không đồng nhất với giới hạn 10 người của cuộc gọi.
 
 ## 6. Nhóm gọi, mic và live
 
@@ -107,23 +106,25 @@ Trong phòng nhóm lâu dài, có thể tạo các nhóm gọi nhỏ cho những
 
 Chỉ thành viên phòng được vào nhóm gọi hoặc xem live. Bạn của nhóm chưa là thành viên cần được mời/nhận vào phòng trước.
 
-Người xem không chiếm suất trong đội chơi, nhưng có tính vào giới hạn cuộc gọi. Người không chơi vẫn được dùng mic bình thường. Mỗi người tự bật/tắt mic; có thể chỉnh âm lượng hoặc tắt tiếng riêng từng người khác, chỉ ảnh hưởng phía mình nghe.
+Mỗi người dùng chỉ ở 1 nhóm gọi tại một thời điểm; muốn vào nhóm gọi khác phải rời nhóm gọi cũ trước (`leave old first`). Người xem không chiếm suất trong đội chơi, nhưng có tính vào giới hạn cuộc gọi. Người không chơi vẫn được dùng mic bình thường. Mỗi người tự bật/tắt mic; có thể chỉnh âm lượng hoặc tắt tiếng riêng từng người khác (local mute/volume adjustment), chỉ ảnh hưởng phía mình nghe.
 
 Mỗi nhóm gọi:
 
 - Tối đa 10 người, tính cả người chơi và người xem.
 - Tối đa 3 người chia sẻ màn hình đồng thời.
-- Người xem chọn một luồng chính và chuyển nhanh giữa các luồng đang phát.
+- Người xem chọn một luồng chính và chuyển nhanh giữa các luồng đang phát (selected main video subscription).
 - Live mặc định 720p, 30 FPS; tự giảm chất lượng khi mạng yếu, ưu tiên giữ âm thanh cuộc gọi ổn định.
-- Tự đóng khi người cuối cùng rời đi. Phòng lâu dài và lịch sử chat vẫn được giữ.
+- Tự đóng khi người cuối cùng chủ động rời đi (`explicit last leave`). Phòng lâu dài và lịch sử chat vẫn được giữ.
+- Mất kết nối mạng bất ngờ có thời gian chờ (grace period) 30 giây để rejoin. Cơ chế ngắt nhịp (heartbeat) 15 giây, thời gian tồn tại trạng thái (presence TTL) 45 giây.
 
-Hỗ trợ cả chia sẻ màn hình trực tiếp trong cuộc gọi và xem live YouTube/Twitch trong phòng. Chia sẻ màn hình được hỗ trợ trên trình duyệt máy tính tương thích; điện thoại dùng mic và xem live, không yêu cầu phát màn hình trực tiếp từ PWA trong bản đầu.
+Hỗ trợ chia sẻ màn hình trực tiếp trong cuộc gọi và xem live YouTube/Twitch trong phòng:
+- Tối đa 1 nguồn stream ngoài (YouTube/Twitch) per call do một thành viên hiện tại thiết lập. Mỗi người xem tự chọn tab xem phía trình duyệt của mình, không đồng bộ phát (no sync playback) và không relay qua SFU.
+- Chia sẻ màn hình được hỗ trợ trên trình duyệt máy tính tương thích; điện thoại dùng mic và xem live, không yêu cầu phát màn hình trực tiếp từ PWA trong bản đầu.
+- Không hỗ trợ camera, ghi hình cuộc gọi hoặc lưu trữ bản phát live.
 
 Chủ phòng có thể ngắt mic, dừng chia sẻ màn hình hoặc đưa người ra khỏi cuộc gọi. Người bị ngắt mic cần được cho phép lại trước khi nói tiếp.
 
-Chủ phòng có thể bổ nhiệm người hỗ trợ, chọn riêng quyền quản lý chat, cuộc gọi, tuyển đội và thành viên. Chuyển quyền sở hữu và giải tán phòng dành cho chủ phòng.
-
-Cách xác định team chơi theo danh sách xin tham gia và được chủ đội duyệt đã được xác nhận. Cần chốt: quy tắc rời/mất kết nối và vào lại; quyền đưa live ngoài vào phòng và cách chọn live ngoài so với màn hình đang phát. Chưa yêu cầu camera, ghi hình cuộc gọi hoặc lưu bản phát live.
+Chủ phòng có thể bổ nhiệm người hỗ trợ (helper), chọn riêng quyền quản lý chat, cuộc gọi, tuyển đội và thành viên. Chuyển quyền sở hữu và giải tán phòng dành riêng cho chủ phòng.
 
 ## 7. PWA và thông báo
 
@@ -133,23 +134,36 @@ Trên iPhone, push yêu cầu iOS 16.4 trở lên và website đã thêm vào m�
 
 Giữ cả thông báo trong website, push và email. Người dùng bật/tắt riêng từng kênh và loại thông báo. Không được mặc định coi việc đăng nhập hoặc cài PWA là đã cấp quyền push.
 
-Đề xuất nhóm thông báo, cần xác nhận danh sách cuối:
+Danh sách thông báo chính thức được phê duyệt:
 
-- Tin nhắn riêng và @nhắc tên.
-- Lời mời kết bạn, lời mời vào đội.
-- Yêu cầu vào đội và kết quả duyệt.
-- Nhắc lịch chơi.
+- In-app và Web Push: tin nhắn riêng, @nhắc tên, lời mời kết bạn, lời mời vào đội/phòng, yêu cầu vào đội và kết quả duyệt, nhắc lịch chơi.
+- Email: lời mời (kết bạn, vào đội/phòng) và nhắc lịch chơi.
+- Nhắc lịch chơi được gửi trước 10 phút (`reminder 10min`).
+- Không gửi push hoặc email cho mọi tin nhắn trong Lobby.
 
-Đề xuất không gửi push cho mọi tin chat Lobby. Email đề xuất tập trung lời mời và lịch chơi. Bấm thông báo mở nội dung/phòng liên quan theo quyền truy cập hiện tại.
+Bấm thông báo mở nội dung/phòng liên quan theo quyền truy cập hiện tại.
 
-## 8. Quản trị cộng đồng
+## 8. Quản trị cộng đồng và tệp tải lên
 
 Giai đoạn đầu, chủ website quản trị toàn bộ cộng đồng: nhận báo cáo, xử lý tin vi phạm và khóa tài khoản. Có chặn người dùng, báo cáo người dùng/tin nhắn và trang quản trị. Chưa phân công moderator theo game.
 
-Quyền quản trị website tách biệt với quyền quản lý phòng do chủ phòng cấp. Quy tắc vi phạm, mức khóa, cách chặn ảnh hưởng chat chung và quy trình xử lý báo cáo cần đặc tả tiếp.
+Quyền quản trị website tách biệt với quyền quản lý phòng do chủ phòng cấp. Chính sách kiểm duyệt biên tập nội dung và quy trình xử lý vi phạm chi tiết sẽ tiếp tục được hoàn thiện trong các task quản trị (như T37).
 
-## 9. Kịch bản nghiệm thu chính
+Quy định xử lý tập tin hình ảnh tải lên:
+- Định dạng cho phép: JPG, PNG, WebP với dung lượng tối đa 5MiB và độ phân giải tối đa 20MP. Tất cả ảnh tải lên được tự động re-encode sang WebP.
+- Phân quyền tập tin đính kèm chặt chẽ theo conversation access. Không hỗ trợ SVG hoặc GIF trong v1.
 
+## 9. Chỉ số hiệu năng và Kịch bản nghiệm thu chính
+
+### Chỉ số hiệu năng mục tiêu (Performance Targets)
+- REST API response time: p95 < 500ms.
+- Realtime chat delivery latency: p95 < 1s.
+- Call join setup latency: p95 < 3s.
+- Tỷ lệ lỗi hệ thống (Error rate): < 1%.
+- Mất gói âm thanh cuộc gọi (Audio packet loss): < 2% trong bài kiểm thử tải; phải kiểm thử nghe âm thanh thực tế (actual audible quality test).
+- Bảo toàn mục tiêu media: 1.000 người dùng đồng thời gọi/live (10 total/3 publishers/1 selected main stream/720p30).
+
+### Kịch bản nghiệm thu chính
 1. Khách xem Lobby và thẻ tuyển nhưng không thể gửi tin hoặc xin vào đội; chat riêng/phòng nhóm không bị lộ.
 2. Đăng nhập bằng Google/Discord, hoàn thành hồ sơ ban đầu rồi vào Lobby mà không bắt buộc khai rank.
 3. Tin chat cập nhật trực tiếp; tải lịch sử, gửi ảnh, trả lời và @nhắc tên hoạt động đúng quyền.
@@ -161,18 +175,19 @@ Quyền quản trị website tách biệt với quyền quản lý phòng do ch�
 9. Chủ phòng chuyển quyền rồi rời, hoặc giải tán; người hỗ trợ chỉ thực hiện được quyền đã cấp.
 10. Một phòng mở nhiều nhóm gọi; mỗi nhóm không vượt 10 người hoặc 3 luồng màn hình; người xem không chiếm suất đội chơi.
 11. Bật/tắt mic, âm lượng riêng, chuyển luồng, ngắt mic và dừng chia sẻ theo quyền hoạt động đúng; giảm chất lượng hình không làm mất ưu tiên âm thanh.
-12. Nhóm gọi đóng khi trống; hành vi mất kết nối phải được chốt trước khi kiểm thử tiêu chí này.
+12. Nhóm gọi đóng khi người cuối cùng rời đi; mất mạng có 30s grace period để rejoin.
 13. PWA, cấp/từ chối/thu hồi quyền push và tùy chọn email hoạt động trên thiết bị được hỗ trợ; không có quyền push vẫn dùng website bình thường.
-14. Kiểm thử 1.000 người đồng thời dùng gọi/live với kịch bản số nhóm, số người phát, tỷ lệ xem, thời lượng và điều kiện mạng được xác định trong kế hoạch kỹ thuật. Chưa được kết luận đạt chỉ bằng thử chat hoặc mở 1.000 kết nối.
+14. Kiểm thử 1.000 người đồng thời dùng gọi/live với kịch bản số nhóm, số người phát, tỷ lệ xem, thời lượng và điều kiện mạng được xác định trong kế hoạch kỹ thuật T41. Chưa được kết luận đạt chỉ bằng thử chat hoặc mở 1.000 kết nối.
 
-## 10. Các quyết định tiếp theo
+## 10. Quyết định baseline T00 và các cổng hoạt động tiếp theo
 
-- Hoàn thiện quy tắc đội hẹn giờ và mất kết nối; danh sách team chơi do chủ đội duyệt đã được chốt.
-- Chốt các trường thẻ theo từng game, sức chứa phòng lâu dài và sắp xếp đội phù hợp.
-- Xác nhận các đề xuất mặc định còn đánh dấu ở trên; chốt quyền riêng tư hồ sơ và hành vi chặn.
-- Chốt kịch bản tải gọi/live, tiêu chí hiệu năng và dự toán vận hành; chọn kiến trúc sau đó.
-- Chốt thời điểm ra mắt và tiêu chí thành công của thử nghiệm cộng đồng.
-- Tên FG và phong cách mockup đã được duyệt; áp dụng 02-frontend-design.md khi xây các màn hình chi tiết.
+**Tech Stack đã phê duyệt:** Frontend (React, Vite, Tailwind CSS, Inter font self-host), Backend API (NestJS, Node24, TypeScript), Database (PostgreSQL, Drizzle ORM), Cache & Queue (Redis, BullMQ), Auth (Better Auth Google & Discord providers), Realtime (Socket.IO), Media (Self-hosted LiveKit SFU), Worker/Delivery (Nodemailer SMTP, Web Push VAPID). Không bổ sung dịch vụ trả phí nếu chưa được người dùng chọn.
+
+Các đề xuất kỹ thuật và nghiệp vụ cho T00 đã được người dùng phê duyệt chính thức ngày 04/10/2026. Danh mục các cổng chuẩn bị và hoạt động tiếp theo:
+1. **T02 Setup Gate**: Đăng ký và cấu hình các thông số OAuth Client ID/Secret (Google, Discord), SMTP server credentials, VAPID keys và PUBLIC_ORIGIN thực tế trước T02.
+2. **T41 Operational Cost Gate**: Đo đạc lưu lượng thực tế, dự toán chi phí traffic/egress/TURN và trình người dùng phê duyệt trần chi phí (cost ceiling) trước khi thực hiện kiểm thử tải trả phí hoặc chi tiêu hạ tầng.
+3. **Kế hoạch vận hành**: Thời điểm ra mắt chính thức và quy chế biên tập/kiểm duyệt nội dung cộng đồng sẽ do bộ phận vận hành chốt ở các giai đoạn sau; các chi tiết kỹ thuật cụ thể vẫn được định nghĩa bởi contracts và ACL từng task.
+4. Tên FG và phong cách mockup đã được duyệt; áp dụng [02-frontend-design.md](./02-frontend-design.md) khi xây các màn hình chi tiết.
 
 ## 11. Nguồn xác minh khả năng nền tảng
 
