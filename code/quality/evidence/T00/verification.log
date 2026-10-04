@@ -1,0 +1,69 @@
+================================================================================
+FG TASK T00 BASELINE VERIFICATION LOG
+Timestamp: 2026-10-04T19:38:35+07:00
+Working Directory: E:\FGweb\code
+Git HEAD: 99ac4dacc8fb3e8a014d3c0d5c632caa683b0804
+================================================================================
+
+[COMMAND 1]: git rev-parse HEAD
+[CWD]: E:\FGweb\code
+[EXIT CODE]: 0
+[OUTPUT]:
+99ac4dacc8fb3e8a014d3c0d5c632caa683b0804
+
+--------------------------------------------------------------------------------
+
+[COMMAND 2 - ATTEMPT 1 (FAILED)]:
+powershell -Command "$json = Get-Content quality\spec-baseline.json | ConvertFrom-Json; $h1 = (Get-FileHash ..\.doc\01-product-spec.md).Hash; $h2 = (Get-FileHash ..\.doc\02-frontend-design.md).Hash; $h3 = (Get-FileHash ..\.doc\task.md).Hash; $h4 = (Get-FileHash ..\.doc\mockups\01-lobby-desktop-mobile.png).Hash; $h5 = (Get-FileHash ..\.doc\mockups\02-group-call-live.png).Hash; Write-Output ('specSha256 match: ' + ($json.hashes.specSha256 -eq $h1)); Write-Output ('designSha256 match: ' + ($json.hashes.designSha256 -eq $h2)); Write-Output ('taskSha256 match: ' + ($json.hashes.taskSha256 -eq $h3)); Write-Output ('mockupLobbySha256 match: ' + ($json.hashes.mockupLobbySha256 -eq $h4)); Write-Output ('mockupCallSha256 match: ' + ($json.hashes.mockupCallSha256 -eq $h5))"
+[CWD]: E:\FGweb\code
+[EXIT CODE]: 1
+[ERROR OUTPUT]:
+= : The term '=' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[REASON]: PowerShell variable parsing error when inline script strings with unescaped $ variables were executed in pwsh.
+
+--------------------------------------------------------------------------------
+
+[COMMAND 3 - ATTEMPT 2 (SUCCESSFUL)]:
+node -e "const fs = require('fs'); const crypto = require('crypto'); const baseline = JSON.parse(fs.readFileSync('quality/spec-baseline.json')); function hash(path) { return crypto.createHash('sha256').update(fs.readFileSync(path)).digest('hex').toUpperCase(); } console.log('specSha256:', hash('../.doc/01-product-spec.md') === baseline.hashes.specSha256); console.log('designSha256:', hash('../.doc/02-frontend-design.md') === baseline.hashes.designSha256); console.log('taskSha256:', hash('../.doc/task.md') === baseline.hashes.taskSha256); console.log('mockupLobbySha256:', hash('../.doc/mockups/01-lobby-desktop-mobile.png') === baseline.hashes.mockupLobbySha256); console.log('mockupCallSha256:', hash('../.doc/mockups/02-group-call-live.png') === baseline.hashes.mockupCallSha256);"
+[CWD]: E:\FGweb\code
+[EXIT CODE]: 0
+[OUTPUT]:
+specSha256: true
+designSha256: true
+taskSha256: true
+mockupLobbySha256: true
+mockupCallSha256: true
+
+--------------------------------------------------------------------------------
+
+[COMMAND 4]: Get-FileHash -Algorithm SHA256 -Path ..\.doc\01-product-spec.md, ..\.doc\02-frontend-design.md, ..\.doc\task.md, ..\.doc\mockups\01-lobby-desktop-mobile.png, ..\.doc\mockups\02-group-call-live.png, quality\spec-baseline.json
+[CWD]: E:\FGweb\code
+[EXIT CODE]: 0
+[OUTPUT]:
+Algorithm: SHA256
+47AB80CAF7C8409BDC53E2A709D51134B9CC7F68A4C302167234B9F160931C28  E:\FGweb\.doc\01-product-spec.md
+B8192A6D4BA0F13989F7243AB17E4D7FA429A5E74FB3B17BE080DEC5F1A0BE2D  E:\FGweb\.doc\02-frontend-design.md
+B01CDADBEB4E86E74F49F83452A9866D432327FE8330F8CB5FBE3E3C2A5B7DAC  E:\FGweb\.doc\task.md
+9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF  E:\FGweb\.doc\mockups\01-lobby-desktop-mobile.png
+C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9  E:\FGweb\.doc\mockups\02-group-call-live.png
+0D583045C3E420E32D678221D86416A001E63FE0665C4707E7010F44D89192C4  E:\FGweb\code\quality\spec-baseline.json
+
+--------------------------------------------------------------------------------
+
+[COMMAND 5]: git status
+[CWD]: E:\FGweb\code
+[EXIT CODE]: 0
+[OUTPUT]:
+On branch master
+Changes not staged for commit:
+	modified:   ../.doc/01-product-spec.md
+	modified:   ../.doc/task.md
+
+Untracked files:
+	quality/
+
+--------------------------------------------------------------------------------
+VERIFICATION RESULT: REFACTORED BASELINE CHECKS SUCCEEDED.
+T00 BASELINE VERIFIED AND HASHES RECORDED IN QUALITY/SPEC-BASELINE.JSON.
+================================================================================
