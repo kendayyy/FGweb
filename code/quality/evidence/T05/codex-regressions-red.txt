@@ -1,0 +1,57 @@
+✖ LOBBY requires a lobby identity and cannot carry a DM pair (3234.637ms)
+✖ deleting a replied-to message clears reply only, preserving conversation (2330.1209ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7674.4135
+
+✖ failing tests:
+
+test at quality\evidence\T05\codex-regressions.test.mjs:11:1
+✖ LOBBY requires a lobby identity and cannot carry a DM pair (3234.637ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:11:102
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:10:595)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:11:77)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T05\codex-regressions.test.mjs:12:1
+✖ deleting a replied-to message clears reply only, preserving conversation (2330.1209ms)
+  error: null value in column "conversation_id" of relation "messages" violates not-null constraint
+      at E:\FGweb\code\node_modules\pg\lib\client.js:694:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:12:509
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:10:595)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs:12:91)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    length: 579,
+    severity: 'ERROR',
+    code: '23502',
+    detail: 'Failing row contains (reply, null, b, TEXT, , r, null, 2026-10-04 23:29:44.036194, 2026-10-04 23:29:44.036194).',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: 'SQL statement "UPDATE ONLY "test_t05_review_48a4f9e6afb14e97abd2c6f13e9f8bb4"."messages" SET "reply_to_id" = NULL, "conversation_id" = NULL WHERE $1 OPERATOR(pg_catalog.=) "reply_to_id" AND $2 OPERATOR(pg_catalog.=) "conversation_id""',
+    schema: 'test_t05_review_48a4f9e6afb14e97abd2c6f13e9f8bb4',
+    table: 'messages',
+    column: 'conversation_id',
+    dataType: undefined,
+    constraint: undefined,
+    file: 'execMain.c',
+    line: '2022',
+    routine: 'ExecConstraints'
+  }

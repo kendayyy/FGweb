@@ -602,18 +602,116 @@
     },
     {
       "id": "T05",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T04"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": []
+      "inputsHash": "aba1f0db3084ea2f3e181f284cc127b93459f5c4",
+      "outputsHash": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "files": {
+          "packages/database/src/schema/conversations.ts": "399c646231616c35d40066362503465c9e35ef9349ad972efe121534a3497181",
+          "packages/database/src/schema/messages.ts": "aff713e20923f7f2461538bae850ba0dcb424e498a4292229c082802d4a6afd8",
+          "quality/evidence/T05/codex-regressions.test.mjs": "90579f0097ed5ba5258dfba7ccd3827925709c93e6c92e0c272b2e78303be2ef",
+          "packages/database/src/schema/social.ts": "97e2c78c87b891d17885ef710f274622a7ed0fdb2130f46c1263f673cc2c44a7",
+          "packages/database/migrations/meta/0001_snapshot.json": "6c4a2e04d039605b4b7dd6e92fc8e32c8381b3a7ef19d90edbe14243c191f901",
+          "packages/database/src/index.ts": "2993c332be91410eef16f5f9efd01e416d6fbbf87f96744546853d0ad78f5cf5",
+          "packages/database/migrations/0001_left_the_call.sql": "10c6665e3b292386ef5047b15ded79153c48f9d545a6b4b333e427c621eee02a",
+          "packages/database/migrations/meta/_journal.json": "e0605d6deb604806317bb9723e3b32f2b27bab26cf4f019f2bc56c5d91b82adf",
+          "packages/database/test/social-chat.test.ts": "2ec0543bbd684730d4410597b4c1af14e48f419474526b56ca44be47d7973d15",
+          "quality/evidence/T05/tsconfig.check.json": "e220dc41dee539fff8156cddcbabba86d3491127c2abcc391c9bd031af4a7638"
+        }
+      },
+      "commands": [
+        {
+          "completedAt": "2026-10-04T23:43:58.6296795Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "1f6d028061f2dd6b3e1113369b3deaed6f473d9bb15025921629ef6748c1006a",
+          "startedAt": "2026-10-04T23:43:49.8773494Z",
+          "command": "npm run test --workspace @fg/database -- test/social-chat.test.ts",
+          "evidencePath": "quality/evidence/T05/final-acceptance.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:08.173836Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "a2033ee52a9006c7f6c165ade98741efb744f340e65144202da6eb9f8a711a3e",
+          "startedAt": "2026-10-04T23:43:58.665365Z",
+          "command": "npm run test --workspace @fg/database",
+          "evidencePath": "quality/evidence/T05/final-db-regression.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:14.4747154Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "30fe5ab86f809331b63a78282d785247cd4aa65d11d0c1bab75166c39f851f22",
+          "startedAt": "2026-10-04T23:44:08.1832231Z",
+          "command": "npm run build --workspace @fg/database",
+          "evidencePath": "quality/evidence/T05/final-build.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:20.1564225Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "721a8a0e08ae4d27c209ad32350f93390ab115366fcff084115b60fda91d4ec7",
+          "startedAt": "2026-10-04T23:44:14.483693Z",
+          "command": "node --test quality/evidence/T05/codex-regressions.test.mjs",
+          "evidencePath": "quality/evidence/T05/final-compiled-regressions.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:28.4926059Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "startedAt": "2026-10-04T23:44:20.165906Z",
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T05/tsconfig.check.json",
+          "evidencePath": "quality/evidence/T05/final-typecheck.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:34.7601471Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "startedAt": "2026-10-04T23:44:28.4946515Z",
+          "command": "npm run lint",
+          "evidencePath": "quality/evidence/T05/final-lint.txt",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-04T23:44:37.9038379Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "57de8863079febd256aa9039345b08adae6e9df2d225048146a97bdc4b964a35",
+          "startedAt": "2026-10-04T23:44:34.7636523Z",
+          "command": "npm run db:generate --workspace @fg/database",
+          "evidencePath": "quality/evidence/T05/final-migrations.txt",
+          "exitCode": 0
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T05/codex-review.md",
+        "quality/evidence/T05/final-verification.json",
+        "quality/evidence/T05/codex-regressions-red.txt",
+        "quality/evidence/T05/final-compiled-regressions.txt"
+      ],
+      "startedAt": "2026-10-04T23:23:21.6537911Z",
+      "completedAt": "2026-10-04T23:46:52.0254432Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "packages/database/src/schema/conversations.ts",
+        "packages/database/src/schema/messages.ts",
+        "packages/database/src/schema/social.ts",
+        "packages/database/src/index.ts",
+        "packages/database/migrations/**",
+        "packages/database/test/social-chat.test.ts",
+        "quality/evidence/T05/**"
+      ],
+      "antigravity": {
+        "result": "PASS after Codex deep review and independent checks",
+        "model": "Gemini 3.6 Flash (High)",
+        "refactorLoops": 2,
+        "conversationId": "5a86f583-32f3-4d55-a344-ea20ae343ebf"
+      }
     },
     {
       "id": "T06",

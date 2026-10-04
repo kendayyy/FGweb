@@ -1,0 +1,52 @@
+# FG Task Refactor Report: T05 Loop 2
+
+**Task ID**: `T05` (Refactor Loop 2)  
+**Status**: `COMPLETED / AWAITING MASTER REVIEW`  
+**Workspace**: `E:\FGweb\code`  
+**Model**: Gemini 3.6 Flash (High)  
+
+---
+
+## 1. Summary of Loop 2 Improvements
+
+1. **Test Migration Cleanup & Path Safety**:
+   - Updated temporary migration directory creation in [`packages/database/test/social-chat.test.ts`](file:///E:/FGweb/code/packages/database/test/social-chat.test.ts) to resolve inside `code/.cache/t05_mig_<rand>`.
+   - Added explicit path validation checking absolute path location under `code/.cache` and owned prefix `t05_mig_` before calling `fs.rmSync(recursive: true)`.
+   - Validated schema prefix `test_t05_mig_` before issuing `DROP SCHEMA` queries.
+   - Refactored `finally` and `afterAll` blocks to execute all cleanup steps without swallowing errors, collecting exceptions and throwing them outside block statements (satisfying ESLint `no-unsafe-finally` while ensuring no cleanup failures are lost).
+
+2. **GameProfiles Preservation Assertion**:
+   - Added explicit assertion in `social-chat.test.ts` verifying that `gameProfiles` record `gp_mig_1` (`userId`, `gameId`, `inGameName`, `rank`) is 100% preserved after applying forward T05 migration over seeded T04 schema.
+
+3. **Genuine Shell Redirections & Raw Evidence Output**:
+   - Executed genuine shell redirection commands generating raw log outputs and execution metadata JSON files in [`quality/evidence/T05/`](file:///E:/FGweb/code/quality/evidence/T05/):
+     - `raw-test-db.log` & `raw-test-db.json` (16 database tests passed)
+     - `raw-codex-regressions.log` & `raw-codex-regressions.json` (2 Codex regression tests passed)
+     - `raw-build.log` & `raw-build.json` (workspace DB build passed)
+     - `raw-typecheck.log` & `raw-typecheck.json` (tsc clean with 0 errors across src and tests)
+     - `raw-lint.log` & `raw-lint.json` (eslint clean with 0 warnings/errors)
+     - `raw-migration-consistency.log` & `raw-migration-consistency.json` (`No schema changes, nothing to migrate 😴`)
+   - Initial RED log [`quality/evidence/T05/codex-regressions-red.txt`](file:///E:/FGweb/code/quality/evidence/T05/codex-regressions-red.txt) remains preserved untouched.
+
+---
+
+## 2. Test Execution & Verification Matrix
+
+| Test / Check Scope | Command | Result |
+| --- | --- | --- |
+| Codex Regressions | `node --test quality/evidence/T05/codex-regressions.test.mjs` | **2 passed, 0 failed** |
+| Social & Chat Tests | `npm run test --workspace @fg/database -- test/social-chat.test.ts` | **10 passed, 0 failed** |
+| Identity Regression | `npx vitest run test/identity.test.ts` | **6 passed, 0 failed** |
+| Database Package Build | `npm run build --workspace @fg/database` | **Passed (exit code 0)** |
+| Source + Test Typecheck | `npx tsc -p quality/evidence/T05/tsconfig.check.json` | **0 errors (exit code 0)** |
+| Workspace Lint | `npm run lint` | **0 errors/warnings (exit code 0)** |
+| Migration Consistency | `npm run db:generate --workspace @fg/database` | **0 pending diffs** |
+
+---
+
+## 3. Scope & Metadata Compliance
+
+- **Scope**: Modifications restricted strictly to `packages/database/test/social-chat.test.ts` and `quality/evidence/T05/**`.
+- **T04 & Global Ledger**: No T04 source or test files altered. Global ledger `quality/tasks.json` status unedited.
+
+*Awaiting master review.*

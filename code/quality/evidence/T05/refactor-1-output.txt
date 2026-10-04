@@ -1,0 +1,63 @@
+# FG Task Implementation Report: T05 Refactor Loop 1
+
+**Task ID**: `T05` (Refactor Loop 1)  
+**Status**: `COMPLETED / READY FOR CODEX REVIEW`  
+**Workspace**: `E:\FGweb\code`  
+**Model**: Gemini 3.6 Flash (High)  
+
+---
+
+## 1. Resolved Regressions & Schema Adjustments
+
+1. **Conversation Kind Shapes (`conversation_kind_shape_check`)**:
+   - Replaced separate `kind` check with strict unified shape check in [`packages/database/src/schema/conversations.ts`](file:///E:/FGweb/code/packages/database/src/schema/conversations.ts):
+     - `DM`: Enforces `user1_id IS NOT NULL AND user2_id IS NOT NULL AND user1_id < user2_id AND lobby_id IS NULL`.
+     - `LOBBY`: Enforces `lobby_id IS NOT NULL AND user1_id IS NULL AND user2_id IS NULL`.
+     - `ROOM`: Enforces `lobby_id IS NULL AND user1_id IS NULL AND user2_id IS NULL`.
+   - Any malformed conversation (e.g., LOBBY carrying user pairs, DM with lobbyId, ROOM with lobbyId) is rejected at the database level with PostgreSQL error `23514`.
+
+2. **Composite Replies FK Parent Deletion (`messages_reply_to_same_conversation_fk`)**:
+   - Updated the composite foreign key clause in [`packages/database/migrations/0001_left_the_call.sql`](file:///E:/FGweb/code/packages/database/migrations/0001_left_the_call.sql):
+     ```sql
+     ALTER TABLE "messages" ADD CONSTRAINT "messages_reply_to_same_conversation_fk"
+     FOREIGN KEY ("reply_to_id", "conversation_id")
+     REFERENCES "messages"("id", "conversation_id")
+     ON DELETE SET NULL ("reply_to_id")
+     ON UPDATE NO ACTION;
+     ```
+   - Specifying column-specific `ON DELETE SET NULL ("reply_to_id")` ensures that deleting a replied-to parent message sets `reply_to_id` to NULL while leaving `conversation_id` intact, preventing PG `23502` (`not_null_violation`) and retaining the reply message in its original conversation.
+   - Documented the Drizzle DSL mapping limitation in [`packages/database/src/schema/messages.ts`](file:///E:/FGweb/code/packages/database/src/schema/messages.ts).
+
+---
+
+## 2. Test Execution & Verification
+
+1. **Codex Regression Suite**:
+   - `node --test quality/evidence/T05/codex-regressions.test.mjs`:
+     - `✔ LOBBY requires a lobby identity and cannot carry a DM pair` (PASSED)
+     - `✔ deleting a replied-to message clears reply only, preserving conversation` (PASSED)
+     - **2 passed, 0 failed**.
+
+2. **Workspace Database Test Suite**:
+   - `npx vitest run test/identity.test.ts test/social-chat.test.ts`:
+     - `social-chat.test.ts`: **10 passed** (including workspace tests for malformed DM/LOBBY/ROOM shapes and parent message deletion).
+     - `identity.test.ts`: **6 passed** (T04 regression).
+     - **16 passed, 0 failed**.
+   - Total database tests across all suites: **18 passed, 0 failed**.
+
+3. **Workspace Quality Checks**:
+   - `npm run build --workspace @fg/database`: Exited with code 0.
+   - `npx tsc -p quality/evidence/T05/tsconfig.check.json`: Clean compilation with 0 errors across `src` and `test`.
+   - `npm run lint`: Exited with code 0 (zero ESLint warnings/errors).
+   - `npm run db:generate --workspace @fg/database`: Verified migration consistency (`No schema changes, nothing to migrate 😴`).
+
+---
+
+## 3. Metadata & Limitations
+
+- **Custom Migration SQL Limitation**: Drizzle Kit DSL represents composite FK `onDelete('set null')` without column-level target parameters in schema definitions. The forward migration SQL (`0001_left_the_call.sql`) explicitly uses PostgreSQL 17 `ON DELETE SET NULL ("reply_to_id")` syntax. Future migration generators should take care not to overwrite this custom clause when generating schema diffs.
+- **FK Schema Qualification**: All foreign key references in `0001_left_the_call.sql` remain normalized without explicit `"public".` schema qualification to maintain search_path isolation across test environments.
+
+---
+
+*Note: T05 implementation and refactor loop 1 are complete and verified. Awaiting Codex review.*
