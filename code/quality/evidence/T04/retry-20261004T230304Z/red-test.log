@@ -1,0 +1,37 @@
+> @fg/database@0.1.0 test
+> vitest run test/identity.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/identity.test.ts (5 tests | 5 failed) 262ms
+   ❯ T04 - Identity, Profiles, and Game Catalog Schema (5)
+     × should seed 7 approved games and one Lobby per game idempotently 17ms
+     × should allow Better Auth drizzle adapter to read and write user/account/session/verification 23ms
+     × should reject duplicate Discord identity for providerId + accountId 2ms
+     × should support optional rank and profile fields on game_profiles 1ms
+     × should reject invalid FK constraints 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema > should seed 7 approved games and one Lobby per game idempotently
+AssertionError: expected [] to have a length of 7 but got +0
+
+ ❯ test/identity.test.ts:51:21
+
+ FAIL  test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema > should allow Better Auth drizzle adapter to read and write user/account/session/verification
+BetterAuthError: [# Drizzle Adapter]: The model "user" was not found in the schema object. Please pass the schema directly to the adapter options.
+
+ FAIL  test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema > should reject duplicate Discord identity for providerId + accountId
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+
+ FAIL  test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema > should support optional rank and profile fields on game_profiles
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+
+ FAIL  test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema > should reject invalid FK constraints
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  06:06:21
+   Duration  2.11s

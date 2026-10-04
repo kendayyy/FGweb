@@ -1,0 +1,56 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+Wait for task-18 to finish execution.
+Wait for task-76 to finish execution.
+Wait for task-106 to finish execution.
+Wait for task-122 to finish execution.
+Wait for task-128 to finish execution.
+Wait for task-154 to finish execution.
+Wait for task-172 to finish execution.
+Wait for task-176 to finish execution.
+Wait for task-180 to finish execution.
+Wait for task-184 to finish execution.
+Wait for task-190 to finish execution.
+Wait for task-194 to finish execution.
+Wait for task-198 to finish execution.
+### FG Task T04 Implementation Summary
+
+#### 1. Pre-Check & Validation
+- Verified pre-requisites for T04: T00 through T03 are `PASS`.
+- Executed `npm run task:check -- T04` prior to any code edits, returning `PASS`.
+
+#### 2. Modified & Created Files
+All work was performed strictly within `E:/FGweb/code` and within the allowed file list for T04:
+- [auth.ts](file:///E:/FGweb/code/packages/database/src/schema/auth.ts): Better Auth 1.7.7 standard schema (`user`, `session`, `account`, `verification`) with `unique('account_provider_account_unique').on(providerId, accountId)`.
+- [profiles.ts](file:///E:/FGweb/code/packages/database/src/schema/profiles.ts): `profiles`, `game_profiles` (with optional `rank`, `inGameName`, `role`, `playHours`, `playStyle`), and `game_interests` with unique `(userId, gameId)` constraints and safe cascading FKs.
+- [games.ts](file:///E:/FGweb/code/packages/database/src/schema/games.ts): `games` catalog table and minimal `lobbies` table with unique `gameId` FK constraint.
+- [seed-games.ts](file:///E:/FGweb/code/packages/database/src/seed-games.ts): Idempotent seed function for the 7 official approved games (`ALLOWED_GAMES`) and matching lobbies.
+- [index.ts](file:///E:/FGweb/code/packages/database/src/index.ts): Package exports for schemas and seeding helper.
+- [0000_solid_maria_hill.sql](file:///E:/FGweb/code/packages/database/migrations/0000_solid_maria_hill.sql): Generated Drizzle ORM migration DDL and metadata.
+- [drizzle.config.ts](file:///E:/FGweb/code/packages/database/drizzle.config.ts) & [vitest.config.ts](file:///E:/FGweb/code/packages/database/vitest.config.ts): Workspace database configuration files.
+- [identity.test.ts](file:///E:/FGweb/code/packages/database/test/identity.test.ts): TDD behavior test suite using isolated PostgreSQL test schemas.
+
+#### 3. TDD Execution & Verification
+1. **RED Phase**:
+   - Initial test run against stubs failed as expected on behavior assertions (missing schema tables and seed data).
+   - Log captured: [red-test.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/red-test.log).
+2. **GREEN Phase**:
+   - Executed test suite against real local PostgreSQL with isolated disposable schemas (`test_t04_*`) created per test run and cleaned up automatically.
+   - Test results: **5 passed / 5 tests** (0 failed, 0 skipped).
+   - Log captured: [test-pass.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/test-pass.log).
+3. **Build, Typecheck, and Lint**:
+   - `npm run build --workspace @fg/database` (Exit Code: 0) — [build.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/build.log).
+   - `npm run typecheck` (Exit Code: 0) — [typecheck.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/typecheck.log).
+   - `npm run lint` (Exit Code: 0) — [lint.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/lint.log).
+
+#### 4. Evidence Paths
+- Evidence Directory: `E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z`
+  - [run-manifest.md](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/run-manifest.md)
+  - [red-test.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/red-test.log)
+  - [test-pass.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/test-pass.log)
+  - [build.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/build.log)
+  - [typecheck.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/typecheck.log)
+  - [lint.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/lint.log)
+
+#### 5. Limitations & Protocol Compliance
+- No git commits were made.
+- Global ledger status (`code/quality/tasks.json`) was not modified, awaiting review by Codex.

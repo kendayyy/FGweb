@@ -9,4 +9,6 @@
 | Frontend/database tooling compatible | T01 | final-vite.txt/final-drizzle.txt | PASS |
 | External services/credentials/task gate | T02 | quality/evidence/T02/verification.json and review.md; real service smoke and task gate | PASS |
 | Shared API/realtime contracts | T03 | quality/evidence/T03/final-verification.json,29contracts+3regression | PASS |
-| Product features, media1000, PWA, release | T04–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+| Identity/profiles/7game7Lobby migrations | T04 | PostgreSQL6/6 twice, real adapter4models, build/test-types/lint; T04/codex-review.md | PASS |
+| Product features, media1000, PWA, release | T05–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+

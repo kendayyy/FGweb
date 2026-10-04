@@ -1,0 +1,57 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+Wait for task-221 to finish execution.
+Wait for task-233 to finish execution.
+Wait for task-239 to finish execution.
+Wait for task-243 to finish execution.
+Wait for task-261 to finish execution.
+Wait for task-265 to finish execution.
+Wait for task-269 to finish execution.
+Wait for task-273 to finish execution.
+Wait for task-277 to finish execution.
+Wait for task-281 to finish execution.
+Wait for task-285 to finish execution.
+Wait for task-289 to finish execution.
+### FG Task T04 Refactor Summary (Loop 1)
+
+#### 1. Scope & Action Summary
+All modifications were made within `E:/FGweb/code` and restricted strictly to the approved T04 file scope. No dependencies were added/modified, and no global ledgers or git commits were executed.
+
+#### 2. Specific Items Resolved
+1. **Typecheck Fix for Codex Review Configuration**:
+   - Replaced `.mjs` relative import with a typed local environment reader (`loadLocalEnv`) using `node:fs` and `node:util` `parseEnv`.
+   - Typed `db` as `NodePgDatabase<typeof schema> & { $client: pg.Client }`.
+   - Added record interfaces (`UserRecord`, `AccountRecord`, `SessionRecord`, `VerificationRecord`) to Better Auth `adapter.create<T>` and `adapter.findOne<T>` calls.
+   - Verified `node node_modules/typescript/bin/tsc --project .cache/t04-review-tsconfig.json` passes with **0 errors** (Exit Code: 0).
+
+2. **Lobby Name Spec Compliance & Seed Assertions**:
+   - Updated `seedGames` in [seed-games.ts](file:///E:/FGweb/code/packages/database/src/seed-games.ts) to set `name: 'Lobby'` for all 7 games per product spec section 2.
+   - Added test assertions in [identity.test.ts](file:///E:/FGweb/code/packages/database/test/identity.test.ts) confirming:
+     - All 7 Lobby names equal `'Lobby'`.
+     - Game titles match `ALLOWED_GAMES`.
+     - 7 unique games and 1 unique `gameId` per Lobby.
+     - Repeated seeding is idempotent and preserves exact game & lobby IDs.
+
+3. **PostgreSQL Constraint Error Code Assertions**:
+   - Implemented `getPgErrorCode(err)` helper to inspect `err.cause?.code ?? err.code` (handling Drizzle error wrapping).
+   - Asserted exact PostgreSQL error code `'23505'` (`unique_violation`) for duplicate user email, duplicate Discord identity (`providerId` + `accountId`), duplicate `gameProfile`, duplicate `gameInterest`, and duplicate `lobbies`.
+   - Asserted exact PostgreSQL error code `'23503'` (`foreign_key_violation`) for invalid FK references (`session.userId`, `gameProfiles.gameId`, `gameProfiles.userId`, `lobbies.gameId`).
+
+4. **Better Auth Adapter Coverage for All 4 Models & Metadata**:
+   - Exercised `adapter.create` and `adapter.findOne` across `user`, `account`, `session`, and `verification` models.
+   - Validated schema metadata alignment against `getAuthTables({})` from `better-auth/db`.
+
+5. **Migration Isolation & Safety**:
+   - Kept `migrationsSchema: schemaName` for isolated PostgreSQL schema execution (`test_t04_*`).
+   - Cleanups in `afterAll` drop isolated test schemas cleanly and throw on failure.
+
+#### 3. Verification & Evidence Files
+- **RED Phase Log**: [red-test.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/red-test.log) (Exit Code: 1, `AssertionError: expected 'Lobby Liên Minh Huyền Thoại' to be 'Lobby'`).
+- **GREEN Test Log**: [test-pass.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/test-pass.log) (Exit Code: 0, **6 passed / 6 tests**).
+- **Workspace Build Log**: [build.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/build.log) (Exit Code: 0).
+- **Review Typecheck Log**: [typecheck.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/typecheck.log) (Exit Code: 0).
+- **Workspace Lint Log**: [lint.log](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/lint.log) (Exit Code: 0).
+- **Run Manifest**: [run-manifest.md](file:///E:/FGweb/code/quality/evidence/T04/retry-20261004T230304Z/run-manifest.md).
+
+#### 4. Limitations
+- No git commits were created.
+- Task status in `code/quality/tasks.json` remains unedited per instructions (pending Codex review).
