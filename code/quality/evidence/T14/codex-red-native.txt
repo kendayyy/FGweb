@@ -1,0 +1,222 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/chat-rich.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3872) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/chat-rich.integration.spec.ts (31.531 s)
+  ● T14 actual private rich chat and durable image storage › rejects fake JPEG, MIME mismatch, disallowed signatures and oversized multipart bytes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      10 |  const post=(conversation:string,body:object,session=cookie)=>request(base).post(`/api/v1/conversations/${conversation}/messages`).set('Origin',origin).set('Cookie',session).send({content:'Rich message',clientMessageId:randomUUID(),...body});
+      11 |  const content=(id:string,session?:string)=>{const call=request(base).get(`/api/v1/attachments/${id}/content`);return session?call.set('Cookie',session):call;};
+    > 12 |  it('rejects fake JPEG, MIME mismatch, disallowed signatures and oversized multipart bytes',async()=>{expect((await upload('private',Buffer.from('not a JPEG'),'image/jpeg')).status).toBe(422);expect((await upload('private',png,'image/jpeg')).status).toBe(422);expect((await upload('private',Buffer.from('<svg/>'),'image/svg+xml')).status).toBe(422);expect((await upload('private',Buffer.alloc(MAX_IMAGE_SIZE_BYTES+1))).status).toBe(413);expect((await pool.query('SELECT id FROM pending_image_uploads')).rowCount).toBe(0);});
+         |                                                                                                                                                                                       ^
+      13 |  it('re-encodes real PNG into a private WebP draft with opaque URL and verified ownership',async()=>{const response=await upload();expect(response.status).toBe(201);const draft=AttachmentSchema.parse(response.body);expect(draft.mimeType).toBe('image/webp');expect(draft.url).toBe(`${origin}/api/v1/attachments/${draft.id}/content`);expect(JSON.stringify(draft)).not.toContain(storage);const binary=await content(draft.id,cookie);expect(binary.status).toBe(200);expect(binary.headers['content-type']).toContain('image/webp');expect(binary.headers['cache-control']).toBe('private, no-store');expect((await sharp(binary.body).metadata()).format).toBe('webp');expect((await content(draft.id)).status).toBe(403);expect((await content(draft.id,outsiderCookie)).status).toBe(403);const pending=(await pool.query('SELECT uploader_id,conversation_id,expires_at>created_at AS valid FROM pending_image_uploads WHERE id=$1',[draft.id])).rows[0];expect(pending).toEqual({uploader_id:'owner',conversation_id:'private',valid:true});});
+      14 |  it('attaches once atomically, retries by clientMessageId and denies outsider metadata/content',async()=>{const response=await upload();expect(response.status).toBe(201);const image=AttachmentSchema.parse(response.body),id=randomUUID();const body={content:'',attachmentIds:[image.id],clientMessageId:id};const results=await Promise.all([post('private',body),post('private',body)]);for(const result of results){expect(result.status).toBe(201);expect(MessageSchema.parse(result.body).attachments[0].id).toBe(image.id);}expect(results[0].body.id).toBe(results[1].body.id);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(0);expect((await pool.query('SELECT id FROM attachments WHERE id=$1',[image.id])).rowCount).toBe(1);expect((await content(image.id,cookie)).status).toBe(200);expect((await content(image.id,outsiderCookie)).status).toBe(403);expect((await request(base).get(`/api/v1/attachments/${image.id}`).set('Cookie',outsiderCookie)).status).toBe(403);});
+      15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:12:183)
+
+  ● T14 actual private rich chat and durable image storage › re-encodes real PNG into a private WebP draft with opaque URL and verified ownership
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      11 |  const content=(id:string,session?:string)=>{const call=request(base).get(`/api/v1/attachments/${id}/content`);return session?call.set('Cookie',session):call;};
+      12 |  it('rejects fake JPEG, MIME mismatch, disallowed signatures and oversized multipart bytes',async()=>{expect((await upload('private',Buffer.from('not a JPEG'),'image/jpeg')).status).toBe(422);expect((await upload('private',png,'image/jpeg')).status).toBe(422);expect((await upload('private',Buffer.from('<svg/>'),'image/svg+xml')).status).toBe(422);expect((await upload('private',Buffer.alloc(MAX_IMAGE_SIZE_BYTES+1))).status).toBe(413);expect((await pool.query('SELECT id FROM pending_image_uploads')).rowCount).toBe(0);});
+    > 13 |  it('re-encodes real PNG into a private WebP draft with opaque URL and verified ownership',async()=>{const response=await upload();expect(response.status).toBe(201);const draft=AttachmentSchema.parse(response.body);expect(draft.mimeType).toBe('image/webp');expect(draft.url).toBe(`${origin}/api/v1/attachments/${draft.id}/content`);expect(JSON.stringify(draft)).not.toContain(storage);const binary=await content(draft.id,cookie);expect(binary.status).toBe(200);expect(binary.headers['content-type']).toContain('image/webp');expect(binary.headers['cache-control']).toBe('private, no-store');expect((await sharp(binary.body).metadata()).format).toBe('webp');expect((await content(draft.id)).status).toBe(403);expect((await content(draft.id,outsiderCookie)).status).toBe(403);const pending=(await pool.query('SELECT uploader_id,conversation_id,expires_at>created_at AS valid FROM pending_image_uploads WHERE id=$1',[draft.id])).rows[0];expect(pending).toEqual({uploader_id:'owner',conversation_id:'private',valid:true});});
+         |                                                                                                                                                            ^
+      14 |  it('attaches once atomically, retries by clientMessageId and denies outsider metadata/content',async()=>{const response=await upload();expect(response.status).toBe(201);const image=AttachmentSchema.parse(response.body),id=randomUUID();const body={content:'',attachmentIds:[image.id],clientMessageId:id};const results=await Promise.all([post('private',body),post('private',body)]);for(const result of results){expect(result.status).toBe(201);expect(MessageSchema.parse(result.body).attachments[0].id).toBe(image.id);}expect(results[0].body.id).toBe(results[1].body.id);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(0);expect((await pool.query('SELECT id FROM attachments WHERE id=$1',[image.id])).rowCount).toBe(1);expect((await content(image.id,cookie)).status).toBe(200);expect((await content(image.id,outsiderCookie)).status).toBe(403);expect((await request(base).get(`/api/v1/attachments/${image.id}`).set('Cookie',outsiderCookie)).status).toBe(403);});
+      15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+      16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:13:156)
+
+  ● T14 actual private rich chat and durable image storage › attaches once atomically, retries by clientMessageId and denies outsider metadata/content
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      12 |  it('rejects fake JPEG, MIME mismatch, disallowed signatures and oversized multipart bytes',async()=>{expect((await upload('private',Buffer.from('not a JPEG'),'image/jpeg')).status).toBe(422);expect((await upload('private',png,'image/jpeg')).status).toBe(422);expect((await upload('private',Buffer.from('<svg/>'),'image/svg+xml')).status).toBe(422);expect((await upload('private',Buffer.alloc(MAX_IMAGE_SIZE_BYTES+1))).status).toBe(413);expect((await pool.query('SELECT id FROM pending_image_uploads')).rowCount).toBe(0);});
+      13 |  it('re-encodes real PNG into a private WebP draft with opaque URL and verified ownership',async()=>{const response=await upload();expect(response.status).toBe(201);const draft=AttachmentSchema.parse(response.body);expect(draft.mimeType).toBe('image/webp');expect(draft.url).toBe(`${origin}/api/v1/attachments/${draft.id}/content`);expect(JSON.stringify(draft)).not.toContain(storage);const binary=await content(draft.id,cookie);expect(binary.status).toBe(200);expect(binary.headers['content-type']).toContain('image/webp');expect(binary.headers['cache-control']).toBe('private, no-store');expect((await sharp(binary.body).metadata()).format).toBe('webp');expect((await content(draft.id)).status).toBe(403);expect((await content(draft.id,outsiderCookie)).status).toBe(403);const pending=(await pool.query('SELECT uploader_id,conversation_id,expires_at>created_at AS valid FROM pending_image_uploads WHERE id=$1',[draft.id])).rows[0];expect(pending).toEqual({uploader_id:'owner',conversation_id:'private',valid:true});});
+    > 14 |  it('attaches once atomically, retries by clientMessageId and denies outsider metadata/content',async()=>{const response=await upload();expect(response.status).toBe(201);const image=AttachmentSchema.parse(response.body),id=randomUUID();const body={content:'',attachmentIds:[image.id],clientMessageId:id};const results=await Promise.all([post('private',body),post('private',body)]);for(const result of results){expect(result.status).toBe(201);expect(MessageSchema.parse(result.body).attachments[0].id).toBe(image.id);}expect(results[0].body.id).toBe(results[1].body.id);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(0);expect((await pool.query('SELECT id FROM attachments WHERE id=$1',[image.id])).rowCount).toBe(1);expect((await content(image.id,cookie)).status).toBe(200);expect((await content(image.id,outsiderCookie)).status).toBe(403);expect((await request(base).get(`/api/v1/attachments/${image.id}`).set('Cookie',outsiderCookie)).status).toBe(403);});
+         |                                                                                                                                                                 ^
+      15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+      16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+      17 |  it('rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only',async()=>{expect((await post('private',{mentionedUserIds:['outsider']})).status).toBe(422);expect((await pool.query("SELECT id FROM mentions WHERE mentioned_user_id='outsider'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM notifications WHERE user_id='outsider'")).rowCount).toBe(0);const result=await post('private',{mentionedUserIds:['peer','peer']});expect(result.status).toBe(201);const message=MessageSchema.parse(result.body);expect(message.mentionedUserIds).toEqual(['peer']);expect(message.mentions[0].displayName).toBe('Peer');expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1);});
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:14:161)
+
+  ● T14 actual private rich chat and durable image storage › rejects cross-conversation and foreign-owner draft claims without consuming drafts
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "id"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "url"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "fileName"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "number",
+        "code": "invalid_type",
+        "path": [
+          "fileSize"
+        ],
+        "message": "Invalid input: expected number, received undefined"
+      },
+      {
+        "code": "invalid_value",
+        "values": [
+          "image/jpeg",
+          "image/png",
+          "image/webp"
+        ],
+        "path": [
+          "mimeType"
+        ],
+        "message": "Invalid option: expected one of \"image/jpeg\"|\"image/png\"|\"image/webp\""
+      }
+    ]
+
+      13 |  it('re-encodes real PNG into a private WebP draft with opaque URL and verified ownership',async()=>{const response=await upload();expect(response.status).toBe(201);const draft=AttachmentSchema.parse(response.body);expect(draft.mimeType).toBe('image/webp');expect(draft.url).toBe(`${origin}/api/v1/attachments/${draft.id}/content`);expect(JSON.stringify(draft)).not.toContain(storage);const binary=await content(draft.id,cookie);expect(binary.status).toBe(200);expect(binary.headers['content-type']).toContain('image/webp');expect(binary.headers['cache-control']).toBe('private, no-store');expect((await sharp(binary.body).metadata()).format).toBe('webp');expect((await content(draft.id)).status).toBe(403);expect((await content(draft.id,outsiderCookie)).status).toBe(403);const pending=(await pool.query('SELECT uploader_id,conversation_id,expires_at>created_at AS valid FROM pending_image_uploads WHERE id=$1',[draft.id])).rows[0];expect(pending).toEqual({uploader_id:'owner',conversation_id:'private',valid:true});});
+      14 |  it('attaches once atomically, retries by clientMessageId and denies outsider metadata/content',async()=>{const response=await upload();expect(response.status).toBe(201);const image=AttachmentSchema.parse(response.body),id=randomUUID();const body={content:'',attachmentIds:[image.id],clientMessageId:id};const results=await Promise.all([post('private',body),post('private',body)]);for(const result of results){expect(result.status).toBe(201);expect(MessageSchema.parse(result.body).attachments[0].id).toBe(image.id);}expect(results[0].body.id).toBe(results[1].body.id);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(0);expect((await pool.query('SELECT id FROM attachments WHERE id=$1',[image.id])).rowCount).toBe(1);expect((await content(image.id,cookie)).status).toBe(200);expect((await content(image.id,outsiderCookie)).status).toBe(403);expect((await request(base).get(`/api/v1/attachments/${image.id}`).set('Cookie',outsiderCookie)).status).toBe(403);});
+    > 15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+         |                                                                                                                                 ^
+      16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+      17 |  it('rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only',async()=>{expect((await post('private',{mentionedUserIds:['outsider']})).status).toBe(422);expect((await pool.query("SELECT id FROM mentions WHERE mentioned_user_id='outsider'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM notifications WHERE user_id='outsider'")).rowCount).toBe(0);const result=await post('private',{mentionedUserIds:['peer','peer']});expect(result.status).toBe(201);const message=MessageSchema.parse(result.body);expect(message.mentionedUserIds).toEqual(['peer']);expect(message.mentions[0].displayName).toBe('Peer');expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1);});
+      18 |  it('allows guests to read attached Lobby images while keeping unsent drafts uploader-only',async()=>{const image=AttachmentSchema.parse((await upload(lobby)).body);expect((await content(image.id)).status).toBe(403);expect((await post(lobby,{attachmentIds:[image.id]})).status).toBe(201);expect((await content(image.id)).status).toBe(200);expect((await upload('private',png,'image/png',outsiderCookie)).status).toBe(403);});
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:15:129)
+
+  ● T14 actual private rich chat and durable image storage › rejects cross-room reply while returning a bounded public sender reply preview in the same room
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 422
+
+      14 |  it('attaches once atomically, retries by clientMessageId and denies outsider metadata/content',async()=>{const response=await upload();expect(response.status).toBe(201);const image=AttachmentSchema.parse(response.body),id=randomUUID();const body={content:'',attachmentIds:[image.id],clientMessageId:id};const results=await Promise.all([post('private',body),post('private',body)]);for(const result of results){expect(result.status).toBe(201);expect(MessageSchema.parse(result.body).attachments[0].id).toBe(image.id);}expect(results[0].body.id).toBe(results[1].body.id);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(0);expect((await pool.query('SELECT id FROM attachments WHERE id=$1',[image.id])).rowCount).toBe(1);expect((await content(image.id,cookie)).status).toBe(200);expect((await content(image.id,outsiderCookie)).status).toBe(403);expect((await request(base).get(`/api/v1/attachments/${image.id}`).set('Cookie',outsiderCookie)).status).toBe(403);});
+      15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+    > 16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      17 |  it('rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only',async()=>{expect((await post('private',{mentionedUserIds:['outsider']})).status).toBe(422);expect((await pool.query("SELECT id FROM mentions WHERE mentioned_user_id='outsider'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM notifications WHERE user_id='outsider'")).rowCount).toBe(0);const result=await post('private',{mentionedUserIds:['peer','peer']});expect(result.status).toBe(201);const message=MessageSchema.parse(result.body);expect(message.mentionedUserIds).toEqual(['peer']);expect(message.mentions[0].displayName).toBe('Peer');expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1);});
+      18 |  it('allows guests to read attached Lobby images while keeping unsent drafts uploader-only',async()=>{const image=AttachmentSchema.parse((await upload(lobby)).body);expect((await content(image.id)).status).toBe(403);expect((await post(lobby,{attachmentIds:[image.id]})).status).toBe(201);expect((await content(image.id)).status).toBe(200);expect((await upload('private',png,'image/png',outsiderCookie)).status).toBe(403);});
+      19 | });
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:16:431)
+
+  ● T14 actual private rich chat and durable image storage › rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 422
+
+      15 |  it('rejects cross-conversation and foreign-owner draft claims without consuming drafts',async()=>{const image=AttachmentSchema.parse((await upload()).body);expect((await post('other',{attachmentIds:[image.id]})).status).toBe(422);expect((await post(lobby,{attachmentIds:[image.id]},outsiderCookie)).status).toBe(422);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[image.id])).rowCount).toBe(1);});
+      16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+    > 17 |  it('rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only',async()=>{expect((await post('private',{mentionedUserIds:['outsider']})).status).toBe(422);expect((await pool.query("SELECT id FROM mentions WHERE mentioned_user_id='outsider'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM notifications WHERE user_id='outsider'")).rowCount).toBe(0);const result=await post('private',{mentionedUserIds:['peer','peer']});expect(result.status).toBe(201);const message=MessageSchema.parse(result.body);expect(message.mentionedUserIds).toEqual(['peer']);expect(message.mentions[0].displayName).toBe('Peer');expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1);});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+      18 |  it('allows guests to read attached Lobby images while keeping unsent drafts uploader-only',async()=>{const image=AttachmentSchema.parse((await upload(lobby)).body);expect((await content(image.id)).status).toBe(403);expect((await post(lobby,{attachmentIds:[image.id]})).status).toBe(201);expect((await content(image.id)).status).toBe(200);expect((await upload('private',png,'image/png',outsiderCookie)).status).toBe(403);});
+      19 | });
+      20 |
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:17:490)
+
+  ● T14 actual private rich chat and durable image storage › allows guests to read attached Lobby images while keeping unsent drafts uploader-only
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "id"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "url"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "fileName"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "number",
+        "code": "invalid_type",
+        "path": [
+          "fileSize"
+        ],
+        "message": "Invalid input: expected number, received undefined"
+      },
+      {
+        "code": "invalid_value",
+        "values": [
+          "image/jpeg",
+          "image/png",
+          "image/webp"
+        ],
+        "path": [
+          "mimeType"
+        ],
+        "message": "Invalid option: expected one of \"image/jpeg\"|\"image/png\"|\"image/webp\""
+      }
+    ]
+
+      16 |  it('rejects cross-room reply while returning a bounded public sender reply preview in the same room',async()=>{const source=await post('other',{content:'Outside room'});expect(source.status).toBe(201);expect((await post('private',{replyToId:source.body.id})).status).toBe(422);const original=await post('private',{content:'Original'}),reply=await post('private',{content:'Reply',replyToId:original.body.id});expect(reply.status).toBe(201);const message=MessageSchema.parse(reply.body);expect(message.replyToMessage?.id).toBe(original.body.id);expect(message.replyToMessage?.content).toBe('Original');expect(message.replyToMessage).not.toHaveProperty('replyToMessage');expect(JSON.stringify(message)).not.toContain('owner@example.com');});
+      17 |  it('rejects outsiders mentioned in private chat and persists/deduplicates eligible mentions only',async()=>{expect((await post('private',{mentionedUserIds:['outsider']})).status).toBe(422);expect((await pool.query("SELECT id FROM mentions WHERE mentioned_user_id='outsider'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM notifications WHERE user_id='outsider'")).rowCount).toBe(0);const result=await post('private',{mentionedUserIds:['peer','peer']});expect(result.status).toBe(201);const message=MessageSchema.parse(result.body);expect(message.mentionedUserIds).toEqual(['peer']);expect(message.mentions[0].displayName).toBe('Peer');expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1);});
+    > 18 |  it('allows guests to read attached Lobby images while keeping unsent drafts uploader-only',async()=>{const image=AttachmentSchema.parse((await upload(lobby)).body);expect((await content(image.id)).status).toBe(403);expect((await post(lobby,{attachmentIds:[image.id]})).status).toBe(201);expect((await content(image.id)).status).toBe(200);expect((await upload('private',png,'image/png',outsiderCookie)).status).toBe(403);});
+         |                                                                                                                                    ^
+      19 | });
+      20 |
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:18:132)
+
+Test Suites: 1 failed, 1 total
+Tests:       7 failed, 7 total
+Snapshots:   0 total
+Time:        33.751 s
+Ran all test suites matching test/chat-rich.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/chat-rich.integration.spec.ts

@@ -1,0 +1,37 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/chat-rich.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18172) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/chat-rich.integration.spec.ts (44.151 s)
+  ● T14 actual private rich chat and durable image storage › cleans expired/unreferenced image files and retains linked images
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      20 |   const linked=AttachmentSchema.parse((await upload()).body);expect((await post('private',{attachmentIds:[linked.id]})).status).toBe(201);
+      21 |   const draft=AttachmentSchema.parse((await upload()).body),orphanId=randomUUID();fs.writeFileSync(path.join(storage,`${orphanId}.webp`),png);
+    > 22 |   const store=app.get<{cleanup?:(now?:Date)=>Promise<void>}>('FG_IMAGE_STORE');expect(typeof store.cleanup).toBe('function');await store.cleanup!(new Date(Date.now()+26*60*60*1000));
+         |                                                                                                             ^
+      23 |   expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[draft.id])).rowCount).toBe(0);expect(fs.existsSync(path.join(storage,`${draft.id}.webp`))).toBe(false);expect(fs.existsSync(path.join(storage,`${orphanId}.webp`))).toBe(false);expect((await content(linked.id,cookie)).status).toBe(200);
+      24 |  });
+      25 |
+
+      at Object.<anonymous> (test/chat-rich.integration.spec.ts:22:109)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 7 passed, 8 total
+Snapshots:   0 total
+Time:        44.978 s
+Ran all test suites matching test/chat-rich.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/chat-rich.integration.spec.ts

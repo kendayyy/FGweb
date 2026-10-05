@@ -27,3 +27,4 @@
 | Seven-game responsive Lobby, guest/member text chat, reconnect ID merge and reading position | T13 | 9 task +37 FE tests; native built-web/Nest/PG/Redis; four viewports, drawer/focus/scroll; T13/final-verification.json | PASS |
 | Multipart upload and protected image content transport contracts | T03-FIX4 | 2RED;44 contracts tests, build/types/lint/audit; T03-FIX4/final-verification.json | PASS |
 | Durable image draft ownership/context/expiry and additive migration | T05-FIX1 | 6 task +46 PostgreSQL tests; populated/empty upgrades, atomic consume/rollback/expiry; build/types/lint/audit; T05-FIX1/final-verification.json | PASS |
+| Protected durable image uploads, atomic rich messages/replies/mentions and 24h orphan cleanup | T14 | 11 task +64 API regression tests; compiled Nest/PG/Redis upload/restart/membership revocation; T14/final-verification.json | PASS |
