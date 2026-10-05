@@ -1,0 +1,49 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/lobby-subscriptions.test.ts (4 tests | 1 failed) 138ms
+   ❯ T03-FIX3 Lobby and subscription boundaries (4)
+     × registers public game-ID history with the existing cursor/50-message page contract 84ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby-subscriptions.test.ts > T03-FIX3 Lobby and subscription boundaries > registers public game-ID history with the existing cursor/50-message page contract
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/lobby-subscriptions.test.ts:11:82
+      9|   expect(endpoint?.requestSchema?.safeParse({limit:51}).success).toBe(…
+     10|   expect(endpoint?.requestSchema?.safeParse({cursor:'bad cursor'}).suc…
+     11|   expect(endpoint?.responseSchema.safeParse({items:[],nextCursor:null}…
+       |                                                                                  ^
+     12|  });
+     13|  it('keeps the title-based public Lobby alias and existing created-mes…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 41 passed (42)
+   Start at  15:48:06
+   Duration  2.59s (import 47%, transform 45%, tests 6%, worker 3%)
+
+  Transform  transforming modules took 4.72s · 45% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run

@@ -49,6 +49,8 @@ export const ApiErrorResponseSchema = z.object({
 export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>;
 
 export const SocketEventNames = {
+  CONVERSATION_SUBSCRIBE:'conversation.subscribe',
+  CONVERSATION_UNSUBSCRIBE:'conversation.unsubscribe',
   MESSAGE_CREATED: 'message.created',
   MESSAGE_DELETED: 'message.deleted',
   PRESENCE_CHANGED: 'presence.changed',

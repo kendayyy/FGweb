@@ -61,6 +61,8 @@
 
 ## 4. Socket.IO Realtime Events & Schemas
 
+Clients emit `conversation.subscribe` or `conversation.unsubscribe` with strict `SocketConversationRequestSchema` (`{conversationId}`). Identity and permission overrides are rejected. `SocketConversationAckSchema` is `{ok:true,conversationId}` or `{ok:false,error:ApiErrorResponseSchema}`; errors never acknowledge success. Guest subscriptions are limited to public Lobby conversations. Private subscriptions require current membership; origin, session validity and ACL are checked on every event and before delivery to an existing subscription. Session cookies are the only socket identity source. Unsubscribe releases the identified subscription and remains subject to these checks. Server `message.created` retains its existing MessageSchema payload, emitted only after database commit.
+
 Path: `/socket.io`
 
 | Event Name | ACL Scope | Payload Schema |
@@ -94,6 +96,8 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - **GET `/api/v1/online-users`** [Auth: Public] -> Request: `ListOnlineUsersQuerySchema` | Response: `Page<PublicProfileSchema>`
 
 ### 5.3 Conversations & Messages
+- **GET `/api/v1/games/:gameId/lobby/messages`** [Auth: Public] -> Request: `ListMessagesQuerySchema` | Response: `Page<MessageSchema>`. Opaque catalog game ID resolves its single Lobby. Unknown game returns404. The existing **GET `/api/v1/lobby/messages`** alias accepts `LobbyMessagesQuerySchema` with a locked seven-game title and returns the same page/ACL behavior.
+- History starts with the latest page (default/max50), ordered by UTC `createdAt,id` descending. `cursor` identifies the exclusive oldest returned pair; subsequent pages are strictly older and never lose tied timestamps. Reconnect clients fetch latest and earlier pages until their last known message and merge by message ID. The REST history remains the recovery source; no socket silence is treated as complete history.
 - **GET `/api/v1/conversations/:id/messages`** [Auth: ConversationRead] -> Request: `ListMessagesQuerySchema` | Response: `Page<MessageSchema>`
 - **POST `/api/v1/conversations/:id/messages`** [Auth: ConversationMember] -> Request: `CreateMessageRequestSchema` | Response: `MessageSchema`
 - **DELETE `/api/v1/conversations/:id/messages/:messageId`** [Auth: Authenticated] -> Response: `{ success: boolean }`

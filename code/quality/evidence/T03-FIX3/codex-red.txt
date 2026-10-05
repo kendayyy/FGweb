@@ -1,0 +1,71 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/lobby-subscriptions.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/lobby-subscriptions.test.ts (4 tests | 3 failed) 28ms
+   ❯ T03-FIX3 Lobby and subscription boundaries (4)
+     × registers public game-ID history with the existing cursor/50-message page contract 10ms
+     × exports client event names and strict opaque conversation requests without identity overrides 6ms
+     × acknowledges authorization errors without a fake success or ambiguous payload 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby-subscriptions.test.ts > T03-FIX3 Lobby and subscription boundaries > registers public game-ID history with the existing cursor/50-message page contract
+AssertionError: expected undefined to be defined
+ ❯ test/lobby-subscriptions.test.ts:7:20
+      5|  it('registers public game-ID history with the existing cursor/50-mess…
+      6|   const endpoint=contracts.ApiEndpointRegistry.find(item=>item.method=…
+      7|   expect(endpoint).toBeDefined();expect(endpoint?.auth).toBe('Public');
+       |                    ^
+      8|   expect(endpoint?.requestSchema?.parse({})).toEqual({limit:50});
+      9|   expect(endpoint?.requestSchema?.safeParse({limit:51}).success).toBe(…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  test/lobby-subscriptions.test.ts > T03-FIX3 Lobby and subscription boundaries > exports client event names and strict opaque conversation requests without identity overrides
+AssertionError: expected undefined to be 'conversation.subscribe' // Object.is equality
+
+- Expected:
+"conversation.subscribe"
+
++ Received:
+undefined
+
+ ❯ test/lobby-subscriptions.test.ts:20:57
+     18|  });
+     19|  it('exports client event names and strict opaque conversation request…
+     20|   expect(added.SocketEventNames.CONVERSATION_SUBSCRIBE).toBe('conversa…
+       |                                                         ^
+     21|   expect(added.SocketEventNames.CONVERSATION_UNSUBSCRIBE).toBe('conver…
+     22|   const request=added.SocketConversationRequestSchema;expect(request).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  test/lobby-subscriptions.test.ts > T03-FIX3 Lobby and subscription boundaries > acknowledges authorization errors without a fake success or ambiguous payload
+AssertionError: expected undefined to be defined
+ ❯ test/lobby-subscriptions.test.ts:27:59
+     25|  });
+     26|  it('acknowledges authorization errors without a fake success or ambig…
+     27|   const ack=added.SocketConversationAckSchema;expect(ack).toBeDefined(…
+       |                                                           ^
+     28|   const error={code:contracts.ErrorCode.FORBIDDEN,message:'Access deni…
+     29|   expect(ack.parse({ok:false,error})).toEqual({ok:false,error});
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  15:47:05
+   Duration  929ms (transform 49%, import 43%, tests 5%, worker 3%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/lobby-subscriptions.test.ts

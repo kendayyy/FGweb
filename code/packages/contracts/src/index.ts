@@ -7,6 +7,7 @@ import {
   ListGamesQuerySchema,
   ListOnlineUsersQuerySchema,
   createPageSchema,
+  ApiErrorResponseSchema,
 } from './common.js';
 import { MeDTOSchema } from './auth.js';
 import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
@@ -28,6 +29,13 @@ export * from './notifications.js';
 export * from './moderation.js';
 
 export const SocketMessageCreatedPayloadSchema = MessageSchema;
+export const SocketConversationRequestSchema=z.object({conversationId:IdSchema}).strict();
+export type SocketConversationRequest=z.infer<typeof SocketConversationRequestSchema>;
+export const SocketConversationAckSchema=z.discriminatedUnion('ok',[
+  z.object({ok:z.literal(true),conversationId:IdSchema}).strict(),
+  z.object({ok:z.literal(false),error:ApiErrorResponseSchema.strict()}).strict(),
+]);
+export type SocketConversationAck=z.infer<typeof SocketConversationAckSchema>;
 export const SocketMessageDeletedPayloadSchema = z.object({
   messageId: IdSchema,
   conversationId: IdSchema,
@@ -96,6 +104,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
 
   { method: 'GET', path: '/api/v1/conversations/:id/messages', auth: 'ConversationRead', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'GET', path: '/api/v1/lobby/messages', auth: 'Public', requestSchema: LobbyMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
+  { method: 'GET', path: '/api/v1/games/:gameId/lobby/messages', auth: 'Public', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'POST', path: '/api/v1/conversations/:id/messages', auth: 'Authenticated', requestSchema: CreateMessageRequestSchema, responseSchema: MessageSchema },
   { method: 'DELETE', path: '/api/v1/conversations/:id/messages/:messageId', auth: 'MessageAuthorOrModerator', responseSchema: z.object({ success: z.boolean() }) },
   { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', responseSchema: AttachmentSchema },

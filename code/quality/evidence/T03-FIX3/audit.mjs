@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {parseEnv} from 'node:util';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8'));
+for(const [key,file]of Object.entries({specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png'}))assert.equal(hash(file),baseline.hashes[key].toLowerCase());
+const allowed=file=>file.startsWith('quality/evidence/T03-FIX3/')||['packages/contracts/src/common.ts','packages/contracts/src/index.ts','packages/contracts/test/lobby-subscriptions.test.ts','quality/api-contract.md','quality/tasks.json','quality/spec-coverage.md'].includes(file);
+const changed=execFileSync('git',['diff','--relative','--name-only','c159079ccef3a49b23f178a3b14b52f4db15c3e7'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+const untracked=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+assert([...changed,...untracked].every(allowed),'Out-of-scope edit');
+const secrets=Object.entries(parseEnv(fs.readFileSync('.env.local','utf8'))).filter(([key,value])=>/(SECRET|PASSWORD|PRIVATE_KEY)/.test(key)&&value.length>=8).map(([,value])=>value);
+for(const file of [...changed,...untracked])assert(!secrets.some(secret=>fs.readFileSync(file).includes(Buffer.from(secret))),'Configured secret leaked');
+console.log(JSON.stringify({approvedBaselines:5,scopeFiles:changed.length+untracked.length,configuredSecretLeak:false}));
