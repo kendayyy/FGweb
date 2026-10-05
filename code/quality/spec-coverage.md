@@ -16,4 +16,3 @@
 | Discord auth/session guards | T08 | 16PG/Nest, build, source/test typecheck, lint, native smoke, real Discord OAuth session/logout/replay and cleanup; quality/evidence/T08/direct-review.md | PASS |
 | Discord frontend auth/guest guards and UI foundation | T09 | 16behavior tests, build/source+test types/lint, real Nest/PG browser logout/replay/session deletion,4viewport screenshots, cleanup/secret audit; T09/final-verification.json and codex-review.md | PASS |
 | Product API/UI features, media1000, PWA, release | T10–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
-
