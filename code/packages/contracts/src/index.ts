@@ -2,7 +2,6 @@ import { z } from 'zod';
 import {
   SocketEventNames,
   IdSchema,
-  CustomStatusSchema,
   GameSchema,
   ListGamesQuerySchema,
   ListOnlineUsersQuerySchema,
@@ -18,10 +17,12 @@ import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequ
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
 import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
 import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
+import { ListGameOnlineUsersQuerySchema, UpdateCustomStatusRequestSchema, UpdateCustomStatusResponseSchema, SocketPresenceRequestSchema, SocketScopedPresenceChangedPayloadSchema } from './presence.js';
 
 export * from './common.js';
 export * from './auth.js';
 export * from './profiles.js';
+export * from './presence.js';
 export * from './messages.js';
 export * from './uploads.js';
 export * from './rooms.js';
@@ -42,11 +43,6 @@ export const SocketMessageDeletedPayloadSchema = z.object({
   messageId: IdSchema,
   conversationId: IdSchema,
 });
-export const SocketPresenceChangedPayloadSchema = z.object({
-  userId: IdSchema,
-  customStatus: CustomStatusSchema,
-  isOnline: z.boolean(),
-});
 export const SocketRecruitmentUpdatedPayloadSchema = RecruitmentSchema;
 export const SocketTeamUpdatedPayloadSchema = z.object({
   playSession: PlaySessionSchema,
@@ -62,7 +58,10 @@ export const SocketNotificationReadPayloadSchema = z.object({
 export const SocketEventSchemaMap = {
   [SocketEventNames.MESSAGE_CREATED]: SocketMessageCreatedPayloadSchema,
   [SocketEventNames.MESSAGE_DELETED]: SocketMessageDeletedPayloadSchema,
-  [SocketEventNames.PRESENCE_CHANGED]: SocketPresenceChangedPayloadSchema,
+  [SocketEventNames.PRESENCE_SUBSCRIBE]: SocketPresenceRequestSchema,
+  [SocketEventNames.PRESENCE_UNSUBSCRIBE]: SocketPresenceRequestSchema,
+  [SocketEventNames.PRESENCE_HEARTBEAT]: SocketPresenceRequestSchema,
+  [SocketEventNames.PRESENCE_CHANGED]: SocketScopedPresenceChangedPayloadSchema,
   [SocketEventNames.RECRUITMENT_UPDATED]: SocketRecruitmentUpdatedPayloadSchema,
   [SocketEventNames.TEAM_UPDATED]: SocketTeamUpdatedPayloadSchema,
   [SocketEventNames.ROOM_UPDATED]: SocketRoomUpdatedPayloadSchema,
@@ -101,9 +100,11 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/me/onboarding', auth: 'Authenticated', requestSchema: OnboardingRequestSchema, responseSchema: PrivateProfileSchema },
   { method: 'PUT', path: '/api/v1/me/interests', auth: 'Authenticated', requestSchema: UpdateInterestsRequestSchema, responseSchema: InterestsResponseSchema },
   { method: 'PUT', path: '/api/v1/me/game-profiles/:gameId', auth: 'Authenticated', requestSchema: UpdateGameProfileRequestSchema, responseSchema: GameProfileSchema },
+  { method: 'PATCH', path: '/api/v1/me/status', auth: 'Authenticated', requestSchema: UpdateCustomStatusRequestSchema, responseSchema: UpdateCustomStatusResponseSchema },
 
   { method: 'GET', path: '/api/v1/users/:id/profile', auth: 'Public', responseSchema: PublicProfileSchema },
   { method: 'GET', path: '/api/v1/games', auth: 'Public', requestSchema: ListGamesQuerySchema, responseSchema: z.array(GameSchema) },
+  { method: 'GET', path: '/api/v1/games/:id/online', auth: 'Public', requestSchema: ListGameOnlineUsersQuerySchema, responseSchema: createPageSchema(PublicProfileSchema) },
   { method: 'GET', path: '/api/v1/online-users', auth: 'Public', requestSchema: ListOnlineUsersQuerySchema, responseSchema: createPageSchema(PublicProfileSchema) },
 
   { method: 'GET', path: '/api/v1/conversations/:id/messages', auth: 'ConversationRead', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },

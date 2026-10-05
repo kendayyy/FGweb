@@ -1,0 +1,66 @@
+ property:null<SYSTEM_MESSAGE>
+[Message] timestamp=2026-10-05T16:10:25Z sender=3e77b455-1ce4-4534-a3fc-34e6a726187b/task-77 priority=MESSAGE_PRIORITY_HIGH content=Task id "3e77b455-1ce4-4534-a3fc-34e6a726187b/task-77" finished with result:
+
+The command exited with code 0.
+Output:
+{"command":"node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js exec -- eslint packages/contracts/src/presence.ts packages/contracts/src/common.ts packages/contracts/src/index.ts packages/contracts/test/presence-contracts.test.ts","cwd":"E:\\FGweb\\code","startedAt":"2026-10-05T16:10:19.467Z","completedAt":"2026-10-05T16:10:25.807Z","exitCode":0,"signal":null,"evidencePath":"quality/evidence/T03-FIX5/codex-lint-sources.txt","evidenceSha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+
+
+Log: file:///C:/Users/PC/.gemini/antigravity-cli/brain/3e77b455-1ce4-4534-a3fc-34e6a726187b/.system_generated/tasks/task-77.log
+</SYSTEM_MESSAGE>
+### Task T03-FIX5 Implementation Summary
+
+#### 1. Implemented Files
+- [presence.ts](file:///E:/FGweb/code/packages/contracts/src/presence.ts): Created shared presence DTO schemas, socket request/ack schemas, scoped and legacy payload schemas, and timing constants (`PRESENCE_HEARTBEAT_INTERVAL_MS = 15000`, `PRESENCE_TTL_MS = 45000`).
+- [common.ts](file:///E:/FGweb/code/packages/contracts/src/common.ts): Added `PRESENCE_SUBSCRIBE`, `PRESENCE_UNSUBSCRIBE`, `PRESENCE_HEARTBEAT`, and `PRESENCE_CHANGED` to `SocketEventNames`.
+- [index.ts](file:///E:/FGweb/code/packages/contracts/src/index.ts): Re-exported presence schemas and constants; added `GET /api/v1/games/:id/online` and `PATCH /api/v1/me/status` to `ApiEndpointRegistry`; mapped presence socket events in `SocketEventSchemaMap`; retained legacy `/online-users` route.
+- [presence-contracts.test.ts](file:///E:/FGweb/code/packages/contracts/test/presence-contracts.test.ts): Unit tests validating presence timing constants, route registry definitions, socket event names, strict request/ack schemas, scoped vs. legacy payload compatibility, and schema mapping.
+- [api-contract.md](file:///E:/FGweb/code/quality/api-contract.md): Documented dedicated `/presence` Socket.IO namespace, websocket handshake requirements, heartbeat/TTL parameters, presence socket events table, `GET /api/v1/games/:id/online`, and `PATCH /api/v1/me/status`.
+
+---
+
+#### 2. Test Execution & Assertion Counts
+
+##### Genuine Behavior RED Run
+- **Command**: `node quality/evidence/T03-FIX5/record-check.mjs test-red node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test -- --run packages/contracts/test/presence-contracts.test.ts`
+- **Result**: Failed (Exit code 1).
+- **Assertion Counts**: 8 failed out of 10 tests (genuine RED against non-existent presence exports & route definitions).
+- **Evidence**: [codex-test-red.txt](file:///E:/FGweb/code/quality/evidence/T03-FIX5/codex-test-red.txt) (`SHA-256: 9e94f561ec693c28a492e71db2328df2e4b78d926a405b632b1fb853efa959c8`).
+
+##### Implementation PASS Run
+- **Command**: `node quality/evidence/T03-FIX5/record-check.mjs test-pass node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/contracts -- --run test/presence-contracts.test.ts`
+- **Result**: Passed (Exit code 0).
+- **Assertion Counts**: 10 passed out of 10 tests.
+- **Evidence**: [codex-test-pass.txt](file:///E:/FGweb/code/quality/evidence/T03-FIX5/codex-test-pass.txt) (`SHA-256: cd8da9a340cf92a2888ce81b57280a65090980db552fb5cf7633dc51befc4e35`).
+
+##### Contracts Suite Regression Run
+- **Command**: `node quality/evidence/T03-FIX5/record-check.mjs test-contracts-all node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/contracts`
+- **Result**: Passed (Exit code 0).
+- **Assertion Counts**: 54 passed out of 54 tests across 9 test files.
+- **Evidence**: [codex-test-contracts-all.txt](file:///E:/FGweb/code/quality/evidence/T03-FIX5/codex-test-contracts-all.txt) (`SHA-256: ee4f8c5157e04e0ca4702eac49185cbca9ff4cf76f4e806d3a9ff66f7dae5ec7`).
+
+##### Workspace Build, Typecheck & Lint Verification
+1. **Contracts Build**: `node quality/evidence/T03-FIX5/record-check.mjs build-contracts node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run build --workspace @fg/contracts` (Exit code 0, Evidence: `codex-build-contracts.txt`).
+2. **Workspace Typecheck**: `node quality/evidence/T03-FIX5/record-check.mjs typecheck node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run typecheck` (Exit code 0, Evidence: `codex-typecheck.txt`).
+3. **ESLint Changed Sources**: `node quality/evidence/T03-FIX5/record-check.mjs lint-sources node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" exec -- eslint packages/contracts/src/presence.ts packages/contracts/src/common.ts packages/contracts/src/index.ts packages/contracts/test/presence-contracts.test.ts` (Exit code 0, Evidence: `codex-lint-sources.txt`).
+4. **Git Diff Check**: `node quality/evidence/T03-FIX5/record-check.mjs git-diff-check git diff --check` (Exit code 0, Evidence: `codex-git-diff-check.txt`).
+5. **Scope & Baseline Audit**: `node quality/evidence/T03-FIX5/record-check.mjs audit node quality/evidence/T03-FIX5/audit.mjs` (Exit code 0, Output: `{"baselinesVerified":5,"frozenPredecessorsVerified":950,"scopeVerified":true,"configuredSecretLeak":false}`).
+
+---
+
+#### 3. Evidence Artifacts
+All execution logs and hash records have been saved to `quality/evidence/T03-FIX5/`:
+- `codex-test-red.txt` / `codex-test-red.json`
+- `codex-test-pass.txt` / `codex-test-pass.json`
+- `codex-test-contracts-all.txt` / `codex-test-contracts-all.json`
+- `codex-build-contracts.txt` / `codex-build-contracts.json`
+- `codex-typecheck.txt` / `codex-typecheck.json`
+- `codex-lint-sources.txt` / `codex-lint-sources.json`
+- `codex-git-diff-check.txt` / `codex-git-diff-check.json`
+- `codex-audit.txt` / `codex-audit.json`
+
+---
+
+#### 4. Remaining Blockers
+- **None for T03-FIX5 contract declaration**.
+- Implementation for T03-FIX5 is complete and verified. Ready for **Codex review and final PASS decision**.

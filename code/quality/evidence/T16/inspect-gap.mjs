@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const before=JSON.parse(fs.readFileSync('quality/tasks.json','utf8'));assert.equal(before.tasks.find(task=>task.id==='T15').status,'PASS');
+execFileSync(process.execPath,['scripts/verify-task.mjs','T16'],{stdio:'inherit'});
+const registry=fs.readFileSync('packages/contracts/src/index.ts','utf8'),common=fs.readFileSync('packages/contracts/src/common.ts','utf8');
+assert(!registry.includes("path: '/api/v1/games/:id/online'"));assert(!registry.includes("path: '/api/v1/me/status'"));assert(!common.includes('presence.heartbeat'));assert(registry.includes("path: '/api/v1/online-users'"));
+const report={checkedAt:new Date().toISOString(),task:'T16',prerequisiteGate:'PASS',missingRoutes:['GET /api/v1/games/:id/online','PATCH /api/v1/me/status'],missingSocketInput:'presence subscription/unsubscription/heartbeat schemas and event names',specSha256:hash('../.doc/01-product-spec.md'),contractRegistrySha256:hash('packages/contracts/src/index.ts'),eventNamesSha256:hash('packages/contracts/src/common.ts'),businessImplementationStarted:false};
+fs.writeFileSync('quality/evidence/T16/gap-verification.json',JSON.stringify(report,null,2)+'\n');
+const task=before.tasks.find(item=>item.id==='T16');Object.assign(task,{status:'BLOCKED',startedAt:report.checkedAt,inputsHash:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),evidencePaths:['quality/evidence/T16/gap-verification.json','quality/evidence/T16/prerequisite-proposal.md'],blockers:['Approval to insert T03-FIX5 contracts prerequisite for missing presence routes/socket context; proposal: quality/evidence/T16/prerequisite-proposal.md']});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(before,null,2)+'\n');console.log('T16 prerequisite gap verified; proposal prepared; no feature code changed.');

@@ -63,13 +63,20 @@
 
 Clients emit `conversation.subscribe` or `conversation.unsubscribe` with strict `SocketConversationRequestSchema` (`{conversationId}`). Identity and permission overrides are rejected. `SocketConversationAckSchema` is `{ok:true,conversationId}` or `{ok:false,error:ApiErrorResponseSchema}`; errors never acknowledge success. Guest subscriptions are limited to public Lobby conversations. Private subscriptions require current membership; origin, session validity and ACL are checked on every event and before delivery to an existing subscription. Session cookies are the only socket identity source. Unsubscribe releases the identified subscription and remains subject to these checks. Server `message.created` retains its existing MessageSchema payload, emitted only after database commit.
 
-Path: `/socket.io`
+Presence realtime connections connect via dedicated `/presence` Socket.IO namespace for T16. Handshake requires valid same-origin header and authenticated session cookie (or guest access limited strictly to canonical approved game Lobbies). Authenticated sessions contribute heartbeats and tab leases (`PRESENCE_HEARTBEAT_INTERVAL_MS = 15000`, `PRESENCE_TTL_MS = 45000`). Private presence subscriptions require active membership rechecked on every event/heartbeat. Closing one tab decrements refcount without dropping other socket leases or altering chosen profile custom status.
+
+Clients emit `presence.subscribe`, `presence.unsubscribe`, and `presence.heartbeat` with strict `SocketPresenceRequestSchema` (`{conversationId}`). Identity is derived server-side. Acknowledgement uses `SocketPresenceAckSchema` (`{ok:true,conversationId}` or `{ok:false,error:ApiErrorResponseSchema}`). Server emits `presence.changed` with `SocketScopedPresenceChangedPayloadSchema` requiring `conversationId`. Legacy `SocketPresenceChangedPayloadSchema` accepts optional `conversationId` for backwards compatibility.
+
+Engine.IO transport path: `/socket.io`. Chat uses the default `/` Socket.IO namespace; presence uses the `/presence` namespace over the same transport path.
 
 | Event Name | ACL Scope | Payload Schema |
 | --- | --- | --- |
 | `message.created` | Public Lobby / Conversation Members | `SocketMessageCreatedPayloadSchema` (`MessageSchema`) |
 | `message.deleted` | Public Lobby / Conversation Members | `SocketMessageDeletedPayloadSchema` |
-| `presence.changed` | Public Lobby / Friends | `SocketPresenceChangedPayloadSchema` |
+| `presence.subscribe` | Public Lobby / Room Members | `SocketPresenceRequestSchema` -> `SocketPresenceAckSchema` |
+| `presence.unsubscribe` | Public Lobby / Room Members | `SocketPresenceRequestSchema` -> `SocketPresenceAckSchema` |
+| `presence.heartbeat` | Authenticated Lobby user / Room Members; guests cannot create leases | `SocketPresenceRequestSchema` -> `SocketPresenceAckSchema` |
+| `presence.changed` | Public Lobby / Friends / Room Members | `SocketScopedPresenceChangedPayloadSchema` (`SocketPresenceChangedPayloadSchema` legacy) |
 | `recruitment.updated` | Public Game Lobby | `SocketRecruitmentUpdatedPayloadSchema` (`RecruitmentSchema`) |
 | `team.updated` | Room / Team Members | `SocketTeamUpdatedPayloadSchema` |
 | `room.updated` | Room Members | `SocketRoomUpdatedPayloadSchema` (`RoomSchema`) |
@@ -89,10 +96,12 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - **POST `/api/v1/me/onboarding`** [Auth: Authenticated] -> Request: `OnboardingRequestSchema` | Response: `PrivateProfileSchema`
 - **PUT `/api/v1/me/interests`** [Auth: Authenticated] -> Request: `UpdateInterestsRequestSchema` | Response: `InterestsResponseSchema`. Replaces interests with at least one unique title from the locked seven-game catalog; invalid/duplicate/empty input returns422. Actor identity comes only from session; extra payload fields are rejected.
 - **PUT `/api/v1/me/game-profiles/:gameId`** [Auth: Authenticated] -> Request: `UpdateGameProfileRequestSchema` | Response: `GameProfileSchema`. Replaces the actor's game details; rank/role/inGameName/playHours/playStyle remain optional. `gameId` comes from the route, `gameTitle` from the catalog; identity/catalog overrides in the payload are rejected. `playHours` is nonnegative numeric duration, not a local-time or ISO timestamp string.
+- **PATCH `/api/v1/me/status`** [Auth: Authenticated] -> Request: `UpdateCustomStatusRequestSchema` (`{customStatus}`) | Response: `UpdateCustomStatusResponseSchema` (`{customStatus, isOnline?}`). Updates the custom status using locked enum (`LOOKING_FOR_TEAM`, `PLAYING`, `JUST_CHATTING`). Actor identity comes strictly from session. Optional `isOnline` reports lease state and does not replace the independently persisted chosen status.
 
 ### 5.2 Games & Public Profiles
 - **GET `/api/v1/users/:id/profile`** [Auth: Public] -> Response: `PublicProfileSchema`
 - **GET `/api/v1/games`** [Auth: Public] -> Request: `ListGamesQuerySchema` | Response: `z.array(GameSchema)`
+- **GET `/api/v1/games/:id/online`** [Auth: Public] -> Request: `ListGameOnlineUsersQuerySchema` | Response: `Page<PublicProfileSchema>`. Returns paginated online user profiles for the specified game lobby.
 - **GET `/api/v1/online-users`** [Auth: Public] -> Request: `ListOnlineUsersQuerySchema` | Response: `Page<PublicProfileSchema>`
 
 ### 5.3 Conversations & Messages
