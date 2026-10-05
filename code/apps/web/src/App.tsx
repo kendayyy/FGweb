@@ -4,12 +4,14 @@ import { LoginForm, HeaderAuthWidget, ProtectedRoute, useAuth } from './features
 import { OnboardingPage } from './features/onboarding/index.js';
 import { ProfilePage } from './features/profiles/index.js';
 import { Card } from './components/ui/Card.js';
+import { LobbyPage } from './features/lobby/LobbyPage.js';
 
 export const App: React.FC = () => {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Navigation Header */}
       <header
+        className="fg-app-header"
         style={{
           minHeight: '64px',
           backgroundColor: 'var(--bg-sidebar)',
@@ -79,49 +81,7 @@ const GuestLobbyShell: React.FC = () => {
     return <OnboardingPage />;
   }
 
-  return (
-    <div style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <Card padding={32}>
-        <h2 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-main)' }}>
-          Lobby · Liên Minh Huyền Thoại — FG
-        </h2>
-        <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-          Chào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi
-          trạng thái phòng và tìm đội chơi.
-        </p>
-
-        {!user ? (
-          <div
-            style={{
-              backgroundColor: 'var(--bg-raised)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '16px',
-              flexWrap: 'wrap',
-            }}
-          >
-            <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>
-                Đăng nhập để tham gia chat & gọi thoại
-              </h3>
-              <p style={{ fontSize: '13px', color: 'var(--text-quiet)' }}>
-                Đăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.
-              </p>
-            </div>
-            <HeaderAuthWidget />
-          </div>
-        ) : (
-          <div style={{ color: 'var(--color-online)', fontWeight: 600 }}>
-            ✓ Đã xác thực phiên làm việc: {user.displayName}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+  return <LobbyPage />;
 };
 
 const ProtectedMemberShell: React.FC = () => {

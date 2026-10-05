@@ -1,0 +1,30 @@
+.fg-chat-avatar{min-width:44px;min-height:44px}
+.fg-chat-avatar img{width:40px;height:40px;border-radius:50%}
+.fg-message-meta span{font-size:13px;font-weight:600;color:var(--text-main);overflow-wrap:anywhere}
+.fg-guest-note a{display:inline-flex;align-items:center;min-height:44px}
+.fg-chat-composer textarea{min-height:44px}
+@media(max-width:1023px){
+ .fg-app-header{padding:6px 12px!important;min-height:56px!important;height:56px;flex-wrap:nowrap!important;gap:8px!important}
+ .fg-app-header>div:first-child{gap:8px!important}
+ .fg-app-header nav a:first-child{display:none!important}
+ .fg-app-header [data-testid=user-avatar-link] span{display:none}
+ .fg-lobby-shell{height:calc(100dvh - 56px)}
+ .fg-game-header{display:grid;grid-template-columns:36px minmax(0,1fr);grid-template-rows:44px auto;gap:4px 12px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top))}
+ .fg-header-game-icon{grid-column:1;grid-row:1 / span 2}
+ .fg-game-select{grid-column:2;grid-row:1;width:100%}
+ .fg-game-heading{display:contents}
+ .fg-game-heading h1{grid-column:2;grid-row:2;font-size:12px;line-height:16px;font-weight:500;color:var(--text-quiet)}
+ .fg-game-heading p{display:none}
+ .fg-chat-avatar img{width:36px;height:36px}
+}
+.fg-mobile-menu{display:none}
+.fg-drawer-backdrop{position:fixed;inset:0;z-index:50;background:rgb(0 0 0 / 55%)}
+.fg-mobile-drawer{width:min(300px,calc(100vw - 44px));height:100dvh;overflow:auto;background:var(--bg-sidebar);padding:16px;box-shadow:8px 0 24px rgb(0 0 0 / 25%)}
+.fg-drawer-close,.fg-mobile-menu button{display:flex;align-items:center;gap:8px;min-height:44px;min-width:44px;padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-raised);color:var(--text-main);font:inherit;cursor:pointer}
+.fg-mobile-drawer .fg-sidebar-footer{margin-top:24px}
+@media(max-width:1023px){.fg-mobile-menu{display:flex;flex:0 0 auto;padding:4px 12px;border-bottom:1px solid var(--border-color)}.fg-mobile-menu button{width:100%;font-size:12px}.fg-mobile-drawer .fg-game-name,.fg-mobile-drawer .fg-sidebar-footer span{display:inline}}
+.fg-game-heading h1{font-size:28px;line-height:36px}
+.fg-game-name{font-size:14px}
+@media(min-width:1024px) and (max-width:1199px){.fg-game-heading h1{font-size:18px;line-height:26px}}
+@media(max-width:1023px){.fg-game-heading h1{font-size:12px;line-height:16px}.fg-message-bubble{font-size:15px;line-height:24px}.fg-chat-composer textarea{font-size:16px;line-height:24px}}
+.fg-message-list{overflow-anchor:none}

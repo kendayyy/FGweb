@@ -24,3 +24,4 @@
 | Game-ID Lobby history and realtime subscription contracts | T03-FIX3 | 3RED;42 contracts tests, build/types/lint/audit; T03-FIX3/final-verification.json | PASS |
 | Durable message creation outbox prerequisite | T07-FIX1 | 4RED;40 PostgreSQL tests; build/types/lint/audit; T07-FIX1/final-verification.json | PASS |
 | Lobby history, native Socket.IO text chat, current session/private ACL, committed durable Redis events | T12 | 16 native tests;53 API regression tests; build/types/lint/audit; T12/final-verification.json | PASS |
+| Seven-game responsive Lobby, guest/member text chat, reconnect ID merge and reading position | T13 | 9 task +37 FE tests; native built-web/Nest/PG/Redis; four viewports, drawer/focus/scroll; T13/final-verification.json | PASS |

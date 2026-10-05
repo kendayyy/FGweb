@@ -1,0 +1,1437 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/lobby.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (6 tests | 6 failed) 6317ms
+   ❯ T13 approved Lobby behavior (6)
+     × loads all seven games, guest sees history and cannot send 1153ms
+     × changes game without mixing histories and ignores a response arriving after game switch 1040ms
+     × merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50 1039ms
+     × ignores old socket events after changing game and disposes its connection 1026ms
+     × authenticated composer persists through API, merges server/event duplicates and renders HTML as text 1029ms
+     × has accessible Chat/Find-team tabs and honest loading/error states 1025ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > loads all seven games, guest sees history and cannot send
+TestingLibraryElementError: Unable to find role="combobox" and name "Chọn game"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:40:38
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > changes game without mixing histories and ignores a response arriving after game switch
+TestingLibraryElementError: Unable to find role="combobox" and name "Chọn game"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:44:40
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50
+TestingLibraryElementError: Unable to find an element with the text: old-anchor. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:47:173
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > ignores old socket events after changing game and disposes its connection
+TestingLibraryElementError: Unable to find an element with the text: tin-game-0. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:51:23
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > authenticated composer persists through API, merges server/event duplicates and renders HTML as text
+TestingLibraryElementError: Unable to find an element with the text: tin-game-0. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mdata-testid[39m=[32m"user-avatar-link"[39m
+              [33mhref[39m=[32m"/users/actor"[39m
+              [33mstyle[39m=[32m"display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 50%; background-color: var(--color-action); color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;"[39m
+              [36m>[39m
+                [0mG[0m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mstyle[39m=[32m"font-weight: 600; color: var(--text-main); font-size: 14px;"[39m
+              [36m>[39m
+                [0mGamer[0m
+              [36m</span>[39m
+            [36m</a>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+              [33mdata-testid[39m=[32m"logout-button"[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng xuất[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"color: var(--color-online); font-weight: 600;"[39m
+            [36m>[39m
+              [0m✓ Đã xác thực phiên làm việc: [0m
+              [0mGamer[0m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mdata-testid[39m=[32m"user-avatar-link"[39m
+              [33mhref[39m=[32m"/users/actor"[39m
+              [33mstyle[39m=[32m"display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 50%; background-color: var(--color-action); color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;"[39m
+              [36m>[39m
+                [0mG[0m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mstyle[39m=[32m"font-weight: 600; color: var(--text-main); font-size: 14px;"[39m
+              [36m>[39m
+                [0mGamer[0m
+              [36m</span>[39m
+            [36m</a>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+              [33mdata-testid[39m=[32m"logout-button"[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng xuất[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"color: var(--color-online); font-weight: 600;"[39m
+            [36m>[39m
+              [0m✓ Đã xác thực phiên làm việc: [0m
+              [0mGamer[0m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:54:33
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > has accessible Chat/Find-team tabs and honest loading/error states
+TestingLibraryElementError: Unable to find role="combobox" and name "Chọn game"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/protected"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"guest-login-cta"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng nhập bằng Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"padding: 32px 24px; max-width: 1200px; margin: 0px auto;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m""[39m
+            [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px;"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mstyle[39m=[32m"font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"[39m
+            [36m>[39m
+              [0mLobby · Liên Minh Huyền Thoại — FG[0m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; line-height: 1.6; margin-bottom: 24px;"[39m
+            [36m>[39m
+              [0mChào mừng bạn đến với cộng đồng game thủ FG. Giao diện Lobby công khai cho phép người xem theo dõi trạng thái phòng và tìm đội chơi.[0m
+            [36m</p>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"background-color: var(--bg-raised); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h3[39m
+                  [33mstyle[39m=[32m"font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;"[39m
+                [36m>[39m
+                  [0mĐăng nhập để tham gia chat & gọi thoại[0m
+                [36m</h3>[39m
+                [36m<p[39m
+                  [33mstyle[39m=[32m"font-size: 13px; color: var(--text-quiet);"[39m
+                [36m>[39m
+                  [0mĐăng nhập bằng tài khoản Discord của bạn chỉ với 1-click.[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mdata-testid[39m=[32m"guest-login-cta"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                    [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mĐăng nhập bằng Discord[0m
+                    [36m</span>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/lobby.test.tsx:57:75
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  16:34:22
+   Duration  10.73s (tests 62%, environment 22%, transform 7%, import 5%, setup 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/lobby.test.tsx

@@ -1,0 +1,5 @@
+# T13 — Approved Lobby frontend
+
+Read both approved mockups and frontend rule. Scope: AppShell, Lobby feature/test, minimal App route integration and T13 evidence. Existing tokens/font/auth are unchanged. Implement actual seven-game API navigation, cursor history and Socket.IO ID reconciliation. Guest composers require login; pending/error/signout auth fails closed. Game/actor changes cancel and ignore obsolete requests/events. Reconnect subscribes before recovering all pages through the last known ID; coalesce concurrent recovery, retain drafts on errors and stable client-message IDs for safe retries.
+
+Desktop208px sidebar, flexible scrolling chat,352px recruitment panel; tablet72/320; mobile selector and Chat/Tìm đội tabs, separate composer/bottom nav,44px hit targets. No game artwork/sample numbers/production mock data. Team/online/friend features remain their later owning tasks, with honest unavailable controls rather than fake results. Preserve the existing initial Lobby heading for regression compatibility. Native built-web/API/DB screenshots at1440/1280/390/360 and behavior checks will precede PASS.
