@@ -2984,19 +2984,186 @@
       ]
     },
     {
-      "id": "T14",
-      "status": "NOT_STARTED",
+      "id": "T03-FIX4",
       "dependencies": [
         "T13"
       ],
+      "writeAllowlist": [
+        "packages/contracts/src/uploads.ts",
+        "packages/contracts/src/index.ts",
+        "packages/contracts/test/uploads.test.ts",
+        "quality/api-contract.md",
+        "quality/evidence/T03-FIX4/**"
+      ],
+      "status": "PASS",
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
+      "blockers": [],
+      "startedAt": "2026-10-05T14:28:52.386Z",
+      "inputsHash": "48f1a82083d7474bad8c85925a180428d7e0a6fd",
+      "completedAt": "2026-10-05T14:31:25.007Z",
+      "commands": [
+        {
+          "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/contracts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:07.449Z",
+          "completedAt": "2026-10-05T14:30:15.515Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-build.txt",
+          "evidenceSha256": "7c96070e2dee1fe34fa5ebbe0769540b26c561496a0a6e1d3a474f9c393fbf86"
+        },
+        {
+          "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/contracts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:02.309Z",
+          "completedAt": "2026-10-05T14:30:07.335Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-contracts-regression.txt",
+          "evidenceSha256": "552314d6acd9d91ded78f658f35d2becca00a14dcbdbaa609d51d20a83aede18"
+        },
+        {
+          "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/api/tsconfig.json",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:15.638Z",
+          "completedAt": "2026-10-05T14:30:35.531Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-api-types.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/web/tsconfig.json",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:35.784Z",
+          "completedAt": "2026-10-05T14:30:42.220Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-web-types.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/uploads.ts packages/contracts/src/index.ts packages/contracts/test/uploads.test.ts quality/evidence/T03-FIX4/record-check.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:47.829Z",
+          "completedAt": "2026-10-05T14:30:51.556Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-lint.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "git diff --check",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:53.888Z",
+          "completedAt": "2026-10-05T14:30:54.077Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-diff.txt",
+          "evidenceSha256": "5c3a8ace8600c1e6b853a4272eb8d6506064ce72fcc9e9f81c937a30d8182bd2"
+        },
+        {
+          "command": "node quality/evidence/T03-FIX4/audit.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-05T14:30:51.764Z",
+          "completedAt": "2026-10-05T14:30:53.760Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T03-FIX4/codex-audit.txt",
+          "evidenceSha256": "13cd4daef150be4639a5f89d2c8ad8df8a64bfb7ed9c3878f4c740e9f6204705"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T03-FIX4/plan.md",
+        "quality/evidence/T03-FIX4/review.md",
+        "quality/evidence/T03-FIX4/codex-red-registry.txt",
+        "quality/evidence/T03-FIX4/final-verification.json",
+        "quality/evidence/T03-FIX4/codex-build.txt",
+        "quality/evidence/T03-FIX4/codex-contracts-regression.txt",
+        "quality/evidence/T03-FIX4/codex-api-types.txt",
+        "quality/evidence/T03-FIX4/codex-web-types.txt",
+        "quality/evidence/T03-FIX4/codex-lint.txt",
+        "quality/evidence/T03-FIX4/codex-diff.txt",
+        "quality/evidence/T03-FIX4/codex-audit.txt"
+      ],
+      "outputsHash": {
+        "specSha256": "7041323fcafe84bf51b080db1efda6e151ad9253d6547df4adcea79fb1901c83",
+        "files": {
+          "packages/contracts/src/uploads.ts": "9fbb209cf6b7d9b71e802aeebbc75cc16c9ab435b082febc8045dbc9e19b4eed",
+          "packages/contracts/src/index.ts": "0e3ca37410b3cfe8637ea799e6fc73e260d7c0a3f4b89d32af7c8df341d659d7",
+          "packages/contracts/test/uploads.test.ts": "4602fbbfd9e78ada7f7691a72a23f7af2f36a2cb77e151302512d9485bd2e628",
+          "quality/api-contract.md": "588987fccd4e24ebd8ceb351206e7d9a9d4bdd691cd127944483af90a4ccd62e",
+          "quality/evidence/T03-FIX4/approval.md": "21b170810d353e287b2904c0bedbb672d59965a784ae4bb44047525fd757b9c0",
+          "quality/evidence/T03-FIX4/audit.mjs": "c1b9b45cf7070546975e2297002bc41e5eb501fd9f7638ba0cd98fc6be4c72c0",
+          "quality/evidence/T03-FIX4/closeout.mjs": "53eba1ba84a1cfde9874bca5b538ba3f945c23d5677483afae76af96cd7bf2e1",
+          "quality/evidence/T03-FIX4/codex-api-types.json": "e3cc053e3393a6c4583d44dd3d0b48888863d2cf853e700279bdcab6a5ec6fc1",
+          "quality/evidence/T03-FIX4/codex-api-types.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "quality/evidence/T03-FIX4/codex-audit.json": "624da8b603dfed0408c36c6338b6815ffa055ab6afe9ca7b56300efdfed75180",
+          "quality/evidence/T03-FIX4/codex-audit.txt": "13cd4daef150be4639a5f89d2c8ad8df8a64bfb7ed9c3878f4c740e9f6204705",
+          "quality/evidence/T03-FIX4/codex-build.json": "4a47ff478fd4d267feb99503f4f2c96340c98c4ae9569a2627da5596c7069b37",
+          "quality/evidence/T03-FIX4/codex-build.txt": "7c96070e2dee1fe34fa5ebbe0769540b26c561496a0a6e1d3a474f9c393fbf86",
+          "quality/evidence/T03-FIX4/codex-contracts-regression.json": "5a28ec1f2c85ee55e257b624ece484942bb2f0ab40a5b980eed32e8a00a76080",
+          "quality/evidence/T03-FIX4/codex-contracts-regression.txt": "552314d6acd9d91ded78f658f35d2becca00a14dcbdbaa609d51d20a83aede18",
+          "quality/evidence/T03-FIX4/codex-diff.json": "67ffd4139bac74ae3ad260f0e9e75e77bbe41e927b2c45e4859ad200ebdb6830",
+          "quality/evidence/T03-FIX4/codex-diff.txt": "5c3a8ace8600c1e6b853a4272eb8d6506064ce72fcc9e9f81c937a30d8182bd2",
+          "quality/evidence/T03-FIX4/codex-lint.json": "aadf1490883ce2cf7507cb8c634b1c38ecdfd6339801591d81a200f52555b055",
+          "quality/evidence/T03-FIX4/codex-lint.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "quality/evidence/T03-FIX4/codex-red-registry.json": "744813c1af14a8aabf36c4756d86aa2f3082e87b10a655c7818368721b79ead5",
+          "quality/evidence/T03-FIX4/codex-red-registry.txt": "b2ef8a2ea740103f25e2e9b82ff38ca04acc5254707d59d07aa6efd3b7d94d2d",
+          "quality/evidence/T03-FIX4/codex-red.json": "d504259fb70956d726cd033cc653b8effef59ab4401290176573aca5a45a3c67",
+          "quality/evidence/T03-FIX4/codex-red.txt": "d640e6893a2c209aa9b6f8d2436ee48e7e64bf248080f04bf0449ff13171597c",
+          "quality/evidence/T03-FIX4/codex-web-types.json": "c14139b7b27379a024a7e955b5e8776c16b715a2d5aac929a052c2633486db32",
+          "quality/evidence/T03-FIX4/codex-web-types.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "quality/evidence/T03-FIX4/final-verification.json": "f08c6129764c39f862954e7e3624457dc9549449149e6448a39fe9c498310de8",
+          "quality/evidence/T03-FIX4/plan.md": "8bebd4cd3afe72a0b2438e2122c3b7895c664a6902766fba447d21868b9559e3",
+          "quality/evidence/T03-FIX4/preflight.txt": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354",
+          "quality/evidence/T03-FIX4/record-check.mjs": "f26256e559d3d5cc4cc9a17a78dbbac974e94360798cd22e45432de7ba11d27d",
+          "quality/evidence/T03-FIX4/review.md": "c1913f207826fb8296b75af2a6924cb157d11cf00ca45ba1561eee15dd0fc9f2"
+        }
+      }
+    },
+    {
+      "id": "T05-FIX1",
+      "dependencies": [
+        "T03-FIX4"
+      ],
+      "writeAllowlist": [
+        "packages/database/src/schema/pending-uploads.ts",
+        "packages/database/src/schema/index.ts",
+        "packages/database/migrations/**",
+        "packages/database/test/pending-uploads.test.ts",
+        "quality/evidence/T05-FIX1/**"
+      ],
+      "status": "NOT_STARTED",
+      "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+      "blockers": []
+    },
+    {
+      "id": "T14",
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "T13",
+        "T03-FIX4",
+        "T05-FIX1"
+      ],
+      "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+      "inputsHash": "48f1a82083d7474bad8c85925a180428d7e0a6fd",
       "outputsHash": null,
       "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
+      "evidencePaths": [
+        "quality/evidence/T14/preflight.txt",
+        "quality/evidence/T14/prerequisite-proposal.md"
+      ],
+      "startedAt": "2026-10-05T14:26:37.422Z",
       "completedAt": null,
-      "blockers": []
+      "blockers": [],
+      "writeAllowlist": [
+        "apps/api/src/modules/uploads/**",
+        "apps/api/src/modules/chat/**",
+        "apps/api/src/app.module.ts",
+        "apps/api/test/chat-rich.integration.spec.ts",
+        "quality/evidence/T14/**"
+      ]
     },
     {
       "id": "T15",

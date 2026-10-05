@@ -11,6 +11,7 @@ import {
 } from './common.js';
 import { MeDTOSchema } from './auth.js';
 import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
+import {UploadImageRequestSchema,AttachmentUrlSchema,ImageContentSchema} from './uploads.js';
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
 import { RoomSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
@@ -22,6 +23,7 @@ export * from './common.js';
 export * from './auth.js';
 export * from './profiles.js';
 export * from './messages.js';
+export * from './uploads.js';
 export * from './rooms.js';
 export * from './teams.js';
 export * from './calls.js';
@@ -89,6 +91,8 @@ export interface ApiEndpointDefinition {
   requiredPermission?: 'MANAGE_CHAT' | 'MANAGE_CALLS' | 'MANAGE_RECRUITMENT' | 'MANAGE_MEMBERS';
   requestSchema?: z.ZodTypeAny;
   responseSchema: z.ZodTypeAny;
+  requestFormat?: 'multipart';
+  responseFormat?: 'binary';
 }
 
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
@@ -107,8 +111,9 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/games/:gameId/lobby/messages', auth: 'Public', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'POST', path: '/api/v1/conversations/:id/messages', auth: 'Authenticated', requestSchema: CreateMessageRequestSchema, responseSchema: MessageSchema },
   { method: 'DELETE', path: '/api/v1/conversations/:id/messages/:messageId', auth: 'MessageAuthorOrModerator', responseSchema: z.object({ success: z.boolean() }) },
-  { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', responseSchema: AttachmentSchema },
-  { method: 'GET', path: '/api/v1/attachments/:id', auth: 'ConversationRead', responseSchema: z.object({ url: z.string().url() }) },
+  { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', requestSchema: UploadImageRequestSchema,requestFormat:'multipart', responseSchema: AttachmentSchema },
+  { method: 'GET', path: '/api/v1/attachments/:id', auth: 'ConversationRead', responseSchema: AttachmentUrlSchema },
+  { method: 'GET', path: '/api/v1/attachments/:id/content', auth: 'ConversationRead', responseSchema: ImageContentSchema,responseFormat:'binary' },
 
   { method: 'GET', path: '/api/v1/friends', auth: 'Authenticated', requestSchema: ListFriendsQuerySchema, responseSchema: createPageSchema(PublicProfileSchema) },
   { method: 'POST', path: '/api/v1/friends/requests', auth: 'Authenticated', requestSchema: SendFriendRequestSchema, responseSchema: z.object({ requestId: IdSchema, status: z.literal('PENDING') }) },

@@ -1,0 +1,5 @@
+# T03-FIX4 review
+
+User-approved prerequisite to T14, limited to additive upload transport contracts/documentation. Multipart requests declare conversation context and actual bytes/filename/MIME, reject client ownership fields, unsupported declared formats, empty/oversize payloads. The server still must verify signatures/decoded pixels, re-encode and enforce current ACL. GET metadata returns the existing JSON URL contract; the separately declared content endpoint returns protected WebP bytes and never implies a public filesystem URL. Draft TTL24h is explicit. Existing MessageSchema/attachment response shapes remain unchanged.
+
+Two genuine RED failures occurred for the missing upload request and protected-content route after correcting the initial registry-name typo. All44 contracts tests, build, API/web typechecks, lint, baseline/frozen-output/secret/database audit and diff checks PASS. Backend endpoints are intentionally implemented in T14; this task does not claim actual upload or authorization integration. Old tests/spec/mockups remain intact; T14 prerequisite proposal/approval and all failure logs are retained.

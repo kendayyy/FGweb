@@ -1,0 +1,41 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/uploads.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/uploads.test.ts (2 tests | 2 failed) 29ms
+   ❯ approved protected image-upload contracts (2)
+     × requires conversation context and an actual multipart file, with no client ownership fields 15ms
+     × declares protected metadata and binary content as distinct response transports 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/uploads.test.ts > approved protected image-upload contracts > requires conversation context and an actual multipart file, with no client ownership fields
+AssertionError: Upload must declare its request: expected undefined to be defined
+ ❯ test/uploads.test.ts:7:119
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/uploads.test.ts > approved protected image-upload contracts > declares protected metadata and binary content as distinct response transports
+AssertionError: Protected content route must exist: expected undefined to be defined
+ ❯ test/uploads.test.ts:12:337
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  21:29:09
+   Duration  899ms (transform 49%, import 45%, tests 4%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/uploads.test.ts
