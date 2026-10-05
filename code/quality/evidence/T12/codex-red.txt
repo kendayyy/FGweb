@@ -1,0 +1,224 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18284) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/lobby.integration.spec.ts (32.407 s)
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › guest reads200 and sends401 with structured domain errors
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › keeps seven game lobbies independent and legacy title query uses shared catalog
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › recovers a disconnected gap beyond50 with tied timestamps, stable cursors and no duplicate IDs
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › deduplicates concurrent retries in storage and persists one creation job
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › validates blank/oversized/rich input and CSRF origin without inserting messages
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rejects guest/private read and subscribe; permits guest public subscribe only
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rejects unknown channels and untrusted or missing socket origins
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › broadcasts committed public DTOs only to the selected Lobby and supports unsubscribe
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › invalid cookies never downgrade to guest access
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rechecks revoked membership on subscription and delivery to an already connected socket
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › expired and revoked sessions cannot send or reuse a connected socket
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › banned sessions cannot send or keep socket access
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › failed outbox transaction emits nothing and leaves neither message nor job
+
+    error: column "id" of relation "profiles" does not exist
+
+      34 |   games=await schema.seedGames(drizzle(pool,{schema}));
+      35 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES('member','Member','member@example.com',true,now(),now()),('outsider','Outsider','out@example.com',true,now(),now())`);
+    > 36 |   await pool.query(`INSERT INTO profiles(user_id,display_name) VALUES('member','Gamer')`);
+         |   ^
+      37 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-member','member','token-member',now()+interval '1 day',now(),now())`);
+      38 |   cookie=await createSignedSessionCookie(secret,'token-member');
+      39 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('private-conversation','ROOM')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/lobby.integration.spec.ts:36:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       13 failed, 13 total
+Snapshots:   0 total
+Time:        36.038 s
+Ran all test suites matching test/lobby.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts

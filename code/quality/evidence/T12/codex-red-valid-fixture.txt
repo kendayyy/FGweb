@@ -1,0 +1,197 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3324) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/lobby.integration.spec.ts (23.976 s)
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › guest reads200 and sends401 with structured domain errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      55 |  async function insert(conversation:string,id:string,content=id){await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id,created_at) VALUES($1,$2,'member',$3,$1,'2026-10-01T00:00:00.000Z')`,[id,conversation,content]);}
+      56 |  it('guest reads200 and sends401 with structured domain errors',async()=>{
+    > 57 |   const response=await request(base).get(`/api/v1/games/${games[0].id}/lobby/messages`);expect(response.status).toBe(200);expect(createPageSchema(MessageSchema).parse(response.body).items).toEqual([]);
+         |                                                                                                                 ^
+      58 |   const denied=await request(base).post(`/api/v1/conversations/${games[0].lobbyId}/messages`).set('Origin',origin).send({content:'hello',clientMessageId:'guest'});expect(denied.status).toBe(401);expect(ApiErrorResponseSchema.parse(denied.body).code).toBe('LOGIN_REQUIRED');
+      59 |  });
+      60 |  it('keeps seven game lobbies independent and legacy title query uses shared catalog',async()=>{
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:57:113)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › keeps seven game lobbies independent and legacy title query uses shared catalog
+
+    error: insert or update on table "messages" violates foreign key constraint "messages_conversation_id_conversations_id_fk"
+
+      53 |  }
+      54 |  async function subscribe(socket:Socket,conversationId:string){return SocketConversationAckSchema.parse(await socket.timeout(1500).emitWithAck(SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId}));}
+    > 55 |  async function insert(conversation:string,id:string,content=id){await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id,created_at) VALUES($1,$2,'member',$3,$1,'2026-10-01T00:00:00.000Z')`,[id,conversation,content]);}
+         |                                                                  ^
+      56 |  it('guest reads200 and sends401 with structured domain errors',async()=>{
+      57 |   const response=await request(base).get(`/api/v1/games/${games[0].id}/lobby/messages`);expect(response.status).toBe(200);expect(createPageSchema(MessageSchema).parse(response.body).items).toEqual([]);
+      58 |   const denied=await request(base).post(`/api/v1/conversations/${games[0].lobbyId}/messages`).set('Origin',origin).send({content:'hello',clientMessageId:'guest'});expect(denied.status).toBe(401);expect(ApiErrorResponseSchema.parse(denied.body).code).toBe('LOGIN_REQUIRED');
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at insert (test/lobby.integration.spec.ts:55:66)
+      at Object.<anonymous> (test/lobby.integration.spec.ts:61:71)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › recovers a disconnected gap beyond50 with tied timestamps, stable cursors and no duplicate IDs
+
+    error: insert or update on table "messages" violates foreign key constraint "messages_conversation_id_conversations_id_fk"
+
+      53 |  }
+      54 |  async function subscribe(socket:Socket,conversationId:string){return SocketConversationAckSchema.parse(await socket.timeout(1500).emitWithAck(SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId}));}
+    > 55 |  async function insert(conversation:string,id:string,content=id){await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id,created_at) VALUES($1,$2,'member',$3,$1,'2026-10-01T00:00:00.000Z')`,[id,conversation,content]);}
+         |                                                                  ^
+      56 |  it('guest reads200 and sends401 with structured domain errors',async()=>{
+      57 |   const response=await request(base).get(`/api/v1/games/${games[0].id}/lobby/messages`);expect(response.status).toBe(200);expect(createPageSchema(MessageSchema).parse(response.body).items).toEqual([]);
+      58 |   const denied=await request(base).post(`/api/v1/conversations/${games[0].lobbyId}/messages`).set('Origin',origin).send({content:'hello',clientMessageId:'guest'});expect(denied.status).toBe(401);expect(ApiErrorResponseSchema.parse(denied.body).code).toBe('LOGIN_REQUIRED');
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at insert (test/lobby.integration.spec.ts:55:66)
+      at Object.<anonymous> (test/lobby.integration.spec.ts:66:61)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › deduplicates concurrent retries in storage and persists one creation job
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      70 |  });
+      71 |  it('deduplicates concurrent retries in storage and persists one creation job',async()=>{
+    > 72 |   const body={content:'race',clientMessageId:randomUUID()};const results=await Promise.all([post(games[0].lobbyId,body),post(games[0].lobbyId,body)]);for(const response of results){expect(response.status).toBe(201);MessageSchema.parse(response.body);}expect(results[0].body.id).toBe(results[1].body.id);
+         |                                                                                                                                                                                                              ^
+      73 |   expect((await pool.query('SELECT id FROM messages WHERE client_message_id=$1',[body.clientMessageId])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM realtime_outbox WHERE message_id=$1',[results[0].body.id])).rowCount).toBe(1);
+      74 |  });
+      75 |  it('validates blank/oversized/rich input and CSRF origin without inserting messages',async()=>{
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:72:206)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › validates blank/oversized/rich input and CSRF origin without inserting messages
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      74 |  });
+      75 |  it('validates blank/oversized/rich input and CSRF origin without inserting messages',async()=>{
+    > 76 |   for(const body of [{content:'  ',clientMessageId:'blank'},{content:'x'.repeat(2001),clientMessageId:'long'},{content:'hi',attachmentIds:['unowned'],clientMessageId:'rich'}])expect((await post(games[0].lobbyId,body)).status).toBe(422);
+         |                                                                                                                                                                                                                                   ^
+      77 |   expect((await request(base).post(`/api/v1/conversations/${games[0].lobbyId}/messages`).set('Cookie',cookie).set('Origin','https://evil.example').send({content:'evil',clientMessageId:'evil'})).status).toBe(403);
+      78 |  });
+      79 |  it('rejects guest/private read and subscribe; permits guest public subscribe only',async()=>{
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:76:227)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rejects guest/private read and subscribe; permits guest public subscribe only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      78 |  });
+      79 |  it('rejects guest/private read and subscribe; permits guest public subscribe only',async()=>{
+    > 80 |   expect((await history('private-conversation')).status).toBe(401);const guest=await connect();const denied=await subscribe(guest,'private-conversation');expect(denied.ok).toBe(false);if(!denied.ok)expect(denied.error.code).toBe('FORBIDDEN');expect((await subscribe(guest,games[0].lobbyId)).ok).toBe(true);guest.disconnect();
+         |                                                          ^
+      81 |  });
+      82 |  it('rejects unknown channels and untrusted or missing socket origins',async()=>{
+      83 |   const socket=await connect();expect((await subscribe(socket,'not-found')).ok).toBe(false);socket.disconnect();await expect(connect(undefined,'https://evil.example')).rejects.toThrow();await expect(connect(undefined,'')).rejects.toThrow();
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:80:58)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rejects unknown channels and untrusted or missing socket origins
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › broadcasts committed public DTOs only to the selected Lobby and supports unsubscribe
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › invalid cookies never downgrade to guest access
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      88 |   const unsub=await one.timeout(1500).emitWithAck('conversation.unsubscribe',{conversationId:games[2].lobbyId});expect(SocketConversationAckSchema.parse(unsub).ok).toBe(true);one.disconnect();two.disconnect();
+      89 |  });
+    > 90 |  it('invalid cookies never downgrade to guest access',async()=>{expect((await history(games[0].lobbyId).set('Cookie','better-auth.session_token=invalid')).status).toBe(401);await expect(connect('better-auth.session_token=invalid')).rejects.toThrow();});
+         |                                                                                                                                                                    ^
+      91 |  it('rechecks revoked membership on subscription and delivery to an already connected socket',async()=>{
+      92 |   const member=await connect(cookie);expect((await subscribe(member,'private-conversation')).ok).toBe(true);const leaked:unknown[]=[];member.on('message.created',value=>leaked.push(value));await pool.query(`DELETE FROM conversation_members WHERE id='membership'`);
+      93 |   const msg='revoked-'+randomUUID();await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id) VALUES($1,'private-conversation','outsider','Private',$1)`,[msg]);await pool.query(`INSERT INTO realtime_outbox(id,message_id,conversation_id,event_name) VALUES($1,$2,'private-conversation','message.created')`,[randomUUID(),msg]);await new Promise(resolve=>setTimeout(resolve,600));expect(leaked).toEqual([]);expect((await subscribe(member,'private-conversation')).ok).toBe(false);expect((await history('private-conversation').set('Cookie',cookie)).status).toBe(403);member.disconnect();
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:90:164)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › rechecks revoked membership on subscription and delivery to an already connected socket
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › expired and revoked sessions cannot send or reuse a connected socket
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › banned sessions cannot send or keep socket access
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › failed outbox transaction emits nothing and leaves neither message nor job
+
+    websocket error
+
+      at WS.onError (../../node_modules/engine.io-client/build/esm-debug/transport.js:41:37)
+      at WebSocket.ws.onerror (../../node_modules/engine.io-client/build/esm-debug/transports/websocket.js:51:39)
+      at callListener (../../node_modules/ws/lib/event-target.js:290:14)
+      at WebSocket.onError (../../node_modules/ws/lib/event-target.js:230:9)
+      at emitErrorAndClose (../../node_modules/ws/lib/websocket.js:1060:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       13 failed, 13 total
+Snapshots:   0 total
+Time:        24.452 s, estimated 33 s
+Ran all test suites matching test/lobby.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts

@@ -1,0 +1,77 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17292) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/lobby.integration.spec.ts (44.749 s)
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › recovers a disconnected gap beyond50 with tied timestamps, stable cursors and no duplicate IDs
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 122
+    Received: 50
+
+      68 |   const recovered=new Set<string>();let cursor:string|undefined;let pages=0;
+      69 |   do{const response=await history(conversation).query({limit:50,...(cursor?{cursor}:{})});expect(response.status).toBe(200);const page=createPageSchema(MessageSchema).parse(response.body);expect(page.items.length).toBeLessThanOrEqual(50);for(const item of page.items){expect(recovered.has(item.id)).toBe(false);recovered.add(item.id);}cursor=page.hasMore?page.nextCursor??undefined:undefined;expect(++pages).toBeLessThan(6);}while(cursor);
+    > 70 |   expect(recovered.size).toBe(122);expect((await history(conversation).query({cursor:'garbage'})).status).toBe(422);expect((await history(conversation).query({limit:51})).status).toBe(422);
+         |                          ^
+      71 |  });
+      72 |  it('deduplicates concurrent retries in storage and persists one creation job',async()=>{
+      73 |   const body={content:'race',clientMessageId:randomUUID()};const results=await Promise.all([post(games[0].lobbyId,body),post(games[0].lobbyId,body)]);for(const response of results){expect(response.status).toBe(201);MessageSchema.parse(response.body);}expect(results[0].body.id).toBe(results[1].body.id);
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:70:26)
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › expired and revoked sessions cannot send or reuse a connected socket
+
+    Socket access denied
+
+      at Socket.onpacket (../../node_modules/socket.io-client/build/esm-debug/socket.js:518:29)
+      at Manager.Emitter.emit (../../node_modules/@socket.io/component-emitter/lib/cjs/index.js:143:20)
+      at ../../node_modules/socket.io-client/build/esm-debug/manager.js:217:18
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › banned sessions cannot send or keep socket access
+
+    Socket access denied
+
+      at Socket.onpacket (../../node_modules/socket.io-client/build/esm-debug/socket.js:518:29)
+      at Manager.Emitter.emit (../../node_modules/@socket.io/component-emitter/lib/cjs/index.js:143:20)
+      at ../../node_modules/socket.io-client/build/esm-debug/manager.js:217:18
+
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › failed outbox transaction emits nothing and leaves neither message nor job
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 401
+
+      104 |   const listener=await connect();await subscribe(listener,games[4].lobbyId);const events:unknown[]=[];listener.on('message.created',value=>events.push(value));
+      105 |   await pool.query(`CREATE FUNCTION fail_t12_job() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'intentional test transaction failure'; END $$`);await pool.query(`CREATE TRIGGER fail_job BEFORE INSERT ON realtime_outbox FOR EACH ROW EXECUTE FUNCTION fail_t12_job()`);
+    > 106 |   try{expect((await post(games[4].lobbyId,{content:'rollback',clientMessageId:'failed-outbox'})).status).toBe(500);expect((await pool.query(`SELECT id FROM messages WHERE client_message_id='failed-outbox'`)).rowCount).toBe(0);await new Promise(resolve=>setTimeout(resolve,400));expect(events).toEqual([]);}finally{await pool.query('DROP TRIGGER fail_job ON realtime_outbox');await pool.query('DROP FUNCTION fail_t12_job()');listener.disconnect();}
+          |                                                                                                          ^
+      107 |  });
+      108 | });
+      109 |
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:106:106)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 9 passed, 13 total
+Snapshots:   0 total
+Time:        45.379 s
+Ran all test suites matching test/lobby.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts

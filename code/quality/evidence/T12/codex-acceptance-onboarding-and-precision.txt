@@ -1,0 +1,47 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:9172) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/lobby.integration.spec.ts (59.491 s)
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › guest reads200 and sends401 with structured domain errors
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      at _getError (../../node_modules/jest-circus/build/jestAdapterInit.js:1985:12)
+          at Array.map (<anonymous>)
+
+    Cause:
+        thrown: "Exceeded timeout of 5000 ms for a test.
+        Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+          59 |  async function subscribe(socket:Socket,conversationId:string){return SocketConversationAckSchema.parse(await socket.timeout(1500).emitWithAck(SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId}));}
+          60 |  async function insert(conversation:string,id:string,content=id){await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id,created_at) VALUES($1,$2,'member',$3,$1,'2026-10-01T00:00:00.000Z')`,[id,conversation,content]);}
+        > 61 |  it('guest reads200 and sends401 with structured domain errors',async()=>{
+             |  ^
+          62 |   const response=await request(base).get(`/api/v1/games/${games[0].id}/lobby/messages`);expect(response.status).toBe(200);expect(createPageSchema(MessageSchema).parse(response.body).items).toEqual([]);
+          63 |   const denied=await request(base).post(`/api/v1/conversations/${games[0].lobbyId}/messages`).set('Origin',origin).send({content:'hello',clientMessageId:'guest'});expect(denied.status).toBe(401);expect(ApiErrorResponseSchema.parse(denied.body).code).toBe('LOGIN_REQUIRED');
+          64 |  });
+
+          at test/lobby.integration.spec.ts:61:2
+          at test/lobby.integration.spec.ts:22:1
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        60.104 s
+Ran all test suites matching test/lobby.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts

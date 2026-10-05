@@ -1,0 +1,37 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts -t requires completed onboarding
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6980) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/lobby.integration.spec.ts (36.082 s)
+  ● T12 native HTTP/Socket.IO with actual PostgreSQL › requires completed onboarding before an authenticated user can send
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      83 |  it('requires completed onboarding before an authenticated user can send',async()=>{
+      84 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('session-outsider','outsider','token-outsider',now()+interval '1 day',now(),now())`);
+    > 85 |   const incomplete=await createSignedSessionCookie(secret,'token-outsider');expect((await post(games[0].lobbyId,{content:'not onboarded',clientMessageId:'incomplete-profile'},incomplete)).status).toBe(403);
+         |                                                                                                                                                                                                     ^
+      86 |  });
+      87 |  it('keeps microsecond cursor boundaries independent from the host timezone',async()=>{
+      88 |   const conversation=games[5].lobbyId;
+
+      at Object.<anonymous> (test/lobby.integration.spec.ts:85:197)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 skipped, 15 total
+Snapshots:   0 total
+Time:        36.524 s, estimated 49 s
+Ran all test suites matching test/lobby.integration.spec.ts with tests matching "requires completed onboarding".
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/lobby.integration.spec.ts -t ^"requires^ completed^ onboarding^"
