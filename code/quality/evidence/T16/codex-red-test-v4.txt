@@ -1,0 +1,140 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25884) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/presence.integration.spec.ts (68.819 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › two authenticated sockets same user dedup
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › closing one tab keeps other online
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › stale lease expires exactly 45s with injected clock
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › heartbeat keeps current lease
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › custom status persists through reconnect/expiry
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      277 |       .send({ customStatus: 'LOOKING_FOR_TEAM' });
+      278 |
+    > 279 |     expect(patchRes.status).toBe(200);
+          |                             ^
+      280 |     const body = UpdateCustomStatusResponseSchema.parse(patchRes.body);
+      281 |     expect(body.customStatus).toBe('LOOKING_FOR_TEAM');
+      282 |
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:279:29)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › per-game isolation
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › guest/private outsider denied
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › private membership revoked/session revoked/ban/origin deny/identity injection
+
+    expect(received).rejects.toThrow()
+
+    Matcher error: received value must be a promise or a function returning a promise
+
+    Received has type:  object
+    Received has value: {"_callbacks": {"$connect_error": [[Function on]]}, "_opts": {"extraHeaders": {"Cookie": "better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=", "Origin": "http://malicious-site.com"}, "hostname": "127.0.0.1", "path": "/socket.io", "port": "46053", "reconnection": false, "secure": false, "transports": ["websocket"]}, "_queue": [], "_queueSeq": 0, "acks": {}, "connected": false, "flags": {}, "ids": 0, "io": {"_autoConnect": true, "_callbacks": {"$close": [[Function bound onclose]], "$error": [[Function bound onerror]], "$open": [[Function bound onopen]], "$packet": [[Function bound onpacket]]}, "_randomizationFactor": 0.5, "_readyState": "opening", "_reconnection": false, "_reconnectionAttempts": Infinity, "_reconnectionDelay": 1000, "_reconnectionDelayMax": 5000, "_timeout": 20000, "backoff": {"attempts": 0, "factor": 2, "jitter": 0.5, "max": 5000, "ms": 1000}, "clearTimeoutFn": [Function bound clearTimeout], "decoder": {"opts": {"maxAttachments": 10, "reviver": undefined}}, "encoder": {"replacer": undefined}, "engine": {"_callbacks": {"$error": [[Function onError]], "$open": [[Function anonymous]]}, "_maxPayload": -1, "_pingInterval": -1, "_pingTimeout": -1, "_pingTimeoutTime": Infinity, "_prevBufferLen": 0, "_transportsByName": {"polling": [Function XHR], "websocket": [Function WS], "webtransport": [Function WT]}, "_upgrades": [], "binaryType": "nodebuffer", "clearTimeoutFn": [Function bound clearTimeout], "hostname": "127.0.0.1", "opts": {"addTrailingSlash": true, "agent": false, "closeOnBeforeunload": false, "extraHeaders": {"Cookie": "better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=", "Origin": "http://malicious-site.com"}, "hostname": "127.0.0.1", "path": "/socket.io/", "perMessageDeflate": {"threshold": 1024}, "port": "46053", "reconnection": false, "rejectUnauthorized": true, "rememberUpgrade": false, "secure": false, "timestampParam": "t", "transportOptions": {}, "transports": ["websocket"], "upgrade": true, "withCredentials": false}, "port": "46053", "readyState": "opening", "secure": false, "setTimeoutFn": [Function bound setTimeout], "transport": {"_callbacks": {"$close": [[Function anonymous]], "$drain": [[Function bound _onDrain]], "$error": [[Function bound _onError]], "$packet": [[Function bound _onPacket]]}, "clearTimeoutFn": [Function bound clearTimeout], "opts": {"addTrailingSlash": true, "agent": false, "closeOnBeforeunload": false, "extraHeaders": {"Cookie": "better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=", "Origin": "http://malicious-site.com"}, "hostname": "127.0.0.1", "path": "/socket.io/", "perMessageDeflate": {"threshold": 1024}, "port": "46053", "query": {"EIO": 4, "transport": "websocket"}, "reconnection": false, "rejectUnauthorized": true, "rememberUpgrade": false, "secure": false, "socket": [Circular], "timestampParam": "t", "transportOptions": {}, "transports": ["websocket"], "upgrade": true, "withCredentials": false}, "query": {"EIO": 4, "transport": "websocket"}, "readyState": "opening", "setTimeoutFn": [Function bound setTimeout], "socket": [Circular], "supportsBinary": true, "writable": false, "ws": {"_autoPong": true, "_binaryType": "nodebuffer", "_bufferedAmount": 0, "_closeCode": 1006, "_closeFrameReceived": false, "_closeFrameSent": false, "_closeMessage": {"data": [], "type": "Buffer"}, "_closeTimeout": 30000, "_closeTimer": null, "_errorEmitted": false, "_events": {"close": [Function onClose], "error": [Function onError], "message": [Function onMessage], "open": [Function onOpen]}, "_eventsCount": 4, "_extensions": {}, "_isServer": false, "_maxListeners": undefined, "_paused": false, "_protocol": "", "_readyState": 0, "_receiver": null, "_redirects": 0, "_req": {"_closed": false, "_contentLength": 0, "_defaultKeepAlive": true, "_ended": false, "_events": {"error": [Function anonymous], "response": [Function anonymous], "upgrade": [Function anonymous]}, "_eventsCount": 3, "_hasBody": true, "_header": "GET /socket.io/?EIO=4&transport=websocket HTTP/1.1·
+    Origin: http://malicious-site.com·
+    Cookie: better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=·
+    Sec-WebSocket-Version: 13·
+    Sec-WebSocket-Key: tbbhRQ0y8wcl7K5BPJzEGA==·
+    Connection: Upgrade·
+    Upgrade: websocket·
+    Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits·
+    Host: 127.0.0.1:46053···
+    ", "_headerSent": true, "_keepAliveTimeout": 0, "_last": true, "_maxListeners": undefined, "_onPendingData": [Function nop], "_removedConnection": false, "_removedContLen": false, "_removedTE": false, "_trailer": "", "aborted": false, "agent": {"_events": {"free": [Function anonymous], "newListener": [Function maybeEnableKeylog]}, "_eventsCount": 2, "_maxListeners": undefined, "agentKeepAliveTimeoutBuffer": 1000, "defaultPort": 80, "freeSockets": {}, "keepAlive": false, "keepAliveMsecs": 1000, "maxFreeSockets": 256, "maxSockets": Infinity, "maxTotalSockets": Infinity, "options": {"noDelay": true, "path": null}, "protocol": "http:", "requests": {}, "scheduling": "lifo", "sockets": {"127.0.0.1:46053:": [{"_closeAfterHandlingError": false, "_events": [Object], "_eventsCount": 7, "_hadError": false, "_host": null, "_httpMessage": [Circular], "_maxListeners": undefined, "_parent": null, "_pendingData": null, "_pendingEncoding": "", "_readableState": [ReadableState], "_server": null, "_sockname": null, "_writableState": [WritableState], "allowHalfOpen": false, "connecting": true, "server": null, Symbol(async_id_symbol): 992, Symbol(kHandle): [TCP], Symbol(lastWriteQueueSize): 0, Symbol(timeout): null, Symbol(kBuffer): null, Symbol(kBufferCb): null, Symbol(kBufferGen): null, Symbol(shapeMode): true, Symbol(kCapture): false, Symbol(kSetNoDelay): true, Symbol(kSetKeepAlive): false, Symbol(kSetKeepAliveInitialDelay): 0, Symbol(kSetTOS): undefined, Symbol(kBytesRead): 0, Symbol(kBytesWritten): 0}]}, "totalSocketCount": 1, Symbol(shapeMode): false, Symbol(kCapture): false}, "chunkedEncoding": false, "destroyed": false, "finished": true, "host": "127.0.0.1", "httpValidation": undefined, "insecureHTTPParser": undefined, "joinDuplicateHeaders": undefined, "maxHeaderSize": undefined, "maxHeadersCount": null, "maxRequestsOnConnectionReached": false, "method": "GET", "outputData": [{"callback": [Function bound onFinish], "data": "GET /socket.io/?EIO=4&transport=websocket HTTP/1.1·
+    Origin: http://malicious-site.com·
+    Cookie: better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=·
+    Sec-WebSocket-Version: 13·
+    Sec-WebSocket-Key: tbbhRQ0y8wcl7K5BPJzEGA==·
+    Connection: Upgrade·
+    Upgrade: websocket·
+    Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits·
+    Host: 127.0.0.1:46053···
+    ", "encoding": "latin1"}], "outputSize": 387, "parser": null, "protocol": "http:", "res": null, "reusedSocket": false, "sendDate": false, "shouldKeepAlive": true, "socketPath": undefined, "strictContentLength": false, "timeoutCb": null, "upgradeOrConnect": false, "useChunkedEncodingByDefault": false, "writable": true, Symbol(shapeMode): false, Symbol(kCapture): false, Symbol(kBytesWritten): 0, Symbol(kNeedDrain): false, Symbol(corked): 0, Symbol(kChunkedBuffer): [], Symbol(kChunkedLength): 0, Symbol(kSocket): null, Symbol(kOutHeaders): {"connection": ["Connection", "Upgrade"], "cookie": ["Cookie", "better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10="], "host": ["Host", "127.0.0.1:46053"], "origin": ["Origin", "http://malicious-site.com"], "sec-websocket-extensions": ["Sec-WebSocket-Extensions", "permessage-deflate; client_max_window_bits"], "sec-websocket-key": ["Sec-WebSocket-Key", "tbbhRQ0y8wcl7K5BPJzEGA=="], "sec-websocket-version": ["Sec-WebSocket-Version", 13], "upgrade": ["Upgrade", "websocket"]}, Symbol(errored): null, Symbol(kWritableFinished): false, Symbol(kEndCallbacks): null, Symbol(kFlushError): null, Symbol(kHighWaterMark): 16384, Symbol(kRejectNonStandardBodyWrites): false, Symbol(kPath): "/socket.io/?EIO=4&transport=websocket", Symbol(kProxyRewrittenToAbsolute): false, Symbol(kAuthority): "127.0.0.1:46053", Symbol(kUniqueHeaders): null}, "_sender": null, "_socket": null, "_url": "ws://127.0.0.1:46053/socket.io/?EIO=4&transport=websocket", Symbol(shapeMode): false, Symbol(kCapture): false}}, "transports": ["websocket"], "writeBuffer": []}, "nsps": {"/presence": [Circular]}, "opts": {"extraHeaders": {"Cookie": "better-auth.session_token=token-user1.VvbTPrQQ4DlGvdrdTXzNAS74dNjHn6HxRjLFRjmGo10=", "Origin": "http://malicious-site.com"}, "hostname": "127.0.0.1", "path": "/socket.io", "port": "46053", "reconnection": false, "secure": false, "transports": ["websocket"]}, "setTimeoutFn": [Function bound setTimeout], "skipReconnect": false, "subs": [[Function anonymous], [Function subDestroy], [Function subDestroy]], "uri": "http://127.0.0.1:46053/presence"}, "nsp": "/presence", "receiveBuffer": [], "recovered": false, "sendBuffer": [], "subs": [[Function subDestroy], [Function subDestroy], [Function subDestroy], [Function subDestroy]]}
+
+      353 |         extraHeaders: { Origin: 'http://malicious-site.com', Cookie: cookieUser1 },
+      354 |       }).once('connect_error', err => err)
+    > 355 |     ).rejects.toThrow();
+          |               ^
+      356 |
+      357 |     // 2. Identity injection in subscribe body is ignored (uses session user1)
+      358 |     const s = await connectPresenceSocket(cookieUser1);
+
+      at Object.toThrow (../../node_modules/expect/build/index.js:2153:11)
+      at Object.<anonymous> (test/presence.integration.spec.ts:355:15)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › authorized private deliveries only
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › legacy endpoint/schema paging
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › real chosen status SQL update
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      488 |       .send({ customStatus: 'PLAYING' });
+      489 |
+    > 490 |     expect(patchRes.status).toBe(200);
+          |                             ^
+      491 |     const parsed = UpdateCustomStatusResponseSchema.parse(patchRes.body);
+      492 |     expect(parsed.customStatus).toBe('PLAYING');
+      493 |
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:490:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 11 total
+Snapshots:   0 total
+Time:        69.201 s
+Ran all test suites matching test/presence.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts

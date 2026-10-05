@@ -1,0 +1,73 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3648) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/presence.integration.spec.ts (35.316 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › rejects client clock overrides in HTTP and socket payloads (strict contracts)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      308 |       expect(res.status).toBe(200);
+      309 |       // User must be OFFLINE because server clock is at +50s, client header was ignored
+    > 310 |       expect(res.body.items.some((u: any) => u.id === 'user1')).toBe(false);
+          |                                                                 ^
+      311 |     } finally {
+      312 |       s.disconnect();
+      313 |     }
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:310:65)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › private membership revoked/session revoked/ban/origin deny/identity injection
+
+    error: update or delete on table "room_members" violates foreign key constraint "rooms_owner_membership_fk" on table "rooms"
+
+      414 |       expect(subPriv.ok).toBe(true);
+      415 |
+    > 416 |       await pool.query('DELETE FROM room_members WHERE user_id=$1 AND room_id IN (SELECT id FROM rooms WHERE conversation_id=$2)', ['user1', privateRoomId]);
+          |       ^
+      417 |       try {
+      418 |         const hbAfterRevoke = await sPrivate.timeout(5000).emitWithAck('presence.heartbeat', { conversationId: privateRoomId });
+      419 |         expect(hbAfterRevoke.ok).toBe(false);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:416:7)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › legacy endpoint/schema paging
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "user1"
+
+      511 |       expect(resPage2.status).toBe(200);
+      512 |       expect(resPage2.body.items).toHaveLength(1);
+    > 513 |       expect(resPage2.body.items[0].id).not.toBe(resLimit1.body.items[0].id);
+          |                                             ^
+      514 |
+      515 |       const resUnknownGame = await request(base).get('/api/v1/games/non-existent-game-id/online').set('Origin', origin);
+      516 |       expect(resUnknownGame.status).toBe(404);
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:513:45)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 9 passed, 12 total
+Snapshots:   0 total
+Time:        35.868 s, estimated 88 s
+Ran all test suites matching test/presence.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts

@@ -1,0 +1,190 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22052) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/presence.integration.spec.ts (30.773 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › two authenticated sockets same user dedup
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › closing one tab keeps other online
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › stale lease expires exactly 45s with injected clock
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › heartbeat keeps current lease
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › custom status persists through reconnect/expiry
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › per-game isolation
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › guest/private outsider denied
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › private membership revoked/session revoked/ban/origin deny/identity injection
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › authorized private deliveries only
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › legacy endpoint/schema paging
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › real chosen status SQL update
+
+    error: column "title" of relation "rooms" does not exist
+
+      80 |     await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`, [privateRoomId]);
+      81 |     const roomTableId = randomUUID();
+    > 82 |     await pool.query(`INSERT INTO rooms(id,conversation_id,owner_id,title,visibility) VALUES($1,$2,'user1','Private Room','PRIVATE')`, [roomTableId, privateRoomId]);
+         |     ^
+      83 |
+      84 |     await pool.query(`
+      85 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/presence.integration.spec.ts:82:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 11 total
+Snapshots:   0 total
+Time:        31.302 s
+Ran all test suites matching test/presence.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts

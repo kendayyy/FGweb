@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21616) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/presence.integration.spec.ts (43.482 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › application shutdown waits for an in-flight presence sweep
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      828 |       close = temporary.close().then(() => { closed = true; });
+      829 |       await new Promise(resolve => setTimeout(resolve, 50));
+    > 830 |       expect(closed).toBe(false);
+          |                      ^
+      831 |       release();
+      832 |       await sweep;
+      833 |       await close;
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:830:22)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 23 passed, 24 total
+Snapshots:   0 total
+Time:        44.391 s, estimated 48 s
+Ran all test suites matching apps/api/test/presence.integration.spec.ts.

@@ -1,0 +1,119 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24088) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/presence.integration.spec.ts (87.449 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › two authenticated sockets same user dedup
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › closing one tab keeps other online
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › stale lease expires exactly 45s with injected server clock
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › heartbeat keeps current lease
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › rejects client clock overrides in HTTP and socket payloads (strict contracts)
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › custom status persists through reconnect/expiry
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      321 |       .send({ customStatus: 'LOOKING_FOR_TEAM' });
+      322 |
+    > 323 |     expect(patchRes.status).toBe(200);
+          |                             ^
+      324 |     const body = UpdateCustomStatusResponseSchema.parse(patchRes.body);
+      325 |     expect(body.customStatus).toBe('LOOKING_FOR_TEAM');
+      326 |
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:323:29)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › per-game isolation
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › guest/private outsider denied
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › private membership revoked/session revoked/ban/origin deny/identity injection
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › authorized private deliveries only
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › legacy endpoint/schema paging
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › real chosen status SQL update
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      529 |       .send({ customStatus: 'PLAYING' });
+      530 |
+    > 531 |     expect(patchRes.status).toBe(200);
+          |                             ^
+      532 |     const parsed = UpdateCustomStatusResponseSchema.parse(patchRes.body);
+      533 |     expect(parsed.customStatus).toBe('PLAYING');
+      534 |
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:531:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       12 failed, 12 total
+Snapshots:   0 total
+Time:        87.883 s
+Ran all test suites matching test/presence.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/presence.integration.spec.ts

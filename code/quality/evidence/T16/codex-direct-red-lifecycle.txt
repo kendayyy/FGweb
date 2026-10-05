@@ -1,0 +1,43 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:8708) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/presence.integration.spec.ts (36.071 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › revoked session immediately releases its lease and preserves another valid tab
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      705 |       const res = await request(base).get(`/api/v1/games/${gameAId}/online`).set('Origin', origin);
+      706 |       expect(res.status).toBe(200);
+    > 707 |       expect(res.body.items.some((u: { id: string }) => u.id === 'user1')).toBe(false);
+          |                                                                            ^
+      708 |     } finally {
+      709 |       expired.disconnect(); valid.disconnect();
+      710 |       await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('sess-1','user1','token-user1',now()+interval '1 day',now(),now()) ON CONFLICT DO NOTHING`);
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:707:76)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › interleaved unsubscribe and another instance subscribe preserve live online index
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      735 |       const res = await request(base2).get(`/api/v1/games/${gameAId}/online`).set('Origin', origin);
+      736 |       expect(res.status).toBe(200);
+    > 737 |       expect(res.body.items.some((u: { id: string }) => u.id === 'user1')).toBe(true);
+          |                                                                            ^
+      738 |     } finally {
+      739 |       release?.(); restore?.(); leaving.disconnect(); joining.disconnect();
+      740 |     }
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:737:76)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 17 passed, 19 total
+Snapshots:   0 total
+Time:        43.651 s, estimated 49 s
+Ran all test suites matching apps/api/test/presence.integration.spec.ts.

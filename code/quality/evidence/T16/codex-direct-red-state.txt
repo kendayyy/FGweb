@@ -1,0 +1,69 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:20628) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/presence.integration.spec.ts (36.682 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › opaque conversation and user IDs cannot share socket lease keys
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      747 |       await presenceService2.addOrRenewLease('collision:part', 'user1', 'second-socket');
+      748 |       await presenceService.removeLease('collision', 'part:user1', 'first-socket');
+    > 749 |       expect(await presenceService.isUserOnlineInConv('collision', 'part:user1')).toBe(false);
+          |                                                                                   ^
+      750 |       expect(await presenceService2.isUserOnlineInConv('collision:part', 'user1')).toBe(true);
+      751 |     } finally {
+      752 |       await presenceService2.removeLease('collision:part', 'user1', 'second-socket');
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:749:83)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › delayed Redis notification uses current stored status and current lease state
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+        "conversationId": "4b8ec58e-ff1c-45bb-9165-9b7ba5fca47d",
+    -   "customStatus": "LOOKING_FOR_TEAM",
+    -   "isOnline": true,
+    +   "customStatus": "PLAYING",
+    +   "isOnline": false,
+        "userId": "user1",
+      }
+
+      770 |         conversationId: gameALobby, userId: 'user1', customStatus: 'PLAYING', isOnline: false,
+      771 |       }));
+    > 772 |       expect(await event).toMatchObject({ conversationId: gameALobby, userId: 'user1', customStatus: 'LOOKING_FOR_TEAM', isOnline: true });
+          |                           ^
+      773 |     } finally {
+      774 |       observer.disconnect(); actor.disconnect();
+      775 |     }
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:772:27)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › private-only participant remains online without appearing in public Lobby list
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      782 |       const changed = await request(base).patch('/api/v1/me/status').set('Cookie', cookieUser1).set('Origin', origin).send({ customStatus: 'PLAYING' });
+      783 |       expect(changed.status).toBe(200);
+    > 784 |       expect(changed.body.isOnline).toBe(true);
+          |                                     ^
+      785 |       const publicList = await request(base).get(`/api/v1/games/${gameAId}/online`).set('Origin', origin);
+      786 |       expect(publicList.body.items.some((u: { id: string }) => u.id === 'user1')).toBe(false);
+      787 |     } finally { s.disconnect(); }
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:784:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 19 passed, 22 total
+Snapshots:   0 total
+Time:        37.195 s, estimated 44 s
+Ran all test suites matching apps/api/test/presence.integration.spec.ts.

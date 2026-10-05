@@ -1,0 +1,44 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:9712) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/presence.integration.spec.ts (52.193 s)
+  ● T16 Actual Online Presence & Custom Status Integration Suite › online read removes a revoked session even without a further heartbeat
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      798 |       const res = await request(base2).get(`/api/v1/games/${gameAId}/online`).set('Origin', origin);
+      799 |       expect(res.status).toBe(200);
+    > 800 |       expect(res.body.items.some((u: { id: string }) => u.id === 'user1')).toBe(false);
+          |                                                                            ^
+      801 |     } finally {
+      802 |       s.disconnect();
+      803 |       await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('sess-1','user1','token-user1',now()+interval '1 day',now(),now()) ON CONFLICT DO NOTHING`);
+
+      at Object.<anonymous> (test/presence.integration.spec.ts:800:76)
+
+  ● T16 Actual Online Presence & Custom Status Integration Suite › application shutdown waits for an in-flight presence sweep
+
+    Connection is closed.
+
+      125 |     const now = this.nowMs;
+      126 |     const prefix = 'fg:presence:' + this.ns + ':';
+    > 127 |     const result = await redis.eval(LEASE_SCRIPT, 5,
+          |                                ^
+      128 |       prefix + 'leases:' + this.component(convId) + ':' + this.component(userId),
+      129 |       prefix + 'active:' + this.component(convId),
+      130 |       prefix + 'active_convs',
+
+      at EventEmitter.sendCommand (../../node_modules/ioredis/built/Redis.js:360:28)
+      at EventEmitter.eval (../../node_modules/ioredis/built/utils/Commander.js:90:25)
+      at PresenceService.transition (src/modules/presence/presence.service.ts:127:32)
+      at PresenceService.sweepExpiredLeases (src/modules/presence/presence.service.ts:155:24)
+      at Object.<anonymous> (test/presence.integration.spec.ts:834:7)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 22 passed, 24 total
+Snapshots:   0 total
+Time:        52.947 s
+Ran all test suites matching apps/api/test/presence.integration.spec.ts.
