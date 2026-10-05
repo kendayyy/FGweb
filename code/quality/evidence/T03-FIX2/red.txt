@@ -1,0 +1,85 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/onboarding-state.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/onboarding-state.test.ts (4 tests | 3 failed) 39ms
+   ❯ Authenticated onboarding state contract (4)
+     × preserves explicit incomplete state and empty persisted interests 21ms
+     × preserves completed state and rejects unknown game interests 2ms
+     × rejects malformed completion and duplicate persisted game choices 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/onboarding-state.test.ts > Authenticated onboarding state contract > preserves explicit incomplete state and empty persisted interests
+AssertionError: expected { id: 'actor', …(8) } to have property "onboardingComplete" with value false
+
+- Expected:
+false
+
++ Received:
+undefined
+
+ ❯ test/onboarding-state.test.ts:7:18
+      5|  it('preserves explicit incomplete state and empty persisted interests…
+      6|   const parsed=MeDTOSchema.parse({...actor,onboardingComplete:false,in…
+      7|   expect(parsed).toHaveProperty('onboardingComplete',false);
+       |                  ^
+      8|   expect(parsed).toHaveProperty('interestedGames',[]);
+      9|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  test/onboarding-state.test.ts > Authenticated onboarding state contract > preserves completed state and rejects unknown game interests
+AssertionError: expected { id: 'actor', …(8) } to have property "onboardingComplete" with value true
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ test/onboarding-state.test.ts:12:18
+     10|  it('preserves completed state and rejects unknown game interests',()=…
+     11|   const parsed=MeDTOSchema.parse({...actor,onboardingComplete:true,int…
+     12|   expect(parsed).toHaveProperty('onboardingComplete',true);
+       |                  ^
+     13|   expect(parsed).toHaveProperty('interestedGames',['Valorant','Roblox'…
+     14|   expect(MeDTOSchema.safeParse({...actor,interestedGames:['unknown-gam…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  test/onboarding-state.test.ts > Authenticated onboarding state contract > rejects malformed completion and duplicate persisted game choices
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/onboarding-state.test.ts:17:79
+     15|  });
+     16|  it('rejects malformed completion and duplicate persisted game choices…
+     17|   expect(MeDTOSchema.safeParse({...actor,onboardingComplete:'true'}).s…
+       |                                                                               ^
+     18|   expect(MeDTOSchema.safeParse({...actor,interestedGames:['Valorant','…
+     19|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  13:22:42
+   Duration  623ms (import 52%, transform 32%, tests 12%, worker 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/onboarding-state.test.ts

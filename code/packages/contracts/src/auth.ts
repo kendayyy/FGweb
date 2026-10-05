@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IdSchema, IsoDateTimeSchema, CustomStatusSchema } from './common.js';
+import { IdSchema, IsoDateTimeSchema, CustomStatusSchema, GameTitleSchema } from './common.js';
 
 export const AuthProviderSchema = z.literal('discord');
 export type AuthProvider = z.infer<typeof AuthProviderSchema>;
@@ -14,6 +14,11 @@ export const MeDTOSchema = z.object({
   customStatus: CustomStatusSchema.default('JUST_CHATTING'),
   createdAt: IsoDateTimeSchema,
   updatedAt: IsoDateTimeSchema,
+  onboardingComplete: z.boolean().optional(),
+  interestedGames: z.array(GameTitleSchema).refine(
+    games => new Set(games).size === games.length,
+    'Interested games must be unique',
+  ).optional(),
 });
 export type MeDTO = z.infer<typeof MeDTOSchema>;
 

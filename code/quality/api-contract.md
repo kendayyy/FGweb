@@ -20,7 +20,8 @@
    - Guests CANNOT send chat messages, create recruitment cards, request to join teams, access private rooms, view private room chats, or join voice/screen share calls.
 2. **Profile Privacy**:
    - Public endpoint `GET /api/v1/users/:id/profile` returns `PublicProfileSchema` which strips private fields (`email`, `discordId`, `emailVerified`, auth secrets).
-   - Authenticated `/api/v1/me` and `/api/v1/me/profile` return `PrivateProfileSchema`.
+   - Authenticated `GET /api/v1/me` returns `MeDTOSchema`; profile mutation responses use `PrivateProfileSchema`.
+   - `/me` includes server-derived `onboardingComplete` (persisted profile plus at least one game interest) and `interestedGames` (unique titles from the locked seven-game catalog). These additive fields are optional in the shared schema for legacy consumer compatibility, with no invented defaults. The auth producer must return both; T11 treats missing state as an integration error. Public profile never exposes this private completion state or private identity fields.
    - Better Auth manages session credentials exclusively via HTTP-only secure cookies. Public session DTOs expose safe session metadata (`id`, `userId`, `expiresAt`) and never expose raw session tokens.
 3. **Room Permissions & Helper ACL**:
    - Helper permissions: `MANAGE_CHAT`, `MANAGE_CALLS`, `MANAGE_RECRUITMENT`, `MANAGE_MEMBERS`.
