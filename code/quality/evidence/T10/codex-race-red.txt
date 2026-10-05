@@ -1,0 +1,44 @@
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:4072) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T10/codex-profile-regressions.spec.ts (24.602 s)
+  ● Codex T10 internal error privacy (unit scope) › keeps unexpected backend failures500 and hides internal exception text
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 422
+
+      18 |   const host={switchToHttp:()=>({getResponse:()=>response,getRequest:()=>({headers:{}})})} as unknown as ArgumentsHost;
+      19 |   new ProfilesExceptionFilter().catch(new Error('private_backend_marker'),host);
+    > 20 |   expect(status).toBe(500);
+         |                  ^
+      21 |   expect(JSON.stringify(payload)).not.toContain('private_backend_marker');
+      22 |  });
+      23 | });
+
+      at Object.<anonymous> (quality/evidence/T10/codex-profile-regressions.spec.ts:20:18)
+
+  ● Codex T10 independent HTTP regressions › concurrent interest replacement yields one complete selection instead of a union
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 2
+    Received array:  [{"game_id": "d9860b06-5ca8-4b32-81ec-f4671524691a"}, {"game_id": "e67ed916-c711-4ad7-aa25-3617b96dcde2"}]
+
+      82 |   expect(responses.map(response=>response.status)).toEqual([200,200]);
+      83 |   const result=await client.query(`SELECT game_id FROM "${schemaName}".game_interests WHERE user_id=$1`,[actor]);
+    > 84 |   expect(result.rows).toHaveLength(1);
+         |                       ^
+      85 |  });
+      86 | });
+      87 |
+
+      at Object.<anonymous> (quality/evidence/T10/codex-profile-regressions.spec.ts:84:23)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 3 passed, 5 total
+Snapshots:   0 total
+Time:        25.367 s
+Ran all test suites.

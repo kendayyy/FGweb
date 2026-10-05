@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2404) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T10/codex-profile-regressions.spec.ts (32.565 s)
+  ● Codex T10 independent HTTP regressions › explicitly cleared avatar stays null when returning the profile or later patching another field
+
+    expect(received).toBeNull()
+
+    Received: "https://provider.example.com/review.png"
+
+      87 |   await client.query(`UPDATE "${schemaName}"."user" SET image=$1 WHERE id=$2`,['https://provider.example.com/review.png',actor]);
+      88 |   const cleared=await supertest(app.getHttpServer()).patch('/api/v1/me/profile').set('Cookie',cookie).set('Origin',origin).send({avatarUrl:null});
+    > 89 |   expect(cleared.status).toBe(200);expect(cleared.body.avatarUrl).toBeNull();
+         |                                                                   ^
+      90 |   const changed=await supertest(app.getHttpServer()).patch('/api/v1/me/profile').set('Cookie',cookie).set('Origin',origin).send({bio:'An unrelated edit'});
+      91 |   expect(changed.status).toBe(200);expect(changed.body.avatarUrl).toBeNull();
+      92 |   const publicView=await supertest(app.getHttpServer()).get(`/api/v1/users/${actor}/profile`);
+
+      at Object.<anonymous> (quality/evidence/T10/codex-profile-regressions.spec.ts:89:67)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 5 passed, 6 total
+Snapshots:   0 total
+Time:        32.999 s
+Ran all test suites.

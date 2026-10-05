@@ -15,5 +15,6 @@
 | Call/notification/moderation constraints and populated migration | T07 | PostgreSQL13T07+36DB+11independent+T05/T06; quality/evidence/T07/codex-review.md | PASS |
 | Discord auth/session guards | T08 | 16PG/Nest, build, source/test typecheck, lint, native smoke, real Discord OAuth session/logout/replay and cleanup; quality/evidence/T08/direct-review.md | PASS |
 | Discord frontend auth/guest guards and UI foundation | T09 | 16behavior tests, build/source+test types/lint, real Nest/PG browser logout/replay/session deletion,4viewport screenshots, cleanup/secret audit; T09/final-verification.json and codex-review.md | PASS |
-| Product API/UI features, media1000, PWA, release | T10–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+| Profile APIs/security and transactional game interests | T10 | 15acceptance+31auth/profile regression+7independent, build/types/lint, native7/cleanup/secret audit; T10/final-verification.json and codex-review.md | PASS |
+| Product UI/realtime features, media1000, PWA, release | T11–T42 | task.md acceptance owns future evidence | NOT_STARTED |
 | Approved missing profile PUT contract correction | T03-FIX1 | 5RED before implementation;34contracts,build/API+web types/lint PASS; T03-FIX1/final-verification.json and review.md | PASS |

@@ -1,0 +1,17 @@
+Setting up owned native smoke schema: t10_native_1791181203378_sj7k2s on verified free port 36384...
+Database schema migrated and 7 catalog games seeded.
+Spawning compiled server process with shell: false...
+Child server spawned with owned PID: 19380
+Server responded ready with status 200 on port 36384.
+Smoke check 1 PASS: GET /api/v1/games returns 7 catalog games.
+Smoke check 2 PASS: GET absent profile returns 404 with code NOT_FOUND.
+Smoke check 3 PASS: Guest mutation returns 401 with code LOGIN_REQUIRED.
+Smoke check 4 PASS: Signed cookie onboarding returns 200 with PrivateProfileSchema.
+Smoke check 5 PASS: GET public profile returns 200 stripping email and discordId.
+Smoke check 6 PASS: Invalid interest returns 422 with code INVALID_INPUT.
+Smoke check 7 PASS: Game profile PUT returns 200 with GameProfileSchema.
+
+All 7 Native Compiled AppModule HTTP Smoke Checks PASSED Cleanly!
+Executing strict process and DB schema cleanup...
+Owned child server PID 19380 successfully terminated.
+Verified owned schema t10_native_1791181203378_sj7k2s successfully dropped.

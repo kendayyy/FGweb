@@ -1,0 +1,34 @@
+FAIL test/profiles.integration.spec.ts (23.86 s)
+  ● T10 - Profile & Game-Interest APIs (Integration) › 2. GET /api/v1/games (7 Games Catalog) › filters games by search query parameter
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 3. Security & Access Control (Guest, CSRF, Ban & Identity Isolation) › banned session returns 403 FORBIDDEN
+
+    Cause: error: null value in column "actor_id" of relation "admin_actions" violates not-null constraint
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 4. POST /api/v1/me/onboarding › atomically onboarding persists profile and interests without rank requirement
+
+    expected 200 "OK", got 422 "Unprocessable Entity"
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 5. PUT /api/v1/me/interests › rejects duplicate, unknown, or empty interests with 422 and preserves prior data
+
+    expected 200 "OK", got 422 "Unprocessable Entity"
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 5. PUT /api/v1/me/interests › successfully replaces interests list atomically
+
+    expected 200 "OK", got 422 "Unprocessable Entity"
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 6. PUT /api/v1/me/game-profiles/:gameId › upserts game profile and enforces PUT replacement semantics for omitted optional fields
+
+    expected 200 "OK", got 404 "Not Found"
+
+  ● T10 - Profile & Game-Interest APIs (Integration) › 7. PATCH /api/v1/me/profile › updates user profile and returns PrivateProfileSchema
+
+    expected 200 "OK", got 422 "Unprocessable Entity"
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 6 passed, 15 total
