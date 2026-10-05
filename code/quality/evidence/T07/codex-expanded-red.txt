@@ -1,0 +1,215 @@
+✖ departed participant releases seat while preserving member history (4342.5133ms)
+✖ departed member cannot obtain screen publish slot (4840.967ms)
+✖ departed member cannot configure external live (4577.1849ms)
+✖ closed call retains left-member history and private room (4388.0798ms)
+✖ notification dedup key is mandatory (4530.0987ms)
+✖ outbox recipient must own its linked notification (4668.0669ms)
+✖ new USER report cannot omit validated target FK (9668.7311ms)
+✖ new MESSAGE report cannot omit target or carry unrelated user target (4983.1258ms)
+✖ admin action requires a recorded actor (4288.7582ms)
+✖ admin audit actor cannot be erased by hard user deletion (5209.0735ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 0
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52943.717
+
+✖ failing tests:
+
+test at quality\evidence\T07\codex-regressions.test.mjs:15:1
+✖ departed participant releases seat while preserving member history (4342.5133ms)
+  error: duplicate key value violates unique constraint "call_member_group_seat_unique"
+      at E:\FGweb\code\node_modules\pg\lib\client.js:694:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async member (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:12:56)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:15:141
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:15:85)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    length: 297,
+    severity: 'ERROR',
+    code: '23505',
+    detail: 'Key (call_group_id, seat_index)=(call1, 1) already exists.',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: 'test_t07_review_66d33079cace4df5a1be4cd78d594d26',
+    table: 'call_members',
+    column: undefined,
+    dataType: undefined,
+    constraint: 'call_member_group_seat_unique',
+    file: 'nbtinsert.c',
+    line: '666',
+    routine: '_bt_check_unique'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:16:1
+✖ departed member cannot obtain screen publish slot (4840.967ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:16:124
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:16:68)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:17:1
+✖ departed member cannot configure external live (4577.1849ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:17:121
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:17:65)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:18:1
+✖ closed call retains left-member history and private room (4388.0798ms)
+  error: update or delete on table "call_groups" violates foreign key constraint "call_members_open_call_fk" on table "call_members"
+      at E:\FGweb\code\node_modules\pg\lib\client.js:694:17
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:18:131
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:18:75)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    length: 361,
+    severity: 'ERROR',
+    code: '23503',
+    detail: 'Key (id, state)=(call1, OPEN) is still referenced from table "call_members".',
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: 'test_t07_review_ad1ffbabe6f4439f9053585665790bf6',
+    table: 'call_members',
+    column: undefined,
+    dataType: undefined,
+    constraint: 'call_members_open_call_fk',
+    file: 'ri_triggers.c',
+    line: '2612',
+    routine: 'ri_ReportViolation'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:19:1
+✖ notification dedup key is mandatory (4530.0987ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:19:79
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:19:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:20:1
+✖ outbox recipient must own its linked notification (4668.0669ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:20:115
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:20:68)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:21:1
+✖ new USER report cannot omit validated target FK (9668.7311ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:21:91
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:21:66)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:22:1
+✖ new MESSAGE report cannot omit target or carry unrelated user target (4983.1258ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:22:112
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:22:87)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:23:1
+✖ admin action requires a recorded actor (4288.7582ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:23:82
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:23:57)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T07\codex-regressions.test.mjs:24:1
+✖ admin audit actor cannot be erased by hard user deletion (5209.0735ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:24:210
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:24:75)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -1,0 +1,33 @@
+Command: npm run test --workspace @fg/database -- test/call-outbox.test.ts
+Started At UTC: 2026-10-05T01:03:35Z
+Completed At UTC: 2026-10-05T01:03:53Z
+Exit Code: 0
+
+--- RAW STDOUT / STDERR ---
+
+> @fg/database@0.1.0 test
+> vitest run test/call-outbox.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ▶ test/call-outbox.test.ts
+   T07 - Call, Notification, Moderation & Outbox Constraints
+     ✔ should enforce call member is a member of the same private room (339.6923ms)
+     ✔ should reject adding active call member to a CLOSED call group (175.7663ms)
+     ✔ should enforce max 10 active call participants and unique user across active calls (222.1812ms)
+     ✔ should allow seat reuse when participant departs while preserving member history (179.3789ms)
+     ✔ should enforce screen publisher is an active call member and ordinals 1..3 are unique (204.6067ms)
+     ✔ should enforce external live source constraints (max 1 source/call, youtube/twitch only) (185.7335ms)
+     ✔ should enforce unique eventId on webhook_events for anti-replay (158.6293ms)
+     ✔ should enforce notification dedup keys and preference channel email restrictions (200.7712ms)
+     ✔ should enforce reports and admin actions audit rules (202.9463ms)
+     ✔ should handle real 2-client transaction race for last seat 10 in active call (333.6496ms)
+     ✔ should handle real 2-client transaction race for 3rd publisher slot (238.1691ms)
+     ✔ should handle real 2-client transaction race for same user joining 2 active calls (237.986ms)
+     ✔ should stage prefix 0000-0002, seed populated data, apply 0003 twice idempotently, and preserve private room data (671.3093ms)
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  08:03:35
+   Duration  17.68s (tests 90%, import 8%, transform 2%)

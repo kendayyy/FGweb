@@ -1,0 +1,156 @@
+Command: npm run test --workspace @fg/database -- test/call-outbox.test.ts
+Started At UTC: 2026-10-05T00:44:52Z
+Completed At UTC: 2026-10-05T00:45:04Z
+Exit Code: 1
+
+--- RAW STDOUT / STDERR ---
+
+> @fg/database@0.1.0 test
+> vitest run test/call-outbox.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/call-outbox.test.ts (9 tests | 8 failed) 7338ms
+   ❯ T07 - Call, Notification, Moderation & Outbox Constraints (9)
+     × should enforce call member is a member of the same private room 376ms
+     × should reject adding active call member to a CLOSED call group 186ms
+     × should enforce max 10 active call participants and unique user across active calls 154ms
+     × should enforce screen publisher is an active call member and ordinals 1..3 are unique 147ms
+     × should enforce external live source constraints (max 1 source/call, youtube/twitch only) 158ms
+     × should enforce unique eventId on webhook_events for anti-replay 1ms
+     × should enforce notification dedup keys and preference channel email restrictions 6ms
+     × should enforce reports and admin actions audit rules 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce call member is a member of the same private room
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:137:40
+    135|     });
+    136|
+    137|     await db.insert(schema.callGroups).values({
+       |                                        ^
+    138|       id: callId,
+    139|       roomId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should reject adding active call member to a CLOSED call group
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:167:40
+    165|     const callId = 'call_closed_' + Math.random().toString(36).substri…
+    166|
+    167|     await db.insert(schema.callGroups).values({
+       |                                        ^
+    168|       id: callId,
+    169|       roomId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce max 10 active call participants and unique user across active calls
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:198:40
+    196|     const callId = 'call_max_' + Math.random().toString(36).substring(…
+    197|
+    198|     await db.insert(schema.callGroups).values({
+       |                                        ^
+    199|       id: callId,
+    200|       roomId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce screen publisher is an active call member and ordinals 1..3 are unique
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:297:40
+    295|     const callId = 'call_pub_' + Math.random().toString(36).substring(…
+    296|
+    297|     await db.insert(schema.callGroups).values({
+       |                                        ^
+    298|       id: callId,
+    299|       roomId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce external live source constraints (max 1 source/call, youtube/twitch only)
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:386:40
+    384|     const callId = 'call_el_' + Math.random().toString(36).substring(2…
+    385|
+    386|     await db.insert(schema.callGroups).values({
+       |                                        ^
+    387|       id: callId,
+    388|       roomId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce unique eventId on webhook_events for anti-replay
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:452:43
+    450|     const now = new Date();
+    451|
+    452|     await db.insert(schema.webhookEvents).values({
+       |                                           ^
+    453|       id: 'we_1',
+    454|       eventId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce notification dedup keys and preference channel email restrictions
+TypeError: Cannot read properties of undefined (reading 'Symbol(drizzle:Columns)')
+ ❯ ../../node_modules/src/pg-core/query-builders/insert.ts:93:22
+ ❯ PgInsertBuilder.values ../../node_modules/src/pg-core/query-builders/insert.ts:91:31
+ ❯ test/call-outbox.test.ts:488:43
+    486|
+    487|     // 1. Notification dedup key uniqueness per user (23505)
+    488|     await db.insert(schema.notifications).values({
+       |                                           ^
+    489|       id: 'n_1',
+    490|       userId: uId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should enforce reports and admin actions audit rules
+AssertionError: expected undefined to be '23514' // Object.is equality
+
+- Expected:
+"23514"
+
++ Received:
+undefined
+
+ ❯ test/call-outbox.test.ts:633:43
+    631|       longReasonErr = e;
+    632|     }
+    633|     expect(getPgErrorCode(longReasonErr)).toBe('23514');
+       |                                           ^
+    634|
+    635|     // 2. Report target shape mismatch (targetType = USER but reported…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 1 passed (9)
+   Start at  07:44:54
+   Duration  9.07s (tests 83%, import 13%, transform 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/call-outbox.test.ts

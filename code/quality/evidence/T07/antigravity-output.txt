@@ -1,0 +1,64 @@
+### Báo cáo triển khai Task T07 — Schema cuộc gọi, thông báo và quản trị
+
+Đã hoàn thành triển khai duy nhất **T07** đúng phạm vi được chỉ định, thực hiện TDD với PostgreSQL thật, sinh migration `0003_lush_squadron_supreme.sql` và lưu trữ toàn bộ bằng chứng kiểm thử tại `quality/evidence/T07/`.
+
+---
+
+### 1. Danh sách các file đã tạo & sửa đổi
+
+- **Mã nguồn Schema & Index Exports**:
+  - [`packages/database/src/schema/calls.ts`](file:///E:/FGweb/code/packages/database/src/schema/calls.ts): Định nghĩa `call_groups`, `call_members`, `call_publish_slots`, `call_restrictions`, `external_lives`, `webhook_events`.
+  - [`packages/database/src/schema/notifications.ts`](file:///E:/FGweb/code/packages/database/src/schema/notifications.ts): Định nghĩa `notifications`, `notification_preferences`, `push_subscriptions`, `notification_outbox`.
+  - [`packages/database/src/schema/moderation.ts`](file:///E:/FGweb/code/packages/database/src/schema/moderation.ts): Định nghĩa `reports`, `admin_actions`.
+  - [`packages/database/src/index.ts`](file:///E:/FGweb/code/packages/database/src/index.ts): Export các module schema mới.
+- **Migration & Metadata Forward 0003**:
+  - [`packages/database/migrations/0003_lush_squadron_supreme.sql`](file:///E:/FGweb/code/packages/database/migrations/0003_lush_squadron_supreme.sql): SQL migration 0003 (schema-relative foreign keys).
+  - [`packages/database/migrations/meta/0003_snapshot.json`](file:///E:/FGweb/code/packages/database/migrations/meta/0003_snapshot.json): Snapshot 0003.
+  - [`packages/database/migrations/meta/_journal.json`](file:///E:/FGweb/code/packages/database/migrations/meta/_journal.json): Append duy nhất entry `idx: 3`.
+- **Kiểm thử TDD & Bằng chứng**:
+  - [`packages/database/test/call-outbox.test.ts`](file:///E:/FGweb/code/packages/database/test/call-outbox.test.ts): Bộ test mô tả hành vi DB cho T07 và kiểm thử migration 0003.
+  - [`quality/evidence/T07/red-test.txt`](file:///E:/FGweb/code/quality/evidence/T07/red-test.txt): Log chi tiết chạy RED test trước khi viết schema.
+  - [`quality/evidence/T07/green-test.txt`](file:///E:/FGweb/code/quality/evidence/T07/green-test.txt): Log chi tiết chạy GREEN test sau khi triển khai schema & migration.
+  - [`quality/evidence/T07/tsconfig.check.json`](file:///E:/FGweb/code/quality/evidence/T07/tsconfig.check.json): Config typecheck cho `src` và `test`.
+  - [`quality/evidence/T07/agent-verification.json`](file:///E:/FGweb/code/quality/evidence/T07/agent-verification.json): JSON lưu vết lệnh, exit code, timestamp UTC và SHA256 các file.
+  - [`quality/evidence/T07/summary.md`](file:///E:/FGweb/code/quality/evidence/T07/summary.md): Báo cáo tổng hợp bằng chứng.
+
+---
+
+### 2. Kết quả TDD & Bảo toàn Migration / Dữ liệu
+
+1. **RED Test**:
+   - Chạy lệnh `npm run test --workspace @fg/database -- test/call-outbox.test.ts` trước khi khai báo schema models.
+   - Kết quả: **8/9 tests FAIL** (lỗi thiếu import/tên bảng/chưa có ràng buộc DB) — Đã lưu tại `quality/evidence/T07/red-test.txt`.
+2. **GREEN Test**:
+   - Chạy lại sau khi hoàn thiện schema và migration 0003.
+   - Kết quả: **9/9 tests PASS** — Đã lưu tại `quality/evidence/T07/green-test.txt`.
+3. **Bảo toàn Dữ liệu & Migration Idempotency**:
+   - Test migration đã dựng DB ở prefix `0000–0002`, seed 7 game, 7 Lobbies, người dùng, tin DM, private Room, member và chat.
+   - Chạy migration `0003` hai lần liên tiếp (idempotent).
+   - Xác nhận 100% dữ liệu cũ (DM, Lobbies, private Room) giữ nguyên cấu trúc, visibility `PRIVATE` không bị thay đổi.
+   - Giữ nguyên toàn bộ SQL tùy chỉnh ở `0001` (`SET NULL("reply_to_id")`) và `0002` (`DEFERRABLE INITIALLY DEFERRED`).
+
+---
+
+### 3. Các kiểm tra xác minh bắt buộc (All Passed)
+
+| Lệnh / Kiểm tra | Kết quả | Ghi chú |
+| --- | --- | --- |
+| `npm run test --workspace @fg/database -- test/call-outbox.test.ts` | **PASS (9/9)** | Test hành vi T07 & Migration 0003 |
+| `npm run test --workspace @fg/database -- --fileParallelism false` | **PASS (32/32)** | Full regression suite của package `@fg/database` |
+| `npm run build --workspace @fg/database` | **PASS (Exit 0)** | Biên dịch TypeScript `@fg/database` |
+| `npx tsc -p quality/evidence/T07/tsconfig.check.json` | **PASS (Exit 0)** | Typecheck cả `src/**/*` và `test/**/*` |
+| `npm run lint` | **PASS (Exit 0)** | ESLint không có cảnh báo/lỗi nào |
+| `npm run db:generate --workspace @fg/database` | **PASS (Zero Drift)** | *"No schema changes, nothing to migrate 😴"* |
+| `node quality/evidence/T05/codex-regressions.test.mjs` | **PASS (2/2)** | Regression test T05 độc lập từ Codex |
+| `node quality/evidence/T06/codex-regressions.test.mjs` | **PASS (12/12)** | Regression test T06 độc lập từ Codex |
+| `npm test` (Root CLI) | **Report thật** | Chạy Vitest workspace (32/32 DB PASS); API Jest trong `@fg/api` chưa có tests (dành cho T08+) |
+
+---
+
+### 4. Ranh giới & Giới hạn công việc (Boundaries & Limitations)
+
+- Ràng buộc tầng Database đảm bảo seat atomic, giới hạn 10 người/call, max 3 publisher, unique active call/user, webhook anti-replay, dedup notifications/outbox, và lịch sử audit khi target bị xóa (`ON DELETE SET NULL`).
+- **Giới hạn**: Ràng buộc DB không thay thế cho LiveKit SFU media routing, WebRTC bandwidth adaptation, Push/Email Worker delivery hay API Authorization endpoints (thuộc các task từ T08 trở đi).
+- Không tự động sửa ledger `tasks.json` (do script task:check quản lý). Khóa preflight gate PASS tại `quality/evidence/T07/preflight-gate.txt` sẵn sàng cho Codex review độc lập trước khi mở khóa T08.

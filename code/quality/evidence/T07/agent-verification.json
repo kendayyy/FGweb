@@ -1,0 +1,104 @@
+{
+  "task": "T07",
+  "status": "PASS",
+  "executor": "Antigravity Gemini 3.6 Flash (High)",
+  "loop": 2,
+  "startedAtUTC": "2026-10-05T01:10:00Z",
+  "completedAtUTC": "2026-10-05T01:17:30Z",
+  "cwd": "E:/FGweb/code",
+  "filesChanged": [
+    "packages/database/src/schema/calls.ts",
+    "packages/database/src/schema/notifications.ts",
+    "packages/database/src/schema/moderation.ts",
+    "packages/database/src/index.ts",
+    "packages/database/migrations/0003_complex_thunderbird.sql",
+    "packages/database/migrations/meta/0003_snapshot.json",
+    "packages/database/migrations/meta/_journal.json",
+    "packages/database/test/call-outbox.test.ts",
+    "packages/database/vitest.config.ts",
+    "quality/evidence/T07/tsconfig.check.json"
+  ],
+  "fileHashes": {
+    "packages/database/src/schema/calls.ts": "3B572C682CD090B969DD3AB832DD2E5E72CE07AD3E55931A9DE983FB37B178CF",
+    "packages/database/src/schema/notifications.ts": "2C0D288CE517C6EED270C27358B5C62BB458078DD49AB9E46BD1D774B94644C7",
+    "packages/database/src/schema/moderation.ts": "9BF1E48F3C1A5F119108525C05B15493677DE8061DE9718D1D199E73E447466B",
+    "packages/database/src/index.ts": "F8B2F4D0B3F5421268EA48AB1C204BB121CD1358612A946A237D14926960DB5D",
+    "packages/database/migrations/0003_complex_thunderbird.sql": "8BD9125A32CA10E1E6CB5B248D81F8DB502FBE3D55C022965BB5957BB1A51870",
+    "packages/database/migrations/meta/0003_snapshot.json": "2474E06B4A1D38DFEA40C6D8A93B5B61DBAAF7E2D1CEED079D865D8AF501D60F",
+    "packages/database/migrations/meta/_journal.json": "98B7D6DDEAD472EA6501FE87CAAFC737F8180EF34D76A9AB395AF9BF81182947",
+    "packages/database/test/call-outbox.test.ts": "C25693FA693AB3C7496920848F014794908818A386F2C3F30438A762192E8D93",
+    "packages/database/vitest.config.ts": "29DD26F44B07DBAC3E0C898DC7696973BCBF2DD5E4A45B69325269476E7D2180"
+  },
+  "recorder": {
+    "script": "quality/evidence/T07/record-loop2.ps1",
+    "verificationJson": "quality/evidence/T07/loop2-verification.json",
+    "allCheckResults": [
+      { "name": "acceptance", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-acceptance.txt" },
+      { "name": "db-regression", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-db-regression.txt" },
+      { "name": "build", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-build.txt" },
+      { "name": "codex-t07", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-codex-t07.txt" },
+      { "name": "codex-t05", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-codex-t05.txt" },
+      { "name": "codex-t06", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-codex-t06.txt" },
+      { "name": "typecheck", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-typecheck.txt" },
+      { "name": "lint", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-lint.txt" },
+      { "name": "migration-consistency", "exitCode": 0, "logFile": "quality/evidence/T07/loop2-migration-consistency.txt" }
+    ]
+  },
+  "verifications": {
+    "redTest": {
+      "command": "npm run test --workspace @fg/database -- test/call-outbox.test.ts",
+      "exitCode": 1,
+      "logFile": "quality/evidence/T07/red-test.txt"
+    },
+    "greenTest": {
+      "command": "npm run test --workspace @fg/database -- test/call-outbox.test.ts",
+      "exitCode": 0,
+      "failedCount": 0,
+      "passedCount": 13,
+      "logFile": "quality/evidence/T07/loop2-acceptance.txt"
+    },
+    "fullDatabaseRegression": {
+      "command": "npm run test --workspace @fg/database",
+      "exitCode": 0,
+      "testFilesPassed": 4,
+      "totalTestsPassed": 36
+    },
+    "databaseBuild": {
+      "command": "npm run build --workspace @fg/database",
+      "exitCode": 0
+    },
+    "tscCheck": {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T07/tsconfig.check.json",
+      "exitCode": 0
+    },
+    "eslint": {
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    "zeroDrift": {
+      "command": "npm run db:generate --workspace @fg/database",
+      "exitCode": 0,
+      "result": "No schema changes, nothing to migrate 😴"
+    },
+    "codexT07Regressions": {
+      "command": "node --test quality/evidence/T07/codex-regressions.test.mjs",
+      "exitCode": 0,
+      "passed": 11
+    },
+    "codexT05Regressions": {
+      "command": "node --test quality/evidence/T05/codex-regressions.test.mjs",
+      "exitCode": 0,
+      "passed": 2
+    },
+    "codexT06Regressions": {
+      "command": "node --test quality/evidence/T06/codex-regressions.test.mjs",
+      "exitCode": 0,
+      "passed": 12
+    },
+    "rootNpmTest": {
+      "command": "npm test",
+      "exitCode": 1,
+      "note": "Root npm test invokes Jest for @fg/api workspace which has no test files yet (scheduled for T08+). Database tests pass 100%."
+    }
+  }
+}

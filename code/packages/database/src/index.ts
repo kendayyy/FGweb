@@ -7,4 +7,7 @@ export * from './schema/social.js';
 export * from './schema/rooms.js';
 export * from './schema/teams.js';
 export * from './schema/recruitments.js';
+export * from './schema/calls.js';
+export * from './schema/notifications.js';
+export * from './schema/moderation.js';
 export * from './seed-games.js';

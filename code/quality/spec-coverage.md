@@ -12,4 +12,5 @@
 | Identity/profiles/7game7Lobby migrations | T04 | PostgreSQL6/6 twice, real adapter4models, build/test-types/lint; T04/codex-review.md | PASS |
 | Chat/social constraints and forward migration | T05 | PostgreSQL10T05+6T04 and2independentregressions; quality/evidence/T05/codex-review.md | PASS |
 | Rooms/teams/recruitment constraints and populated migration | T06 | PostgreSQL7T06+23DB+12independent+2T05; quality/evidence/T06/codex-review.md | PASS |
-| Product features, media1000, PWA, release | T07–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+| Call/notification/moderation constraints and populated migration | T07 | PostgreSQL13T07+36DB+11independent+T05/T06; quality/evidence/T07/codex-review.md | PASS |
+| Product API/UI features, media1000, PWA, release | T08–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |

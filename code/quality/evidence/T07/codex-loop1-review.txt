@@ -1,0 +1,38 @@
+✔ departed participant releases seat while preserving member history (5878.3527ms)
+✔ departed member cannot obtain screen publish slot (4250.3131ms)
+✔ departed member cannot configure external live (4782.6547ms)
+✔ closed call retains left-member history and private room (4579.0314ms)
+✔ notification dedup key is mandatory (5014.7272ms)
+✔ outbox recipient must own its linked notification (4260.6599ms)
+✔ new USER report cannot omit validated target FK (4752.0477ms)
+✔ new MESSAGE report cannot omit target or carry unrelated user target (4142.8182ms)
+✔ admin action requires a recorded actor (4516.3621ms)
+✔ admin audit actor cannot be erased by hard user deletion (4832.6221ms)
+✖ MESSAGE report rejects unrelated user target even when message FK is valid (4493.133ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52891.2068
+
+✖ failing tests:
+
+test at quality\evidence\T07\codex-regressions.test.mjs:25:1
+✖ MESSAGE report rejects unrelated user target even when message FK is valid (4493.133ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async reject (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:10:33)
+      at async file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:25:245
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:11:1180)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T07/codex-regressions.test.mjs:25:93)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
