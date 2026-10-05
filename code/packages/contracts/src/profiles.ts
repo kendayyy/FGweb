@@ -20,6 +20,28 @@ export const GameProfileSchema = z.object({
 });
 export type GameProfileDTO = z.infer<typeof GameProfileSchema>;
 
+export const UpdateGameProfileRequestSchema = GameProfileSchema.pick({
+  inGameName: true,
+  rank: true,
+  role: true,
+  playHours: true,
+  playStyle: true,
+}).strict();
+export type UpdateGameProfileRequest = z.infer<typeof UpdateGameProfileRequestSchema>;
+
+export const UpdateInterestsRequestSchema = z.object({
+  interestedGames: z.array(GameTitleSchema).min(1).refine(
+    games => new Set(games).size === games.length,
+    'Interested games must be unique',
+  ),
+}).strict();
+export type UpdateInterestsRequest = z.infer<typeof UpdateInterestsRequestSchema>;
+
+export const InterestsResponseSchema = z.object({
+  interestedGames: z.array(GameTitleSchema),
+}).strict();
+export type InterestsResponse = z.infer<typeof InterestsResponseSchema>;
+
 export const PublicProfileSchema = z.object({
   id: IdSchema,
   displayName: z.string().min(1).max(50),

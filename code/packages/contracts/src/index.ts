@@ -9,7 +9,7 @@ import {
   createPageSchema,
 } from './common.js';
 import { MeDTOSchema } from './auth.js';
-import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema } from './profiles.js';
+import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
 import { RoomSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
@@ -75,7 +75,7 @@ export type EndpointAuthLevel =
   | 'OwnUserOrTarget';
 
 export interface ApiEndpointDefinition {
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   auth: EndpointAuthLevel;
   requiredPermission?: 'MANAGE_CHAT' | 'MANAGE_CALLS' | 'MANAGE_RECRUITMENT' | 'MANAGE_MEMBERS';
@@ -87,6 +87,8 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/me', auth: 'Authenticated', responseSchema: MeDTOSchema },
   { method: 'PATCH', path: '/api/v1/me/profile', auth: 'Authenticated', requestSchema: UpdateProfileRequestSchema, responseSchema: PrivateProfileSchema },
   { method: 'POST', path: '/api/v1/me/onboarding', auth: 'Authenticated', requestSchema: OnboardingRequestSchema, responseSchema: PrivateProfileSchema },
+  { method: 'PUT', path: '/api/v1/me/interests', auth: 'Authenticated', requestSchema: UpdateInterestsRequestSchema, responseSchema: InterestsResponseSchema },
+  { method: 'PUT', path: '/api/v1/me/game-profiles/:gameId', auth: 'Authenticated', requestSchema: UpdateGameProfileRequestSchema, responseSchema: GameProfileSchema },
 
   { method: 'GET', path: '/api/v1/users/:id/profile', auth: 'Public', responseSchema: PublicProfileSchema },
   { method: 'GET', path: '/api/v1/games', auth: 'Public', requestSchema: ListGamesQuerySchema, responseSchema: z.array(GameSchema) },

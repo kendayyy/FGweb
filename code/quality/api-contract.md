@@ -84,6 +84,8 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - **GET `/api/v1/me`** [Auth: Authenticated] -> Response: `MeDTOSchema`
 - **PATCH `/api/v1/me/profile`** [Auth: Authenticated] -> Request: `UpdateProfileRequestSchema` | Response: `PrivateProfileSchema`
 - **POST `/api/v1/me/onboarding`** [Auth: Authenticated] -> Request: `OnboardingRequestSchema` | Response: `PrivateProfileSchema`
+- **PUT `/api/v1/me/interests`** [Auth: Authenticated] -> Request: `UpdateInterestsRequestSchema` | Response: `InterestsResponseSchema`. Replaces interests with at least one unique title from the locked seven-game catalog; invalid/duplicate/empty input returns422. Actor identity comes only from session; extra payload fields are rejected.
+- **PUT `/api/v1/me/game-profiles/:gameId`** [Auth: Authenticated] -> Request: `UpdateGameProfileRequestSchema` | Response: `GameProfileSchema`. Replaces the actor's game details; rank/role/inGameName/playHours/playStyle remain optional. `gameId` comes from the route, `gameTitle` from the catalog; identity/catalog overrides in the payload are rejected. `playHours` is nonnegative numeric duration, not a local-time or ISO timestamp string.
 
 ### 5.2 Games & Public Profiles
 - **GET `/api/v1/users/:id/profile`** [Auth: Public] -> Response: `PublicProfileSchema`

@@ -1323,16 +1323,129 @@
       }
     },
     {
-      "id": "T10",
-      "status": "NOT_STARTED",
+      "id": "T03-FIX1",
+      "status": "PASS",
       "dependencies": [
         "T09"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+      "inputsHash": "9612719ee3b75f520e890c1fceab320a27195e56",
+      "outputsHash": {
+        "files": {
+          "quality/api-contract.md": "c3e0b2a3f78445b3c6ffc9b2f8175af84d61c655f383d746d6389cea83397b89",
+          "packages/contracts/test/profile-put.test.ts": "a0776ff1a601cd1df9a819d7e8854b56cb465d33b554999900404a18ad23acd5",
+          "packages/contracts/src/profiles.ts": "96b3ab05bd175e21847625b774cb8bda6d223f208720c5d63a0cb275d5ad4b7b",
+          "packages/contracts/src/index.ts": "1392d6f5b8315191aeebea6e107e6c27561d26517cccfaf3cf344c4203f2f07d"
+        }
+      },
+      "commands": [
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-contracts-tests.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "b4ebbe6ef16fae2a5a4258464ec21fcbd780e83d4fe7047238539da3e5c8af91",
+          "completedAt": "2026-10-05T05:21:52.6729967Z",
+          "exitCode": 0,
+          "command": "npm run test --workspace @fg/contracts",
+          "startedAt": "2026-10-05T05:21:48.9403292Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-contracts-build.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "9d65fab31d309d463fc56b550efdebe88bd96b0b93dc17a54403f5cddc395653",
+          "completedAt": "2026-10-05T05:21:59.2111851Z",
+          "exitCode": 0,
+          "command": "npm run build --workspace @fg/contracts",
+          "startedAt": "2026-10-05T05:21:52.7391655Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-api-build.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "ddc57190891dd2b2b21f38127d6b48861cd628b856300df60629c52c7155c024",
+          "completedAt": "2026-10-05T05:22:08.3791191Z",
+          "exitCode": 0,
+          "command": "npm run build --workspace @fg/api",
+          "startedAt": "2026-10-05T05:21:59.2177282Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-api-types.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completedAt": "2026-10-05T05:22:16.6418466Z",
+          "exitCode": 0,
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T08/tsconfig.check.json",
+          "startedAt": "2026-10-05T05:22:08.3993065Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-web-types.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completedAt": "2026-10-05T05:22:20.8280806Z",
+          "exitCode": 0,
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T09/tsconfig.check.json",
+          "startedAt": "2026-10-05T05:22:16.6502081Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-lint.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "completedAt": "2026-10-05T05:22:26.6987196Z",
+          "exitCode": 0,
+          "command": "npm run lint",
+          "startedAt": "2026-10-05T05:22:20.8335927Z"
+        },
+        {
+          "evidencePath": "quality/evidence/T03-FIX1/final-diff.txt",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "d886a666cec6c01e51fcfd417ae7879d3d90b7e769362eae9864e2cebc924caf",
+          "completedAt": "2026-10-05T05:22:26.8493602Z",
+          "exitCode": 0,
+          "command": "git diff --check",
+          "startedAt": "2026-10-05T05:22:26.7028872Z"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T03-FIX1/final-verification.json",
+        "quality/evidence/T03-FIX1/review.md",
+        "quality/evidence/T03-FIX1/red.txt"
+      ],
+      "startedAt": "2026-10-05T05:20:26.4390316Z",
+      "completedAt": "2026-10-05T05:23:16.3500926Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "packages/contracts/src/profiles.ts",
+        "packages/contracts/src/index.ts",
+        "packages/contracts/test/profile-put.test.ts",
+        "quality/api-contract.md",
+        "quality/evidence/T03-FIX1/**"
+      ],
+      "followupOf": "T03",
+      "authorization": "User approved concrete T03-FIX1 proposal and sequential continuation of T10"
+    },
+    {
+      "id": "T10",
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "T09",
+        "T03-FIX1"
+      ],
+      "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
       "inputsHash": null,
       "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
+      "commands": [
+        {
+          "evidencePath": "quality/evidence/T10/preflight.txt",
+          "completedAt": "2026-10-05T05:18:42.3790588Z",
+          "command": "npm run task:check -- T10",
+          "startedAt": "2026-10-05T05:18:41.0413283Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "evidenceSha256": "556cabc03c67399c75d81f8404f145187e9cff94dd63a75ec443ebe3c47d1ffb"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T10/preflight-verification.json",
+        "quality/evidence/T10/contract-change-proposal.md"
+      ],
       "startedAt": null,
       "completedAt": null,
       "blockers": []

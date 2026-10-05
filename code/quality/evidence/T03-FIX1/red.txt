@@ -1,0 +1,95 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/profile-put.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/profile-put.test.ts (5 tests | 5 failed) 45ms
+   ❯ T03-FIX1 profile PUT contracts (5)
+     × registers authenticated interest replacement and its response 25ms
+     × accepts every locked game and rejects unknown, empty and duplicate interests 3ms
+     × rejects payload ownership override and unrecognized interest fields 2ms
+     × allows game profile replacement without requiring rank or route fields 2ms
+     × rejects invalid game profile values and identity/catalog overrides 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/profile-put.test.ts > T03-FIX1 profile PUT contracts > registers authenticated interest replacement and its response
+AssertionError: Missing approved PUT /api/v1/me/interests: expected undefined to be defined
+ ❯ endpoint test/profile-put.test.ts:6:48
+      4| function endpoint(path: string) {
+      5|   const match=c.ApiEndpointRegistry.find(item=>String(item.method)==='…
+      6|   expect(match,`Missing approved PUT ${path}`).toBeDefined();
+       |                                                ^
+      7|   expect(match?.auth).toBe('Authenticated');
+      8|   expect(match?.requestSchema).toBeDefined();
+ ❯ test/profile-put.test.ts:13:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/profile-put.test.ts > T03-FIX1 profile PUT contracts > accepts every locked game and rejects unknown, empty and duplicate interests
+AssertionError: Missing approved PUT /api/v1/me/interests: expected undefined to be defined
+ ❯ endpoint test/profile-put.test.ts:6:48
+      4| function endpoint(path: string) {
+      5|   const match=c.ApiEndpointRegistry.find(item=>String(item.method)==='…
+      6|   expect(match,`Missing approved PUT ${path}`).toBeDefined();
+       |                                                ^
+      7|   expect(match?.auth).toBe('Authenticated');
+      8|   expect(match?.requestSchema).toBeDefined();
+ ❯ test/profile-put.test.ts:18:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/profile-put.test.ts > T03-FIX1 profile PUT contracts > rejects payload ownership override and unrecognized interest fields
+AssertionError: Missing approved PUT /api/v1/me/interests: expected undefined to be defined
+ ❯ endpoint test/profile-put.test.ts:6:48
+      4| function endpoint(path: string) {
+      5|   const match=c.ApiEndpointRegistry.find(item=>String(item.method)==='…
+      6|   expect(match,`Missing approved PUT ${path}`).toBeDefined();
+       |                                                ^
+      7|   expect(match?.auth).toBe('Authenticated');
+      8|   expect(match?.requestSchema).toBeDefined();
+ ❯ test/profile-put.test.ts:23:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/profile-put.test.ts > T03-FIX1 profile PUT contracts > allows game profile replacement without requiring rank or route fields
+AssertionError: Missing approved PUT /api/v1/me/game-profiles/:gameId: expected undefined to be defined
+ ❯ endpoint test/profile-put.test.ts:6:48
+      4| function endpoint(path: string) {
+      5|   const match=c.ApiEndpointRegistry.find(item=>String(item.method)==='…
+      6|   expect(match,`Missing approved PUT ${path}`).toBeDefined();
+       |                                                ^
+      7|   expect(match?.auth).toBe('Authenticated');
+      8|   expect(match?.requestSchema).toBeDefined();
+ ❯ test/profile-put.test.ts:27:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/profile-put.test.ts > T03-FIX1 profile PUT contracts > rejects invalid game profile values and identity/catalog overrides
+AssertionError: Missing approved PUT /api/v1/me/game-profiles/:gameId: expected undefined to be defined
+ ❯ endpoint test/profile-put.test.ts:6:48
+      4| function endpoint(path: string) {
+      5|   const match=c.ApiEndpointRegistry.find(item=>String(item.method)==='…
+      6|   expect(match,`Missing approved PUT ${path}`).toBeDefined();
+       |                                                ^
+      7|   expect(match?.auth).toBe('Authenticated');
+      8|   expect(match?.requestSchema).toBeDefined();
+ ❯ test/profile-put.test.ts:33:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  12:20:29
+   Duration  875ms (transform 46%, import 44%, tests 8%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/profile-put.test.ts
