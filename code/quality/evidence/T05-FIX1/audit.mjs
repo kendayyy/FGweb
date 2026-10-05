@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {parseEnv} from 'node:util';
+import pg from 'pg';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8'));
+for(const [key,file]of Object.entries({specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png'}))assert.equal(hash(file),baseline.hashes[key].toLowerCase());
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8').replace(/^\uFEFF/,''));
+const task=ledger.tasks.find(item=>item.id==='T05-FIX1');
+const changed=execFileSync('git',['diff','--relative','--name-only',task.inputsHash],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+const untracked=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+const allowed=file=>['quality/evidence/T05-FIX1/'].some(prefix=>file.startsWith(prefix))||['packages/database/src/schema/pending-uploads.ts','packages/database/src/index.ts','packages/database/test/pending-uploads.test.ts','packages/database/migrations/0005_regular_wolverine.sql','packages/database/migrations/meta/0005_snapshot.json','packages/database/migrations/meta/_journal.json','quality/tasks.json','quality/spec-coverage.md'].includes(file);
+assert([...changed,...untracked].every(allowed),'Out-of-scope change');
+const latest=new Map();for(const predecessor of ledger.tasks.slice(0,ledger.tasks.indexOf(task)))for(const [file,digest]of Object.entries(predecessor.outputsHash?.files??{}))latest.set(file,digest);
+for(const [file,digest]of latest)if(!['packages/database/src/index.ts','packages/database/migrations/meta/_journal.json'].includes(file))assert.equal(hash(file),digest.toLowerCase(),'Frozen predecessor output changed');
+const env=parseEnv(fs.readFileSync('.env.local','utf8'));
+const secrets=Object.entries(env).filter(([key,value])=>/(SECRET|PASSWORD|PRIVATE_KEY)/.test(key)&&value.length>=8).map(([,value])=>value);
+for(const file of [...changed,...untracked])assert(!secrets.some(secret=>fs.readFileSync(file).includes(Buffer.from(secret))),'Configured secret leaked');
+const client=new pg.Client({connectionString:env.DATABASE_URL,query_timeout:10000,connectionTimeoutMillis:5000});await client.connect();
+try{assert.equal((await client.query("SELECT nspname FROM pg_namespace WHERE nspname LIKE 't05_fix1_%'")).rowCount,0);assert.equal((await client.query("SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'")).rows[0].n,0);}finally{await client.end();}
+console.log(JSON.stringify({approvedBaselines:5,frozenPredecessorsVerified:latest.size-2,scopeFiles:changed.length+untracked.length,configuredSecretLeak:false,remainingOwnedSchemas:0,publicTables:0}));

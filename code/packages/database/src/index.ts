@@ -12,3 +12,4 @@ export * from './schema/notifications.js';
 export * from './schema/moderation.js';
 export * from './schema/realtime-outbox.js';
 export * from './seed-games.js';
+export * from './schema/pending-uploads.js';

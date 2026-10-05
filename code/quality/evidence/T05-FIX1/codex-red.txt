@@ -1,0 +1,77 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/pending-uploads.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/pending-uploads.test.ts (6 tests | 6 failed) 16376ms
+   ❯ durable unsent image uploads on actual PostgreSQL (6)
+     × forward migration preserves linked images/messages and adds durable drafts 42ms
+     × migrates an empty schema without relaxing linked image constraints 3138ms
+     × enforces ownership/context references, WebP size and expiry boundaries 4ms
+     × rollback restores the pending image after a failed message/attachment claim 25ms
+     × two concurrent consumers cannot both claim the same draft 91ms
+     × indexes expiry selection and removes expired drafts without removing linked images 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > forward migration preserves linked images/messages and adds durable drafts
+AssertionError: expected null not to be null
+ ❯ test/pending-uploads.test.ts:9:544
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > migrates an empty schema without relaxing linked image constraints
+AssertionError: expected null not to be null
+ ❯ test/pending-uploads.test.ts:10:415
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > enforces ownership/context references, WebP size and expiry boundaries
+error: relation "pending_image_uploads" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/pending-uploads.test.ts:11:88
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > rollback restores the pending image after a failed message/attachment claim
+error: relation "pending_image_uploads" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/pending-uploads.test.ts:12:259
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > two concurrent consumers cannot both claim the same draft
+error: relation "pending_image_uploads" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/pending-uploads.test.ts:13:337
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > indexes expiry selection and removes expired drafts without removing linked images
+error: relation "pending_image_uploads" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/pending-uploads.test.ts:14:100
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  21:34:03
+   Duration  17.84s (tests 93%, import 7%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/pending-uploads.test.ts
