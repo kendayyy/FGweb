@@ -10,4 +10,5 @@ export * from './schema/recruitments.js';
 export * from './schema/calls.js';
 export * from './schema/notifications.js';
 export * from './schema/moderation.js';
+export * from './schema/realtime-outbox.js';
 export * from './seed-games.js';

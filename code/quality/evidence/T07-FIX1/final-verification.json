@@ -1,0 +1,72 @@
+[
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/database",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T08:56:56.640Z",
+    "completedAt": "2026-10-05T08:57:04.477Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-build.txt",
+    "evidenceSha256": "b451cff1e41207d39e3a8b7dc7234d4c67f27be815d895febf40a2d6d6cdb496"
+  },
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/database -- --no-file-parallelism",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:03:07.862Z",
+    "completedAt": "2026-10-05T09:04:57.477Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-regression-serial.txt",
+    "evidenceSha256": "3a921e0d403fa0c3b7ad55276308e1c63b7c371bcbec0ca8491afee6ec352962"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T07-FIX1/test-types.json",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:02:26.100Z",
+    "completedAt": "2026-10-05T09:02:44.168Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-test-types.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/api/tsconfig.json",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:02:57.819Z",
+    "completedAt": "2026-10-05T09:03:09.748Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-api-types.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node node_modules/eslint/bin/eslint.js packages/database/src/index.ts packages/database/src/schema/realtime-outbox.ts packages/database/test/realtime-outbox.test.ts quality/evidence/T07-FIX1/*.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:06:29.732Z",
+    "completedAt": "2026-10-05T09:06:32.847Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-lint-final.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "git diff --check",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:02:57.508Z",
+    "completedAt": "2026-10-05T09:02:57.679Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-diff.txt",
+    "evidenceSha256": "554b5d25ecef74fdc0af6ede850e4f87e856e2f33d03659beefbda5914246cf6"
+  },
+  {
+    "command": "node quality/evidence/T07-FIX1/audit.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-05T09:06:28.412Z",
+    "completedAt": "2026-10-05T09:06:29.469Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T07-FIX1/codex-audit-statement-check.txt",
+    "evidenceSha256": "dfdfdddd4a18b44d152169e8d9ddd3b6c4c4b11bd420c4b15e78f96d2f13107d"
+  }
+]

@@ -1,0 +1,69 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/realtime-outbox.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/realtime-outbox.test.ts (4 tests | 4 failed) 15182ms
+   ❯ T07-FIX1 actual PostgreSQL durable message events (4)
+     × adds the table through forward migration while preserving seeded messages 49ms
+     × migrates an empty schema with a usable durable creation event table 4097ms
+     × rolls back message and outbox together on an aborted transaction 27ms
+     × deduplicates jobs and prevents cross-conversation linkage or negative attempts 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > adds the table through forward migration while preserving seeded messages
+AssertionError: expected null not to be null
+ ❯ test/realtime-outbox.test.ts:33:129
+     31|   await migrate(drizzle(client),{migrationsFolder:migrations,migration…
+     32|   const prior=await client.query(`SELECT content FROM messages WHERE i…
+     33|   const table=await client.query('SELECT to_regclass($1) AS name',[`${…
+       |                                                                                                                                 ^
+     34|  });
+     35|  it('migrates an empty schema with a usable durable creation event tab…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > migrates an empty schema with a usable durable creation event table
+AssertionError: expected null not to be null
+ ❯ test/realtime-outbox.test.ts:37:216
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > rolls back message and outbox together on an aborted transaction
+error: relation "realtime_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/realtime-outbox.test.ts:41:170
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > deduplicates jobs and prevents cross-conversation linkage or negative attempts
+error: relation "realtime_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/realtime-outbox.test.ts:46:3
+     44|  });
+     45|  it('deduplicates jobs and prevents cross-conversation linkage or nega…
+     46|   await client.query(`INSERT INTO realtime_outbox(id,message_id,conver…
+       |   ^
+     47|   await expect(client.query(`INSERT INTO realtime_outbox(id,message_id…
+     48|   await expect(client.query(`INSERT INTO realtime_outbox(id,message_id…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  15:55:32
+   Duration  17.00s (tests 91%, import 9%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/realtime-outbox.test.ts

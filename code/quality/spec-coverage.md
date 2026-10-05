@@ -22,3 +22,4 @@
 | Persisted onboarding/interest read and cleared owner avatar | T08-FIX1 | 5RED;6new+37BE+9FE tests, build/types/lint, native10 and cleanup/secret audit; T08-FIX1/final-verification.json | PASS |
 | Onboarding, owner/public profiles and account-safe mutations | T11 | 12 task +28 frontend +7 reviewer; real PG/API E2E, four viewports and cleanup; quality/evidence/T11/final-verification.json | PASS |
 | Game-ID Lobby history and realtime subscription contracts | T03-FIX3 | 3RED;42 contracts tests, build/types/lint/audit; T03-FIX3/final-verification.json | PASS |
+| Durable message creation outbox prerequisite | T07-FIX1 | 4RED;40 PostgreSQL tests; build/types/lint/audit; T07-FIX1/final-verification.json | PASS |
