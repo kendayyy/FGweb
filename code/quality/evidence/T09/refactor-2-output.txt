@@ -1,0 +1,53 @@
+### T09 Refactor Loop 2 Summary
+
+Implemented and verified all refactor requirements for **T09 (Discord Auth, Guest Guards, Navigation & UI Foundation)** in `@fg/web`.
+
+---
+
+### 1. Changed Files
+- `apps/web/src/features/auth/utils.ts` — WHATWG URL normalization, strict same-origin validation, backslash/control character injection prevention.
+- `apps/web/src/features/auth/api.ts` — Strict Discord OAuth URL validation (`https://discord.com/(api/)?oauth2/authorize` + host/protocol/userinfo checks) and non-ok server sign-out error handling.
+- `apps/web/src/features/auth/lifecycle.ts` — Aggregate resource cleanup execution (Socket.IO/LiveKit) without early exit on individual failure.
+- `apps/web/src/features/auth/AuthProvider.tsx` — Promise rejection on failed server/cleanup logout, query cancellation, cache clearing, stale `/me` request epoch invalidation.
+- `apps/web/src/features/auth/HeaderAuthWidget.tsx` — Accessible `role="alert"` error container with `"Thử lại"` action retrying failed operations for both logged-in and guest views.
+- `apps/web/src/features/auth/ProtectedRoute.tsx` — Accessible `role="alert"` error boundary with distinct network/403 states, refetch/retry action, and fail-closed privacy.
+- `apps/web/src/features/auth/LoginForm.tsx` — Preserved accepted `"Đăng nhập Discord bị hủy hoặc thất bại. Vui lòng thử lại để tham gia FG."` text and multi-error param support.
+- `apps/web/src/styles/tokens.css` & `global.css` — 3-layer CSS tokens (primitive → semantic → component), dark navy palette, Inter self-host, button component classes, minimum 44px touch targets, and documented **6.00:1 contrast ratio** for `--color-blue-action` (`#1E5ADE`) against white text.
+- `apps/web/src/App.tsx` & `index.html` — Clean production labels, responsive header flex layout, removed broken `/vite.svg` favicon, honest guest/member shell.
+- `quality/evidence/T09/run-real-api-harness.mjs` — Direct `process.execPath` (shell: false) execution of compiled Nest API (port 3000) and Vite preview (port 5173), PGOPTIONS schema isolation, signed session cookie (`token.signature`), strict 44px/overflow layout assertions across 4 viewports, and robust `finally` child/database schema cleanup.
+- `quality/evidence/T09/recorder.mjs` — Executable verification recorder logging actual commands, timestamps, exit codes, raw outputs, and file SHA256 hashes.
+
+---
+
+### 2. Behavioral Enhancements
+1. **Redirect Security**: Rejects all external domain open-redirects, protocol-relative paths (`//evil.com`), backslash tricks (`/\\evil.com`), newline/tab injections, and `javascript:` URIs.
+2. **OAuth Authorization Validation**: `signInWithDiscord` strictly checks the returned URL structure before redirection.
+3. **Logout & Cache Invalidation**: Server sign-out failure rejects promises and displays a `role="alert"` UI banner with a working `"Thử lại"` button. Successful logout clears query caches and runs registered Socket/Call cleanups.
+4. **Accessible Error & Retry UI**: `<HeaderAuthWidget />` and `<ProtectedRoute />` expose accessible `role="alert"` regions with retry buttons.
+5. **Touch Target & Layout Integrity**: All button controls guarantee `minHeight: 44px`. Verified no horizontal scrollbar overflow across 1440x900, 1280x800, 390x844, and 360x800 viewports.
+
+---
+
+### 3. Verification Results
+
+All 8 automated verification pipeline steps passed with **exit code 0**:
+
+| Check Name | Command | Exit Code | Status | Result / Detail |
+| --- | --- | --- | --- | --- |
+| **Source+Test Typecheck** | `node node_modules/typescript/bin/tsc -p quality/evidence/T09/tsconfig.check.json` | 0 | **PASS** | Clean TS compilation across source & test files |
+| **Original Acceptance Test** | `npm run test --workspace @fg/web -- test/auth.test.tsx` | 0 | **PASS** | 9 / 9 tests passed |
+| **All Web Unit Tests** | `npm run test --workspace @fg/web` | 0 | **PASS** | 16 / 16 tests passed across 3 test suites |
+| **Web Production Build** | `npm run build --workspace @fg/web` | 0 | **PASS** | Built client bundle in 1.70s |
+| **Workspace Lint** | `npm run lint` | 0 | **PASS** | 0 ESLint errors / warnings |
+| **Redirect Security Regression** | `node quality/evidence/T09/codex-redirect-regression.mjs` | 0 | **PASS** | Unsafe normalized callback paths rejected |
+| **Git Diff Check** | `git diff --check` | 0 | **PASS** | No trailing whitespace or diff errors |
+| **Real API & Browser Harness** | `node --env-file=.env.local quality/evidence/T09/run-real-api-harness.mjs` | 0 | **PASS** | Real Nest API (port 3000) + Vite preview (port 5173), guest 401, signed cookie auth /me 200 with `MeDTO`, 16 viewport screenshots, 44px targets, zero overflow, schema cleanup |
+
+Recorded evidence saved to `quality/evidence/T09/loop2-verification.json` and `quality/evidence/T09/loop2-*.txt`.
+
+---
+
+### 4. Remaining Limitations / Blockers
+- Real Discord OAuth browser user sign-in flow (interactive browser prompt) requires human user intervention in future tasks; fixture session lookup was verified via signed session tokens in local PostgreSQL schema.
+- Full Lobby UI layout & recruitment card details are owned by **T13**; T09 provides the guest/authenticated auth shell.
+- Stopping after T09 as instructed. Work on T10 has not been started.

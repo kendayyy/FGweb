@@ -1,0 +1,174 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/auth.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/auth.test.tsx (9 tests | 1 failed) 747ms
+   ❯ T09 Auth Features & Guards (9)
+     ❯ Denied OAuth / Error state and recovery (1)
+       × displays error UI when OAuth returns error parameter or API fails, allowing retry 129ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/auth.test.tsx > T09 Auth Features & Guards > Denied OAuth / Error state and recovery > displays error UI when OAuth returns error parameter or API fails, allowing retry
+TestingLibraryElementError: Unable to find an element with the text: /Đăng nhập Discord bị hủy hoặc thất bại/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      style="min-height: 100vh; display: flex; flex-direction: column;"
+    >
+      <header
+        style="min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"
+      >
+        <div
+          style="display: flex; align-items: center; gap: 24px;"
+        >
+          <a
+            data-discover="true"
+            href="/"
+            style="font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em;"
+          >
+            FG
+          </a>
+          <nav
+            style="display: flex; gap: 16px;"
+          >
+            <a
+              data-discover="true"
+              href="/"
+              style="color: var(--text-main); font-size: 14px; font-weight: 500;"
+            >
+              Lobby
+            </a>
+            <a
+              data-discover="true"
+              href="/protected"
+              style="color: var(--text-sub); font-size: 14px; font-weight: 500;"
+            >
+              Phòng của tôi
+            </a>
+          </nav>
+        </div>
+        <div
+          style="color: var(--text-quiet); font-size: 13px;"
+        >
+          Đang tải...
+        </div>
+      </header>
+      <main
+        style="flex: 1 1 0%; background-color: var(--bg-canvas);"
+      >
+        <div
+          style="display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 24px 16px;"
+        >
+          <div
+            class=""
+            style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px; max-width: 440px; width: 100%;"
+          >
+            <div
+              style="display: flex; flex-direction: column; gap: 24px; text-align: center;"
+            >
+              <div>
+                <h1
+                  style="font-size: 28px; font-weight: 800; color: var(--color-focus); letter-spacing: -0.02em; margin-bottom: 8px;"
+                >
+                  FG
+                </h1>
+                <h2
+                  style="font-size: 18px; font-weight: 700; color: var(--text-main);"
+                >
+                  Cộng đồng game thủ Việt Nam
+                </h2>
+                <p
+                  style="color: var(--text-sub); font-size: 14px; margin-top: 4px;"
+                >
+                  Đăng nhập bằng Discord để tham gia phòng và kết nối cùng đội chơi
+                </p>
+              </div>
+              <div
+                data-testid="oauth-error-banner"
+                style="background-color: rgba(229, 72, 77, 0.12); border: 1px solid rgba(229, 72, 77, 0.4); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 8px;"
+              >
+                <h4
+                  style="font-weight: 600; font-size: 14px; margin: 0px;"
+                >
+                  Đăng nhập không thành công
+                </h4>
+                <p
+                  style="color: var(--text-sub); font-size: 13px; margin: 0px;"
+                >
+                  Đăng nhập Discord bị hủy hoặc bị từ chối cấp quyền.
+                </p>
+                <div
+                  style="margin-top: 8px;"
+                >
+                  <button
+                    class=""
+                    style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease; opacity: 1; cursor: pointer; background-color: transparent; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; min-height: 44px; padding: 0px 14px; font-size: 13px; border-radius: var(--radius-sm);"
+                  >
+                    <span>
+                      Thử lại
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div
+                style="display: flex; flex-direction: column; gap: 12px;"
+              >
+                <button
+                  class=""
+                  style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease; opacity: 1; cursor: pointer; background-color: var(--color-action); color: rgb(255, 255, 255); font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.15); min-height: 52px; padding: 0px 24px; font-size: 16px; border-radius: var(--radius-md); width: 100%;"
+                >
+                  <svg
+                    fill="currentColor"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    width="20"
+                  >
+                    <path
+                      d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"
+                    />
+                  </svg>
+                  <span>
+                    Đăng nhập bằng Discord
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/auth.test.tsx:127:21
+    125|       });
+    126|
+    127|       expect(screen.getByText(/Đăng nhập Discord bị hủy hoặc thất bại/…
+       |                     ^
+    128|       expect(screen.getByRole('button', { name: /Thử lại/i })).toBeInT…
+    129|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  11:54:58
+   Duration  3.80s (environment 41%, tests 21%, setup 15%, transform 12%, import 11%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/auth.test.tsx

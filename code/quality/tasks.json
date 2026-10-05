@@ -1160,18 +1160,167 @@
     },
     {
       "id": "T09",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T08"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": []
+      "inputsHash": "cd7677f2c5e086fe1fa1b1f1b7a74e4149e6bfdd",
+      "outputsHash": {
+        "files": {
+          "apps/web/src/styles/global.css": "16a1fc0f961486d5d6897b545df91f57c8f9ccc8f5b746a167163a281dabad0b",
+          "apps/web/src/features/auth/lifecycle.ts": "fa243319f567170578399a1e6b00fd299336dfa7d3dc8aa4c8c3f2369d1b9dc4",
+          "apps/web/src/components/ui/Button.tsx": "6817bf1bbe43678a6134db2312c9d7feac16b6d2693cbd03ff05bfaae5204fee",
+          "apps/web/test/auth.test.tsx": "f78b993a32159c5b29fb15b90acb4a4ccbc92407ea78d137eed9fdc5439743bb",
+          "apps/web/test/codex-auth-ui-regressions.test.tsx": "2446ca88a5c16a5ba4b743a19239abe2210b5fc91a6da4926d47e8fb7457c3b7",
+          "apps/web/src/features/auth/HeaderAuthWidget.tsx": "14ae2bcd1e7cd6fd11e9f750a659388795f66ebd0a029908adc94210ce36ec05",
+          "apps/web/src/styles/tokens.css": "3109fc6c14bbcd195d53fa58c2f8b78c51078307ebcd97a7cfc5fff820d4914a",
+          "apps/web/index.html": "a471ffa8dca118b0a81ce47e908c6d89f6774c6324351d3e75e814102d7d3454",
+          "apps/web/test/codex-auth-regressions.test.tsx": "05438a8771f45edcd36aaab18c4a49b022f1a0cfd2b9032b730720b03126a58a",
+          "apps/web/src/components/ui/Card.tsx": "2ebc0c4834a595bd959ed56e4456a929419717deaf0cada2ff3b0ccfd1041715",
+          "apps/web/src/features/auth/index.ts": "5dd8fa7048dee4be3c8852dbee37cb5285d575a41d621cd313a132b0326186c6",
+          "apps/web/src/features/auth/AuthProvider.tsx": "f6d4b8431090dc4304f2ebc5fd0afd2ef0706614658b72c27a2c9e4bc656b2df",
+          "apps/web/src/features/auth/ProtectedRoute.tsx": "74c7ef0b3522c889a7882f73400b2e8ca6dd239e1a009ecbe941b1770823807c",
+          "apps/web/src/features/auth/api.ts": "0dcc88f5365d3adc85f6ce5a808935ef86c67878a2a9421e964c3183d23da535",
+          "apps/web/test/setup.ts": "e696e3641a7e5ccf290230e22fd4e174a0e7705877c3bfafc22000c2092dea02",
+          "apps/web/vitest.config.ts": "49e49eb771540057dde02471cc32975df6ea26826089fcf4226b9ea48ccaa3d3",
+          "apps/web/src/features/auth/utils.ts": "8567d6ed115506a12a17a9b69d59e8e01d326b891507a06ede8a7fd18e0afac0",
+          "apps/web/src/App.tsx": "f932c979076ab19d08d3b8cc0eac53cab72d4c8211560c9b2901f4e4c3ad1301",
+          "apps/web/src/features/auth/LoginForm.tsx": "5048a21847852f345a07a3a8893abbd49f0597e37895ab617c466ea86b55f55c",
+          "apps/web/src/components/ui/Alert.tsx": "961a3a87979d4056fd361a330902bd3fc4e9ae2cae3885084a77cb97e0207a30",
+          "apps/web/src/main.tsx": "269c55d7ee91d10b2fb52a8e1d1ca0323898b8325867718bc25026b2a1cd62b7",
+          "apps/web/src/components/ui/Spinner.tsx": "9cedb9abc960105b09d51bc95ac2fbb9de58945a1c7f267b057c51c897021dda"
+        }
+      },
+      "commands": [
+        {
+          "startedAt": "2026-10-05T05:14:05.236975Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-acceptance.txt",
+          "completedAt": "2026-10-05T05:14:11.4210425Z",
+          "command": "npm run test --workspace @fg/web -- test/auth.test.tsx",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "abd310356c6d39ca8dd634f874f50f0568115796b04b564d69d1267f26833099"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:11.4587112Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-build.txt",
+          "completedAt": "2026-10-05T05:14:14.9032825Z",
+          "command": "npm run build --workspace @fg/web",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "79558963c4f0e6285c8fe4298609e64014939420475d0411d99e00026d778b35"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:14.9298923Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-types.txt",
+          "completedAt": "2026-10-05T05:14:19.0168234Z",
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T09/tsconfig.check.json",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:19.0234045Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-lint.txt",
+          "completedAt": "2026-10-05T05:14:25.0174357Z",
+          "command": "npm run lint",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:25.0274931Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-redirect.txt",
+          "completedAt": "2026-10-05T05:14:25.1862636Z",
+          "command": "node quality/evidence/T09/codex-redirect-regression.mjs",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "dbbb5bee8f242f9cba92fdd0b121cd7084923ee09dc61debc489c288825bc8ef"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:25.1982317Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-all-tests.txt",
+          "completedAt": "2026-10-05T05:14:33.1489911Z",
+          "command": "npm run test --workspace @fg/web",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "27ac087ab1b6c431811bb01b7e20f5f47d44df55b2d40f758705795db71c3b65"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:33.170424Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-ui-layout.txt",
+          "completedAt": "2026-10-05T05:14:36.669667Z",
+          "command": "node quality/evidence/T09/codex-ui-layout-regression.mjs",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "68756c8e0643b37045360dbbbab1472a2cc50b1bed4cf9d97e9726a41a4d674c"
+        },
+        {
+          "startedAt": "2026-10-05T05:14:36.6757515Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-real-api.txt",
+          "completedAt": "2026-10-05T05:15:03.9632852Z",
+          "command": "node --env-file=.env.local quality/evidence/T09/run-real-api-harness.mjs",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "340fa19afd53e6e701c8bb7db27f3bbd904738930c2f6bfdee7419c4ef07d261"
+        },
+        {
+          "startedAt": "2026-10-05T05:15:03.9811399Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-cleanup-audit.txt",
+          "completedAt": "2026-10-05T05:15:04.5917961Z",
+          "command": "node --env-file=.env.local quality/evidence/T09/final-audit.mjs",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "deee24b730cd6ffa75563cda11aed41c0ae1417e769e33a9050e9a8e0ad80883"
+        },
+        {
+          "startedAt": "2026-10-05T05:15:04.6043407Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-task-gate.txt",
+          "completedAt": "2026-10-05T05:15:05.8570983Z",
+          "command": "npm run task:check -- T09",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "bad9c143968ef261bf177a766e9be4101bbb7b70be5e7d35cbeddf3ad79379fa"
+        },
+        {
+          "startedAt": "2026-10-05T05:15:05.8623087Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T09/final-diff.txt",
+          "completedAt": "2026-10-05T05:15:05.9470507Z",
+          "command": "git diff --check",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T09/final-verification.json",
+        "quality/evidence/T09/codex-review.md",
+        "quality/evidence/T09/api-harness-results.json",
+        "quality/evidence/T09/codex-ui-layout-red.txt",
+        "quality/evidence/T09/codex-ui-layout-pass.txt"
+      ],
+      "startedAt": "2026-10-05T04:10:20.5038212Z",
+      "completedAt": "2026-10-05T05:15:55.8394087Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "apps/web/src/styles/tokens.css",
+        "apps/web/src/styles/global.css",
+        "apps/web/src/components/ui/**",
+        "apps/web/src/features/auth/**",
+        "apps/web/test/**",
+        "apps/web/src/main.tsx",
+        "apps/web/src/App.tsx",
+        "apps/web/index.html",
+        "apps/web/vitest.config.ts",
+        "quality/evidence/T09/**"
+      ],
+      "antigravity": {
+        "model": "Gemini 3.6 Flash (High)",
+        "refactorLoops": 2,
+        "result": "REVIEW_FAILED_THEN_CODEX_REPAIRED",
+        "conversation": "48d1da24-03de-4d33-b0c3-744d9bc08291"
+      }
     },
     {
       "id": "T10",

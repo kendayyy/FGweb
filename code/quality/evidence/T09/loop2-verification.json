@@ -1,0 +1,112 @@
+{
+  "task": "T09",
+  "loop": 2,
+  "timestamp": "2026-10-05T05:05:51.177Z",
+  "cwd": "E:\\FGweb\\code",
+  "allPassed": true,
+  "commands": [
+    {
+      "name": "source_test_typecheck",
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T09/tsconfig.check.json",
+      "startedAt": "2026-10-05T05:04:57.774Z",
+      "completedAt": "2026-10-05T05:05:02.965Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-typecheck.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "original_acceptance_test",
+      "command": "npm run test --workspace @fg/web -- test/auth.test.tsx",
+      "startedAt": "2026-10-05T05:05:02.967Z",
+      "completedAt": "2026-10-05T05:05:08.371Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-acceptance.txt",
+      "evidenceSha256": "b3f24ec57640d858ffef11d12502250fd261e919c0c67a81654c9aafc468e606"
+    },
+    {
+      "name": "all_web_tests",
+      "command": "npm run test --workspace @fg/web",
+      "startedAt": "2026-10-05T05:05:08.373Z",
+      "completedAt": "2026-10-05T05:05:15.488Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-all-tests.txt",
+      "evidenceSha256": "c0506899d7bd7c0f3a69b7063055fca21e2fb5eddd0db4fc961b2af38d8e163d"
+    },
+    {
+      "name": "web_build",
+      "command": "npm run build --workspace @fg/web",
+      "startedAt": "2026-10-05T05:05:15.491Z",
+      "completedAt": "2026-10-05T05:05:18.416Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-build.txt",
+      "evidenceSha256": "f196dbeeb4eb743a34305a52a000fc83d65acaa3bafbb67ff14c634e05ab5de1"
+    },
+    {
+      "name": "workspace_lint",
+      "command": "npm run lint",
+      "startedAt": "2026-10-05T05:05:18.419Z",
+      "completedAt": "2026-10-05T05:05:24.864Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-lint.txt",
+      "evidenceSha256": "6ba41d3386946f3480608c0bcb80bb893d785c187db4178012a840ea9081d89b"
+    },
+    {
+      "name": "redirect_security_regression",
+      "command": "node quality/evidence/T09/codex-redirect-regression.mjs",
+      "startedAt": "2026-10-05T05:05:24.867Z",
+      "completedAt": "2026-10-05T05:05:25.150Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-redirect.txt",
+      "evidenceSha256": "a63ae6bcc938ccceed31e1aaa06aa26e4097affe4a4304c1ce8a83c94b35c135"
+    },
+    {
+      "name": "git_diff_check",
+      "command": "git diff --check",
+      "startedAt": "2026-10-05T05:05:25.154Z",
+      "completedAt": "2026-10-05T05:05:25.306Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-diff.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "real_api_browser_harness",
+      "command": "node --env-file=.env.local quality/evidence/T09/run-real-api-harness.mjs",
+      "startedAt": "2026-10-05T05:05:25.307Z",
+      "completedAt": "2026-10-05T05:05:51.156Z",
+      "exitCode": 0,
+      "passed": true,
+      "evidencePath": "quality/evidence/T09/loop2-api-harness.txt",
+      "evidenceSha256": "fd682a67b8f72cd55a5501a586ec98a299c9b5da4fbd56ab0b2f32f8ffc66d4b"
+    }
+  ],
+  "fileHashes": {
+    "apps/web/src/styles/tokens.css": "2bad84164c1367a09bdc599e89ca98ff3fd42fee4652eec4f9e4fcd37e2776a2",
+    "apps/web/src/styles/global.css": "16a1fc0f961486d5d6897b545df91f57c8f9ccc8f5b746a167163a281dabad0b",
+    "apps/web/src/components/ui/Button.tsx": "6817bf1bbe43678a6134db2312c9d7feac16b6d2693cbd03ff05bfaae5204fee",
+    "apps/web/src/components/ui/Card.tsx": "2ebc0c4834a595bd959ed56e4456a929419717deaf0cada2ff3b0ccfd1041715",
+    "apps/web/src/components/ui/Spinner.tsx": "9cedb9abc960105b09d51bc95ac2fbb9de58945a1c7f267b057c51c897021dda",
+    "apps/web/src/components/ui/Alert.tsx": "961a3a87979d4056fd361a330902bd3fc4e9ae2cae3885084a77cb97e0207a30",
+    "apps/web/src/features/auth/utils.ts": "8567d6ed115506a12a17a9b69d59e8e01d326b891507a06ede8a7fd18e0afac0",
+    "apps/web/src/features/auth/lifecycle.ts": "fa243319f567170578399a1e6b00fd299336dfa7d3dc8aa4c8c3f2369d1b9dc4",
+    "apps/web/src/features/auth/api.ts": "0dcc88f5365d3adc85f6ce5a808935ef86c67878a2a9421e964c3183d23da535",
+    "apps/web/src/features/auth/AuthProvider.tsx": "f6d4b8431090dc4304f2ebc5fd0afd2ef0706614658b72c27a2c9e4bc656b2df",
+    "apps/web/src/features/auth/ProtectedRoute.tsx": "74c7ef0b3522c889a7882f73400b2e8ca6dd239e1a009ecbe941b1770823807c",
+    "apps/web/src/features/auth/LoginForm.tsx": "5048a21847852f345a07a3a8893abbd49f0597e37895ab617c466ea86b55f55c",
+    "apps/web/src/features/auth/HeaderAuthWidget.tsx": "8c1127e100b274359d5a390cba4104cec522f151e6e75fa4d09cbfb365a296a8",
+    "apps/web/src/features/auth/index.ts": "5dd8fa7048dee4be3c8852dbee37cb5285d575a41d621cd313a132b0326186c6",
+    "apps/web/src/App.tsx": "f932c979076ab19d08d3b8cc0eac53cab72d4c8211560c9b2901f4e4c3ad1301",
+    "apps/web/src/main.tsx": "269c55d7ee91d10b2fb52a8e1d1ca0323898b8325867718bc25026b2a1cd62b7",
+    "apps/web/index.html": "a471ffa8dca118b0a81ce47e908c6d89f6774c6324351d3e75e814102d7d3454",
+    "apps/web/vitest.config.ts": "49e49eb771540057dde02471cc32975df6ea26826089fcf4226b9ea48ccaa3d3",
+    "apps/web/test/setup.ts": "e696e3641a7e5ccf290230e22fd4e174a0e7705877c3bfafc22000c2092dea02",
+    "apps/web/test/auth.test.tsx": "f78b993a32159c5b29fb15b90acb4a4ccbc92407ea78d137eed9fdc5439743bb",
+    "quality/evidence/T09/run-real-api-harness.mjs": "f84319397a9e4d14fde12786651429a6135a727805c3fe85e16248b0a65a0cef"
+  }
+}

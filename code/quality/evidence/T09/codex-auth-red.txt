@@ -1,0 +1,136 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/codex-auth-regressions.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+stderr | test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > reports rejected server logout rather than resolving success
+Server sign-out warning: Error: Logout server request failed: HTTP 503
+    at signOutServer (E:/FGweb/code/apps/web/src/features/auth/api.ts:70:11)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at Object.signOut (E:/FGweb/code/apps/web/src/features/auth/AuthProvider.tsx:61:7)
+
+stderr | test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > reports cleanup failure while still attempting other resource disconnects
+Auth cleanup handler error: Error: fixture disconnect failure
+    at E:/FGweb/code/apps/web/test/codex-auth-regressions.test.tsx:43:58
+    at runAuthCleanups (E:/FGweb/code/apps/web/src/features/auth/lifecycle.ts:23:13)
+    at E:/FGweb/code/apps/web/test/codex-auth-regressions.test.tsx:44:18
+    at file:///E:/FGweb/code/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///E:/FGweb/code/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///E:/FGweb/code/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///E:/FGweb/code/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///E:/FGweb/code/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+
+ ❯ test/codex-auth-regressions.test.tsx (4 tests | 4 failed) 64ms
+   ❯ Codex T09 behavioral regressions (4)
+     × reports rejected server logout rather than resolving success 43ms
+     × removes private query data after successful server logout 12ms
+     × rejects an unsafe OAuth URL supplied in an API response 3ms
+     × reports cleanup failure while still attempting other resource disconnects 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > reports rejected server logout rather than resolving success
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ test/codex-auth-regressions.test.tsx:26:63
+     24|     vi.spyOn(globalThis,'fetch').mockImplementation(async input => new…
+     25|     const view=harness();
+     26|     await act(async () => { await expect(view.auth().signOut()).reject…
+       |                                                               ^
+     27|   });
+     28|   it('removes private query data after successful server logout', asyn…
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act ../../node_modules/react/cjs/react.development.js:890:22
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ test/codex-auth-regressions.test.tsx:26:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > removes private query data after successful server logout
+AssertionError: expected { text: 'private message fixture' } to be undefined
+
+- Expected:
+undefined
+
++ Received:
+{
+  "text": "private message fixture",
+}
+
+ ❯ test/codex-auth-regressions.test.tsx:32:67
+     30|     const view=harness();
+     31|     await act(async () => { await view.auth().signOut(); });
+     32|     expect(view.client.getQueryData(['private','room','review'])).toBe…
+       |                                                                   ^
+     33|     expect(view.auth().user).toBeNull();
+     34|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > rejects an unsafe OAuth URL supplied in an API response
+AssertionError: promise resolved "'javascript:alert(1)'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"javascript:alert(1)"
+
+ ❯ test/codex-auth-regressions.test.tsx:38:42
+     36|     for(const url of ['javascript:alert(1)','https://outside.invalid/o…
+     37|       vi.spyOn(globalThis,'fetch').mockResolvedValueOnce(new Response(…
+     38|       await expect(signInWithDiscord('/')).rejects.toThrow();
+       |                                          ^
+     39|     }
+     40|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > reports cleanup failure while still attempting other resource disconnects
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ test/codex-auth-regressions.test.tsx:44:35
+     42|     const otherDisconnect=vi.fn();
+     43|     unregisters.push(registerAuthCleanup(async()=>{throw new Error('fi…
+     44|     await expect(runAuthCleanups()).rejects.toThrow();
+       |                                   ^
+     45|     expect(otherDisconnect).toHaveBeenCalledTimes(1);
+     46|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  11:32:52
+   Duration  2.47s (environment 59%, import 13%, setup 12%, transform 12%, tests 3%, worker 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/codex-auth-regressions.test.tsx
