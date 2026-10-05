@@ -1,0 +1,9 @@
+# T08-FIX1 final review
+
+Closed-owner repair for the approved first-login/profile flow, using prior direct repair/testing authorization. Historical T08 remains PASS; T11 depends explicitly on this follow-up and T03-FIX2. Source changed only AuthService.getUserMe; existing guards, provider config, session lifecycle, auth tests and profile tests unchanged.
+
+New actual AppModule/HTTP/PostgreSQL suite first showed five behavioral failures and one privacy control PASS (red.txt, red-verification.json). It covers absent profile/interests, profile-only, interests-only, complete onboarding without rank across fresh requests, cleared avatar after unrelated update, and guest/public privacy. Production code derives completion from persisted profile plus at least one game interest, same existing guard policy; returns actual catalog titles in stable order; existing profile null avatar takes precedence over provider fallback. No client-derived completion or production test shortcuts.
+
+Fresh verification: new6 tests, combined37 backend regressions, existing9 frontend auth tests, API build, API source/test/reviewer types, web source/test types, lint/diff, compiled native HTTP10 and baseline/secret/owned-schema/PID audit all PASS. final-verification.json has ten actual timestamped command results and raw output hashes. Real migrations are confined to generated owned schemas; public database remains empty. Native fixtures are explicitly test-only signed sessions, not new real OAuth logins. Owned native server and schemas verified removed. Original ts-jest/VM warnings remain visible.
+
+T11 can now use server state instead of guessing onboarding from nickname/localStorage. No spec/design/mockup/dependency/database changes and no media capacity claims. The shared fields are additive for legacy compatibility; new auth producer always returns both, and T11 must show an integration error if either is absent.

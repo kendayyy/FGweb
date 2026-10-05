@@ -1658,10 +1658,10 @@
           "evidencePath": "quality/evidence/T03-FIX2/final-api-build.txt",
           "cwd": "E:/FGweb/code",
           "command": "npm run build --workspace @fg/api",
-          "startedAt": "2026-10-05T06:23:31.5630270Z",
+          "startedAt": "2026-10-05T06:23:31.563027Z",
           "evidenceSha256": "ddc57190891dd2b2b21f38127d6b48861cd628b856300df60629c52c7155c024",
           "exitCode": 0,
-          "completedAt": "2026-10-05T06:23:41.8881450Z"
+          "completedAt": "2026-10-05T06:23:41.888145Z"
         },
         {
           "evidencePath": "quality/evidence/T03-FIX2/final-api-types.txt",
@@ -1724,18 +1724,148 @@
     },
     {
       "id": "T08-FIX1",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T03-FIX2"
       ],
       "followupOf": "T08",
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
+      "inputsHash": "c49f97418a131af351d4a76146d081f97949f625",
+      "outputsHash": {
+        "specSha256": "7041323fcafe84bf51b080db1efda6e151ad9253d6547df4adcea79fb1901c83",
+        "files": {
+          "apps/api/src/modules/auth/auth.service.ts": "d1355c34b306cd8d128d10eef8a3dd3937c2b131f4ac8897ef52ec3edf48610a",
+          "apps/api/test/auth-profile-read.integration.spec.ts": "9f7becb4f36afcf9c66b2eae67f1d8f201c1852de71aa2c685a8eeee72e2dc9e",
+          "quality/evidence/T08-FIX1/closeout.mjs": "66c3ad36ea0aadc10122b04adc8d8c2220698da3a87baf4e97f1e197918753cc",
+          "quality/evidence/T08-FIX1/final-acceptance.txt": "4ee31526ae5f0ab9afa52f42cc62a054ede59acd1d65e90e714a2dd7e68e287f",
+          "quality/evidence/T08-FIX1/final-api-build.txt": "ddc57190891dd2b2b21f38127d6b48861cd628b856300df60629c52c7155c024",
+          "quality/evidence/T08-FIX1/final-api-types.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "quality/evidence/T08-FIX1/final-audit.mjs": "d6da8678ca8d6ff53c555b3dc6b02ca5b8bd434ff3536775cd14c1e6c7f3930d",
+          "quality/evidence/T08-FIX1/final-audit.txt": "c7f2b81f3cfb0e35a36fed2364029e363da6ea89a601c4fe79fcab6c759376ab",
+          "quality/evidence/T08-FIX1/final-diff.txt": "8b51b44d4df586441bade7bca7395719071988ee777124780b82b0692098b403",
+          "quality/evidence/T08-FIX1/final-lint.txt": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "quality/evidence/T08-FIX1/final-native.txt": "2ce8fb8fac78985e4ebb6ee42d3c39f6552cc07bec64cf6bbbffe9b490c848b6",
+          "quality/evidence/T08-FIX1/final-regression.txt": "19232bf94b77038947dfb5379da7d5244c232b5715654920600ed69e1c4fa887",
+          "quality/evidence/T08-FIX1/final-verification.json": "525ca2b4ae2fbc9437f7e3ecbb9a7ed8a77fdcd0ca943248072abeb1a8fca066",
+          "quality/evidence/T08-FIX1/final-web-auth.txt": "6064a9ca98bec64d3fde90e4d2672f7308c35424280c33f7c3bbe9d0b5a60bf3",
+          "quality/evidence/T08-FIX1/final-web-types.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "quality/evidence/T08-FIX1/native-smoke.mjs": "d85f3b5cd4d036a6233315c53c618aa8f800db8782df46fd296b06f7e90d7537",
+          "quality/evidence/T08-FIX1/plan.md": "ae2e340f3b933326b6b1eb67353d977c49626c21db47b16ec79555dade111f22",
+          "quality/evidence/T08-FIX1/preflight.txt": "2d1097940b5758ec8a515dfe9d9b88d54f8318932fc5e9073de2ed839893c260",
+          "quality/evidence/T08-FIX1/red-verification.json": "dc149305ef9551f636c761bab22200c8aef305617033ad4ca18f1517b35f1095",
+          "quality/evidence/T08-FIX1/red.txt": "701d6b8c6aa6aeb057479e28fd3623cbd9dc44fc9abb0e05f513d263df1dc752",
+          "quality/evidence/T08-FIX1/review.md": "9367544c8e379e87617681208db702f2bee3b7a1c84e6aa3ea345735d4f12301"
+        }
+      },
+      "commands": [
+        {
+          "startedAt": "2026-10-05T06:28:19.3331802Z",
+          "completedAt": "2026-10-05T06:28:44.8407738Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/auth-profile-read.integration.spec.ts",
+          "evidenceSha256": "4ee31526ae5f0ab9afa52f42cc62a054ede59acd1d65e90e714a2dd7e68e287f",
+          "evidencePath": "quality/evidence/T08-FIX1/final-acceptance.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:28:45.0121093Z",
+          "completedAt": "2026-10-05T06:29:36.4464389Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/auth.integration.spec.ts apps/api/test/profiles.integration.spec.ts apps/api/test/auth-profile-read.integration.spec.ts",
+          "evidenceSha256": "19232bf94b77038947dfb5379da7d5244c232b5715654920600ed69e1c4fa887",
+          "evidencePath": "quality/evidence/T08-FIX1/final-regression.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:29:36.4760991Z",
+          "completedAt": "2026-10-05T06:29:43.7209203Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "npm run test --workspace @fg/web -- test/auth.test.tsx",
+          "evidenceSha256": "6064a9ca98bec64d3fde90e4d2672f7308c35424280c33f7c3bbe9d0b5a60bf3",
+          "evidencePath": "quality/evidence/T08-FIX1/final-web-auth.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:29:43.7353603Z",
+          "completedAt": "2026-10-05T06:29:52.6052352Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "npm run build --workspace @fg/api",
+          "evidenceSha256": "ddc57190891dd2b2b21f38127d6b48861cd628b856300df60629c52c7155c024",
+          "evidencePath": "quality/evidence/T08-FIX1/final-api-build.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:29:52.6136781Z",
+          "completedAt": "2026-10-05T06:30:01.6943624Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T10/tsconfig.review.json",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "evidencePath": "quality/evidence/T08-FIX1/final-api-types.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:30:01.7003356Z",
+          "completedAt": "2026-10-05T06:30:05.9376467Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T09/tsconfig.check.json",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "evidencePath": "quality/evidence/T08-FIX1/final-web-types.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:30:05.9444203Z",
+          "completedAt": "2026-10-05T06:30:13.6581906Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "npm run lint",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "evidencePath": "quality/evidence/T08-FIX1/final-lint.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:30:13.6657250Z",
+          "completedAt": "2026-10-05T06:30:13.8552852Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "git diff --check",
+          "evidenceSha256": "8b51b44d4df586441bade7bca7395719071988ee777124780b82b0692098b403",
+          "evidencePath": "quality/evidence/T08-FIX1/final-diff.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:30:13.8775530Z",
+          "completedAt": "2026-10-05T06:30:32.6294049Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node --env-file=.env.local quality/evidence/T08-FIX1/native-smoke.mjs",
+          "evidenceSha256": "2ce8fb8fac78985e4ebb6ee42d3c39f6552cc07bec64cf6bbbffe9b490c848b6",
+          "evidencePath": "quality/evidence/T08-FIX1/final-native.txt"
+        },
+        {
+          "startedAt": "2026-10-05T06:30:32.6525380Z",
+          "completedAt": "2026-10-05T06:30:33.3859094Z",
+          "cwd": "E:/FGweb/code",
+          "exitCode": 0,
+          "command": "node quality/evidence/T08-FIX1/final-audit.mjs",
+          "evidenceSha256": "c7f2b81f3cfb0e35a36fed2364029e363da6ea89a601c4fe79fcab6c759376ab",
+          "evidencePath": "quality/evidence/T08-FIX1/final-audit.txt"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T08-FIX1/review.md",
+        "quality/evidence/T08-FIX1/plan.md",
+        "quality/evidence/T08-FIX1/red.txt",
+        "quality/evidence/T08-FIX1/final-acceptance.txt",
+        "quality/evidence/T08-FIX1/final-regression.txt",
+        "quality/evidence/T08-FIX1/final-web-auth.txt",
+        "quality/evidence/T08-FIX1/final-api-build.txt",
+        "quality/evidence/T08-FIX1/final-api-types.txt",
+        "quality/evidence/T08-FIX1/final-web-types.txt",
+        "quality/evidence/T08-FIX1/final-lint.txt",
+        "quality/evidence/T08-FIX1/final-diff.txt",
+        "quality/evidence/T08-FIX1/final-native.txt",
+        "quality/evidence/T08-FIX1/final-audit.txt"
+      ],
+      "startedAt": "2026-10-05T06:24:58.5017713Z",
+      "completedAt": "2026-10-05T06:31:48.602Z",
       "blockers": [],
       "writeAllowlist": [
         "apps/api/src/modules/auth/auth.service.ts",

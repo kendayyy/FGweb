@@ -226,16 +226,25 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       .from(schema.profiles)
       .where(eq(schema.profiles.userId, userId));
 
+    const interests = await this.db
+      .select({ title: schema.games.title })
+      .from(schema.gameInterests)
+      .innerJoin(schema.games, eq(schema.gameInterests.gameId, schema.games.id))
+      .where(eq(schema.gameInterests.userId, userId))
+      .orderBy(schema.games.title);
+
     const meData = {
       id: dbUser.id,
       displayName: profile?.displayName || dbUser.name,
-      avatarUrl: profile?.avatarUrl || dbUser.image || null,
+      avatarUrl: profile ? profile.avatarUrl : (dbUser.image ?? null),
       email: dbUser.email,
       emailVerified: dbUser.emailVerified,
       discordId: discordAccount.accountId,
       customStatus: profile?.customStatus || 'JUST_CHATTING',
       createdAt: dbUser.createdAt.toISOString(),
       updatedAt: dbUser.updatedAt.toISOString(),
+      onboardingComplete: Boolean(profile) && interests.length > 0,
+      interestedGames: interests.map(interest => interest.title),
     };
 
     return MeDTOSchema.parse(meData);

@@ -1,0 +1,93 @@
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:23360) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-profile-read.integration.spec.ts (23.07 s)
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › first login returns explicit incomplete onboarding and empty stored interests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: undefined
+
+      51 |  const mutate=(method:'patch'|'post'|'put',route:string,body:object)=>supertest(app.getHttpServer())[method](route).set('Cookie',cookie).set('Origin',origin).send(body).expect(200);
+      52 |  it('first login returns explicit incomplete onboarding and empty stored interests',async()=>{
+    > 53 |   const user=await me();expect(user.onboardingComplete).toBe(false);expect(user.interestedGames).toEqual([]);
+         |                                                         ^
+      54 |  });
+      55 |  it('a profile without interests does not falsely complete onboarding',async()=>{
+      56 |   await mutate('patch','/api/v1/me/profile',{bio:'Profile only'});
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:53:57)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › a profile without interests does not falsely complete onboarding
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: undefined
+
+      55 |  it('a profile without interests does not falsely complete onboarding',async()=>{
+      56 |   await mutate('patch','/api/v1/me/profile',{bio:'Profile only'});
+    > 57 |   const user=await me();expect(user.onboardingComplete).toBe(false);expect(user.interestedGames).toEqual([]);
+         |                                                         ^
+      58 |  });
+      59 |  it('stored interests without a profile remain incomplete and are restored from DB',async()=>{
+      60 |   await mutate('put','/api/v1/me/interests',{interestedGames:['Roblox']});
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:57:57)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › stored interests without a profile remain incomplete and are restored from DB
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: undefined
+
+      59 |  it('stored interests without a profile remain incomplete and are restored from DB',async()=>{
+      60 |   await mutate('put','/api/v1/me/interests',{interestedGames:['Roblox']});
+    > 61 |   const user=await me();expect(user.onboardingComplete).toBe(false);expect(user.interestedGames).toEqual(['Roblox']);
+         |                                                         ^
+      62 |  });
+      63 |  it('onboarding without rank is complete and remains correct across fresh GET requests',async()=>{
+      64 |   await mutate('post','/api/v1/me/onboarding',{displayName:'FG Gamer',interestedGames:['Roblox','Valorant']});
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:61:57)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › onboarding without rank is complete and remains correct across fresh GET requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      63 |  it('onboarding without rank is complete and remains correct across fresh GET requests',async()=>{
+      64 |   await mutate('post','/api/v1/me/onboarding',{displayName:'FG Gamer',interestedGames:['Roblox','Valorant']});
+    > 65 |   for(let attempt=0;attempt<2;attempt++){const user=await me();expect(user.onboardingComplete).toBe(true);expect([...(user.interestedGames??[])].sort()).toEqual(['Roblox','Valorant']);expect(user.displayName).toBe('FG Gamer');}
+         |                                                                                                ^
+      66 |   expect(await app.get(AuthService).isUserOnboarded(actor)).toBe(true);
+      67 |  });
+      68 |  it('GET me retains explicitly cleared avatar after another unrelated profile update',async()=>{
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:65:96)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › GET me retains explicitly cleared avatar after another unrelated profile update
+
+    expect(received).toBeNull()
+
+    Received: "https://provider.example.com/avatar.png"
+
+      68 |  it('GET me retains explicitly cleared avatar after another unrelated profile update',async()=>{
+      69 |   await mutate('patch','/api/v1/me/profile',{avatarUrl:null});
+    > 70 |   expect((await me()).avatarUrl).toBeNull();
+         |                                  ^
+      71 |   await mutate('patch','/api/v1/me/profile',{bio:'Keep cleared avatar'});
+      72 |   expect((await me()).avatarUrl).toBeNull();
+      73 |  });
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:70:34)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 1 passed, 6 total
+Snapshots:   0 total
+Time:        23.495 s
+Ran all test suites matching apps/api/test/auth-profile-read.integration.spec.ts.
