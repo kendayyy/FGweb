@@ -1,0 +1,780 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/profiles.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/profiles.test.tsx (12 tests | 4 failed) 4735ms
+   ❯ T11 - Profiles & Onboarding Behavioral Suite (12)
+     ❯ 2. Owner Game Profile Editor & Optional Rank Payload (3)
+       × sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId 1207ms
+       × allows leaving rank empty when saving game profile (optional rank, rank omitted from payload) 1074ms
+       × failed saves keep form inputs intact and display error message 1058ms
+     ❯ 4. Server Onboarding States & Integration Error Handling (3)
+       × submitting onboarding requires >= 1 game and triggers POST /api/v1/me/onboarding 1075ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId
+AssertionError: expected "fetch" to be called with arguments: [ StringContaining{…}, …(1) ]
+
+Received:
+
+  1st fetch call:
+
+  [
+-   StringContaining "/api/v1/me/game-profiles/game_val_123",
+-   ObjectContaining {
+-     "body": StringContaining "\"rank\":\"Radiant\"",
+-     "method": "PUT",
++   "/api/v1/me",
++   {
++     "headers": {
++       "Accept": "application/json",
++     },
++     "method": "GET",
++     "signal": undefined,
+    },
+  ]
+
+
+Number of calls: 1
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m""[39m
+        [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; max-width: 560px; margin: 0px auto;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"[39m
+        [36m>[39m
+          [36m<h3[39m
+            [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0px;"[39m
+          [36m>[39m
+            [0mChỉnh sửa hồ sơ game: Valorant[0m
+          [36m</h3>[39m
+        [36m</div>[39m
+        [36m<form[39m
+          [33mstyle[39m=[32m"display: flex; flex-direction: column; gap: 16px;"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-ign"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mTên trong game (IGN)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-ign"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m"NewTag#999"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-rank"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mRank (Tự khai báo, tùy chọn)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-rank"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Radiant, Kim Cương..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m"Radiant"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-role"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mVai trò (Role)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-role"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Duelist, Carry, Mid..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-hours"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mGiờ chơi (Hours duration)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-hours"[39m
+              [33mmin[39m=[32m"0"[39m
+              [33mplaceholder[39m=[32m"VD: 150.5"[39m
+              [33mstep[39m=[32m"0.5"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"number"[39m
+              [33mvalue[39m=[32m"300"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-style"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mPhong cách chơi (Playstyle)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-style"[39m
+              [33mmaxlength[39m=[32m"100"[39m
+              [33mplaceholder[39m=[32m"VD: Aggressive, Tactical..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [33mtype[39m=[32m"submit"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mLưu[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</form>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/profiles.test.tsx:153:26
+    151|
+    152|       await waitFor(() => {
+    153|         expect(fetchSpy).toHaveBeenCalledWith(
+       |                          ^
+    154|           expect.stringContaining('/api/v1/me/game-profiles/game_val_1…
+    155|           expect.objectContaining({
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > allows leaving rank empty when saving game profile (optional rank, rank omitted from payload)
+AssertionError: expected undefined to be defined
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m""[39m
+        [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; max-width: 560px; margin: 0px auto;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"[39m
+        [36m>[39m
+          [36m<h3[39m
+            [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0px;"[39m
+          [36m>[39m
+            [0mChỉnh sửa hồ sơ game: Valorant[0m
+          [36m</h3>[39m
+        [36m</div>[39m
+        [36m<form[39m
+          [33mstyle[39m=[32m"display: flex; flex-direction: column; gap: 16px;"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-ign"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mTên trong game (IGN)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-ign"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m"CasualPlayer"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-rank"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mRank (Tự khai báo, tùy chọn)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-rank"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Radiant, Kim Cương..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-role"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mVai trò (Role)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-role"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Duelist, Carry, Mid..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-hours"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mGiờ chơi (Hours duration)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-hours"[39m
+              [33mmin[39m=[32m"0"[39m
+              [33mplaceholder[39m=[32m"VD: 150.5"[39m
+              [33mstep[39m=[32m"0.5"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"number"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-style"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mPhong cách chơi (Playstyle)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-style"[39m
+              [33mmaxlength[39m=[32m"100"[39m
+              [33mplaceholder[39m=[32m"VD: Aggressive, Tactical..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [33mtype[39m=[32m"submit"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mLưu[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</form>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/profiles.test.tsx:189:26
+    187|         expect(fetchSpy).toHaveBeenCalled();
+    188|         const callArgs = fetchSpy.mock.calls.find((call) => String(cal…
+    189|         expect(callArgs).toBeDefined();
+       |                          ^
+    190|         const bodyStr = String(callArgs?.[1]?.body);
+    191|         const parsedBody = JSON.parse(bodyStr);
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > failed saves keep form inputs intact and display error message
+TestingLibraryElementError: Unable to find an element by: [data-testid="editor-error-alert"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m""[39m
+      [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; max-width: 560px; margin: 0px auto;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0px;"[39m
+        [36m>[39m
+          [0mChỉnh sửa hồ sơ game: Valorant[0m
+        [36m</h3>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mstyle[39m=[32m"display: flex; flex-direction: column; gap: 16px;"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"editor-ign"[39m
+            [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+          [36m>[39m
+            [0mTên trong game (IGN)[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mid[39m=[32m"editor-ign"[39m
+            [33mmaxlength[39m=[32m"50"[39m
+            [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m"UnsavedInput"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"editor-rank"[39m
+            [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+          [36m>[39m
+            [0mRank (Tự khai báo, tùy chọn)[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mid[39m=[32m"editor-rank"[39m
+            [33mmaxlength[39m=[32m"50"[39m
+            [33mplaceholder[39m=[32m"VD: Radiant, Kim Cương..."[39m
+            [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"editor-role"[39m
+            [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+          [36m>[39m
+            [0mVai trò (Role)[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mid[39m=[32m"editor-role"[39m
+            [33mmaxlength[39m=[32m"50"[39m
+            [33mplaceholder[39m=[32m"VD: Duelist, Carry, Mid..."[39m
+            [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"editor-hours"[39m
+            [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+          [36m>[39m
+            [0mGiờ chơi (Hours duration)[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mid[39m=[32m"editor-hours"[39m
+            [33mmin[39m=[32m"0"[39m
+            [33mplaceholder[39m=[32m"VD: 150.5"[39m
+            [33mstep[39m=[32m"0.5"[39m
+            [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+            [33mtype[39m=[32m"number"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"editor-style"[39m
+            [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+          [36m>[39m
+            [0mPhong cách chơi (Playstyle)[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mid[39m=[32m"editor-style"[39m
+            [33mmaxlength[39m=[32m"100"[39m
+            [33mplaceholder[39m=[32m"VD: Aggressive, Tactical..."[39m
+            [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+            [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [33mtype[39m=[32m"submit"[39m
+          [36m>[39m
+            [36m<span>[39m
+              [0mLưu[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</form>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m""[39m
+        [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; max-width: 560px; margin: 0px auto;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"[39m
+        [36m>[39m
+          [36m<h3[39m
+            [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0px;"[39m
+          [36m>[39m
+            [0mChỉnh sửa hồ sơ game: Valorant[0m
+          [36m</h3>[39m
+        [36m</div>[39m
+        [36m<form[39m
+          [33mstyle[39m=[32m"display: flex; flex-direction: column; gap: 16px;"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-ign"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mTên trong game (IGN)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-ign"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m"UnsavedInput"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-rank"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mRank (Tự khai báo, tùy chọn)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-rank"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Radiant, Kim Cương..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-role"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mVai trò (Role)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-role"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mplaceholder[39m=[32m"VD: Duelist, Carry, Mid..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-hours"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mGiờ chơi (Hours duration)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-hours"[39m
+              [33mmin[39m=[32m"0"[39m
+              [33mplaceholder[39m=[32m"VD: 150.5"[39m
+              [33mstep[39m=[32m"0.5"[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"number"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"editor-style"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"[39m
+            [36m>[39m
+              [0mPhong cách chơi (Playstyle)[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"editor-style"[39m
+              [33mmaxlength[39m=[32m"100"[39m
+              [33mplaceholder[39m=[32m"VD: Aggressive, Tactical..."[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [33mtype[39m=[32m"submit"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mLưu[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</form>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/profiles.test.tsx:209:13
+    207|       fireEvent.click(saveBtn);
+    208|
+    209|       await waitFor(() => {
+       |             ^
+    210|         expect(screen.getByTestId('editor-error-alert')).toBeInTheDocu…
+    211|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > submitting onboarding requires >= 1 game and triggers POST /api/v1/me/onboarding
+AssertionError: expected "fetch" to be called with arguments: [ StringContaining{…}, …(1) ]
+
+Received:
+
+  1st fetch call:
+
+  [
+-   StringContaining "/api/v1/me/onboarding",
+-   ObjectContaining {
+-     "body": StringContaining "\"interestedGames\":[\"Valorant\"]",
+-     "method": "POST",
++   "/api/v1/me",
++   {
++     "headers": {
++       "Accept": "application/json",
++     },
++     "method": "GET",
++     "signal": undefined,
+    },
+  ]
+
+
+Number of calls: 1
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m""[39m
+        [33mdata-testid[39m=[32m"onboarding-form"[39m
+        [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 600px; margin: 0px auto;"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mstyle[39m=[32m"font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);"[39m
+        [36m>[39m
+          [0mHoàn tất hồ sơ ban đầu[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mstyle[39m=[32m"font-size: 14px; color: var(--text-sub); margin-bottom: 24px;"[39m
+        [36m>[39m
+          [0mChọn biệt danh và các tựa game bạn yêu thích để bắt đầu tìm đội và tham gia cộng đồng FG.[0m
+        [36m</p>[39m
+        [36m<form[39m
+          [33mstyle[39m=[32m"display: flex; flex-direction: column; gap: 20px;"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"onboarding-display-name"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 8px;"[39m
+            [36m>[39m
+              [0mBiệt danh (Nickname) *[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33mid[39m=[32m"onboarding-display-name"[39m
+              [33mmaxlength[39m=[32m"50"[39m
+              [33mminlength[39m=[32m"2"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mstyle[39m=[32m"width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m"NewGamer"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mfor[39m=[32m"onboarding-bio"[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 8px;"[39m
+            [36m>[39m
+              [0mGiới thiệu ngắn (Bio)[0m
+            [36m</label>[39m
+            [36m<textarea[39m
+              [33mid[39m=[32m"onboarding-bio"[39m
+              [33mmaxlength[39m=[32m"500"[39m
+              [33mrows[39m=[32m"3"[39m
+              [33mstyle[39m=[32m"width: 100%; padding: 10px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main); resize: vertical;"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div>[39m
+            [36m<label[39m
+              [33mstyle[39m=[32m"display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 12px;"[39m
+            [36m>[39m
+              [0mGame bạn quan tâm (Chọn ít nhất 1) *[0m
+            [36m</label>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Liên Minh Huyền Thoại"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mLiên Minh Huyền Thoại[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: rgba(30, 90, 222, 0.15); border: 1px solid var(--color-action); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Valorant"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mValorant[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Teamfight Tactics (TFT)"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mTeamfight Tactics (TFT)[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Dota 2"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mDota 2[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Roblox"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mRoblox[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Liên Quân Mobile"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mLiên Quân Mobile[0m
+                [36m</span>[39m
+              [36m</label>[39m
+              [36m<label[39m
+                [33mstyle[39m=[32m"display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"[39m
+              [36m>[39m
+                [36m<input[39m
+                  [33maria-label[39m=[32m"Free Fire"[39m
+                  [33mstyle[39m=[32m"width: 18px; height: 18px; accent-color: var(--color-action);"[39m
+                  [33mtype[39m=[32m"checkbox"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mFree Fire[0m
+                [36m</span>[39m
+              [36m</label>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; justify-content: flex-end; margin-top: 12px;"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+              [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+              [33mtype[39m=[32m"submit"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mHoàn tất[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</form>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/profiles.test.tsx:367:26
+    365|
+    366|       await waitFor(() => {
+    367|         expect(fetchSpy).toHaveBeenCalledWith(
+       |                          ^
+    368|           expect.stringContaining('/api/v1/me/onboarding'),
+    369|           expect.objectContaining({
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 8 passed (12)
+   Start at  15:21:16
+   Duration  7.48s (tests 66%, environment 19%, transform 7%, import 5%, setup 3%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/profiles.test.tsx

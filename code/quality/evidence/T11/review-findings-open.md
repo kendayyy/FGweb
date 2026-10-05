@@ -1,0 +1,18 @@
+# Codex open review findings (not final)
+
+2026-10-05 14:22local, source still being implemented, do not interpret as final rejection.
+
+- ProfileHeader status switch uses IN_GAME, but actual shared enum is PLAYING. Must label PLAYING as Đang chơi; typecheck should catch enum mismatch. Add behavior test.
+- ProfileEditor basic mode currently initializes bio empty and sends blank as undefined: cannot restore existing bio or intentionally clear it; ensure prop/real profile initialized and empty clearing sends null or permitted empty string. Status selector/interests editor are required, not yet present.
+- OnboardingPage only checks onboardingComplete; interestedGames missing must also show integration failure. Product text currently mentions onboardingComplete and onboarding implementation term; replace with natural Vietnamese action/error wording, implementation detail in logs/evidence only.
+- Form submit currently verifies freshUser completion true only, not same actor/current lifecycle or intended interests; after await another account could be active. Use actor-scoped requests/AbortController/mount guards and verified matching actor+interest set before navigation. Existing refetchUser can update gate early; avoid redirect success before complete verification.
+- Public/profile caches keyed by viewedID plus authenticated viewer ownership; account changes must unmount/reset private editors; pending async mutations shouldn't update another owner's form/cache/navigation. Components must have tests for actual lifecycle behavior, not merely clearing QueryClient after each test.
+- Empty failure/404 distinction and retry, source/test types, exact real API/DB E2E/fourviewports remain unverified.
+
+Original tests retained; fixtures corrected to actual shared schemas. Preserve every RED execution; do not overwrite red-actual.txt further. Write new raw log paths per run with actual native exit code.
+
+14:30 E2E review: URL already '/' before submission, so waitForURL('/') succeeds before mutation; must await actual onboarding response and visible verified Lobby/absent form before DB read. /me fresh explicit completeness/interests must be asserted. Game edit locator first Chỉnh sửa can choose wrong/default game; click exact Valorant declaration and verify returned/gameId + DBwhere(actor,gameId), hours actual numeric120 not string. Native readiness helpers currently accept any HTTPstatus without verifying owned child alive. Shutdown resolves immediately after SIGKILL request instead of confirmed exit and silently ignores failure; require bounded confirmed death and fail cleanup. Credential/database fallback must be removed. Fourviewport UI/hit/no-overflow screenshots absent. Endpoint producer remains frozen; correct E2E fixture/expectations, not backend.
+
+14:28 delegated changed existing T11 error accessibility assertion from getByRole('alert') to getByTestId('editor-error-alert') after implementation lacked alert role. This weakens required accessibility; restore original assertion and wrap shared Alert in feature-owned role=alert container (shared component scope frozen). Existing logout regression must remain unchanged and PASS. No artifact/ledger PASS from handwritten summaries.
+
+14:48 independent cascade-race behavioral RED: ProfileEditor PATCH resolves after actor switches, then sends interests PUT with current cookie for new actor. Must check mounted/current query actor BEFORE every follow-up request and AFTER every await, not only final onSaved; use cancellation/lifecycle guard. Preserve codex-review test case. Evidence codex-cascade-race-red.txt/json. Five prior reviewer cases currently PASS, sixth FAIL; no final PASS.

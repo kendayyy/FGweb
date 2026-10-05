@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { Link, useInRouterContext } from 'react-router-dom';
 import { useAuth } from './AuthProvider.js';
 import { Button } from '../../components/ui/Button.js';
 
@@ -6,6 +7,7 @@ export const HeaderAuthWidget: React.FC = () => {
   const { user, isLoading, isSigningOut, signIn, signOut } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
   const [failedAction, setFailedAction] = useState<'signIn' | 'signOut' | null>(null);
+  const inRouter = useInRouterContext();
 
   const handleSignIn = useCallback(async () => {
     setAuthError(null);
@@ -40,6 +42,63 @@ export const HeaderAuthWidget: React.FC = () => {
   if (isLoading) {
     return <div style={{ color: 'var(--text-quiet)', fontSize: '13px' }}>Đang tải...</div>;
   }
+
+  const renderUserLink = () => {
+    if (!user) return null;
+    const content = (
+      <>
+        {user.avatarUrl ? (
+          <img
+            src={user.avatarUrl}
+            alt={user.displayName}
+            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-action)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              fontSize: '14px',
+            }}
+          >
+            {user.displayName.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <span style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '14px' }}>{user.displayName}</span>
+      </>
+    );
+
+    const linkStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      textDecoration: 'none',
+      color: 'inherit',
+      minHeight:44,
+      minWidth:44,
+    };
+
+    if (inRouter) {
+      return (
+        <Link to={`/users/${user.id}`} data-testid="user-avatar-link" style={linkStyle}>
+          {content}
+        </Link>
+      );
+    }
+
+    return (
+      <a href={`/users/${user.id}`} data-testid="user-avatar-link" style={linkStyle}>
+        {content}
+      </a>
+    );
+  };
 
   return (
     <div
@@ -80,33 +139,7 @@ export const HeaderAuthWidget: React.FC = () => {
         </div>
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {user.avatarUrl ? (
-              <img
-                src={user.avatarUrl}
-                alt={user.displayName}
-                style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-action)',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 700,
-                  fontSize: '14px',
-                }}
-              >
-                {user.displayName.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <span style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '14px' }}>{user.displayName}</span>
-          </div>
+          {renderUserLink()}
 
           <Button
             data-testid="logout-button"

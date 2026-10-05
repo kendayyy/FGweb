@@ -1,0 +1,620 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx (5 tests | 5 failed) 4282ms
+   ❯ Codex independent T11 behavior review (5)
+     × a pending game save cannot report success after switching to another account 774ms
+     × a complete server response for different interests cannot acknowledge onboarding success 1240ms
+     × labels actual shared PLAYING status as self-selected playing 101ms
+     × missing stored interests cannot be silently considered a completed onboarding 1031ms
+     × opening existing game editor restores all saved fields instead of clearing replacement data 1130ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  ../../quality/evidence/T11/codex-review.test.tsx > Codex independent T11 behavior review > a pending game save cannot report success after switching to another account
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array []
+
+
+Number of calls: 1
+
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx:35:21
+     33|   await act(async()=>{clients[0].setQueryData(['auth','me'],{...actor,…
+     34|   await act(async()=>{resolveSave(new Response(JSON.stringify({...prof…
+     35|   expect(saved).not.toHaveBeenCalled();
+       |                     ^
+     36|  });
+     37|  it('a complete server response for different interests cannot acknowl…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  ../../quality/evidence/T11/codex-review.test.tsx > Codex independent T11 behavior review > a complete server response for different interests cannot acknowledge onboarding success
+AssertionError: expected 1 to be greater than 1
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div
+        class=""
+        data-testid="onboarding-form"
+        style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 600px; margin: 0px auto;"
+      >
+        <h2
+          style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);"
+        >
+          Hoàn tất hồ sơ ban đầu
+        </h2>
+        <p
+          style="font-size: 14px; color: var(--text-sub); margin-bottom: 24px;"
+        >
+          Chọn biệt danh và các tựa game bạn yêu thích để bắt đầu tìm đội và tham gia cộng đồng FG.
+        </p>
+        <div
+          style="margin-bottom: 20px;"
+        >
+          <div
+            data-testid="onboarding-error-alert"
+            style="background-color: rgba(229, 72, 77, 0.12); border: 1px solid rgba(229, 72, 77, 0.4); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 8px;"
+          >
+            <p
+              style="color: var(--text-sub); font-size: 13px; margin: 0px;"
+            >
+              Biệt danh phải có ít nhất 2 ký tự
+            </p>
+          </div>
+        </div>
+        <form
+          style="display: flex; flex-direction: column; gap: 20px;"
+        >
+          <div>
+            <label
+              for="onboarding-display-name"
+              style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 8px;"
+            >
+              Biệt danh (Nickname) *
+            </label>
+            <input
+              id="onboarding-display-name"
+              maxlength="50"
+              minlength="2"
+              required=""
+              style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+              type="text"
+              value=""
+            />
+          </div>
+          <div>
+            <label
+              for="onboarding-bio"
+              style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 8px;"
+            >
+              Giới thiệu ngắn (Bio)
+            </label>
+            <textarea
+              id="onboarding-bio"
+              maxlength="500"
+              rows="3"
+              style="width: 100%; padding: 10px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main); resize: vertical;"
+            />
+          </div>
+          <div>
+            <label
+              style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 12px;"
+            >
+              Game bạn quan tâm (Chọn ít nhất 1) *
+            </label>
+            <div
+              style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;"
+            >
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Liên Minh Huyền Thoại"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Liên Minh Huyền Thoại
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: rgba(30, 90, 222, 0.15); border: 1px solid var(--color-action); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Valorant"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Valorant
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Teamfight Tactics (TFT)"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Teamfight Tactics (TFT)
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Dota 2"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Dota 2
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Roblox"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Roblox
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Liên Quân Mobile"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Liên Quân Mobile
+                </span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; min-height: 44px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-main); font-size: 14px; user-select: none;"
+              >
+                <input
+                  aria-label="Free Fire"
+                  style="width: 18px; height: 18px; accent-color: var(--color-action);"
+                  type="checkbox"
+                />
+                <span>
+                  Free Fire
+                </span>
+              </label>
+            </div>
+          </div>
+          <div
+            style="display: flex; justify-content: flex-end; margin-top: 12px;"
+          >
+            <button
+              class="fg-btn fg-btn-primary "
+              style="min-height: 52px; padding: 0px 24px; font-size: 16px;"
+              type="submit"
+            >
+              <span>
+                Hoàn tất
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx:49:39
+     47|   fireEvent.click(screen.getByRole('checkbox',{name:'Valorant'}));
+     48|   fireEvent.submit(screen.getByTestId('onboarding-form').querySelector…
+     49|   await waitFor(()=>expect(readCount).toBeGreaterThan(1));
+       |                                       ^
+     50|   await waitFor(()=>expect(screen.getByTestId('onboarding-error-alert'…
+     51|   expect(success).not.toHaveBeenCalled();
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  ../../quality/evidence/T11/codex-review.test.tsx > Codex independent T11 behavior review > labels actual shared PLAYING status as self-selected playing
+Error: expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  Đang chơi
+Received:
+  Trạng thái tự chọn: Chỉ trò chuyện
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx:53:168
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  ../../quality/evidence/T11/codex-review.test.tsx > Codex independent T11 behavior review > missing stored interests cannot be silently considered a completed onboarding
+TestingLibraryElementError: Unable to find an element by: [data-testid="onboarding-error-state"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      style="display: flex; justify-content: center; padding: 40px 20px;"
+    >
+      <div
+        class=""
+        style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 480px; width: 100%; text-align: center;"
+      >
+        <h3
+          style="font-size: 18px; font-weight: 700; color: var(--color-online); margin-bottom: 12px;"
+        >
+          Hồ sơ đã hoàn tất
+        </h3>
+        <p
+          style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;"
+        >
+          Bạn đã hoàn thành khai báo thông tin ban đầu.
+        </p>
+        <button
+          class="fg-btn fg-btn-primary "
+          style="min-height: 44px; padding: 0px 16px; font-size: 14px;"
+        >
+          <span>
+            Đến Lobby
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div
+        style="display: flex; justify-content: center; padding: 40px 20px;"
+      >
+        <div
+          class=""
+          style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 480px; width: 100%; text-align: center;"
+        >
+          <h3
+            style="font-size: 18px; font-weight: 700; color: var(--color-online); margin-bottom: 12px;"
+          >
+            Hồ sơ đã hoàn tất
+          </h3>
+          <p
+            style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;"
+          >
+            Bạn đã hoàn thành khai báo thông tin ban đầu.
+          </p>
+          <button
+            class="fg-btn fg-btn-primary "
+            style="min-height: 44px; padding: 0px 16px; font-size: 14px;"
+          >
+            <span>
+              Đến Lobby
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx:57:9
+     55|   vi.spyOn(globalThis,'fetch').mockImplementation(async(url)=>new Resp…
+     56|   mountPage('/onboarding',<OnboardingPage/>);
+     57|   await waitFor(()=>expect(screen.getByTestId('onboarding-error-state'…
+       |         ^
+     58|  });
+     59|  it('opening existing game editor restores all saved fields instead of…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  ../../quality/evidence/T11/codex-review.test.tsx > Codex independent T11 behavior review > opening existing game editor restores all saved fields instead of clearing replacement data
+Error: expect(element).toHaveValue(KeepTag)
+
+Expected the element to have value:
+  KeepTag
+Received:
+
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div
+        style="padding: 32px 24px; max-width: 1000px; margin: 0px auto;"
+      >
+        <div
+          class=""
+          style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px;"
+        >
+          <div
+            style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;"
+          >
+            <div
+              style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;"
+            >
+              <div
+                style="width: 80px; height: 80px; border-radius: 50%; background-color: var(--color-action); color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700;"
+              >
+                R
+              </div>
+              <div>
+                <h1
+                  style="font-size: 24px; font-weight: 700; color: var(--text-main); margin: 0px 0px 6px;"
+                >
+                  Review Gamer
+                </h1>
+                <div
+                  style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;"
+                >
+                  <span
+                    data-testid="profile-custom-status"
+                    style="font-size: 13px; font-weight: 500; color: var(--color-focus); background-color: rgba(30, 90, 222, 0.15); padding: 4px 10px; border-radius: var(--radius-pill); border: 1px solid rgba(30, 90, 222, 0.3);"
+                  >
+                    Trạng thái tự chọn: Chỉ trò chuyện
+                  </span>
+                  <span
+                    data-testid="profile-created-at"
+                    style="font-size: 13px; color: var(--text-quiet);"
+                  >
+                    Tham gia: 
+                    07:00 05/10/2026
+                  </span>
+                </div>
+                <p
+                  style="font-size: 14px; color: var(--text-sub); margin: 0px; line-height: 1.5;"
+                >
+                  Keep stored biography
+                </p>
+              </div>
+            </div>
+            <button
+              class="fg-btn fg-btn-outline "
+              style="min-height: 44px; padding: 0px 16px; font-size: 14px;"
+            >
+              <span>
+                Chỉnh sửa
+              </span>
+            </button>
+          </div>
+        </div>
+        <div
+          style="margin-bottom: 32px;"
+        >
+          <div
+            class=""
+            style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; max-width: 560px; margin: 0px auto;"
+          >
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"
+            >
+              <h3
+                style="font-size: 18px; font-weight: 700; color: var(--text-main); margin: 0px;"
+              >
+                Chỉnh sửa hồ sơ: Valorant
+              </h3>
+              <button
+                class="fg-btn fg-btn-ghost "
+                style="min-height: 44px; padding: 0px 14px; font-size: 13px;"
+              >
+                <span>
+                  Đóng
+                </span>
+              </button>
+            </div>
+            <form
+              style="display: flex; flex-direction: column; gap: 16px;"
+            >
+              <div>
+                <label
+                  for="editor-ign"
+                  style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"
+                >
+                  Tên trong game (IGN)
+                </label>
+                <input
+                  id="editor-ign"
+                  maxlength="50"
+                  style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <div>
+                <label
+                  for="editor-rank"
+                  style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"
+                >
+                  Rank (Tự khai báo, tùy chọn)
+                </label>
+                <input
+                  id="editor-rank"
+                  maxlength="50"
+                  placeholder="VD: Radiant, Kim Cương..."
+                  style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <div>
+                <label
+                  for="editor-role"
+                  style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"
+                >
+                  Vai trò (Role)
+                </label>
+                <input
+                  id="editor-role"
+                  maxlength="50"
+                  placeholder="VD: Duelist, Carry, Mid..."
+                  style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <div>
+                <label
+                  for="editor-hours"
+                  style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"
+                >
+                  Giờ chơi (Hours duration)
+                </label>
+                <input
+                  id="editor-hours"
+                  min="0"
+                  placeholder="VD: 150.5"
+                  step="0.5"
+                  style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+                  type="number"
+                  value=""
+                />
+              </div>
+              <div>
+                <label
+                  for="editor-style"
+                  style="display: block; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;"
+                >
+                  Phong cách chơi (Playstyle)
+                </label>
+                <input
+                  id="editor-style"
+                  maxlength="100"
+                  placeholder="VD: Aggressive, Tactical..."
+                  style="width: 100%; min-height: 44px; padding: 0px 12px; font-size: 16px; background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main);"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <div
+                style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;"
+              >
+                <button
+                  class="fg-btn fg-btn-outline "
+                  style="min-height: 44px; padding: 0px 16px; font-size: 14px;"
+                  type="button"
+                >
+                  <span>
+                    Hủy
+                  </span>
+                </button>
+                <button
+                  class="fg-btn fg-btn-primary "
+                  style="min-height: 44px; padding: 0px 16px; font-size: 14px;"
+                  type="submit"
+                >
+                  <span>
+                    Lưu
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          class=""
+          style="background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px;"
+        >
+          <h3
+            style="font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 16px;"
+          >
+            Thông tin chi tiết từng game
+          </h3>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;"
+          >
+            <div
+              style="background-color: var(--bg-canvas); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;"
+            >
+              <div>
+                <h4
+                  style="font-size: 16px; font-weight: 700; color: var(--color-focus); margin: 0px 0px 10px;"
+                >
+                  Valorant
+                </h4>
+                <div
+                  style="font-size: 13px; color: var(--text-main); margin-bottom: 4px;"
+                >
+                  <strong>
+                    IGN:
+                  </strong>
+                   
+                  KeepTag
+                </div>
+                <div
+                  style="font-size: 13px; color: var(--text-main); margin-bottom: 4px;"
+                >
+                  <strong>
+                    Rank:
+                  </strong>
+                   
+                  KeepRank
+                </div>
+                <div
+                  style="font-size: 13px; color: var(--text-sub); margin-bottom: 4px;"
+                >
+                  <strong>
+                    Giờ chơi:
+                  </strong>
+                   
+                  42
+                   giờ
+                </div>
+              </div>
+              <div
+                style="display: flex; justify-content: flex-end; margin-top: 8px;"
+              >
+                <button
+                  class="fg-btn fg-btn-ghost "
+                  style="min-height: 44px; padding: 0px 14px; font-size: 13px;"
+                >
+                  <span>
+                    Chỉnh sửa
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;"
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ ../../quality/evidence/T11/codex-review.test.tsx:68:70
+     66|   const editButtons=screen.getAllByRole('button',{name:/chỉnh sửa/i});
+     67|   fireEvent.click(editButtons[editButtons.length-1]);
+     68|   await waitFor(()=>expect(screen.getByLabelText(/tên trong game/i)).t…
+       |                                                                      ^
+     69|   expect(screen.getByLabelText(/rank/i)).toHaveValue('KeepRank');
+     70|   expect(screen.getByLabelText(/giờ chơi/i)).toHaveValue(42);
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  14:40:59
+   Duration  10.90s (tests 41%, environment 36%, transform 9%, import 8%, setup 6%)
+

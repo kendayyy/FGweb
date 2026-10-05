@@ -1,0 +1,35 @@
+
+> test:e2e
+> playwright test tests/e2e/onboarding.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:13768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Setting up owned temporary PostgreSQL schema: t11_e2e_1791189014728_qm9e4p
+Owned API PID: 8096
+Stopped owned PID: 8096
+Verified owned schema removed
+  x  1 [chromium] › tests\e2e\onboarding.spec.ts:262:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit (2ms)
+
+
+  1) [chromium] › tests\e2e\onboarding.spec.ts:262:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit 
+
+    Error: Timeout waiting for HTTP server at http://127.0.0.1:46523/api/v1/me
+
+      44 |         .on('error', () => {
+      45 |           if (Date.now() - start > timeoutMs) {
+    > 46 |             reject(new Error(`Timeout waiting for HTTP server at ${url}`));
+         |                    ^
+      47 |           } else {
+      48 |             setTimeout(check, 300);
+      49 |           }
+        at ClientRequest.<anonymous> (E:\FGweb\code\tests\e2e\onboarding.spec.ts:46:20)
+
+    Error Context: .cache\playwright-results\onboarding-T11---Real-E2E--98080--persists-game-profile-edit-chromium\error-context.md
+
+    Error Context: .cache\playwright-results\onboarding-T11---Real-E2E--98080--persists-game-profile-edit-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\e2e\onboarding.spec.ts:262:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit 

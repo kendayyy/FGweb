@@ -1,0 +1,9 @@
+# T11 initial independent review
+
+Initial delegated print run timed out with work in progress; exit0 is not task success. Current source stubs and partial onboarding are not complete. red-test.log was a hand-written summary, rejected as execution evidence. The resumed same conversation is attributed to original T11 prompt; no fresh feature task or next task started.
+
+red-actual.txt is actual redirected Vitest output dated2026-10-05 14:15local:12failed. Eleven are missing UI behavior from stubs; final onboarding submit case has fixture setup error (useAuth outside AuthProvider), so that one is not counted as behavior RED until fixture repaired. Delegated shell used `$env:LASTEXITCODE` rather than actual native `$LASTEXITCODE`, so output is genuine but command wrapper exit needs independent recording. Review loops must preserve this raw failure history and correct fixture/setup before PASS.
+
+Open acceptance items: form APIs/profiles remain stubs, root first-login routing and clickable avatar not wired, realPG/API browser E2E absent, no source/test typecheck/build/lint/evidence recorder/native cleanup or fourviewport proof yet. Unknown/missing /me state must never be inferred complete. Existing refetchUser's void query refresh cannot independently prove saved state; verified GET/server completion required before navigation. Unit fixtures must use lobbyRoomId and valid shared response DTOs. Optional rank/timezone/privacy assertions strengthened rather than removed.
+
+Codex owns task ledger and review; no T12 until all T11 requirements verified. Existing broader user permission for direct corrections/testing remains available after delegation review if needed. Browser opening of Anti2 dashboard rejected by current browser policy; no workaround attempted. Progress monitored via local transcript metadata/files only.

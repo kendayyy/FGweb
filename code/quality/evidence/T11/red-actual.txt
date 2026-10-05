@@ -1,0 +1,355 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/profiles.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/profiles.test.tsx (12 tests | 11 failed) 4648ms
+   ❯ T11 - Profiles & Onboarding Behavioral Suite (12)
+     ❯ 1. Public Profile Security & Formatting (3)
+       × public profile renders public data and omits private email and discordId 152ms
+       × formats UTC createdAt date in Asia/Bangkok locale with hour 17 for 10:00:00Z 21ms
+       × labels self-selected custom status separately without fabricated online badge 12ms
+     ❯ 2. Owner Game Profile Editor & Optional Rank Payload (3)
+       × sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId 36ms
+       × allows leaving rank empty when saving game profile (optional rank, rank omitted from payload) 20ms
+       × failed saves keep form inputs intact and display error message 14ms
+     ❯ 3. Loading, Error & Guest vs Owner Profile Page States (3)
+       × displays loading spinner while profile query is in flight 31ms
+       × displays error card with retry button when profile query fails 1028ms
+       × hides edit controls when guest views public profile 1022ms
+     ❯ 4. Server Onboarding States & Integration Error Handling (3)
+       × renders onboarding form for authenticated user with onboardingComplete === false 1012ms
+       × renders integration error state with retry when onboardingComplete is missing/undefined 1021ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > public profile renders public data and omits private email and discordId
+TestingLibraryElementError: Unable to find an element with the text: GamerOwner. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Header Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:83:21
+     81|       renderWithProviders(<ProfileHeader profile={profileWithPrivateFi…
+     82|
+     83|       expect(screen.getByText('GamerOwner')).toBeInTheDocument();
+       |                     ^
+     84|       expect(screen.getByText('Competitive FPS player')).toBeInTheDocu…
+     85|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > formats UTC createdAt date in Asia/Bangkok locale with hour 17 for 10:00:00Z
+TestingLibraryElementError: Unable to find an element by: [data-testid="profile-created-at"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Header Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:95:31
+     93|
+     94|       // 2026-01-01T10:00:00.000Z is 17:00 in Asia/Bangkok (+7)
+     95|       const dateText = screen.getByTestId('profile-created-at');
+       |                               ^
+     96|       expect(dateText).toBeInTheDocument();
+     97|       expect(dateText.textContent).toMatch(/17|17:00/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > labels self-selected custom status separately without fabricated online badge
+TestingLibraryElementError: Unable to find an element by: [data-testid="profile-custom-status"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Header Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:104:34
+    102|       renderWithProviders(<ProfileHeader profile={mockPublicProfile} /…
+    103|
+    104|       const statusBadge = screen.getByTestId('profile-custom-status');
+       |                                  ^
+    105|       expect(statusBadge).toHaveTextContent('Trạng thái tự chọn: Đang …
+    106|       expect(statusBadge.textContent).not.toContain('Online');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId
+TestingLibraryElementError: Unable to find a label with the text of: /tên trong game/i
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Editor Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText ../../node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:141:31
+    139|       renderWithProviders(<ProfileEditor gameId="game_val_123" gameTit…
+    140|
+    141|       const ignInput = screen.getByLabelText(/tên trong game/i);
+       |                               ^
+    142|       const rankInput = screen.getByLabelText(/rank/i);
+    143|       const hoursInput = screen.getByLabelText(/giờ chơi/i);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > allows leaving rank empty when saving game profile (optional rank, rank omitted from payload)
+TestingLibraryElementError: Unable to find a label with the text of: /tên trong game/i
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Editor Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText ../../node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:180:31
+    178|       renderWithProviders(<ProfileEditor gameId="game_val_123" gameTit…
+    179|
+    180|       const ignInput = screen.getByLabelText(/tên trong game/i);
+       |                               ^
+    181|       fireEvent.change(ignInput, { target: { value: 'CasualPlayer' } }…
+    182|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > failed saves keep form inputs intact and display error message
+TestingLibraryElementError: Unable to find a label with the text of: /tên trong game/i
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Editor Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText ../../node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:203:31
+    201|       renderWithProviders(<ProfileEditor gameId="game_val_123" gameTit…
+    202|
+    203|       const ignInput = screen.getByLabelText(/tên trong game/i) as HTM…
+       |                               ^
+    204|       fireEvent.change(ignInput, { target: { value: 'UnsavedInput' } }…
+    205|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > displays loading spinner while profile query is in flight
+TestingLibraryElementError: Unable to find an element by: [data-testid="profile-loading-spinner"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Page Stub
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/profiles.test.tsx:229:21
+    227|       );
+    228|
+    229|       expect(screen.getByTestId('profile-loading-spinner')).toBeInTheD…
+       |                     ^
+    230|     });
+    231|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > displays error card with retry button when profile query fails
+TestingLibraryElementError: Unable to find an element by: [data-testid="profile-error-state"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Page Stub
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div>
+        Profile Page Stub
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/profiles.test.tsx:244:13
+    242|       );
+    243|
+    244|       await waitFor(() => {
+       |             ^
+    245|         expect(screen.getByTestId('profile-error-state')).toBeInTheDoc…
+    246|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > hides edit controls when guest views public profile
+TestingLibraryElementError: Unable to find an element with the text: GamerOwner. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Profile Page Stub
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div>
+        Profile Page Stub
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/profiles.test.tsx:268:13
+    266|       );
+    267|
+    268|       await waitFor(() => {
+       |             ^
+    269|         expect(screen.getByText('GamerOwner')).toBeInTheDocument();
+    270|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > renders onboarding form for authenticated user with onboardingComplete === false
+TestingLibraryElementError: Unable to find an element by: [data-testid="onboarding-form"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Onboarding Page Stub
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div>
+        Onboarding Page Stub
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/profiles.test.tsx:297:13
+    295|       );
+    296|
+    297|       await waitFor(() => {
+       |             ^
+    298|         expect(screen.getByTestId('onboarding-form')).toBeInTheDocumen…
+    299|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
+ FAIL  test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > renders integration error state with retry when onboardingComplete is missing/undefined
+TestingLibraryElementError: Unable to find an element by: [data-testid="onboarding-error-state"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      Onboarding Page Stub
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<html>
+  <head />
+  <body>
+    <div>
+      <div>
+        Onboarding Page Stub
+      </div>
+    </div>
+  </body>
+</html>
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/profiles.test.tsx:329:13
+    327|       );
+    328|
+    329|       await waitFor(() => {
+       |             ^
+    330|         expect(screen.getByTestId('onboarding-error-state')).toBeInThe…
+    331|         expect(screen.getByRole('button', { name: /thử lại/i })).toBeI…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/11]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 1 passed (12)
+   Start at  14:18:37
+   Duration  15.32s (transform 46%, tests 31%, environment 14%, import 6%, setup 2%)
+
+  Transform  transforming modules took 6.85s · 46% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/profiles.test.tsx

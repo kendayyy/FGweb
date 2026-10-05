@@ -1,0 +1,47 @@
+
+> test:e2e
+> playwright test tests/e2e/onboarding.spec.ts
+
+
+Running 1 test using 1 worker
+
+(node:1644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Setting up owned temporary PostgreSQL schema: t11_e2e_1791189196950_fp2thn
+Owned API PID: 19108
+Owned web PID: 17744
+Stopped owned PID: 17744
+Stopped owned PID: 19108
+Verified owned schema removed
+  x  1 [chromium] › tests\e2e\onboarding.spec.ts:268:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit (7.1s)
+
+
+  1) [chromium] › tests\e2e\onboarding.spec.ts:268:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit 
+
+    Error: Touch controls at 1440x900
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Lobby",
+    + ]
+
+      425 |         return rect.width>0&&rect.height>0&&(rect.width<44||rect.height<44);
+      426 |       }).map(element=>element.textContent?.trim()||element.getAttribute('aria-label')||element.tagName));
+    > 427 |       expect(undersized,`Touch controls at ${vp.label}`).toEqual([]);
+          |                                                          ^
+      428 |
+      429 |       await page.screenshot({
+      430 |         path: path.join(screenshotsDir, `${vp.label}-profile.png`),
+        at E:\FGweb\code\tests\e2e\onboarding.spec.ts:427:58
+
+    Error Context: .cache\playwright-results\onboarding-T11---Real-E2E--98080--persists-game-profile-edit-chromium\error-context.md
+
+    Error Context: .cache\playwright-results\onboarding-T11---Real-E2E--98080--persists-game-profile-edit-chromium\error-context.md
+
+  1 failed
+    [chromium] › tests\e2e\onboarding.spec.ts:268:3 › T11 - Real E2E Onboarding & Profile Verification › completes first login onboarding without rank -> Lobby, persists DB interests, refresh stays complete, omits private fields, persists game profile edit 

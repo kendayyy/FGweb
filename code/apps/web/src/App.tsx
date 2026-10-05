@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { LoginForm, HeaderAuthWidget, ProtectedRoute, useAuth } from './features/auth/index.js';
+import { OnboardingPage } from './features/onboarding/index.js';
+import { ProfilePage } from './features/profiles/index.js';
 import { Card } from './components/ui/Card.js';
 
 export const App: React.FC = () => {
@@ -29,15 +31,16 @@ export const App: React.FC = () => {
               color: 'var(--color-focus)',
               textDecoration: 'none',
               letterSpacing: '-0.02em',
+              display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44,
             }}
           >
             FG
           </Link>
           <nav style={{ display: 'flex', gap: '16px' }}>
-            <Link to="/" style={{ color: 'var(--text-main)', fontSize: '14px', fontWeight: 500 }}>
+            <Link to="/" style={{ color: 'var(--text-main)', fontSize: '14px', fontWeight: 500,display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44 }}>
               Lobby
             </Link>
-            <Link to="/protected" style={{ color: 'var(--text-sub)', fontSize: '14px', fontWeight: 500 }}>
+            <Link to="/protected" style={{ color: 'var(--text-sub)', fontSize: '14px', fontWeight: 500,display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44 }}>
               Phòng của tôi
             </Link>
           </nav>
@@ -50,6 +53,9 @@ export const App: React.FC = () => {
       <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>
         <Routes>
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/users/:id" element={<ProfilePage />} />
+          <Route path="/users/:id/profile" element={<ProfilePage />} />
           <Route path="/" element={<GuestLobbyShell />} />
           <Route
             path="/protected"
@@ -67,6 +73,11 @@ export const App: React.FC = () => {
 
 const GuestLobbyShell: React.FC = () => {
   const { user } = useAuth();
+
+  // Authenticated incomplete users reach onboarding flow
+  if (user && (user.onboardingComplete !== true || !Array.isArray(user.interestedGames) || user.interestedGames.length===0)) {
+    return <OnboardingPage />;
+  }
 
   return (
     <div style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
