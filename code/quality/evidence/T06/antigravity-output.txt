@@ -1,0 +1,72 @@
+I launched the database test run in the background to verify existing test status. I will wait for it to finish.
+root agent idle; waiting up to 20m0s for 1 background task(s)
+I launched the RED test execution in the background and will wait for it to complete.
+I launched the database test run for T06 in the background and will wait for it to complete.
+I launched the database test run for T06 in the background and will wait for it to complete.
+I launched the database test run for T06 in the background and will wait for it to finish.
+I launched the full database test regression in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+I launched the workspace typecheck task in the background and will wait for it to complete.
+I launched the workspace linter task in the background and will wait for it to complete.
+I launched the workspace linter task in the background and will wait for it to complete.
+I launched the workspace linter task in the background and will wait for it to complete.
+I launched the `db:generate` consistency check in the background and will wait for it to complete.
+I launched the database test regression in the background and will wait for it to complete.
+I launched the setup probe tests in the background and will wait for it to finish.
+I launched the workspace typecheck task in the background and will wait for it to complete.
+I launched the linter in the background and will wait for it to complete.
+I launched the T06 evidence recorder script in the background and will wait for it to complete.
+I launched the T06 evidence recorder script in the background and will wait for it to complete.
+### Summary of FG T06 Implementation
+
+I have implemented **FG Task T06 (Database Schema: Rooms, Permissions, Play Sessions, and Teams)** following the strict sequential execution rules, TDD protocol, database constraints, and workspace boundaries.
+
+---
+
+### Key Requirements Implemented & Verified
+
+1. **Room & Owner Membership Constraints**:
+   - Implemented `rooms`, `room_members`, and `permission_grants` in [rooms.ts](file:///E:/FGweb/code/packages/database/src/schema/rooms.ts).
+   - Added `rooms_owner_membership_fk` as a deferred composite foreign key (`DEFERRABLE INITIALLY DEFERRED`) referencing `room_members(room_id, user_id)` to enforce atomically within transactions that room owners must be members of the room.
+   - Enforced helper permission boundaries via `helper_permission_check` to disallow granting owner-only permissions (`OWNER_TRANSFER`, `ROOM_DISSOLVE`) to helpers.
+
+2. **Room Chat Type Safety**:
+   - Added `conversations_id_kind_unique` composite unique constraint to [conversations.ts](file:///E:/FGweb/code/packages/database/src/schema/conversations.ts).
+   - Linked `rooms(conversation_id, conversation_kind)` via composite foreign key `rooms_conversation_fk` referencing `conversations(id, kind)` with `conversation_kind = 'ROOM'` check, preventing rooms from linking to `LOBBY` or `DM` conversations.
+
+3. **Active Play Slots & Single Active Team Rule**:
+   - Implemented `play_sessions`, `team_members`, and `active_play_slots` in [teams.ts](file:///E:/FGweb/code/packages/database/src/schema/teams.ts).
+   - Primary key on `active_play_slots.user_id` guarantees at the database level that a user can have at most **1 active play slot**. Verified concurrent insertion race conditions fail with PostgreSQL error `23505`.
+   - Foreign key to `play_sessions(id, state)` with `session_state = 'ACTIVE'` prevents `SCHEDULED` sessions from acquiring active slots.
+   - Foreign key to `team_members(play_session_id, user_id)` prevents non-roster spectators from acquiring active slots.
+
+4. **Team Capacity & Roster Bounds**:
+   - Enforced team capacity (1..10) statically via CHECK constraint `slot_index <= player_capacity` and UNIQUE constraint `(play_session_id, slot_index)`.
+
+5. **Recruitments, Join Requests & Invitations**:
+   - Implemented `recruitments`, `join_requests`, and `invitations` in [recruitments.ts](file:///E:/FGweb/code/packages/database/src/schema/recruitments.ts).
+   - Enforced target shape rules for `ROOM` vs `PLAY_SESSION` invitations and self-invitation prevention via `invitation_no_self_check` and `invitation_target_shape_check`.
+
+6. **Migrations & Forward Compatibility**:
+   - Generated new single forward migration `0002_foamy_jack_flag.sql` and corresponding snapshot/journal in [migrations](file:///E:/FGweb/code/packages/database/migrations).
+   - Normalized all foreign key references to work with isolated `search_path` schema tests without schema qualification.
+   - Preserved all previous migration SQL files (`0000`, `0001`) without modification.
+
+---
+
+### Verification & Evidence
+
+All commands were executed in `E:\FGweb\code`:
+
+- **T06 Acceptance Test Suite**: 7 passed / 0 failed ([team-constraints.test.ts](file:///E:/FGweb/code/packages/database/test/team-constraints.test.ts)).
+- **Full Database Regression Suite**: 23 passed / 0 failed across all database test suites.
+- **Compiled Setup Probes**: 2 passed / 0 failed ([probe-failures.test.mjs](file:///E:/FGweb/code/quality/evidence/T01/probe-failures.test.mjs)).
+- **Workspace Build**: `@fg/database` compiled cleanly (`exitCode 0`).
+- **Workspace Typecheck**: `tsc --noEmit` clean (`exitCode 0`).
+- **Workspace Lint**: `eslint .` clean with 0 errors (`exitCode 0`).
+- **Migration Consistency**: `db:generate` clean with 0 schema drift (`exitCode 0`).
+- **Evidence Files**: Genuine raw execution logs, JSON metadata, exit codes, and timestamps stored in [quality/evidence/T06](file:///E:/FGweb/code/quality/evidence/T06).

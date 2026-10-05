@@ -1,0 +1,84 @@
+✔ owner membership must carry OWNER role (3422.2262ms)
+✔ deleting owner membership without transfer cannot cascade room/history away (4286.0797ms)
+✔ two rooms cannot share one chat conversation (3754.9214ms)
+✔ regular member cannot receive helper permission grants (2928.7438ms)
+✔ recruitment game must match its room (3224.0511ms)
+✔ play session invitation must reference a session from the same room (3388.7339ms)
+✔ active slot seat must match its roster seat (3171.2107ms)
+✖ room membership must reference an existing room (3254.083ms)
+✖ recruitment requires a concrete play session (3451.8626ms)
+✖ linked play session history cannot be deleted behind a recruitment (2916.1713ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 7
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40787.3919
+
+✖ failing tests:
+
+test at quality\evidence\T06\codex-regressions.test.mjs:21:1
+✖ room membership must reference an existing room (3254.083ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async rejected (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:10:42)
+      at async file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:21:91
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:11:748)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:21:66)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T06\codex-regressions.test.mjs:22:1
+✖ recruitment requires a concrete play session (3451.8626ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:22:110
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:11:748)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:22:63)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T06\codex-regressions.test.mjs:23:1
+✖ linked play session history cannot be deleted behind a recruitment (2916.1713ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  error: null value in column "room_id" of relation "recruitments" violates not-null constraint
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async rejected (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:10:42)
+      at async file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:23:358
+      at async isolated (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:11:748)
+      at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:23:85)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: error: null value in column "room_id" of relation "recruitments" violates not-null constraint
+        at E:\FGweb\code\node_modules\pg\lib\client.js:694:17
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async rejected (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:10:42)
+        at async file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:23:358
+        at async isolated (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:11:748)
+        at async TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs:23:85)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }

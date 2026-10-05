@@ -17,6 +17,7 @@ export const conversations = pgTable(
     updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow(),
   },
   (table) => [
+    unique('conversations_id_kind_unique').on(table.id, table.kind),
     unique('dm_pair_unique').on(table.user1Id, table.user2Id),
     check(
       'conversation_kind_shape_check',

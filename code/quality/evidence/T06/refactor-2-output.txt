@@ -1,0 +1,46 @@
+I launched the database build task in the background and will wait for it to complete.
+I launched the database build task in the background and will wait for it to complete.
+root agent idle; waiting up to 20m0s for 1 background task(s)
+I launched the database migration generation task in the background and will wait for it to complete.
+I launched the Codex 10-test regression execution in the background and will wait for it to complete.
+I launched the database test run in the background and will wait for it to complete.
+I launched the full database test regression in the background and will wait for it to complete.
+I launched the Loop 2 evidence recorder script in the background and will wait for it to complete.
+I launched the evidence recorder script in the background and will wait for it to complete.
+### Summary of Refactor Loop 2 for FG T06
+
+All three expanded relational issues (Issues A, B, C) reported by Codex's 10-test suite have been resolved, verified, and backed by genuine execution evidence in `quality/evidence/T06/`.
+
+---
+
+### Key Invariant Fixes Applied in Loop 2
+
+1. **Issue A — Restored `room_members.room_id` Foreign Key to `rooms.id`**:
+   - In [rooms.ts](file:///E:/FGweb/code/packages/database/src/schema/rooms.ts), restored foreign key `room_members.room_id` referencing `rooms.id` using a typed thunk callback `(): AnyPgColumn => rooms.id`.
+   - This prevents TypeScript circular type inference recursion while enforcing that orphan room memberships (referencing a non-existent `room_id`) are rejected by PostgreSQL with error `23503`.
+
+2. **Issue B — `recruitments.play_session_id` Made `NOT NULL`**:
+   - In [recruitments.ts](file:///E:/FGweb/code/packages/database/src/schema/recruitments.ts), updated `playSessionId` to `.notNull()`.
+   - All recruitment cards now require a concrete play session for T20/T22 mapping. Inserting `NULL` for `play_session_id` is rejected with PostgreSQL error `23502`.
+   - Updated the setup fixture of test 18 in [codex-regressions.test.mjs](file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs) to create a valid play session `ps1` attached to room `r1`, supplying `'ps1'` as `play_session_id` so PostgreSQL evaluates the bad-game foreign key constraint (`23503`) rather than a missing NOT NULL value.
+
+3. **Issue C — Non-Cascading `recruitments_play_session_fk` (`ON DELETE NO ACTION`)**:
+   - In [recruitments.ts](file:///E:/FGweb/code/packages/database/src/schema/recruitments.ts), updated `recruitments_play_session_fk` from `ON DELETE SET NULL` to `ON DELETE NO ACTION`.
+   - Deleting a play session that has an active recruitment card linked to it is rejected with PostgreSQL error `23503`, preserving session history and recruitment card links.
+
+---
+
+### Verification Summary (Loop 2)
+
+All 9 verification steps executed cleanly in `E:\FGweb\code`:
+
+- **Codex Expanded Regression Suite** ([codex-regressions.test.mjs](file:///E:/FGweb/code/quality/evidence/T06/codex-regressions.test.mjs)): **10 passed / 0 failed** (`exitCode 0`).
+- **T06 Acceptance Test Suite** ([team-constraints.test.ts](file:///E:/FGweb/code/packages/database/test/team-constraints.test.ts)): **7 passed / 0 failed** (`exitCode 0`).
+- **T05 Compiled Regression Fixture** ([codex-regressions.test.mjs](file:///E:/FGweb/code/quality/evidence/T05/codex-regressions.test.mjs)): **2 passed / 0 failed** (`exitCode 0`).
+- **Full Database Regression Suite** (`@fg/database`): **23 passed / 0 failed** (`exitCode 0`).
+- **Database Source & Test Typecheck** (`tsconfig.check.json`): **Passed** with 0 errors (`exitCode 0`).
+- **Workspace Build**: `@fg/database` compiled cleanly (`exitCode 0`).
+- **Workspace Typecheck**: `tsc --noEmit` clean (`exitCode 0`).
+- **Workspace Lint**: `eslint .` clean with 0 errors (`exitCode 0`).
+- **Migration Consistency**: `db:generate` clean with 0 schema drift (`exitCode 0`).
+- **Raw Evidence Logs & Metadata**: Stored with `loop2` suffix (`raw-*-loop2.log` & `raw-*-loop2.json`) in [quality/evidence/T06](file:///E:/FGweb/code/quality/evidence/T06), preserving initial failed evidence untouched.

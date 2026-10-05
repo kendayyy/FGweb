@@ -4,4 +4,7 @@ export * from './schema/games.js';
 export * from './schema/conversations.js';
 export * from './schema/messages.js';
 export * from './schema/social.js';
+export * from './schema/rooms.js';
+export * from './schema/teams.js';
+export * from './schema/recruitments.js';
 export * from './seed-games.js';

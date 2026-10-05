@@ -715,18 +715,129 @@
     },
     {
       "id": "T06",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T05"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": []
+      "inputsHash": "153afa5c0b8c81a368d9751c18f458c015ec29e8",
+      "outputsHash": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "files": {
+          "packages/database/migrations/0002_curvy_scourge.sql": "379db05d702ef5af2ff39b9a4b7337e68116ba1f78550f8b4361d7a00a1d4f4d",
+          "quality/evidence/T06/tsconfig.check.json": "cdff79f43d9b54e07dd5cad8dd818902617c62ec0330094531aa602876a16b3e",
+          "packages/database/migrations/meta/_journal.json": "4e56aa3764154d64f780d3526e4917b0d09a0e2965b67be91d02f96a9f74bf67",
+          "packages/database/src/schema/teams.ts": "4bf6b1159ea0523f1e79e4eccd2de768ed4747b99e9a7d3fa5897117115f909c",
+          "packages/database/src/schema/recruitments.ts": "cd78b820fd4c06fe56072b6f24ebc405a00c45904220e20b4d76d0dda85c9e9d",
+          "quality/evidence/T06/codex-regressions.test.mjs": "27409a7b4c98ef686ea9713a835c6238869044df79998677ee77525cb0da929b",
+          "packages/database/src/schema/games.ts": "7e4d9036465e328669add3f8a195d3c23c4625670634254ba47093566c7306f0",
+          "packages/database/test/team-constraints.test.ts": "6344d3e3cd96f4a5ee25e07554fec7a980331c5a75e1ef4424c9ee22913bb4c4",
+          "packages/database/src/schema/rooms.ts": "bd1d864af0322df14a66e554b10ef2759a61d0eb1298ed98c09b831cfc24fb14",
+          "packages/database/src/index.ts": "090f79e4b3302ce69f7327868e46a0f6a3d80af30fa78021d88fc8103ee0429c",
+          "packages/database/migrations/meta/0002_snapshot.json": "b47a2786d9e605a52e3fb6e071415538b3123a8c339a4034112422679dc5e7f0",
+          "packages/database/src/schema/conversations.ts": "d289eea3b21e2b3ffcfed48b0a4b5e8eaa360d38144f7b06a45becd87dfb16f3"
+        }
+      },
+      "commands": [
+        {
+          "startedAt": "2026-10-05T00:37:18.3571703Z",
+          "command": "npm run test --workspace @fg/database -- test/team-constraints.test.ts",
+          "evidenceSha256": "f03459b4e293b472fcbe12f540e6fc64c0c4ec61b489b9758a61debf6f56e652",
+          "evidencePath": "quality/evidence/T06/final-acceptance.txt",
+          "cwd": "E:/FGweb/code",
+          "completedAt": "2026-10-05T00:37:27.4675344Z",
+          "exitCode": 0
+        },
+        {
+          "startedAt": "2026-10-05T00:37:27.5679147Z",
+          "command": "npm run test --workspace @fg/database",
+          "evidenceSha256": "79ec867dc230f0c9e4bd42ed21e5a180c0117bf9436bd3cfd43b66e66ecb5292",
+          "evidencePath": "quality/evidence/T06/final-db-regression.txt",
+          "cwd": "E:/FGweb/code",
+          "completedAt": "2026-10-05T00:37:44.1634884Z",
+          "exitCode": 0
+        },
+        {
+          "startedAt": "2026-10-05T00:37:44.1964836Z",
+          "command": "npm run build --workspace @fg/database",
+          "evidenceSha256": "30fe5ab86f809331b63a78282d785247cd4aa65d11d0c1bab75166c39f851f22",
+          "evidencePath": "quality/evidence/T06/final-build.txt",
+          "cwd": "E:/FGweb/code",
+          "completedAt": "2026-10-05T00:37:50.4578997Z",
+          "exitCode": 0
+        },
+        {
+          "startedAt": "2026-10-05T00:38:30.0554338Z",
+          "command": "node --test quality/evidence/T05/codex-regressions.test.mjs",
+          "evidenceSha256": "85f629cc6fff18ac4dcf433ec85b854a44ca236ee8251cbf7379e6e2d675ce6e",
+          "evidencePath": "quality/evidence/T06/final-t05-regressions.txt",
+          "cwd": "E:/FGweb/code",
+          "completedAt": "2026-10-05T00:38:38.2277554Z",
+          "exitCode": 0
+        },
+        {
+          "startedAt": "2026-10-05T00:38:38.2452565Z",
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T06/tsconfig.check.json",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "evidencePath": "quality/evidence/T06/final-typecheck.txt",
+          "cwd": "E:/FGweb/code",
+          "completedAt": "2026-10-05T00:38:45.7746109Z",
+          "exitCode": 0
+        },
+        {
+          "completedAt": "2026-10-05T00:40:00.4448926Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "d9bb0094e74e168f985fe0b374ee8df7a0d69980ab3788d9e768e91709b6244f",
+          "startedAt": "2026-10-05T00:39:17.0236146Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T06/final-compiled-regressions.txt",
+          "command": "node --test quality/evidence/T06/codex-regressions.test.mjs"
+        },
+        {
+          "completedAt": "2026-10-05T00:40:06.0608544Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "startedAt": "2026-10-05T00:40:00.4945266Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T06/final-lint.txt",
+          "command": "npm run lint"
+        },
+        {
+          "completedAt": "2026-10-05T00:40:08.8388374Z",
+          "cwd": "E:/FGweb/code",
+          "evidenceSha256": "377446d05c8e8604ae4f923a760c2d4abc688770141e2e55d1183b3417ddd9b0",
+          "startedAt": "2026-10-05T00:40:06.0753798Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T06/final-migrations.txt",
+          "command": "npm run db:generate --workspace @fg/database"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T06/codex-review.md",
+        "quality/evidence/T06/final-verification.json",
+        "quality/evidence/T06/codex-regressions-red.txt",
+        "quality/evidence/T06/codex-loop1-review.txt"
+      ],
+      "startedAt": "2026-10-04T23:48:35.7727047Z",
+      "completedAt": "2026-10-05T00:40:54.1827240Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "packages/database/src/schema/rooms.ts",
+        "packages/database/src/schema/teams.ts",
+        "packages/database/src/schema/recruitments.ts",
+        "packages/database/src/schema/conversations.ts",
+        "packages/database/src/index.ts",
+        "packages/database/migrations/**",
+        "packages/database/test/team-constraints.test.ts",
+        "quality/evidence/T06/**",
+        "packages/database/src/schema/games.ts"
+      ],
+      "antigravity": {
+        "refactorLoops": 2,
+        "model": "Gemini 3.6 Flash (High)",
+        "result": "PASS",
+        "conversation": "b5afcb73-5bc0-4e64-8e39-e722475f6d6c"
+      }
     },
     {
       "id": "T07",
