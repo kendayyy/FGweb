@@ -1,0 +1,69 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand --testTimeout=60000 test/auth.integration.spec.ts
+
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:7572) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.error
+    2026-10-05T03:56:48.066Z ERROR [Better Auth]: Failed to parse state [StateError [BetterAuthError]: State mismatch: verification not found] {
+      code: 'state_mismatch',
+      details: { state: 'invalid_state_value' },
+      errorURL: undefined
+    }
+
+      at LogFunc (../../node_modules/@better-auth/core/dist/env/logger.mjs:64:35)
+      at Object.error (../../node_modules/@better-auth/core/dist/env/logger.mjs:72:82)
+      at parseState (../../node_modules/better-auth/dist/oauth2/state.mjs:53:20)
+      at ../../node_modules/better-auth/dist/api/routes/callback.mjs:77:97
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:11
+      at internalHandler (../../node_modules/better-call/src/endpoint.ts:626:20)
+      at ../../node_modules/better-auth/dist/api/dispatch.mjs:231:18
+      at processRequest (../../node_modules/better-call/src/router.ts:260:11)
+      at handler (../../node_modules/better-call/src/router.ts:301:16)
+      at ../../node_modules/@better-auth/core/dist/context/transaction.mjs:37:13
+      at ../../node_modules/better-call/src/adapters/node/index.ts:12:27
+      at ../../node_modules/@nestjs/core/router/router-proxy.js:6:17
+
+FAIL test/auth.integration.spec.ts (35.375 s)
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › performs real signed cookie session creation, logout invalidation, and replay rejection
+
+    expected 404 "Not Found", got 400 "Bad Request"
+
+      247 |       .set('Origin', 'http://localhost:5173')
+      248 |       .send({ providerId: 'discord' })
+    > 249 |       .expect(404);
+          |        ^
+      250 |     // 2. Perform logout via /api/auth/sign-out with valid Origin and signed cookie
+      251 |     const signOutResponse = await supertest(app.getHttpServer())
+      252 |       .post('/api/auth/sign-out')
+
+      at Object.<anonymous> (test/auth.integration.spec.ts:249:8)
+      ----
+      at Test._assertStatus (../../node_modules/supertest/lib/test.js:404:14)
+      at ../../node_modules/supertest/lib/test.js:460:13
+      at Test._assertFunction (../../node_modules/supertest/lib/test.js:437:13)
+      at Test.assert (../../node_modules/supertest/lib/test.js:302:23)
+      at localAssert (../../node_modules/supertest/lib/test.js:220:38)
+      at Server.<anonymous> (../../node_modules/supertest/lib/test.js:227:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        36.322 s, estimated 85 s
+Ran all test suites matching test/auth.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand --testTimeout=60000 test/auth.integration.spec.ts

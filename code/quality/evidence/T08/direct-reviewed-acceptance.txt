@@ -1,0 +1,32 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/auth.integration.spec.ts
+
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21092) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.error
+    2026-10-05T04:01:10.146Z ERROR [Better Auth]: Failed to parse state [StateError [BetterAuthError]: State mismatch: verification not found] {
+      code: 'state_mismatch',
+      details: { state: 'invalid_state_value' },
+      errorURL: undefined
+    }
+
+      at LogFunc (../../node_modules/@better-auth/core/dist/env/logger.mjs:64:35)
+      at Object.error (../../node_modules/@better-auth/core/dist/env/logger.mjs:72:82)
+      at parseState (../../node_modules/better-auth/dist/oauth2/state.mjs:53:20)
+      at ../../node_modules/better-auth/dist/api/routes/callback.mjs:77:97
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:11
+      at internalHandler (../../node_modules/better-call/src/endpoint.ts:626:20)
+      at ../../node_modules/better-auth/dist/api/dispatch.mjs:231:18
+      at processRequest (../../node_modules/better-call/src/router.ts:260:11)
+      at handler (../../node_modules/better-call/src/router.ts:301:16)
+      at ../../node_modules/@better-auth/core/dist/context/transaction.mjs:37:13
+      at ../../node_modules/better-call/src/adapters/node/index.ts:12:27
+      at ../../node_modules/@nestjs/core/router/router-proxy.js:6:17
+
+Test Suites: 1 passed, 1 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        27.124 s, estimated 29 s
+Ran all test suites matching test/auth.integration.spec.ts.

@@ -1,0 +1,10 @@
+# Sequential batch: T08 through final T42, including suffix tasks in ledger order
+Active: T08; all later tasks queued and locked until predecessor reviewed PASS.
+Executor: Antigravity via Anti2, Gemini 3.6 Flash (High), one fresh conversation/task. Codex owns review, ledger and closeout.
+Baseline: 9c901540d4b47afc91a1639a842c6f7a8584cfc8; clean worktree before Codex T08 evidence/ledger metadata.
+T08 scope: auth module/guards/test; minimal main.ts/app.module.ts wiring needed because API is not scaffolded. Minimal tsconfig/jest config compatibility only if required for locked ESM Better Auth; no package/dependency changes.
+Forbidden: ledger, checker, spec/baseline, previous evidence/tests/migrations, all frontend and later features. Do not git reset/checkout/restore any file.
+T08 real Discord browser login remains mandatory, separate from automated test OAuth fixtures. Never mark PASS pending user/browser verification. No production deployment, spending or device/load claims.
+T08 scope extension: minimal apps/api/package.json test script may enable native Jest ESM via Node --experimental-vm-modules; preserve every locked dependency/version and unrelated scripts. Test helpers under apps/api/test/ are permitted for real scoped integration; no production fake endpoints. This is routine locked-dependency compatibility, not a stack change. No other manifests/lockfile edits.
+Initial CLI returned partial at20m and exit0 while turn in progress; no PASS claimed. Refactor is routed to the SAME pinned conversation/task only.
+Further minimal compatibility clarification: apps/api/package.json may set type=module if required to align TypeScript NodeNext import identities with existing ESM @fg/database/contracts and Better Auth. Keep dependencies/versions unchanged. In that case existing apps/api/jest.config.js must use export default; keep the same path (no deletion/rename of predecessor-owned file). All production/test imports and runtime must be verified consistently. This does not authorize type assertions, skipped diagnostics, any escapes or new dependencies to hide errors.

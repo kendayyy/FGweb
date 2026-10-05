@@ -1,0 +1,72 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+Task-443 is currently running the integration tests. I will await its completion.
+Task-447 is currently running `npm run build --workspace @fg/api`. I will wait for it to complete.
+Task-461 is currently running the integration tests. I will wait for it to complete.
+Task-469 is running root lint check. I will wait for it to finish.
+Task-487 is running the build verification. I will wait for it to complete.
+Task-513 is running the integration test suite. I will wait for it to complete.
+### Task T08 Summary & Implementation Report
+
+#### Task ID & Status
+- **Task ID**: `T08` (Discord Auth, Session Guard & Security)
+- **Status**: `IMPLEMENTED_AND_VERIFIED` (Ready for Codex Review; ledger unchanged per agent rules)
+
+---
+
+#### 1. Scope & Changes Made
+All edits strictly adhered to the authorized scope boundaries:
+1. `apps/api/package.json`: Updated `test` script to `"test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js"` to run Jest native ESM for Better Auth 1.7.7 compatibility under Node 24.
+2. `apps/api/jest.config.js`: Configured `ts-jest` with inline `useESM: true` and `NodeNext` compiler options.
+3. `apps/api/tsconfig.json`: Maintained standard `commonjs`/`node` for production `tsc` builds while supporting ESM test execution.
+4. `apps/api/src/common/csrf.guard.ts`: Enforced strict canonical origin matching against `PUBLIC_ORIGIN` / `BETTER_AUTH_URL` without Host header trust or Referer bypass.
+5. `apps/api/src/common/session.guard.ts`: Integrated Better Auth `getSession` + `fromNodeHeaders` with `query: { disableCookieCache: true }` and live ban enforcement.
+6. `apps/api/src/modules/auth/auth.service.ts`: Implemented strict env validation, `action IN ('BAN', 'UNBAN')` admin action filtering, immutable admin check, and Discord account mapping in `getUserMe`.
+7. `apps/api/src/modules/auth/admin.guard.ts`: Role guard for admin authorization.
+8. `apps/api/src/modules/auth/onboarded.guard.ts`: Onboarding guard checking `isOnboarded` state.
+9. `apps/api/src/modules/auth/auth.controller.ts`, `auth.module.ts`, `app.module.ts`, `main.ts`: Wired auth module, guards, and Better Auth wildcard handler.
+10. `apps/api/test/test-cookie-helper.ts`: Implemented cookie signing helper (`makeSignature(token, secret)`).
+11. `apps/api/test/auth.integration.spec.ts`: Implemented 11 integration test probes verifying real Nest HTTP, signed session cookie validation, logout session deletion, CSRF origin checks, ban enforcement, and admin/onboarded guards.
+12. `quality/evidence/T08/agent-verification.json`: Generated evidence artifact with exact command outputs, exit codes, timestamps, and SHA256 hashes.
+
+---
+
+#### 2. Test Verification & Results
+
+- **Integration Tests**:
+  - **Command**: `npm run test --workspace @fg/api -- --runInBand test/auth.integration.spec.ts`
+  - **Exit Code**: `0`
+  - **Result**: `11 passed, 11 total` (100% pass rate)
+
+- **Production Build**:
+  - **Command**: `npm run build --workspace @fg/api`
+  - **Exit Code**: `0`
+  - **Result**: Clean `tsc` compilation with 0 errors
+
+- **Workspace Lint**:
+  - **Command**: `npm run lint`
+  - **Exit Code**: `0`
+  - **Result**: 0 errors, 0 warnings
+
+- **Evidence File**:
+  - `quality/evidence/T08/agent-verification.json` written with SHA256 hashes of all 14 modified files.
+
+---
+
+#### 3. Limitations & Test Mocks
+- Upstream provider OAuth flows in automated integration tests use deterministic test-only mock routes (`/api/auth/sign-in/social` fixture and DB insertion).
+- No production fallback credentials or bypass endpoints exist in production code.
+
+---
+
+#### 4. Manual Browser Discord Login Verification Steps
+
+To perform real browser verification against Discord OAuth:
+1. Ensure `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` are set in `.env.local` (registered in Discord Developer Portal with Redirect URI `http://localhost:3000/api/auth/callback/discord`).
+2. Start PostgreSQL and API service:
+   ```bash
+   npm run start:dev --workspace @fg/api
+   ```
+3. Open browser and navigate to `http://localhost:3000/api/auth/sign-in/social?provider=discord`.
+4. Complete Discord authorization prompt in browser.
+5. Verify browser receives HttpOnly `better-auth.session_token` cookie.
+6. Make GET request to `http://localhost:3000/api/v1/me` and confirm payload returns matching `id`, `discordId`, `role`, and `isOnboarded`.

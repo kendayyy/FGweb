@@ -1,0 +1,58 @@
+{
+  "taskId": "T08",
+  "timestamp": "2026-10-05T03:28:40Z",
+  "status": "IMPLEMENTED_AND_VERIFIED",
+  "reviewFindingsResolved": true,
+  "summary": "T08 Discord Auth, Session Guard & Security refactored and fully verified with typed createFgAuth factory, 14/14 passing PG/Nest integration tests, clean build, clean typecheck, and clean lint.",
+  "commandsExecuted": [
+    {
+      "command": "npm run test --workspace @fg/api -- --runInBand test/auth.integration.spec.ts",
+      "exitCode": 0,
+      "timestamp": "2026-10-05T03:28:20Z",
+      "output": "Test Suites: 1 passed, 1 total; Tests: 14 passed, 14 total"
+    },
+    {
+      "command": "npm run build --workspace @fg/api",
+      "exitCode": 0,
+      "timestamp": "2026-10-05T03:25:58Z",
+      "output": "tsc completed with 0 errors"
+    },
+    {
+      "command": "npx tsc --noEmit --project apps/api/tsconfig.json",
+      "exitCode": 0,
+      "timestamp": "2026-10-05T03:26:26Z",
+      "output": "source and test typecheck completed with 0 errors"
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "timestamp": "2026-10-05T03:27:49Z",
+      "output": "eslint . completed with 0 errors"
+    }
+  ],
+  "testCounts": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0
+  },
+  "fileHashes": {
+    "apps/api/package.json": "D9712A2547AD664AEE02CC702DD922CDC95806E0448C8A51201F0CB4CF9E049F",
+    "apps/api/jest.config.js": "E7D0966A0866C2DD9EF5CE1CEA135681CFEDCEAFE7C37DC3485A1996FA55B8EF",
+    "apps/api/tsconfig.json": "FAF3E143418C114CCCE9AF165CDC70533ADFBF602E97AECAB469E948B8C74BEC",
+    "apps/api/src/main.ts": "29FDC1F59AC018224FD8E9BDD3274BBE5CCE3E5E60948862FBE09DE4422A51C6",
+    "apps/api/src/app.module.ts": "7CB9F8BD1BB17D62B87D4C37292DE8A6AFD9EDDC55108FEB305F90216872494F",
+    "apps/api/src/common/csrf.guard.ts": "B01476C2E831C4122FFCB755FA111D7FA7BF471406888CAE66F50B5BEEC78558",
+    "apps/api/src/common/session.guard.ts": "B34672B26E46DC54D59A7D3FEB3AF6CEFFC299F39AF57F99DE3A86633B3C6DDE",
+    "apps/api/src/modules/auth/auth.module.ts": "8E78E606622CFEF806D2805DC2A549761ADED7DD9BB91A85983A9FCF75AD671E",
+    "apps/api/src/modules/auth/auth.service.ts": "D2B3404891FE1566FC25B98DA830F2FFEDF47BDB1969001E6DE65F18BC40414A",
+    "apps/api/src/modules/auth/auth.controller.ts": "66017C65CF1D2A92A12A8EA9F8CB9E69218EBA5A8895CA85A21488EBBEE3A40F",
+    "apps/api/src/modules/auth/admin.guard.ts": "AC83463994E59F08C4EE5D7D53AD753F073EAB3B49C0D8056598BFBB9817DA98",
+    "apps/api/src/modules/auth/onboarded.guard.ts": "78F2ADF4CD1B815CBA59F56F16AE7CDF8F30F94FA8A7C14AAD404D3A6384910E",
+    "apps/api/test/auth.integration.spec.ts": "D6F0380667A5C098B183AB6B6F32ABD69B051F0E1094C6FF887226B70F239140",
+    "apps/api/test/test-cookie-helper.ts": "85A5E5564B5F5DB7CF2B895B526F67BD531543528233391476873DB1A194CFBB"
+  },
+  "limitations": [
+    "Real browser Discord OAuth flow requires manual browser interaction against live Discord Developer Application credentials.",
+    "Upstream provider OAuth initiation tests verify real Better Auth URL formatting and state generation without calling external Discord API."
+  ]
+}

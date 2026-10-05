@@ -13,4 +13,5 @@
 | Chat/social constraints and forward migration | T05 | PostgreSQL10T05+6T04 and2independentregressions; quality/evidence/T05/codex-review.md | PASS |
 | Rooms/teams/recruitment constraints and populated migration | T06 | PostgreSQL7T06+23DB+12independent+2T05; quality/evidence/T06/codex-review.md | PASS |
 | Call/notification/moderation constraints and populated migration | T07 | PostgreSQL13T07+36DB+11independent+T05/T06; quality/evidence/T07/codex-review.md | PASS |
-| Product API/UI features, media1000, PWA, release | T08–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |
+| Discord auth/session guards | T08 | 16PG/Nest, build, source/test typecheck, lint, native smoke, real Discord OAuth session/logout/replay and cleanup; quality/evidence/T08/direct-review.md | PASS |
+| Product API/UI features, media1000, PWA, release | T09–T42 | not implemented; task.md acceptance owns future evidence | NOT_STARTED |

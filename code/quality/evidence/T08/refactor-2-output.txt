@@ -1,0 +1,98 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+Task-554 is running the updated integration tests. I will wait for it to complete.
+Task-564 is running the integration tests. I will wait for it to finish.
+Task-570 is running the integration tests. I will wait for it to complete.
+Task-576 is running the typecheck command. I will wait for it to finish.
+Task-588 is running the final verification of integration tests. I will wait for it to complete.
+### Task T08 Second Review Loop — Final Implementation & Verification Report
+
+#### Task ID & Status
+- **Task ID**: `T08` (Discord Auth, Session Guard & Security)
+- **Status**: `IMPLEMENTED_AND_VERIFIED` (Ready for Codex Review; ledger/tasks.json unchanged per agent rules)
+
+---
+
+#### 1. Refactor Summary & Code Adjustments
+
+1. **Typed Auth Instance Factory (`auth.service.ts`)**:
+   - Extracted `createFgAuth(db, options)` factory function.
+   - Inferred instance type via `export type FgAuthInstance = ReturnType<typeof createFgAuth>`.
+   - Removed all `as unknown` / `as any` / type assertions from `AuthService` assignment.
+
+2. **Parity CSRF Protection (`csrf.guard.ts` & `auth.module.ts`)**:
+   - Extracted `CsrfGuard.validateRequestOrigin(req)`.
+   - Applied identical canonical Origin validation to Nest route guards and Better Auth middleware routes (`/api/auth/*`).
+
+3. **Expanded PG/Nest Integration Probes (`auth.integration.spec.ts`)**:
+   - Added `POST /api/auth/sign-in/social` probe: Asserts HTTP 200/302, valid Discord authorization URL (`https://discord.com/api/oauth2/authorize?client_id=...&state=...`), stored OAuth state, and invalid Origin rejection (403).
+   - Added guest account-linking probe: Proves unauthenticated account-linking requests fail through real handler (401 Unauthorized).
+   - Added HTTPS cookie security probe: Verifies `useSecureCookies: true`, `__Secure-` cookie name prefix, `httpOnly: true`, `sameSite: 'lax'`, tampered session token rejection (401), and expired/revoked session token rejection (401).
+
+4. **Fixture Cleanup Safety (`auth.integration.spec.ts`)**:
+   - Updated `afterAll` to execute all schema drop and DB pool shutdown steps, collecting and surfacing errors if any cleanup path fails.
+
+---
+
+#### 2. Verification Command Results
+
+1. **PG/Nest Integration Tests**:
+   - **Command**: `npm run test --workspace @fg/api -- --runInBand test/auth.integration.spec.ts`
+   - **Exit Code**: `0`
+   - **Result**: `14 passed, 14 total` (100% pass rate)
+
+2. **API Workspace Production Build**:
+   - **Command**: `npm run build --workspace @fg/api`
+   - **Exit Code**: `0`
+   - **Result**: `tsc` clean build with 0 errors
+
+3. **Source & Test Typecheck**:
+   - **Command**: `npx tsc --noEmit --project apps/api/tsconfig.json`
+   - **Exit Code**: `0`
+   - **Result**: 0 type errors across source and test files
+
+4. **Workspace Lint**:
+   - **Command**: `npm run lint`
+   - **Exit Code**: `0`
+   - **Result**: 0 errors, 0 warnings
+
+5. **Evidence Artifact**:
+   - Written to `quality/evidence/T08/agent-verification.json` containing exact raw command logs, exit codes, timestamps, test counts, and SHA256 file hashes.
+
+---
+
+#### 3. Corrected Manual Browser Verification Guide
+
+To test real browser Discord OAuth authentication:
+
+1. **Environment Setup**:
+   Ensure `.env.local` in `E:/FGweb/code` contains:
+   ```env
+   PUBLIC_ORIGIN=http://localhost:3000
+   BETTER_AUTH_URL=http://localhost:3000
+   BETTER_AUTH_SECRET=your_32_char_minimum_secret_key_12345
+   DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/fgweb
+   DISCORD_CLIENT_ID=your_discord_client_id
+   DISCORD_CLIENT_SECRET=your_discord_client_secret
+   ```
+   *(Ensure Discord Developer Portal has Redirect URI `http://localhost:3000/api/auth/callback/discord` configured).*
+
+2. **Build and Launch API**:
+   From workspace root (`E:/FGweb/code`):
+   ```bash
+   npm run build --workspace @fg/api
+   node --env-file=.env.local apps/api/dist/main.js
+   ```
+
+3. **Trigger Social Sign-In**:
+   Send a POST request to initiate OAuth (e.g. via cURL or Postman):
+   ```bash
+   curl -X POST http://localhost:3000/api/auth/sign-in/social \
+     -H "Content-Type: application/json" \
+     -H "Origin: http://localhost:3000" \
+     -d '{"provider": "discord", "callbackURL": "http://localhost:3000"}'
+   ```
+   Open the returned `url` in browser, authorize via Discord, and confirm redirection back to `http://localhost:3000` with HttpOnly `better-auth.session_token` cookie set.
+
+4. **Inspect User Profile (`MeDTO`)**:
+   Send GET to `http://localhost:3000/api/v1/me` with the session cookie set. Verify response returns:
+   `{ id, displayName, avatarUrl, email, emailVerified, discordId, customStatus, createdAt, updatedAt }`.

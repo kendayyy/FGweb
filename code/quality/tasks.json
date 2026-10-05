@@ -1020,18 +1020,143 @@
     },
     {
       "id": "T08",
-      "status": "NOT_STARTED",
+      "status": "PASS",
       "dependencies": [
         "T07"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
-      "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
-      "completedAt": null,
-      "blockers": []
+      "inputsHash": "9c901540d4b47afc91a1639a842c6f7a8584cfc8",
+      "outputsHash": {
+        "files": {
+          "apps/api/tsconfig.json": "faf3e143418c114ccce9af165cdc70533adfbf602e97aecab469e948b8c74bec",
+          "apps/api/src/modules/auth/onboarded.guard.ts": "78f2adf4cd1b815cba59f56f16ae7cdf8f30f94fa8a7c14aad404d3a6384910e",
+          "apps/api/src/main.ts": "29fdc1f59ac018224fd8e9bdd3274bbe5cce3e5e60948862fbe09de4422a51c6",
+          "apps/api/jest.config.js": "e7d0966a0866c2dd9ef5ce1cea135681cfedceafe7c37dc3485a1996fa55b8ef",
+          "apps/api/src/modules/auth/auth.controller.ts": "66017c65cf1d2a92a12a8ea9f8cb9e69218eba5a8895ca85a21488ebbee3a40f",
+          "apps/api/src/common/session.guard.ts": "b34672b26e46dc54d59a7d3feb3af6ceffc299f39af57f99de3a86633b3c6dde",
+          "apps/api/src/modules/auth/auth.service.ts": "a66e0856c42ad9b42aca60556a66319ddde65dd259b14b6e8cd982cf2460d2f8",
+          "apps/api/package.json": "d9712a2547ad664aee02cc702dd922cdc95806e0448c8a51201f0cb4cf9e049f",
+          "apps/api/test/auth.integration.spec.ts": "41ac78c4a68a89ac780537f1940a6be6b477d49e0939e41796c7172a5f5480da",
+          "quality/evidence/T08/tsconfig.check.json": "c561d5be188d0c21c0d91aa222af28c8c205fe57c17357611b3e5a1e6f7318e2",
+          "apps/api/src/modules/auth/admin.guard.ts": "ac83463994e59f08c4ee5d7d53ad753f073eab3b49c0d8056598bfbb9817da98",
+          "apps/api/src/common/csrf.guard.ts": "b01476c2e831c4122ffcb755fa111d7fa7bf471406888cae66f50b5beec78558",
+          "apps/api/src/app.module.ts": "7cb9f8bd1bb17d62b87d4c37292de8a6afd9eddc55108feb305f90216872494f",
+          "apps/api/test/test-cookie-helper.ts": "85a5e5564b5f5db7cf2b895b526f67bd531543528233391476873db1a194cfbb",
+          "apps/api/src/modules/auth/auth.module.ts": "8e78e606622cfef806d2805dc2a549761aded7dd9bb91a85983a9fcf75ad671e"
+        },
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83"
+      },
+      "commands": [
+        {
+          "command": "npm run build --workspace @fg/api",
+          "startedAt": "2026-10-05T04:07:36.6941826Z",
+          "evidenceSha256": "ddc57190891dd2b2b21f38127d6b48861cd628b856300df60629c52c7155c024",
+          "cwd": "E:/FGweb/code",
+          "evidencePath": "quality/evidence/T08/closeout-final-build.txt",
+          "completedAt": "2026-10-05T04:07:43.3321924Z",
+          "exitCode": 0
+        },
+        {
+          "command": "npm run test --workspace @fg/api -- --runInBand test/auth.integration.spec.ts",
+          "startedAt": "2026-10-05T04:07:43.3954257Z",
+          "evidenceSha256": "3613087e39b6342737a59bdf8ae6d447be5921041e08e151790d7a5a8da8c304",
+          "cwd": "E:/FGweb/code",
+          "evidencePath": "quality/evidence/T08/closeout-final-acceptance.txt",
+          "completedAt": "2026-10-05T04:08:03.4428792Z",
+          "exitCode": 0
+        },
+        {
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T08/tsconfig.check.json",
+          "startedAt": "2026-10-05T04:08:03.4718697Z",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "cwd": "E:/FGweb/code",
+          "evidencePath": "quality/evidence/T08/closeout-final-test-types.txt",
+          "completedAt": "2026-10-05T04:08:11.6551261Z",
+          "exitCode": 0
+        },
+        {
+          "command": "npm run lint",
+          "startedAt": "2026-10-05T04:08:11.6582232Z",
+          "evidenceSha256": "9e26cc9ff4b569e5db90454732fd10fd7539c03822105285e1736826ed26fc0f",
+          "cwd": "E:/FGweb/code",
+          "evidencePath": "quality/evidence/T08/closeout-final-lint.txt",
+          "completedAt": "2026-10-05T04:08:17.4460944Z",
+          "exitCode": 0
+        },
+        {
+          "command": "node quality/evidence/T08/direct-runtime-probe.mjs",
+          "cwd": "E:/FGweb/code",
+          "startedAt": "2026-10-05T03:59:53.447Z",
+          "completedAt": "2026-10-05T03:59:53.696Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T08/direct-native-smoke.txt",
+          "evidenceSha256": "8f338ae5d39c2533b9eef32a8419c0afab9035a31a8c286aff524f9dbf2a1af3",
+          "serverPid": 11624,
+          "schemaName": "t08_browser_09bf0b8afe38495a82e132f3d354788c"
+        },
+        {
+          "command": "node --env-file=.env.local quality/evidence/T08/real-oauth-probe.mjs",
+          "cwd": "E:/FGweb/code",
+          "startedAt": "2026-10-05T04:06:25.177Z",
+          "completedAt": "2026-10-05T04:06:25.665Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T08/real-oauth-result.txt",
+          "evidenceSha256": "17f452024003d925dccdd80d15bb246ff449606a43d6c2b646fca8e4aad286ce"
+        },
+        {
+          "command": "node --env-file=.env.local quality/evidence/T08/closeout-audit.mjs",
+          "cwd": "E:/FGweb/code",
+          "startedAt": "2026-10-05T04:08:47.098Z",
+          "completedAt": "2026-10-05T04:08:47.297Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T08/closeout-audit.txt",
+          "evidenceSha256": "535b614a10c6a9cf6fce7845c9a5e084f71aa92da83307919781d8099ffc2522"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T08/codex-review.md",
+        "quality/evidence/T08/codex-verification.json",
+        "quality/evidence/T08/native-verification.json",
+        "quality/evidence/T08/review-findings-initial.md",
+        "quality/evidence/T08/refactor-1-output.txt",
+        "quality/evidence/T08/refactor-2-output.txt",
+        "quality/evidence/T08/direct-review.md",
+        "quality/evidence/T08/direct-reviewed-verification.json",
+        "quality/evidence/T08/direct-native-verification.json",
+        "quality/evidence/T08/direct-baseline-audit.txt",
+        "quality/evidence/T08/direct-provider-red-retry.txt",
+        "quality/evidence/T08/direct-types-red.txt",
+        "quality/evidence/T08/browser-observation.json",
+        "quality/evidence/T08/closeout-verification.json",
+        "quality/evidence/T08/real-oauth-verification.json",
+        "quality/evidence/T08/closeout-audit-verification.json"
+      ],
+      "startedAt": "2026-10-05T02:34:42.7738906Z",
+      "completedAt": "2026-10-05T04:09:15.5063566Z",
+      "blockers": [],
+      "writeAllowlist": [
+        "apps/api/src/modules/auth/**",
+        "apps/api/src/common/session.guard.ts",
+        "apps/api/src/common/csrf.guard.ts",
+        "apps/api/src/main.ts",
+        "apps/api/src/app.module.ts",
+        "apps/api/test/auth.integration.spec.ts",
+        "apps/api/tsconfig.json",
+        "apps/api/jest.config.js",
+        "quality/evidence/T08/**",
+        "apps/api/package.json",
+        "apps/api/test/**"
+      ],
+      "antigravity": {
+        "initialCliResult": "20m timeout returned exit0 with turn in progress; not acceptance",
+        "model": "Gemini 3.6 Flash (High)",
+        "refactorLoops": 2,
+        "conversation": "35eefc63-a3e1-4155-a514-363182fc2aa4",
+        "result": "BLOCKED",
+        "cliEnded": true
+      },
+      "repairExecutor": "Codex direct; user authorized fix/test then Anti2 sequential tasks",
+      "resumedAt": "2026-10-05T03:45:50.8403999Z"
     },
     {
       "id": "T09",

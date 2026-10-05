@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi"><meta charset="utf-8"><title>FG — Kiểm thử Discord T08</title>
+<h1>FG — Kiểm thử đăng nhập Discord</h1>
+<p>Trang kiểm thử local, dùng API đăng nhập thật.</p>
+<button id="login">Đăng nhập Discord</button>
+<button id="check">Kiểm tra session</button>
+<button id="logout">Đăng xuất và kiểm tra lại</button>
+<pre id="status" aria-live="polite">Chưa kiểm tra.</pre>
+<script>
+const status = document.querySelector('#status');
+async function check() {
+  const response = await fetch('/api/v1/me', { credentials: 'same-origin' });
+  if (response.status === 401) { status.textContent = '401 — Chưa đăng nhập hoặc session đã thu hồi.'; return; }
+  if (!response.ok) { status.textContent = 'API trả HTTP ' + response.status; return; }
+  const me = await response.json();
+  status.textContent = '200 — Đã đăng nhập: ' + me.displayName + '\nDiscord identity: ' + (Boolean(me.discordId) ? 'có' : 'thiếu');
+}
+document.querySelector('#check').onclick = () => check().catch(() => status.textContent = 'Không kết nối được API.');
+document.querySelector('#login').onclick = async () => {
+  try {
+    status.textContent = 'Đang mở Discord…';
+    const response = await fetch('/api/auth/sign-in/social', {
+      method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider: 'discord', callbackURL: location.origin + '/__t08_probe?returned=1' })
+    });
+    if (!response.ok) { status.textContent = 'Không mở được đăng nhập: HTTP ' + response.status; return; }
+    const result = await response.json();
+    const url = new URL(result.url);
+    if (url.protocol !== 'https:' || url.hostname !== 'discord.com') throw new Error('Unexpected authorization origin');
+    location.assign(url.href);
+  } catch { status.textContent = 'Không mở được Discord. Kiểm tra evidence của T08.'; }
+};
+document.querySelector('#logout').onclick = async () => {
+  try {
+    const response = await fetch('/api/auth/sign-out', {
+      method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}'
+    });
+    if (!response.ok) { status.textContent = 'Đăng xuất trả HTTP ' + response.status; return; }
+    await check();
+  } catch { status.textContent = 'Không kết nối được API.'; }
+};
+if (new URLSearchParams(location.search).has('returned')) check();
+</script></html>

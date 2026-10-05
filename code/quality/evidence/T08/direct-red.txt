@@ -1,0 +1,230 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/auth.integration.spec.ts
+
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:23048) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/auth.integration.spec.ts (15.418 s)
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › fails safely when required production configuration is missing
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › guest public read succeeds (GET /api/v1/health)
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › guest mutation returns 401 Unauthorized
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › rejects unsigned or tampered session cookies
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › OAuth callback rejects invalid state without 500 server error
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › performs real signed cookie session creation, logout invalidation, and replay rejection
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › banned valid session returns 403 and unrelated actions never unban
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › requireAdmin guard uses immutable server-configured user IDs and Discord account lookup
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › requireOnboarded guard handles negative and positive cases
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › CSRF guard rejects missing, null, foreign, misleading-prefix, and spoofed Host mutations
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › disables automatic account linking by email
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › handles POST /api/auth/sign-in/social with JSON payload, returns Discord OAuth URL with state, and rejects invalid Origin
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › rejects guest account linking attempts through real handler
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › configures Secure cookies on HTTPS base URL outside production and rejects tampered / expired session cookies
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      84 |
+      85 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 86 |     client = await pool.connect();
+         |              ^
+      87 |
+      88 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      89 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:86:14)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        15.911 s, estimated 23 s
+Ran all test suites matching test/auth.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/auth.integration.spec.ts
