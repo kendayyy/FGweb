@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { io } from 'socket.io-client';
-import { GameDTO, MessageDTO, MessageSchema, SocketConversationAckSchema, SocketEventNames } from '@fg/contracts';
+import { GameDTO, MessageDTO, MessageSchema, CreateMessageRequest, SocketConversationAckSchema, SocketEventNames } from '@fg/contracts';
 import { fetchHistory, sendMessage } from './api.js';
 import { reconcileMessages } from './reconcile.js';
 import { registerAuthCleanup } from '../auth/lifecycle.js';
@@ -176,7 +176,7 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
                 setLoadingOlder(false);
         }
     };
-    const send = async (content: string, clientMessageId: string) => {
+    const send = async (content: string, clientMessageId: string, rich?: CreateMessageRequest) => {
         if (!active.current || pendingSend.current)
             throw new Error('Send unavailable');
         pendingSend.current = true;
@@ -185,7 +185,7 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
         controllers.current.add(controller);
         const target = canonical.current;
         try {
-            const message = await sendMessage(target, content, clientMessageId, controller.signal);
+            const message = await sendMessage(target, content, clientMessageId, controller.signal, rich);
             if (!active.current || controller.signal.aborted)
                 throw new Error('Session changed');
             if (message.conversationId !== target)
@@ -200,5 +200,5 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
                 setSending(false);
         }
     };
-    return { messages, connection, conversationResolved, syncError, isLoading: query.isPending, isError: query.isError, hasOlder: Boolean(olderCursor), loadingOlder, loadOlder, retry: async () => { await query.refetch(); await recover(); }, send, sending };
+    return { messages, conversationId, connection, conversationResolved, syncError, isLoading: query.isPending, isError: query.isError, hasOlder: Boolean(olderCursor), loadingOlder, loadOlder, retry: async () => { await query.refetch(); await recover(); }, send, sending };
 }

@@ -1,4 +1,4 @@
-import { GameSchema, MessageSchema, CreateMessageRequestSchema, createPageSchema, GameDTO, Page, MessageDTO } from '@fg/contracts';
+import { GameSchema, MessageSchema, CreateMessageRequestSchema, CreateMessageRequest, createPageSchema, GameDTO, Page, MessageDTO } from '@fg/contracts';
 import { z } from 'zod';
 async function json(url: string, init?: RequestInit) {
     const response = await fetch(url, { ...init, credentials: 'include', headers: { Accept: 'application/json', ...(init?.body ? { 'Content-Type': 'application/json' } : {}), ...init?.headers } });
@@ -13,4 +13,4 @@ export async function fetchHistory(gameId: string, cursor?: string, signal?: Abo
         query.set('cursor', cursor);
     return createPageSchema(MessageSchema).parse(await json(`/api/v1/games/${encodeURIComponent(gameId)}/lobby/messages?${query}`, { signal }));
 }
-export async function sendMessage(conversationId: string, content: string, clientMessageId: string, signal?: AbortSignal) { const body = CreateMessageRequestSchema.parse({ content, clientMessageId }); return MessageSchema.parse(await json(`/api/v1/conversations/${encodeURIComponent(conversationId)}/messages`, { method: 'POST', body: JSON.stringify(body), signal })); }
+export async function sendMessage(conversationId: string, content: string, clientMessageId: string, signal?: AbortSignal, rich?: CreateMessageRequest) { const body = CreateMessageRequestSchema.parse({ ...rich, content, clientMessageId }); return MessageSchema.parse(await json(`/api/v1/conversations/${encodeURIComponent(conversationId)}/messages`, { method: 'POST', body: JSON.stringify(body), signal })); }

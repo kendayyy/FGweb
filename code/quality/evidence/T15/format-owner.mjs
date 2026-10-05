@@ -1,0 +1,3 @@
+import fs from 'node:fs';import ts from 'typescript';
+const files=['apps/web/src/features/chat/RichComposer.tsx','apps/web/src/features/chat/RichMessage.tsx','apps/web/src/features/chat/api.ts','apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/chat-rich.test.tsx'];
+const printer=ts.createPrinter({newLine:ts.NewLineKind.LineFeed});for(const file of files)fs.writeFileSync(file,printer.printFile(ts.createSourceFile(file,fs.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true,file.endsWith('.tsx')?ts.ScriptKind.TSX:ts.ScriptKind.TS)).replace(/[ \t]+$/gm,''));console.log('Formatted T15 owned files.');

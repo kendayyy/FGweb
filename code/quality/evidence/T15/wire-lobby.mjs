@@ -1,0 +1,11 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const file='apps/web/src/features/lobby/LobbyPage.tsx';let text=fs.readFileSync(file,'utf8');
+text=text.replace('GameDTO, ALLOWED_GAMES','GameDTO, MessageDTO, ALLOWED_GAMES').replace('Send, MessageCircle','MessageCircle');
+text=text.replace("import './lobby.css';","import { RichComposer } from '../chat/RichComposer.js';\nimport { RichMessage } from '../chat/RichMessage.js';\nimport './lobby.css';");
+const start=text.indexOf("    const [draft, setDraft]"),end=text.indexOf('viewport = useRef<HTMLDivElement>(null)',start);assert(start>0&&end>start);
+text=text.slice(0,start)+"    const [reply, setReply] = useState<MessageDTO | null>(null), [unread, setUnread] = useState(0);\n    const candidates = Array.from(new Map(chat.messages.flatMap(message => [message.sender, ...message.mentions]).map(person => [person.id, person])).values());\n    const "+text.slice(end);
+const submit=text.indexOf('    const submit = async'),ret=text.indexOf('    return <>',submit);assert(submit>0&&ret>submit);text=text.slice(0,submit)+text.slice(ret);
+text=text.replace('<p className="fg-message-bubble">{message.content}</p>','<RichMessage message={message} onReply={canSend ? setReply : undefined}/>');
+const composer=text.indexOf(' <div className="fg-composer-wrap">');assert(composer>0);
+text=text.slice(0,composer)+` <div className="fg-composer-wrap">{!canSend && <p className="fg-guest-note">{auth.isLoading ? 'Đang kiểm tra tài khoản…' : auth.isError ? 'Không xác minh được tài khoản.' : auth.user && !chat.conversationResolved ? 'Đang kết nối với Lobby…' : <>Bạn đang xem Lobby. <Link to="/login">Đăng nhập Discord</Link> để trò chuyện.</>}</p>}<RichComposer conversationId={chat.conversationId} disabled={!canSend} candidates={candidates} reply={reply} onCancelReply={()=>setReply(null)} onSend={request=>chat.send(request.content,request.clientMessageId,request)}/></div></>;\n}\n`;
+fs.writeFileSync(file,text);console.log('Minimal Lobby rich component wiring; scroll/reconnect flow preserved.');

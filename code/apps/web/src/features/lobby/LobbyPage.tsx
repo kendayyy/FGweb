@@ -1,12 +1,14 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { GameDTO, ALLOWED_GAMES } from '@fg/contracts';
-import { Send, MessageCircle, Users, Bell, House, Gamepad2, ChevronDown } from 'lucide-react';
+import { GameDTO, MessageDTO, ALLOWED_GAMES } from '@fg/contracts';
+import { MessageCircle, Users, Bell, House, Gamepad2, ChevronDown } from 'lucide-react';
 import { fetchGames } from './api.js';
 import { useLobbyChat } from './useLobbyChat.js';
 import { useAuth } from '../auth/index.js';
 import { AppShell } from '../../layouts/AppShell.js';
+import { RichComposer } from '../chat/RichComposer.js';
+import { RichMessage } from '../chat/RichMessage.js';
 import './lobby.css';
 import './responsive.css';
 const abbreviations = ['LM', 'V', 'TFT', 'D2', 'R', 'LQ', 'FF'];
@@ -33,11 +35,9 @@ function ChatPane({ game }: {
 }) {
     const auth = useAuth(), actorKey = `${auth.user?.id ?? 'guest'}:${auth.isSigningOut}`;
     const chat = useLobbyChat(game, actorKey);
-    const [draft, setDraft] = useState(''), [sendError, setSendError] = useState(false), [unread, setUnread] = useState(0);
-    const retryId = useRef<{
-        content: string;
-        id: string;
-    } | null>(null), viewport = useRef<HTMLDivElement>(null), nearBottom = useRef(true), lastCount = useRef(0), loadingAnchor = useRef<{
+    const [reply, setReply] = useState<MessageDTO | null>(null), [unread, setUnread] = useState(0);
+    const candidates = Array.from(new Map(chat.messages.flatMap(message => [message.sender, ...message.mentions]).map(person => [person.id, person])).values());
+    const viewport = useRef<HTMLDivElement>(null), nearBottom = useRef(true), lastCount = useRef(0), loadingAnchor = useRef<{
         id: string;
         offset: number;
     } | null>(null);
@@ -62,23 +62,6 @@ function ChatPane({ game }: {
         }
         lastCount.current = chat.messages.length;
     }, [chat.messages, chat.loadingOlder]);
-    const submit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        if (!canSend || chat.sending || !draft.trim())
-            return;
-        const content = draft.trim();
-        if (!retryId.current || retryId.current.content !== content)
-            retryId.current = { content, id: crypto.randomUUID() };
-        try {
-            await chat.send(content, retryId.current.id);
-            setDraft('');
-            retryId.current = null;
-            setSendError(false);
-        }
-        catch {
-            setSendError(true);
-        }
-    };
     return <><div className="fg-chat-status" aria-live="polite"><span>{chat.connection === 'connected' ? 'Đã kết nối' : chat.connection === 'offline' ? 'Mất kết nối · đang kết nối lại…' : 'Đang kết nối…'}</span>{chat.syncError && <button onClick={() => void chat.retry()}>Tải lại tin</button>}</div><div className="fg-message-list" ref={viewport} onScroll={() => {
             const element = viewport.current;
             if (element) {
@@ -97,17 +80,12 @@ function ChatPane({ game }: {
                 void chat.loadOlder();
             }}>{chat.loadingOlder ? 'Đang tải…' : 'Xem tin trước'}</button>}
  {chat.isLoading && <p className="fg-chat-empty" role="status">Đang tải lịch sử Lobby…</p>}{chat.isError && <div className="fg-chat-empty" role="alert">Không tải được lịch sử Lobby. <button onClick={() => void chat.retry()}>Thử lại</button></div>}{!chat.isLoading && !chat.isError && chat.messages.length === 0 && <div className="fg-chat-empty"><MessageCircle size={32}/><h2>Chào mừng đến Lobby</h2><p>Hãy bắt đầu cuộc trò chuyện và tìm bạn cùng chơi.</p></div>}
- {chat.messages.map(message => <article className="fg-chat-message" key={message.id} data-message-id={message.id}><Link className="fg-chat-avatar" to={`/users/${encodeURIComponent(message.senderId)}/profile`} aria-label={`Hồ sơ ${message.sender.displayName}`}>{message.sender.avatarUrl ? <img src={message.sender.avatarUrl} alt=""/> : message.sender.displayName.slice(0, 1).toUpperCase()}</Link><div className="fg-message-body"><div className="fg-message-meta"><span>{message.sender.displayName}</span><time dateTime={message.createdAt}>{new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Bangkok' }).format(new Date(message.createdAt))}</time></div><p className="fg-message-bubble">{message.content}</p></div></article>)}
+ {chat.messages.map(message => <article className="fg-chat-message" key={message.id} data-message-id={message.id}><Link className="fg-chat-avatar" to={`/users/${encodeURIComponent(message.senderId)}/profile`} aria-label={`Hồ sơ ${message.sender.displayName}`}>{message.sender.avatarUrl ? <img src={message.sender.avatarUrl} alt=""/> : message.sender.displayName.slice(0, 1).toUpperCase()}</Link><div className="fg-message-body"><div className="fg-message-meta"><span>{message.sender.displayName}</span><time dateTime={message.createdAt}>{new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Bangkok' }).format(new Date(message.createdAt))}</time></div><RichMessage message={message} onReply={canSend ? setReply : undefined}/></div></article>)}
  </div>{unread > 0 && <button className="fg-new-messages" onClick={() => {
                 nearBottom.current = true;
                 setUnread(0);
                 if (viewport.current)
                     viewport.current.scrollTop = viewport.current.scrollHeight;
             }}>{unread} tin mới ↓</button>}
- <div className="fg-composer-wrap">{sendError && <p role="alert">Không gửi được tin. Nội dung đã được giữ lại để bạn thử lại.</p>}{!canSend && <p className="fg-guest-note">{auth.isLoading ? 'Đang kiểm tra tài khoản…' : auth.isError ? 'Không xác minh được tài khoản.' : auth.user && !chat.conversationResolved ? 'Đang kết nối với Lobby…' : <>Bạn đang xem Lobby. <Link to="/login">Đăng nhập Discord</Link> để trò chuyện.</>}</p>}<form className="fg-chat-composer" onSubmit={event => void submit(event)}><textarea aria-label="Tin nhắn Lobby" placeholder="Nhắn vào Lobby…" maxLength={2000} rows={1} value={draft} disabled={!canSend || chat.sending} onChange={event => setDraft(event.target.value)} onKeyDown={event => {
-            if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
-                event.preventDefault();
-                void submit(event);
-            }
-        }}/><button type="submit" aria-label="Gửi tin nhắn" disabled={!canSend || chat.sending || !draft.trim()}><Send size={20}/></button></form></div></>;
+ <div className="fg-composer-wrap">{!canSend && <p className="fg-guest-note">{auth.isLoading ? 'Đang kiểm tra tài khoản…' : auth.isError ? 'Không xác minh được tài khoản.' : auth.user && !chat.conversationResolved ? 'Đang kết nối với Lobby…' : <>Bạn đang xem Lobby. <Link to="/login">Đăng nhập Discord</Link> để trò chuyện.</>}</p>}<RichComposer conversationId={chat.conversationId} disabled={!canSend} candidates={candidates} reply={reply} onCancelReply={() => setReply(null)} onSend={request => chat.send(request.content, request.clientMessageId, request)}/></div></>;
 }

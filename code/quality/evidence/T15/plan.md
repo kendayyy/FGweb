@@ -1,0 +1,7 @@
+# T15 — Rich chat frontend
+
+T14 PASS and gate verified. Implement shared composer/message components under features/chat and chat-rich.test.tsx; minimal wiring in existing LobbyPage/useLobbyChat/api connects these components to the canonical conversation and existing reconciler. This is required integration of the specified T15 functionality, with no new product scope, contracts, backend, design theme or earlier tests changed. All rich implementation remains in features/chat. Reuse locked packages and shared schemas.
+
+Behavior RED first: failed send preserves text and attachment; retries preserve clientMessageId; cancel reply; emoji preserves insertion caret; mention choice sends opaque API ID; literal script remains text; private image uses authenticated protected endpoints, keyboard close and blob cleanup; guest cannot upload/send; changing conversation/session disposes upload/download resources. Upload progress must reflect actual XHR, not fabricated timers. Mention candidates come from validated messages in this conversation, with no fake directory. Broader member directory belongs to later presence tasks.
+
+Validate component tests, untouched FE regression, typecheck/lint/build, actual built UI with native compiled API/PostgreSQL/Redis at four viewports. Capture screenshots and keyboard/privacy/retry behavior. No PASS from jsdom alone or visual rendering. Preserve T13 scroll/reconnect mechanisms.
