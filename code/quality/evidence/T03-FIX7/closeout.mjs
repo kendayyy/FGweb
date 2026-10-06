@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T03-FIX7',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T03-FIX7');
+assert.equal(t.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.id==='T18-FIX1').status,'NOT_STARTED');
+const labels=['preflight-1','independent-build-1','independent-contracts-1','independent-types-1','independent-lint-1','independent-web-types-1','independent-transport-1','independent-audit-2','independent-diff-2'];
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0,r.command);assert.equal(hash(r.evidencePath),r.evidenceSha256);assert(Date.parse(r.startedAt)>=Date.parse(t.startedAt));}
+assert(fs.readFileSync(`${dir}/codex-independent-contracts-1.txt`,'utf8').includes('64 passed'));
+const red=JSON.parse(fs.readFileSync(`${dir}/codex-recovered-red.json`));assert.equal(red.exitCode,1);assert.equal(hash(red.evidencePath),red.evidenceSha256);
+const handoff=JSON.parse(fs.readFileSync(`${dir}/codex-producer-handoff-red-1.json`));assert.equal(handoff.exitCode,2);assert.equal(hash(handoff.evidencePath),handoff.evidenceSha256);
+const handoffOutput=fs.readFileSync(handoff.evidencePath,'utf8');assert.equal((handoffOutput.match(/error TS/g)??[]).length,2);assert(handoffOutput.includes('conversationId'));assert(handoffOutput.includes('rooms.service.ts(120,5)'));assert(handoffOutput.includes('rooms.service.ts(238,13)'));
+for(const prefix of ['antigravity','refactor1'])assert.equal(fs.readFileSync(`${dir}/${prefix}-exit.txt`,'utf8').trim(),'0');
+assert(fs.readFileSync(`${dir}/review.md`,'utf8').includes('Contract-only Codex review: PASS'));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({verifiedContractAcceptance:records,actualRed:red,expectedProducerHandoff:handoff,backendIntegrationStatus:'NOT_VERIFIED_PENDING_APPROVED_T18-FIX1'},null,2)+'\n');
+const files=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const outputs=['packages/contracts/src/rooms.ts','packages/contracts/test/contracts.test.ts','packages/contracts/test/room-chat-bridge.test.ts','quality/api-contract.md',...files('packages/contracts/dist'),...files(dir)];
+Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:files(dir),outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))},blockers:[],producerHandoff:{task:'T18-FIX1',status:'REQUIRED_BEFORE_T19',evidencePath:handoff.evidencePath}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Authenticated room chat conversation ID required and separate from room ID; public card privacy unchanged | T03-FIX7 |4 genuine RED behaviors plus corrected page fixture;64 contracts, six compiled endpoint transports, contract/test+web types/lint/build/frozen audit PASS; API producer handoff explicitly pending T18-FIX1 | PASS (contracts only) |\n');
+console.log('T03-FIX7 contract acceptance PASS; backend integration remains explicitly pending T18-FIX1.');

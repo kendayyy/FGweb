@@ -196,3 +196,10 @@ Room lists return only rooms the authenticated user belongs to; room details/mem
 ConversationRead permits guest reads only for canonical public Lobby; private chat/attachments require current conversation membership. ConversationMember requires authenticated authorized membership. MessageAuthorOrModerator requires author, applicable MANAGE_CHAT or website admin. RoomMember and CallParticipant require current membership, not merely login. RoomHelperOrOwner requires owner or the exact requiredPermission stored in the registry (MANAGE_CALLS for calls, MANAGE_RECRUITMENT for team/recruitment actions). Owner transfer/dissolve remain owner-only. Metadata is a contract, not an implemented authorization middleware; backend tasks must enforce it.
 
 LobbyMessagesQuerySchema imports the shared GameTitleSchema enum of the approved seven games; no independent game-title validation. Public room endpoints cannot return private metadata even though members may receive private RoomDTOs.
+
+### T03-FIX7 Room Chat Bridge Transport Contract
+
+- **Separate Identifiers**: `RoomSchema` requires both `id` (the opaque room ID) and `conversationId` (the opaque underlying chat conversation ID). `id` and `conversationId` are distinct opaque identifiers and may differ.
+- **Membership ACL**: Access to room chat via `conversationId` requires active room membership (`RoomMember` / `ConversationRead` / `ConversationMember`). Public room visibility permits recruitment card discovery only and never grants room chat or voice call access.
+- **Uniform Room Response Shape**: All room endpoints returning room objects (`POST /api/v1/rooms`, `GET /api/v1/rooms/:id`, `GET /api/v1/rooms`, `GET /api/v1/rooms/own`, `PATCH /api/v1/rooms/:id/settings`, `POST /api/v1/rooms/:id/transfer-owner`) output `RoomSchema` / `RoomDTO` containing the required `conversationId`.
+- **Public Recruitment Cards**: `PublicRecruitmentSchema` remains unchanged and does not expose internal room `conversationId` or private room metadata to unauthenticated users or guest catalog views.

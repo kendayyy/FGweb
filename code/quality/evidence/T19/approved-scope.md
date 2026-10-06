@@ -1,0 +1,3 @@
+# User-approved scope
+
+User replied “Permission to broaden Write Scope or touch locked files” to the concrete prerequisite proposal and approval question. This approves T03-FIX7 required conversationId contract, T18-FIX1 backend actual room conversation FK projection, and T19 App.tsx protected route/navigation wiring as specifically proposed. No general permission to edit unrelated locked files. Original T18 remains PASS; follow-up ownership is recorded in new tasks. Sequence T03-FIX7 → T18-FIX1 → T19, one at a time. Antigravity Gemini3.6 Flash (High) implements, Anti2 observes, Codex independently reviews/closes. Existing product/design/mockup baselines unchanged.

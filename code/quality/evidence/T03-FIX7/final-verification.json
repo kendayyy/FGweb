@@ -1,0 +1,122 @@
+{
+  "verifiedContractAcceptance": [
+    {
+      "command": "node scripts/verify-task.mjs T03-FIX7 packages/contracts/src/rooms.ts packages/contracts/test/contracts.test.ts packages/contracts/test/room-chat-bridge.test.ts quality/api-contract.md",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:12:41.633Z",
+      "completedAt": "2026-10-06T16:12:46.033Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-preflight-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/contracts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:20:37.273Z",
+      "completedAt": "2026-10-06T16:20:44.204Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-build-1.txt",
+      "evidenceSha256": "7c96070e2dee1fe34fa5ebbe0769540b26c561496a0a6e1d3a474f9c393fbf86"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/contracts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:21:00.041Z",
+      "completedAt": "2026-10-06T16:21:11.354Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-contracts-1.txt",
+      "evidenceSha256": "627421f909452547bf91703e89b46d3185ad4ca55a5da32d863f0d43f0d5da26"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T03-FIX7/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:21:00.931Z",
+      "completedAt": "2026-10-06T16:21:18.399Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/rooms.ts packages/contracts/test/contracts.test.ts packages/contracts/test/room-chat-bridge.test.ts --max-warnings 0",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:21:01.634Z",
+      "completedAt": "2026-10-06T16:21:17.623Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:21:02.445Z",
+      "completedAt": "2026-10-06T16:21:23.176Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-web-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T03-FIX7/transport-review.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:22:28.397Z",
+      "completedAt": "2026-10-06T16:22:28.859Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-transport-1.txt",
+      "evidenceSha256": "2a8dc226e6ffc088176cd1f7b42e37b7262a6616e9b10decc0aaf11da4adabfe"
+    },
+    {
+      "command": "node quality/evidence/T03-FIX7/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:28:31.931Z",
+      "completedAt": "2026-10-06T16:28:38.000Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-audit-2.txt",
+      "evidenceSha256": "5773ec3549565203dd7f8356e77ee858d59ab0f54b5bb3c2034eda2e311b8307"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T16:28:38.118Z",
+      "completedAt": "2026-10-06T16:28:38.275Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX7/codex-independent-diff-2.txt",
+      "evidenceSha256": "4c5a4e0d672e8a037129d6d0d2a1fd6776fc32dfe8bc0d14228d3175096fcfdc"
+    }
+  ],
+  "actualRed": {
+    "command": "npm run test --workspace @fg/contracts -- test/room-chat-bridge.test.ts",
+    "cwd": "E:/FGweb/code",
+    "startedAt": "2026-10-06T16:15:54Z",
+    "completedAt": "2026-10-06T16:16:20Z",
+    "exitCode": 1,
+    "evidencePath": "quality/evidence/T03-FIX7/codex-recovered-red.txt",
+    "evidenceSha256": "40256cd16b72694601c1d4cc34a481de5244d11d29a52a25697fd1decf4849c5",
+    "source": "C:/Users/PC/.gemini/antigravity-cli/brain/7cf610d9-3a41-43fa-b4a8-a46b392656b1/.system_generated/tasks/task-22.log",
+    "sourceSteps": [
+      21,
+      22,
+      24,
+      25
+    ],
+    "note": "Four behavior failures from missing/unpreserved conversationId; fifth page test also lacked required hasMore fixture. Full original output retained; no five-behavior RED claim."
+  },
+  "expectedProducerHandoff": {
+    "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --noEmit",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T16:21:02.503Z",
+    "completedAt": "2026-10-06T16:21:36.375Z",
+    "exitCode": 2,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX7/codex-producer-handoff-red-1.txt",
+    "evidenceSha256": "fea3e62431c5df912f3320d412f543264b1f53e95f50e1711894d1860e04f1a5"
+  },
+  "backendIntegrationStatus": "NOT_VERIFIED_PENDING_APPROVED_T18-FIX1"
+}

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const root='C:/Users/PC/.gemini/antigravity-cli/brain/7cf610d9-3a41-43fa-b4a8-a46b392656b1/.system_generated';
+const rows=fs.readFileSync(`${root}/logs/transcript.jsonl`,'utf8').trim().split(/\r?\n/).map(JSON.parse);
+const start=rows.find(r=>r.step_index===21),finish=rows.find(r=>r.step_index===24);
+assert(start.tool_calls[0].name==='run_command');assert(finish.content.includes('command exited with code 1'));
+const edit=rows.find(r=>r.step_index===25);assert(edit.tool_calls[0].args.TargetFile.includes('src/rooms.ts'));assert(finish.step_index<edit.step_index&&Date.parse(finish.created_at)<=Date.parse(edit.created_at),'RED must precede schema edit; provider timestamps have second precision');
+const evidencePath='quality/evidence/T03-FIX7/codex-recovered-red.txt';assert(!fs.existsSync(evidencePath));
+fs.copyFileSync(`${root}/tasks/task-22.log`,evidencePath);
+const output=fs.readFileSync(evidencePath,'utf8');assert(output.includes('5 failed'));assert(output.includes("expected undefined to be 'conv_abc123'"));
+const record={command:JSON.parse(start.tool_calls[0].args.CommandLine),cwd:JSON.parse(start.tool_calls[0].args.Cwd),startedAt:start.created_at,completedAt:finish.created_at,exitCode:1,evidencePath,evidenceSha256:createHash('sha256').update(fs.readFileSync(evidencePath)).digest('hex'),source:`${root}/tasks/task-22.log`,sourceSteps:[21,22,24,25],note:'Four behavior failures from missing/unpreserved conversationId; fifth page test also lacked required hasMore fixture. Full original output retained; no five-behavior RED claim.'};
+fs.writeFileSync('quality/evidence/T03-FIX7/codex-recovered-red.json',JSON.stringify(record,null,2)+'\n');console.log('Recovered actual pre-schema RED, exit1; source ordering verified.');

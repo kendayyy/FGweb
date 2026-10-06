@@ -1,0 +1,46 @@
+Allocation complete. Waiting for task completion notification.
+Allocation complete. Waiting for task completion notification.
+Allocation complete. Waiting for task completion notification.
+Allocation complete. Waiting for task completion notification.
+Allocation complete. Waiting for task completion notification.
+### Changed Files (Written Exactly Four Files)
+1. [`packages/contracts/src/rooms.ts`](file:///E:/FGweb/code/packages/contracts/src/rooms.ts#L75-L87) - Added required `conversationId: IdSchema` field to `RoomSchema`.
+2. [`packages/contracts/test/contracts.test.ts`](file:///E:/FGweb/code/packages/contracts/test/contracts.test.ts#L15) - Added `conversationId: 'c'` to the existing room test fixture while preserving all existing assertions.
+3. [`packages/contracts/test/room-chat-bridge.test.ts`](file:///E:/FGweb/code/packages/contracts/test/room-chat-bridge.test.ts#L1-L93) - Added unit test suite verifying `RoomSchema` and shared page transport requirements for opaque `conversationId`.
+4. [`quality/api-contract.md`](file:///E:/FGweb/code/quality/api-contract.md#L199-L208) - Added contract documentation for T03-FIX7 Room Chat Bridge Transport (separate IDs, membership ACL, response shape across endpoints, public recruitment shape preservation).
+
+*(Build output generated under `packages/contracts/dist/**` via `npm run build --workspace @fg/contracts`.)*
+
+---
+
+### Genuine RED Evidence Step
+- **Command**: `npm run test --workspace @fg/contracts -- test/room-chat-bridge.test.ts`
+- **Exit Code**: `1`
+- **Results**: 5 failed (5 tests run)
+- **Failure Cause**: `RoomSchema` parsed room objects without exposing `conversationId` (`AssertionError: expected undefined to be 'conv_abc123'`), and allowed missing/blank `conversationId` payloads to succeed prior to schema enforcement.
+
+---
+
+### Verification Summary & Test Counts
+
+1. **Contracts Test Suite (GREEN post-schema edit)**:
+   - **Command**: `npm run test --workspace @fg/contracts`
+   - **Exit Code**: `0`
+   - **Test Results**: 11 test files passed, 64 tests passed.
+
+2. **Contracts Package Build**:
+   - **Command**: `npm run build --workspace @fg/contracts`
+   - **Exit Code**: `0`
+
+3. **Contracts Typecheck**:
+   - **Command**: `node node_modules/typescript/bin/tsc -p packages/contracts/tsconfig.json --noEmit`
+   - **Exit Code**: `0`
+
+4. **Lint Check**:
+   - **Command**: `npx eslint packages/contracts/src/rooms.ts packages/contracts/test/contracts.test.ts packages/contracts/test/room-chat-bridge.test.ts`
+   - **Exit Code**: `0`
+
+---
+
+### Backend Producer Handoff Note
+The `@fg/contracts` package now strictly requires `conversationId` on all `RoomSchema` / `RoomDTO` structures. As planned, backend API producers in `apps/api` have not been modified in this task and remain missing `conversationId` until the authorized follow-up task **T18-FIX1**. T18-FIX1 and T19 were not implemented in this conversation.

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const p='quality/tasks.json',x=JSON.parse(fs.readFileSync(p));
+assert(!x.tasks.some(t=>t.id==='T03-FIX7'),'Already planned');
+const i=x.tasks.findIndex(t=>t.id==='T19');
+const base={specSha256:x.tasks[i].specSha256,inputsHash:null,outputsHash:null,commands:[],evidencePaths:[],startedAt:null,completedAt:null,blockers:[]};
+x.tasks.splice(i,0,{...base,id:'T03-FIX7',status:'IN_PROGRESS',dependencies:['T18'],inputsHash:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),startedAt:new Date().toISOString(),writeAllowlist:['packages/contracts/src/rooms.ts','packages/contracts/test/contracts.test.ts','packages/contracts/test/room-chat-bridge.test.ts','packages/contracts/dist/**','quality/api-contract.md','quality/evidence/T03-FIX7/**']},{...base,id:'T18-FIX1',status:'NOT_STARTED',dependencies:['T03-FIX7'],writeAllowlist:['apps/api/src/modules/rooms/rooms.service.ts','apps/api/test/rooms.integration.spec.ts','quality/evidence/T18-FIX1/**']});
+const t=x.tasks.find(t=>t.id==='T19');t.dependencies=['T18-FIX1'];t.blockers=['Waiting for approved T03-FIX7 and T18-FIX1; scope approval received.'];
+t.writeAllowlist=['apps/web/src/features/rooms/**','apps/web/test/rooms.test.tsx','apps/web/src/App.tsx','quality/evidence/T19/**'];
+fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
+fs.writeFileSync('quality/evidence/T03-FIX7/record-check.mjs',fs.readFileSync('quality/evidence/T18/record-check.mjs','utf8').replace("const dir = 'quality/evidence/T18';","const dir = 'quality/evidence/T03-FIX7';"));
+console.log('Approved sequential queue recorded; T03-FIX7 active.');

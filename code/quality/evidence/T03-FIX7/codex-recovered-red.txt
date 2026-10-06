@@ -1,0 +1,125 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/room-chat-bridge.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/room-chat-bridge.test.ts (5 tests | 5 failed) 30ms
+   ❯ T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema (5)
+     × requires conversationId in authenticated RoomSchema and parses valid opaque conversationId 20ms
+     × allows conversationId and roomId (id) to differ as separate opaque identifiers 2ms
+     × rejects room response when conversationId is missing 3ms
+     × rejects room response when conversationId is blank or whitespace-only 1ms
+     × requires conversationId across shared page transports for rooms 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/room-chat-bridge.test.ts > T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema > requires conversationId in authenticated RoomSchema and parses valid opaque conversationId
+AssertionError: expected undefined to be 'conv_abc123' // Object.is equality
+
+- Expected:
+"conv_abc123"
+
++ Received:
+undefined
+
+ ❯ test/room-chat-bridge.test.ts:30:75
+     28|     expect(result.success).toBe(true);
+     29|     if (result.success) {
+     30|       expect((result.data as { conversationId?: string }).conversation…
+       |                                                                           ^
+     31|       expect(result.data.id).toBe('room_123');
+     32|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/room-chat-bridge.test.ts > T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema > allows conversationId and roomId (id) to differ as separate opaque identifiers
+AssertionError: expected undefined to be 'conv_id_999' // Object.is equality
+
+- Expected:
+"conv_id_999"
+
++ Received:
+undefined
+
+ ❯ test/room-chat-bridge.test.ts:45:75
+     43|     if (result.success) {
+     44|       expect(result.data.id).toBe('room_id_001');
+     45|       expect((result.data as { conversationId?: string }).conversation…
+       |                                                                           ^
+     46|       expect(result.data.id).not.toBe((result.data as { conversationId…
+     47|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/room-chat-bridge.test.ts > T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema > rejects room response when conversationId is missing
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/room-chat-bridge.test.ts:55:28
+     53|     };
+     54|     const result = c.RoomSchema.safeParse(roomWithoutConvId);
+     55|     expect(result.success).toBe(false);
+       |                            ^
+     56|   });
+     57|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/room-chat-bridge.test.ts > T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema > rejects room response when conversationId is blank or whitespace-only
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/room-chat-bridge.test.ts:67:61
+     65|       conversationId: '   ',
+     66|     };
+     67|     expect(c.RoomSchema.safeParse(roomWithEmptyId).success).toBe(false…
+       |                                                             ^
+     68|     expect(c.RoomSchema.safeParse(roomWithSpaceId).success).toBe(false…
+     69|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/room-chat-bridge.test.ts > T03-FIX7 Room Chat Bridge - conversationId requirement in RoomSchema > requires conversationId across shared page transports for rooms
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/room-chat-bridge.test.ts:82:57
+     80|       nextCursor: null,
+     81|     };
+     82|     expect(PageRoomSchema.safeParse(validPage).success).toBe(true);
+       |                                                         ^
+     83|
+     84|     const invalidPage = {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  23:16:16
+   Duration  2.39s (transform 47%, import 37%, worker 12%, tests 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/room-chat-bridge.test.ts

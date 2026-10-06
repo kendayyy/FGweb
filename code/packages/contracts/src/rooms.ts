@@ -74,6 +74,7 @@ export type RoomSettingsDTO = z.infer<typeof RoomSettingsSchema>;
 
 export const RoomSchema = z.object({
   id: IdSchema,
+  conversationId: IdSchema,
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   gameId: IdSchema,
