@@ -16,7 +16,7 @@ import { RoomSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettin
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
 import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
-import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
+import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, ListFriendRequestsQuerySchema, PendingFriendRequestSchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
 import { ListGameOnlineUsersQuerySchema, UpdateCustomStatusRequestSchema, UpdateCustomStatusResponseSchema, SocketPresenceRequestSchema, SocketScopedPresenceChangedPayloadSchema } from './presence.js';
 
 export * from './common.js';
@@ -117,6 +117,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/attachments/:id/content', auth: 'ConversationRead', responseSchema: ImageContentSchema,responseFormat:'binary' },
 
   { method: 'GET', path: '/api/v1/friends', auth: 'Authenticated', requestSchema: ListFriendsQuerySchema, responseSchema: createPageSchema(PublicProfileSchema) },
+  { method: 'GET', path: '/api/v1/friends/requests', auth: 'Authenticated', requestSchema: ListFriendRequestsQuerySchema, responseSchema: createPageSchema(PendingFriendRequestSchema) },
   { method: 'POST', path: '/api/v1/friends/requests', auth: 'Authenticated', requestSchema: SendFriendRequestSchema, responseSchema: z.object({ requestId: IdSchema, status: z.literal('PENDING') }) },
   { method: 'PATCH', path: '/api/v1/friends/requests/:id/respond', auth: 'Authenticated', requestSchema: RespondFriendRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'DELETE', path: '/api/v1/friends/:userId', auth: 'Authenticated', requestSchema: RemoveFriendSchema, responseSchema: z.object({ success: z.boolean() }) },

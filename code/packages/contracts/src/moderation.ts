@@ -53,6 +53,24 @@ export const ListFriendsQuerySchema = z.object({
 });
 export type ListFriendsQuery = z.infer<typeof ListFriendsQuerySchema>;
 
+export const ListFriendRequestsQuerySchema = z.object({
+  direction: z.enum(['INCOMING', 'OUTGOING']).default('INCOMING'),
+  cursor: z.string().optional(),
+  limit: z.number().int().min(1).max(50).default(50),
+});
+export type ListFriendRequestsQuery = z.infer<typeof ListFriendRequestsQuerySchema>;
+
+export const PendingFriendRequestSchema = z.object({
+  requestId: IdSchema,
+  sender: UserSummarySchema,
+  receiver: UserSummarySchema,
+  status: z.literal('PENDING'),
+  createdAt: IsoDateTimeSchema,
+  updatedAt: IsoDateTimeSchema,
+});
+export type PendingFriendRequestDTO = z.infer<typeof PendingFriendRequestSchema>;
+export type PendingFriendRequest = PendingFriendRequestDTO;
+
 export const RespondFriendRequestSchema = z.object({
   action: z.enum(['ACCEPT', 'REJECT']),
 });

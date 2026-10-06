@@ -1,0 +1,112 @@
+[
+  {
+    "command": "node scripts/verify-task.mjs T03-FIX6",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T02:54:21.536Z",
+    "completedAt": "2026-10-06T02:54:24.856Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-preflight.txt",
+    "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+  },
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/contracts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:05:09.301Z",
+    "completedAt": "2026-10-06T03:05:19.490Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-contracts.txt",
+    "evidenceSha256": "9a9ea6797d176c3e4203554333efd713e41dcf45990811bd64d66a229397ecda"
+  },
+  {
+    "command": "node node_modules/vitest/vitest.mjs run --config quality/evidence/T03-FIX6/reviewer-vitest.config.mts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:05:08.698Z",
+    "completedAt": "2026-10-06T03:05:14.189Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-review.txt",
+    "evidenceSha256": "5697602380de43cd9945738b23cdd7d9eb706b6adaefc0e3fc8e4830d53bf92f"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T03-FIX6/test-types.json",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:05:10.101Z",
+    "completedAt": "2026-10-06T03:05:24.872Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-types.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/moderation.ts packages/contracts/src/index.ts packages/contracts/test/social-contracts.test.ts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:05:11.597Z",
+    "completedAt": "2026-10-06T03:05:24.466Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-lint.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node quality/evidence/T03-FIX6/compatibility-audit.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:05:12.376Z",
+    "completedAt": "2026-10-06T03:05:14.184Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-compatibility.txt",
+    "evidenceSha256": "baef7321d934f475c7eff39f7523f3f7a25fbd9e6734e0ca0f79dd43d948fd07"
+  },
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/contracts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:02:33.582Z",
+    "completedAt": "2026-10-06T03:02:43.127Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-contracts-build.txt",
+    "evidenceSha256": "7c96070e2dee1fe34fa5ebbe0769540b26c561496a0a6e1d3a474f9c393fbf86"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --noEmit",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:03:17.072Z",
+    "completedAt": "2026-10-06T03:03:29.464Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-typecheck-api.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:03:38.310Z",
+    "completedAt": "2026-10-06T03:03:46.980Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-typecheck-web.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "git diff --check",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:08:10.959Z",
+    "completedAt": "2026-10-06T03:08:11.043Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-diff-final.txt",
+    "evidenceSha256": "4e820e4ce3fdce0bae5be32fb6b9a16c2e0f0717a433e66563be5176a699d73e"
+  },
+  {
+    "command": "node quality/evidence/T03-FIX6/audit.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:08:11.162Z",
+    "completedAt": "2026-10-06T03:08:13.515Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T03-FIX6/codex-independent-audit-final.txt",
+    "evidenceSha256": "c49d825a3dc7a347d15277fa9ac828e974c3c888f6f5c106746bb42c2a869314"
+  }
+]

@@ -1,0 +1,97 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/social-contracts.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/social-contracts.test.ts (5 tests | 5 failed) 38ms
+   ❯ T03-FIX6 Pending Friend Requests Listing Contracts (5)
+     × exports ListFriendRequestsQuerySchema and PendingFriendRequestSchema 17ms
+     × ListFriendRequestsQuerySchema applies direction and limit defaults and validates bounds 3ms
+     × PendingFriendRequestSchema validates request DTO fields and rejects invalid status/dates/user summaries 3ms
+     × supports createPageSchema pagination and ensures privacy projection 7ms
+     × registers GET /api/v1/friends/requests endpoint in ApiEndpointRegistry 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/social-contracts.test.ts > T03-FIX6 Pending Friend Requests Listing Contracts > exports ListFriendRequestsQuerySchema and PendingFriendRequestSchema
+AssertionError: expected undefined to be defined
+ ❯ test/social-contracts.test.ts:6:45
+      4| describe('T03-FIX6 Pending Friend Requests Listing Contracts', () => {
+      5|   it('exports ListFriendRequestsQuerySchema and PendingFriendRequestSc…
+      6|     expect(c.ListFriendRequestsQuerySchema).toBeDefined();
+       |                                             ^
+      7|     expect(c.PendingFriendRequestSchema).toBeDefined();
+      8|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/social-contracts.test.ts > T03-FIX6 Pending Friend Requests Listing Contracts > ListFriendRequestsQuerySchema applies direction and limit defaults and validates bounds
+TypeError: Cannot read properties of undefined (reading 'parse')
+ ❯ test/social-contracts.test.ts:12:59
+     10|   it('ListFriendRequestsQuerySchema applies direction and limit defaul…
+     11|     // Defaults
+     12|     const defaultParsed = c.ListFriendRequestsQuerySchema.parse({});
+       |                                                           ^
+     13|     expect(defaultParsed).toEqual({
+     14|       direction: 'INCOMING',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/social-contracts.test.ts > T03-FIX6 Pending Friend Requests Listing Contracts > PendingFriendRequestSchema validates request DTO fields and rejects invalid status/dates/user summaries
+TypeError: Cannot read properties of undefined (reading 'safeParse')
+ ❯ test/social-contracts.test.ts:57:41
+     55|     };
+     56|
+     57|     expect(c.PendingFriendRequestSchema.safeParse(validRequest).succes…
+       |                                         ^
+     58|
+     59|     // Rejects invalid literal status (must be PENDING)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/social-contracts.test.ts > T03-FIX6 Pending Friend Requests Listing Contracts > supports createPageSchema pagination and ensures privacy projection
+TypeError: Cannot read properties of undefined (reading '_zod')
+ ❯ inst._zod.parse ../../node_modules/zod/v4/core/schemas.js:845:40
+ ❯ Internals.wrapped ../../node_modules/zod/v4/core/memoizer.js:239:32
+ ❯ eval ../../node_modules/zod/v4/core/doc.js:35:25
+ ❯ inst._zod.parse ../../node_modules/zod/v4/core/schemas.js:1187:23
+ ❯ Internals.wrapped ../../node_modules/zod/v4/core/memoizer.js:239:32
+ ❯ Module.fn ../../node_modules/zod/v4/core/parse.js:11:36
+ ❯ _parse ../../node_modules/zod/v4/classic/schemas.js:135:22
+ ❯ test/social-contracts.test.ts:116:31
+    114|     };
+    115|
+    116|     const parsed = PageSchema.parse(pageData);
+       |                               ^
+    117|     expect(parsed.items).toHaveLength(1);
+    118|     expect(parsed.nextCursor).toBe('next_page_cursor_xyz');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/social-contracts.test.ts > T03-FIX6 Pending Friend Requests Listing Contracts > registers GET /api/v1/friends/requests endpoint in ApiEndpointRegistry
+AssertionError: expected undefined to be defined
+ ❯ test/social-contracts.test.ts:134:22
+    132|     );
+    133|
+    134|     expect(endpoint).toBeDefined();
+       |                      ^
+    135|     expect(endpoint?.auth).toBe('Authenticated');
+    136|     expect(endpoint?.requestSchema).toBe(c.ListFriendRequestsQuerySche…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  10:00:02
+   Duration  1.15s (import 51%, transform 43%, tests 5%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/social-contracts.test.ts

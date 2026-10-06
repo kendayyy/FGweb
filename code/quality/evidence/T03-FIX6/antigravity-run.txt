@@ -1,0 +1,49 @@
+### Summary of Task T03-FIX6 Implementation
+
+#### Task Details
+- **Task ID**: `T03-FIX6` (Pending Friend Requests Listing Contract)
+- **Status**: Complete & Verified (Ready for Codex Review)
+- **Model**: Gemini 3.6 Flash (High)
+- **Working Directory**: `E:/FGweb/code`
+
+---
+
+#### Modified & Created Files
+1. **[moderation.ts](file:///E:/FGweb/code/packages/contracts/src/moderation.ts)**
+   - Defined `ListFriendRequestsQuerySchema` and inferred `ListFriendRequestsQuery` type (`direction`: `'INCOMING' | 'OUTGOING'` defaulting to `'INCOMING'`, `cursor`: optional string, `limit`: integer 1..50 defaulting to 50).
+   - Defined `PendingFriendRequestSchema` and `PendingFriendRequestDTO` / `PendingFriendRequest` types (`requestId`: `IdSchema`, `sender`: `UserSummarySchema`, `receiver`: `UserSummarySchema`, `status`: `z.literal('PENDING')`, `createdAt`/`updatedAt`: `IsoDateTimeSchema`).
+2. **[index.ts](file:///E:/FGweb/code/packages/contracts/src/index.ts)**
+   - Re-exported `ListFriendRequestsQuerySchema` and `PendingFriendRequestSchema`.
+   - Registered `GET /api/v1/friends/requests` endpoint in `ApiEndpointRegistry` with `Authenticated` level, `ListFriendRequestsQuerySchema` request schema, and `Page<PendingFriendRequestSchema>` response schema.
+3. **[social-contracts.test.ts](file:///E:/FGweb/code/packages/contracts/test/social-contracts.test.ts)**
+   - Added unit tests covering export existence, defaults, direction enum values, numeric bounds, DTO schema validation, Zod `createPageSchema` pagination, privacy projection (omitting private profile/session fields), and registry entries.
+4. **[api-contract.md](file:///E:/FGweb/code/quality/api-contract.md)**
+   - Updated specification section `5.4 Social, Friends & DM` to document `GET /api/v1/friends/requests`, detailing backend actor-only filtering obligations for `INCOMING`/`OUTGOING` directions, public profile graph privacy, and preservation of existing send/respond/cancel transport endpoints.
+5. **Evidence Artifacts**:
+   - `quality/evidence/T03-FIX6/codex-red.json` / `codex-red.txt` (Initial RED assertion run)
+   - `quality/evidence/T03-FIX6/codex-pass.json` / `codex-pass.txt` (Green test run)
+   - `quality/evidence/T03-FIX6/codex-contracts-regression.json` / `codex-contracts-regression.txt` (Full `@fg/contracts` test regression)
+   - `quality/evidence/T03-FIX6/codex-contracts-build.json` / `codex-contracts-build.txt` (Workspace build)
+   - `quality/evidence/T03-FIX6/codex-typecheck-contracts-v2.json` / `codex-typecheck-contracts-v2.txt` (Contracts typecheck using `test-types.json`)
+   - `quality/evidence/T03-FIX6/codex-typecheck-api.json` / `codex-typecheck-api.txt` (`@fg/api` source typecheck)
+   - `quality/evidence/T03-FIX6/codex-typecheck-web.json` / `codex-typecheck-web.txt` (`@fg/web` source typecheck)
+   - `quality/evidence/T03-FIX6/codex-lint-check.json` / `codex-lint-check.txt` (ESLint on modified sources & new test file)
+   - `quality/evidence/T03-FIX6/codex-audit-check.json` / `codex-audit-check.txt` (Scope & baseline audit execution)
+
+---
+
+#### Verification Results
+- **RED Test Executed**: Failed as expected on missing schemas and missing registry endpoint (`exitCode: 1`).
+- **GREEN Test Executed**: 5/5 tests passed (`exitCode: 0`).
+- **Full Contracts Test Suite**: 10 test files, 59 tests passed (`exitCode: 0`).
+- **Contracts Workspace Build**: Compiled clean (`exitCode: 0`).
+- **Contracts Typecheck (`test-types.json`)**: Passed (`exitCode: 0`).
+- **API Workspace Typecheck**: Passed (`exitCode: 0`).
+- **Web Workspace Typecheck**: Passed (`exitCode: 0`).
+- **ESLint Check**: 0 lint errors (`exitCode: 0`).
+- **Scope & Baseline Audit (`audit.mjs`)**: Verified 5 baselines, 1477 frozen outputs, verified scope, 0 secret leaks (`exitCode: 0`).
+
+---
+
+#### Blockers
+- None. Task T03-FIX6 is complete and ready for Codex review.
