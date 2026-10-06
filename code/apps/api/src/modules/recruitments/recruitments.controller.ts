@@ -19,13 +19,13 @@ export class RecruitmentsController {
     @Get('games/:id/recruitments/suggestions')
     suggestions(
     @Param('id')
-    id: string, 
+    id: string,
     @Query()
     q: Record<string, unknown>) { return this.service.list(this.query(q), true, id); }
     @Get('games/:id/recruitments')
     game(
     @Param('id')
-    id: string, 
+    id: string,
     @Query()
     q: Record<string, unknown>) { return this.service.list(this.query(q), false, id); }
     @Get('recruitments/:id')
@@ -36,7 +36,7 @@ export class RecruitmentsController {
     @UseGuards(SessionGuard, CsrfGuard, RequireOnboardedGuard)
     create(
     @Req()
-    req: AuthenticatedRequest, 
+    req: AuthenticatedRequest,
     @Body()
     body: unknown) { const parsed = CreateRecruitmentSchema().safeParse(body); if (!parsed.success)
         roomError(ErrorCode.INVALID_INPUT, 'Invalid recruitment input'); return this.service.create(req.user!.id, req.session!.id, parsed.data); }
@@ -44,14 +44,14 @@ export class RecruitmentsController {
     @UseGuards(SessionGuard, CsrfGuard, RequireOnboardedGuard)
     close(
     @Req()
-    req: AuthenticatedRequest, 
+    req: AuthenticatedRequest,
     @Param('id')
     id: string) { return this.service.setOpen(req.user!.id, req.session!.id, id, false); }
     @Patch('recruitments/:id/reopen')
     @UseGuards(SessionGuard, CsrfGuard, RequireOnboardedGuard)
     reopen(
     @Req()
-    req: AuthenticatedRequest, 
+    req: AuthenticatedRequest,
     @Param('id')
     id: string) { return this.service.setOpen(req.user!.id, req.session!.id, id, true); }
 }

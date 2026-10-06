@@ -6,7 +6,7 @@ const dir='quality/evidence/T20';
 const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T20');
 assert.equal(t.status,'IN_PROGRESS');
-const labels=['rooms-final-1','lint-final-1','test-types-final-1','build-final-1','regression-final-1','native-final-1','native-privacy-final-1','native-timestamps-final-1','audit-final-1'];
+const labels=['rooms-final-1','lint-final-2','test-types-final-2','build-final-1','regression-final-1','native-final-1','native-privacy-final-1','native-timestamps-final-1','audit-final-2','diff-final-2'];
 const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
 for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
 assert(fs.readFileSync(`${dir}/codex-rooms-final-1.txt`,'utf8').includes('14 passed'));
@@ -19,5 +19,5 @@ const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?
 const evidence=walk(dir),outputs=[...walk('apps/api/src/modules/recruitments'),'apps/api/src/app.module.ts','apps/api/test/recruitments.integration.spec.ts',...evidence];
 Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,blockers:[],outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
 fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
-fs.appendFileSync('quality/spec-coverage.md','| Recruitment create/list/suggest/close/reopen; persistent-room new-session retention; owner/helper ACL; atomic active slots, retries, scheduled-time recheck, microsecond cursor/private race | T20 |14 real PostgreSQL/API tests;166 API regression;compiled native/privacy probes;build,lint,strict source/test types,scope audit | PASS |\n');
+if(!fs.readFileSync('quality/spec-coverage.md','utf8').includes('| T20 |14 real PostgreSQL/API tests;166 API regression'))fs.appendFileSync('quality/spec-coverage.md','| Recruitment create/list/suggest/close/reopen; persistent-room new-session retention; owner/helper ACL; atomic active slots, retries, scheduled-time recheck, microsecond cursor/private race | T20 |14 real PostgreSQL/API tests;166 API regression;compiled native/privacy probes;build,lint,strict source/test types,scope audit | PASS |\n');
 console.log('T20 PASS; reviewed evidence frozen. T21 is next.');

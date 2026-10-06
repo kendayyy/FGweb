@@ -39,4 +39,3 @@ const record = {
 fs.writeFileSync(`${dir}/codex-${label}.json`, JSON.stringify(record, null, 2) + '\n');
 console.log(JSON.stringify(record));
 process.exitCode = result.exitCode;
-
