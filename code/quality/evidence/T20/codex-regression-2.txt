@@ -1,0 +1,118 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand
+
+(node:18348) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/auth-profile-read.integration.spec.ts (13.773 s)
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › first login returns explicit incomplete onboarding and empty stored interests
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › a profile without interests does not falsely complete onboarding
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › stored interests without a profile remain incomplete and are restored from DB
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › onboarding without rank is complete and remains correct across fresh GET requests
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › GET me retains explicitly cleared avatar after another unrelated profile update
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › guest cannot read private completion state and public profile omits private identity/state
+
+    Can't find meta/_journal.json file
+
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+      29 |   db=drizzle(client,{schema:tables});
+    > 30 |   await migrate(db,{migrationsFolder:'packages/database/migrations',migrationsSchema:schemaName});
+         |         ^
+      31 |   await tables.seedGames(db);
+      32 |   const scoped=new URL(originalUrl);scoped.searchParams.set('options',`-c search_path=${schemaName}`);
+      33 |   process.env.DATABASE_URL=scoped.toString();
+
+      at readMigrationFiles (../../node_modules/drizzle-orm/migrator.js:8:11)
+      at migrate (../../node_modules/drizzle-orm/node-postgres/migrator.js:3:22)
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:30:9)
+
+[Nest] 18348  - 10/07/2026, 2:28:19 AM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+[Nest] 18348  - 10/07/2026, 2:28:34 AM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+
+Test Suites: 1 failed, 9 passed, 10 total
+Tests:       6 failed, 159 passed, 165 total
+Snapshots:   0 total
+Time:        147.397 s, estimated 171 s
+Ran all test suites.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand

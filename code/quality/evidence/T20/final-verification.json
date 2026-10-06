@@ -1,0 +1,98 @@
+{
+  "task": "T20",
+  "executor": "Codex direct; Anti2 paused",
+  "checks": [
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/api -- --runInBand test/recruitments.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:31:21.356Z",
+      "completedAt": "2026-10-06T19:32:25.757Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-rooms-final-1.txt",
+      "evidenceSha256": "b69c0838aa1641009fb3f5c9e9595b7aeee7a8c36f572882cab1c6b4626670e4"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/api/src/modules/recruitments apps/api/src/app.module.ts apps/api/test/recruitments.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:31:33.349Z",
+      "completedAt": "2026-10-06T19:31:45.063Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-lint-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T20/test-types.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:31:34.596Z",
+      "completedAt": "2026-10-06T19:32:06.024Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-test-types-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/api",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:31:32.952Z",
+      "completedAt": "2026-10-06T19:32:00.323Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-build-final-1.txt",
+      "evidenceSha256": "e1bdbf05d09d8a71597a1736bf4da495d35e58ebf80bfe41adf236e874e38b23"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:32:36.739Z",
+      "completedAt": "2026-10-06T19:35:14.334Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-regression-final-1.txt",
+      "evidenceSha256": "27b187e8d179a6bcff0d6a704df62d912131113febb70939cad462d17327e7e1"
+    },
+    {
+      "command": "node quality/evidence/T20/native-review.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:32:48.763Z",
+      "completedAt": "2026-10-06T19:33:16.796Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-native-final-1.txt",
+      "evidenceSha256": "dc4d7a8ebfe49eeff83976dfb7c214cc3c4477c65893ef4fa021007ff7a1b994"
+    },
+    {
+      "command": "node quality/evidence/T20/native-privacy.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:32:47.749Z",
+      "completedAt": "2026-10-06T19:33:14.095Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-native-privacy-final-1.txt",
+      "evidenceSha256": "f514a9cd2c8608eee3788d0f17c65125d3ba9b77f738ad87cff9b806981a96be"
+    },
+    {
+      "command": "node quality/evidence/T20/native-timestamps.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:32:49.809Z",
+      "completedAt": "2026-10-06T19:33:15.182Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-native-timestamps-final-1.txt",
+      "evidenceSha256": "c404674bf3daa0f11855b8c13ba92c138ce88d81633bd3ff61fea234b50cd213"
+    },
+    {
+      "command": "node quality/evidence/T20/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:32:50.175Z",
+      "completedAt": "2026-10-06T19:33:08.239Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T20/codex-audit-final-1.txt",
+      "evidenceSha256": "70b20b1bfb19576149f54e243f1cd8f7ecb4a8d94154dc7b6312af96b791f4ef"
+    }
+  ],
+  "failedRunsPreserved": true,
+  "mediaLoadVerified": false
+}

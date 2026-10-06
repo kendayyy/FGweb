@@ -1,0 +1,85 @@
+  beforeEach(async()=>{
+    await pool.query('DELETE FROM active_play_slots');
+    await pool.query('DELETE FROM join_requests');
+    await pool.query('DELETE FROM recruitments');
+    await pool.query('DELETE FROM team_members');
+    await pool.query('DELETE FROM play_sessions');
+    await pool.query('DELETE FROM rooms');
+  });
+  const payload=(extra: Record<string,unknown>={})=>({gameId,gameTitle,title:'Đội Valorant',mode:'ranked',playerCapacity:5,timingType:'now',...extra});
+  const post=(data: Record<string,unknown>,cookie=cookieOwner)=>request(base).post('/api/v1/recruitments').set('Cookie',cookie).set('Origin',origin).send(data);
+  const card=(id:string,action:string,cookie=cookieOwner)=>request(base).patch(`/api/v1/recruitments/${id}/${action}`).set('Cookie',cookie).set('Origin',origin).send({});
+  async function room(visibility='PUBLIC'){
+    const r=await request(base).post('/api/v1/rooms').set('Cookie',cookieOwner).set('Origin',origin).send({name:'Existing room',gameId,gameTitle,visibility});
+    expect(r.status).toBe(200);return RoomSchema.parse(r.body);
+  }
+  it('creates a real room/session with only owner roster and active slot',async()=>{
+    const r=await post(payload());expect(r.status).toBe(201);const dto=RecruitmentSchema.parse(r.body);
+    expect((await pool.query('SELECT user_id FROM active_play_slots')).rows.map(r=>r.user_id)).toEqual(['user-owner']);
+    expect((await pool.query('SELECT * FROM team_members')).rowCount).toBe(1);
+    expect((await request(base).get(`/api/v1/games/${gameId}/recruitments`)).body.items[0].id).toBe(dto.id);
+  });
+  it('preserves old members/chat when creating a fresh session in an existing room',async()=>{
+    const old=await room();
+    await pool.query("INSERT INTO room_members(id,room_id,user_id,role)VALUES('additional',$1,'user-member','MEMBER')",[old.id]);
+    const first=await post(payload({roomId:old.id}));expect(first.status).toBe(201);
+    const session=(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[first.body.id])).rows[0].play_session_id;
+    await pool.query('DELETE FROM active_play_slots');await pool.query("UPDATE play_sessions SET state='ENDED' WHERE id=$1",[session]);
+    expect((await card(first.body.id,'reopen')).status).toBe(409);
+    const next=await post(payload({roomId:old.id}));expect(next.status).toBe(201);
+    const ids=(await pool.query('SELECT play_session_id FROM recruitments ORDER BY id')).rows.map(r=>r.play_session_id);
+    expect(new Set(ids).size).toBe(2);expect(next.body.roomId).toBe(old.id);
+    const current=(await request(base).get(`/api/v1/rooms/${old.id}`).set('Cookie',cookieOwner)).body;
+    expect(current.conversationId).toBe(old.conversationId);expect(current.memberCount).toBe(2);
+    expect((await pool.query('SELECT count(*)::int AS n FROM team_members WHERE play_session_id<>$1',[session])).rows[0].n).toBe(1);
+  });
+  it('close/reopen preserves session and occupied slot, and private rooms cannot publish',async()=>{
+    const r=await post(payload());expect(r.status).toBe(201);
+    expect((await card(r.body.id,'close')).body.state).toBe('CLOSED');
+    expect((await pool.query('SELECT * FROM active_play_slots')).rowCount).toBe(1);
+    expect((await card(r.body.id,'reopen')).body.state).toBe('OPEN');
+    const privateRoom=await room('PRIVATE');
+    expect((await post(payload({roomId:privateRoom.id,timingType:'scheduledAt',scheduledAt:new Date(Date.now()+3600000).toISOString()}))).status).toBe(403);
+  });
+  it('two concurrent now creations for the same owner produce exactly one committed session',async()=>{
+    const results=await Promise.all([post(payload()),post(payload({title:'Concurrent'}))]);
+    expect(results.map(r=>r.status).sort()).toEqual([201,409]);
+    expect((await pool.query('SELECT * FROM play_sessions')).rowCount).toBe(1);
+    expect((await pool.query('SELECT * FROM rooms')).rowCount).toBe(1);
+    expect((await post(payload())).status).toBe(409);
+  });
+  it('scheduled sessions have no active slot and guests cannot mutate',async()=>{
+    const r=await post(payload({timingType:'scheduledAt',scheduledAt:new Date(Date.now()+3600000).toISOString()}));expect(r.status).toBe(201);
+    expect((await pool.query('SELECT * FROM active_play_slots')).rowCount).toBe(0);
+    expect((await pool.query('SELECT state FROM play_sessions')).rows[0].state).toBe('SCHEDULED');
+    expect((await request(base).post('/api/v1/recruitments').set('Origin',origin).send(payload())).status).toBe(401);
+    expect((await post(payload(),cookieBanned)).status).toBe(403);
+    expect((await post(payload(),cookieUnonboarded)).status).toBe(403);
+  });
+  it('suggestions filter full/closed/private/wrong mode and sort missing slots with stable cursor',async()=>{
+    const schedule={timingType:'scheduledAt',scheduledAt:new Date(Date.now()+3600000).toISOString()};
+    const cards=[];for(const cap of [4,2,3,1]){const r=await post(payload({...schedule,playerCapacity:cap}));expect(r.status).toBe(201);cards.push(r.body);}
+    await card(cards[2].id,'close');
+    const other=await post(payload({...schedule,mode:'unranked'}));expect(other.status).toBe(201);
+    const path=`/api/v1/games/${gameId}/recruitments/suggestions?mode=ranked&limit=1`;
+    const first=await request(base).get(path);expect(first.status).toBe(200);expect(first.body.items.map((r:{id:string})=>r.id)).toEqual([cards[1].id]);
+    PublicRecruitmentSchema.parse(first.body.items[0]);expect(first.body.items[0].conversationId).toBeUndefined();
+    const second=await request(base).get(path+'&cursor='+encodeURIComponent(first.body.nextCursor));expect(second.status).toBe(200);expect(second.body.items.map((r:{id:string})=>r.id)).toEqual([cards[0].id]);
+    expect((await request(base).get(path+'&visibility=PRIVATE')).status).toBe(422);
+    expect((await request(base).get(path+'&cursor=garbage')).status).toBe(422);
+  });
+  it('only current owner/helper with recruitment permission can close/reopen',async()=>{
+    const r=await post(payload());expect(r.status).toBe(201);
+    expect((await card(r.body.id,'close',cookieOutsider)).status).toBe(403);
+    await pool.query("INSERT INTO room_members(id,room_id,user_id,role)VALUES('helper',$1,'user-member','MEMBER')",[r.body.roomId]);
+    expect((await card(r.body.id,'close',cookieMember)).status).toBe(403);
+    const grant=await request(base).patch(`/api/v1/rooms/${r.body.roomId}/helpers/user-member`).set('Cookie',cookieOwner).set('Origin',origin).send({permissions:['MANAGE_RECRUITMENT']});expect(grant.status).toBe(200);
+    expect((await card(r.body.id,'close',cookieMember)).status).toBe(200);
+    expect((await card(r.body.id,'reopen',cookieMember)).status).toBe(200);
+  });
+  it('idempotent create returns the same card and rejects reuse with a different payload',async()=>{
+    const a=await post(payload({idempotencyKey:'retry-key'}));expect(a.status).toBe(201);
+    const b=await post(payload({idempotencyKey:'retry-key'}));expect(b.status).toBe(201);expect(b.body.id).toBe(a.body.id);
+    expect((await pool.query('SELECT * FROM recruitments')).rowCount).toBe(1);
+    expect((await post(payload({idempotencyKey:'retry-key',title:'Different'}))).status).toBe(409);
+  });

@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T20',ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const t=ledger.tasks.find(t=>t.id==='T20');assert.equal(t.status,'NOT_STARTED');
+t.status='IN_PROGRESS';t.startedAt=new Date().toISOString();t.inputsHash={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+const allow=f=>t.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T03-FIX8/record.mjs','utf8').replaceAll('T03-FIX8','T20'));
+const original=fs.readFileSync('apps/api/test/rooms.integration.spec.ts','utf8');
+let test=original.slice(0,original.indexOf('  async function createTestRoomSql'));
+test=test.replaceAll('t18_rooms','t20_recruitments').replaceAll('T18 Room Management, Members & Ownership Integration','T20 recruitment integration');
+test=test.replace('RoomSchema,','RoomSchema,\n  RecruitmentSchema,\n  PublicRecruitmentSchema,');
+fs.writeFileSync('apps/api/test/recruitments.integration.spec.ts',test+'\n'+fs.readFileSync(`${dir}/test-cases.txt`,'utf8')+'\n});\n');
+console.log('T20 activated; real PostgreSQL fixture setup adapted without editing predecessor tests.');

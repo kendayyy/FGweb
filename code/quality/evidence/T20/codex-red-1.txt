@@ -1,0 +1,164 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/recruitments.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:14276) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[Nest] 14276  - 10/07/2026, 2:15:29 AM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+FAIL test/recruitments.integration.spec.ts (28.32 s)
+  ● T20 recruitment integration › creates a real room/session with only owner roster and active slot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      198 |   }
+      199 |   it('creates a real room/session with only owner roster and active slot',async()=>{
+    > 200 |     const r=await post(payload());expect(r.status).toBe(201);const dto=RecruitmentSchema.parse(r.body);
+          |                                                    ^
+      201 |     expect((await pool.query('SELECT user_id FROM active_play_slots')).rows.map(r=>r.user_id)).toEqual(['user-owner']);
+      202 |     expect((await pool.query('SELECT * FROM team_members')).rowCount).toBe(1);
+      203 |     expect((await request(base).get(`/api/v1/games/${gameId}/recruitments`)).body.items[0].id).toBe(dto.id);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:200:52)
+
+  ● T20 recruitment integration › preserves old members/chat when creating a fresh session in an existing room
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      206 |     const old=await room();
+      207 |     await pool.query("INSERT INTO room_members(id,room_id,user_id,role)VALUES('additional',$1,'user-member','MEMBER')",[old.id]);
+    > 208 |     const first=await post(payload({roomId:old.id}));expect(first.status).toBe(201);
+          |                                                                           ^
+      209 |     const session=(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[first.body.id])).rows[0].play_session_id;
+      210 |     await pool.query('DELETE FROM active_play_slots');await pool.query("UPDATE play_sessions SET state='ENDED' WHERE id=$1",[session]);
+      211 |     expect((await card(first.body.id,'reopen')).status).toBe(409);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:208:75)
+
+  ● T20 recruitment integration › close/reopen preserves session and occupied slot, and private rooms cannot publish
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      218 |   });
+      219 |   it('close/reopen preserves session and occupied slot, and private rooms cannot publish',async()=>{
+    > 220 |     const r=await post(payload());expect(r.status).toBe(201);
+          |                                                    ^
+      221 |     expect((await card(r.body.id,'close')).body.state).toBe('CLOSED');
+      222 |     expect((await pool.query('SELECT * FROM active_play_slots')).rowCount).toBe(1);
+      223 |     expect((await card(r.body.id,'reopen')).body.state).toBe('OPEN');
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:220:52)
+
+  ● T20 recruitment integration › two concurrent now creations for the same owner produce exactly one committed session
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   201,
+    -   409,
+    +   404,
+    +   404,
+      ]
+
+      227 |   it('two concurrent now creations for the same owner produce exactly one committed session',async()=>{
+      228 |     const results=await Promise.all([post(payload()),post(payload({title:'Concurrent'}))]);
+    > 229 |     expect(results.map(r=>r.status).sort()).toEqual([201,409]);
+          |                                             ^
+      230 |     expect((await pool.query('SELECT * FROM play_sessions')).rowCount).toBe(1);
+      231 |     expect((await pool.query('SELECT * FROM rooms')).rowCount).toBe(1);
+      232 |     expect((await post(payload())).status).toBe(409);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:229:45)
+
+  ● T20 recruitment integration › scheduled sessions have no active slot and guests cannot mutate
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      233 |   });
+      234 |   it('scheduled sessions have no active slot and guests cannot mutate',async()=>{
+    > 235 |     const r=await post(payload({timingType:'scheduledAt',scheduledAt:new Date(Date.now()+3600000).toISOString()}));expect(r.status).toBe(201);
+          |                                                                                                                                     ^
+      236 |     expect((await pool.query('SELECT * FROM active_play_slots')).rowCount).toBe(0);
+      237 |     expect((await pool.query('SELECT state FROM play_sessions')).rows[0].state).toBe('SCHEDULED');
+      238 |     expect((await request(base).post('/api/v1/recruitments').set('Origin',origin).send(payload())).status).toBe(401);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:235:133)
+
+  ● T20 recruitment integration › suggestions filter full/closed/private/wrong mode and sort missing slots with stable cursor
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      242 |   it('suggestions filter full/closed/private/wrong mode and sort missing slots with stable cursor',async()=>{
+      243 |     const schedule={timingType:'scheduledAt',scheduledAt:new Date(Date.now()+3600000).toISOString()};
+    > 244 |     const cards=[];for(const cap of [4,2,3,1]){const r=await post(payload({...schedule,playerCapacity:cap}));expect(r.status).toBe(201);cards.push(r.body);}
+          |                                                                                                                               ^
+      245 |     await card(cards[2].id,'close');
+      246 |     const other=await post(payload({...schedule,mode:'unranked'}));expect(other.status).toBe(201);
+      247 |     const path=`/api/v1/games/${gameId}/recruitments/suggestions?mode=ranked&limit=1`;
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:244:127)
+
+  ● T20 recruitment integration › only current owner/helper with recruitment permission can close/reopen
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      253 |   });
+      254 |   it('only current owner/helper with recruitment permission can close/reopen',async()=>{
+    > 255 |     const r=await post(payload());expect(r.status).toBe(201);
+          |                                                    ^
+      256 |     expect((await card(r.body.id,'close',cookieOutsider)).status).toBe(403);
+      257 |     await pool.query("INSERT INTO room_members(id,room_id,user_id,role)VALUES('helper',$1,'user-member','MEMBER')",[r.body.roomId]);
+      258 |     expect((await card(r.body.id,'close',cookieMember)).status).toBe(403);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:255:52)
+
+  ● T20 recruitment integration › idempotent create returns the same card and rejects reuse with a different payload
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      262 |   });
+      263 |   it('idempotent create returns the same card and rejects reuse with a different payload',async()=>{
+    > 264 |     const a=await post(payload({idempotencyKey:'retry-key'}));expect(a.status).toBe(201);
+          |                                                                                ^
+      265 |     const b=await post(payload({idempotencyKey:'retry-key'}));expect(b.status).toBe(201);expect(b.body.id).toBe(a.body.id);
+      266 |     expect((await pool.query('SELECT * FROM recruitments')).rowCount).toBe(1);
+      267 |     expect((await post(payload({idempotencyKey:'retry-key',title:'Different'}))).status).toBe(409);
+
+      at Object.<anonymous> (test/recruitments.integration.spec.ts:264:80)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 8 total
+Snapshots:   0 total
+Time:        30.963 s
+Ran all test suites matching test/recruitments.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/recruitments.integration.spec.ts
