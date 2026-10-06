@@ -8537,18 +8537,110 @@
     },
     {
       "id": "T21",
-      "status": "NOT_STARTED",
+      "status": "BLOCKED",
       "dependencies": [
         "T20"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
+      "inputsHash": {
+        "head": "b7c62844526194793ee6c5f187b37f319da24763"
+      },
       "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
+      "commands": [
+        {
+          "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/web -- test/recruitments.test.tsx",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:52:08.224Z",
+          "completedAt": "2026-10-06T19:52:15.787Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-feature-final-3.txt",
+          "evidenceSha256": "aa6a00a75ca22a8716fff6cf770a1fab9d14b1b21039a83e40f0a8ce68ca3bc5"
+        },
+        {
+          "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/web -- --maxWorkers=1",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:54:30.669Z",
+          "completedAt": "2026-10-06T19:55:18.767Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-frontend-regression-3.txt",
+          "evidenceSha256": "707a03f86193427cbafec84d4099c5ab8472d563b00ad8c36eb8be639086434e"
+        },
+        {
+          "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T21/test-types.json",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:53:05.981Z",
+          "completedAt": "2026-10-06T19:53:36.189Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-types-final-2.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node node_modules/eslint/bin/eslint.js apps/web/src/features/recruitments apps/web/test/recruitments.test.tsx",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:53:07.896Z",
+          "completedAt": "2026-10-06T19:53:32.786Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-lint-final-2.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node quality/evidence/T21/audit.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:53:06.855Z",
+          "completedAt": "2026-10-06T19:53:39.532Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-audit-final-2.txt",
+          "evidenceSha256": "0a36df2f5edb250785dbeac1c9603390f11eda3f683a43ed4bdb19a3facb5b05"
+        },
+        {
+          "command": "node scripts/verify-task.mjs T21",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:38:18.480Z",
+          "completedAt": "2026-10-06T19:38:23.048Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-gate-1.txt",
+          "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+        },
+        {
+          "command": "git diff --cached --check -- apps/web/src/features/recruitments apps/web/test/recruitments.test.tsx quality/evidence/T21/*.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-06T19:57:23.711Z",
+          "completedAt": "2026-10-06T19:57:23.798Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T21/codex-diff-final-1.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T21/codex-feature-final-3.txt",
+        "quality/evidence/T21/codex-frontend-regression-3.txt",
+        "quality/evidence/T21/codex-types-final-2.txt",
+        "quality/evidence/T21/codex-lint-final-2.txt",
+        "quality/evidence/T21/codex-audit-final-2.txt",
+        "quality/evidence/T21/codex-gate-1.txt",
+        "quality/evidence/T21/wiring-proposal.md",
+        "quality/evidence/T21/LobbyPage.proposed.tsx",
+        "quality/evidence/T21/component-review.md",
+        "quality/evidence/T21/component-verification.json",
+        "quality/evidence/T21/codex-diff-final-1.txt"
+      ],
+      "startedAt": "2026-10-06T19:38:14.998Z",
       "completedAt": null,
-      "blockers": []
+      "blockers": [
+        "Approve minimal additional write scope apps/web/src/features/lobby/LobbyPage.tsx (import RecruitmentPanel and replace frozen placeholder only), then integrated build/browser verification"
+      ],
+      "writeAllowlist": [
+        "apps/web/src/features/recruitments/**",
+        "apps/web/test/recruitments.test.tsx",
+        "quality/evidence/T21/**"
+      ]
     },
     {
       "id": "T22",

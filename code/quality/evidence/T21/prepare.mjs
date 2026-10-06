@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T21',p='quality/tasks.json',l=JSON.parse(fs.readFileSync(p)),t=l.tasks.find(t=>t.id==='T21');assert.equal(t.status,'NOT_STARTED');assert.equal(l.tasks.find(t=>t.id==='T20').status,'PASS');
+t.writeAllowlist=['apps/web/src/features/recruitments/**','apps/web/test/recruitments.test.tsx','quality/evidence/T21/**'];t.status='IN_PROGRESS';t.startedAt=new Date().toISOString();t.inputsHash={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()};fs.writeFileSync(p,JSON.stringify(l,null,2)+'\n');
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),allow=f=>t.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T20/record.mjs','utf8').replaceAll('T20','T21'));
+fs.writeFileSync(`${dir}/audit.mjs`,fs.readFileSync('quality/evidence/T03-FIX8/audit.mjs','utf8').replaceAll('T03-FIX8','T21'));
+console.log('T21 active within original frontend feature/test scope; frozen LobbyPage wiring untouched.');

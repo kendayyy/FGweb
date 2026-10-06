@@ -1,0 +1,43 @@
+
+> @fg/web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (9 tests | 1 failed) 13094ms
+   ❯ T13 approved Lobby behavior (9)
+     × merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50 5528ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/lobby.test.tsx:87:5
+     85|         expect(screen.queryByText('Tin trễ từ Liên Minh')).not.toBeInT…
+     86|     });
+     87|     it('merges duplicate realtime/reconnect history by message ID and …
+       |     ^
+     88|         let requests = 0;
+     89|         let fetchedOlder = false;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  1 failed | 129 passed (130)
+   Start at  02:53:09
+   Duration  27.24s (tests 42%, environment 30%, transform 12%, import 9%, setup 7%)
+
+Environment  jsdom was created 10 times · 47.55s total, 30% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run
