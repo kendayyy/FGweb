@@ -12,6 +12,19 @@ export type ChatActor = {
 } | null;
 export function chatError(code: ErrorCode, message: string): never { throw new HttpException({ code, message, requestId: randomUUID() }, ErrorCodeToHttpStatus[code]); }
 type Queryable = Pool | PoolClient;
+/**
+ * Transaction-scoped advisory lock for serializing social pair operations
+ * (DM writes, block insertions, friend request changes).
+ * Uses PostgreSQL hashtextextended with a 64-bit key generated from a JSON array
+ * containing a fixed namespace label ('fg_social_pair') and canonical LEAST/GREATEST user IDs.
+ */
+export async function lockSocialPair(db: Queryable, firstId: string, secondId: string): Promise<void> {
+    if (!firstId || !secondId) return;
+    await db.query(
+        `SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_social_pair', LEAST($1::text, $2::text), GREATEST($1::text, $2::text))::text, 0::bigint))`,
+        [firstId, secondId]
+    );
+}
 @Injectable()
 export class ChatService implements OnModuleInit, OnModuleDestroy {
     private pool!: Pool;
@@ -74,6 +87,17 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         if (conversation.kind === 'DM') {
             if (actor.userId !== conversation.user1_id && actor.userId !== conversation.user2_id)
                 chatError(ErrorCode.FORBIDDEN, 'Private conversation requires membership');
+            if (write) {
+                if (!conversation.user1_id || !conversation.user2_id)
+                    chatError(ErrorCode.FORBIDDEN, 'Invalid DM participants');
+                await lockSocialPair(db, conversation.user1_id, conversation.user2_id);
+                const block = await db.query(
+                    `SELECT 1 FROM blocks WHERE (blocker_id=$1 AND blocked_id=$2) OR (blocker_id=$2 AND blocked_id=$1) LIMIT 1`,
+                    [conversation.user1_id, conversation.user2_id]
+                );
+                if (block.rowCount)
+                    chatError(ErrorCode.FORBIDDEN, 'DM communication blocked');
+            }
         }
         else {
             const room = (await db.query('SELECT id FROM rooms WHERE conversation_id=$1', [conversation.id])).rows[0];

@@ -1,0 +1,29 @@
+### Summary of Work — FG T12-FIX1
+
+#### Scope & Files Written
+- [chat.service.ts](file:///E:/FGweb/code/apps/api/src/modules/chat/chat.service.ts#L15-L26): Implemented and exported the shared `lockSocialPair` canonical pair transaction-lock helper using PostgreSQL 64-bit `hashtextextended` and canonical `LEAST/GREATEST` JSON pair serialization. Enforced block policy inside `ChatService.authorize(..., write=true)` for DM conversations before message, draft claim, mention, or outbox insertions.
+- [dm-block.integration.spec.ts](file:///E:/FGweb/code/apps/api/test/dm-block.integration.spec.ts): Created comprehensive native HTTP and real migrated PostgreSQL integration test suite covering all 4 Codex review findings and requirements.
+- [quality/evidence/T12-FIX1/test-types.json](file:///E:/FGweb/code/quality/evidence/T12-FIX1/test-types.json): Configured typecheck manifest for API source and owned integration test.
+- Evidence files generated in `quality/evidence/T12-FIX1/` using unique `record-check.mjs` labels (`codex-red-dm-block-2.txt`, `codex-pass-dm-block-v2.txt`, `codex-pass-api-regression-v2.txt`, `codex-api-build-v2.txt`, `codex-test-types-v3.txt`, `codex-lint-changed-v3.txt`, `codex-native-blocked-dm-v2.txt`, `codex-audit-v3.txt`).
+
+---
+
+#### Addressing Codex Findings
+1. **Actor-blocks-peer test updated**: `rejects DM write when actor blocks peer (User A blocks User B) with FORBIDDEN 403` seeds `A blocks B` and makes the request using `cookieA` (Alice's own session after blocking Bob), verifying 403 FORBIDDEN. Peer-blocks-actor test (`B blocks A` -> `cookieA`) is retained separately.
+2. **Draft & attachment claim protection**: `blocked retries produce zero writes, attachment claims, or outbox effects` seeds a valid `pending_image_uploads` draft for `user-a` / `dm-ab`, submits its attachment ID twice while blocked, and asserts both requests return `403 FORBIDDEN` while leaving draft rows, attachments (0), messages (0), and outbox (0) unchanged.
+3. **Environment & Redis safety**: `process.env` is captured prior to suite initialization and restored in `afterAll` even on errors. Redis connection errors in setup are no longer silently swallowed.
+4. **Concurrency lock barrier**: Real `pg_locks` waiting barrier is retained with eager native `fetch(...)` execution, verifying that racing writes wait behind uncommitted transaction-scoped pair locks before receiving 403 FORBIDDEN upon block commit.
+
+---
+
+#### Evidence & Verification Results
+1. **Behavioral RED**: `quality/evidence/T12-FIX1/codex-red-dm-block-2.txt` (exit code 1) — proved blocked DM writes previously returned HTTP 201 Created and persisted messages prior to fix.
+2. **Integration Tests (GREEN)**: `quality/evidence/T12-FIX1/codex-pass-dm-block-v2.txt` (exit code 0) — all 10 tests passed against real PostgreSQL and Nest HTTP stack.
+3. **API Build**: `quality/evidence/T12-FIX1/codex-api-build-v2.txt` (exit code 0) — `@fg/api` workspace built cleanly.
+4. **Type Check**: `quality/evidence/T12-FIX1/codex-test-types-v3.txt` (exit code 0) — zero TypeScript errors across source and owned test file.
+5. **Linter**: `quality/evidence/T12-FIX1/codex-lint-changed-v3.txt` (exit code 0) — zero ESLint errors on modified source and new test.
+6. **Native Probe**: `quality/evidence/T12-FIX1/codex-native-blocked-dm-v2.txt` (exit code 0) — executed unchanged Codex probe `quality/evidence/T17-BE/blocked-dm-probe.mjs`, returning `actualHttpStatus: 403` and `actualNewMessages: 0`.
+7. **Scope & Clean Audit**: `quality/evidence/T12-FIX1/codex-audit-v3.txt` (exit code 0) — verified 5 spec/design baselines, zero secret leaks, zero leftover temporary schemas (`ownedSchemasRemaining: 0`), and clean file scope.
+8. **Full API Regression**: `quality/evidence/T12-FIX1/codex-pass-api-regression.txt` (command setup failure without `.env.local` preserved) and `quality/evidence/T12-FIX1/codex-pass-api-regression-v2.txt` (command setup correction with `--env-file=.env.local`).
+
+All files, tests, and evidence artifacts are ready for Codex review.

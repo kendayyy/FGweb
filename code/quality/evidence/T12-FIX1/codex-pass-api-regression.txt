@@ -1,0 +1,109 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:19612) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL test/auth-profile-read.integration.spec.ts (6.438 s)
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › first login returns explicit incomplete onboarding and empty stored interests
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › a profile without interests does not falsely complete onboarding
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › stored interests without a profile remain incomplete and are restored from DB
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › onboarding without rank is complete and remains correct across fresh GET requests
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › GET me retains explicitly cleared avatar after another unrelated profile update
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › guest cannot read private completion state and public profile omits private identity/state
+
+    Local DB/auth config required; run with --env-file=.env.local
+
+      23 |  let cookie:string;
+      24 |  beforeAll(async()=>{
+    > 25 |   if(!originalUrl||!process.env.BETTER_AUTH_SECRET||!origin)throw new Error('Local DB/auth config required; run with --env-file=.env.local');
+         |                                                                   ^
+      26 |   client=new pg.Client({connectionString:originalUrl});await client.connect();
+      27 |   await client.query(`CREATE SCHEMA "${schemaName}"`);createdSchema=true;
+      28 |   await client.query(`SET search_path TO "${schemaName}"`);
+
+      at Object.<anonymous> (test/auth-profile-read.integration.spec.ts:25:67)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+
+Test Suites: 1 failed, 6 passed, 7 total
+Tests:       6 failed, 93 passed, 99 total
+Snapshots:   0 total
+Time:        142.338 s, estimated 147 s
+Ran all test suites.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand

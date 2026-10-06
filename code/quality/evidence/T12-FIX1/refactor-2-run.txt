@@ -1,0 +1,33 @@
+### Refactor & Verification Summary — FG T12-FIX1
+
+#### Refinements Applied
+1. **Module Root & Runtime Path**: Restored `fileURLToPath(import.meta.url)` path resolution for `root` in [dm-block.integration.spec.ts](file:///E:/FGweb/code/apps/api/test/dm-block.integration.spec.ts#L20), ensuring valid runtime root resolution for both root CWD `E:/FGweb/code` and workspace CWD `E:/FGweb/code/apps/api`.
+2. **Actor-Blocks-Peer Verification**: Updated `rejects DM write when actor blocks peer (User A blocks User B) with FORBIDDEN 403` to execute using `cookieA` (Alice who blocked Bob attempts to send to Bob), verifying 403 FORBIDDEN.
+3. **Draft & Retry Integrity Assertions**: In `blocked retries produce zero writes, attachment claims, or outbox effects`, asserted `FORBIDDEN` error codes on both retry responses and verified exact draft row equality before and after blocked send attempts (`expect(draftAfter.rows[0]).toEqual(draftBefore.rows[0])`).
+4. **Environment & Redis Teardown**: Maintained explicit `process.env.REDIS_URL` validation and strict Redis connection error throwing, with full `process.env` backup and restoration in `afterAll`.
+5. **Config Isolation**: Left reviewer configs `test-types.json` and `test-types-v2.json` completely unedited per instructions.
+
+---
+
+#### Evidence Records
+1. **Strengthened Integration Tests (`pass-dm-block-v3`)**:
+   - Log: `quality/evidence/T12-FIX1/codex-pass-dm-block-v3.txt` (exit code 0).
+   - Result: `Test Suites: 1 passed, 1 total; Tests: 10 passed, 10 total`.
+2. **Root CWD Full API Regression (`pass-root-regression`)**:
+   - Command: `node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand` (cwd: `E:/FGweb/code`).
+   - Log: `quality/evidence/T12-FIX1/codex-pass-root-regression.txt` (exit code 0).
+   - Result: `Test Suites: 7 passed, 7 total; Tests: 99 passed, 99 total`.
+3. **TypeScript Typecheck (`test-types-v4`)**:
+   - Command: `node node_modules/typescript/bin/tsc -p quality/evidence/T12-FIX1/test-types-v2.json`.
+   - Log: `quality/evidence/T12-FIX1/codex-test-types-v4.txt` (exit code 0).
+4. **Linter (`lint-changed-v4`)**:
+   - Command: `node node_modules/eslint/bin/eslint.js apps/api/src/modules/chat/chat.service.ts apps/api/test/dm-block.integration.spec.ts`.
+   - Log: `quality/evidence/T12-FIX1/codex-lint-changed-v4.txt` (exit code 0).
+5. **API Build (`api-build-v3`)**:
+   - Command: `npm run build --workspace @fg/api`.
+   - Log: `quality/evidence/T12-FIX1/codex-api-build-v3.txt` (exit code 0).
+6. **Audit (`audit-v4`)**:
+   - Log: `quality/evidence/T12-FIX1/codex-audit-v4.txt` (exit code 0).
+   - Result: `{"baselinesVerified":5,"frozenOutputsVerified":1546,"scopeVerified":true,"secretLeak":false,"ownedSchemasRemaining":0,"publicTables":0}`.
+
+All 6 verification steps have completed with clean exit code 0 evidence. Ready for Codex review.

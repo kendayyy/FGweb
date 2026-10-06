@@ -1,0 +1,115 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/dm-block.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:16100) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/dm-block.integration.spec.ts (30.392 s)
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › exports lockSocialPair helper on ChatService module
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      182 |
+      183 |   it('exports lockSocialPair helper on ChatService module', () => {
+    > 184 |     expect(typeof ChatServiceModule.lockSocialPair).toBe('function');
+          |                                                     ^
+      185 |   });
+      186 |
+      187 |   it('rejects DM write when peer blocks actor (User B blocks User A) with FORBIDDEN 403 and zero DB side-effects', async () => {
+
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:184:53)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when peer blocks actor (User B blocks User A) with FORBIDDEN 403 and zero DB side-effects
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      194 |     const res = await postMsg('dm-ab', { content: 'Blocked message attempt from A', clientMessageId: 'attempt-a-1' }, cookieA);
+      195 |
+    > 196 |     expect(res.status).toBe(403);
+          |                        ^
+      197 |     expect(ApiErrorResponseSchema.parse(res.body).code).toBe('FORBIDDEN');
+      198 |
+      199 |     // Verify 0 new messages and 0 new outbox entries inserted
+
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:196:24)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when actor blocks peer (User A blocks User B) with FORBIDDEN 403
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      214 |     const res = await postMsg('dm-ab', { content: 'Blocked message attempt from B', clientMessageId: 'attempt-b-1' }, cookieB);
+      215 |
+    > 216 |     expect(res.status).toBe(403);
+          |                        ^
+      217 |     expect(ApiErrorResponseSchema.parse(res.body).code).toBe('FORBIDDEN');
+      218 |
+      219 |     expect(await countTable('messages')).toBe(msgCountBefore);
+
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:216:24)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › blocked retries produce zero writes, attachment claims, or outbox effects
+
+    error: duplicate key value violates unique constraint "block_pair_unique"
+
+      224 |
+      225 |   it('blocked retries produce zero writes, attachment claims, or outbox effects', async () => {
+    > 226 |     await pool.query(`INSERT INTO blocks(id,blocker_id,blocked_id) VALUES('blk-ba-retry','user-b','user-a')`);
+          |     ^
+      227 |
+      228 |     const clientMsgId = 'retry-client-msg-id';
+      229 |     const res1 = await postMsg('dm-ab', { content: 'Retry 1', clientMessageId: clientMsgId }, cookieA);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:226:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › preserves historical read access and membership while active block exists
+
+    error: duplicate key value violates unique constraint "block_pair_unique"
+
+      240 |
+      241 |   it('preserves historical read access and membership while active block exists', async () => {
+    > 242 |     await pool.query(`INSERT INTO blocks(id,blocker_id,blocked_id) VALUES('blk-ba-hist','user-b','user-a')`);
+          |     ^
+      243 |
+      244 |     // Both A and B can read history of previous messages
+      245 |     const resA = await getHistory('dm-ab', cookieA);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:242:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › serializes concurrent write behind a pair-lock transaction inserting a block (PostgreSQL locks barrier)
+
+    TypeError: ChatServiceModule.lockSocialPair is not a function
+
+      311 |       await blockerConn.query('BEGIN');
+      312 |       // Hold transaction-scoped advisory pair lock on (user-a, user-b)
+    > 313 |       await ChatServiceModule.lockSocialPair(blockerConn, 'user-a', 'user-b');
+          |                               ^
+      314 |       // Insert block inside uncommitted transaction
+      315 |       await blockerConn.query(`INSERT INTO blocks(id,blocker_id,blocked_id) VALUES('blk-race','user-b','user-a')`);
+      316 |
+
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:313:31)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 4 passed, 10 total
+Snapshots:   0 total
+Time:        30.767 s, estimated 35 s
+Ran all test suites matching test/dm-block.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/dm-block.integration.spec.ts

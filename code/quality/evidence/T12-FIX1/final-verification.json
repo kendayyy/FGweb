@@ -1,0 +1,92 @@
+[
+  {
+    "command": "node scripts/verify-task.mjs T12-FIX1",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:09:20.643Z",
+    "completedAt": "2026-10-06T03:09:23.722Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-preflight.txt",
+    "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+  },
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/api -- --runInBand test/dm-block.integration.spec.ts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:39:17.523Z",
+    "completedAt": "2026-10-06T03:39:58.580Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-pass-dm-block-v3.txt",
+    "evidenceSha256": "1568da9bbd1451e4e0464eac85e01b1113868d401b7b96257cac036f46ea3dd0"
+  },
+  {
+    "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:40:08.939Z",
+    "completedAt": "2026-10-06T03:42:18.032Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-pass-root-regression.txt",
+    "evidenceSha256": "74e988098b1791756060d6554ecfbc89402cdc9b2cd86a542c8ff851ad144260"
+  },
+  {
+    "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/api",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:33:48.363Z",
+    "completedAt": "2026-10-06T03:34:02.603Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-api-build-v2.txt",
+    "evidenceSha256": "e1bdbf05d09d8a71597a1736bf4da495d35e58ebf80bfe41adf236e874e38b23"
+  },
+  {
+    "command": "node quality/evidence/T12-FIX1/native-independent.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:39:06.894Z",
+    "completedAt": "2026-10-06T03:39:19.378Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-independent-native.txt",
+    "evidenceSha256": "a1800f9843ef85cf106df8529d43c92536e6dd554f88e23b9588dd78b3cbedd8"
+  },
+  {
+    "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T12-FIX1/test-types-v2.json",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:42:29.625Z",
+    "completedAt": "2026-10-06T03:42:47.185Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-independent-types.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "node node_modules/eslint/bin/eslint.js apps/api/src/modules/chat/chat.service.ts apps/api/test/dm-block.integration.spec.ts",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:42:30.314Z",
+    "completedAt": "2026-10-06T03:42:35.833Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-independent-lint.txt",
+    "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "git diff --check",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:44:23.337Z",
+    "completedAt": "2026-10-06T03:44:23.468Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-independent-diff-final.txt",
+    "evidenceSha256": "432cd65d676a154f521ca8434dd5becbdae3ee5c7f625220cf934e31a1241420"
+  },
+  {
+    "command": "node quality/evidence/T12-FIX1/audit.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-06T03:44:24.875Z",
+    "completedAt": "2026-10-06T03:44:27.535Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T12-FIX1/codex-independent-audit-final.txt",
+    "evidenceSha256": "0de110d80649c0fcc82fe44e0d1c692be55b98fa023de7fc91d3665b361c3ee2"
+  }
+]

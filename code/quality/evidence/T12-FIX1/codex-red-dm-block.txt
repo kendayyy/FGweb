@@ -1,0 +1,170 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/dm-block.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22752) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/dm-block.integration.spec.ts (34.831 s)
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › exports lockSocialPair helper on ChatService module
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when peer blocks actor (User B blocks User A) with FORBIDDEN 403 and zero DB side-effects
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when actor blocks peer (User A blocks User B) with FORBIDDEN 403
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › blocked retries produce zero writes, attachment claims, or outbox effects
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › preserves historical read access and membership while active block exists
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › permits writes after unblocking and deduplicates replay correctly
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › denies unauthenticated guests (401) and non-participant outsiders (403)
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › Lobby conversations allow messages even if author is blocked by another user
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › serializes concurrent write behind a pair-lock transaction inserting a block (PostgreSQL locks barrier)
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › fails closed when user session expires or is revoked
+
+    error: cannot insert multiple commands into a prepared statement
+
+      62 |
+      63 |     // Create synthetic users A, B, and Outsider C
+    > 64 |     await pool.query(`
+         |     ^
+      65 |       INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at)
+      66 |       VALUES
+      67 |         ('user-a','Alice','alice@example.com',true,now(),now()),
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:64:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       10 failed, 10 total
+Snapshots:   0 total
+Time:        37.346 s
+Ran all test suites matching test/dm-block.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/dm-block.integration.spec.ts
