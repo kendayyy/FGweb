@@ -1,0 +1,25 @@
+I have launched the typecheck verification command (`node node_modules/typescript/bin/tsc -p quality/evidence/T18/test-types.json --noEmit --incremental false`) in the background. I will review the results as soon as it completes.
+I have launched `npm run build --workspace @fg/api` in the background. I will inspect the build results as soon as it completes.
+### Refactor Summary
+
+Updated `apps/api/src/modules/rooms/rooms.service.ts` to use the required strongly typed signature for `listOwnRooms`:
+
+```ts
+async listOwnRooms(actorId: string, sessionId: string, query: ListOwnRoomsQuery): Promise<Page<RoomDTO>>
+```
+
+This replaces the previous optional overload/fallback logic and resolves the TypeScript type inference issue (`TS2339`) cleanly. All transaction boundaries, session/ban checks (`checkActorSessionAndBan`), row-level locking (`FOR SHARE OF rm`), microsecond timestamp formatting, cursor semantics, and item projections are fully preserved.
+
+---
+
+### Verification Results
+
+1. **Source & Test Typecheck**
+   - **Command**: `node node_modules/typescript/bin/tsc -p quality/evidence/T18/test-types.json --noEmit --incremental false`
+   - **Exit Code**: `0`
+   - **Result**: PASSED with zero TypeScript errors.
+
+2. **API Workspace Build**
+   - **Command**: `npm run build --workspace @fg/api`
+   - **Exit Code**: `0`
+   - **Result**: PASSED cleanly (`tsc` completed with 0 errors).

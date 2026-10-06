@@ -1,0 +1,10 @@
+# Concrete remaining T18 repair
+
+Approved files remain apps/api/src/modules/rooms/**, apps/api/test/rooms.integration.spec.ts and quality/evidence/T18/**. apps/api/src/app.module.ts remains limited to the already approved RoomsModule import/mount. No contracts/schema/dependencies/frontend/spec changes or next task are needed.
+
+1. RoomsController/RoomsService: own-room listing must not return private room metadata when membership removal commits while DTO hydration is waiting. Reproduce with the immutable native-list-revocation.mjs and codex-independent-native-list-revocation-red-1.*. Preserve cursor precision and projections; serialize authorized reads with removal or revalidate current membership/session before returning, fail closed when revoked. Detail/member reads already lock room/membership; apply consistent authorization for list endpoints.
+2. rooms.service.ts helper validation: remove the two `as any` casts while preserving owner-only permission rejection and de-duplication. Do not add eslint disables.
+3. rooms.integration.spec.ts: parse response members through a typed shared array schema so callback parameters at lines400/401 are not implicit any. Cleanup must collect/rethrow errors while still closing every resource; do not swallow app.close failures. Use abortOnError:false for the Nest test fixture, validate the exact owned schema name, verify removal, restore environment after cleanup.
+4. Do not repeat the two scope incidents. Codex owns ledger/checker/baseline/reviewer assertions. No git checkout/restore/reset of unrelated or owner files; all new executable artifacts remain under code/. Removed outside scratch artifact and restored ledger are recorded in scope-incident.md.
+
+Verification after repairs: required rooms.integration.spec.ts, changed lint, source/test typecheck, API build; unchanged native rooms, socket ACL, session-wait and list-revocation probes; full API regression for AppModule composition; baseline/frozen-output/scope/secrets/owned-schema audit and git diff --check. Record exact commands/exit/time/hash. Close T18 only after all mandatory checks pass; T19 remains unopened until then.

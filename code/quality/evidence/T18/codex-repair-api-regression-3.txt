@@ -1,0 +1,233 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22068) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[Nest] 22068  - 10/06/2026, 10:59:44 PM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL apps/api/test/dm-block.integration.spec.ts (20.904 s)
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › exports lockSocialPair helper on ChatService module
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when peer blocks actor (User B blocks User A) with FORBIDDEN 403 and zero DB side-effects
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › rejects DM write when actor blocks peer (User A blocks User B) with FORBIDDEN 403
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › blocked retries produce zero writes, attachment claims, or outbox effects
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › preserves historical read access and membership while active block exists
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › permits writes after unblocking and deduplicates replay correctly
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › denies unauthenticated guests (401) and non-participant outsiders (403)
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › Lobby conversations allow messages even if author is blocked by another user
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › serializes concurrent write behind a pair-lock transaction inserting a block (PostgreSQL locks barrier)
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+  ● T12-FIX1 DM block policy enforcement and canonical pair lock › fails closed when user session expires or is revoked
+
+    Connection terminated due to connection timeout
+
+      47 |
+      48 |     pool = new pg.Pool({ connectionString: connection.href, max: 10, connectionTimeoutMillis: 5000 });
+    > 49 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      50 |
+      51 |     const client = await pool.connect();
+      52 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/dm-block.integration.spec.ts:49:5)
+
+    Cause:
+        Connection terminated unexpectedly
+
+          at Connection.<anonymous> (../../node_modules/pg/lib/client.js:204:73)
+          at Socket.<anonymous> (../../node_modules/pg/lib/connection.js:64:12)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+
+Test Suites: 1 failed, 8 passed, 9 total
+Tests:       10 failed, 142 passed, 152 total
+Snapshots:   0 total
+Time:        159.63 s
+Ran all test suites.

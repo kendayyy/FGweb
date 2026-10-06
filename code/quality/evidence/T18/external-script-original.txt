@@ -1,0 +1,18 @@
+import pg from 'pg';
+import fs from 'fs';
+import { parseEnv } from 'util';
+
+const env = parseEnv(fs.readFileSync('E:/FGweb/code/.env.local', 'utf8'));
+const client = new pg.Client({ connectionString: env.DATABASE_URL });
+
+async function main() {
+  await client.connect();
+  const res = await client.query("SELECT nspname FROM pg_namespace WHERE nspname LIKE 't18_%'");
+  for (const row of res.rows) {
+    console.log('Dropping schema:', row.nspname);
+    await client.query(`DROP SCHEMA "${row.nspname}" CASCADE`);
+  }
+  await client.end();
+}
+
+main().catch(console.error);

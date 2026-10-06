@@ -1,0 +1,7 @@
+# API regression environment correction
+
+First full API invocation omitted --env-file=.env.local. Legacy auth-profile-read integration fixture explicitly requires DATABASE_URL, BETTER_AUTH_SECRET and PUBLIC_ORIGIN inherited in process.env, unlike the T18 fixture that loads its own configuration. It failed before creating its schema. Codex stopped verified Jest PID22756; the recorder preserved command, interrupted exit4294967295 and partial failure output in codex-repair-api-regression-1.*.
+
+Corrected outer invocation: node --env-file=.env.local quality/evidence/T18/record-check.mjs repair-api-regression-2 node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/api -- --runInBand. Child inherits configuration; no credentials printed. Assertions, fixtures and production source unchanged. This is an environment correction, not a passing result until the child completes and records exit0.
+
+Attempt2 exposed a second invocation issue: npm workspace test changes cwd to apps/api, while legacy fixtures resolve packages/database/migrations from code root. The explicit migration journal error was retained; verified Jest PID21708 was stopped. Attempt3 uses the same working command already recorded by T17-BE: node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand from code/. No fixture/source changes or assertion weakening. Codex owns these two invocation mistakes; neither is claimed as a product regression or PASS.

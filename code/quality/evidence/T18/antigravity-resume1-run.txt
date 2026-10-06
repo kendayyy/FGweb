@@ -1,0 +1,43 @@
+### FG T18 — Implementation & Verification Report
+
+#### 1. Scope & Execution Environment
+- **Task ID:** T18 (Backend: Persistent Rooms, Member Roles & Ownership)
+- **Model:** Gemini 3.6 Flash (High)
+- **Working Directory:** `E:\FGweb\code`
+- **Write Scope Adherence:**
+  - `apps/api/src/modules/rooms/**` (`rooms.module.ts`, `rooms.controller.ts`, `rooms.service.ts`, `rooms.exception-filter.ts`)
+  - `apps/api/test/rooms.integration.spec.ts`
+  - `quality/evidence/T18/**`
+  - `apps/api/src/app.module.ts` (ONLY `RoomsModule` import/mount)
+
+---
+
+#### 2. Implementation Summary
+1. **Room REST Endpoints & Contracts:**
+   - `POST /api/v1/rooms`: Creates persistent room, `ROOM` conversation, sets `OWNER` role in `room_members` and inserts owner into `conversation_members` inside an isolated transaction. Validates `gameId`/`gameTitle`.
+   - `GET /api/v1/rooms` & `GET /api/v1/rooms/own`: Paginated list of member rooms with database ISO timestamp cursor precision (`to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`), `null` `nextCursor` when page is exhausted, and 422 validation on malformed cursors.
+   - `GET /api/v1/rooms/:id` & `GET /api/v1/rooms/:id/members`: Enforces room membership check inside transaction. Outsiders receive `403 FORBIDDEN`. Returns projected `UserSummary` (`id`, `displayName`, `avatarUrl`, `customStatus`).
+   - `PATCH /api/v1/rooms/:id/settings`: Restricted to owner. Atomically updates settings and executes SQL predicate `UPDATE recruitments SET state = 'CLOSED' WHERE room_id = $1 AND state = 'OPEN'` when visibility transitions to `PRIVATE`.
+   - `PATCH /api/v1/rooms/:id/helpers/:userId`: Owner-only. Validates helper permissions (rejects `OWNER_TRANSFER`/`ROOM_DISSOLVE` with 422). De-duplicates input permissions. **Deletes `permission_grants` BEFORE modifying `room_members.role`** to satisfy immediate FK constraints.
+   - `POST /api/v1/rooms/:id/transfer-owner`: Owner-only. Rejects non-member outsiders (`403 FORBIDDEN`). Atomically transfers ownership inside transaction with row locks, clearing previous helper grants.
+   - `DELETE /api/v1/rooms/:id/members/:userId`:
+     - Self-leaving: Prevents owner from leaving when other members exist (`403 FORBIDDEN`); dissolves room when sole member owner leaves. Revokes `conversation_members` chat access.
+     - Member removal: Enforces `MANAGE_MEMBERS` permission for helpers, prevents helpers from kicking helpers/owner.
+   - `DELETE /api/v1/rooms/:id`: Owner-only room dissolution. Cascades deletion of room, memberships, permission grants, and room conversation.
+
+---
+
+#### 3. Empirical Verification Results
+- **Test Command:** `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+  - **Result:** `PASS` (23 passed, 0 failed, 1 total test suite)
+  - **Execution Time:** ~36.9s
+  - **Coverage:** Guest 401s, Unonboarded 403s, Banned 403s, Game validation 422s, Room creation, Listing pagination & cursor 422s, Member detail ACL, PRIVATE recruitment closure, Helper permission assignment & demotion, Owner transfer to member / outsider rejection, Self-leave / sole owner dissolution / multi-member owner block, Direct dissolution.
+- **Build Command:** `npm run build --workspace @fg/api`
+  - **Result:** `PASS` (Exit code 0, clean `tsc` build output)
+- **Scope & Schema Audit:** `node quality/evidence/T18/implementation-audit.mjs`
+  - **Result:** `{"baselinesVerified":5,"frozenOutputsVerified":2211,"scopeVerified":true,"secretLeak":false,"ownedSchemasRemaining":0,"publicTables":0}`
+
+---
+
+#### 4. Next Steps
+- Awaiting Codex independent review and closeout.

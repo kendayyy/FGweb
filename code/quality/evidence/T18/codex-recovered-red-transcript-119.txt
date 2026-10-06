@@ -1,0 +1,101 @@
+The following is a <SYSTEM_MESSAGE> not actually sent by the user. It is provided by the system as important information to pay attention to.
+
+<SYSTEM_MESSAGE>
+[Message] timestamp=2026-10-06T09:57:53Z sender=602267e4-860d-4c60-903f-74a5e9efc10f/task-114 priority=MESSAGE_PRIORITY_HIGH content=Task id "602267e4-860d-4c60-903f-74a5e9efc10f/task-114" finished with result:
+
+The command exited with code 1.
+Output:
+<truncated 1 lines>
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      367 |         .set('Cookie', cookieMember);
+      368 |
+    > 369 |       expect(res.status).toBe(200);
+          |                          ^
+      370 |       expect(Array.isArray(res.body)).toBe(true);
+      371 |       expect(res.body).toHaveLength(2);
+      372 |       const members = res.body.map((m: unknown) => RoomMemberSchema.parse(m));
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:369:26)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › prevents non-owner from modifying room settings
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      405 |         });
+      406 |
+    > 407 |       expect(res.status).toBe(403);
+          |                          ^
+      408 |       expect(res.body.code).toBe(ErrorCode.FORBIDDEN);
+      409 |     });
+      410 |
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:407:26)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      420 |         });
+      421 |
+    > 422 |       expect(res.status).toBe(200);
+          |                          ^
+      423 |       const room = RoomSchema.parse(res.body);
+      424 |       expec
+<truncated 4658 bytes>
+mbers & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › dissolves room when sole owner leaves
+
+    error: duplicate key value violates unique constraint "room_members_pkey"
+
+      557 |       conversationId = created.conversationId;
+      558 |
+    > 559 |       await pool.query(
+          |       ^
+      560 |         `INSERT INTO room_members(id, room_id, user_id, role, joined_at) VALUES ('rm-mem-l', $1, 'user-member', 'MEMBER', now())`,
+      561 |         [roomId]
+      562 |       );
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:559:7)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › allows owner to dissolve room directly
+
+    error: duplicate key value violates unique constraint "room_members_pkey"
+
+      557 |       conversationId = created.conversationId;
+      558 |
+    > 559 |       await pool.query(
+          |       ^
+      560 |         `INSERT INTO room_members(id, room_id, user_id, role, joined_at) VALUES ('rm-mem-l', $1, 'user-member', 'MEMBER', now())`,
+      561 |         [roomId]
+      562 |       );
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:559:7)
+
+Test Suites: 1 failed, 1 total
+Tests:       22 failed, 22 total
+Snapshots:   0 total
+Time:        37.839 s
+Ran all test suites matching test/rooms.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/rooms.integration.spec.ts
+
+
+Log: file:///C:/Users/PC/.gemini/antigravity-cli/brain/602267e4-860d-4c60-903f-74a5e9efc10f/.system_generated/tasks/task-114.log
+</SYSTEM_MESSAGE>

@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+const file='quality/tasks.json',ledger=JSON.parse(fs.readFileSync(file,'utf8'));
+const task=ledger.tasks.find(x=>x.id==='T18');assert(task&&task.status==='NOT_STARTED'&&task.inputsHash===null);
+const head=fs.readFileSync('quality/evidence/T18/baseline-head.txt','utf8').trim();assert.equal(execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),head);
+fs.writeFileSync('quality/evidence/T18/ledger-after-unauthorized-checkout.json',JSON.stringify(task,null,2)+'\n');
+const initial=JSON.parse(fs.readFileSync('quality/evidence/T18/codex-approved-preflight.json','utf8'));
+task.status='BLOCKED';task.inputsHash=head;task.startedAt=initial.startedAt;task.completedAt=null;task.outputsHash=null;
+task.writeAllowlist=['apps/api/src/modules/rooms/**','apps/api/test/rooms.integration.spec.ts','quality/evidence/T18/**','apps/api/src/app.module.ts'];
+task.commands=fs.readdirSync('quality/evidence/T18').filter(x=>/^codex-.*\.json$/.test(x)).map(x=>JSON.parse(fs.readFileSync(`quality/evidence/T18/${x}`,'utf8'))).filter(x=>x.command&&Number.isInteger(x.exitCode));
+task.evidencePaths=fs.readdirSync('quality/evidence/T18').filter(x=>fs.statSync(`quality/evidence/T18/${x}`).isFile()).map(x=>`quality/evidence/T18/${x}`);
+task.blockers=['Antigravity made two unauthorized writes: executable scratch script outside code (step241) and git checkout quality/tasks.json resetting Codex-owned T18 ledger (step280). Stop runner and replan execution per skill Hard Limits; user decision required before new implementation run.','Independent list-revocation probe confirms revoked private-room metadata is returned during DTO hydration; lint3 errors and test type2 errors remain. T19 stays NOT_STARTED.'];
+fs.writeFileSync(file,JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({restoredTask:'T18',status:task.status,inputsHash:head,scopePaths:task.writeAllowlist,next:'T19 NOT_STARTED',startedAtSource:'earliest retained approved preflight command; original erased ledger timestamp unavailable'}));

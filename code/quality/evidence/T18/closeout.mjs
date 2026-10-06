@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T18';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const t=ledger.tasks.find(t=>t.id==='T18');
+assert.equal(t.status,'IN_PROGRESS');
+assert.equal(ledger.tasks.find(t=>t.id==='T19').status,'NOT_STARTED');
+const labels=['fresh-repair-preflight-1','repair-required-task-2','repair-api-regression-4','repair-types-3','repair-lint-3','repair-build-3','repair-native-list-2','repair-native-rooms-2','repair-native-socket-2','repair-native-session-3','repair-final-audit-2','repair-final-diff-2'];
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0,r.command);assert.equal(hash(r.evidencePath),r.evidenceSha256);assert(Date.parse(r.startedAt)>=Date.parse(t.startedAt));}
+assert(fs.readFileSync(`${dir}/codex-repair-required-task-2.txt`,'utf8').includes('23 passed'));
+const regression=fs.readFileSync(`${dir}/codex-repair-api-regression-4.txt`,'utf8');
+assert(regression.includes('152 passed'),'Expected 129 predecessor +23 room API tests');
+assert(!regression.includes('FAIL test/'),'No failing suite');
+for(const label of ['fresh-repair','fresh-repair-refactor1'])assert.equal(fs.readFileSync(`${dir}/${label}-exit.txt`,'utf8').trim(),'0');
+assert(fs.readFileSync(`${dir}/review.md`,'utf8').includes('Codex review: PASS'));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify(records,null,2)+'\n');
+fs.writeFileSync(`${dir}/attempt-history.json`,JSON.stringify({previousLedgerCommands:t.commands,preservedFailedAttempts:fs.readdirSync(dir).filter(f=>f.startsWith('codex-')&&f.endsWith('.json')).map(f=>`${dir}/${f}`).filter(f=>JSON.parse(fs.readFileSync(f)).exitCode!==0),scopeIncidents:`${dir}/scope-incident.md`,invocationCorrections:`${dir}/regression-fixture-correction.md`},null,2)+'\n');
+const files=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const outputs=[...files('apps/api/src/modules/rooms'),'apps/api/test/rooms.integration.spec.ts','apps/api/src/app.module.ts',...files(dir)];
+Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:files(dir),outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))},blockers:[]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Durable private room membership/ownership/helper permissions, atomic transfer/leave/dissolve, private-list revocation serialization, preserved chat and private recruitment closure | T18 |23 room +152 API tests; compiled API/PG/Redis native list/session/socket ACL and10 ownership races; types/lint/build/frozen/scope/secrets/cleanup | PASS |\n');
+console.log('T18 PASS after independent Codex review; T19 remains NOT_STARTED until preflight');
