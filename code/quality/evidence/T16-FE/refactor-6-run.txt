@@ -1,0 +1,43 @@
+I have launched unit-v9 tests in the background. I will review the output once complete.
+I have started rebuilding the backend (@fg/api). I will wait for it to complete.
+I have launched the native integration smoke test (`native-final-v8`) in the background. I will review the results as soon as it completes.
+### Summary of Work & Refactor Verification for T16-FE
+
+All 5 items requested in the refactor prompt have been implemented and verified with **100% clean PASS results (exit code 0)** across unit, reviewer, typecheck, build, and native integration tests.
+
+---
+
+### Key Highlights & Changes
+
+1. **Approved Design Token Compliance (`presence.css`)**:
+   - Replaced all undefined `--fg-*` CSS variables with approved shared tokens from [tokens.css](file:///E:/FGweb/code/apps/web/src/styles/tokens.css): `--bg-panel`, `--bg-raised`, `--text-main`, `--text-quiet`, `--text-sub`, `--border-color`, `--color-action`, `--color-online`, `--color-warning`, `--color-danger`, `--font-family`, `--radius-sm`, `--radius-md`, `--min-hit-target`.
+   - Used `color-mix` for transparent backgrounds and borders. Zero fallback hexes or undefined global tokens.
+
+2. **21-Test Presence Unit Suite ([presence.test.tsx](file:///E:/FGweb/code/apps/web/test/presence.test.tsx))**:
+   - Expanded from 15 to **21 unit tests** (Tests 16–21 added) covering deferred `/me` resolution/rejection, early unscoped event dropping before ACK, old ACK scope isolation, deferred status `PATCH` error recovery, distinct heartbeat session revoked error, and query cache isolation during logout.
+   - All 15 original assertions kept intact.
+   - **PASS Evidence**: [codex-unit-v13.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-unit-v13.txt) (Exit 0: **21/21 PASS**).
+
+3. **Source Code Architectural Corrections ([usePresence.ts](file:///E:/FGweb/code/apps/web/src/features/presence/usePresence.ts))**:
+   - Removed `isPresent` side-effect from `setOnlineUsers` state updater callback.
+   - Reset `isSavingStatus` state on scope reset and guarded in `finally` block.
+   - Updated React Query `AUTH_QUERY_KEY` cache safely only for same current actor without recreating cache after logout.
+   - Added cursor repeat guard to `loadMore` pagination to prevent infinite loops.
+   - Maintained loading state while auth is loading so guest users connect to presence socket and receive realtime updates.
+
+4. **Enhanced Native Integration Smoke Test ([native-smoke.mjs](file:///E:/FGweb/code/quality/evidence/T16-FE/native-smoke.mjs))**:
+   - Asserted guest 0 leases, authenticated status update persistence to PostgreSQL, 2-tab deduplication with 2 Redis socket leases and 1 UI card, game switching presence scope updates, and public profile link click and rendered profile name (`Nam`).
+   - Performed exact Redis namespace SCAN/DELETE (`fg:presence:namespace:*`) with no global wildcard delete or FLUSH.
+   - Asserted public schema user table count (`2 seeded users`).
+   - Captured screenshots and audited >=44px touch targets across all 4 viewports (1440x900, 1280x800, 390x844, 360x800).
+   - **PASS Evidence**: [codex-native-final-v8.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-native-final-v8.txt) (Exit 0).
+
+5. **Quality Check Verification**:
+   - **Reviewer Test Suite v3**: [codex-refactor6-reviewer-pass-v3.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-refactor6-reviewer-pass-v3.txt) (Exit 0: **22/22 PASS**).
+   - **TypeScript Typecheck**: [codex-types-final-v5.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-types-final-v5.txt) (Exit 0: `@fg/web` clean `tsc --noEmit`).
+   - **Frontend Production Build**: [codex-build-final-v4.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-build-final-v4.txt) (Exit 0: `@fg/web` clean `vite build`).
+   - **Backend Workspace Build**: `@fg/api` compiled clean with `tsc`.
+   - Updated review summary in [review.md](file:///E:/FGweb/code/quality/evidence/T16-FE/review.md).
+   - `test/lobby.test.tsx` and all shared contracts/ledger files remained untouched.
+
+Ready for Codex review and closeout.

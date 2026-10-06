@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T16-FE';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8'));
+const task=ledger.tasks.find(item=>item.id==='T16-FE');
+if(task.status!=='IN_PROGRESS')throw new Error('Unexpected task status');
+task.status='BLOCKED';
+task.blockers=['Two Antigravity review/refactor loops exhausted for stale-response and reconnect correctness; awaiting user implementer decision.','Independent reviewer suite: 2 failures; full frontend regression: 1 failure; production test-specific fake success must be removed; final native/build/type/lint proof incomplete.'];
+task.commands=['pass-final-v5','independent-review-full','independent-fe-regression','independent-audit'].map(label=>JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`,'utf8')));
+task.evidencePaths=[`${dir}/review-blocked.md`,`${dir}/refactor-1-review.md`,`${dir}/refactor-2-review.md`,...task.commands.flatMap(record=>[record.evidencePath,record.evidencePath.replace(/\.txt$/,'.json')]),`${dir}/reviewer-presence.test.tsx`,`${dir}/reviewer-vitest.config.mts`];
+task.outputsHash=null;
+task.completedAt=null;
+const files=['apps/web/src/features/presence/usePresence.ts','apps/web/src/features/presence/api.ts','apps/web/src/features/lobby/OnlineUsers.tsx','apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/presence.test.tsx'];
+fs.writeFileSync(`${dir}/blocked-draft-hashes.json`,JSON.stringify({capturedAt:new Date().toISOString(),files:Object.fromEntries(files.map(file=>[file,createHash('sha256').update(fs.readFileSync(file)).digest('hex')]))},null,2)+'\n');
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+if(ledger.tasks.find(item=>item.id==='T17-BE').status!=='NOT_STARTED')throw new Error('Unexpected downstream unlock');
+console.log('T16-FE BLOCKED recorded truthfully; T17-BE remains NOT_STARTED; no PASS hashes or source edits.');

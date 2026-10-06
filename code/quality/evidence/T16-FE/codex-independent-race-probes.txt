@@ -1,0 +1,159 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T16-FE/reviewer-presence.test.tsx (18 tests | 2 failed | 15 skipped) 1433ms
+   ❯ T16-FE Presence & Online Users Panel (18)
+     × Codex review: an older initial response cannot overwrite the newer subscription refresh 124ms
+     × Codex review: authoritative reconnect list restores a user after an offline event was followed by missed online event 1063ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence.test.tsx > T16-FE Presence & Online Users Panel > Codex review: an older initial response cannot overwrite the newer subscription refresh
+TestingLibraryElementError: Unable to find an element with the text: Fresh authoritative user. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-header"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng ([0m
+          [0m1[0m
+          [0m)[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<ul[39m
+        [33maria-label[39m=[32m"Danh sách người chơi online"[39m
+        [33mclass[39m=[32m"fg-online-list"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33mclass[39m=[32m"fg-online-item"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33maria-label[39m=[32m"Hồ sơ Old stale user"[39m
+            [33mclass[39m=[32m"fg-online-profile-link"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/users/old-user/profile"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-online-avatar"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mO[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"fg-online-dot"[39m
+                [33mtitle[39m=[32m"Online"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-online-info"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-online-name"[39m
+              [36m>[39m
+                [0mOld stale user[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-online-status-badge"[39m
+              [36m>[39m
+                [0mChỉ trò chuyện[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</a>[39m
+        [36m</li>[39m
+      [36m</ul>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ quality/evidence/T16-FE/reviewer-presence.test.tsx:673:19
+    671|     await waitFor(() => expect(screen.getByText('Fresh authoritative u…
+    672|     await act(async () => resolveOld(new Response(JSON.stringify({item…
+    673|     expect(screen.getByText('Fresh authoritative user')).toBeInTheDocu…
+       |                   ^
+    674|     expect(screen.queryByText('Old stale user')).not.toBeInTheDocument…
+    675|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence.test.tsx > T16-FE Presence & Online Users Panel > Codex review: authoritative reconnect list restores a user after an offline event was followed by missed online event
+TestingLibraryElementError: Unable to find an element with the text: Recovered user. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-header"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng ([0m
+          [0m0[0m
+          [0m)[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-empty"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mChưa có người chơi online trong Lobby này.[0m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-header"[39m
+        [36m>[39m
+          [36m<h2>[39m
+            [0mCộng đồng ([0m
+            [0m0[0m
+            [0m)[0m
+          [36m</h2>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-empty"[39m
+          [33mrole[39m=[32m"status"[39m
+        [36m>[39m
+          [0mChưa có người chơi online trong Lobby này.[0m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ quality/evidence/T16-FE/reviewer-presence.test.tsx:699:11
+    697|     expect(screen.queryByText('Recovered user')).not.toBeInTheDocument…
+    698|     await act(async () => {socket.fire('disconnect');socket.fire('conn…
+    699|     await waitFor(() => expect(screen.getByText('Recovered user')).toB…
+       |           ^
+    700|   });
+    701| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed | 15 skipped (18)
+   Start at  01:02:47
+   Duration  4.55s (environment 40%, tests 34%, transform 12%, import 8%, setup 6%)
+

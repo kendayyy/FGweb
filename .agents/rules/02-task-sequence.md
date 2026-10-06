@@ -16,4 +16,4 @@ description: "Follow FG task.md sequentially without skipped tasks or false comp
 - Spec hash đổi: kiểm yêu cầu mới và cập nhật plan/tests tương ứng; không sửa checker/baseline để vượt gate.
 - Resume phải kiểm files/tests/ledger thật, không tin recap phiên trước.
 - Báo cuối task: ID, trạng thái, files, kiểm thử, evidence, blocker và task kế tiếp.
-
+- Người dùng xác nhận ngày06/10/2026: FG bỏ giới hạn hai vòng Antigravity sửa cùng một lỗi. Tiếp tục các vòng review/refactor trong cùng task, cùng Gemini3.6 Flash (High), đến khi kiểm thử và Codex review đạt hoặc có blocker thực sự; các giới hạn phạm vi/thứ tự/bằng chứng vẫn giữ nguyên.

@@ -1,0 +1,3 @@
+# First T16-FE review interruption
+
+Initial Antigravity RED attempted spawning npm with shell:false on Windows and failed ENOENT; no behavior tests executed. Feature logic proceeded anyway. Codex stopped only uniquely identified owned process PID29636; initial exit -1. No PASS. Same conversation continuation requested with corrected absolute npm CLI command, genuine RED and strict scoped/current-state/auth lifecycle regressions. Draft public profile type was nonexistent in frozen contracts; fix to existing ProfileDTO,never change contracts. Exact findings in refactor-1-prompt.txt. Scope remains task frontend and minimal LobbyPage mount only.

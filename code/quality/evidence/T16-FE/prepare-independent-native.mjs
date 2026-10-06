@@ -1,0 +1,36 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/T16-FE';
+let source=fs.readFileSync(dir+'/native-smoke.mjs','utf8');
+source=source.replace('`quality/evidence/T16-FE/screenshots/${schema}`','`quality/evidence/T16-FE/screenshots-independent/${schema}`');
+const viewportMarker="    await expect(page1.getByRole('heading', { name: /Cộng đồng/i })).toBeVisible();\n\n    const metrics";
+assert(source.includes(viewportMarker));
+source=source.replace(viewportMarker,`    await expect(page1.getByRole('heading', { name: /Cộng đồng/i })).toBeVisible();
+    await expect(page1.locator('.fg-online-profile-link').first()).toBeVisible();
+    const palette = await page1.locator('.fg-online-users-panel').evaluate(element => {
+      const reference=document.createElement('div');
+      reference.style.backgroundColor='var(--bg-panel)';
+      reference.style.color='var(--text-main)';
+      document.body.appendChild(reference);
+      const actual=getComputedStyle(element),expected=getComputedStyle(reference);
+      const result={actualBg:actual.backgroundColor,expectedBg:expected.backgroundColor,actualText:actual.color,expectedText:expected.color,fontFamily:actual.fontFamily,interLoaded:[...document.fonts].some(face=>face.family.includes('Inter')&&face.status==='loaded')};
+      reference.remove();return result;
+    });
+    assert.equal(palette.actualBg,palette.expectedBg,'Online panel uses approved shared background');
+    assert.equal(palette.actualText,palette.expectedText,'Online panel uses approved shared text');
+    assert(palette.fontFamily.includes('Inter')&&palette.interLoaded,'Self-hosted Inter actually loaded');
+    checks.push({viewport:viewport.width,approvedPaletteAndInter:palette});
+
+    const metrics`);
+const revokeMarker="  checks.push('Revoked SQL session removes active leases and sets presence state to offline');";
+assert(source.includes(revokeMarker));
+source=source.replace(revokeMarker,`  await expect(page1.locator('.fg-online-users-panel').getByText('Mất kết nối',{exact:true})).toBeVisible({timeout:30000});
+  await expect(page1.getByRole('combobox',{name:/Trạng thái/i})).toHaveValue('LOOKING_FOR_TEAM');
+  checks.push('Revoked SQL session removes active leases; actual browser heartbeat rejects and marks offline without changing custom status');`);
+const reconnectMarker="  checks.push('Browser offline transition displays Mất kết nối with status unchanged, reconnect restores REST online lease');";
+assert(source.includes(reconnectMarker));
+source=source.replace(reconnectMarker,`  await expect(page1.locator('.fg-online-users-panel .fg-presence-connection')).toHaveCount(0,{timeout:15000});
+  await expect(page1.getByRole('combobox',{name:/Trạng thái/i})).toHaveValue('LOOKING_FOR_TEAM');
+  checks.push('Browser offline transition displays Mất kết nối with status unchanged; successful reconnect ACK and real REST online lease restored');`);
+fs.writeFileSync(dir+'/native-independent.mjs',source);
+console.log('Independent native probe adds real palette/font, reconnect ACK and revoked-browser heartbeat assertions.');

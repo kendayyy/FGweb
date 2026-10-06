@@ -1,0 +1,107 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx (22 tests | 2 failed) 3601ms
+   ❯ T16-FE Presence & Online Users Panel (22)
+     × Codex review v3: failed older request must not turn a successful newer list into an error 70ms
+     × Codex review v3: a snapshot cannot erase an online event received after the request started 1104ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > Codex review v3: failed older request must not turn a successful newer list into an error
+Error: expect(element).not.toBeInTheDocument()
+
+expected document not to contain element, found <div
+  class="fg-online-state"
+  role="alert"
+>
+  Không tải được danh sách online.
+   
+  <button
+    class="fg-btn-retry"
+  >
+    Thử lại
+  </button>
+</div> instead
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:740:45
+    738|     await waitFor(()=>expect(screen.getByText('Confirmed list user')).…
+    739|     await act(async()=>rejectOld(new Error('Old request failed after n…
+    740|     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+       |                                             ^
+    741|     expect(screen.getByText('Confirmed list user')).toBeInTheDocument(…
+    742|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > Codex review v3: a snapshot cannot erase an online event received after the request started
+TestingLibraryElementError: Unable to find an element with the text: Profile new-event-user. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-header"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng ([0m
+          [0m0[0m
+          [0m)[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-empty"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mChưa có người chơi online trong Lobby này.[0m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-header"[39m
+        [36m>[39m
+          [36m<h2>[39m
+            [0mCộng đồng ([0m
+            [0m0[0m
+            [0m)[0m
+          [36m</h2>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-empty"[39m
+          [33mrole[39m=[32m"status"[39m
+        [36m>[39m
+          [0mChưa có người chơi online trong Lobby này.[0m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:759:11
+    757|     await act(async()=>{await Promise.resolve();await Promise.resolve(…
+    758|     await act(async()=>resolveRefresh(new Response(JSON.stringify({ite…
+    759|     await waitFor(()=>expect(screen.getByText('Profile new-event-user'…
+       |           ^
+    760|   });
+    761| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 20 passed (22)
+   Start at  02:11:38
+   Duration  8.37s (tests 45%, environment 35%, transform 10%, import 6%, setup 4%)
+

@@ -1,0 +1,47 @@
+### T16-FE — Execution Summary (Refactor Loop 3)
+
+The refactoring and verification for **T16-FE (Frontend Online Users & Custom Status Panel)** are complete.
+
+---
+
+### Key Fixes Implemented
+
+1. **Request Sequencing & Out-of-Order HTTP Prevention**:
+   - Implemented `fetchCounterRef` and `completedFetchIdRef` in [usePresence.ts](file:///E:/FGweb/code/apps/web/src/features/presence/usePresence.ts).
+   - Any HTTP fetch whose sequence ID is older than `completedFetchIdRef.current` is discarded, preventing out-of-order initial HTTP responses from overwriting newer subscription refresh snapshots.
+
+2. **Event Versioning & Request Timestamp Correlation**:
+   - Recorded timestamps for `presence.changed` events in `userStatesRef`.
+   - Authoritative server snapshots from `/api/v1/games/:id/online` are evaluated against `requestStartTime`. Offline tombstones in `userStatesRef` only filter out server items if the offline event arrived *after* the request started.
+   - Authoritative reconnect lists now properly restore users who went offline and subsequently reconnected.
+
+3. **Socket Lifecycle & Layout Mounting Order**:
+   - Updated socket initialization in [usePresence.ts](file:///E:/FGweb/code/apps/web/src/features/presence/usePresence.ts) to `useLayoutEffect`.
+   - Preserves socket setup ordering prior to passive effects.
+
+4. **Complete Removal of Production Test Bypass**:
+   - Removed `isTestEnv` and `Unexpected test request` error handling from [api.ts](file:///E:/FGweb/code/apps/web/src/features/presence/api.ts) and [usePresence.ts](file:///E:/FGweb/code/apps/web/src/features/presence/usePresence.ts). Zero test-only code paths in production source.
+
+---
+
+### Empirical Verification Evidence
+
+| Stage | Command / Evidence File | Result | Highlights |
+| --- | --- | --- | --- |
+| **Reviewer RED** | `quality/evidence/T16-FE/codex-refactor3-reviewer-red.txt` | Exit 1 | 16 pass / 2 fail (captured out-of-order HTTP & reconnect tombstone failures) |
+| **Reviewer PASS** | `quality/evidence/T16-FE/codex-refactor3-reviewer-pass.txt` | Exit 0 | **18/18 PASS** |
+| **Presence Unit Tests** | `quality/evidence/T16-FE/codex-pass-final-v6.txt` | Exit 0 | **15/15 PASS** |
+| **TypeScript Check** | `quality/evidence/T16-FE/codex-types-final.txt` | Exit 0 | Clean build on `@fg/web` |
+| **Frontend Build** | `quality/evidence/T16-FE/codex-build-final.txt` | Exit 0 | Clean production build |
+| **Native Integration** | `quality/evidence/T16-FE/codex-native-final-v3.txt` | Exit 0 | Real NestJS + PG schema `t16_fe_*` + Redis + Playwright (1440x900, 1280x800, 390x844, 360x800) |
+
+---
+
+### Audit & Prerequisite Report
+
+- **Frontend Regression Suite**: 61/62 passed.
+- **Single Failure Investigation**:
+  - In `test/lobby.test.tsx` (frozen T13 test harness), `window.fetch` is stubbed without an `/api/v1/games/:id/online` handler, throwing an unhandled route error for `/online`. In test 8, when `history` fails, `ChatPane` renders `<div role="alert">Không tải được lịch sử Lobby.</div>`. Simultaneously, `OnlineUsers` catches the unhandled `/online` fetch error and renders `<div role="alert">Không tải được danh sách online.</div>`. Because RTL's `screen.findByRole('alert')` in T13's test 8 does not filter by element name, it encounters multiple `role="alert"` elements.
+  - **Prerequisite Proposal**: Adding an `/online` endpoint mock handler to `test/lobby.test.tsx` (or scoping role queries by name) in T13's test fixture allows test 8 to pass cleanly without any production code bypasses.
+
+Review details logged in [review.md](file:///E:/FGweb/code/quality/evidence/T16-FE/review.md). Ready for Codex closeout review.

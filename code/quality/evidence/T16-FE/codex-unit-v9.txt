@@ -1,0 +1,1082 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/presence.test.tsx (21 tests | 21 failed) 139ms
+   ❯ T16-FE Presence & Online Users Panel (21)
+     × 1. deduplicates duplicate users across pages, events, and multiple tabs, retaining first profile displayName 29ms
+     × 2. lost socket connection leaves chosen custom status intact 4ms
+     × 3. game switch releases old canonical subscription and resets scope 5ms
+     × 4. profile links encode opaque user IDs properly 3ms
+     × 5. failed save of custom status keeps previous confirmed status with visible error and retry 11ms
+     × 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat 7ms
+     × 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored 7ms
+     × 8. ignores malformed or wrong-scope presence events 7ms
+     × 9. handles empty, error, and retry states correctly 3ms
+     × 10. supports pagination with cursor and appends new unique users 4ms
+     × 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK 3ms
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 6ms
+     × 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection 10ms
+     × 14. regression: loadMore failure exposes error/retry and preserves loaded users 2ms
+     × 15. regression: socket does not open while auth is loading/error/signing-out; status save uses confirmed server response 5ms
+     × 16. auth loading/error/signing-out prevents socket connection and handles deferred /me 9ms
+     × 17. drops early unscoped events before canonical subscribe ACK 3ms
+     × 18. old ACK after disconnect or scope switch cannot mark new scope offline 2ms
+     × 19. status response after logout or account switch cannot update/recreate old cache 3ms
+     × 20. tests distinct subscribe rejection, heartbeat session revoked error, and socket timeout 5ms
+     × 21. deferred status PATCH shows saving state and error recovery re-enables selector 3ms
+ ❯ |web| apps/web/test/profiles.test.tsx (12 tests | 12 failed) 207ms
+   ❯ T11 - Profiles & Onboarding Behavioral Suite (12)
+     ❯ 1. Public Profile Security & Formatting (3)
+       × public profile renders public data and omits private email and discordId 33ms
+       × formats UTC createdAt date in Asia/Bangkok locale with hour 17 for 10:00:00Z 2ms
+       × labels self-selected custom status separately without fabricated online badge 3ms
+     ❯ 2. Owner Game Profile Editor & Optional Rank Payload (3)
+       × sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId 8ms
+       × allows leaving rank empty when saving game profile (optional rank, rank omitted from payload) 5ms
+       × failed saves keep form inputs intact and display error message 3ms
+     ❯ 3. Loading, Error & Guest vs Owner Profile Page States (3)
+       × displays loading spinner while profile query is in flight 4ms
+       × displays error card with retry button when profile query fails 124ms
+       × hides edit controls when guest views public profile 6ms
+     ❯ 4. Server Onboarding States & Integration Error Handling (3)
+       × renders onboarding form for authenticated user with onboardingComplete === false 4ms
+       × renders integration error state with retry when onboardingComplete is missing/undefined 2ms
+       × submitting onboarding requires >= 1 game and triggers POST /api/v1/me/onboarding 5ms
+ ❯ |web| apps/web/test/codex-auth-ui-regressions.test.tsx (3 tests | 3 failed) 397ms
+   ❯ Codex T09 visible failure and recovery (3)
+     × keeps logout failure visible even after local identity is cleared, with a retry action 133ms
+     × shows failed header sign-in and retries the API rather than only logging to console 29ms
+     × retries failed identity loading and renders protected children only after actual success 211ms
+(node:5512) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ❯ |web| apps/web/test/codex-auth-regressions.test.tsx (4 tests | 2 failed) 216ms
+   ❯ Codex T09 behavioral regressions (4)
+     × reports rejected server logout rather than resolving success 64ms
+     × removes private query data after successful server logout 4ms
+ ❯ |database| packages/database/test/identity.test.ts (6 tests | 6 skipped) 11210ms
+ ❯ |database| packages/database/test/pending-uploads.test.ts (6 tests | 6 skipped) 14243ms
+ ❯ |web| apps/web/test/chat-rich.test.tsx (10 tests | 10 failed) 81ms
+   ❯ T15 rich chat behavior (10)
+     × Escape closes a focused emoji menu and restores composer focus 46ms
+     × failed send retains content and retry keeps clientMessageId 4ms
+     × reply can be canceled without sending or losing text 2ms
+     × emoji inserts at selected caret and restores caret 2ms
+     × mention picker uses opaque candidate ID and display name 5ms
+     × script content is rendered literally and reply control exists 2ms
+     × private image fetches protected endpoints with session and closes on Escape 5ms
+     × disabled composer cannot send or select uploads 3ms
+     × upload progress and retry are real transport state; failed send retains uploaded image 3ms
+     × forbidden image shows real error and never displays remote content 4ms
+ ❯ |web| apps/web/test/auth.test.tsx (9 tests | 8 failed) 126ms
+   ❯ T09 Auth Features & Guards (9)
+     ❯ validateSafeRedirect (2)
+       × allows valid relative paths and same-origin URLs 31ms
+     ❯ Discord OAuth sign-in API trigger (1)
+       × sends POST /api/auth/sign-in/social with provider discord and safe callback URLs 35ms
+     ❯ Session loading privacy (1)
+       × does not render protected child components while session query is pending 7ms
+     ❯ Denied OAuth / Error state and recovery (1)
+       × displays error UI when OAuth returns error parameter or API fails, allowing retry 8ms
+     ❯ Guest access & CTA (1)
+       × allows guest to view public lobby shell with Discord login CTA 3ms
+     ❯ Network / 403 failure closes protected routes (1)
+       × fails closed when /me returns 403 or network error, displaying error/login prompt 6ms
+     ❯ Logout lifecycle, React Query invalidation and Socket/Call cleanup (1)
+       × waits for server POST /api/auth/sign-out, invalidates cache and triggers registered cleanup callbacks 5ms
+     ❯ Stale async /me response race condition prevention (1)
+       × ignores slow in-flight /me request that resolves after logout 11ms
+ ❯ |web| apps/web/test/lobby.test.tsx (9 tests | 9 failed) 65ms
+   ❯ T13 approved Lobby behavior (9)
+     × loads all seven games, guest sees history and cannot send 28ms
+     × changes game without mixing histories and ignores a response arriving after game switch 4ms
+     × merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50 5ms
+     × ignores old socket events after changing game and disposes its connection 7ms
+     × authenticated composer persists through API, merges server/event duplicates and renders HTML as text 4ms
+     × uses the server canonical conversation ID when it differs from the opaque Lobby ID 3ms
+     × keeps authenticated send disabled until the server resolves the conversation 2ms
+     × opens mobile game navigation, closes on game selection and Escape 2ms
+     × has accessible Chat/Find-team tabs and honest loading/error states 3ms
+(node:20780) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ❯ |database| packages/database/test/social-chat.test.ts (10 tests | 1 failed) 28597ms
+   ❯ T05 - Chat, Social Relations, and Forward Migration Schema (10)
+     × should preserve T04 data when applying T05 forward migration over old T04 migration and seed 5031ms
+ ❯ |database| packages/database/test/realtime-outbox.test.ts (4 tests | 3 failed) 29622ms
+   ❯ T07-FIX1 actual PostgreSQL durable message events (4)
+     × migrates an empty schema with a usable durable creation event table 5025ms
+     × rolls back message and outbox together on an aborted transaction 2709ms
+     × deduplicates jobs and prevents cross-conversation linkage or negative attempts 17ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/identity.test.ts > T04 - Identity, Profiles, and Game Catalog Schema
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ packages/database/test/identity.test.ts:71:3
+     69|   let schemaName: string;
+     70|
+     71|   beforeAll(async () => {
+       |   ^
+     72|     const codeRootDir = path.resolve(import.meta.dirname, '../../../');
+     73|     process.chdir(codeRootDir);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/72]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ packages/database/test/pending-uploads.test.ts:14:5
+     12| describe('durable unsent image uploads on actual PostgreSQL', () => {
+     13|     let client: pg.Client;
+     14|     beforeAll(async () => {
+       |     ^
+     15|         client = new pg.Client({ connectionString: databaseUrl, query_…
+     16|         await client.connect();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/72]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL
+error: current transaction is aborted, commands ignored until end of transaction block
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/pending-uploads.test.ts:39:17
+     37|                 if (!/^t05_fix1_[0-9]+_[a-z0-9]+(?:_empty)?$/.test(sch…
+     38|                     throw new Error('Unsafe schema');
+     39|                 await client.query(`DROP SCHEMA IF EXISTS "${schema}" …
+       |                 ^
+     40|             }
+     41|             expect((await client.query('SELECT nspname FROM pg_namespa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/72]⎯
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 69 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > validateSafeRedirect > allows valid relative paths and same-origin URLs
+ReferenceError: window is not defined
+ ❯ apps/web/test/auth.test.tsx:39:35
+     37|       expect(validateSafeRedirect('/')).toBe('/');
+     38|       expect(validateSafeRedirect('/teams?id=123')).toBe('/teams?id=12…
+     39|       expect(validateSafeRedirect(window.location.origin + '/dashboard…
+       |                                   ^
+     40|     });
+     41|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Discord OAuth sign-in API trigger > sends POST /api/auth/sign-in/social with provider discord and safe callback URLs
+ReferenceError: window is not defined
+ ❯ apps/web/test/auth.test.tsx:69:29
+     67|           body: JSON.stringify({
+     68|             provider: 'discord',
+     69|             callbackURL: `${window.location.origin}/lobby`,
+       |                             ^
+     70|             errorCallbackURL: `${window.location.origin}/login?error=o…
+     71|           }),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Session loading privacy > does not render protected child components while session query is pending
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:83:7
+     81|       vi.spyOn(globalThis, 'fetch').mockImplementation(() => new Promi…
+     82|
+     83|       render(
+       |       ^
+     84|         <QueryClientProvider client={queryClient}>
+     85|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Denied OAuth / Error state and recovery > displays error UI when OAuth returns error parameter or API fails, allowing retry
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:113:7
+    111|       );
+    112|
+    113|       render(
+       |       ^
+    114|         <QueryClientProvider client={queryClient}>
+    115|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Guest access & CTA > allows guest to view public lobby shell with Discord login CTA
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:138:7
+    136|       );
+    137|
+    138|       render(
+       |       ^
+    139|         <QueryClientProvider client={queryClient}>
+    140|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Network / 403 failure closes protected routes > fails closed when /me returns 403 or network error, displaying error/login prompt
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:164:7
+    162|       );
+    163|
+    164|       render(
+       |       ^
+    165|         <QueryClientProvider client={queryClient}>
+    166|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Logout lifecycle, React Query invalidation and Socket/Call cleanup > waits for server POST /api/auth/sign-out, invalidates cache and triggers registered cleanup callbacks
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:240:7
+    238|       }
+    239|
+    240|       render(
+       |       ^
+    241|         <QueryClientProvider client={queryClient}>
+    242|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/72]⎯
+
+ FAIL  |web| apps/web/test/auth.test.tsx > T09 Auth Features & Guards > Stale async /me response race condition prevention > ignores slow in-flight /me request that resolves after logout
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/auth.test.tsx:305:7
+    303|       }
+    304|
+    305|       render(
+       |       ^
+    306|         <QueryClientProvider client={queryClient}>
+    307|           <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > Escape closes a focused emoji menu and restores composer focus
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:13:9
+     11| describe('T15 rich chat behavior', () => {
+     12|     it('Escape closes a focused emoji menu and restores composer focus…
+     13|         render(<RichComposer {...base} onSend={vi.fn()}/>);
+       |         ^
+     14|         fireEvent.click(screen.getByLabelText('Chọn emoji'));
+     15|         const option=screen.getByLabelText('Chèn 🎮'); option.focus();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > failed send retains content and retry keeps clientMessageId
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:24:9
+     22|         const send = vi.fn(async (request: CreateMessageRequest) => { …
+     23|             throw new Error('offline'); });
+     24|         render(<RichComposer {...base} onSend={send}/>);
+       |         ^
+     25|         fireEvent.change(screen.getByLabelText('Tin nhắn Lobby'), { ta…
+     26|         fireEvent.click(screen.getByLabelText('Gửi tin nhắn'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > reply can be canceled without sending or losing text
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:36:9
+     34|     it('reply can be canceled without sending or losing text', () => {
+     35|         const cancel = vi.fn();
+     36|         render(<RichComposer {...base} reply={message} onCancelReply={…
+       |         ^
+     37|         fireEvent.change(screen.getByLabelText('Tin nhắn Lobby'), { ta…
+     38|         fireEvent.click(screen.getByLabelText('Hủy trả lời'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > emoji inserts at selected caret and restores caret
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:43:9
+     41|     });
+     42|     it('emoji inserts at selected caret and restores caret', async () …
+     43|         render(<RichComposer {...base} onSend={vi.fn()}/>);
+       |         ^
+     44|         const input = screen.getByLabelText('Tin nhắn Lobby') as HTMLT…
+     45|         fireEvent.change(input, { target: { value: 'abc' } });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > mention picker uses opaque candidate ID and display name
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:57:9
+     55|     it('mention picker uses opaque candidate ID and display name', asy…
+     56|         const send = vi.fn(async (request: CreateMessageRequest) => { …
+     57|         render(<RichComposer {...base} onSend={send}/>);
+       |         ^
+     58|         fireEvent.change(screen.getByLabelText('Tin nhắn Lobby'), { ta…
+     59|         fireEvent.click(await screen.findByRole('option', { name: 'Bạn…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > script content is rendered literally and reply control exists
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:67:31
+     65|         const reply = vi.fn();
+     66|         const text = '<script>window.hacked=true</script>';
+     67|         const { container } = render(<RichMessage message={{ ...messag…
+       |                               ^
+     68|         expect(screen.getByText(text)).toBeInTheDocument();
+     69|         expect(container.querySelector('script')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > private image fetches protected endpoints with session and closes on Escape
+ReferenceError: window is not defined
+ ❯ apps/web/test/chat-rich.test.tsx:81:92
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > disabled composer cannot send or select uploads
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:93:9
+     91|     });
+     92|     it('disabled composer cannot send or select uploads', () => {
+     93|         render(<RichComposer {...base} disabled onSend={vi.fn()}/>);
+       |         ^
+     94|         expect(screen.getByLabelText('Tin nhắn Lobby')).toBeDisabled();
+     95|         expect(screen.getByLabelText('Thêm ảnh')).toBeDisabled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > upload progress and retry are real transport state; failed send retains uploaded image
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:122:9
+    120|         vi.stubGlobal('XMLHttpRequest', FakeXHR);
+    121|         const send = vi.fn(async (request: CreateMessageRequest) => { …
+    122|         render(<RichComposer {...base} onSend={send}/>);
+       |         ^
+    123|         fireEvent.change(screen.getByLabelText('Tin nhắn Lobby'), { ta…
+    124|         fireEvent.change(screen.getByLabelText('Chọn tệp ảnh'), { targ…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/72]⎯
+
+ FAIL  |web| apps/web/test/chat-rich.test.tsx > T15 rich chat behavior > forbidden image shows real error and never displays remote content
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/chat-rich.test.tsx:148:9
+    146|         const fetch = vi.fn(async (input: RequestInfo | URL) => { void…
+    147|         vi.stubGlobal('fetch', fetch);
+    148|         render(<RichMessage message={{ ...message, attachments: [{ id:…
+       |         ^
+    149|         fireEvent.click(screen.getByRole('button', { name: 'Xem ảnh pr…
+    150|         await screen.findByRole('alert');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/72]⎯
+
+ FAIL  |web| apps/web/test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > reports rejected server logout rather than resolving success
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ harness apps/web/test/codex-auth-regressions.test.tsx:19:3
+     17|   let context!: AuthContextType;
+     18|   function Capture(){ context=useAuth(); return <span>{context.user?.d…
+     19|   render(<QueryClientProvider client={client}><AuthProvider><Capture /…
+       |   ^
+     20|   return {client, auth:()=>context};
+     21| }
+ ❯ apps/web/test/codex-auth-regressions.test.tsx:25:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/72]⎯
+
+ FAIL  |web| apps/web/test/codex-auth-regressions.test.tsx > Codex T09 behavioral regressions > removes private query data after successful server logout
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ harness apps/web/test/codex-auth-regressions.test.tsx:19:3
+     17|   let context!: AuthContextType;
+     18|   function Capture(){ context=useAuth(); return <span>{context.user?.d…
+     19|   render(<QueryClientProvider client={client}><AuthProvider><Capture /…
+       |   ^
+     20|   return {client, auth:()=>context};
+     21| }
+ ❯ apps/web/test/codex-auth-regressions.test.tsx:30:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/72]⎯
+
+ FAIL  |web| apps/web/test/codex-auth-ui-regressions.test.tsx > Codex T09 visible failure and recovery > keeps logout failure visible even after local identity is cleared, with a retry action
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/codex-auth-ui-regressions.test.tsx:14:3
+     12|   const client=new QueryClient({defaultOptions:{queries:{retry:false}}…
+     13|   if(session!==undefined)client.setQueryData(AUTH_QUERY_KEY,session);
+     14|   render(<QueryClientProvider client={client}><AuthProvider>{children}…
+       |   ^
+     15| }
+     16| describe('Codex T09 visible failure and recovery',()=>{
+ ❯ apps/web/test/codex-auth-ui-regressions.test.tsx:19:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/72]⎯
+
+ FAIL  |web| apps/web/test/codex-auth-ui-regressions.test.tsx > Codex T09 visible failure and recovery > shows failed header sign-in and retries the API rather than only logging to console
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/codex-auth-ui-regressions.test.tsx:14:3
+     12|   const client=new QueryClient({defaultOptions:{queries:{retry:false}}…
+     13|   if(session!==undefined)client.setQueryData(AUTH_QUERY_KEY,session);
+     14|   render(<QueryClientProvider client={client}><AuthProvider>{children}…
+       |   ^
+     15| }
+     16| describe('Codex T09 visible failure and recovery',()=>{
+ ❯ apps/web/test/codex-auth-ui-regressions.test.tsx:27:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/72]⎯
+
+ FAIL  |web| apps/web/test/codex-auth-ui-regressions.test.tsx > Codex T09 visible failure and recovery > retries failed identity loading and renders protected children only after actual success
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/codex-auth-ui-regressions.test.tsx:14:3
+     12|   const client=new QueryClient({defaultOptions:{queries:{retry:false}}…
+     13|   if(session!==undefined)client.setQueryData(AUTH_QUERY_KEY,session);
+     14|   render(<QueryClientProvider client={client}><AuthProvider>{children}…
+       |   ^
+     15| }
+     16| describe('Codex T09 visible failure and recovery',()=>{
+ ❯ apps/web/test/codex-auth-ui-regressions.test.tsx:35:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > loads all seven games, guest sees history and cannot send
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:64:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > changes game without mixing histories and ignores a response arriving after game switch
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:75:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:94:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > ignores old socket events after changing game and disposes its connection
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:105:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > authenticated composer persists through API, merges server/event duplicates and renders HTML as text
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:116:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > uses the server canonical conversation ID when it differs from the opaque Lobby ID
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:133:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > keeps authenticated send disabled until the server resolves the conversation
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:144:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > opens mobile game navigation, closes on game selection and Escape
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:151:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/72]⎯
+
+ FAIL  |web| apps/web/test/lobby.test.tsx > T13 approved Lobby behavior > has accessible Chat/Find-team tabs and honest loading/error states
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ show apps/web/test/lobby.test.tsx:62:24
+     60|     });
+     61|     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restor…
+     62|     const show = () => render(<QueryClientProvider client={client}><Au…
+       |                        ^
+     63|     it('loads all seven games, guest sees history and cannot send', as…
+     64|         show();
+ ❯ apps/web/test/lobby.test.tsx:165:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 1. deduplicates duplicate users across pages, events, and multiple tabs, retaining first profile displayName
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:200:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 2. lost socket connection leaves chosen custom status intact
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:217:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 3. game switch releases old canonical subscription and resets scope
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/presence.test.tsx:242:26
+    240|     );
+    241|
+    242|     const { rerender } = render(
+       |                          ^
+    243|       <QueryClientProvider client={client}>
+    244|         <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 4. profile links encode opaque user IDs properly
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:285:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 5. failed save of custom status keeps previous confirmed status with visible error and retry
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:309:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:338:39
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/presence.test.tsx:380:26
+    378|     );
+    379|
+    380|     const { rerender } = render(
+       |                          ^
+    381|       <QueryClientProvider client={client}>
+    382|         <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 8. ignores malformed or wrong-scope presence events
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:420:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 9. handles empty, error, and retry states correctly
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:450:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 10. supports pagination with cursor and appends new unique users
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:487:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:508:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[46/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 12. regression: online->offline while profile fetch is pending does not re-add user
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:533:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[47/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:575:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[48/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 14. regression: loadMore failure exposes error/retry and preserves loaded users
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:621:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[49/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 15. regression: socket does not open while auth is loading/error/signing-out; status save uses confirmed server response
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:651:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[50/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 16. auth loading/error/signing-out prevents socket connection and handles deferred /me
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:676:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[51/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 17. drops early unscoped events before canonical subscribe ACK
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:696:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[52/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 18. old ACK after disconnect or scope switch cannot mark new scope offline
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ apps/web/test/presence.test.tsx:728:26
+    726|     );
+    727|
+    728|     const { rerender } = render(
+       |                          ^
+    729|       <QueryClientProvider client={client}>
+    730|         <AuthProvider>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[53/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 19. status response after logout or account switch cannot update/recreate old cache
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:761:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[54/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 20. tests distinct subscribe rejection, heartbeat session revoked error, and socket timeout
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:791:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[55/72]⎯
+
+ FAIL  |web| apps/web/test/presence.test.tsx > T16-FE Presence & Online Users Panel > 21. deferred status PATCH shows saving state and error recovery re-enables selector
+ReferenceError: document is not defined
+ ❯ Proxy.render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderComponent apps/web/test/presence.test.tsx:181:5
+    179|
+    180|   const renderComponent = (game = testGames[0], customClient = client)…
+    181|     render(
+       |     ^
+    182|       <QueryClientProvider client={customClient}>
+    183|         <AuthProvider>
+ ❯ apps/web/test/presence.test.tsx:815:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[56/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > public profile renders public data and omits private email and discordId
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:81:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[57/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > formats UTC createdAt date in Asia/Bangkok locale with hour 17 for 10:00:00Z
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:92:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[58/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 1. Public Profile Security & Formatting > labels self-selected custom status separately without fabricated online badge
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:102:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[59/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > sends correct game edit payload with optional rank to PUT /api/v1/me/game-profiles/:gameId
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:140:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[60/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > allows leaving rank empty when saving game profile (optional rank, rank omitted from payload)
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:181:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[61/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 2. Owner Game Profile Editor & Optional Rank Payload > failed saves keep form inputs intact and display error message
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:206:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[62/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > displays loading spinner while profile query is in flight
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:228:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[63/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > displays error card with retry button when profile query fails
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:243:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[64/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 3. Loading, Error & Guest vs Owner Profile Page States > hides edit controls when guest views public profile
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:267:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[65/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > renders onboarding form for authenticated user with onboardingComplete === false
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:296:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[66/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > renders integration error state with retry when onboardingComplete is missing/undefined
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:328:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[67/72]⎯
+
+ FAIL  |web| apps/web/test/profiles.test.tsx > T11 - Profiles & Onboarding Behavioral Suite > 4. Server Onboarding States & Integration Error Handling > submitting onboarding requires >= 1 game and triggers POST /api/v1/me/onboarding
+ReferenceError: document is not defined
+ ❯ render node_modules/@testing-library/react/dist/pure.js:265:5
+ ❯ renderWithProviders apps/web/test/profiles.test.tsx:63:12
+     61|
+     62|   const renderWithProviders = (ui: React.ReactNode, initialEntries = […
+     63|     return render(
+       |            ^
+     64|       <QueryClientProvider client={queryClient}>
+     65|         <AuthProvider>
+ ❯ apps/web/test/profiles.test.tsx:360:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[68/72]⎯
+
+ FAIL  |database| packages/database/test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > migrates an empty schema with a usable durable creation event table
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ packages/database/test/realtime-outbox.test.ts:35:2
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[69/72]⎯
+
+ FAIL  |database| packages/database/test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > rolls back message and outbox together on an aborted transaction
+error: insert or update on table "messages" violates foreign key constraint "messages_conversation_id_conversations_id_fk"
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/realtime-outbox.test.ts:41:7
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[70/72]⎯
+
+ FAIL  |database| packages/database/test/realtime-outbox.test.ts > T07-FIX1 actual PostgreSQL durable message events > deduplicates jobs and prevents cross-conversation linkage or negative attempts
+error: relation "realtime_outbox" does not exist
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/realtime-outbox.test.ts:46:3
+     44|  });
+     45|  it('deduplicates jobs and prevents cross-conversation linkage or nega…
+     46|   await client.query(`INSERT INTO realtime_outbox(id,message_id,conver…
+       |   ^
+     47|   await expect(client.query(`INSERT INTO realtime_outbox(id,message_id…
+     48|   await client.query(`INSERT INTO messages(id,conversation_id,sender_i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[71/72]⎯
+
+ FAIL  |database| packages/database/test/social-chat.test.ts > T05 - Chat, Social Relations, and Forward Migration Schema > should preserve T04 data when applying T05 forward migration over old T04 migration and seed
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ packages/database/test/social-chat.test.ts:464:3
+    462|   });
+    463|
+    464|   it('should preserve T04 data when applying T05 forward migration ove…
+       |   ^
+    465|     const migSchemaName = `test_t05_mig_${Date.now()}_${Math.random().…
+    466|     const migClient = new pg.Client({ connectionString: env.DATABASE_U…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[72/72]⎯
+
+
+ Test Files  11 failed | 11 passed (22)
+      Tests  69 failed | 87 passed | 12 skipped (168)
+   Start at  02:20:22
+   Duration  49.02s (tests 64%, import 31%, transform 4%, worker 1%)
+

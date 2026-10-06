@@ -1,0 +1,42 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/presence.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/presence.test.tsx (21 tests | 1 failed) 1164ms
+   ❯ T16-FE Presence & Online Users Panel (21)
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 23ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 12. regression: online->offline while profile fetch is pending does not re-add user
+TypeError: Cannot read properties of undefined (reading 'fire')
+ ❯ test/presence.test.tsx:540:14
+    538|     // Online event triggers profile fetch
+    539|     await act(async () => {
+    540|       socket.fire('presence.changed', {
+       |              ^
+    541|         conversationId: 'canonical-lol-room',
+    542|         userId: 'user-racing',
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act ../../node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> ../../node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ test/presence.test.tsx:539:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 passed (21)
+   Start at  02:21:33
+   Duration  4.53s (environment 43%, tests 27%, transform 12%, setup 9%, import 8%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/presence.test.tsx

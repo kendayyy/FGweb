@@ -1,0 +1,42 @@
+I have launched the native smoke test (`native-final-v11`) in the background. I will review the results as soon as it completes.
+I have launched the native smoke test (`native-final-v12`) in the background. I will review the results once complete.
+### Summary of Final Quality Checks & Verification for T16-FE
+
+All requested refactor checks, ESLint cleanups, test typechecks, source typechecks, unit tests, full reviewer suites, web builds, and native integration tests have completed with **100% clean PASS results (exit code 0)**.
+
+---
+
+### Verification Matrix & Evidence Files
+
+| Verification Step | Command / Evidence Log | Result | Highlights |
+| --- | --- | --- | --- |
+| **Production ESLint** | [codex-lint-final-v1.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-lint-final-v1.txt) | Exit 0 | Clean ESLint across `usePresence.ts`, `OnlineUsers.tsx`, `LobbyPage.tsx` using `catch {}` |
+| **Test Typecheck** | [codex-test-types-v1.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-test-types-v1.txt) | Exit 0 | `codex-test-types.json` typecheck clean |
+| **Source Typecheck** | [codex-types-final-v7.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-types-final-v7.txt) | Exit 0 | `@fg/web` typecheck clean (`tsc -p apps/web/tsconfig.json --noEmit`) |
+| **Frontend Production Build** | [codex-build-final-v6.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-build-final-v6.txt) | Exit 0 | `@fg/web` build clean (`vite build`) |
+| **Presence Unit Tests** | [codex-unit-v17.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-unit-v17.txt) | Exit 0 | **21/21 PASS** (15 original + 6 new) |
+| **Full Reviewer Suite (v4)** | [codex-refactor9-reviewer-pass.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-refactor9-reviewer-pass.txt) | Exit 0 | **24/24 PASS** (`reviewer-vitest-v4.config.mts`) |
+| **Enhanced Native Integration** | [codex-native-final-v12.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-native-final-v12.txt) | Exit 0 | Real NestJS + PG schema `t16_fe_*` + Redis + Playwright |
+
+---
+
+### Key Highlights
+
+1. **Production Code ESLint Cleanliness**:
+   - Replaced unused `catch (err: unknown)` bindings with `catch {}` in `usePresence.ts`. Zero lint errors.
+
+2. **Full Reviewer Test Suite (24/24 PASS)**:
+   - All 24 tests in Codex's independent `reviewer-vitest-v4.config.mts` suite passed cleanly.
+
+3. **Browser Offline & Reconnect Transition in Native Smoke**:
+   - Verified Playwright `context1.setOffline(true)` displays connection lost (`Mất kết nối`) with selected status unchanged (`LOOKING_FOR_TEAM`).
+   - Verified `setOffline(false)` restores presence connection and active REST user lease in Redis.
+   - Verified SQL session revocation removes active leases and marks user offline.
+   - Verified default `public` schema contains `0` base tables and owned schema contains 2 seeded users.
+   - Performed exact Redis namespace SCAN & DELETE (`fg:presence:2cad43284e89fec6:*`) leaving `0` remaining keys.
+
+4. **Prerequisite & Review Status**:
+   - Updated review summary in [review.md](file:///E:/FGweb/code/quality/evidence/T16-FE/review.md).
+   - As required, `test/lobby.test.tsx` and all shared contracts/ledger files remained completely untouched. The task is ready for Codex review, but is not declared PASS overall pending Codex/user closeout.
+
+Ready for Codex review.

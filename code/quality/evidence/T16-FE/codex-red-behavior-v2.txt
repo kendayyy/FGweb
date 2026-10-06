@@ -1,0 +1,224 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/presence.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/presence.test.tsx (14 tests | 14 failed) 65376ms
+   ❯ T16-FE Presence & Online Users Panel (14)
+     × 1. deduplicates duplicate users across pages, events, and multiple tabs 5064ms
+     × 2. lost socket connection leaves chosen custom status intact 5033ms
+     × 3. game switch releases old canonical subscription and resets scope 5019ms
+     × 4. profile links encode opaque user IDs properly 5022ms
+     × 5. failed save of custom status keeps previous confirmed status with visible error and retry 5031ms
+     × 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat 5011ms
+     × 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored 5019ms
+     × 8. ignores malformed or wrong-scope presence events 5022ms
+     × 9. handles empty, error, and retry states correctly 5034ms
+     × 10. supports pagination with cursor and appends new unique users 5028ms
+     × 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK 6ms
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 5020ms
+     × 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection 5036ms
+     × 14. regression: loadMore failure exposes error/retry and preserves loaded users 5023ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 1. deduplicates duplicate users across pages, events, and multiple tabs
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:189:3
+    187|     );
+    188|
+    189|   it('1. deduplicates duplicate users across pages, events, and multip…
+       |   ^
+    190|     const p1 = makeProfile('user-1', 'Minh');
+    191|     const p2 = makeProfile('user-2', 'Hoàng');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 2. lost socket connection leaves chosen custom status intact
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:208:3
+    206|   });
+    207|
+    208|   it('2. lost socket connection leaves chosen custom status intact', a…
+       |   ^
+    209|     authUser = { id: 'user-me', displayName: 'Nam', customStatus: 'LOO…
+    210|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 3. game switch releases old canonical subscription and resets scope
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:231:3
+    229|   });
+    230|
+    231|   it('3. game switch releases old canonical subscription and resets sc…
+       |   ^
+    232|     onlineResponses.set('game-lol', async () =>
+    233|       new Response(JSON.stringify({ items: [makeProfile('u1', 'LOL Pla…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 4. profile links encode opaque user IDs properly
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:275:3
+    273|   });
+    274|
+    275|   it('4. profile links encode opaque user IDs properly', async () => {
+       |   ^
+    276|     const specialId = 'user/special#123';
+    277|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 5. failed save of custom status keeps previous confirmed status with visible error and retry
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:289:3
+    287|   });
+    288|
+    289|   it('5. failed save of custom status keeps previous confirmed status …
+       |   ^
+    290|     authUser = { id: 'me-1', displayName: 'Nam', customStatus: 'JUST_C…
+    291|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:326:3
+    324|   });
+    325|
+    326|   it('6. canonical ack derives ID; member sends 15s heartbeat; guest s…
+       |   ^
+    327|     transport.canonicalId = 'canonical-lol-conv-99';
+    328|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:367:3
+    365|   });
+    366|
+    367|   it('7. stale HTTP responses, acks, events, or status saves after gam…
+       |   ^
+    368|     let resolveSlowOnline!: (r: Response) => void;
+    369|     onlineResponses.set('game-lol', async () => new Promise((resolve) …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 8. ignores malformed or wrong-scope presence events
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:403:3
+    401|   });
+    402|
+    403|   it('8. ignores malformed or wrong-scope presence events', async () =…
+       |   ^
+    404|     transport.canonicalId = 'canonical-lol-conv';
+    405|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 9. handles empty, error, and retry states correctly
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:432:3
+    430|   });
+    431|
+    432|   it('9. handles empty, error, and retry states correctly', async () =…
+       |   ^
+    433|     let returnError = true;
+    434|     onlineResponses.set('game-lol', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 10. supports pagination with cursor and appends new unique users
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:453:3
+    451|   });
+    452|
+    453|   it('10. supports pagination with cursor and appends new unique users…
+       |   ^
+    454|     onlineResponses.set('game-lol', async (url) => {
+    455|       const cursor = url.searchParams.get('cursor');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK
+TypeError: Cannot read properties of undefined (reading 'fire')
+ ❯ test/presence.test.tsx:502:14
+    500|     // Legacy event missing required conversationId
+    501|     await act(async () => {
+    502|       socket.fire('presence.changed', {
+       |              ^
+    503|         userId: 'u3',
+    504|         customStatus: 'PLAYING',
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act ../../node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> ../../node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ test/presence.test.tsx:501:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 12. regression: online->offline while profile fetch is pending does not re-add user
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:512:3
+    510|   });
+    511|
+    512|   it('12. regression: online->offline while profile fetch is pending d…
+       |   ^
+    513|     transport.canonicalId = 'canonical-lol-room';
+    514|     onlineResponses.set('game-lol', async () =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:554:3
+    552|   });
+    553|
+    554|   it('13. regression: heartbeat uses emitWithAck and stops timer on er…
+       |   ^
+    555|     authUser = { id: 'hb-user', displayName: 'HB User', customStatus: …
+    556|     transport.canonicalId = 'canonical-lol-room';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 14. regression: loadMore failure exposes error/retry and preserves loaded users
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/presence.test.tsx:580:3
+    578|   });
+    579|
+    580|   it('14. regression: loadMore failure exposes error/retry and preserv…
+       |   ^
+    581|     let returnLoadMoreError = true;
+    582|     onlineResponses.set('game-lol', async (url) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/14]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  14 failed (14)
+   Start at  00:49:18
+   Duration  68.65s (tests 96%, environment 2%, transform 1%, import 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/presence.test.tsx

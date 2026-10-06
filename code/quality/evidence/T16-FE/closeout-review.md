@@ -1,0 +1,11 @@
+# T16-FE Codex closeout — PASS
+
+T13-FIX1 is now PASS with the original Lobby assertions intact and independent full frontend 68/68 PASS. This resolves the current-review.md prerequisite blocker; earlier blocked reports and failed executions remain historical evidence.
+
+Reviewed actual presence API/schema integration, socket subscription/ACK/heartbeat lifecycle, generation and ordering guards, status confirmation/cache isolation, pagination, profile navigation, minimal Lobby mount and shared-token styles. Antigravity implemented in conversation 59b0b857-d58b-4c84-86e9-63c8ccbf8751, requested Gemini 3.6 Flash (High), exit 0 after loop 8. User-directed no-fixed-retry-limit policy remains effective.
+
+Independent feature 21/21 and reviewer-v4 24/24 tests PASS, source/owned-test types, lint and production build exit 0. Independent native browser proof runs built web, compiled Nest, PostgreSQL and Redis in a unique schema: guest no heartbeat/leases; persisted status; two-tab deduplication; game scope change; actual rendered profile; disconnect/reconnect ACK; expired-session heartbeat rejects while custom status remains. Real screenshots at 1440x900,1280x800,390x844,360x800 assert existing palette, loaded Inter, horizontal overflow zero and target controls >=44px. Codex visually inspected desktop1440 and mobile390. Chat connection styling in these screenshots is not used as independent chat validation; chat behavior is covered by the preserved regression suite and prior T13 native proof.
+
+Final gate at exact predecessor bytes PASS, restoring the authorized pending mount immediately in finally. Final audit after approved prerequisite: five baselines, 1,182 effective frozen outputs, unchanged ChatPane outside minimal mount, approved scope, no configured secret leaks or remaining owned schemas, public tables unchanged (zero). No production fake success, test suppression or assertion weakening. Previous nonzero commands are retained in historical evidence but excluded from PASS command set.
+
+Known build warning: web chunk exceeds500KB, without build failure; no unrelated optimization scope opened. These presence tests do not certify1000 media concurrency. T17-BE is the next task and still requires its own preflight/verification.

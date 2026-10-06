@@ -1,0 +1,65 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx (22 tests | 3 failed) 1348ms
+   ❯ T16-FE Presence & Online Users Panel (22)
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 28ms
+     × Codex review v2: delayed profile hydration cannot revert a newer online status 16ms
+     × Codex review v3: a snapshot cannot erase an online event received after the request started 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > 12. regression: online->offline while profile fetch is pending does not re-add user
+TypeError: Cannot read properties of undefined (reading 'fire')
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:540:14
+    538|     // Online event triggers profile fetch
+    539|     await act(async () => {
+    540|       socket.fire('presence.changed', {
+       |              ^
+    541|         conversationId: 'canonical-lol-room',
+    542|         userId: 'user-racing',
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:539:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > Codex review v2: delayed profile hydration cannot revert a newer online status
+TypeError: Cannot read properties of undefined (reading 'fire')
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:720:31
+    718|     await waitFor(()=>expect(screen.getByText(/Chưa có người chơi onli…
+    719|     const socket=transport.sockets.find(s=>s.namespace==='/presence');
+    720|     await act(async()=>socket.fire('presence.changed',{conversationId:…
+       |                               ^
+    721|     await waitFor(()=>expect(resolvers).toHaveLength(1));
+    722|     await act(async()=>socket.fire('presence.changed',{conversationId:…
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:720:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > Codex review v3: a snapshot cannot erase an online event received after the request started
+TypeError: Cannot read properties of undefined (reading 'fire')
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:753:31
+    751|     await waitFor(()=>expect(screen.getByText(/Chưa có người chơi onli…
+    752|     const socket=transport.sockets.find(s=>s.namespace==='/presence');
+    753|     await act(async()=>socket.fire('connect'));
+       |                               ^
+    754|     await waitFor(()=>expect(requests).toBe(3));
+    755|     await act(async()=>socket.fire('presence.changed',{conversationId:…
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:753:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 19 passed (22)
+   Start at  02:22:37
+   Duration  4.56s (environment 32%, tests 32%, transform 16%, import 11%, setup 9%)
+

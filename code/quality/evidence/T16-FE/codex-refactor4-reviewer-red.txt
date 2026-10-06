@@ -1,0 +1,159 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T16-FE/reviewer-presence-v2.test.tsx (20 tests | 2 failed) 2412ms
+   ❯ T16-FE Presence & Online Users Panel (20)
+     × Codex review v2: reconnect snapshot is current even when offline event and request share one millisecond 1058ms
+     × Codex review v2: delayed profile hydration cannot revert a newer online status 88ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v2.test.tsx > T16-FE Presence & Online Users Panel > Codex review v2: reconnect snapshot is current even when offline event and request share one millisecond
+TestingLibraryElementError: Unable to find an element with the text: Same millisecond user. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-header"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng ([0m
+          [0m0[0m
+          [0m)[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-empty"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mChưa có người chơi online trong Lobby này.[0m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-header"[39m
+        [36m>[39m
+          [36m<h2>[39m
+            [0mCộng đồng ([0m
+            [0m0[0m
+            [0m)[0m
+          [36m</h2>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-online-empty"[39m
+          [33mrole[39m=[32m"status"[39m
+        [36m>[39m
+          [0mChưa có người chơi online trong Lobby này.[0m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ quality/evidence/T16-FE/reviewer-presence-v2.test.tsx:711:11
+    709|     expect(screen.queryByText('Same millisecond user')).not.toBeInTheD…
+    710|     await act(async()=>{socket.fire('disconnect');socket.fire('connect…
+    711|     await waitFor(()=>expect(screen.getByText('Same millisecond user')…
+       |           ^
+    712|   });
+    713|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v2.test.tsx > T16-FE Presence & Online Users Panel > Codex review v2: delayed profile hydration cannot revert a newer online status
+TestingLibraryElementError: Unable to find an element with the text: Đang tìm đội. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-header"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng ([0m
+          [0m1[0m
+          [0m)[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<ul[39m
+        [33maria-label[39m=[32m"Danh sách người chơi online"[39m
+        [33mclass[39m=[32m"fg-online-list"[39m
+      [36m>[39m
+        [36m<li[39m
+          [33mclass[39m=[32m"fg-online-item"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33maria-label[39m=[32m"Hồ sơ Ordered status user"[39m
+            [33mclass[39m=[32m"fg-online-profile-link"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/users/status-race/profile"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-online-avatar"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mO[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"fg-online-dot"[39m
+                [33mtitle[39m=[32m"Online"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-online-info"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-online-name"[39m
+              [36m>[39m
+                [0mOrdered status user[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-online-status-badge"[39m
+              [36m>[39m
+                [0mĐang chơi[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</a>[39m
+        [36m</li>[39m
+      [36m</ul>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ quality/evidence/T16-FE/reviewer-presence-v2.test.tsx:727:19
+    725|     await waitFor(()=>expect(screen.getByText('Ordered status user')).…
+    726|     await act(async()=>resolvers[0](new Response(JSON.stringify(makePr…
+    727|     expect(screen.getByText('Đang tìm đội')).toBeInTheDocument();
+       |                   ^
+    728|     expect(screen.queryByText('Đang chơi')).not.toBeInTheDocument();
+    729|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 18 passed (20)
+   Start at  02:09:21
+   Duration  6.34s (tests 41%, environment 34%, transform 11%, import 8%, setup 6%)
+

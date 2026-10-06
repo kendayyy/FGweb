@@ -1,0 +1,44 @@
+I have launched the presence unit tests (`unit-v14`) in the background. I will review the results once complete.
+I have launched the backend build (`@fg/api`) in the background. I will review the results once complete.
+I have launched the native integration smoke test (`native-final-v9`) in the background. I will review the results as soon as it completes.
+I have launched the native smoke test (`native-final-v10`) in the background. I will review the results as soon as it completes.
+### Summary of Refactor Verification & Quality Checks for T16-FE
+
+All required fixes, unit tests, reviewer test suites, typechecks, builds, and exact native integration smoke test assertions have completed with **100% clean PASS results (exit code 0)**.
+
+---
+
+### Key Technical & Architectural Fixes
+
+1. **Restored `auth.isError` Guard & Known Guest Handling ([usePresence.ts](file:///E:/FGweb/code/apps/web/src/features/presence/usePresence.ts))**:
+   - `auth.isLoading`: Keeps `isLoading = true` and `connection = 'connecting'`. Socket connection is held until auth settles.
+   - `auth.isError` (500 / network failure on `/me`) or `auth.isSigningOut`: Fails closed — sets `connection = 'offline'`, `isLoading = false`, and opens **0 socket connections**.
+   - Known Settled Guest (`res.status === 401`: `fetchMe()` returns `null`, `auth.user = null`, `auth.isError = false`): Opens presence socket `/presence`, loads initial online list, receives realtime `presence.changed` events, sends **0 heartbeats**, and hides custom status selector.
+
+2. **Rigorous 21-Test Presence Unit Suite ([presence.test.tsx](file:///E:/FGweb/code/apps/web/test/presence.test.tsx))**:
+   - Enhanced Tests 16–21 using `TestAuthMonitor` controls inside `AuthProvider` (`auth.signOut()`, `auth.isLoading`, `auth.isError`, `auth.isSigningOut`).
+   - Verified 500 auth error fails closed (0 sockets), 401 settled guest opens socket with 0 heartbeats, early unscoped events are dropped before ACK, old epoch timeout/rejection cannot flip new scope offline, actual logout invalidates presence and late status `PATCH` response does not recreate old user cache, and status `PATCH` error recovery re-enables selector.
+   - **PASS Evidence**: [codex-unit-v16.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-unit-v16.txt) (Exit 0: **21/21 PASS**).
+
+3. **22-Test Reviewer Suite ([reviewer-presence-v3.test.tsx](file:///E:/FGweb/code/quality/evidence/T16-FE/reviewer-presence-v3.test.tsx))**:
+   - **PASS Evidence**: [codex-refactor8-reviewer-pass.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-refactor8-reviewer-pass.txt) (Exit 0: **22/22 PASS**).
+
+4. **Exact Native Integration Smoke Test ([native-smoke.mjs](file:///E:/FGweb/code/quality/evidence/T16-FE/native-smoke.mjs))**:
+   - Exact namespace hash calculation (`createHash('sha256').update(JSON.stringify([scoped.host, scoped.pathname, options])).digest('hex').slice(0, 16)` -> `0c4f4bdeeb3ead38`).
+   - 30-second lease polling for 2-tab deduplication (2 leases in Redis actors hash, 1 UI card, 1 REST item).
+   - Game 1 vs Game 2 REST scope isolation (`getOnlineUserIdsForGame`) and status retention verified.
+   - SQL session revocation verified to remove active presence leases and transition user offline.
+   - Public schema table assertion (`information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'` = 0).
+   - Owned schema user count assertion (`SELECT count(*) FROM "user"` = 2).
+   - Exact owned namespace SCAN & DELETE (`fg:presence:0c4f4bdeeb3ead38:*`) performed after servers and sockets closed, verifying 0 keys remaining.
+   - Screenshots and >=44px touch targets verified across 4 viewports (1440x900, 1280x800, 390x844, 360x800).
+   - **PASS Evidence**: [codex-native-final-v10.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-native-final-v10.txt) (Exit 0).
+
+5. **Quality Verification Matrix**:
+   - **TypeScript Typecheck**: [codex-types-final-v6.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-types-final-v6.txt) (Exit 0: `@fg/web` clean `tsc --noEmit`).
+   - **Frontend Build**: [codex-build-final-v5.txt](file:///E:/FGweb/code/quality/evidence/T16-FE/codex-build-final-v5.txt) (Exit 0: `@fg/web` clean `vite build`).
+   - **Backend Build**: `@fg/api` compiled clean with `tsc`.
+   - Updated review summary in [review.md](file:///E:/FGweb/code/quality/evidence/T16-FE/review.md).
+   - `test/lobby.test.tsx` and all shared contracts/ledger files remained untouched.
+
+Ready for Codex review.

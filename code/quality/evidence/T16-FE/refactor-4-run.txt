@@ -1,0 +1,50 @@
+### T16-FE — Execution Summary (Refactor Loop 4)
+
+Refactor Loop 4 for **T16-FE (Frontend Online Users & Custom Status Panel)** is complete. All identified race conditions, event versioning issues, and profile hydration ordering bugs have been resolved.
+
+---
+
+### Architectural Corrections Implemented
+
+1. **Monotonic Event Versioning (`eventVersionRef`)**:
+   - Replaced wallclock `Date.now()` timestamps with a monotonically increasing counter (`eventVersionRef.current`).
+   - Captured `requestEventVersion` when starting REST requests; snapshot items are only filtered if an offline event occurred *after* the request was initiated (`version > requestEventVersion`).
+   - Resolves reconnect race conditions where offline events and reconnect requests share the same millisecond timestamp (**Reviewer Test 19**).
+
+2. **Out-of-Order Profile Hydration & Status Badge Preservation**:
+   - Tracked per-user latest status in `userStatesRef`.
+   - Delayed profile HTTP lookups resolve against `latestKnownStatus` rather than stale payload status.
+   - Prevents out-of-order profile HTTP lookups from overwriting newer status badges (**Reviewer Test 20**).
+
+3. **Scope Generation & Connection Epoch Guards**:
+   - Guarded all async handlers (`loadInitialOnline`, `loadMore`, `saveStatus`) with `generationRef.current === generation` and `!fetchCtrl.signal.aborted`.
+   - Incremented `connectionEpochRef` on disconnect/reconnect to invalidate stale ACKs.
+   - Enforced concurrency locks (`isLoadingMoreRef`, `isSavingStatusRef`).
+
+4. **Enhanced Native Integration Smoke Test**:
+   - Asserted mandatory profile link click and URL navigation (`/users/:id/profile`).
+   - Asserted game switching and canonical presence scope updates.
+   - Automatically switches to the "Tìm đội" tab on mobile viewports (< 1024) before capturing screenshots and verifying >=44px touch targets.
+   - Cleaned up isolated Redis keys (`t16_fe_*`).
+
+---
+
+### Empirical Verification Evidence
+
+| Stage | Command / Evidence File | Result | Highlights |
+| --- | --- | --- | --- |
+| **Reviewer v2 RED** | `quality/evidence/T16-FE/codex-refactor4-reviewer-red.txt` | Exit 1 | 18 pass / 2 fail (captured static timestamp & profile hydration race failures) |
+| **Reviewer v2 PASS** | `quality/evidence/T16-FE/codex-refactor4-reviewer-pass.txt` | Exit 0 | **20/20 PASS** |
+| **Presence Unit Tests** | `quality/evidence/T16-FE/codex-pass-final-v7.txt` | Exit 0 | **15/15 PASS** |
+| **TypeScript Check** | `quality/evidence/T16-FE/codex-types-final-v2.txt` | Exit 0 | `@fg/web` typecheck clean |
+| **Frontend Build** | `quality/evidence/T16-FE/codex-build-final-v2.txt` | Exit 0 | `@fg/web` production build clean |
+| **Native Integration** | `quality/evidence/T16-FE/codex-native-final-v5.txt` | Exit 0 | Real NestJS + PG schema `t16_fe_*` + Redis + Playwright across 4 viewports (1440x900, 1280x800, 390x844, 360x800) |
+
+---
+
+### Audit & Prerequisite Status
+
+- **Frontend Regression Suite**: 61/62 passed.
+- **Pending Prerequisite Decision (`test/lobby.test.tsx`)**: `test/lobby.test.tsx` was untouched and left pending Codex/user prerequisite decision as instructed.
+
+Review summary documented in [review.md](file:///E:/FGweb/code/quality/evidence/T16-FE/review.md). Ready for Codex review.

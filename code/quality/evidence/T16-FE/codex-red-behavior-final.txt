@@ -1,0 +1,750 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/presence.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+stderr | test/presence.test.tsx > T16-FE Presence & Online Users Panel > 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored
+An update to AuthProvider inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ❯ test/presence.test.tsx (15 tests | 15 failed) 15379ms
+   ❯ T16-FE Presence & Online Users Panel (15)
+     × 1. deduplicates duplicate users across pages, events, and multiple tabs, retaining first profile displayName 1061ms
+     × 2. lost socket connection leaves chosen custom status intact 1025ms
+     × 3. game switch releases old canonical subscription and resets scope 1019ms
+     × 4. profile links encode opaque user IDs properly 1024ms
+     × 5. failed save of custom status keeps previous confirmed status with visible error and retry 1026ms
+     × 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat 1018ms
+     × 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored 1062ms
+     × 8. ignores malformed or wrong-scope presence events 1039ms
+     × 9. handles empty, error, and retry states correctly 1022ms
+     × 10. supports pagination with cursor and appends new unique users 1015ms
+     × 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK 1011ms
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 1011ms
+     × 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection 1013ms
+     × 14. regression: loadMore failure exposes error/retry and preserves loaded users 1010ms
+     × 15. regression: socket does not open while auth is loading/error/signing-out; status save uses confirmed server response 1016ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 15 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 1. deduplicates duplicate users across pages, events, and multiple tabs, retaining first profile displayName
+TestingLibraryElementError: Unable to find an element with the text: /Cộng đồng \s*\(2\)|Đang online \s*\(2\)/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:202:11
+    200|     renderComponent();
+    201|
+    202|     await waitFor(() => {
+       |           ^
+    203|       expect(screen.getByText(/Cộng đồng \s*\(2\)|Đang online \s*\(2\)…
+    204|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 2. lost socket connection leaves chosen custom status intact
+TestingLibraryElementError: Unable to find role="combobox" and name `/Trạng thái/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:219:11
+    217|     renderComponent();
+    218|
+    219|     await waitFor(() => {
+       |           ^
+    220|       expect(screen.getByRole('combobox', { name: /Trạng thái/i })).to…
+    221|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 3. game switch releases old canonical subscription and resets scope
+TestingLibraryElementError: Unable to find an element with the text: LOL Player. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:252:11
+    250|     );
+    251|
+    252|     await waitFor(() => expect(screen.getByText('LOL Player')).toBeInT…
+       |           ^
+    253|
+    254|     const oldSocket = transport.sockets.find((s) => s.namespace === '/…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 4. profile links encode opaque user IDs properly
+TestingLibraryElementError: Unable to find an element with the text: Special User. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:287:11
+    285|     renderComponent();
+    286|
+    287|     await waitFor(() => expect(screen.getByText('Special User')).toBeI…
+       |           ^
+    288|
+    289|     const link = screen.getByRole('link', { name: /Special User/i });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 5. failed save of custom status keeps previous confirmed status with visible error and retry
+TestingLibraryElementError: Unable to find role="combobox" and name `/Trạng thái/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/presence.test.tsx:311:33
+    309|     renderComponent();
+    310|
+    311|     const select = await screen.findByRole('combobox', { name: /Trạng …
+       |                                 ^
+    312|     expect(select).toHaveValue('JUST_CHATTING');
+    313|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat
+AssertionError: expected 0 to be greater than 0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/presence.test.tsx:340:40
+    338|     const { unmount: unmountGuest } = renderComponent(testGames[0], gu…
+    339|     await waitFor(() => {
+    340|       expect(transport.sockets.length).toBeGreaterThan(0);
+       |                                        ^
+    341|     });
+    342|
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ ../../node_modules/@testing-library/dom/dist/wait-for.js:97:7
+ ❯ waitFor ../../node_modules/@testing-library/dom/dist/wait-for.js:36:10
+ ❯ ../../node_modules/@testing-library/dom/dist/wait-for.js:164:54
+ ❯ Object.asyncWrapper ../../node_modules/@testing-library/react/dist/pure.js:88:28
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:164:35
+ ❯ test/presence.test.tsx:339:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored
+TestingLibraryElementError: Unable to find an element with the text: Val User. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:403:11
+    401|     );
+    402|
+    403|     await waitFor(() => expect(screen.getByText('Val User')).toBeInThe…
+       |           ^
+    404|
+    405|     await act(async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 8. ignores malformed or wrong-scope presence events
+TestingLibraryElementError: Unable to find an element with the text: User 1. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:421:11
+    419|
+    420|     renderComponent();
+    421|     await waitFor(() => expect(screen.getByText('User 1')).toBeInTheDo…
+       |           ^
+    422|
+    423|     const socket = transport.sockets.find((s) => s.namespace === '/pre…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 9. handles empty, error, and retry states correctly
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:452:11
+    450|     renderComponent();
+    451|
+    452|     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextCo…
+       |           ^
+    453|
+    454|     returnError = false;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 10. supports pagination with cursor and appends new unique users
+TestingLibraryElementError: Unable to find an element with the text: Page 1 User. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:489:11
+    487|     renderComponent();
+    488|
+    489|     await waitFor(() => expect(screen.getByText('Page 1 User')).toBeIn…
+       |           ^
+    490|
+    491|     const loadMoreButton = screen.getByRole('button', { name: /Xem thê…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK
+AssertionError: expected 0 to be greater than 0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/presence.test.tsx:509:58
+    507|
+    508|     renderComponent();
+    509|     await waitFor(() => expect(transport.sockets.length).toBeGreaterTh…
+       |                                                          ^
+    510|     const socket = transport.sockets.find((s) => s.namespace === '/pre…
+    511|
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ ../../node_modules/@testing-library/dom/dist/wait-for.js:97:7
+ ❯ waitFor ../../node_modules/@testing-library/dom/dist/wait-for.js:36:10
+ ❯ ../../node_modules/@testing-library/dom/dist/wait-for.js:164:54
+ ❯ Object.asyncWrapper ../../node_modules/@testing-library/react/dist/pure.js:88:28
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:164:35
+ ❯ test/presence.test.tsx:509:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 12. regression: online->offline while profile fetch is pending does not re-add user
+TestingLibraryElementError: Unable to find an element with the text: /Chưa có người chơi online/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:534:11
+    532|
+    533|     renderComponent();
+    534|     await waitFor(() => expect(screen.getByText(/Chưa có người chơi on…
+       |           ^
+    535|
+    536|     const socket = transport.sockets.find((s) => s.namespace === '/pre…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection
+TestingLibraryElementError: Unable to find role="combobox" and name `/Trạng thái/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:577:11
+    575|     renderComponent();
+    576|
+    577|     await waitFor(() => expect(screen.getByRole('combobox', { name: /T…
+       |           ^
+    578|
+    579|     // First heartbeat succeeds
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 14. regression: loadMore failure exposes error/retry and preserves loaded users
+TestingLibraryElementError: Unable to find an element with the text: Page 1 User. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"fg-online-users-panel"[39m
+      [36m>[39m
+        [36m<h2>[39m
+          [0mCộng đồng[0m
+        [36m</h2>[39m
+        [36m<p>[39m
+          [0mNot implemented[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/presence.test.tsx:622:11
+    620|
+    621|     renderComponent();
+    622|     await waitFor(() => expect(screen.getByText('Page 1 User')).toBeIn…
+       |           ^
+    623|
+    624|     const loadMoreButton = screen.getByRole('button', { name: /Xem thê…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/15]⎯
+
+ FAIL  test/presence.test.tsx > T16-FE Presence & Online Users Panel > 15. regression: socket does not open while auth is loading/error/signing-out; status save uses confirmed server response
+TestingLibraryElementError: Unable to find role="combobox" and name `/Trạng thái/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-online-users-panel"[39m
+    [36m>[39m
+      [36m<h2>[39m
+        [0mCộng đồng[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mNot implemented[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/presence.test.tsx:653:33
+    651|     renderComponent();
+    652|
+    653|     const select = await screen.findByRole('combobox', { name: /Trạng …
+       |                                 ^
+    654|     await act(async () => {
+    655|       fireEvent.change(select, { target: { value: 'JUST_CHATTING' } });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/15]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  15 failed (15)
+   Start at  00:58:12
+   Duration  18.25s (tests 86%, environment 9%, transform 2%, import 2%, setup 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/presence.test.tsx

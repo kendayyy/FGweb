@@ -20,3 +20,7 @@ Workspace mở tại E:/FGweb. Shell cài/build/test làm việc tại E:/FGweb/
 Hướng dẫn sử dụng và danh mục rule: .doc/03-antigravity-rules.md.
 Yêu cầu mới của người dùng có thể điều chỉnh project rules; ghi thay đổi được chỉ định vào tài liệu và task liên quan.
 
+## Điều chỉnh quy trình được người dùng xác nhận — 06/10/2026
+- Với FG, bỏ giới hạn hai vòng review/refactor cùng một lỗi của Antigravity. Tiếp tục sửa và kiểm thử trong task hiện tại đến khi Codex review đạt hoặc có blocker thực sự cần người dùng.
+- Antigravity triển khai, Anti2 theo dõi, Codex review và chốt; giữ Gemini 3.6 Flash (High), một task mỗi lần, không mở task sau trước PASS.
+- Thay đổi này chỉ bỏ giới hạn số vòng sửa; không nới phạm vi files, quyền truy cập, acceptance, kiểm thử hay điều kiện PASS. Không giả success, sửa test để che lỗi hoặc tự đổi model.

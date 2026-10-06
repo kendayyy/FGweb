@@ -1,0 +1,46 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx (22 tests | 1 failed) 2014ms
+   ❯ T16-FE Presence & Online Users Panel (22)
+     × 3. game switch releases old canonical subscription and resets scope 171ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T16-FE/reviewer-presence-v3.test.tsx > T16-FE Presence & Online Users Panel > 3. game switch releases old canonical subscription and resets scope
+AssertionError: expected [ { …(2) } ] to deep equally contain { event: 'presence.unsubscribe', …(1) }
+
+- Expected:
+{
+  "body": {
+    "conversationId": "lobby-lol-room",
+  },
+  "event": "presence.unsubscribe",
+}
+
++ Received:
+[
+  {
+    "body": {
+      "conversationId": "lobby-lol-room",
+    },
+    "event": "presence.subscribe",
+  },
+]
+
+ ❯ quality/evidence/T16-FE/reviewer-presence-v3.test.tsx:273:37
+    271|     expect(screen.queryByText('LOL Player')).not.toBeInTheDocument();
+    272|
+    273|     expect(oldSocket.emittedEvents).toContainEqual({
+       |                                     ^
+    274|       event: 'presence.unsubscribe',
+    275|       body: { conversationId: 'lobby-lol-room' },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 21 passed (22)
+   Start at  02:14:36
+   Duration  5.16s (tests 42%, environment 33%, transform 12%, import 8%, setup 6%)
+

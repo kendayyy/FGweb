@@ -1,0 +1,19 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import {parseEnv} from 'node:util';import pg from 'pg';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8'));
+for(const [key,file]of Object.entries({specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png'}))assert.equal(hash(file),baseline.hashes[key].toLowerCase());
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8')),task=ledger.tasks.find(t=>t.id==='T16-FE');
+const changed=execFileSync('git',['diff','--relative','--name-only',task.inputsHash],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean),untracked=execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+const approvedFix=ledger.tasks.find(t=>t.id==='T13-FIX1');assert.equal(approvedFix.status,'PASS');
+const approvedFiles=new Set(Object.keys(approvedFix.outputsHash.files));
+const allowed=file=>approvedFiles.has(file)||['apps/web/src/features/presence/','quality/evidence/T16-FE/'].some(prefix=>file.startsWith(prefix))||['apps/web/src/features/lobby/OnlineUsers.tsx','apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/presence.test.tsx','quality/tasks.json','quality/spec-coverage.md'].includes(file);
+assert([...changed,...untracked].every(allowed),'Out of scope');
+const latest=new Map();for(const previous of ledger.tasks.slice(0,ledger.tasks.indexOf(task)))for(const [file,digest]of Object.entries(previous.outputsHash?.files??{}))latest.set(file,digest);
+for(const [file,digest]of latest)if(file!=='apps/web/src/features/lobby/LobbyPage.tsx')assert.equal(hash(file),digest.toLowerCase(),'Frozen output changed '+file);
+const previous=execFileSync('git',['show',task.inputsHash+':code/apps/web/src/features/lobby/LobbyPage.tsx'],{encoding:'utf8'}),current=fs.readFileSync('apps/web/src/features/lobby/LobbyPage.tsx','utf8');
+assert.equal(current.slice(current.indexOf('function ChatPane(')).replaceAll('\r\n','\n'),previous.slice(previous.indexOf('function ChatPane(')).replaceAll('\r\n','\n'),'ChatPane outside minimal mount changed');
+const env=parseEnv(fs.readFileSync('.env.local','utf8')),secrets=Object.entries(env).filter(([key,value])=>/(SECRET|PASSWORD|PRIVATE_KEY)/.test(key)&&value.length>=8).map(([,value])=>value);
+for(const file of [...changed,...untracked])assert(!secrets.some(secret=>fs.readFileSync(file).includes(Buffer.from(secret))),'Configured secret leaked');
+const client=new pg.Client({connectionString:env.DATABASE_URL,query_timeout:10000,connectionTimeoutMillis:5000});await client.connect();
+try{assert.equal((await client.query("SELECT nspname FROM pg_namespace WHERE nspname LIKE 't16_fe_%' OR nspname LIKE 't16fe_%'")).rowCount,0);assert.equal((await client.query("SELECT count(*)::int AS n FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'")).rows[0].n,0);}finally{await client.end();}
+console.log(JSON.stringify({baselinesVerified:5,frozenPredecessorsVerified:latest.size-1,minimalMountChatUnchanged:true,scopeVerified:true,remainingOwnedSchemas:0,publicTables:0,configuredSecretLeak:false}));
