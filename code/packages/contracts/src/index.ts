@@ -142,9 +142,12 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'DELETE', path: '/api/v1/rooms/:id', auth: 'RoomOwner', responseSchema: z.object({ success: z.boolean() }) },
 
   { method: 'GET', path: '/api/v1/recruitments', auth: 'Public', requestSchema: PublicRecruitmentQuerySchema, responseSchema: createPageSchema(PublicRecruitmentSchema) },
+  { method: 'GET', path: '/api/v1/games/:id/recruitments', auth: 'Public', requestSchema: PublicRecruitmentQuerySchema, responseSchema: createPageSchema(PublicRecruitmentSchema) },
+  { method: 'GET', path: '/api/v1/games/:id/recruitments/suggestions', auth: 'Public', requestSchema: PublicRecruitmentQuerySchema, responseSchema: createPageSchema(PublicRecruitmentSchema) },
   { method: 'POST', path: '/api/v1/recruitments', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: CreateRecruitmentSchema(), responseSchema: RecruitmentSchema },
   { method: 'GET', path: '/api/v1/recruitments/:id', auth: 'Public', responseSchema: PublicRecruitmentSchema },
   { method: 'PATCH', path: '/api/v1/recruitments/:id/close', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: RecruitmentSchema },
+  { method: 'PATCH', path: '/api/v1/recruitments/:id/reopen', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: RecruitmentSchema },
   { method: 'POST', path: '/api/v1/recruitments/:id/join-requests', auth: 'Authenticated', responseSchema: JoinRequestSchema },
   { method: 'GET', path: '/api/v1/recruitments/:id/join-requests', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: z.array(JoinRequestSchema) },
   { method: 'GET', path: '/api/v1/recruitments/me/joins', auth: 'Authenticated', responseSchema: z.array(JoinRequestSchema) },

@@ -1,0 +1,84 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/recruitment-transport.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/recruitment-transport.test.ts (5 tests | 4 failed) 36ms
+   ❯ T03-FIX8 recruitment transports (5)
+     × preserves explicit existing-room selection while accepting new-room creation 23ms
+     × declares game-specific public cards and suggestions with validated public pagination 1ms
+     × declares permission-protected reopen without changing the original close route 1ms
+     × preserves legacy discovery/create routes and requires authenticated creation 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/recruitment-transport.test.ts > T03-FIX8 recruitment transports > preserves explicit existing-room selection while accepting new-room creation
+AssertionError: expected { gameId: 'game-opaque', …(5) } to have property "roomId" with value 'room-opaque'
+
+- Expected:
+"room-opaque"
+
++ Received:
+undefined
+
+ ❯ test/recruitment-transport.test.ts:7:79
+      5| describe('T03-FIX8 recruitment transports',()=>{
+      6|  it('preserves explicit existing-room selection while accepting new-ro…
+      7|   expect(c.CreateRecruitmentSchema().parse({...create,roomId:'room-opa…
+       |                                                                               ^
+      8|   expect(c.CreateRecruitmentSchema().parse(create)).not.toHaveProperty…
+      9|   expect(c.CreateRecruitmentSchema().safeParse({...create,roomId:'  '}…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/recruitment-transport.test.ts > T03-FIX8 recruitment transports > declares game-specific public cards and suggestions with validated public pagination
+TypeError: Cannot read properties of undefined (reading 'find')
+ ❯ test/recruitment-transport.test.ts:13:28
+     11|  it('declares game-specific public cards and suggestions with validate…
+     12|   for(const path of ['/api/v1/games/:id/recruitments','/api/v1/games/:…
+     13|    const route=c.ApiRoutes.find(r=>r.path===path&&r.method==='GET');
+       |                            ^
+     14|    expect(route).toBeDefined();expect(route?.auth).toBe('Public');
+     15|    expect(route?.requestSchema?.safeParse({mode:'ranked',limit:50}).su…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/recruitment-transport.test.ts > T03-FIX8 recruitment transports > declares permission-protected reopen without changing the original close route
+TypeError: Cannot read properties of undefined (reading 'find')
+ ❯ test/recruitment-transport.test.ts:23:28
+     21|  it('declares permission-protected reopen without changing the origina…
+     22|   for(const action of ['close','reopen']){
+     23|    const route=c.ApiRoutes.find(r=>r.path===`/api/v1/recruitments/:id/…
+       |                            ^
+     24|    expect(route).toBeDefined();expect(route?.auth).toBe('RoomHelperOrO…
+     25|    expect(route?.requiredPermission).toBe('MANAGE_RECRUITMENT');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/recruitment-transport.test.ts > T03-FIX8 recruitment transports > preserves legacy discovery/create routes and requires authenticated creation
+TypeError: Cannot read properties of undefined (reading 'find')
+ ❯ test/recruitment-transport.test.ts:29:22
+     27|  });
+     28|  it('preserves legacy discovery/create routes and requires authenticat…
+     29|   expect(c.ApiRoutes.find(r=>r.path==='/api/v1/recruitments'&&r.method…
+       |                      ^
+     30|   const post=c.ApiRoutes.find(r=>r.path==='/api/v1/recruitments'&&r.me…
+     31|   expect(post?.auth).toBe('Authenticated');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  02:10:12
+   Duration  1.03s (transform 47%, import 46%, tests 5%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/recruitment-transport.test.ts

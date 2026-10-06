@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T03-FIX8';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T03-FIX8'),next=ledger.tasks.find(t=>t.id==='T20');
+assert.equal(t.status,'IN_PROGRESS');
+const records=['build-2','contracts-2','lint-1','test-types-1','api-types-1','web-types-1','audit-1'].map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert(fs.readFileSync(`${dir}/codex-contracts-2.txt`,'utf8').includes('69 passed'));
+assert.equal(JSON.parse(fs.readFileSync(`${dir}/codex-red-2.json`)).exitCode,1);
+assert(fs.readFileSync(`${dir}/review.md`,'utf8').includes('Contract-only Codex review: PASS'));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({checks:records,backendImplemented:false,producerTask:'T20',failedRunsPreserved:true},null,2)+'\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const evidence=walk(dir),outputs=['packages/contracts/src/teams.ts','packages/contracts/src/index.ts','packages/contracts/test/recruitment-transport.test.ts','quality/api-contract.md',...walk('packages/contracts/dist'),...evidence];
+Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+next.status='NOT_STARTED';next.blockers=[];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Existing/new permanent-room recruitment selection; game discovery/suggestions/reopen transports with preserved public privacy and helper ACL | T03-FIX8 |5 new+69 contracts; build/source+test/API/web types,lint,scope/frozen/spec/secrets audit | PASS (contracts; producer T20 pending) |\n');
+console.log('T03-FIX8 PASS; T20 unlocked with approved wiring.');

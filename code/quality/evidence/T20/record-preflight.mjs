@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T20';
+const startedAt=new Date().toISOString();
+const result=spawnSync(process.execPath,['scripts/verify-task.mjs','T20'],{encoding:'utf8'});
+const evidencePath=`${dir}/preflight.txt`;
+fs.writeFileSync(evidencePath,(result.stdout??'')+(result.stderr??''));
+fs.writeFileSync(`${dir}/preflight.json`,JSON.stringify({command:'node scripts/verify-task.mjs T20',cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:result.status,evidencePath,evidenceSha256:createHash('sha256').update(fs.readFileSync(evidencePath)).digest('hex')},null,2)+'\n');
+if(result.status!==0)process.exit(result.status??1);
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const t=ledger.tasks.find(t=>t.id==='T20');
+t.status='BLOCKED';
+t.blockers=['Await user confirmation of T03-FIX8 contract prerequisite and exact RecruitmentsModule AppModule wiring. See quality/evidence/T20/prerequisite-proposal.md. No T20 feature source written.'];
+t.prerequisiteProposal=`${dir}/prerequisite-proposal.md`;
+t.executorOverride={executor:'Codex',anti2:'paused',authorization:'User temporarily assigned Codex all remaining tasks while Antigravity quota is exhausted.'};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('T20 preflight PASS; concrete scope prerequisite awaits confirmation.');

@@ -169,6 +169,7 @@ export type RecruitmentDTO = z.infer<typeof RecruitmentSchema>;
 export function CreateRecruitmentSchema(clock: Date | (() => Date) = () => new Date()) {
   return z
     .object({
+      roomId: IdSchema.optional(),
       gameId: IdSchema,
       gameTitle: GameTitleSchema,
       title: z.string().min(1, 'Title is required').max(100),

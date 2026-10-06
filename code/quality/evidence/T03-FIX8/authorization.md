@@ -1,0 +1,1 @@
+User approved the concrete T03-FIX8 contracts prerequisite and exact T20 AppModule wiring. Codex direct executor; Anti2 paused. One task at a time; no spec or database changes. Generated contracts/dist artifacts are derived from the approved source build.
