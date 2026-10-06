@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T19';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const task=ledger.tasks.find(t=>t.id==='T19'),next=ledger.tasks.find(t=>t.id==='T20');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(next.status,'NOT_STARTED');
+const labels=['codex-full-web-final-2','codex-types-final-2','codex-lint-final-2','codex-audit-final-3','codex-build-final-5','codex-native-create-visual-final-2',...['dialog','pagination','mobile-tabs','private','management','helper-inline','ended','reconnect','revoke-reconnect'].map(n=>`codex-native-${n}-final-3`),'codex-native-send-acl-fixed-1'];
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0,r.command);assert.equal(hash(r.evidencePath),r.evidenceSha256);assert(Date.parse(r.startedAt)>=Date.parse(task.startedAt));}
+assert(fs.readFileSync(`${dir}/codex-codex-full-web-final-2.txt`,'utf8').includes('104 passed'));
+assert(fs.readFileSync(`${dir}/review.md`,'utf8').includes('Codex review: PASS'));
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const source=['apps/web/src/App.tsx','apps/web/test/rooms.test.tsx',...walk('apps/web/src/features/rooms')];
+const sourceHashes=Object.fromEntries(source.map(f=>[f,hash(f)]));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({verifiedChecks:records,sourceHashes,frontendTests:104,roomsTests:19,actualBrowser:true,actualApi:true,actualPostgres:true,mediaLoadNotTested:true,failedRunsPreserved:true,executor:'Codex',anti2:'paused'},null,2)+'\n');
+const evidence=walk(dir);
+Object.assign(task,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries([...source,...evidence].map(f=>[f,hash(f)]))},blockers:[]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Durable room list, canonical private room chat, cursor/reconnect recovery, membership revocation, owner/helper actions and confirmed lifecycle; mobile/keyboard/accessibility | T19 |19 rooms+104 frontend; real built-web/API/PG/Redis browser action probes and four viewports; types/lint/build/frozen/scope/secret audit; T19/final-verification.json | PASS |\n');
+console.log('T19 PASS after verified Codex implementation/review. T20 is next.');

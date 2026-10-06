@@ -1,0 +1,432 @@
+/* Scoped rooms feature CSS using frozen design tokens */
+.fg-rooms-container {
+  display: flex;
+  height: calc(100vh - 64px);
+  width: 100%;
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+/* Sidebar - 240px */
+.fg-rooms-sidebar {
+  width: 240px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.fg-rooms-sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fg-rooms-sidebar-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.fg-rooms-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fg-room-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+  text-align: left;
+  min-height: 44px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.fg-room-item:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.fg-room-item.active {
+  background-color: var(--bg-raised);
+  border-color: var(--color-focus);
+  color: var(--text-main);
+}
+
+.fg-room-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.fg-room-item-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px;
+  color: var(--text-quiet);
+  margin-top: 4px;
+}
+
+/* Main Area */
+.fg-rooms-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-canvas);
+  overflow: hidden;
+}
+
+.fg-rooms-header {
+  min-height: 60px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fg-rooms-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fg-rooms-header-title h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.fg-rooms-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Main content split (Stage + Chat) */
+.fg-rooms-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Stage Area (Voice/Live placeholder affordance) */
+.fg-rooms-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background-color: var(--bg-canvas);
+  overflow-y: auto;
+}
+
+.fg-stage-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 240px;
+  gap: 16px;
+}
+
+/* Chat Panel - 320px */
+.fg-rooms-chat-panel {
+  width: 320px;
+  background-color: var(--bg-chat);
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.fg-rooms-chat-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fg-rooms-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fg-rooms-chat-composer {
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-panel);
+}
+
+/* Modals */
+.fg-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(10, 14, 20, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.fg-modal-container {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.fg-modal-container.fg-modal-large {
+  max-width: 640px;
+}
+
+.fg-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fg-modal-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.fg-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fg-modal-close:hover {
+  color: var(--text-main);
+}
+
+.fg-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fg-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fg-form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-sub);
+}
+
+.fg-form-group input,
+.fg-form-group textarea,
+.fg-form-group select {
+  background-color: var(--bg-canvas);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-main);
+  font-size: 16px;
+  font-family: inherit;
+  min-height: 44px;
+}
+
+.fg-form-group input:focus,
+.fg-form-group textarea:focus,
+.fg-form-group select:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+
+.fg-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.fg-form-row > * {
+  flex: 1;
+}
+
+.fg-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.fg-members-settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.fg-member-settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--bg-canvas);
+  border-radius: var(--radius-sm);
+  gap: 12px;
+}
+
+.fg-member-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fg-member-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.fg-member-role-badge {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--bg-raised);
+  color: var(--text-sub);
+}
+
+.fg-helper-permissions-toggles {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fg-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+
+/* Mobile Tabs Navigation */
+.fg-mobile-tabs {
+  display: none;
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 8px;
+}
+
+.fg-mobile-tab-button {
+  flex: 1;
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-sub);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fg-mobile-tab-button.active {
+  color: var(--color-focus);
+  border-bottom-color: var(--color-focus);
+  font-weight: 600;
+}
+
+/* Responsive adjustments (< 1024px) */
+@media (max-width: 1023px) {
+  .fg-rooms-container {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - 64px);
+  }
+
+  .fg-rooms-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    max-height: 180px;
+  }
+
+  .fg-mobile-tabs {
+    display: flex;
+  }
+
+  .fg-rooms-body {
+    flex-direction: column;
+  }
+
+  .fg-rooms-stage,
+  .fg-rooms-chat-panel {
+    display: none;
+  }
+
+  .fg-rooms-stage.fg-mobile-visible,
+  .fg-rooms-chat-panel.fg-mobile-visible {
+    display: flex;
+    width: 100%;
+  }
+
+  .fg-rooms-chat-panel {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
+}

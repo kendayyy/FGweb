@@ -1,0 +1,346 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/rooms.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/rooms.test.tsx (17 tests | 1 failed) 4489ms
+   ❯ T19 — Rooms, Private Group Chat, and Room Management (17)
+     × 14. Mobile settings opens the actual settings dialog and preserves chat after closing 1092ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/rooms.test.tsx > T19 — Rooms, Private Group Chat, and Room Management > 14. Mobile settings opens the actual settings dialog and preserves chat after closing
+TestingLibraryElementError: Unable to find role="dialog" and name `/Cài đặt phòng & Thành viên/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-app-header"[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/rooms"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mdata-testid[39m=[32m"user-avatar-link"[39m
+              [33mhref[39m=[32m"/users/user-owner"[39m
+              [33mstyle[39m=[32m"display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 50%; background-color: var(--color-action); color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;"[39m
+              [36m>[39m
+                [0mR[0m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mstyle[39m=[32m"font-weight: 600; color: var(--text-main); font-size: 14px;"[39m
+              [36m>[39m
+                [0mRoom Owner[0m
+              [36m</span>[39m
+            [36m</a>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+              [33mdata-testid[39m=[32m"logout-button"[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng xuất[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-rooms-container"[39m
+        [36m>[39m
+          [36m<aside[39m
+            [33mclass[39m=[32m"fg-rooms-sidebar"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-rooms-sidebar-header"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [0mPhòng của tôi[0m
+              [36m</h3>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 44px; padding: 0px 14px; font-size: 13px;"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-plus"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"16"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"16"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M5 12h14"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 5v14"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [36m<span>[39m
+                  [0mTạo[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-rooms-list"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-room-item active"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-room-item-name"[39m
+                [36m>[39m
+                  [0mĐội LMHT Hàng Đấu[0m
+                [36m</span>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"fg-room-item-meta"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mLiên Minh Huyền Thoại[0m
+                  [36m</span>[39m
+                  [36m<span>[39m
+                    [0m3[0m
+                    [0m/50 thành viên[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-room-item "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-room-item-name"[39m
+                [36m>[39m
+                  [0mPhòng Mật 18+[0m
+                [36m</spa...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-app-header"[39m
+        [33mstyle[39m=[32m"min-height: 64px; background-color: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; flex-wrap: wrap;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 24px;"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+            [33mstyle[39m=[32m"font-size: 22px; font-weight: 800; color: var(--color-focus); text-decoration: none; letter-spacing: -0.02em; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<nav[39m
+            [33mstyle[39m=[32m"display: flex; gap: 16px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/"[39m
+              [33mstyle[39m=[32m"color: var(--text-main); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mLobby[0m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mhref[39m=[32m"/rooms"[39m
+              [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [0mPhòng của tôi[0m
+            [36m</a>[39m
+          [36m</nav>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; align-items: center; gap: 12px;"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mdata-discover[39m=[32m"true"[39m
+              [33mdata-testid[39m=[32m"user-avatar-link"[39m
+              [33mhref[39m=[32m"/users/user-owner"[39m
+              [33mstyle[39m=[32m"display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; min-height: 44px; min-width: 44px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 50%; background-color: var(--color-action); color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;"[39m
+              [36m>[39m
+                [0mR[0m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mstyle[39m=[32m"font-weight: 600; color: var(--text-main); font-size: 14px;"[39m
+              [36m>[39m
+                [0mRoom Owner[0m
+              [36m</span>[39m
+            [36m</a>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+              [33mdata-testid[39m=[32m"logout-button"[39m
+              [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mĐăng xuất[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-rooms-container"[39m
+        [36m>[39m
+          [36m<aside[39m
+            [33mclass[39m=[32m"fg-rooms-sidebar"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-rooms-sidebar-header"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [0mPhòng của tôi[0m
+              [36m</h3>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 44px; padding: 0px 14px; font-size: 13px;"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-plus"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"16"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"16"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M5 12h14"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 5v14"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [36m<span>[39m
+                  [0mTạo[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-rooms-list"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-room-item active"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-room-item-name"[39m
+                [36m>[39m
+                  [0mĐội LMHT Hàng Đấu[0m
+                [36m</span>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"fg-room-item-meta"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mLiên Minh Huyền Thoại[0m
+                  [36m</span>[39m
+                  [36m<span>[39m
+                    [0m3[0m
+                    [0m/50 thành viên[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-room-item "[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-room-item-name"[39m
+                [36m>[39m
+                  [0mPhòng Mật 18+[0m
+                [36m</spa...
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/rooms.test.tsx:622:33
+    620|     await screen.findByTestId('mobile-tab-settings');
+    621|     fireEvent.click(screen.getByTestId('mobile-tab-settings'));
+    622|     const dialog = await screen.findByRole('dialog', { name: /Cài đặt …
+       |                                 ^
+    623|     fireEvent.keyDown(dialog, { key: 'Escape' });
+    624|     fireEvent.click(screen.getByTestId('mobile-tab-chat'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 passed (17)
+   Start at  01:18:57
+   Duration  9.00s (tests 52%, environment 19%, transform 17%, import 9%, setup 3%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/rooms.test.tsx

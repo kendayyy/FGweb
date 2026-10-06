@@ -3,8 +3,8 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { LoginForm, HeaderAuthWidget, ProtectedRoute, useAuth } from './features/auth/index.js';
 import { OnboardingPage } from './features/onboarding/index.js';
 import { ProfilePage } from './features/profiles/index.js';
-import { Card } from './components/ui/Card.js';
 import { LobbyPage } from './features/lobby/LobbyPage.js';
+import { RoomsPage } from './features/rooms/index.js';
 
 export const App: React.FC = () => {
   return (
@@ -33,16 +33,41 @@ export const App: React.FC = () => {
               color: 'var(--color-focus)',
               textDecoration: 'none',
               letterSpacing: '-0.02em',
-              display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44,
+              display: 'inline-flex',
+              alignItems: 'center',
+              minHeight: 44,
+              minWidth: 44,
             }}
           >
             FG
           </Link>
           <nav style={{ display: 'flex', gap: '16px' }}>
-            <Link to="/" style={{ color: 'var(--text-main)', fontSize: '14px', fontWeight: 500,display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44 }}>
+            <Link
+              to="/"
+              style={{
+                color: 'var(--text-main)',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'inline-flex',
+                alignItems: 'center',
+                minHeight: 44,
+                minWidth: 44,
+              }}
+            >
               Lobby
             </Link>
-            <Link to="/protected" style={{ color: 'var(--text-sub)', fontSize: '14px', fontWeight: 500,display:'inline-flex',alignItems:'center',minHeight:44,minWidth:44 }}>
+            <Link
+              to="/rooms"
+              style={{
+                color: 'var(--text-sub)',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'inline-flex',
+                alignItems: 'center',
+                minHeight: 44,
+                minWidth: 44,
+              }}
+            >
               Phòng của tôi
             </Link>
           </nav>
@@ -60,10 +85,26 @@ export const App: React.FC = () => {
           <Route path="/users/:id/profile" element={<ProfilePage />} />
           <Route path="/" element={<GuestLobbyShell />} />
           <Route
+            path="/rooms"
+            element={
+              <ProtectedRoute>
+                <RoomsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rooms/:roomId"
+            element={
+              <ProtectedRoute>
+                <RoomsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/protected"
             element={
               <ProtectedRoute>
-                <ProtectedMemberShell />
+                <RoomsPage />
               </ProtectedRoute>
             }
           />
@@ -77,28 +118,11 @@ const GuestLobbyShell: React.FC = () => {
   const { user } = useAuth();
 
   // Authenticated incomplete users reach onboarding flow
-  if (user && (user.onboardingComplete !== true || !Array.isArray(user.interestedGames) || user.interestedGames.length===0)) {
+  if (user && (user.onboardingComplete !== true || !Array.isArray(user.interestedGames) || user.interestedGames.length === 0)) {
     return <OnboardingPage />;
   }
 
   return <LobbyPage />;
-};
-
-const ProtectedMemberShell: React.FC = () => {
-  const { user } = useAuth();
-
-  return (
-    <div style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <Card padding={32}>
-        <h2 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '12px', color: 'var(--color-focus)' }}>
-          Phòng của tôi — FG
-        </h2>
-        <p style={{ color: 'var(--text-main)', fontSize: '14px', marginBottom: '16px' }}>
-          Khu vực dành riêng cho thành viên đã xác thực. Chào mừng {user?.displayName}.
-        </p>
-      </Card>
-    </div>
-  );
 };
 
 export default App;

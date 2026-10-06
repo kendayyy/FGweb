@@ -1,0 +1,64 @@
+Owned private-room browser fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toContainText(expected) failed
+
+Locator: getByRole('alert')
+Expected pattern: /không có quyền/i
+Timeout: 10000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" getByRole('alert') with timeout 10000ms
+  - waiting for getByRole('alert')
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toContainText (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T19\native-private.mjs:16:37 {
+  matcherResult: {
+    name: 'toContainText',
+    expected: /không có quyền/i,
+    message: 'expect(locator).toContainText(expected) failed\n' +
+      '\n' +
+      "Locator: getByRole('alert')\n" +
+      'Expected pattern: /không có quyền/i\n' +
+      'Timeout: 10000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toContainText" getByRole('alert') with timeout 10000ms\n` +
+      "  - waiting for getByRole('alert')\n",
+    pass: false,
+    actual: undefined,
+    log: [
+      `  - Expect "toContainText" getByRole('alert') with timeout 10000ms`,
+      "  - waiting for getByRole('alert')"
+    ],
+    timeout: 10000,
+    ariaSnapshot: '- banner:\n' +
+      '  - link "FG":\n' +
+      '    - /url: /\n' +
+      '  - navigation:\n' +
+      '    - link "Lobby":\n' +
+      '      - /url: /\n' +
+      '    - link "Phòng của tôi":\n' +
+      '      - /url: /rooms\n' +
+      '  - link "H Hải":\n' +
+      '    - /url: /users/native-c\n' +
+      '  - button "Đăng xuất"\n' +
+      '- main:\n' +
+      '  - complementary:\n' +
+      '    - heading "Phòng của tôi" [level=3]\n' +
+      '    - button "Tạo"\n' +
+      '    - text: Bạn chưa tham gia phòng nào. Bấm "Tạo" để tạo phòng đầu tiên!\n' +
+      '  - main:\n' +
+      '    - heading "Chọn hoặc tạo một phòng" [level=3]\n' +
+      '    - paragraph: Chọn phòng từ danh sách bên trái hoặc tạo phòng mới để bắt đầu trò chuyện nhóm.\n' +
+      '    - button "Tạo phòng mới"'
+  }
+}
+
+Node.js v24.21.0

@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/T19';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const task=ledger.tasks.find(t=>t.id==='T19');
+assert.equal(task.status,'BLOCKED');
+task.previousBlockers=task.blockers;
+task.blockers=[];
+task.status='IN_PROGRESS';
+task.resumedAt=new Date().toISOString();
+task.executorOverride={executor:'Codex',anti2:'paused',authorization:'User: tạm codex làm hết đi khi antigravity hồi quata',evidence:`${dir}/codex-workflow-override.md`};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+let audit=fs.readFileSync(`${dir}/audit.mjs`,'utf8').replaceAll('readonly-snapshot.json','readonly-codex-resume.json');
+fs.writeFileSync(`${dir}/codex-audit-resume.mjs`,audit);
+fs.appendFileSync(`${dir}/codex-workflow-override.md`,'\nUser confirmed Codex should continue all remaining tasks sequentially while Antigravity quota is exhausted. No automatic model substitution or paid quota purchase.\n');
+console.log('T19 resumed with user-authorized Codex executor; T20 remains closed.');

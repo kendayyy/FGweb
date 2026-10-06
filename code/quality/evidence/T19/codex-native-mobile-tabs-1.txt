@@ -1,0 +1,69 @@
+Owned mobile-tabs browser fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i }) with timeout 5000ms
+  - waiting for getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i })
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toBeVisible (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T19\native-mobile-tabs.mjs:12:145 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i })\n" +
+      'Expected: visible\n' +
+      'Timeout: 5000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i }) with timeout 5000ms\n` +
+      "  - waiting for getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i }) with timeout 5000ms`,
+      "  - waiting for getByRole('dialog', { name: /Cài đặt phòng.*Thành viên/i })"
+    ],
+    timeout: 5000,
+    ariaSnapshot: '- banner:\n' +
+      '  - link "FG":\n' +
+      '    - /url: /\n' +
+      '  - navigation:\n' +
+      '    - link "Phòng của tôi":\n' +
+      '      - /url: /rooms\n' +
+      '  - link "N":\n' +
+      '    - /url: /users/native-a\n' +
+      '  - button "Đăng xuất"\n' +
+      '- main:\n' +
+      '  - complementary:\n' +
+      '    - heading "Phòng của tôi" [level=3]\n' +
+      '    - button "Tạo"\n' +
+      '    - button "Mobile room controls Liên Minh Huyền Thoại 1/50 thành viên"\n' +
+      '  - navigation "Điều hướng tab phòng":\n' +
+      '    - button "Trò chuyện"\n' +
+      '    - button "Thành viên (1)"\n' +
+      '    - button "Cài đặt"\n' +
+      '  - main:\n' +
+      '    - heading "Mobile room controls" [level=2]\n' +
+      '    - text: Liên Minh Huyền Thoại · PUBLIC · Đội 5 người · 1/50 thành viên\n' +
+      '    - button "Cài đặt"\n' +
+      '    - button "Rời phòng"\n' +
+      '    - heading "Khu vực cuộc gọi & Thẻ tuyển đội" [level=3]\n' +
+      '    - paragraph: Phòng nhóm lâu dài của Mobile room controls. Cuộc gọi thoại & tính năng tuyển thành viên sẽ sẵn sàng trong các bước tiếp theo.'
+  }
+}
+
+Node.js v24.21.0

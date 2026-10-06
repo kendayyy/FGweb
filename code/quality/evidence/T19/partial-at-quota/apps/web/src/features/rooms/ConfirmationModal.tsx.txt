@@ -1,0 +1,129 @@
+import React, { useEffect, useRef } from 'react';
+import { AlertTriangle, X } from 'lucide-react';
+import { Button } from '../../components/ui/Button.js';
+import { Alert } from '../../components/ui/Alert.js';
+
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  isDestructive?: boolean;
+  isLoading?: boolean;
+  error?: string | null;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+  isOpen,
+  title,
+  message,
+  confirmText = 'Xác nhận',
+  cancelText = 'Hủy',
+  isDestructive = false,
+  isLoading = false,
+  error = null,
+  onConfirm,
+  onCancel,
+}) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const cancelBtnRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      cancelBtnRef.current?.focus();
+    } else if (previousFocusRef.current) {
+      previousFocusRef.current.focus();
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape' && !isLoading) {
+      e.stopPropagation();
+      onCancel();
+      return;
+    }
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length > 0) {
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  };
+
+  return (
+    <div
+      className="fg-modal-overlay"
+      onClick={e => {
+        if (e.target === e.currentTarget && !isLoading) onCancel();
+      }}
+    >
+      <div
+        ref={dialogRef}
+        className="fg-modal-container"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-modal-title"
+        onKeyDown={handleKeyDown}
+      >
+        <div className="fg-modal-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {isDestructive && <AlertTriangle size={20} color="var(--color-danger)" />}
+            <h3 id="confirm-modal-title">{title}</h3>
+          </div>
+          <button
+            type="button"
+            aria-label="Đóng bảng xác nhận"
+            onClick={onCancel}
+            disabled={isLoading}
+            className="fg-modal-close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {error && <Alert type="error" message={error} />}
+
+        <p style={{ color: 'var(--text-sub)', fontSize: '14px', margin: '12px 0 20px 0', lineHeight: 1.5 }}>
+          {message}
+        </p>
+
+        <div className="fg-modal-actions">
+          <button
+            type="button"
+            ref={cancelBtnRef}
+            className="fg-btn fg-btn-outline"
+            onClick={onCancel}
+            disabled={isLoading}
+          >
+            {cancelText}
+          </button>
+          <Button
+            type="button"
+            variant={isDestructive ? 'destructive' : 'primary'}
+            onClick={onConfirm}
+            isLoading={isLoading}
+          >
+            {confirmText}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};

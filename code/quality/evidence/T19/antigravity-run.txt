@@ -1,0 +1,59 @@
+An initial TDD test suite `apps/web/test/rooms.test.tsx` has been written, and `apps/web/src/App.tsx` has been updated with the approved `/rooms` routing. The initial test run (`npm run test --workspace @fg/web -- test/rooms.test.tsx`) is now running against the minimal shell to demonstrate behavioral RED before logic implementation.
+The implementation of `apps/web/src/features/rooms/` is complete. The test suite `npm run test --workspace @fg/web -- test/rooms.test.tsx` is executing to verify that all 7 test cases pass.
+The updated test suite for rooms feature is currently running to verify all 7 test cases.
+Full web test regression (`npm run test --workspace @fg/web`) is running to verify all web test suites.
+### Summary of Task Implementation: FG T19 — My rooms, private group chat, room management
+
+#### 1. TDD Red/Green Execution Summary
+- **RED Phase**: Initial test suite `apps/web/test/rooms.test.tsx` and empty `RoomsPage` shell were created. The test command `npm run test --workspace @fg/web -- test/rooms.test.tsx` was executed, demonstrating behavioral RED against the empty shell.
+- **GREEN Phase**: Feature implementation in `apps/web/src/features/rooms/` was completed. The test run was executed again and all 7 test cases passed cleanly.
+
+#### 2. Key Features Implemented (`apps/web/src/features/rooms/**` & `App.tsx`)
+- **App Composition**: Updated `App.tsx` to route `/rooms`, `/rooms/:roomId`, and `/protected` to `<RoomsPage />`. Updated header navigation link "Phòng của tôi" to `/rooms`. Removed unused `ProtectedMemberShell` and `Card` imports.
+- **Onboarding Guard**: Authenticated users with incomplete onboarding visiting `/rooms` are routed to `<OnboardingPage />`.
+- **Own Rooms List & Selection**:
+  - Displays user's persistent rooms list (`GET /api/v1/rooms/own`) with pagination and search.
+  - Deep-link support (`/rooms/:roomId`) and state synchronization.
+  - Retains permanent room membership even after play sessions end.
+- **Room Creation Modal (`CreateRoomModal.tsx`)**:
+  - Supports selection of any of the 7 real games (`ALLOWED_GAMES`).
+  - Visibility (`PUBLIC` / `PRIVATE`), invite policy (`OWNER_APPROVAL` / `DIRECT_MEMBER`), and player capacity (1–10).
+  - Validates schemas and submits to `POST /api/v1/rooms`.
+- **Room Settings & Owner Actions (`RoomSettingsModal.tsx`)**:
+  - Owner settings modification (`PATCH /api/v1/rooms/:id/settings`).
+  - Owner management of Helper permissions (`MANAGE_CHAT`, `MANAGE_CALLS`, `MANAGE_RECRUITMENT`, `MANAGE_MEMBERS`).
+  - Member removal (`DELETE /api/v1/rooms/:id/members/:userId`) by authorized owners/helpers.
+  - Transfer ownership (`POST /api/v1/rooms/:id/transfer-owner`) and Dissolve room (`DELETE /api/v1/rooms/:id`).
+- **Confirmation Dialogs (`ConfirmationModal.tsx`)**:
+  - Semantic accessible modal for destructive actions (Dissolve, Transfer, Leave).
+  - Handles Escape key and Cancel with **zero** side-effect API calls.
+  - Warns sole owners that leaving will close/dissolve the room.
+- **Group Chat (`useRoomChat.ts`)**:
+  - Uses canonical `RoomDTO.conversationId` for history (`GET /api/v1/conversations/:id/messages`) and send (`POST /api/v1/conversations/:id/messages`).
+  - Socket.IO connection subscribing to `conversation.subscribe` and handling `message.created`.
+  - Integrates read-only `RichComposer` and `RichMessage` for image upload/preview, replies, mentions, and emoji picker.
+  - Handles private room access revocation (403) cleanly by disabling send and clearing stale state.
+- **Visual Design & Layout (`rooms.css`)**:
+  - Desktop 3-column layout matching Mockup 02 (Sidebar 240px, Main stage flex-1, Group chat 320px).
+  - Mobile responsive design (< 1024px) with Chat / Members / Settings tab navigation and 44px hit targets.
+  - Utilizes existing design tokens (`var(--bg-canvas)`, `var(--bg-sidebar)`, `var(--bg-chat)`, `var(--border-color)`, `var(--color-focus)`, etc.).
+
+#### 3. Verification Results
+- `npm run test --workspace @fg/web -- test/rooms.test.tsx` — **7/7 PASS**
+- `npm run test --workspace @fg/web` (Full Web Regression) — **9/9 Test Files (92/92 Tests) PASS**
+- `npm run typecheck` — **PASS (Exit code 0)**
+- `npm run build --workspace @fg/web` — **PASS (Vite build successful)**
+
+#### 4. Files Modified / Created
+- **Modified**:
+  - `apps/web/src/App.tsx`
+- **Created**:
+  - `apps/web/src/features/rooms/RoomsPage.tsx`
+  - `apps/web/src/features/rooms/index.ts`
+  - `apps/web/src/features/rooms/api.ts`
+  - `apps/web/src/features/rooms/useRoomChat.ts`
+  - `apps/web/src/features/rooms/CreateRoomModal.tsx`
+  - `apps/web/src/features/rooms/RoomSettingsModal.tsx`
+  - `apps/web/src/features/rooms/ConfirmationModal.tsx`
+  - `apps/web/src/features/rooms/rooms.css`
+  - `apps/web/test/rooms.test.tsx`

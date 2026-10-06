@@ -1,0 +1,352 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { io, Socket } from 'socket.io-client';
+import {
+  MessageDTO,
+  MessageSchema,
+  CreateMessageRequest,
+  SocketConversationAckSchema,
+  SocketEventNames,
+} from '@fg/contracts';
+import { fetchRoomMessages, sendRoomMessage, ApiError } from './api.js';
+import { reconcileMessages } from '../lobby/reconcile.js';
+import { registerAuthCleanup } from '../auth/lifecycle.js';
+
+export function useRoomChat(conversationId: string | null, actorUserId: string) {
+  const [extraMessages, setExtraMessages] = useState<MessageDTO[]>([]);
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'offline'>('connecting');
+  const [olderCursor, setOlderCursor] = useState<string | null>(null);
+  const [isLoadingOlder, setIsLoadingOlder] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [isRevokedOrForbidden, setIsRevokedOrForbidden] = useState(false);
+
+  const activeRef = useRef(true);
+  const generationRef = useRef(0);
+  const actorUserIdRef = useRef(actorUserId);
+  const conversationIdRef = useRef(conversationId);
+  const controllersRef = useRef<Set<AbortController>>(new Set());
+  const pendingSendRef = useRef(false);
+  const knownMsgIdsRef = useRef<Set<string>>(new Set());
+  const nextCursorRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    actorUserIdRef.current = actorUserId;
+    conversationIdRef.current = conversationId;
+  }, [actorUserId, conversationId]);
+
+  // Query initial history
+  const query = useQuery({
+    queryKey: ['roomChat', actorUserId, conversationId],
+    queryFn: async ({ signal }) => {
+      if (!conversationId) return { items: [], hasMore: false };
+      try {
+        const res = await fetchRoomMessages(conversationId, undefined, 50, signal);
+        setIsRevokedOrForbidden(false);
+        return res;
+      } catch (err: any) {
+        if ((err instanceof ApiError && (err.status === 401 || err.status === 403 || err.status === 404)) ||
+            err?.status === 403 || err?.status === 401 || err?.status === 404 ||
+            err?.message?.includes('403') || err?.message?.includes('401') || err?.message?.includes('không có quyền')) {
+          setIsRevokedOrForbidden(true);
+          setExtraMessages([]);
+        }
+        throw err;
+      }
+    },
+    enabled: Boolean(conversationId) && !isRevokedOrForbidden,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  // Reset chat state when conversationId or actorUserId changes
+  useEffect(() => {
+    setExtraMessages([]);
+    setOlderCursor(null);
+    setSyncError(null);
+    setIsRevokedOrForbidden(false);
+    nextCursorRef.current = null;
+  }, [conversationId, actorUserId]);
+
+  // Reconcile messages using existing read-only reconcileMessages utility
+  const messages = useMemo(() => {
+    if (!conversationId || isRevokedOrForbidden) return [];
+    const baseItems = query.data?.items ?? [];
+    return reconcileMessages(conversationId, baseItems, extraMessages);
+  }, [conversationId, query.data, extraMessages, isRevokedOrForbidden]);
+
+  useEffect(() => {
+    if (query.data) {
+      nextCursorRef.current = query.data.hasMore ? query.data.nextCursor ?? null : null;
+      setOlderCursor(nextCursorRef.current);
+    }
+  }, [query.data]);
+
+  useEffect(() => {
+    knownMsgIdsRef.current = new Set(messages.map(m => m.id));
+  }, [messages]);
+
+  // Socket IO real-time subscription with captured generation & actor/conv scope
+  useEffect(() => {
+    if (!conversationId || isRevokedOrForbidden) {
+      setConnectionStatus('offline');
+      return;
+    }
+
+    activeRef.current = true;
+    const currentGeneration = ++generationRef.current;
+    const capturedGen = currentGeneration;
+    const capturedActor = actorUserId;
+    const capturedConv = conversationId;
+
+    const isCurrent = () =>
+      activeRef.current &&
+      generationRef.current === capturedGen &&
+      actorUserIdRef.current === capturedActor &&
+      conversationIdRef.current === capturedConv;
+
+    const socket: Socket = io({
+      withCredentials: true,
+      transports: ['websocket'],
+      autoConnect: false,
+      reconnection: true,
+    });
+
+    const recoverHistory = async () => {
+      if (!isCurrent()) return;
+      const controller = new AbortController();
+      controllersRef.current.add(controller);
+
+      try {
+        const anchorSet = new Set(knownMsgIdsRef.current);
+        const seenCursors = new Set<string>();
+        let cursor: string | undefined;
+        let isFirstPage = true;
+
+        do {
+          const page = await fetchRoomMessages(capturedConv, cursor, 50, controller.signal);
+          if (!isCurrent() || controller.signal.aborted) return;
+
+          setExtraMessages(prev => reconcileMessages(capturedConv, prev, page.items));
+          nextCursorRef.current = page.hasMore ? page.nextCursor ?? null : null;
+          setOlderCursor(nextCursorRef.current);
+
+          if (isFirstPage && anchorSet.size === 0) {
+            break;
+          }
+          isFirstPage = false;
+
+          // Stop if we hit known anchor messages or no more pages
+          if (page.items.some(m => anchorSet.has(m.id)) || !page.hasMore) {
+            break;
+          }
+
+          if (!page.nextCursor || seenCursors.has(page.nextCursor)) {
+            break;
+          }
+          seenCursors.add(page.nextCursor);
+          cursor = page.nextCursor;
+        } while (cursor && isCurrent());
+      } catch (err: any) {
+        if (isCurrent() && !controller.signal.aborted) {
+          if ((err instanceof ApiError && (err.status === 401 || err.status === 403 || err.status === 404)) ||
+              err?.status === 403 || err?.status === 401 || err?.status === 404 ||
+              err?.message?.includes('403') || err?.message?.includes('401')) {
+            setIsRevokedOrForbidden(true);
+            setExtraMessages([]);
+          } else {
+            setSyncError('Khôi phục lịch sử tin nhắn thất bại.');
+          }
+        }
+      } finally {
+        controllersRef.current.delete(controller);
+      }
+    };
+
+    const handleConnect = async () => {
+      try {
+        const ackRaw = await socket
+          .timeout(5000)
+          .emitWithAck(SocketEventNames.CONVERSATION_SUBSCRIBE, { conversationId: capturedConv });
+        const ack = SocketConversationAckSchema.parse(ackRaw);
+
+        if (!isCurrent()) return;
+
+        if (!ack.ok || ack.conversationId !== capturedConv) {
+          setConnectionStatus('offline');
+          setSyncError('Không thể đăng ký nhận tin nhắn phòng.');
+          setIsRevokedOrForbidden(true);
+          setExtraMessages([]);
+          return;
+        }
+
+        setConnectionStatus('connected');
+        setSyncError(null);
+        await recoverHistory();
+      } catch {
+        if (isCurrent()) {
+          setConnectionStatus('offline');
+          setSyncError('Mất kết nối thời gian thực.');
+        }
+      }
+    };
+
+    const handleMessageCreated = (raw: unknown) => {
+      if (!isCurrent()) return;
+      const parsed = MessageSchema.safeParse(raw);
+      if (parsed.success && parsed.data.conversationId === capturedConv) {
+        setExtraMessages(prev => reconcileMessages(capturedConv, prev, [parsed.data]));
+      }
+    };
+
+    const handleDisconnect = () => {
+      if (isCurrent()) {
+        setConnectionStatus('offline');
+      }
+    };
+
+    socket.on('connect', handleConnect);
+    socket.on(SocketEventNames.MESSAGE_CREATED, handleMessageCreated);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('connect_error', handleDisconnect);
+
+    const cleanup = () => {
+      activeRef.current = false;
+      generationRef.current++;
+      for (const ctrl of controllersRef.current) {
+        ctrl.abort();
+      }
+      controllersRef.current.clear();
+
+      socket.off('connect', handleConnect);
+      socket.off(SocketEventNames.MESSAGE_CREATED, handleMessageCreated);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('connect_error', handleDisconnect);
+      socket.disconnect();
+    };
+
+    const unregisterAuth = registerAuthCleanup(cleanup);
+
+    if (socket.connected) {
+      void handleConnect();
+    } else {
+      socket.connect();
+    }
+
+    return () => {
+      unregisterAuth();
+      cleanup();
+    };
+  }, [conversationId, actorUserId, isRevokedOrForbidden]);
+
+  const loadOlderMessages = async () => {
+    if (!conversationId || isLoadingOlder || !nextCursorRef.current || !activeRef.current || isRevokedOrForbidden) {
+      return;
+    }
+
+    const capturedGen = generationRef.current;
+    const capturedActor = actorUserId;
+    const capturedConv = conversationId;
+    const isCurrent = () =>
+      activeRef.current &&
+      generationRef.current === capturedGen &&
+      actorUserIdRef.current === capturedActor &&
+      conversationIdRef.current === capturedConv;
+
+    setIsLoadingOlder(true);
+    const controller = new AbortController();
+    controllersRef.current.add(controller);
+
+    try {
+      const page = await fetchRoomMessages(capturedConv, nextCursorRef.current, 50, controller.signal);
+      if (isCurrent()) {
+        setExtraMessages(prev => reconcileMessages(capturedConv, prev, page.items));
+        nextCursorRef.current = page.hasMore ? page.nextCursor ?? null : null;
+        setOlderCursor(nextCursorRef.current);
+      }
+    } catch (err: any) {
+      if (isCurrent() && !controller.signal.aborted) {
+        if ((err instanceof ApiError && (err.status === 401 || err.status === 403 || err.status === 404)) ||
+            err?.status === 403 || err?.status === 401 || err?.status === 404 ||
+            err?.message?.includes('403') || err?.message?.includes('401')) {
+          setIsRevokedOrForbidden(true);
+          setExtraMessages([]);
+        } else {
+          setSyncError('Không thể tải tin nhắn cũ hơn.');
+        }
+      }
+    } finally {
+      controllersRef.current.delete(controller);
+      if (isCurrent()) {
+        setIsLoadingOlder(false);
+      }
+    }
+  };
+
+  const sendMessage = async (request: CreateMessageRequest): Promise<MessageDTO> => {
+    if (!conversationId || !activeRef.current || pendingSendRef.current || isRevokedOrForbidden) {
+      throw new Error('Gửi tin nhắn không khả dụng.');
+    }
+
+    const capturedGen = generationRef.current;
+    const capturedActor = actorUserId;
+    const capturedConv = conversationId;
+    const isCurrent = () =>
+      activeRef.current &&
+      generationRef.current === capturedGen &&
+      actorUserIdRef.current === capturedActor &&
+      conversationIdRef.current === capturedConv;
+
+    pendingSendRef.current = true;
+    setIsSending(true);
+    const controller = new AbortController();
+    controllersRef.current.add(controller);
+
+    try {
+      const message = await sendRoomMessage(capturedConv, request, controller.signal);
+      if (!isCurrent() || controller.signal.aborted) {
+        throw new Error('Đã đổi phòng hoặc phiên làm việc.');
+      }
+
+      setExtraMessages(prev => reconcileMessages(capturedConv, prev, [message]));
+      return message;
+    } catch (err: any) {
+      if (isCurrent()) {
+        if ((err instanceof ApiError && (err.status === 401 || err.status === 403 || err.status === 404)) ||
+            err?.status === 403 || err?.status === 401 || err?.status === 404 ||
+            err?.message?.includes('403') || err?.message?.includes('401')) {
+          setIsRevokedOrForbidden(true);
+          setExtraMessages([]);
+        }
+      }
+      throw err;
+    } finally {
+      pendingSendRef.current = false;
+      controllersRef.current.delete(controller);
+      if (isCurrent()) {
+        setIsSending(false);
+      }
+    }
+  };
+
+  return {
+    messages,
+    connectionStatus,
+    isLoading: query.isPending,
+    isError: query.isError || isRevokedOrForbidden,
+    error: (query.error as Error | null) || (isRevokedOrForbidden ? new Error('Bạn không có quyền xem cuộc trò chuyện này.') : null),
+    syncError,
+    hasOlder: Boolean(olderCursor),
+    isLoadingOlder,
+    loadOlderMessages,
+    sendMessage,
+    isSending,
+    isRevokedOrForbidden,
+  };
+}
+    loadOlderMessages,
+    sendMessage,
+    isSending,
+    isRevokedOrForbidden,
+  };
+}

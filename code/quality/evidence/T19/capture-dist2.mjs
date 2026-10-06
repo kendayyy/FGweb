@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const target='quality/evidence/T19/codex-built-dist2-inputs.json';assert(!fs.existsSync(target));
+const paths=['apps/web/dist/index.html',...fs.readdirSync('apps/web/dist/assets').filter(f=>/\.(js|css)$/.test(f)).map(f=>path.posix.join('apps/web/dist/assets',f))];
+assert(paths.some(p=>p.endsWith('index-DOf2EZl0.js')),'Expected completed refactor2 bundle');
+fs.writeFileSync(target,JSON.stringify({capturedAt:new Date().toISOString(),note:'Captured after native create2/reconnect2/management1 and before next build. Source is undergoing refactor3 and is not claimed frozen here.',specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(paths.map(f=>[f,hash(f)]))},null,2)+'\n');
+console.log('Completed refactor2 browser bundle fingerprints captured.');

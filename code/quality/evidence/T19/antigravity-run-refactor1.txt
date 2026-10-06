@@ -1,0 +1,51 @@
+Executing `npm run test --workspace @fg/web -- test/rooms.test.tsx` to demonstrate behavioral RED phase for the new test cases.
+Running `npm run test --workspace @fg/web -- test/rooms.test.tsx` to verify all test cases pass.
+Running `npm run test --workspace @fg/web -- test/rooms.test.tsx` to verify all test cases.
+Running full web test regression (`npm run test --workspace @fg/web`).
+### Refactor Implementation Summary: FG T19 — My rooms, private group chat, room management
+
+#### 1. Behavioral RED / GREEN Test Execution
+- **Valid MeDTO Fixtures**: Replaced initial test fixtures with strictly validated `MeDTO` objects parsed against `MeDTOSchema.parse(...)` (removing invalid `bio` and `gameProfiles` extra properties).
+- **TDD RED Phase**: Added new behavioral test cases in `apps/web/test/rooms.test.tsx` testing:
+  - Outsider 403 access failure rendering an explicit `role="alert"` element containing `/không có quyền/i` even when own-rooms list is empty.
+  - Non-owner members forbidden from seeing owner settings or dissolve actions.
+  - Mobile tab navigation actively controlling CSS panel visibility (`data-testid="mobile-members-panel"`).
+  - Executed `npm run test --workspace @fg/web -- test/rooms.test.tsx`, demonstrating RED against previous behavior.
+- **GREEN Phase**: Applied fixes across `apps/web/src/features/rooms/` and re-ran tests. All 9 test cases passed.
+
+#### 2. Key Architecture & Feature Adjustments
+1. **RoomsPage Hook Order & Fail-Closed Revocation**:
+   - **Hook Order Safety**: Refactored `RoomsPage` into a guarded outer component (handling `auth.isLoading`, `auth.isError`, `!auth.user`, and incomplete onboarding) and a keyed inner component `RoomsPageInner` (keyed by `${user.id}_${routeRoomId || ''}`). All React hooks are called unconditionally inside `RoomsPageInner`.
+   - **Fail-Closed 403 Alert**: If an outsider requests a private room (`/rooms/room-private`) that returns a 403 error, `RoomsPageInner` renders an explicit `<div role="alert">` displaying the permission denied message, rather than falling back to generic "Chọn hoặc tạo một phòng".
+   - **Actor & Room Scoped Queries**: Query keys (`['ownRooms', actorUserId]`, `['roomDetail', actorUserId, selectedRoomId]`, `['roomMembers', actorUserId, selectedRoomId]`, `['roomChat', actorUserId, conversationId]`) pass and consume `AbortSignal`.
+2. **Permissions & Role-Based UI Controls**:
+   - Header settings button (`data-testid="room-header-settings-btn"`) and owner management controls are strictly guarded by `isOwner = activeRoom?.ownerId === actorUserId`. Non-owner members cannot view or trigger owner actions.
+   - Member removal (`DELETE /api/v1/rooms/:id/members/:userId`) is guarded by `hasManageMembersPermission = isOwner || (isHelper && helperPermissions.includes('MANAGE_MEMBERS'))`.
+   - Player capacity labeled as team slot size (1–10), separate from permanent member cap (up to 50).
+3. **useRoomChat Real-Time & Reconnect Handling**:
+   - Extra messages and subscriptions are keyed by `actorUserId` AND canonical `conversationId`.
+   - Socket ack and incoming `message.created` events validate matching `conversationId` (never using `room.id`).
+   - History and send operations consume `AbortSignal` and generation guards to ignore stale completions.
+4. **Mobile Responsiveness & CSS Tokens**:
+   - Mobile navigation tabs (`data-testid="mobile-tab-chat"`, `data-testid="mobile-tab-members"`, `data-testid="mobile-tab-settings"`) actively control panel visibility via CSS class `.fg-mobile-visible`.
+   - Updated styles to use `--color-danger` token and ensured 44px hit targets and safe-area margins.
+
+#### 3. Final Verification Results
+- `npm run test --workspace @fg/web -- test/rooms.test.tsx` — **9/9 PASS**
+- `npm run test --workspace @fg/web` (Full Web Suite) — **9/9 Test Files (94/94 Tests) PASS**
+- `npm run typecheck` — **PASS (Exit code 0)**
+- `npm run build --workspace @fg/web` — **PASS (Vite build successful)**
+
+#### 4. Files Modified / Created
+- **Modified**:
+  - `apps/web/src/App.tsx`
+  - `apps/web/src/features/rooms/RoomsPage.tsx`
+  - `apps/web/src/features/rooms/rooms.css`
+  - `apps/web/test/rooms.test.tsx`
+- **Created**:
+  - `apps/web/src/features/rooms/api.ts`
+  - `apps/web/src/features/rooms/useRoomChat.ts`
+  - `apps/web/src/features/rooms/CreateRoomModal.tsx`
+  - `apps/web/src/features/rooms/RoomSettingsModal.tsx`
+  - `apps/web/src/features/rooms/ConfirmationModal.tsx`
+  - `apps/web/src/features/rooms/index.ts`
