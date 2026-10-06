@@ -1,0 +1,70 @@
+I have launched the RED check command in the background to record the baseline failures. I will wait for it to complete.
+I have launched the GREEN check for the Lobby test suite in the background. I will wait for it to complete.
+I have launched the full web test suite run in the background. I will wait for it to complete.
+I have launched the typecheck command in the background. I will wait for it to complete.
+I have launched the ESLint check command in the background. I will wait for it to complete.
+I have launched the updated typecheck command in the background. I will wait for it to complete.
+I have launched the green-v2 test run in the background. I will wait for it to complete.
+I have launched the full-web-v2 test run in the background. I will wait for it to complete.
+### Implementation Summary: T13-FIX1 Test Adapter Update
+
+The authorized test adapter fixes for `apps/web/test/lobby.test.tsx` have been implemented. Zero production files were modified, and all 9 original Lobby test assertions, queries, fixture behaviors, and snapshots remain byte-identical.
+
+---
+
+### Exact Lines Changed in `apps/web/test/lobby.test.tsx`
+
+1. **Lines 9–25**: Added `namespace` tracking and `emit() { return socket; }` method to socket mock setup.
+   ```ts
+   const transport = vi.hoisted(() => ({ sockets: [] as Array<{
+           namespace: string;
+           fire: (event: string, data?: unknown) => void;
+           closed: boolean;
+           emit: (event?: string, data?: unknown) => unknown;
+       }>, canonicalId: null as string | null, connected: true }));
+   vi.mock('socket.io-client', () => ({ io: (urlOrOpts?: unknown) => {
+           const namespace = typeof urlOrOpts === 'string' ? urlOrOpts : '/';
+           ...
+           const socket = { namespace, ..., emit() { return socket; }, ... };
+           transport.sockets.push(socket);
+           return socket;
+       } }));
+   ```
+
+2. **Lines 53–55**: Added contract-valid `GET /api/v1/games/:id/online` handler to fetch mock returning an empty page response `reply(page([]))`.
+   ```ts
+   const onlineMatch = url.pathname.match(/^\/api\/v1\/games\/([^/]+)\/online$/);
+   if (onlineMatch)
+       return reply(page([]));
+   ```
+
+3. **Lines 102, 112, 130**: Explicitly selected the chat namespace socket (`namespace === '/'`) when firing realtime chat events in tests 3, 4, and 5:
+   ```ts
+   // Test 3
+   const socket = transport.sockets.filter(s => s.namespace === '/').at(-1)!;
+   // Test 4
+   const old = transport.sockets.filter(s => s.namespace === '/').at(-1)!;
+   // Test 5
+   await act(async () => { transport.sockets.filter(s => s.namespace === '/').at(-1)!.fire('message.created', ...); });
+   ```
+
+---
+
+### Execution Results & Evidence Summary
+
+| Step / Label | Command | Exit Code | Result | Evidence Recorded |
+| --- | --- | --- | --- | --- |
+| **RED Baseline** | `npm run test --workspace @fg/web -- test/lobby.test.tsx` | `1` | 8 FAILED, 1 PASSED | `codex-red.json` / `txt` |
+| **GREEN Lobby Suite** | `npm run test --workspace @fg/web -- test/lobby.test.tsx` | `0` | 9 PASSED, 0 FAILED | `codex-green-v2.json` / `txt` |
+| **Full Web Suite** | `npm run test --workspace @fg/web` | `0` | 68 PASSED (7/7 files) | `codex-full-web-v2.json` / `txt` |
+| **Typecheck** | `tsc -p quality/evidence/T13-FIX1/test-types.json` | `0` | 0 errors | `codex-tsc-v2.json` / `txt` |
+| **ESLint** | `eslint apps/web/test/lobby.test.tsx` | `0` | 0 errors / 0 warnings | `codex-eslint-v2.json` / `txt` |
+
+Implementation report created at [implementation-report.md](file:///E:/FGweb/code/quality/evidence/T13-FIX1/implementation-report.md).
+
+---
+
+### Invariants & Remaining Blockers
+- **Production Source**: `0` production lines altered.
+- **Pre-existing Workspaces**: All dirty T16-FE files preserved untouched.
+- **Task Status**: No commit, PASS, or ledger unlock was performed. Standing by for Codex independent review and closeout.

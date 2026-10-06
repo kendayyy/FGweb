@@ -7,12 +7,15 @@ import { ALLOWED_GAMES, MessageDTO, encodeChatCursor } from '@fg/contracts';
 import { AuthProvider } from '../src/features/auth/index.js';
 import App from '../src/App.js';
 const transport = vi.hoisted(() => ({ sockets: [] as Array<{
+        namespace: string;
         fire: (event: string, data?: unknown) => void;
         closed: boolean;
+        emit: (event?: string, data?: unknown) => unknown;
     }>, canonicalId: null as string | null, connected: true }));
-vi.mock('socket.io-client', () => ({ io: () => {
+vi.mock('socket.io-client', () => ({ io: (urlOrOpts?: unknown) => {
+        const namespace = typeof urlOrOpts === 'string' ? urlOrOpts : '/';
         const handlers = new Map<string, Set<(data?: unknown) => void>>();
-        const socket = { connected: transport.connected, connect() { return socket; }, closed: false, on(event: string, callback: (data?: unknown) => void) { const callbacks = handlers.get(event) ?? new Set(); callbacks.add(callback); handlers.set(event, callbacks); return socket; }, off(event: string, callback: (data?: unknown) => void) { handlers.get(event)?.delete(callback); return socket; }, disconnect() { socket.closed = true; socket.connected = false; return socket; }, timeout() { return socket; }, emitWithAck: vi.fn(async (_event: string, body: {
+        const socket = { namespace, connected: transport.connected, connect() { return socket; }, closed: false, on(event: string, callback: (data?: unknown) => void) { const callbacks = handlers.get(event) ?? new Set(); callbacks.add(callback); handlers.set(event, callbacks); return socket; }, off(event: string, callback: (data?: unknown) => void) { handlers.get(event)?.delete(callback); return socket; }, disconnect() { socket.closed = true; socket.connected = false; return socket; }, timeout() { return socket; }, emit() { return socket; }, emitWithAck: vi.fn(async (_event: string, body: {
                 conversationId: string;
             }) => ({ ok: true, conversationId: transport.canonicalId ?? body.conversationId })), fire(event: string, data?: unknown) {
                 for (const callback of handlers.get(event) ?? [])
@@ -47,6 +50,9 @@ describe('T13 approved Lobby behavior', () => {
                 return auth ? reply({ id: 'actor', displayName: 'Gamer', email: 'gamer@example.com', emailVerified: true, discordId: 'test-discord', customStatus: 'JUST_CHATTING', createdAt: '2026-10-01T00:00:00Z', updatedAt: '2026-10-01T00:00:00Z', onboardingComplete: true, interestedGames: ['Valorant'] }) : reply({}, 401);
             if (url.pathname === '/api/v1/games')
                 return reply(games);
+            const onlineMatch = url.pathname.match(/^\/api\/v1\/games\/([^/]+)\/online$/);
+            if (onlineMatch)
+                return reply(page([]));
             const match = url.pathname.match(/^\/api\/v1\/games\/([^/]+)\/lobby\/messages$/);
             if (match)
                 return history(match[1], url);
@@ -93,7 +99,7 @@ describe('T13 approved Lobby behavior', () => {
         };
         show();
         await screen.findByText('old-anchor');
-        const socket = transport.sockets.at(-1)!;
+        const socket = transport.sockets.filter(s => s.namespace === '/').at(-1)!;
         await act(async () => { socket.fire('message.created', message('new-gap')); socket.fire('message.created', message('new-gap')); socket.fire('connect'); });
         await waitFor(() => expect(document.querySelectorAll('[data-message-id]')).toHaveLength(72));
         expect(fetchedOlder).toBe(true);
@@ -104,7 +110,7 @@ describe('T13 approved Lobby behavior', () => {
     it('ignores old socket events after changing game and disposes its connection', async () => {
         show();
         await screen.findByText('tin-game-0');
-        const old = transport.sockets.at(-1)!;
+        const old = transport.sockets.filter(s => s.namespace === '/').at(-1)!;
         fireEvent.change(screen.getByRole('combobox', { name: 'Chọn game' }), { target: { value: 'game-1' } });
         await screen.findByText('tin-game-1');
         await act(async () => { old.fire('message.created', message('stale event')); });
@@ -123,7 +129,7 @@ describe('T13 approved Lobby behavior', () => {
         expect(sends).toHaveLength(1);
         expect(sends[0].body.clientMessageId).toEqual(expect.any(String));
         expect(document.querySelector('img[src="x"]')).toBeNull();
-        await act(async () => { transport.sockets.at(-1)!.fire('message.created', message('sent', 'lobby-0', '<img src=x onerror=alert(1)>')); });
+        await act(async () => { transport.sockets.filter(s => s.namespace === '/').at(-1)!.fire('message.created', message('sent', 'lobby-0', '<img src=x onerror=alert(1)>')); });
         expect(screen.getAllByText('<img src=x onerror=alert(1)>')).toHaveLength(1);
     });
     it('uses the server canonical conversation ID when it differs from the opaque Lobby ID', async () => {

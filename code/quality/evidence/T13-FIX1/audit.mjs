@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import ts from 'typescript';import {execFileSync} from 'node:child_process';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const dir='quality/evidence/T13-FIX1',ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8')),index=ledger.tasks.findIndex(t=>t.id==='T13-FIX1');
+const original=fs.readFileSync(`${dir}/lobby-before.tsx`,'utf8'),current=fs.readFileSync('apps/web/test/lobby.test.tsx','utf8');
+const observations=text=>{const source=ts.createSourceFile('lobby.tsx',text,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);const assertions=[],names=[];const visit=node=>{if(ts.isCallExpression(node)){if(node.expression.getText(source)==='expect')assertions.push(node.parent.getText(source));if(node.expression.getText(source)==='it')names.push(node.arguments[0].getText(source));}ts.forEachChild(node,visit);};visit(source);return {assertions,names};};
+const before=observations(original),after=observations(current);assert.deepEqual(after,before,'Original assertions or test names changed');assert.equal(after.names.length,9);
+assert.equal(hash('apps/web/src/features/lobby/LobbyPage.tsx'),hash(`${dir}/pending-LobbyPage.tsx`),'Pending T16-FE mount changed');
+const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8'));for(const [key,file]of Object.entries({specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png'}))assert.equal(hash(file),baseline.hashes[key].toLowerCase());
+const frozen=new Map();for(const task of ledger.tasks.slice(0,index))for(const [f,h]of Object.entries(task.outputsHash?.files??{}))frozen.set(f,h);
+for(const [file,digest]of frozen)if(!['apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/lobby.test.tsx'].includes(file))assert.equal(hash(file),digest.toLowerCase(),file);
+execFileSync('git',['diff','--check','--','apps/web/test/lobby.test.tsx'],{stdio:'inherit'});
+console.log(JSON.stringify({originalTests:after.names.length,unchangedAssertions:after.assertions.length,baselinesVerified:5,frozenOutputsVerified:frozen.size-2,pendingMountUnchanged:true,adapterOnlyDiffRequiresCodexReview:true}));
