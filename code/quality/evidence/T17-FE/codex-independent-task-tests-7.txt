@@ -1,0 +1,47 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/social.test.tsx (17 tests | 1 failed) 4142ms
+   ❯ T17-FE Friends, DMs, and Block filtering behavior (17)
+     × handles paginated friends list with load more button 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/social.test.tsx > T17-FE Friends, DMs, and Block filtering behavior > handles paginated friends list with load more button
+ReferenceError: useEffect is not defined
+ ❯ FriendsModal src/features/friends/FriendsModal.tsx:56:3
+     54|
+     55|   const initialFriendsData = friendsQuery.data;
+     56|   useEffect(() => {
+       |   ^
+     57|     if (initialFriendsData) {
+     58|       setAccumulatedFriends((prev) => {
+ ❯ Object.react_stack_bottom_frame ../../node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks ../../node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+ ❯ updateFunctionComponent ../../node_modules/react-dom/cjs/react-dom-client.development.js:10569:19
+ ❯ beginWork ../../node_modules/react-dom/cjs/react-dom-client.development.js:12205:18
+ ❯ runWithFiberInDEV ../../node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ performUnitOfWork ../../node_modules/react-dom/cjs/react-dom-client.development.js:19176:22
+ ❯ workLoopSync ../../node_modules/react-dom/cjs/react-dom-client.development.js:19004:41
+ ❯ renderRootSync ../../node_modules/react-dom/cjs/react-dom-client.development.js:18985:11
+ ❯ performWorkOnRoot ../../node_modules/react-dom/cjs/react-dom-client.development.js:18094:35
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 passed (17)
+   Start at  15:05:57
+   Duration  8.65s (tests 49%, environment 19%, transform 17%, import 8%, setup 6%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/social.test.tsx

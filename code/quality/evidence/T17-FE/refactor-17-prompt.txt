@@ -1,0 +1,7 @@
+[REFACTOR_PROMPT] SAME T17-FE, same Gemini 3.6 Flash (High), ONLY fix useDirectMessages.ts cursor validation. DM page2 independent review now PASS. Refactor16 production fake peer is removed. However incomplete API pages currently break while loop and return successful partial/empty items; requested truthful error is still missing.
+
+Genuine independent RED: quality/evidence/T17-FE/dm-incomplete-pages-review.test.tsx/config (READONLY); both missing cursor and repeated cursor have hasMore=true, hook currently exposes no conversationsError. codex-dm-incomplete-pages-red-1.txt preserved. Backend contracts and other behavior unchanged.
+
+Within conversation queryFn, terminal page is only !page.hasMore. When page.hasMore but !page.nextCursor THROW an Error with useful Vietnamese retriable text. When visitedCursors.has(page.nextCursor) THROW rather than break. Preserve normal paging, dedup, abort signal, actor key, and all message/cache/unread states. Do not touch any other files/logic/globalstyles/ledger/tests/assertions. No extra approval/model change. No PASS/T18.
+
+Do not run tests or background tasks/manage_task. Codex already ran RED, will independently run both unchanged RED probes and all final checks after your two-branch edit. Apply focused edit and report immediately.

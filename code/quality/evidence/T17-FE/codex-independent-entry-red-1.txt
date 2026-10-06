@@ -1,0 +1,51 @@
+Owned RED fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeEnabled() failed
+
+Locator:  getByRole('button', { name: 'Bạn bè', exact: true })
+Expected: enabled
+Received: disabled
+Timeout:  4000ms
+
+Call log:
+  - Expect "toBeEnabled" getByRole('button', { name: 'Bạn bè', exact: true }) with timeout 4000ms
+  - waiting for getByRole('button', { name: 'Bạn bè', exact: true })
+    12 × locator resolved to <button disabled>…</button>
+       - unexpected value "disabled"
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toBeEnabled (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T17-FE\native-entry-red.mjs:7:65 {
+  matcherResult: {
+    message: 'expect(locator).toBeEnabled() failed\n' +
+      '\n' +
+      "Locator:  getByRole('button', { name: 'Bạn bè', exact: true })\n" +
+      'Expected: enabled\n' +
+      'Received: disabled\n' +
+      'Timeout:  4000ms\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeEnabled" getByRole('button', { name: 'Bạn bè', exact: true }) with timeout 4000ms\n` +
+      "  - waiting for getByRole('button', { name: 'Bạn bè', exact: true })\n" +
+      '    12 × locator resolved to <button disabled>…</button>\n' +
+      '       - unexpected value "disabled"\n',
+    pass: false,
+    actual: 'disabled',
+    name: 'toBeEnabled',
+    expected: 'enabled',
+    log: [
+      `  - Expect "toBeEnabled" getByRole('button', { name: 'Bạn bè', exact: true }) with timeout 4000ms`,
+      "  - waiting for getByRole('button', { name: 'Bạn bè', exact: true })",
+      '    12 × locator resolved to <button disabled>…</button>',
+      '       - unexpected value "disabled"'
+    ],
+    timeout: 4000,
+    ariaSnapshot: '- button "Bạn bè" [disabled]'
+  }
+}
+
+Node.js v24.21.0

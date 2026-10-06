@@ -1,0 +1,38 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/social.test.tsx (6 tests | 1 failed) 594ms
+   ❯ T17-FE Friends, DMs, and Block filtering behavior (6)
+     × opens DirectMessagesPanel on ProfilePage when user clicks DM button 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/social.test.tsx > T17-FE Friends, DMs, and Block filtering behavior > opens DirectMessagesPanel on ProfilePage when user clicks DM button
+ReferenceError: Routes is not defined
+ ❯ test/social.test.tsx:494:14
+    492|         <AuthProvider>
+    493|           <MemoryRouter initialEntries={['/users/user-peer/profile']}>
+    494|             <Routes>
+       |              ^
+    495|               <Route path="/users/:id/profile" element={<ProfilePage /…
+    496|             </Routes>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  12:20:15
+   Duration  4.53s (environment 37%, transform 25%, import 17%, tests 14%, setup 8%, worker 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/social.test.tsx

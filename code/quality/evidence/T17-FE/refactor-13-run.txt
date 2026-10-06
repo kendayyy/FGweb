@@ -1,0 +1,24 @@
+I have completed the semantic design token cleanup across all three target components (`FriendsModal.tsx`, `PeerSocialControls.tsx`, `DirectMessagesPanel.tsx`), strictly adhering to your directives.
+
+### Changes Made
+
+1. **`apps/web/src/features/friends/PeerSocialControls.tsx`**:
+   - Replaced all legacy primitive tokens and hex fallbacks (`var(--navy-raised, #202936)`, `var(--border-default, #303D50)`, `var(--text-primary, #EDF2FF)`, `var(--text-secondary, #B6C2D9)`, `var(--text-muted, #94A3BC)`, `var(--blue-action, #3E7FFD)`, `var(--red-destructive, #E5484D)`, `var(--green-status, #39D98A)`) with standard semantic tokens (`var(--bg-raised)`, `var(--border-color)`, `var(--text-main)`, `var(--text-sub)`, `var(--text-quiet)`, `var(--color-action)`, `var(--color-danger)`, `var(--color-online)`).
+   - Set primary action text color to `var(--btn-primary-text)`.
+   - Guaranteed `minHeight: 44px` across all social action buttons (`Nhắn tin`, `Kết bạn`, `Chấp nhận`, `Từ chối`, `Hủy lời mời`, `Hủy kết bạn`, `Bỏ chặn`, `Chặn`).
+
+2. **`apps/web/src/features/friends/FriendsModal.tsx`**:
+   - Replaced legacy tokens with semantic tokens: `var(--bg-panel)`, `var(--bg-sidebar)`, `var(--bg-raised)`, `var(--border-color)`, `var(--text-main)`, `var(--text-sub)`, `var(--text-quiet)`, `var(--color-focus)` (for active tabs & text link contrast), `var(--color-danger)`, `var(--color-online)`.
+   - Updated avatar background to `var(--color-action)` and initial text to `var(--btn-primary-text)`.
+   - Preserved touch target standard (`minHeight: 44px`, `minWidth: 44px`).
+
+3. **`apps/web/src/features/direct-messages/DirectMessagesPanel.tsx`**:
+   - Mapped dialog container and sidebar/chat backgrounds to `var(--bg-panel)`, `var(--bg-sidebar)`, `var(--bg-chat)`, `var(--bg-raised)`.
+   - Updated text & border declarations to `var(--text-main)`, `var(--text-quiet)`, `var(--border-color)`.
+   - Used `var(--color-focus)` for small mobile back link text (`← Danh sách`) for contrast on navy surfaces.
+   - Updated badges and avatars to `var(--color-action)` with text `var(--btn-primary-text)`.
+
+### Preserved Logic & State
+- Retained cursor pagination, visited cursor guards, shared-page request deduplication (`fetchQuery`), actor/direction state guards, thread history reconciliation, and focus trap / opener restoration logic.
+- No changes made to `tasks.json`, `spec-coverage.md`, or predecessor evidence logs.
+- No background processes or polling wait loops initiated in this turn.

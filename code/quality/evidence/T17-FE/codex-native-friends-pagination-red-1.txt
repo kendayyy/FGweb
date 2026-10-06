@@ -1,0 +1,51 @@
+Owned pagination fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/)
+Expected: 60
+Received: 50
+Timeout:  15000ms
+
+Call log:
+  - Expect "toHaveCount" getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/) with timeout 15000ms
+  - waiting for getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/)
+    33 × locator resolved to 50 elements
+       - unexpected value "50"
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toHaveCount (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T17-FE\native-friends-pagination.mjs:8:20 {
+  matcherResult: {
+    actual: 50,
+    expected: 60,
+    message: 'expect(locator).toHaveCount(expected) failed\n' +
+      '\n' +
+      "Locator:  getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/)\n" +
+      'Expected: 60\n' +
+      'Received: 50\n' +
+      'Timeout:  15000ms\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toHaveCount" getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/) with timeout 15000ms\n` +
+      "  - waiting for getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/)\n" +
+      '    33 × locator resolved to 50 elements\n' +
+      '       - unexpected value "50"\n',
+    name: 'toHaveCount',
+    pass: false,
+    log: [
+      `  - Expect "toHaveCount" getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/) with timeout 15000ms`,
+      "  - waiting for getByTestId('friends-modal').getByText(/^Bạn phân trang [0-9]{2}$/)",
+      '    33 × locator resolved to 50 elements',
+      '       - unexpected value "50"'
+    ],
+    timeout: 15000,
+    ariaSnapshot: undefined
+  }
+}
+
+Node.js v24.21.0

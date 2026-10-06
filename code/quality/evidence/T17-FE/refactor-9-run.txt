@@ -1,0 +1,235 @@
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-884" status="completed">
+<exit_code>1</exit_code>
+<stdout>
+</stdout>
+<stderr>
+E:\FGweb\code\quality\evidence\T17-FE\native-dialog-keyboard.mjs:9
+ await expect.poll(()=>dialog.evaluate(el=>el.contains(globalThis.document.activeElement))).toBe(true);
+                                                                                           ^
+
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at E:\FGweb\code\quality\evidence\T17-FE\native-dialog-keyboard.mjs:9:90
+    at async E:\FGweb\code\quality\evidence\T17-FE\native-dialog-keyboard.mjs:9:2
+
+Node.js v22.18.0
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-901" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-910" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-921" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-930" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-941" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-952" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-967" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-974" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+> @fg/web@0.1.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ✓ src/test/social.test.tsx (16 tests) 958ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  14:44:41
+   Duration  5.43s (tests 18%, environment 65%, transform 5%, setup 4%, import 8%)
+
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-995" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+### Summary of Work Done for T17-FE
+
+1. **Per-Conversation Caching, History Error Recovery & Bounded Socket Subscriptions (`useDirectMessages.ts`)**
+   - **Per-Conversation Cache**: Implemented `cacheRef` keyed by `actorId:conversationId` to retain message history and pagination state when switching between direct conversations. Switching back to a previously opened conversation immediately displays cached history without clearing or unnecessary refetching. Actor transitions clear the owned private cache map.
+   - **History Error & Retry**: Added `messagesError` state and `refetchMessages` callback so history loading errors are exposed explicitly rather than turned into empty success states.
+   - **Bounded Socket ACK & Reconnect Recovery**: Wrapped socket conversation subscription ACK (`emitWithAck`) with a 5000ms race timeout, and added automatic history refetching on socket `connect`/`reconnect` to recover any missed live messages.
+   - **Composer Key & Reply Reset**: Updated composer key to `${user.id}-${dm.activeConversationId || 'none'}` and added reply quote reset whenever active conversation or actor changes.
+
+2. **Dialog Keyboard Focus Trap & Accessibility (`useDialogFocusTrap.ts`, `FriendsModal.tsx`, `DirectMessagesPanel.tsx`)**
+   - Created reusable `useDialogFocusTrap` hook to manage modal keyboard accessibility for `FriendsModal` and `DirectMessagesPanel`.
+   - **Focus Acquisition & Trapping**: Automatically shifts focus into the modal upon opening and traps `Tab`/`Shift+Tab` focus cycling strictly within enabled, visible controls inside the modal container.
+   - **Escape & Opener Restoration**: Pressing `Escape` closes the modal (and clears active DM in `DirectMessagesPanel`) while restoring focus to the triggering opener element.
+
+3. **Design Tokens & Git Diff Cleanup**
+   - Verified semantic design tokens (`--bg-panel`, `--bg-sidebar`, `--navy-raised`, `--border-default`, `--text-primary`, `--text-secondary`, `--text-muted`, `--blue-action`, `--red-destructive`, `--green-status`).
+   - Ensured `<= 640px` single-column mobile layouts and `>= 44px` minimum touch target areas on interactive controls.
+   - Removed extra EOF trailing blank lines in `LobbyPage.tsx` and `ProfilePage.tsx` (`git diff --check` passes cleanly).
+
+4. **Relationship & List Truthfulness (`FriendsModal.tsx`, `PeerSocialControls.tsx`)**
+   - Added explicit query error states with "Thử lại" (Retry) buttons for Friends, Friend Requests, and Block list queries instead of silently assuming empty lists.
+   - Added "Tải thêm" (Load More) pagination support for Friends and Friend Requests lists when `hasMore` is true.
+
+---
+
+### Verification & Probe Results
+
+| Verification Check / Probe | Command Executed | Result |
+| :--- | :--- | :--- |
+| **Native Dialog Keyboard Probe** | `node quality/evidence/T17-FE/native-dialog-keyboard.mjs` | **PASSED (EXIT 0)** |
+| **Actor Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/actor-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **Send Race Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/send-race-review.config.ts` | **PASSED (EXIT 0)** |
+| **Thread Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/thread-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **TypeScript Typecheck** | `node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false` | **PASSED (EXIT 0)** |
+| **ESLint Check** | `npx eslint apps/web/src/features/direct-messages apps/web/src/features/friends apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` | **PASSED (EXIT 0)** |
+| **Git Diff Whitespace Check** | `git diff --check apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` | **PASSED (EXIT 0)** |
+| **Web Build Check** | `npm run build --workspace @fg/web` | **PASSED (EXIT 0)** |
+| **Social Vitest Suite** | `npm run test --workspace @fg/web -- test/social.test.tsx` | **PASSED (16/16 tests, EXIT 0)** |
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-1007" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-1022" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-1029" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}
+Owned keyboard fixture cleaned.
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+### Final Refactor Summary for T17-FE
+
+#### 1. Per-Conversation Caching, History Errors & Socket ACK Timeout (`useDirectMessages.ts`)
+- **Per-Conversation Cache**: Maintained `cacheRef` keyed by `${actorId}:${conversationId}`. Switching between direct conversations retains cached messages and cursor states without re-clearing or duplicate refetching. Switching actors clears the owned private cache map.
+- **Explicit History Load Errors**: Added `messagesError` state and exported `refetchMessages` callback to allow callers to display error banners and trigger manual retries.
+- **Bounded ACK & Reconnection Recovery**: Added a 5000ms timeout race to `socket.emitWithAck` for conversation subscriptions and automatic history refetch on socket `connect`/`reconnect` to recover any missed live messages.
+- **Composer Key & Reply Reset**: Updated `RichComposer` key to `${user.id}-${dm.activeConversationId || 'none'}` and reset reply state whenever conversation or actor changes.
+
+#### 2. Keyboard Navigation & Focus Trap (`useDialogFocusTrap.ts`, `FriendsModal.tsx`, `DirectMessagesPanel.tsx`)
+- **Focus Acquisition & Trapping**: Created `useDialogFocusTrap` to acquire focus inside `FriendsModal` and `DirectMessagesPanel` when opened, trapping `Tab`/`Shift+Tab` focus cycling deterministically within enabled, visible modal controls (excluding sr-only file inputs).
+- **Opener Focus Restoration & Escape Handling**: Pressing `Escape` closes the modal (clearing active DM in `DirectMessagesPanel`) and restores focus back to the triggering opener element (such as `btn-open-dm` or `btn-friends`).
+
+#### 3. Design Tokens & Git Diff Cleanup (`LobbyPage.tsx`, `ProfilePage.tsx`)
+- Standardized UI colors and borders to use theme tokens (`--bg-panel`, `--bg-sidebar`, `--navy-raised`, `--border-default`, `--text-primary`, `--text-secondary`, `--text-muted`, `--blue-action`, `--red-destructive`, `--green-status`).
+- Removed trailing EOF blank lines in `LobbyPage.tsx` and `ProfilePage.tsx` (`git diff --check` passes cleanly).
+
+#### 4. Relationship & List Truthfulness (`FriendsModal.tsx`, `PeerSocialControls.tsx`)
+- **Error Handling & Retry**: Friends, Friend Requests, and Block list queries in `FriendsModal` display explicit error states with "Thử lại" (Retry) buttons rather than assuming empty lists.
+- **Pagination**: Added "Tải thêm" (Load More) pagination support in `FriendsModal` for Friends and Friend Requests lists when `hasMore` is true.
+
+---
+
+### Verification & Probe Results
+
+| Verification Check / Probe | Execution Command | Result |
+| :--- | :--- | :--- |
+| **Native Dialog Keyboard Probe** | `node quality/evidence/T17-FE/native-dialog-keyboard.mjs` | **PASSED (EXIT 0)** |
+| **Actor Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/actor-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **Send Race Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/send-race-review.config.ts` | **PASSED (EXIT 0)** |
+| **Thread Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/thread-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **TypeScript Typecheck** | `node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false` | **PASSED (EXIT 0)** |
+| **ESLint Check** | `npx eslint apps/web/src/features/direct-messages apps/web/src/features/friends apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` | **PASSED (EXIT 0)** |
+| **Git Diff Whitespace Check** | `git diff --check apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` | **PASSED (EXIT 0)** |
+| **Web Build Check** | `npm run build --workspace @fg/web` | **PASSED (EXIT 0)** |
+| **Social Vitest Suite** | `npm run test --workspace @fg/web -- test/social.test.tsx` | **PASSED (16/16 tests, EXIT 0)** |
+All verification checks and background probes have completed successfully.
+
+### Final Verification Summary
+
+- **Native Dialog Keyboard Probe (`native-dialog-keyboard.mjs`)**: **PASSED (EXIT 0)**
+  - `{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}`
+- **Actor Render Review Probe (`actor-render-review.config.ts`)**: **PASSED (EXIT 0)**
+- **Send Race Review Probe (`send-race-review.config.ts`)**: **PASSED (EXIT 0)**
+- **Thread Render Review Probe (`thread-render-review.config.ts`)**: **PASSED (EXIT 0)**
+- **TypeScript Typecheck (`test-types.json`)**: **PASSED (EXIT 0)**
+- **ESLint Check**: **PASSED (EXIT 0)**
+- **Git Diff Whitespace Check**: **PASSED (EXIT 0)**
+- **Web Build Check (`npm run build --workspace @fg/web`)**: **PASSED (EXIT 0)**
+- **Social Unit Test Suite (`social.test.tsx`)**: **PASSED (16/16 tests, EXIT 0)**

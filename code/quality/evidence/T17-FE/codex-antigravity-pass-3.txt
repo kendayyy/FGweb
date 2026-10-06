@@ -1,0 +1,114 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/social.test.tsx (6 tests | 1 failed) 1608ms
+   ❯ T17-FE Friends, DMs, and Block filtering behavior (6)
+     × opens DirectMessagesPanel on ProfilePage when user clicks DM button 1024ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/social.test.tsx > T17-FE Friends, DMs, and Block filtering behavior > opens DirectMessagesPanel on ProfilePage when user clicks DM button
+TestingLibraryElementError: Unable to find an element by: [data-testid="peer-social-controls"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"display: flex; justify-content: center; padding: 40px 20px;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m""[39m
+        [33mdata-testid[39m=[32m"profile-error-state"[39m
+        [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 480px; width: 100%; text-align: center;"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 12px;"[39m
+        [36m>[39m
+          [0mKhông tìm thấy hồ sơ người dùng[0m
+        [36m</h3>[39m
+        [36m<p[39m
+          [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; margin-bottom: 20px;"[39m
+        [36m>[39m
+          [0mCấu trúc hồ sơ nhận từ máy chủ không đúng chuẩn[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+          [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0mThử lại[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head>[39m
+    [36m<title>[39m
+      [0mLobby · Liên Minh Huyền Thoại — FG[0m
+    [36m</title>[39m
+  [36m</head>[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"display: flex; justify-content: center; padding: 40px 20px;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m""[39m
+          [33mdata-testid[39m=[32m"profile-error-state"[39m
+          [33mstyle[39m=[32m"background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; max-width: 480px; width: 100%; text-align: center;"[39m
+        [36m>[39m
+          [36m<h3[39m
+            [33mstyle[39m=[32m"font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 12px;"[39m
+          [36m>[39m
+            [0mKhông tìm thấy hồ sơ người dùng[0m
+          [36m</h3>[39m
+          [36m<p[39m
+            [33mstyle[39m=[32m"color: var(--text-sub); font-size: 14px; margin-bottom: 20px;"[39m
+          [36m>[39m
+            [0mCấu trúc hồ sơ nhận từ máy chủ không đúng chuẩn[0m
+          [36m</p>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+            [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+          [36m>[39m
+            [36m<span>[39m
+              [0mThử lại[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ Proxy.waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/social.test.tsx:501:11
+    499|     );
+    500|
+    501|     await waitFor(() => {
+       |           ^
+    502|       expect(screen.getByTestId('peer-social-controls')).toBeInTheDocu…
+    503|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  12:21:10
+   Duration  6.01s (environment 33%, tests 30%, transform 19%, import 13%, setup 6%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/social.test.tsx

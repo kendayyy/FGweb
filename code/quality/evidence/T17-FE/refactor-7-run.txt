@@ -1,0 +1,47 @@
+### Refactor Summary — T17-FE Actor Transition Guards & Reviewer Probe Verification
+
+---
+
+### 1. Key Fixes Implemented
+
+#### A. Actor Transition State Reset (`useDirectMessages.ts`)
+- **Issue (`actor-review.test.tsx`)**: When `actorId` transitioned directly from `actorA` to `actorB` without passing through `null`, `useEffect` only cleared state `if (!actorId)`. As a result, `activeConversationId` (`review-conversation-a`), `messages`, `unreadCounts`, and pending errors leaked to the newly logged-in `actorB`.
+- **Fix**: Updated `useEffect` on `[actorId]` in [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts#L66-L81) to reset all hook state (`activeConvIdRef`, `activeConversationIdState`, `messages`, `unreadCounts`, `sendError`, `isSending`, `isLoadingMessages`, `nextCursor`, `hasMore`, `seenMessageIdsRef`, `subscribedConvsRef`) on ANY `actorId` change.
+
+#### B. Synchronous Conversation Selection Reference
+- Synchronized `activeConvIdRef.current = id;` directly inside `setActiveConversationId` callback so async handlers and event listeners immediately observe the newly selected conversation before deferred `useEffect` renders.
+
+#### C. Async Epoch & Stale Response Guards in `startOrOpenDM`
+- Added epoch check `if (epochRef.current !== currentEpoch)` after `conversationsQuery.refetch()` in `startOrOpenDM` so delayed refetch completions do not select stale conversations across actor transitions.
+
+---
+
+### 2. Empirical Verification
+
+#### A. Reviewer Probe (`actor-review.config.ts`)
+```powershell
+node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/actor-review.config.ts
+# Exit Code: 0 (1/1 passed)
+```
+- Recorded Evidence: [codex-actor-review-probe-pass-1.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-actor-review-probe-pass-1.txt)
+
+#### B. Type Check (`test-types.json`)
+```powershell
+node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false
+# Exit Code: 0
+```
+- Recorded Evidence: [codex-test-types-pass-3.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-test-types-pass-3.txt)
+
+#### C. Vitest Unit Suite (`social.test.tsx`)
+```powershell
+node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web -- test/social.test.tsx
+# Exit Code: 0 (13/13 passed)
+```
+- Recorded Evidence: [codex-actor-transition-guard-pass-1.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-actor-transition-guard-pass-1.txt)
+
+---
+
+### 3. Open Technical Findings & Observations
+
+1. **Intermittent History Edge Case (`history-order-2`)**: Initial history fetch merges live messages using `reconcileMessages(targetConvId, prev, res.items)`. If a background network delay occurs during rapid conversation switching, DOM rendering order should be monitored under high latency.
+2. **Relationship Loading State**: Friend request & blocks list loading states rely on React Query `isLoading`. Retrying network errors during initial profile load requires user interaction or manual refetch button triggering.

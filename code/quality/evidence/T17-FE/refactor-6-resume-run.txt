@@ -1,0 +1,54 @@
+### Refactor Summary — T17-FE Active-Thread Body Preservation & Chronological History Ordering
+
+---
+
+### 1. Key Fixes Implemented
+
+#### A. Active-Thread Body Loss Fix (`sync.ts` & `useDirectMessages.ts`)
+- **Issue (`native-unread-7`)**: When a metadata bridge event (BroadcastChannel / LocalStorage) arrived before the socket message DTO, `seenUnreadMessageIds` recorded the message ID. When the socket event arrived 1ms later carrying full `MessageDTO`, `ingestMessage` returned `isDuplicate: true`, causing `useDirectMessages` to drop the message DTO from rendering in the open active conversation thread.
+- **Fix**:
+  - Updated `UnreadSyncManager.ingestMessage` in [sync.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/sync.ts#L112-L185) to separate message content return from unread increment signaling.
+  - Updated `MESSAGE_CREATED` socket handler in [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts#L196-L208) so that any valid message targeting the active conversation thread (`res.message.conversationId === activeConvIdRef.current`) is merged into `messages` via `reconcileMessages`, regardless of whether a metadata bridge recorded the ID first.
+  - Active conversation view triggers `unreadSync.notifyRead(activeConversationId)`, clearing unread counts and broadcasting `READ` to other tabs.
+
+#### B. Chronological History Sorting (`reconcileMessages`)
+- **Issue (`native-history-order-1`)**: The history endpoint `/api/v1/conversations/:id/messages` returns items ordered `desc(createdAt, id)` (newest first). Passing `res.items` directly rendered chat bubbles backwards.
+- **Fix**: Reused `reconcileMessages` from [reconcile.ts](file:///E:/FGweb/code/apps/web/src/features/lobby/reconcile.ts) across initial message fetches, history pagination (`loadOlderMessages`), sent messages (`sendMessage`), and live socket messages. Handles fractional-second ISO timestamp comparison (`timestamp(a.createdAt).localeCompare(...) || a.id.localeCompare(b.id)`), ensuring messages are rendered chronologically from oldest (top) to newest (bottom).
+
+#### C. Zod Bridge Event Validation (`sync.ts`)
+- Implemented `UnreadSyncEventSchema` using `z.discriminatedUnion('type', ...)` in [sync.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/sync.ts#L14-L30) to validate `actorId`, `conversationId`, `messageId`, finite numeric `timestamp`, and `tabId`.
+- Rejects malformed storage/BC payloads, wrong actor IDs, or missing fields without throwing unhandled exceptions.
+
+---
+
+### 2. Verification & Evidence
+
+#### A. Type Check (`test-types.json`)
+```powershell
+node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false
+# Exit Code: 0
+```
+- Recorded Evidence: [codex-test-types-pass-2.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-test-types-pass-2.txt)
+
+#### B. Vitest Unit Suite (`social.test.tsx`)
+```powershell
+node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web -- test/social.test.tsx
+# Exit Code: 0 (13/13 tests passed)
+```
+- Recorded Evidence: [codex-unread-dedup-active-history-pass-1.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-unread-dedup-active-history-pass-1.txt)
+
+```text
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  14:19:09
+   Duration  9.39s
+```
+
+---
+
+### 3. Open Technical Findings & Observations
+
+1. **Pagination Boundary**: Older message pagination appends historical pages via `reconcileMessages(targetConvId, prev, res.items)`. If multiple pages are loaded during active incoming socket messages, scroll-position adjustment should be checked under network latency.
+2. **Actor Transition Memory Cleanup**: `setActor` clears in-memory state (`seenUnreadMessageIds`, `readWatermarks`), but stale localStorage items for previous actor keys are retained until browser storage garbage collection or explicit logout cleanup.

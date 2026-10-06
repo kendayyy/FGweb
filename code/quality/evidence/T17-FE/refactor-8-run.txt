@@ -1,0 +1,44 @@
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-822" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+> @fg/web@1.0.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ✓ src/test/social.test.tsx (13 tests) 797ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  14:32:51
+   Duration  4.70s (environment 75%, import 7%, transform 6%, setup 5%, tests 8%)
+
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+### Summary of Work Done for T17-FE
+
+1. **Synchronous Render Guard for Actor & Conversation Transitions (`useDirectMessages.ts`)**
+   - Added a synchronous state check (`isActorMismatch`) during render calculation. When `actorId` changes (e.g., from Actor A to Actor B or logout), state resets are scheduled immediately during render, and effective returned values (`activeConversationId`, `messages`, `unreadCounts`, `totalUnread`, `isSending`, `sendError`, `isLoadingMessages`, `hasOlderMessages`) return clean defaults (`null`, `[]`, `{}`, `0`, `false`, `null`, `false`, `false`) on that exact frame.
+   - Added conversation-scope tracking (`messagesConvId`) to ensure that switching between direct conversations for the same actor never exposes previous conversation message bodies for any render frame before fetch resolution.
+
+2. **Stale Asynchronous Send Response & Epoch Handling (`useDirectMessages.ts`)**
+   - Removed state mutations (`setIsSending(false)`, `setSendError(error)`, `setMessages(...)`) in the stale branches of `sendMessage` when `epochRef.current !== currentEpoch` or `activeConvIdRef.current !== targetConvId`. Stale requests now resolve or throw without corrupting active thread state or sending state on the newly selected conversation or actor.
+
+3. **Behavioral Test Coverage (`apps/web/test/social.test.tsx`)**
+   - Added a unit test (`safely handles deferred send response when active conversation changes while send is in flight`) to verify that in-flight messages are suppressed from rendering if the active conversation changes before `sendDirectMessage` completes.
+
+---
+
+### Verification & Probe Results
+
+| Verification Probe / Check | Command Executed | Result |
+| :--- | :--- | :--- |
+| **Actor Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/actor-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **Send Race Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/send-race-review.config.ts` | **PASSED (EXIT 0)** |
+| **Thread Render Review Probe** | `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/thread-render-review.config.ts` | **PASSED (EXIT 0)** |
+| **TypeScript Typecheck** | `node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false` | **PASSED (EXIT 0)** |
+| **Social Vitest Suite** | `npm run test --workspace @fg/web -- test/social.test.tsx` | **PASSED (14/14 tests, EXIT 0)** |

@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/T17-FE';
+const hash = f => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const labels = ['independent-task-final-1','independent-web-regression-final-1','independent-review-suite-final-1','independent-test-types-final-1','independent-changed-lint-final-2','independent-web-build-final-2','native-social-current-final-1','native-unread-final-1','native-history-order-final-1','native-friends-final-2','native-dialog-keyboard-final-1','native-friends-pagination-final-1','native-friend-state-page2-final-1','native-request-pagination-final-1','native-friend-removal-page2-final-1','native-dm-page2-final-1','independent-scope-audit-final-1','independent-diff-final-1'];
+const ledger = JSON.parse(fs.readFileSync('quality/tasks.json', 'utf8'));
+const task = ledger.tasks.find(t => t.id === 'T17-FE');
+assert.equal(task.status, 'IN_PROGRESS');
+assert.equal(ledger.tasks.find(t => t.id === 'T18').status, 'NOT_STARTED');
+const records = labels.map(l => JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`, 'utf8')));
+for (const r of records) { assert.equal(r.exitCode, 0, r.command); assert.equal(hash(r.evidencePath), r.evidenceSha256); assert(Date.parse(r.startedAt) >= Date.parse(task.startedAt)); }
+for (const [label, count] of [['independent-task-final-1',17],['independent-web-regression-final-1',85],['independent-review-suite-final-1',10]]) assert(fs.readFileSync(`${dir}/codex-${label}.txt`, 'utf8').includes(`${count} passed`));
+assert.equal(fs.readFileSync(`${dir}/refactor-18-exit.txt`, 'utf8').trim(), '0');
+assert(!fs.readFileSync(`${dir}/refactor-18-run.txt`, 'utf8').includes('print timeout'));
+fs.writeFileSync(`${dir}/final-verification.json`, JSON.stringify(records, null, 2) + '\n');
+const files = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.isDirectory() ? files(path.join(d,e.name)) : [path.join(d,e.name).replaceAll('\\','/')]);
+const outputs = [...files('apps/web/src/features/friends'),...files('apps/web/src/features/direct-messages'),...files('apps/web/src/features/chat'),'apps/web/src/features/lobby/LobbyPage.tsx','apps/web/src/features/profiles/ProfilePage.tsx','apps/web/test/social.test.tsx',...files(dir)];
+Object.assign(task, { status: 'PASS', completedAt: new Date().toISOString(), commands: records, evidencePaths: [...new Set([...task.evidencePaths,`${dir}/review.md`,`${dir}/final-verification.json`,...records.flatMap(r => [r.evidencePath,r.evidencePath.replace(/\.txt$/,'.json')])])], outputsHash: { specSha256: hash('../.doc/01-product-spec.md'), files: Object.fromEntries(outputs.map(f => [f,hash(f)])) }, blockers: [] });
+fs.writeFileSync('quality/tasks.json', JSON.stringify(ledger,null,2) + '\n');
+fs.appendFileSync('quality/spec-coverage.md','| Friends/requests/block UI, actual profile/Lobby DM without friendship, actor/thread isolation/cache, draft retry, unread tabs, true cursor pages/error retry, keyboard/mobile | T17-FE |17 task +85 frontend +10 independent review tests;10 compiledAPI/PG/built-web native probe groups;types/lint/build/frozen/scope/secret/cleanup/diff | PASS |\n');
+console.log('T17-FE PASS after Codex review; T18 remains NOT_STARTED until its gate.');

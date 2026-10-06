@@ -1,0 +1,77 @@
+<task_update taskId="5711d9a4-e4bb-400e-ba68-8a44fc1c2d67/task-1056" status="completed">
+<exit_code>0</exit_code>
+<stdout>
+> @fg/web@0.1.0 test
+> vitest run test/social.test.tsx
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ✓ src/test/social.test.tsx (17 tests) 1032ms
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  14:52:19
+   Duration  5.58s (tests 18%, environment 65%, transform 6%, setup 4%, import 7%)
+
+</stdout>
+<stderr>
+</stderr>
+</task_update>
+...
+Wait for task notification to arrive.
+Let's inspect what else might be causing test failures in `social.test.tsx`.
+Line 1102: `fireEvent.click(screen.getByText('Tải thêm'))`. In `FriendsModal.tsx`, why did `getByText('Tải thêm')` fail?
+Let's check `FriendsModal.tsx`!
+Let's view `apps/web/src/features/friends/FriendsModal.tsx`.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+Wait for task notification to arrive.
+### Summary of Refactoring & Verification (T17-FE)
+
+#### Core Fixes & Enhancements Implemented
+1. **Dialog Focus Trap & Focus Restoration**:
+   - Fixed `aria-disabled` handling on `btn-open-dm` in [PeerSocialControls.tsx](file:///E:/FGweb/code/apps/web/src/features/friends/PeerSocialControls.tsx#L278-L283) to prevent the browser from stripping focus from the trigger element before focus trap initialization.
+   - Verified in [useDialogFocusTrap.ts](file:///E:/FGweb/code/apps/web/src/features/friends/useDialogFocusTrap.ts#L13-L25) that focus is captured on the `isOpen` `false -> true` transition and cleanly restored to the trigger element when pressing `Escape`.
+
+2. **Synchronous Render Guard & State Lockstep**:
+   - In [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts#L70-L84), synchronized `activeConvIdRef.current = null` inside the `isActorMismatch` synchronous render guard so that actor transitions keep state and ref tracking in lockstep.
+   - Removed destructive state resets from `useEffect([actorId])` that were wiping out `initialConversationId` updates set on mount.
+
+3. **Resilient Active Peer Fallback**:
+   - In [DirectMessagesPanel.tsx](file:///E:/FGweb/code/apps/web/src/features/direct-messages/DirectMessagesPanel.tsx#L75-L87), added a fallback for `activePeer` when `activeConversationId` is non-null, ensuring the main conversation panel, messages list, error alerts, and composer render immediately without falling back to the empty lobby view.
+
+4. **Friends List Pagination & Error Handling**:
+   - In [FriendsModal.tsx](file:///E:/FGweb/code/apps/web/src/features/friends/FriendsModal.tsx#L48-L80), implemented cursor-based pagination with `handleLoadMoreFriends` for the "Tải thêm" button and query error retry mechanisms.
+
+5. **Unit Test & Type Alignment**:
+   - Updated label and role queries in [social.test.tsx](file:///E:/FGweb/code/apps/web/test/social.test.tsx) to target `screen.getByRole('textbox', { name: 'Tin nhắn riêng' })` and updated mock API fixtures with full `MessageDTO` schema fields (`attachments`, `mentions`, `mentionedUserIds`).
+
+---
+
+#### Verification Results
+
+- **Unit Tests (`social.test.tsx`)**:
+  - `npm run test --workspace @fg/web -- test/social.test.tsx` → **17 / 17 PASS**
+- **Production Web Build**:
+  - `npm run build --workspace @fg/web` → **0 errors / Clean Build**
+- **Native Keyboard Dialog Focus Probe**:
+  - `node quality/evidence/T17-FE/native-dialog-keyboard.mjs` → **PASS**
+  - *Output*: `{"realBuiltWeb":true,"realCompiledApi":true,"checks":["Friends modal acquires and traps keyboard focus; Escape restores opener","DM modal acquires and traps keyboard focus; Escape restores opener"]}`
+- **TypeScript Typecheck**:
+  - `node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false` → **PASS (0 errors)**
+- **Actor Render Review Probe**:
+  - `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/actor-render-review.config.ts` → **PASS (1/1 PASS)**
+- **Send Race Review Probe**:
+  - `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/send-race-review.config.ts` → **PASS (1/1 PASS)**
+- **Thread Render Review Probe**:
+  - `node node_modules/vitest/vitest.mjs run --config quality/evidence/T17-FE/thread-render-review.config.ts` → **PASS (1/1 PASS)**
+- **ESLint**:
+  - `npx eslint apps/web/src/features/direct-messages apps/web/src/features/friends apps/web/src/features/chat/RichComposer.tsx apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` → **PASS (0 warnings, 0 errors)**
+- **Git Diff Check**:
+  - `git diff --check apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/profiles/ProfilePage.tsx` → **PASS**

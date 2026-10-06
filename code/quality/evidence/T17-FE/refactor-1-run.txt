@@ -1,0 +1,67 @@
+### T17-FE Implementation Summary
+
+The frontend implementation for **T17-FE (Friends, Direct Messages, and Local Block Filtering from Lobby/Profile)** has been completed in accordance with the specified scope, shared contracts, and quality guidelines.
+
+---
+
+### Key Changes Implemented
+
+1. **Friends & Peer Social Controls (`apps/web/src/features/friends/`)**:
+   - `api.ts`: API helpers for `GET /api/v1/friends`, `GET /api/v1/friends/requests`, `POST /api/v1/friends/requests`, `PATCH /api/v1/friends/requests/:id/respond`, `DELETE /api/v1/friends/requests/:id/cancel`, `DELETE /api/v1/friends/:userId`, `GET /api/v1/blocks`, `POST /api/v1/blocks`, `DELETE /api/v1/blocks/:userId`. Validated with shared `@fg/contracts` Zod schemas (`ProfileDTO`, `PendingFriendRequestDTO`, `BlockDTO`) and `ApiErrorResponseSchema`.
+   - `PeerSocialControls.tsx`: Reusable peer action buttons (`Kết bạn`, `Chấp nhận`, `Từ chối`, `Hủy lời mời`, `Hủy kết bạn`, `Nhắn tin`, `Chặn`, `Bỏ chặn`) displaying exact relationship state with loading/error handling. Self actions are hidden.
+   - `FriendsModal.tsx`: Accessible dialog modal (`role="dialog"`, `aria-modal="true"`, `Escape` listener) for friends list, pending requests, and blocked users management.
+
+2. **Direct Messages & Cross-Tab Sync (`apps/web/src/features/direct-messages/`)**:
+   - `api.ts`: API helpers for `GET /api/v1/direct-conversations`, `POST /api/v1/direct-conversations`, `GET /api/v1/conversations/:id/messages`, `POST /api/v1/conversations/:id/messages`. Validated using `CreateMessageRequestSchema` and `MessageSchema`.
+   - `sync.ts`: Account-scoped same-browser cross-tab unread synchronization using `BroadcastChannel` (fallback to `storage` event) with message-ID deduplication and read watermarking. No sensitive message bodies or tokens are stored or broadcast. Cleans up via `registerAuthCleanup`.
+   - `useDirectMessages.ts`: Hook for active DM conversation, messaging, Socket.IO subscription (`conversation.subscribe` / `conversation.unsubscribe`, `message.created`), message-ID deduplication, and error propagation (throwing/rejecting on send failure so `RichComposer` retains drafts/attachments/reply state for retry).
+   - `DirectMessagesPanel.tsx`: Full DM thread panel mounting `RichMessage` and `RichComposer`.
+
+3. **Lobby & Profile Integration**:
+   - [LobbyPage.tsx](file:///E:/FGweb/code/apps/web/src/features/lobby/LobbyPage.tsx): Mounted local block filtering using `fetchBlocks` (filtering sender IDs from history & realtime messages for current actor; skipped for guests). Added trigger actions for Friends modal, Direct Messages panel, and peer profile popover.
+   - [ProfilePage.tsx](file:///E:/FGweb/code/apps/web/src/features/profiles/ProfilePage.tsx): Mounted `PeerSocialControls` and `DirectMessagesPanel` when viewing peer profiles (`!isOwner`).
+
+4. **Behavioral Testing (`apps/web/test/social.test.tsx`)**:
+   - Added tests covering friend request workflows, recipient accept, sender cancel, removing friends, DM without friendship, local block message filtering in Lobby, cross-tab unread synchronization, guest safety, and ProfilePage DM panel opening.
+
+---
+
+### Empirical Verification & Execution Evidence
+
+All commands were executed sequentially via `record-check.mjs` and logged in `quality/evidence/T17-FE/`:
+
+- **Genuine RED Test Execution**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-red node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web -- test/social.test.tsx`
+  - Exit Code: `1`
+  - Evidence: [codex-antigravity-red.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-red.txt) (Demonstrated failure before block filtering integration).
+
+- **Task PASS Test Execution**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-pass-5 node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web -- test/social.test.tsx`
+  - Exit Code: `0` (6/6 tests passed)
+  - Evidence: [codex-antigravity-pass-5.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-pass-5.txt)
+
+- **Web Package TypeScript Check**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-final-web-tsc node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit`
+  - Exit Code: `0`
+  - Evidence: [codex-antigravity-final-web-tsc.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-final-web-tsc.txt)
+
+- **Workspace Root Typecheck**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-final-root-tsc node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run typecheck`
+  - Exit Code: `0`
+  - Evidence: [codex-antigravity-final-root-tsc.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-final-root-tsc.txt)
+
+- **Web Production Build**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-final-build node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run build --workspace @fg/web`
+  - Exit Code: `0`
+  - Evidence: [codex-antigravity-final-build.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-final-build.txt)
+
+- **Full Frontend Test Suite Regression**:
+  - Command: `node quality/evidence/T17-FE/record-check.mjs antigravity-final-regression node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web`
+  - Exit Code: `0` (8 test files, 74/74 tests passed)
+  - Evidence: [codex-antigravity-final-regression.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-antigravity-final-regression.txt)
+
+---
+
+### Next Steps
+
+The task implementation and automated verification are ready for Codex reviewer inspection and closeout. Real browser / PG / Live API probes can be conducted independently by Codex.

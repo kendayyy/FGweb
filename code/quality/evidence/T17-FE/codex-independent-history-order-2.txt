@@ -1,0 +1,51 @@
+Owned history fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByTestId('dm-message-list').locator('.fg-message-bubble')
+Expected: 2
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" getByTestId('dm-message-list').locator('.fg-message-bubble') with timeout 5000ms
+  - waiting for getByTestId('dm-message-list').locator('.fg-message-bubble')
+    7 × locator resolved to 0 elements
+      - unexpected value "0"
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toHaveCount (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T17-FE\native-history-order.mjs:12:101 {
+  matcherResult: {
+    actual: 0,
+    expected: 2,
+    message: 'expect(locator).toHaveCount(expected) failed\n' +
+      '\n' +
+      "Locator:  getByTestId('dm-message-list').locator('.fg-message-bubble')\n" +
+      'Expected: 2\n' +
+      'Received: 0\n' +
+      'Timeout:  5000ms\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toHaveCount" getByTestId('dm-message-list').locator('.fg-message-bubble') with timeout 5000ms\n` +
+      "  - waiting for getByTestId('dm-message-list').locator('.fg-message-bubble')\n" +
+      '    7 × locator resolved to 0 elements\n' +
+      '      - unexpected value "0"\n',
+    name: 'toHaveCount',
+    pass: false,
+    log: [
+      `  - Expect "toHaveCount" getByTestId('dm-message-list').locator('.fg-message-bubble') with timeout 5000ms`,
+      "  - waiting for getByTestId('dm-message-list').locator('.fg-message-bubble')",
+      '    7 × locator resolved to 0 elements',
+      '      - unexpected value "0"'
+    ],
+    timeout: 5000,
+    ariaSnapshot: undefined
+  }
+}
+
+Node.js v24.21.0

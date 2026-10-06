@@ -1,0 +1,19 @@
+### Refactor Report
+
+#### Modified Files
+1. [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts)
+   - **Multi-page Direct Conversations Fetching**: Updated `conversationsQuery` queryFn to walk all API cursor pages (`cursor`/`nextCursor`) until `hasMore: false`. Deduplicates conversation IDs and guards against missing/repeating cursors so that `activePeer` can be resolved for any conversation outside page 1.
+   - **Exposed Error & Loading States**: Added `conversationsError`, `isLoadingOlderMessages`, and `olderMessagesError` to `DMState`.
+   - **Older Messages Error Handling**: Updated `loadOlderMessages` to set `isLoadingOlderMessages` during fetch, capture `olderMessagesError` on failure, retain current messages/cursors, and prevent duplicate concurrent requests.
+
+2. [DirectMessagesPanel.tsx](file:///E:/FGweb/code/apps/web/src/features/direct-messages/DirectMessagesPanel.tsx)
+   - **Removed Fake Peer Fallback**: Completely removed the hardcoded `peer-fallback` / `Peer User` fabricated profile fallback object.
+   - **Conversation Query Error & Retry**: Added error display and "Thử lại" retry buttons (`dm.refetchConversations()`) for conversation query failures in both the sidebar list and main thread container.
+   - **Older Messages Error & Retry**: Added loading state indicator and error/retry button (`dm.loadOlderMessages()`) for failed older message fetches.
+
+3. [LobbyPage.tsx](file:///E:/FGweb/code/apps/web/src/features/lobby/LobbyPage.tsx)
+   - **Persistent DM Panel Mount**: Changed conditional `{isDMOpen && <DirectMessagesPanel ... />}` mount to persistent `<DirectMessagesPanel isOpen={isDMOpen} ... />` matching `ProfilePage.tsx`, allowing `useDialogFocusTrap` to track external opener focus/click events continuously.
+
+#### Remaining Items / Notes
+- No build, test, or background tasks were executed in this round per instructions.
+- All per-account/per-thread cache guards, synchronous render actor guards, cross-tab unread sync, chronological history sorting, and failed-send draft retention were preserved.

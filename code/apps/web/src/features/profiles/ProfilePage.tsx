@@ -8,19 +8,26 @@ import { useAuth } from '../auth/index.js';
 import { Spinner } from '../../components/ui/Spinner.js';
 import { Button } from '../../components/ui/Button.js';
 import { Card } from '../../components/ui/Card.js';
+import { PeerSocialControls } from '../friends/index.ts';
+import { DirectMessagesPanel, useDirectMessages } from '../direct-messages/index.ts';
 
 export const ProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const dm = useDirectMessages();
   const [editingGameId, setEditingGameId] = useState<string | null>(null);
   const [editingGameTitle, setEditingGameTitle] = useState<string | undefined>(undefined);
   const [isEditingBasic, setIsEditingBasic] = useState<boolean>(false);
+  const [isDMOpen, setIsDMOpen] = useState(false);
+  const [dmConvId, setDmConvId] = useState<string | null>(null);
 
   // Reset editor modal when account changes or viewed ID changes
   useEffect(() => {
     setEditingGameId(null);
     setEditingGameTitle(undefined);
     setIsEditingBasic(false);
+    setIsDMOpen(false);
+    setDmConvId(null);
   }, [id, user?.id]);
 
   const {
@@ -88,6 +95,11 @@ export const ProfilePage: React.FC = () => {
       })
     : undefined;
 
+  const handleOpenDM = (convId: string) => {
+    setDmConvId(convId);
+    setIsDMOpen(true);
+  };
+
   return (
     <div style={{ padding: '32px 24px', maxWidth: '1000px', margin: '0 auto' }}>
       <ProfileHeader
@@ -97,6 +109,24 @@ export const ProfilePage: React.FC = () => {
           setIsEditingBasic(true);
           setEditingGameId(null);
         }}
+      />
+
+      {/* Peer Social Controls when viewing another user's profile */}
+      {!isOwner && user && (
+        <div style={{ marginTop: '16px', marginBottom: '24px' }}>
+          <PeerSocialControls targetUser={profile} onDMOpen={handleOpenDM} />
+        </div>
+      )}
+
+      {/* Direct Messages Panel Mount */}
+      <DirectMessagesPanel
+        isOpen={isDMOpen}
+        onClose={() => {
+          setIsDMOpen(false);
+          setDmConvId(null);
+        }}
+        initialConversationId={dmConvId}
+        dm={dm}
       />
 
       {isEditingBasic && isOwner && (

@@ -1,0 +1,39 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T17-FE/dm-incomplete-pages-review.test.tsx (2 tests | 2 failed) 2058ms
+   × An incomplete DM list with repeat cursor is a retriable error, not empty success 1050ms
+   × An incomplete DM list with missing cursor is a retriable error, not empty success 1007ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T17-FE/dm-incomplete-pages-review.test.tsx > An incomplete DM list with repeat cursor is a retriable error, not empty success
+ FAIL  quality/evidence/T17-FE/dm-incomplete-pages-review.test.tsx > An incomplete DM list with missing cursor is a retriable error, not empty success
+AssertionError: expected null to be an instance of Error
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ quality/evidence/T17-FE/dm-incomplete-pages-review.test.tsx:21:78
+     19|     const wrapper = ({ children }: { children: React.ReactNode }) => <…
+     20|     const hook = renderHook(() => useDirectMessages(), { wrapper });
+     21|     try { await waitFor(() => expect(hook.result.current.conversations…
+       |                                                                              ^
+     22|     finally { hook.unmount(); client.clear(); }
+     23|   });
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  16:22:20
+   Duration  4.75s (tests 47%, environment 34%, setup 6%, transform 6%, import 6%)
+

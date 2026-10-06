@@ -1,0 +1,3 @@
+# Current DM composer selector
+
+native-social.mjs is preserved unchanged. native-social-current.mjs is a separate copy with exactly one selector update: the old Lobby textbox accessible name is replaced with role textbox and exact name Tin nhắn riêng. Refactor10 correctly gave the DM composer its own label while preserving Lobby defaults. The dialog also has the DM aria-label, so using textbox role avoids matching the dialog container. All API status, SQL persistence, failed draft/stable client ID, historical message, viewport bounds and five hit-point assertions are preserved. This is a target identity correction; no assertion or expected behavior is reduced.

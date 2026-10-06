@@ -1,0 +1,57 @@
+file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:56
+ }catch(e){try{await cleanup();}catch(cleanupError){throw new AggregateError([e,cleanupError],'Native setup and cleanup failed',{cause:e});}throw e;}
+                                                          ^
+
+AggregateError: Native setup and cleanup failed
+    at createNativeHarness (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:56:59)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-unread.mjs:4:9 {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:55432
+      at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async createNativeHarness (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:35:3)
+      at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-unread.mjs:4:9 {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 55432
+  },
+  [errors]: [
+    Error: connect ECONNREFUSED 127.0.0.1:55432
+        at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async createNativeHarness (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:35:3)
+        at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-unread.mjs:4:9 {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 55432
+    },
+    AggregateError: Owned native cleanup failed
+        at cleanup (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:29:26)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async createNativeHarness (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:56:16)
+        at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-unread.mjs:4:9 {
+      [errors]: [
+        Error: connect ECONNREFUSED 127.0.0.1:55432
+            at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+            at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+            at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:28:164
+            at async attempt (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:23:49)
+            at async cleanup (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:28:12)
+            at async createNativeHarness (file:///E:/FGweb/code/quality/evidence/T17-FE/native-harness.mjs:56:16)
+            at async file:///E:/FGweb/code/quality/evidence/T17-FE/native-unread.mjs:4:9 {
+          errno: -4078,
+          code: 'ECONNREFUSED',
+          syscall: 'connect',
+          address: '127.0.0.1',
+          port: 55432
+        }
+      ]
+    }
+  ]
+}
+
+Node.js v24.21.0

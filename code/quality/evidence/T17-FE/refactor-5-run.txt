@@ -1,0 +1,56 @@
+### Task Execution Summary — T17-FE Unread Deduplication & Message Ingestion Refactoring
+
+---
+
+### 1. Root Cause & Architecture Fix
+
+#### Centralized Message Ingestion (`apps/web/src/features/direct-messages/sync.ts`)
+- **Root Cause**: `UnreadSyncManager` and `useDirectMessages` previously maintained separate message ID deduplication sets (`seenUnreadMessageIds` vs `seenMessageIdsRef`). When a peer message arrived via BroadcastChannel on Tab 2 before the Socket event arrived on Tab 2, both transports incremented unread state independently, resulting in 1 message producing `unread: 2`.
+- **Fix Implementation**:
+  - Implemented `UnreadSyncManager.ingestMessage(payload, activeConversationId)` in [sync.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/sync.ts#L101-L175).
+  - Validates payload structure against `MessageSchema` and verifies `new Date(msg.createdAt).getTime()` is finite.
+  - Maintains single shared `seenUnreadMessageIds` Set across socket, BroadcastChannel, and LocalStorage.
+  - Prevents resurrection of unread counts if a delayed/old message has `createdAt <= readWatermark`.
+  - Automatically updates read watermark and broadcasts `READ` to other tabs when an incoming message targets the active conversation.
+
+#### Socket Handler & ACK Handling (`apps/web/src/features/direct-messages/useDirectMessages.ts`)
+- Updated `MESSAGE_CREATED` socket listener in [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts#L196-L215) to delegate message ingestion to `unreadSync.ingestMessage(...)`.
+- Removed fallback that previously added denied conversation ACK subscriptions to `subscribedConvsRef`.
+
+#### Scoped Composer Error Verification (`apps/web/test/social.test.tsx`)
+- Updated the failed-send test in [social.test.tsx](file:///E:/FGweb/code/apps/web/test/social.test.tsx#L534-L589) to use `within(composerContainer).getByRole('alert')` targeting `.fg-rich-composer` specifically.
+- Preserved send-button retry interaction, textarea draft retention (`'Unsent draft message'`), and stable `clientMessageId` assertions.
+
+---
+
+### 2. Empirical Verification
+
+#### A. Typecheck (`test-types.json`)
+```powershell
+node node_modules/typescript/bin/tsc -p quality/evidence/T17-FE/test-types.json --noEmit --incremental false
+# Exit code: 0
+```
+- Recorded evidence: [codex-test-types-pass-1.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-test-types-pass-1.txt)
+
+#### B. Unit & Behavioral Tests (`social.test.tsx`)
+```powershell
+node "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" run test --workspace @fg/web -- test/social.test.tsx
+# Exit code: 0 (10/10 tests passed)
+```
+- Recorded evidence: [codex-unread-dedup-pass-1.txt](file:///E:/FGweb/code/quality/evidence/T17-FE/codex-unread-dedup-pass-1.txt)
+
+```text
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  13:47:09
+   Duration  5.30s
+```
+
+---
+
+### 3. Open Technical Findings & Observations
+
+1. **Pagination Cursor Limit**: Conversation message history pagination currently relies on single-cursor fetch (`nextCursor`); rapid multi-page scrolling during active background ingestion should be verified under real network latency.
+2. **Actor Transition Clear**: State resets on actor switch (`setActor`) clear memory sets (`seenUnreadMessageIds`, `readWatermarks`), but localStorage items for previous actor keys are retained until explicit cleanup.

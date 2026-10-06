@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const roots=['apps/web/src/features/friends','apps/web/src/features/direct-messages','apps/web/src/features/chat','apps/web/src/features/lobby/LobbyPage.tsx','apps/web/src/features/profiles/ProfilePage.tsx','apps/web/test/social.test.tsx','apps/web/dist'];
+const files={};const walk=p=>{const stat=fs.statSync(p);if(stat.isDirectory()){for(const name of fs.readdirSync(p))walk(path.posix.join(p,name));}else files[p]=createHash('sha256').update(fs.readFileSync(p)).digest('hex');};roots.forEach(walk);
+fs.writeFileSync('quality/evidence/T17-FE/build7-native-inputs.json',JSON.stringify({capturedAt:new Date().toISOString(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8')).hashes,files},null,2)+'\n');console.log('Captured owned source, test, built assets and frozen spec hashes.');

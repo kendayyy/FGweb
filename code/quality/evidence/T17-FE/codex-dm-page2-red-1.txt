@@ -1,0 +1,44 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T17-FE/dm-page2-review.test.tsx (1 test | 1 failed) 1145ms
+   × Opening an existing DM outside the first list page resolves its real peer 1142ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T17-FE/dm-page2-review.test.tsx > Opening an existing DM outside the first list page resolves its real peer
+AssertionError: expected undefined to be 'review-peer-old' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected:
+"review-peer-old"
+
++ Received:
+undefined
+
+ ❯ quality/evidence/T17-FE/dm-page2-review.test.tsx:27:68
+     25|     await act(async () => { await hook.result.current.startOrOpenDM('r…
+     26|     expect(hook.result.current.activeConversationId).toBe('review-old'…
+     27|     await waitFor(() => expect(hook.result.current.activePeer?.id).toB…
+       |                                                                    ^
+     28|     expect(fixture.cursors).toContain('dm-page-two');
+     29|   } finally { hook.unmount(); client.clear(); }
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  16:03:28
+   Duration  5.28s (environment 48%, tests 24%, setup 10%, transform 9%, import 9%)
+

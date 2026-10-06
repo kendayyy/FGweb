@@ -11,6 +11,8 @@ export type RichComposerProps = {
     reply?: MessageDTO | null;
     onCancelReply: () => void;
     onSend: (request: CreateMessageRequest) => Promise<unknown>;
+    label?: string;
+    placeholder?: string;
 };
 type DraftImage = {
     key: string;
@@ -20,7 +22,7 @@ type DraftImage = {
     error?: string;
     controller?: AbortController;
 };
-export function RichComposer({ conversationId, disabled, candidates, reply, onCancelReply, onSend }: RichComposerProps) {
+export function RichComposer({ conversationId, disabled, candidates, reply, onCancelReply, onSend, label = 'Tin nhắn Lobby', placeholder = 'Nhắn vào Lobby…' }: RichComposerProps) {
     const [text, setText] = useState(''), [images, setImages] = useState<DraftImage[]>([]), [mentions, setMentions] = useState<UserSummary[]>([]), [error, setError] = useState(''), [sending, setSending] = useState(false), [emoji, setEmoji] = useState(false), [caret, setCaret] = useState(0);
     const textarea = useRef<HTMLTextAreaElement>(null), fileInput = useRef<HTMLInputElement>(null), selection = useRef({ start: 0, end: 0 }), restore = useRef<number | null>(null), active = useRef(true), pending = useRef(false), controllers = useRef(new Set<AbortController>()), retry = useRef<{
         fingerprint: string;
@@ -76,7 +78,7 @@ export function RichComposer({ conversationId, disabled, candidates, reply, onCa
     } };
     const busy = disabled || sending;
     return <div className="fg-rich-composer" onKeyDown={event=>{if(event.key==='Escape'){setEmoji(false);setCaret(-1);textarea.current?.focus();}}}>{reply && <div className="fg-reply-preview"><span>Trả lời {reply.sender.displayName}<small>{reply.content || 'Ảnh'}</small></span><button type="button" aria-label="Hủy trả lời" onClick={onCancelReply} disabled={sending}><X size={18}/></button></div>}{images.length > 0 && <ul className="fg-upload-list">{images.map(image => <li key={image.key}><span>{image.file.name}</span>{!image.attachment && !image.error && <progress aria-label={`Tải ảnh ${image.file.name}`} max={100} value={image.progress ?? undefined}/>}<small>{image.attachment ? 'Đã tải ảnh' : image.error ?? 'Đang tải…'}</small>{image.error && <button type="button" disabled={busy} onClick={() => void upload(image)}>Thử tải lại</button>}<button type="button" aria-label={`Bỏ ảnh ${image.file.name}`} disabled={sending} onClick={() => { image.controller?.abort(); setImages(list => list.filter(item => item.key !== image.key)); }}><X size={18}/></button></li>)}</ul>}{error && <p role="alert">{error}</p>}
- <form className="fg-chat-composer fg-rich-form" onSubmit={event => void submit(event)}><textarea ref={textarea} aria-label="Tin nhắn Lobby" placeholder="Nhắn vào Lobby…" maxLength={2000} rows={1} disabled={busy} value={text} onChange={event => { setText(event.target.value); selection.current = { start: event.target.selectionStart, end: event.target.selectionEnd }; setCaret(event.target.selectionStart); }} onSelect={track} onKeyDown={event => { if (event.key === 'Escape') {
+ <form className="fg-chat-composer fg-rich-form" onSubmit={event => void submit(event)}><textarea ref={textarea} aria-label={label} placeholder={placeholder} maxLength={2000} rows={1} disabled={busy} value={text} onChange={event => { setText(event.target.value); selection.current = { start: event.target.selectionStart, end: event.target.selectionEnd }; setCaret(event.target.selectionStart); }} onSelect={track} onKeyDown={event => { if (event.key === 'Escape') {
         setEmoji(false);
         setCaret(-1);
     } if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing)

@@ -1,0 +1,10 @@
+### Refactor Report
+
+#### Modified File
+- [useDirectMessages.ts](file:///E:/FGweb/code/apps/web/src/features/direct-messages/useDirectMessages.ts#L133-L162)
+
+#### Changes Made
+Updated `conversationsQuery` queryFn cursor validation logic:
+1. Terminal condition is strictly `!page.hasMore` (loop breaks when `hasMore` is false).
+2. When `page.hasMore` is `true` but `!page.nextCursor`, throws an explicit retriable `Error('Dữ liệu phân trang cuộc trò chuyện không hợp lệ: thiếu con trỏ tiếp theo.')`.
+3. When `visitedCursors.has(page.nextCursor)`, throws an explicit `Error('Dữ liệu phân trang cuộc trò chuyện bị lặp con trỏ.')` rather than silently returning partial items.

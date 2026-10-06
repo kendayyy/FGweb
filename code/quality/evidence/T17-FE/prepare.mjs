@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T17-FE';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8'));
+const task=ledger.tasks.find(t=>t.id==='T17-FE');
+if(task.status!=='BLOCKED')throw new Error('Unexpected task status');
+task.writeAllowlist.push('apps/web/src/features/lobby/LobbyPage.tsx','apps/web/src/features/profiles/ProfilePage.tsx');
+task.status='IN_PROGRESS'; task.blockers=[]; task.startedAt=new Date().toISOString(); task.completedAt=null;
+task.inputsHash=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+task.evidencePaths.push(`${dir}/approved-scope.md`,`${dir}/run-manifest.md`);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.copyFileSync('quality/evidence/T17-BE/record-check.mjs',`${dir}/record-check.mjs`);
+const recorder=fs.readFileSync(`${dir}/record-check.mjs`,'utf8').replaceAll('T17-BE','T17-FE');
+fs.writeFileSync(`${dir}/record-check.mjs`,recorder);
+fs.writeFileSync(`${dir}/baseline-status.txt`,execFileSync('git',['status','--short'],{encoding:'utf8'}));
+console.log('Approved T17-FE scope recorded; ready for real gate.');

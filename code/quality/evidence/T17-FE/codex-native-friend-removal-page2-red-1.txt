@@ -1,0 +1,63 @@
+4:10:28 PM [vite] ws proxy socket error:
+Error: write ECONNABORTED
+    at afterWriteDispatched (node:internal/stream_base_commons:159:15)
+    at writeGeneric (node:internal/stream_base_commons:150:3)
+    at Socket._writeGeneric (node:net:1262:11)
+    at Socket._write (node:net:1274:8)
+    at writeOrBuffer (node:internal/streams/writable:574:12)
+    at _write (node:internal/streams/writable:503:10)
+    at Writable.write (node:internal/streams/writable:512:10)
+    at Socket.ondata (node:internal/streams/readable:1021:24)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12)
+Owned pagination fixture cleaned.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true })
+Expected: 0
+Received: 1
+Timeout:  15000ms
+
+Call log:
+  - Expect "toHaveCount" getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true }) with timeout 15000ms
+  - waiting for getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true })
+    33 × locator resolved to 1 element
+       - unexpected value "1"
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toHaveCount (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at E:\FGweb\code\quality\evidence\T17-FE\native-friend-removal-page2.mjs:15:66 {
+  matcherResult: {
+    actual: 1,
+    expected: 0,
+    message: 'expect(locator).toHaveCount(expected) failed\n' +
+      '\n' +
+      "Locator:  getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true })\n" +
+      'Expected: 0\n' +
+      'Received: 1\n' +
+      'Timeout:  15000ms\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toHaveCount" getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true }) with timeout 15000ms\n` +
+      "  - waiting for getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true })\n" +
+      '    33 × locator resolved to 1 element\n' +
+      '       - unexpected value "1"\n',
+    name: 'toHaveCount',
+    pass: false,
+    log: [
+      `  - Expect "toHaveCount" getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true }) with timeout 15000ms`,
+      "  - waiting for getByTestId('friends-modal').getByText('Bạn phân trang 59', { exact: true })",
+      '    33 × locator resolved to 1 element',
+      '       - unexpected value "1"'
+    ],
+    timeout: 15000,
+    ariaSnapshot: undefined
+  }
+}
+
+Node.js v24.21.0

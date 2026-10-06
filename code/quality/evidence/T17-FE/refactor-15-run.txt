@@ -1,0 +1,7 @@
+### Refactor Report
+
+#### Modified File
+- [PeerSocialControls.tsx](file:///E:/FGweb/code/apps/web/src/features/friends/PeerSocialControls.tsx#L151-L165)
+
+#### Changes Made
+Added `queryClient.invalidateQueries({ queryKey: ['friends-infinite'] })` and `queryClient.invalidateQueries({ queryKey: ['friend-requests-infinite'] })` to `refreshSocialQueries` in `PeerSocialControls.tsx` while preserving all existing query invalidations (`['friends']`, `['friends-page']`, `['friend-requests']`, `['requests-incoming-page']`, `['requests-outgoing-page']`, `['blocks']`, `['peer-relationship']`, `['direct-conversations']`). This ensures that multi-page infinite queries in `FriendsModal.tsx` are invalidated upon social mutations (e.g. friend removal).
