@@ -93,7 +93,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
 
   private async buildRoomDto(db: Pool | PoolClient, roomId: string): Promise<RoomDTO> {
     const roomRes = await db.query(
-      `SELECT r.id, r.name, r.description, r.game_id, r.owner_id, r.visibility, r.invite_policy, r.player_capacity,
+      `SELECT r.id, r.name, r.description, r.game_id, r.owner_id, r.visibility, r.invite_policy, r.player_capacity, r.conversation_id,
               to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as created_at_iso,
               to_char(r.updated_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as updated_at_iso,
               g.title as game_title,
@@ -119,6 +119,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
 
     return {
       id: row.id,
+      conversationId: row.conversation_id,
       name: row.name,
       description: row.description ?? undefined,
       gameId: row.game_id,
@@ -217,7 +218,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
       await this.checkActorSessionAndBan(client, actorId, sessionId);
 
       const res = await client.query(
-        `SELECT r.id, r.name, r.description, r.game_id, r.owner_id, r.visibility, r.invite_policy, r.player_capacity,
+        `SELECT r.id, r.name, r.description, r.game_id, r.owner_id, r.visibility, r.invite_policy, r.player_capacity, r.conversation_id,
                 to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as created_at_iso,
                 to_char(r.updated_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as updated_at_iso,
                 g.title as game_title,
@@ -246,6 +247,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
           };
           return {
             id: row.id,
+            conversationId: row.conversation_id,
             name: row.name,
             description: row.description ?? undefined,
             gameId: row.game_id,

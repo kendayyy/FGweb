@@ -1,0 +1,103 @@
+Wait for task `task-161` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-161
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 14.5s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (12.288 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      √ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      √ allows room member to view room detail (37 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (16 ms)
+      √ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      √ transfers ownership to an existing member (41 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (37 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        12.434 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-169` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-169
+Command: `npx eslint apps/api/src/modules/rooms/rooms.service.ts apps/api/test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 13.9s
+
+=== STDOUT ===
+
+=== STDERR ===
+}
+### FG T18-FIX1 Refactor Summary
+
+#### 1. Scope & Codex Review Fixes
+- **Target Task**: FG T18-FIX1 (Room conversation identity producer).
+- **Files Modified**:
+  - [`apps/api/src/modules/rooms/rooms.service.ts`](file:///E:/FGweb/code/apps/api/src/modules/rooms/rooms.service.ts)
+  - [`apps/api/test/rooms.integration.spec.ts`](file:///E:/FGweb/code/apps/api/test/rooms.integration.spec.ts)
+- **Refactor Adjustments**:
+  - Replaced all 3 broad status assertions `expect([200, 201]).toContain(sendMsg.status)` with exact `expect(sendMsg.status).toBe(201)` (at lines 340, 454, 660) matching NestJS default `@Post()` creation status code.
+  - Kept all 23 original tests and 74 original assertion lines fully intact without deletion or weakening.
+  - Preserved the 4 minimal SQL/projection additions in `rooms.service.ts` (`r.conversation_id` select + `conversationId: row.conversation_id` in `buildRoomDto` and `listOwnRooms`). All authorization logic and transaction locks remain untouched.
+
+---
+
+#### 2. Exact Modified Lines in `test/rooms.integration.spec.ts`
+
+- **Line 340**:
+  ```ts
+  expect(sendMsg.status).toBe(201);
+  ```
+- **Line 454**:
+  ```ts
+  expect(sendMsg.status).toBe(201);
+  ```
+- **Line 660**:
+  ```ts
+  expect(sendMsg.status).toBe(201);
+  ```
+
+---
+
+#### 3. Verification Commands & Execution Results
+
+| Step | Command | Exit Code | Outcome |
+| :--- | :--- | :---: | :--- |
+| **Review Guards Validation** | `node quality/evidence/T18-FIX1/review-guards.mjs` | `0` | `{"originalTests":23,"originalAssertionLines":74,"preservedAssertions":true,"minimalProducerDelta":true,"exactCreatedStatus":201}` |
+| **Rooms Integration Tests** | `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts` | `0` | **23 passed, 0 failed** (100% pass) |
+| **TypeScript Typecheck** | `npx tsc --noEmit` | `0` | Clean typecheck |
+| **API Build** | `npx tsc -b apps/api` | `0` | Clean build |
+| **ESLint** | `npx eslint apps/api/src/modules/rooms/rooms.service.ts apps/api/test/rooms.integration.spec.ts` | `0` | 0 errors / 0 warnings |
+| **Git Diff Whitespace Check** | `git diff --check` | `0` | No whitespace or line-ending errors |

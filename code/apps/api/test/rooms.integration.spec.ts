@@ -313,6 +313,8 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       // Verify database state
       const dbRoom = (await pool.query('SELECT * FROM rooms WHERE id = $1', [room.id])).rows[0];
       expect(dbRoom).toBeDefined();
+      expect(room.conversationId).toBe(dbRoom.conversation_id);
+      expect(room.conversationId).not.toBe(room.id);
 
       const dbMembers = (await pool.query('SELECT * FROM room_members WHERE room_id = $1', [room.id])).rows;
       expect(dbMembers).toHaveLength(1);
@@ -322,6 +324,34 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       const dbConvMembers = (await pool.query('SELECT * FROM conversation_members WHERE conversation_id = $1', [dbRoom.conversation_id])).rows;
       expect(dbConvMembers).toHaveLength(1);
       expect(dbConvMembers[0].user_id).toBe('user-owner');
+
+      // Verify authorized room owner can fetch history & send chat message using returned conversationId
+      const chatHist = await request(base)
+        .get(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Cookie', cookieOwner);
+      expect(chatHist.status).toBe(200);
+
+      const sendMsg = await request(base)
+        .post(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Origin', origin)
+        .set('Cookie', cookieOwner)
+        .set('x-csrf-token', '1')
+        .send({ content: 'Hello room conversation', clientMessageId: 'cmsg-owner-1' });
+      expect(sendMsg.status).toBe(201);
+
+      // Outsider cannot use returned conversationId for history or send
+      const outsiderHist = await request(base)
+        .get(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Cookie', cookieOutsider);
+      expect(outsiderHist.status).toBe(403);
+
+      const outsiderSend = await request(base)
+        .post(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Origin', origin)
+        .set('Cookie', cookieOutsider)
+        .set('x-csrf-token', '1')
+        .send({ content: 'Intruder message', clientMessageId: 'cmsg-outsider-1' });
+      expect(outsiderSend.status).toBe(403);
     });
   });
 
@@ -341,6 +371,11 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       expect(res.status).toBe(200);
       const parsed = createPageSchema(RoomSchema).parse(res.body);
       expect(parsed.items.some(r => r.id === createdRoomId)).toBe(true);
+      const ownRoom = parsed.items.find(r => r.id === createdRoomId);
+      expect(ownRoom).toBeDefined();
+      const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [createdRoomId])).rows[0];
+      expect(ownRoom?.conversationId).toBe(dbRoom.conversation_id);
+      expect(ownRoom?.conversationId).not.toBe(ownRoom?.id);
     });
 
     it('returns empty page for user with no room memberships', async () => {
@@ -400,6 +435,23 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       const room = RoomSchema.parse(res.body);
       expect(room.id).toBe(roomId);
       expect(room.memberCount).toBe(2);
+      const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+      expect(room.conversationId).toBe(dbRoom.conversation_id);
+      expect(room.conversationId).not.toBe(room.id);
+
+      // Verify room member can fetch history & send chat message using returned conversationId
+      const chatHist = await request(base)
+        .get(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Cookie', cookieMember);
+      expect(chatHist.status).toBe(200);
+
+      const sendMsg = await request(base)
+        .post(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Origin', origin)
+        .set('Cookie', cookieMember)
+        .set('x-csrf-token', '1')
+        .send({ content: 'Member hello', clientMessageId: 'cmsg-member-1' });
+      expect(sendMsg.status).toBe(201);
     });
 
     it('prevents outsider from viewing room members with 403 FORBIDDEN', async () => {
@@ -473,6 +525,9 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       const room = RoomSchema.parse(res.body);
       expect(room.settings.visibility).toBe('PRIVATE');
       expect(room.settings.playerCapacity).toBe(8);
+      const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+      expect(room.conversationId).toBe(dbRoom.conversation_id);
+      expect(room.conversationId).not.toBe(room.id);
 
       // Verify open recruitment was automatically closed in database
       const dbRec = (await pool.query('SELECT state FROM recruitments WHERE id = $1', [recruitmentId])).rows[0];
@@ -586,14 +641,23 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
       expect(res.status).toBe(200);
       const room = RoomSchema.parse(res.body);
       expect(room.ownerId).toBe('user-member');
-
-      // Verify DB state
-      const dbRoom = (await pool.query('SELECT owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+      const dbRoom = (await pool.query('SELECT conversation_id, owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
       expect(dbRoom.owner_id).toBe('user-member');
+      expect(room.conversationId).toBe(dbRoom.conversation_id);
+      expect(room.conversationId).not.toBe(room.id);
 
       const memberRows = (await pool.query('SELECT user_id, role FROM room_members WHERE room_id = $1', [roomId])).rows;
       expect(memberRows.find(m => m.user_id === 'user-member')?.role).toBe('OWNER');
       expect(memberRows.find(m => m.user_id === 'user-owner')?.role).toBe('MEMBER');
+
+      // Verify new owner can still chat with conversationId
+      const sendMsg = await request(base)
+        .post(`/api/v1/conversations/${room.conversationId}/messages`)
+        .set('Origin', origin)
+        .set('Cookie', cookieMember)
+        .set('x-csrf-token', '1')
+        .send({ content: 'New owner chat', clientMessageId: 'cmsg-transfer-1' });
+      expect(sendMsg.status).toBe(201);
     });
   });
 
@@ -643,6 +707,20 @@ describe('T18 Room Management, Members & Ownership Integration', () => {
 
       const dbConvMembers = (await pool.query('SELECT * FROM conversation_members WHERE conversation_id = $1 AND user_id = $2', [conversationId, 'user-member'])).rows;
       expect(dbConvMembers).toHaveLength(0);
+
+      // Verify departed member cannot fetch history or send chat message to room conversationId
+      const departedHist = await request(base)
+        .get(`/api/v1/conversations/${conversationId}/messages`)
+        .set('Cookie', cookieMember);
+      expect(departedHist.status).toBe(403);
+
+      const departedSend = await request(base)
+        .post(`/api/v1/conversations/${conversationId}/messages`)
+        .set('Origin', origin)
+        .set('Cookie', cookieMember)
+        .set('x-csrf-token', '1')
+        .send({ content: 'Departed member attempt', clientMessageId: 'cmsg-departed-1' });
+      expect(departedSend.status).toBe(403);
     });
 
     it('dissolves room when sole owner leaves', async () => {

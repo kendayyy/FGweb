@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T18-FIX1';
+const source='C:/Users/PC/.gemini/antigravity-cli/brain/86bb8a2e-1613-4c8f-a771-626f616f07d0/.system_generated/logs/transcript.jsonl';
+const rows=fs.readFileSync(source,'utf8').trim().split(/\r?\n/).map(JSON.parse);
+const calls=rows.flatMap(r=>(r.tool_calls??[]).map(c=>({step:r.step_index,time:r.created_at,name:c.name,target:c.args.TargetFile??c.args.AbsolutePath??null,commandHash:c.args.CommandLine?createHash('sha256').update(c.args.CommandLine).digest('hex'):null})));
+const writes=calls.filter(c=>/replace_file|write_to_file|multi_replace/.test(c.name));
+for(const w of writes)assert(w.target?.includes('apps/api/src/modules/rooms/rooms.service.ts')||w.target?.includes('apps/api/test/rooms.integration.spec.ts'),'Unexpected provider write target');
+assert(writes.length>0);
+for(const name of ['refactor1','refactor2'])assert.equal(fs.readFileSync(`${dir}/${name}-exit.txt`,'utf8').trim(),'0');
+fs.writeFileSync(`${dir}/provider-tool-audit.json`,JSON.stringify({conversationId:'86bb8a2e-1613-4c8f-a771-626f616f07d0',requestedModel:'Gemini 3.6 Flash (High)',observedEngine:'unknown',initialCliExit:'unavailable after user-turn interruption',completedFollowupExits:[0,0],source,writeCalls:writes,otherCallMetadata:calls.filter(c=>!writes.includes(c))},null,2)+'\n');
+console.log(JSON.stringify({approvedSourceWriteCalls:writes.length,unexpectedSourceWriteCalls:0,followupCliExitCodes:[0,0],initialInterrupted:true}));

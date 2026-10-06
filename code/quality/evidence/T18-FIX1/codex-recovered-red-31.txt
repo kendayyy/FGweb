@@ -1,0 +1,165 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/rooms.integration.spec.ts
+
+ts-jest[config] (WARN) message TS151002: Using hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22684) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[Nest] 22684  - 10/06/2026, 11:37:23 PM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+FAIL test/rooms.integration.spec.ts (39.366 s)
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › creates room successfully and sets owner membership & conversation
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+
+      301 |
+      302 |       expect(res.status).toBe(200);
+    > 303 |       const room = RoomSchema.parse(res.body);
+          |                               ^
+      304 |       expect(room.name).toBe('Owner Valorant Squad');
+      305 |       expect(room.description).toBe('Fun competitive matches');
+      306 |       expect(room.gameId).toBe(gameId);
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:303:31)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "items",
+          0,
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      },
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "items",
+          1,
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+
+      370 |
+      371 |       expect(res.status).toBe(200);
+    > 372 |       const parsed = createPageSchema(RoomSchema).parse(res.body);
+          |                                                   ^
+      373 |       const ownRoom = parsed.items.find(r => r.id === createdRoomId);
+      374 |       expect(ownRoom).toBeDefined();
+      375 |       const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [createdRoomId])).rows[0];
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:372:51)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+
+      432 |
+      433 |       expect(res.status).toBe(200);
+    > 434 |       const room = RoomSchema.parse(res.body);
+          |                               ^
+      435 |       expect(room.id).toBe(roomId);
+      436 |       expect(room.memberCount).toBe(2);
+      437 |       const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:434:31)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+
+      522 |
+      523 |       expect(res.status).toBe(200);
+    > 524 |       const room = RoomSchema.parse(res.body);
+          |                               ^
+      525 |       expect(room.settings.visibility).toBe('PRIVATE');
+      526 |       expect(room.settings.playerCapacity).toBe(8);
+      527 |       const dbRoom = (await pool.query('SELECT conversation_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:524:31)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    ZodError: [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+
+      639 |
+      640 |       expect(res.status).toBe(200);
+    > 641 |       const room = RoomSchema.parse(res.body);
+          |                               ^
+      642 |       expect(room.ownerId).toBe('user-member');
+      643 |       const dbRoom = (await pool.query('SELECT conversation_id, owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+      644 |       expect(room.conversationId).toBe(dbRoom.conversation_id);
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:641:31)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › allows non-owner member to leave room and revokes chat access
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 422
+
+      719 |         .set('x-csrf-token', '1')
+      720 |         .send({ content: 'Departed member attempt' });
+    > 721 |       expect(departedSend.status).toBe(403);
+          |                                   ^
+      722 |     });
+      723 |
+      724 |     it('dissolves room when sole owner leaves', async () => {
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:721:35)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 17 passed, 23 total
+Snapshots:   0 total
+Time:        39.945 s
+Ran all test suites matching test/rooms.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/rooms.integration.spec.ts

@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+const previous=execFileSync('git',['show','HEAD:code/apps/api/test/rooms.integration.spec.ts'],{encoding:'utf8'});
+const current=fs.readFileSync('apps/api/test/rooms.integration.spec.ts','utf8');
+const originalAssertions=previous.split(/\r?\n/).map(s=>s.trim()).filter(s=>s.startsWith('expect('));
+for(const line of originalAssertions) assert(current.includes(line),`Original assertion removed: ${line}`);
+assert.equal((current.match(/\bit\('/g)||[]).length,23,'All original test cases remain');
+assert(!/\b(?:it|test|describe)\.(?:skip|only)\(/.test(current));
+assert(!current.includes('[200, 201]'),'Fresh chat sends require exact HTTP201 per existing controller/contract');
+for(const line of current.split(/\r?\n/).filter(s=>s.includes('sendMsg.status')))assert(line.includes('.toBe(201)'),'Successful new sends assert exact HTTP201');
+const before=execFileSync('git',['show','HEAD:code/apps/api/src/modules/rooms/rooms.service.ts'],{encoding:'utf8'}).replaceAll('\r\n','\n');
+const after=fs.readFileSync('apps/api/src/modules/rooms/rooms.service.ts','utf8').replaceAll('\r\n','\n');
+assert.equal(after.replaceAll('r.player_capacity, r.conversation_id,','r.player_capacity,').replace(/^\s*conversationId: row\.conversation_id,\n/gm,''),before,'Only the four approved FK projection additions');
+console.log(JSON.stringify({originalTests:23,originalAssertionLines:originalAssertions.length,preservedAssertions:true,minimalProducerDelta:true,exactCreatedStatus:201}));

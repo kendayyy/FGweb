@@ -1,0 +1,63 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12972) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[Nest] 12972  - 10/06/2026, 11:51:45 PM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+FAIL apps/api/test/auth.integration.spec.ts (17.897 s)
+  ● Console
+
+    console.error
+      2026-10-06T16:53:59.535Z ERROR [Better Auth]: Failed to parse state [StateError [BetterAuthError]: State mismatch: verification not found] {
+        code: 'state_mismatch',
+        details: { state: 'invalid_state_value' },
+        errorURL: undefined
+      }
+
+      at LogFunc (../../node_modules/@better-auth/core/dist/env/logger.mjs:64:35)
+      at Object.error (../../node_modules/@better-auth/core/dist/env/logger.mjs:72:82)
+      at parseState (../../node_modules/better-auth/dist/oauth2/state.mjs:53:20)
+      at ../../node_modules/better-auth/dist/api/routes/callback.mjs:77:97
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:11
+      at internalHandler (../../node_modules/better-call/src/endpoint.ts:626:20)
+      at ../../node_modules/better-auth/dist/api/dispatch.mjs:231:18
+      at processRequest (../../node_modules/better-call/src/router.ts:260:11)
+      at handler (../../node_modules/better-call/src/router.ts:301:16)
+      at ../../node_modules/@better-auth/core/dist/context/transaction.mjs:37:13
+      at ../../node_modules/better-call/src/adapters/node/index.ts:12:27
+      at ../../node_modules/@nestjs/core/router/router-proxy.js:6:17
+
+
+
+  ● Test suite failed to run
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      at _getError (../../node_modules/jest-circus/build/jestAdapterInit.js:1985:12)
+          at Array.map (<anonymous>)
+
+    Cause:
+     
+
+          114 |   }, 60000);
+          115 |
+        > 116 |   afterAll(async () => {
+              |   ^
+          117 |     const errors: Error[] = [];
+          118 |     if (app) {
+          119 |       try {
+
+          at test/auth.integration.spec.ts:116:3
+          at test/auth.integration.spec.ts:71:1
+
+Test Suites: 1 failed, 8 passed, 9 total
+Tests:       152 passed, 152 total
+Snapshots:   0 total
+Time:        178.528 s
+Ran all test suites.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.

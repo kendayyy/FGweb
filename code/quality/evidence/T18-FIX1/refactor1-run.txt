@@ -1,0 +1,261 @@
+Wait for task `task-77` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-77
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 14.5s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (12.288 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      √ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      √ allows room member to view room detail (37 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (16 ms)
+      √ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      √ transfers ownership to an existing member (41 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (37 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        12.434 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-107` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-107
+Command: `Check docker readiness`
+Exit Code: 0
+Duration: 5.0s
+
+=== STDOUT ===
+Timer expired after 5.0 seconds. Prompt: Check docker readiness
+
+=== STDERR ===
+}
+Wait for task `task-118` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-118
+Command: `docker ps`
+Exit Code: 0
+Duration: 6.9s
+
+=== STDOUT ===
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+=== STDERR ===
+}
+Wait for task `task-124` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-124
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 14.5s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (12.288 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      √ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      √ allows room member to view room detail (37 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (16 ms)
+      √ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      √ transfers ownership to an existing member (41 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (37 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        12.434 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-128` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-128
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 14.5s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (12.288 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      √ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      √ allows room member to view room detail (37 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (16 ms)
+      √ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      √ transfers ownership to an existing member (41 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (37 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        12.434 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-132` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-132
+Command: `npx tsc --noEmit`
+Exit Code: 0
+Duration: 13.9s
+
+=== STDOUT ===
+
+=== STDERR ===
+}
+Wait for task `task-136` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-136
+Command: `npx tsc -b apps/api`
+Exit Code: 0
+Duration: 13.9s
+
+=== STDOUT ===
+
+=== STDERR ===
+}
+Wait for task `task-140` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-140
+Command: `npx eslint apps/api/src/modules/rooms/rooms.service.ts apps/api/test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 13.9s
+
+=== STDOUT ===
+
+=== STDERR ===
+}
+### FG T18-FIX1 Implementation Summary
+
+#### 1. Scope & Execution Rationale
+- **Target Task**: FG T18-FIX1 (Room conversation identity producer).
+- **Files Modified**:
+  - [`apps/api/src/modules/rooms/rooms.service.ts`](file:///E:/FGweb/code/apps/api/src/modules/rooms/rooms.service.ts)
+  - [`apps/api/test/rooms.integration.spec.ts`](file:///E:/FGweb/code/apps/api/test/rooms.integration.spec.ts)
+- **Constraint Compliance**:
+  - Did NOT modify any locked contracts, controllers, resolvers, or schemas.
+  - No git state mutations or ledger/evidence file writes performed.
+
+---
+
+#### 2. Test-Driven Development (TDD Verification)
+
+##### RED Step (Pre-Implementation)
+- **Command**: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+- **Result**: `Exit Code 1` (5 Failed / 18 Passed / 23 Total)
+- **Failure Cause**: `ZodError` on `RoomSchema.parse` and `createPageSchema(RoomSchema).parse` due to missing `conversationId` in response DTO projections for room creation, list own rooms, room detail, update settings, and owner transfer.
+
+##### Minimum Service Implementation (`rooms.service.ts`)
+Added `r.conversation_id` selection in SQL queries and projected `conversationId: row.conversation_id` in:
+1. `buildRoomDto` SQL query & return object projection.
+2. `listOwnRooms` SQL query & return object projection.
+
+All authorization checks, FOR SHARE hydration locks, cursor encoding, transactions, and ownership/membership handling were kept strictly unchanged.
+
+##### GREEN Step (Post-Implementation)
+- **Command**: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+- **Result**: `Exit Code 0` (23 Passed / 0 Failed / 23 Total)
+- **Tests Verified**:
+  - Restored original assertions `expect(parsed.items.some(r => r.id === createdRoomId)).toBe(true)` and `expect(dbRoom.owner_id).toBe('user-member')`.
+  - Proved `room.conversationId === dbRoom.conversation_id` and `room.conversationId !== room.id`.
+  - Verified authorized owner and member can access history (`GET /api/v1/conversations/:id/messages`) and send messages (`POST /api/v1/conversations/:id/messages` returning 201 Created) using the returned `conversationId` with required `clientMessageId`.
+  - Verified outsiders and departed members receive `403 FORBIDDEN` when accessing the room's conversation endpoint.
+
+---
+
+#### 3. Verification & Quality Checks
+
+| Check | Command | Exit Code | Outcome |
+| :--- | :--- | :---: | :--- |
+| **Rooms Integration Tests** | `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts` | `0` | 23 passed, 0 failed |
+| **TypeScript Typecheck** | `npx tsc --noEmit` | `0` | Clean, 0 errors |
+| **API Build** | `npx tsc -b apps/api` | `0` | Clean build |
+| **ESLint** | `npx eslint apps/api/src/modules/rooms/rooms.service.ts apps/api/test/rooms.integration.spec.ts` | `0` | Clean, 0 warnings/errors |
+| **Git Diff Whitespace Check** | `git diff --check` | `0` | No whitespace or line-ending issues |
+
+---
+
+#### 4. Summary of Changed Files
+1. [`apps/api/src/modules/rooms/rooms.service.ts`](file:///E:/FGweb/code/apps/api/src/modules/rooms/rooms.service.ts#L95-L250): Added `r.conversation_id` SQL selection and `conversationId: row.conversation_id` mapping to `buildRoomDto` and `listOwnRooms`.
+2. [`apps/api/test/rooms.integration.spec.ts`](file:///E:/FGweb/code/apps/api/test/rooms.integration.spec.ts#L313-L755): Added strict `conversationId` equal FK & ACL chat history/send tests while preserving all original 23 test bodies and assertions.

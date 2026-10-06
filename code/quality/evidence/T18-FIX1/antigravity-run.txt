@@ -1,0 +1,609 @@
+Wait for task `task-24` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-24
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 1
+Duration: 13.9s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+FAIL test/rooms.integration.spec.ts (11.859 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (202 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (20 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      ✕ creates room successfully and sets owner membership & conversation (67 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      ✕ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (16 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (14 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (23 ms)
+      ✕ allows room member to view room detail (20 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (15 ms)
+      ✕ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (32 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      ✕ transfers ownership to an existing member (28 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (32 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › creates room successfully and sets owner membership & conversation
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      301 |       expect(res.status).toBe(200);
+      302 |       const room = RoomSchema.parse(res.body);
+    > 303 |       expect(room.name).toBe('Owner Valorant Squad');
+          |                    ^
+      304 |       expect(room.description).toBe('Fun competitive matches');
+      305 |       expect(room.gameId).toBe(gameId);
+      306 |       expect(room.gameTitle).toBe(gameTitle);
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:303:20)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "items",
+          0,
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      340 |       expect(res.status).toBe(200);
+      341 |       const parsed = createPageSchema(RoomSchema).parse(res.body);
+    > 342 |       expect(parsed.items.some(r => r.id === createdRoomId)).toBe(true);
+          |                                                   ^
+      343 |     });
+      344 | 
+      345 |     it('returns empty page for user with no room memberships', async () => {
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:342:51)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      398 |       expect(res.status).toBe(200);
+      399 |       const room = RoomSchema.parse(res.body);
+    > 400 |       expect(room.id).toBe(roomId);
+          |                    ^
+      401 |       expect(room.memberCount).toBe(2);
+      402 |     });
+      403 | 
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:400:20)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      471 |       expect(res.status).toBe(200);
+      472 |       const room = RoomSchema.parse(res.body);
+    > 473 |       expect(room.settings.visibility).toBe('PRIVATE');
+          |                    ^
+      474 |       expect(room.settings.playerCapacity).toBe(8);
+      475 | 
+      476:       // Verify open recruitment was automatically closed in database
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:473:20)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      585 |       expect(res.status).toBe(200);
+      586 |       const room = RoomSchema.parse(res.body);
+    > 587 |       expect(room.ownerId).toBe('user-member');
+          |                    ^
+      588 | 
+      589 |       // Verify DB state
+      590 |       const dbRoom = (await pool.query('SELECT owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:587:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 18 passed, 23 total
+Snapshots:   0 total
+Time:        12.015 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-31` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-31
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 1
+Duration: 13.9s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+FAIL test/rooms.integration.spec.ts (11.758 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (20 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      ✕ creates room successfully and sets owner membership & conversation (67 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      ✕ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (21 ms)
+      ✕ allows room member to view room detail (20 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (11 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (17 ms)
+      ✕ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      ✕ transfers ownership to an existing member (28 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (32 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (30 ms)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › creates room successfully and sets owner membership & conversation
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      301 |       expect(res.status).toBe(200);
+      302 |       const room = RoomSchema.parse(res.body);
+    > 303 |       expect(room.name).toBe('Owner Valorant Squad');
+          |                    ^
+      304 |       expect(room.description).toBe('Fun competitive matches');
+      305 |       expect(room.gameId).toBe(gameId);
+      306 |       expect(room.gameTitle).toBe(gameTitle);
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:303:20)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "items",
+          0,
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      340 |       expect(res.status).toBe(200);
+      341 |       const parsed = createPageSchema(RoomSchema).parse(res.body);
+    > 342 |       expect(parsed.items.some(r => r.id === createdRoomId)).toBe(true);
+          |                                                   ^
+      343 |     });
+      344 | 
+      345 |     it('returns empty page for user with no room memberships', async () => {
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:342:51)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      398 |       expect(res.status).toBe(200);
+      399 |       const room = RoomSchema.parse(res.body);
+    > 400 |       expect(room.id).toBe(roomId);
+          |                    ^
+      401 |       expect(room.memberCount).toBe(2);
+      402 |     });
+      403 | 
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:400:20)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      471 |       expect(res.status).toBe(200);
+      472 |       const room = RoomSchema.parse(res.body);
+    > 473 |       expect(room.settings.visibility).toBe('PRIVATE');
+          |                    ^
+      474 |       expect(room.settings.playerCapacity).toBe(8);
+      475 | 
+      476:       // Verify open recruitment was automatically closed in database
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:473:20)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      585 |       expect(res.status).toBe(200);
+      586 |       const room = RoomSchema.parse(res.body);
+    > 587 |       expect(room.ownerId).toBe('user-member');
+          |                    ^
+      588 | 
+      589 |       // Verify DB state
+      590 |       const dbRoom = (await pool.query('SELECT owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:587:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 18 passed, 23 total
+Snapshots:   0 total
+Time:        11.905 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-43` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-43
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 1
+Duration: 13.9s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+FAIL test/rooms.integration.spec.ts (11.776 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (19 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      ✕ creates room successfully and sets owner membership & conversation (65 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      ✕ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (13 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      ✕ allows room member to view room detail (20 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (11 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (17 ms)
+      ✕ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (18 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      ✕ transfers ownership to an existing member (28 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (32 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (30 ms)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › creates room successfully and sets owner membership & conversation
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      301 |       expect(res.status).toBe(200);
+      302 |       const room = RoomSchema.parse(res.body);
+    > 303 |       expect(room.name).toBe('Owner Valorant Squad');
+          |                    ^
+      304 |       expect(room.description).toBe('Fun competitive matches');
+      305 |       expect(room.gameId).toBe(gameId);
+      306 |       expect(room.gameTitle).toBe(gameTitle);
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:303:20)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "items",
+          0,
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      340 |       expect(res.status).toBe(200);
+      341 |       const parsed = createPageSchema(RoomSchema).parse(res.body);
+    > 342 |       expect(parsed.items.some(r => r.id === createdRoomId)).toBe(true);
+          |                                                   ^
+      343 |     });
+      344 | 
+      345 |     it('returns empty page for user with no room memberships', async () => {
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:342:51)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      398 |       expect(res.status).toBe(200);
+      399 |       const room = RoomSchema.parse(res.body);
+    > 400 |       expect(room.id).toBe(roomId);
+          |                    ^
+      401 |       expect(room.memberCount).toBe(2);
+      402 |     });
+      403 | 
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:400:20)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      471 |       expect(res.status).toBe(200);
+      472 |       const room = RoomSchema.parse(res.body);
+    > 473 |       expect(room.settings.visibility).toBe('PRIVATE');
+          |                    ^
+      474 |       expect(room.settings.playerCapacity).toBe(8);
+      475 | 
+      476:       // Verify open recruitment was automatically closed in database
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:473:20)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "conversationId"
+        ],
+        "message": "Required"
+      }
+    ]
+
+      585 |       expect(res.status).toBe(200);
+      586 |       const room = RoomSchema.parse(res.body);
+    > 587 |       expect(room.ownerId).toBe('user-member');
+          |                    ^
+      588 | 
+      589 |       // Verify DB state
+      590 |       const dbRoom = (await pool.query('SELECT owner_id FROM rooms WHERE id = $1', [roomId])).rows[0];
+
+      at Object.get [as parse] (node_modules/zod/lib/index.cjs:649:23)
+      at Object.parse (test/rooms.integration.spec.ts:587:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 18 passed, 23 total
+Snapshots:   0 total
+Time:        11.905 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-49` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-49
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 14.5s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (12.287 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (200 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (21 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /api/v1/rooms & GET /api/v1/rooms/own
+      √ returns own rooms for owner (31 ms)
+      √ returns empty page for user with no room memberships (15 ms)
+      √ validates malformed pagination cursor with 422 INVALID_INPUT (12 ms)
+    GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members
+      √ prevents outsider from viewing room detail with 403 FORBIDDEN (20 ms)
+      √ allows room member to view room detail (37 ms)
+      √ prevents outsider from viewing room members with 403 FORBIDDEN (12 ms)
+      √ allows room member to list members (20 ms)
+    PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure
+      √ prevents non-owner from modifying room settings (16 ms)
+      √ updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE (31 ms)
+    PATCH /api/v1/rooms/:id/helpers/:userId
+      √ rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT (17 ms)
+      √ assigns valid helper permissions (22 ms)
+      √ demotes helper back to member when permissions list is empty (18 ms)
+    POST /api/v1/rooms/:id/transfer-owner
+      √ rejects transferring ownership to an outsider (non-member) with 403 or 422 (19 ms)
+      √ transfers ownership to an existing member (41 ms)
+    DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id
+      √ prevents owner from leaving room when other members exist (18 ms)
+      √ allows non-owner member to leave room and revokes chat access (37 ms)
+      √ dissolves room when sole owner leaves (32 ms)
+      √ allows owner to dissolve room directly (29 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        12.428 s
+Ran all test suites matching /test\\rooms.integration.spec.ts/i.
+
+=== STDERR ===
+}
+Wait for task `task-55` to complete....An async command task has completed!
+Task ID: 86bb8a2e-1613-4c8f-a771-626f616f07d0/task-55
+Command: `npm run test --workspace @fg/api -- --runInBand test/rooms.integration.spec.ts`
+Exit Code: 0
+Duration: 13.9s
+
+=== STDOUT ===
+
+> @fg/api@0.1.0 test
+> jest --runInBand test/rooms.integration.spec.ts
+
+PASS test/rooms.integration.spec.ts (11.829 s)
+  T18 Room Management, Members & Ownership Integration
+    POST /api/v1/rooms
+      √ rejects guest with 401 LOGIN_REQUIRED (196 ms)
+      √ rejects unonboarded user with 403 FORBIDDEN (18 ms)
+      √ rejects banned user with 403 FORBIDDEN (18 ms)
+      √ rejects invalid gameId with 422 INVALID_INPUT (13 ms)
+      √ creates room successfully and sets owner membership & conversation (90 ms)
+    GET /ap
