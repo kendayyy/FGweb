@@ -1,0 +1,24 @@
+I have launched the typecheck command (`refactor-typecheck-4`) as a background task. I will wait for it to complete before proceeding to the next verification step.
+I have launched the T17-BE social integration test suite (`refactor-pass-4`) in the background. I will wait for its completion before proceeding.
+I have launched the social integration test suite (`refactor-pass-5`) in the background. I will wait for it to complete.
+I have launched the full API regression test suite (`refactor-regression-2`) in the background. I will wait for it to complete before proceeding to the next step.
+I have launched the `@fg/api` build command (`refactor-build-2`) in the background. I will wait for it to finish before proceeding to the next step.
+### T17-BE Refactor & Verification Summary
+
+All code corrections and verification steps for **T17-BE** (Social Backend Module) have been completed cleanly in accordance with project context and instructions.
+
+#### Key Changes & Test Fixes Applied
+1. **Integration Test Suite Cleanup (`apps/api/test/social.integration.spec.ts`)**:
+   - Resolved block state leakage across test cases by adding explicit block cleanup queries in `finally` blocks and preceding direct conversation creation tests.
+   - Restored test assertions for real Socket.IO DM subscribe ACL checks (`parsedMember.ok === true`) and DM history accessibility post-block.
+
+#### Verification Evidence Summary (All Exit Code 0)
+- **TypeScript Typecheck (`refactor-typecheck-4`)**: `exitCode: 0` (`codex-refactor-typecheck-4.txt`)
+- **Integration Test Suite (`refactor-pass-5`)**: `exitCode: 0` (`codex-refactor-pass-5.txt`) — 30/30 tests passed
+- **Full API Regression (`refactor-regression-2`)**: `exitCode: 0` (`codex-refactor-regression-2.txt`)
+- **API Build (`refactor-build-2`)**: `exitCode: 0` (`codex-refactor-build-2.txt`)
+- **ESLint (`refactor-lint-3`)**: `exitCode: 0` (`codex-refactor-lint-3.txt`)
+- **Implementation Audit (`refactor-audit-2`)**: `exitCode: 0` (`codex-refactor-audit-2.txt`)
+- **Git Diff Check**: Clean (exit code 0, no whitespace errors).
+
+All implementation and evidence requirements are satisfied. The codebase is ready for independent Codex review.

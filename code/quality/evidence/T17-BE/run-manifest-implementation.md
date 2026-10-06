@@ -1,0 +1,7 @@
+# T17-BE implementation restart
+
+Approved T03-FIX6 PASS9704a41 and T12-FIX1 PASSd867646. New sequential Antigravity task conversation, Gemini3.6 Flash (High); Anti2 observes and Codex reviews/closes. User removed the fixed number of same-error refactors, with existing scope/testing/gates retained. Prior blocked preflight and RED evidence remain unchanged.
+
+Write scope: apps/api/src/modules/social/**, apps/api/test/social.integration.spec.ts, minimal SocialModule import/mount in apps/api/src/app.module.ts, owned T17-BE evidence. Codex owns ledger/coverage and reviewer scripts/configs. No contracts/database/other backend/frontend/dependency changes. Read shared contracts (11 social routes), real social/conversation DB constraints, session/CSRF/onboarding/ban checks, shared ChatService.lockSocialPair, ProfilesService public projection and realtime ACL.
+
+Acceptance: real migrated PostgreSQL/Nest HTTP/Socket.IO tests for receiver-only accept/reject, sender-only cancel, retry/concurrency, private actor-only lists/public projection, DM without friendship, both-direction blocks with preserved history/membership, current session/ban/CSRF/guest/outsider denials and actual block-endpoint/send serialization. Future room/team invitations are verified when their owners implement them; do not fabricate future endpoints. Required task acceptance plus root-entry API regression, API build, owned source/test types, changed lint, frozen/scope/secret/owned-schema audit. No release or paid services/media load claim.

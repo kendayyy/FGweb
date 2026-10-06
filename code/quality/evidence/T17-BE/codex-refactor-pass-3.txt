@@ -1,0 +1,147 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12988) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/social.integration.spec.ts (55.636 s)
+  ● T17-BE Social Integration, Locking & Concurrency › 2. Defect 1: Consistent Lock Ordering & Lock Barrier › Consistent lock ordering: holding pair lock queues eager send and eager respond, pg_locks NOT granted = 2
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 0
+
+      463 |           await new Promise((resolve) => setTimeout(resolve, 100));
+      464 |         }
+    > 465 |         expect(lockCount).toBe(2);
+          |                           ^
+      466 |
+      467 |         await barrierClient.query('COMMIT');
+      468 |
+
+      at Object.<anonymous> (test/social.integration.spec.ts:465:27)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 6. Defect 5: PostgreSQL Canonical Order (LEAST / GREATEST) › Handles synthetic Unicode IDs where JS collation differs from SQL LEAST/GREATEST
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      660 |         .send({ recipientUserId: 'user-ÿ' });
+      661 |
+    > 662 |       expect(dm.status).toBe(200);
+          |                         ^
+      663 |       expect(dm.body).toHaveProperty('conversationId');
+      664 |
+      665 |       const convRow = (await pool.query(`SELECT user1_id, user2_id FROM conversations WHERE id = $1`, [dm.body.conversationId])).rows[0];
+
+      at Object.<anonymous> (test/social.integration.spec.ts:662:25)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 7. Defect 6: Cursor Parsing & Malformed Input Handling › Malformed date/cursor returns 422 INVALID_INPUT rather than 500
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 401
+
+      679 |         .set('Cookie', cookieA);
+      680 |
+    > 681 |       expect(res.status).toBe(422);
+          |                          ^
+      682 |       expect(res.body.code).toBe('INVALID_INPUT');
+      683 |     });
+      684 |   });
+
+      at Object.<anonymous> (test/social.integration.spec.ts:681:26)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 8. Defect 8: Real Eager Advisory Lock Barrier (POST /blocks vs DM POST message) › Holds pair lock, queues actual POST /blocks and valid DM POST message, verifies pg_locks NOT granted waiters = 2
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 0
+
+      725 |           await new Promise((resolve) => setTimeout(resolve, 100));
+      726 |         }
+    > 727 |         expect(lockWaitersCount).toBe(2);
+          |                                  ^
+      728 |
+      729 |         await barrierClient.query('COMMIT');
+      730 |
+
+      at Object.<anonymous> (test/social.integration.spec.ts:727:34)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Real Socket.IO DM subscribe ACL: outsider denied, participant allowed
+
+    Socket access denied
+
+      at Socket.onpacket (../../node_modules/socket.io-client/build/esm-debug/socket.js:518:29)
+      at Manager.Emitter.emit (../../node_modules/@socket.io/component-emitter/lib/cjs/index.js:143:20)
+      at ../../node_modules/socket.io-client/build/esm-debug/manager.js:217:18
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › DM history remains accessible to participant after block
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      785 |         .set('Cookie', cookieC);
+      786 |
+    > 787 |       expect(historyRes.status).toBe(200);
+          |                                 ^
+      788 |     });
+      789 |
+      790 |     it('Reverse block delete ownership: unblock removes ONLY caller->target block', async () => {
+
+      at Object.<anonymous> (test/social.integration.spec.ts:787:33)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Self actions (friend request, DM, block) return 422 INVALID_INPUT
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 401
+
+      823 |         .set('Cookie', cookieA)
+      824 |         .send({ targetUserId: 'user-a' });
+    > 825 |       expect(fSelf.status).toBe(422);
+          |                            ^
+      826 |
+      827 |       const dmSelf = await request(base)
+      828 |         .post('/api/v1/direct-conversations')
+
+      at Object.<anonymous> (test/social.integration.spec.ts:825:28)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Unknown target user IDs return 404 NOT_FOUND
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 401
+
+      846 |         .set('Cookie', cookieA)
+      847 |         .send({ targetUserId: 'user-unknown-999' });
+    > 848 |       expect(fUnknown.status).toBe(404);
+          |                               ^
+      849 |
+      850 |       const dmUnknown = await request(base)
+      851 |         .post('/api/v1/direct-conversations')
+
+      at Object.<anonymous> (test/social.integration.spec.ts:848:31)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 17 passed, 25 total
+Snapshots:   0 total
+Time:        56.157 s
+Ran all test suites matching test/social.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts

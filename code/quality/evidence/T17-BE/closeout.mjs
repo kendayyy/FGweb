@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir='quality/evidence/T17-BE';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const labels=['resume-preflight','refactor-pass-5','refactor-regression-2','refactor-build-2','independent-native-expanded-1','independent-types-final','independent-lint-final','independent-audit-final','independent-diff-final'];
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8'));
+const task=ledger.tasks.find(t=>t.id==='T17-BE');
+assert.equal(task.status,'IN_PROGRESS');
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`,'utf8')));
+for(const r of records){assert.equal(r.exitCode,0,r.command);assert.equal(hash(r.evidencePath),r.evidenceSha256);assert(Date.parse(r.startedAt)>=Date.parse(task.startedAt));}
+assert(fs.readFileSync(`${dir}/codex-refactor-pass-5.txt`,'utf8').includes('30 passed'));
+assert(fs.readFileSync(`${dir}/codex-refactor-regression-2.txt`,'utf8').includes('129 passed'));
+assert.equal(fs.readFileSync(`${dir}/refactor-2-exit.txt`,'utf8').trim(),'0');
+assert(!fs.readFileSync(`${dir}/refactor-2-error.txt`,'utf8').includes('print timeout'));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify(records,null,2)+'\n');
+const files=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const outputs=[...files('apps/api/src/modules/social'),'apps/api/src/app.module.ts','apps/api/test/social.integration.spec.ts',...files(dir)];
+Object.assign(task,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:[`${dir}/run-manifest-implementation.md`,`${dir}/review.md`,`${dir}/codex-impl-red-2.txt`,`${dir}/final-verification.json`,...records.flatMap(r=>[r.evidencePath,r.evidencePath.replace(/\.txt$/,'.json')])],outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))},blockers:[]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Private friends/requests/DM/blocks, receiver and sender ACL, retries and fresh consent, canonical pair race/session checks, preserved history | T17-BE | genuine route RED;30 social+129 API;18 independent compiledAPI/PG/WS check groups;types/lint/build/frozen/scope/secret/cleanup audit | PASS |\n');
+console.log('T17-BE PASS; T17-FE remains unopened until its gate passes.');

@@ -1,0 +1,275 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22616) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/social.integration.spec.ts (32.188 s)
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 1. GET /api/v1/friends returns paginated PublicProfile list
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 2. GET /api/v1/friends/requests returns incoming/outgoing friend requests
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 3. POST /api/v1/friends/requests creates or retries friend request
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 4. Opposite friend request send does not bypass receiver respond
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 5. PATCH /api/v1/friends/requests/:id/respond receiver accepts/rejects
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 6. DELETE /api/v1/friends/:userId removes friendship
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 7. DELETE /api/v1/friends/requests/:id/cancel allows sender to cancel pending request
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 8. POST /api/v1/direct-conversations creates or gets DM without friendship
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 9. GET /api/v1/direct-conversations lists user DMs with peer PublicProfile
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 10. POST /api/v1/blocks and GET /api/v1/blocks
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 11. DELETE /api/v1/blocks/:userId removes block
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Guest / Unauthenticated REST requests return 401
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Non-onboarded & Banned user mutations return 403
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › CSRF missing Origin returns 403 on mutations
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Real Socket.IO DM subscribe ACL check: outsider cannot subscribe
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Concurrent opposite-order DM creation yields 1 conversation & 2 members
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Real advisory lock barrier: POST /blocks vs DM POST message serialization
+
+    error: column "admin_user_id" of relation "admin_actions" does not exist
+
+      101 |
+      102 |     // Banned user action
+    > 103 |     await pool.query(`
+          |     ^
+      104 |       INSERT INTO admin_actions(id, admin_user_id, target_user_id, action, reason, created_at) VALUES
+      105 |       ('action-ban-1', 'user-a', 'user-banned', 'BAN', 'Violation', now())
+      106 |     `);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/social.integration.spec.ts:103:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       17 failed, 17 total
+Snapshots:   0 total
+Time:        33.834 s
+Ran all test suites matching test/social.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts

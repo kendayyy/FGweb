@@ -1,0 +1,5 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T17-BE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8')),task=ledger.tasks.find(t=>t.id==='T17-BE');assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.id==='T12-FIX1').status,'PASS');
+Object.assign(task,{status:'IN_PROGRESS',inputsHash:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),startedAt:new Date().toISOString(),completedAt:null,commands:[],blockers:[]});fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/resume-baseline-status.txt`,execFileSync('git',['status','--short'],{encoding:'utf8'}));
+const cfg=JSON.parse(fs.readFileSync('quality/evidence/T12-FIX1/test-types-v2.json','utf8'));cfg.include=['../../../apps/api/src','../../../apps/api/test/social.integration.spec.ts','../../../apps/api/test/test-cookie-helper.ts'];fs.writeFileSync(`${dir}/test-types-resume.json`,JSON.stringify(cfg,null,2)+'\n');

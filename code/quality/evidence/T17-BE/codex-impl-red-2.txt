@@ -1,0 +1,306 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22444) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/social.integration.spec.ts (36.279 s)
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 1. GET /api/v1/friends returns paginated PublicProfile list
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      198 |         .set('Cookie', cookieA);
+      199 |
+    > 200 |       expect(res.status).toBe(200);
+          |                          ^
+      201 |       const parsed = createPageSchema(PublicProfileSchema).parse(res.body);
+      202 |       expect(Array.isArray(parsed.items)).toBe(true);
+      203 |     });
+
+      at Object.<anonymous> (test/social.integration.spec.ts:200:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 2. GET /api/v1/friends/requests returns incoming/outgoing friend requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      208 |         .set('Cookie', cookieB);
+      209 |
+    > 210 |       expect(resIn.status).toBe(200);
+          |                            ^
+      211 |       const parsedIn = createPageSchema(PendingFriendRequestSchema).parse(resIn.body);
+      212 |       expect(Array.isArray(parsedIn.items)).toBe(true);
+      213 |     });
+
+      at Object.<anonymous> (test/social.integration.spec.ts:210:28)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 3. POST /api/v1/friends/requests creates or retries friend request
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 201]
+
+      220 |         .send({ targetUserId: 'user-b' });
+      221 |
+    > 222 |       expect([200, 201]).toContain(res.status);
+          |                          ^
+      223 |       expect(res.body).toHaveProperty('requestId');
+      224 |       expect(res.body.status).toBe('PENDING');
+      225 |
+
+      at Object.<anonymous> (test/social.integration.spec.ts:222:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 4. Opposite friend request send does not bypass receiver respond
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 404
+
+      243 |         .send({ targetUserId: 'user-a' });
+      244 |
+    > 245 |       expect(opp.status).toBe(409);
+          |                          ^
+      246 |     });
+      247 |
+      248 |     it('5. PATCH /api/v1/friends/requests/:id/respond receiver accepts/rejects', async () => {
+
+      at Object.<anonymous> (test/social.integration.spec.ts:245:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 5. PATCH /api/v1/friends/requests/:id/respond receiver accepts/rejects
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      252 |         .set('Cookie', cookieB);
+      253 |
+    > 254 |       const reqId = list.body.items[0].requestId;
+          |                                    ^
+      255 |
+      256 |       // Sender A trying to accept should fail (receiver ONLY)
+      257 |       const senderFail = await request(base)
+
+      at Object.<anonymous> (test/social.integration.spec.ts:254:36)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 6. DELETE /api/v1/friends/:userId removes friendship
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      287 |         .set('Cookie', cookieA);
+      288 |
+    > 289 |       expect(del.status).toBe(200);
+          |                          ^
+      290 |       expect(del.body).toEqual({ success: true });
+      291 |
+      292 |       const friendsA = await request(base)
+
+      at Object.<anonymous> (test/social.integration.spec.ts:289:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 7. DELETE /api/v1/friends/requests/:id/cancel allows sender to cancel pending request
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      313 |         .set('Cookie', cookieC);
+      314 |
+    > 315 |       expect(receiverCancel.status).toBe(403);
+          |                                     ^
+      316 |
+      317 |       // Sender A cancels
+      318 |       const cancel = await request(base)
+
+      at Object.<anonymous> (test/social.integration.spec.ts:315:37)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 8. POST /api/v1/direct-conversations creates or gets DM without friendship
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 201]
+
+      332 |         .send({ recipientUserId: 'user-c' });
+      333 |
+    > 334 |       expect([200, 201]).toContain(dm.status);
+          |                          ^
+      335 |       expect(dm.body).toHaveProperty('conversationId');
+      336 |
+      337 |       // Idempotent retry returns same conversationId
+
+      at Object.<anonymous> (test/social.integration.spec.ts:334:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 9. GET /api/v1/direct-conversations lists user DMs with peer PublicProfile
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      350 |         .set('Cookie', cookieA);
+      351 |
+    > 352 |       expect(list.status).toBe(200);
+          |                           ^
+      353 |       expect(list.body.items.length).toBeGreaterThan(0);
+      354 |       expect(list.body.items[0]).toHaveProperty('conversationId');
+      355 |       expect(list.body.items[0]).toHaveProperty('peer');
+
+      at Object.<anonymous> (test/social.integration.spec.ts:352:27)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 10. POST /api/v1/blocks and GET /api/v1/blocks
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 201]
+
+      365 |         .send({ blockedId: 'user-b' });
+      366 |
+    > 367 |       expect([200, 201]).toContain(blockRes.status);
+          |                          ^
+      368 |       BlockSchema.parse(blockRes.body);
+      369 |
+      370 |       // GET /blocks lists for A
+
+      at Object.<anonymous> (test/social.integration.spec.ts:367:26)
+
+  ● T17-BE Social Integration & Concurrency › 11 Social Transport Endpoints › 11. DELETE /api/v1/blocks/:userId removes block
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      401 |         .set('Cookie', cookieA);
+      402 |
+    > 403 |       expect(unblock.status).toBe(200);
+          |                              ^
+      404 |       expect(unblock.body).toEqual({ success: true });
+      405 |     });
+      406 |   });
+
+      at Object.<anonymous> (test/social.integration.spec.ts:403:30)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Guest / Unauthenticated REST requests return 401
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      409 |     it('Guest / Unauthenticated REST requests return 401', async () => {
+      410 |       const res = await request(base).get('/api/v1/friends');
+    > 411 |       expect(res.status).toBe(401);
+          |                          ^
+      412 |     });
+      413 |
+      414 |     it('Non-onboarded & Banned user mutations return 403', async () => {
+
+      at Object.<anonymous> (test/social.integration.spec.ts:411:26)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Non-onboarded & Banned user mutations return 403
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      419 |         .send({ targetUserId: 'user-a' });
+      420 |
+    > 421 |       expect(nonOn.status).toBe(403);
+          |                            ^
+      422 |
+      423 |       const banned = await request(base)
+      424 |         .post('/api/v1/friends/requests')
+
+      at Object.<anonymous> (test/social.integration.spec.ts:421:28)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › CSRF missing Origin returns 403 on mutations
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      436 |         .send({ targetUserId: 'user-b' });
+      437 |
+    > 438 |       expect(res.status).toBe(403);
+          |                          ^
+      439 |     });
+      440 |
+      441 |     it('Real Socket.IO DM subscribe ACL check: outsider cannot subscribe', async () => {
+
+      at Object.<anonymous> (test/social.integration.spec.ts:438:26)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Real Socket.IO DM subscribe ACL check: outsider cannot subscribe
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      462 |
+      463 |       const parsedMemberAck = SocketConversationAckSchema.parse(ackMember);
+    > 464 |       expect(parsedMemberAck.ok).toBe(true);
+          |                                  ^
+      465 |     });
+      466 |
+      467 |     it('Concurrent opposite-order DM creation yields 1 conversation & 2 members', async () => {
+
+      at Object.<anonymous> (test/social.integration.spec.ts:464:34)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Concurrent opposite-order DM creation yields 1 conversation & 2 members
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 201]
+
+      479 |       ]);
+      480 |
+    > 481 |       expect([200, 201]).toContain(res1.status);
+          |                          ^
+      482 |       expect([200, 201]).toContain(res2.status);
+      483 |       expect(res1.body.conversationId).toBe(res2.body.conversationId);
+      484 |     });
+
+      at Object.<anonymous> (test/social.integration.spec.ts:481:26)
+
+  ● T17-BE Social Integration & Concurrency › Security, ACL, WS & Real Concurrency › Real advisory lock barrier: POST /blocks vs DM POST message serialization
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 404
+    Received array: [200, 201]
+
+      523 |
+      524 |         const blockResult = await blockPromise;
+    > 525 |         expect([200, 201]).toContain(blockResult.status);
+          |                            ^
+      526 |
+      527 |         // Subsequent message send after block commit must fail with 403
+      528 |         const msgResult = await request(base)
+
+      at Object.<anonymous> (test/social.integration.spec.ts:525:28)
+
+Test Suites: 1 failed, 1 total
+Tests:       17 failed, 17 total
+Snapshots:   0 total
+Time:        37.033 s
+Ran all test suites matching test/social.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/social.integration.spec.ts

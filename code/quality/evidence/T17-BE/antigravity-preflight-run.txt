@@ -1,0 +1,26 @@
+The READ-ONLY source preflight analysis for **FG task T17-BE** has been completed, and the proposal has been generated at [prerequisite-proposal.md](file:///E:/FGweb/code/quality/evidence/T17-BE/prerequisite-proposal.md).
+
+### Preflight Analysis Summary
+
+1. **Social Endpoint & Persistence Compatibility**:
+   - All 10 social endpoints in `@fg/contracts` (`packages/contracts/src/moderation.ts`, `index.ts`) map directly to PostgreSQL tables in `@fg/database` (`packages/database/src/schema/social.ts` and `conversations.ts`).
+   - Friendships (`user1_id < user2_id`) and DMs (`kind = 'DM'`, `user1_id < user2_id`) enforce canonical user pair ordering to prevent duplicate state. No custom DTOs or DB triggers are needed inside backend.
+2. **REST & WebSocket Messaging & Block Enforcement**:
+   - `ChatService.authorize` verifies DM participant membership, but currently lacks a check against the `blocks` table.
+   - For T17-BE implementation, `ChatService.authorize` must be updated to reject DM message creation with `403 FORBIDDEN` if an active block exists between the pair.
+   - Lobby messages from blocked users remain stored in the DB (for reports/moderation) and are hidden locally by the client per Spec Section 3.
+   - Blocking preserves historical DM messages and room memberships without auto-kicking users or deleting chat history.
+3. **AppModule Wiring**:
+   - `SocialModule` (to be created at `apps/api/src/modules/social/`) will be imported into `apps/api/src/app.module.ts`.
+4. **Friend Request Listing Contract Boundary (T17-FE)**:
+   - `@fg/contracts` v1.0.0 includes schemas for send, respond, remove, and cancel, but lacks `GET /api/v1/friends/requests` (pending friend requests list).
+   - If T17-FE requires a pending friend request list in the UI, a contract addition should be formally proposed for `@fg/contracts` prior to T17-FE to adhere to Rule 07.
+5. **Privacy & Guest Protection Audit**:
+   - `GET /api/v1/users/:id/profile` returns `PublicProfileSchema`, omitting email, auth details, and private social relationships.
+   - Guests are strictly rejected with `401 LOGIN_REQUIRED` on social routes and `403 FORBIDDEN` when attempting DM socket subscriptions or history reads.
+
+### Proposal Artifact
+The complete prerequisite proposal is saved at:
+- [prerequisite-proposal.md](file:///E:/FGweb/code/quality/evidence/T17-BE/prerequisite-proposal.md)
+
+*No production code, test suites, database schema, contracts, spec, or task ledger files were edited during this preflight.*

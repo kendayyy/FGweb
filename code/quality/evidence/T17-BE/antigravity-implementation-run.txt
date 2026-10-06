@@ -1,0 +1,50 @@
+I will wait for the background command to complete before proceeding with next actions.
+I will wait for the typecheck command to finish before proceeding.
+I will wait for the typecheck command to finish.
+I will wait for the integration test command to complete.
+I will wait for the integration test command to complete.
+I will wait for the full regression test command to complete.
+I will wait for the API build command to finish.
+### FG T17-BE Implementation Summary
+
+All implementation, security, concurrency, and validation requirements for FG **T17-BE** (Social Backend Module: Friendships, Direct Messaging, and Blocks) have been completed and empirically verified.
+
+---
+
+### Key Work Items Implemented
+
+1. **Social Module Architecture** (`apps/api/src/modules/social/`):
+   - [social.service.ts](file:///E:/FGweb/code/apps/api/src/modules/social/social.service.ts): Implemented all 11 transport methods with transaction atomicity, `ChatService.lockSocialPair` advisory lock serialization, bounded stable pagination, and projection of peer public profiles using `ProfilesService.getPublicProfile`.
+   - [social.controller.ts](file:///E:/FGweb/code/apps/api/src/modules/social/social.controller.ts): Expressed all 11 REST routes with Zod schema validation, numeric query parameter normalization, CSRF origin verification (`CsrfGuard`), session auth (`SessionGuard`), and onboarding requirements (`RequireOnboardedGuard`).
+   - [social.exception-filter.ts](file:///E:/FGweb/code/apps/api/src/modules/social/social.exception-filter.ts): Formatted NestJS HTTP exceptions into standard contract payloads (`{ code, message, requestId }`).
+   - [social.module.ts](file:///E:/FGweb/code/apps/api/src/modules/social/social.module.ts): Registered controllers, providers, and imports for `AuthModule` and `ProfilesModule`.
+
+2. **App Module Mount** (`apps/api/src/app.module.ts`):
+   - Minimal addition of `SocialModule` import and mount.
+
+3. **Comprehensive Integration & Concurrency Test Suite** (`apps/api/test/social.integration.spec.ts`):
+   - Native Nest application execution on real migrated PostgreSQL schema (`t17_social_*`) and real Socket.IO connections.
+   - Tested all 11 transport routes, payload schemas, owner-only request filtering, receiver-only accept/reject, sender-only request cancellation, opposite send conflict guards (409), DM without friendship, block restrictions (403 on new friend requests / DMs), and preserved historical chat/members.
+   - Tested real advisory lock serialization (`POST /blocks` vs `POST /conversations/:id/messages`) with barrier transaction holding `lockSocialPair` and inspecting `pg_locks`.
+
+---
+
+### Verification Evidence & Command Records
+
+| Verification Step | Label | Exit Code | Result |
+| :--- | :--- | :---: | :--- |
+| **RED Integration Test** | `impl-red-2` | 1 | Verified true RED behavior (endpoints returning 404 prior to module mount) |
+| **Typecheck** | `impl-typecheck-2` | 0 | `tsc` passed with 0 errors |
+| **Integration Test Suite** | `impl-pass-2` | 0 | 17/17 integration & concurrency tests PASS |
+| **Full API Regression** | `impl-regression` | 0 | All API test suites (auth, profiles, lobby, chat-rich, presence, social) PASS |
+| **API Workspace Build** | `impl-build` | 0 | `@fg/api` workspace build succeeded |
+| **ESLint Check** | `impl-lint-2` | 0 | 0 lint errors across modified sources and tests |
+| **Implementation Audit** | `impl-audit` | 0 | Scope, boundary, secret leak, and DB schema cleanup verified |
+
+---
+
+### Codex Review Readiness
+
+- **Next Task**: T17-FE
+- **Ledger Status**: `quality/tasks.json` left untouched per task instructions.
+- **Git State**: New social files staged with intent-to-add (`git add -N`); `git diff --check` passed cleanly with 0 whitespace issues. Ready for independent Codex review and task closure.

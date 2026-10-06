@@ -1,0 +1,5 @@
+# Independent probe calibration before first execution
+
+The shared social API registry specifies payload/auth schemas but no success HTTP201 requirement. Existing action-style POST social controllers explicitly choose HTTP200. Before running native-review.mjs for the first time, its draft social success expectations were calibrated to exact200; chat message creation retains exact201. This is documented transport calibration, not loosening a failed assertion or modifying an approved contract/test. Actual response schemas, denial status, raw private-field checks, row counts and the two-waiter race assertions are retained.
+
+The immutable error enum also has no generic CONFLICT. Codex's initial prompt incorrectly mentioned such a code. Review directs in-scope invalid relationship-state actions to existing INVALID_INPUT422 rather than misusing ACTIVE_PLAY_CONFLICT or widening contracts. The new unapproved test's409 assumption needs explicit correction with this rationale; historical/frozen assertions stay unchanged.
