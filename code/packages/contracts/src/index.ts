@@ -8,7 +8,7 @@ import {
   createPageSchema,
   ApiErrorResponseSchema,
 } from './common.js';
-import { MeDTOSchema } from './auth.js';
+import { MeDTOSchema,SignUpEmailRequestSchema,SignInEmailRequestSchema,SendVerificationEmailRequestSchema,VerifyEmailQuerySchema,RequestPasswordResetSchema,ResetPasswordRequestSchema,ChangePasswordRequestSchema,PasswordChallengeRequestSchema,AttachPasswordRequestSchema,PasswordStatusResponseSchema,AuthStatusResponseSchema,AuthMailResponseSchema,SignUpEmailResponseSchema,SignInEmailResponseSchema,VerifyEmailResponseSchema,ChangePasswordResponseSchema } from './auth.js';
 import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
 import {UploadImageRequestSchema,AttachmentUrlSchema,ImageContentSchema} from './uploads.js';
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
@@ -98,6 +98,16 @@ export interface ApiEndpointDefinition {
 }
 
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
+  {method:'POST',path:'/api/auth/sign-up/email',auth:'Public',requestSchema:SignUpEmailRequestSchema,responseSchema:SignUpEmailResponseSchema},
+  {method:'POST',path:'/api/auth/sign-in/email',auth:'Public',requestSchema:SignInEmailRequestSchema,responseSchema:SignInEmailResponseSchema},
+  {method:'POST',path:'/api/auth/send-verification-email',auth:'Public',requestSchema:SendVerificationEmailRequestSchema,responseSchema:AuthStatusResponseSchema},
+  {method:'GET',path:'/api/auth/verify-email',auth:'Public',requestSchema:VerifyEmailQuerySchema,responseSchema:VerifyEmailResponseSchema},
+  {method:'POST',path:'/api/auth/request-password-reset',auth:'Public',requestSchema:RequestPasswordResetSchema,responseSchema:AuthMailResponseSchema},
+  {method:'POST',path:'/api/auth/reset-password',auth:'Public',requestSchema:ResetPasswordRequestSchema,responseSchema:AuthStatusResponseSchema},
+  {method:'POST',path:'/api/auth/change-password',auth:'Authenticated',requestSchema:ChangePasswordRequestSchema,responseSchema:ChangePasswordResponseSchema},
+  {method:'GET',path:'/api/auth/fg/password-status',auth:'Authenticated',responseSchema:PasswordStatusResponseSchema},
+  {method:'POST',path:'/api/auth/fg/password-challenge',auth:'Authenticated',requestSchema:PasswordChallengeRequestSchema,responseSchema:AuthStatusResponseSchema},
+  {method:'POST',path:'/api/auth/fg/password-attach',auth:'Authenticated',requestSchema:AttachPasswordRequestSchema,responseSchema:AuthStatusResponseSchema},
   { method: 'GET', path: '/api/v1/me', auth: 'Authenticated', responseSchema: MeDTOSchema },
   { method: 'PATCH', path: '/api/v1/me/profile', auth: 'Authenticated', requestSchema: UpdateProfileRequestSchema, responseSchema: PrivateProfileSchema },
   { method: 'POST', path: '/api/v1/me/onboarding', auth: 'Authenticated', requestSchema: OnboardingRequestSchema, responseSchema: PrivateProfileSchema },

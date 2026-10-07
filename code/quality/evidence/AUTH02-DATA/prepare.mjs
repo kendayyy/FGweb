@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/AUTH02-DATA',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='AUTH02-DATA');assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.id==='T03-FIX12').status,'PASS');
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.inputsHash={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),approvedRequirement:'AUTH-CHANGE-02/spec14; owner nullable identity and Better Auth wire schemas; existing schema audit only, no migration unless required'};task.blockers=[];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const own=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!own(f)).map(f=>[f,hash(f)])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T03-FIX12/record.mjs','utf8').replaceAll('T03-FIX12','AUTH02-DATA'));
+fs.writeFileSync(`${dir}/plan.md`,'# AUTH02-DATA\n\nShared owner DTO discordId nullable; maintain Discord compatibility and public stripping. Strict bounded Better Auth1.7.7 request/wire response schemas for signup/signin/verify/resend/reset/change plus session-bound fresh email password challenge, attachment and password status. No direct set-password endpoint allowed. Password preserves spaces/Unicode. Reset only existing credential; cannot attach credential to Discord through reset. Callback paths same-origin relative, no client actor.\n\nInstalled schema already has credential password, user verification flag, verification expiry/value and provider/account unique constraint. Prove with real isolated migrated PostgreSQL plus installed adapter metadata/hash, preserving a seeded Discord user/profile/session. No migration/schema source change required unless actual audit shows mismatch. Downstream producer changes remain AUTH02-BE, frontend remains AUTH02-FE.\n');
+console.log('AUTH02-DATA active; exact contracts-only scope, real existing schema audit next.');

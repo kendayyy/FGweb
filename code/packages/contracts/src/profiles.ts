@@ -62,7 +62,7 @@ export const PrivateProfileSchema = z.object({
   gameProfiles: z.array(GameProfileSchema).default([]),
   createdAt: IsoDateTimeSchema,
   email: z.string().email(),
-  discordId: z.string().min(1),
+  discordId: z.string().min(1).nullable(),
   emailVerified: z.boolean(),
 });
 export type PrivateProfileDTO = z.infer<typeof PrivateProfileSchema>;

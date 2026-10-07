@@ -1,5 +1,26 @@
 # FG API Contract & Data Model Specifications (v1)
 
+## AUTH02 — approved email/password extension (Better Auth1.7.7)
+
+All routes below remain under `/api/auth`; Discord social login/callback/logout remain unchanged. Shared strict requests reject client identity/grant/hash overrides. FG owner DTOs allow `discordId:null`; public serializers still strip email/verification/provider/secrets. Native Better Auth private auth results use `BetterAuthUserSchema`, never a public profile or authenticated FG session inferred from signup.
+
+| Method/path | Access | Shared request → response |
+| --- | --- | --- |
+| POST `/api/auth/sign-up/email` | Public | SignUpEmailRequest → SignUpEmailResponse |
+| POST `/api/auth/sign-in/email` | Public | SignInEmailRequest → SignInEmailResponse |
+| POST `/api/auth/send-verification-email` | Public | SendVerificationEmailRequest → AuthStatusResponse |
+| GET `/api/auth/verify-email` | Public | VerifyEmailQuery → VerifyEmailResponse (or same-origin callback redirect) |
+| POST `/api/auth/request-password-reset` | Public | RequestPasswordReset → AuthMailResponse |
+| POST `/api/auth/reset-password` | Public | ResetPasswordRequest → AuthStatusResponse |
+| POST `/api/auth/change-password` | Current session | ChangePasswordRequest → ChangePasswordResponse |
+| GET `/api/auth/fg/password-status` | Current session | none → PasswordStatusResponse |
+| POST `/api/auth/fg/password-challenge` | Current session | PasswordChallengeRequest → AuthStatusResponse |
+| POST `/api/auth/fg/password-attach` | Current session | AttachPasswordRequest → AuthStatusResponse |
+
+Password creation/reset/change/attach12–128 UTF-16 code units (installed Better Auth length semantics), spaces/Unicode preserved without trimming; current/signin password1–128 supports validation of existing credentials. Better Auth salted scrypt remains the password implementation. Creation requires verification24h and creates no session; duplicate signup uses the native generic response with a synthetic non-authenticated result, never discloses existing identity. UI displays the same check-email guidance, never signup success/session from this result. Reset expiry1h, one use, revokes sessions; only existing credential accounts can use reset, preventing reset from silently adding credentials to Discord users. Email verification must reject expiration/replay. Mail resend/signin/challenge endpoints are rate limited and require real SMTP acceptance; generic unknown-email replies do not assert delivery.
+
+Fresh attachment sends a one-use secret link to the current user's stored email, bound to current user/session/email with24h expiry; request contains no target email/userId. Old `emailVerified` alone never authorizes attachment. Only the same currently valid non-banned session can consume the link and attach one credential while keeping userId/profile/community. Password status exposes only `hasPassword`. Direct Better Auth `/set-password` is disabled. Change requires current password and revokes other sessions. Relative same-origin callback paths only; no external or protocol-relative redirects. Token/body values must never appear in logs/evidence. Backend AUTH02-BE owns actual ACL, fresh challenge, SMTP, replay/race and existing-credential reset enforcement; this checkpoint declares contracts only.
+
 > Package `@fg/contracts` (v1.0.0) exports Zod schemas, inferred DTO types, ErrorCodes with HTTP mappings, Socket.IO realtime event payload schemas, and the `ApiEndpointRegistry`.
 
 ---

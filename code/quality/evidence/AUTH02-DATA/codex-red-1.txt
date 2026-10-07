@@ -1,0 +1,134 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/auth-email.test.ts (7 tests | 7 failed) 45ms
+   ❯ AUTH02 owner identity and auth transports (7)
+     × accepts email-only owner identity without weakening public privacy or Discord compatibility 20ms
+     × keeps native signup response separate from an authenticated FG session 10ms
+     × bounds signup/reset/change passwords and preserves spaces and Unicode verbatim 4ms
+     × requires current password for change, and rejects client actor/hash/grant overrides on all new mutations 2ms
+     × allows only bounded relative same-origin callbacks and token queries 1ms
+     × labels fresh attachment/status as session-only and excludes unsafe direct set-password transport 1ms
+     × validates native signin and generic mail/reset results without public provider/hash fields 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > accepts email-only owner identity without weakening public privacy or Discord compatibility
+ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "discordId"
+    ],
+    "message": "Invalid input: expected string, received null"
+  }
+]
+ ❯ test/auth-email.test.ts:8:24
+      6| describe('AUTH02 owner identity and auth transports',()=>{
+      7|  it('accepts email-only owner identity without weakening public privac…
+      8|   expect(c.MeDTOSchema.parse(me).discordId).toBeNull();expect(c.Privat…
+       |                        ^
+      9|   expect(c.MeDTOSchema.parse({...me,discordId:'discord-existing'}).dis…
+     10|   const publicData=c.PublicProfileSchema.parse({...profile,password:'p…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > keeps native signup response separate from an authenticated FG session
+AssertionError: expected undefined to be 'Public' // Object.is equality
+
+- Expected:
+"Public"
+
++ Received:
+undefined
+
+ ❯ test/auth-email.test.ts:15:107
+     13|  });
+     14|  it('keeps native signup response separate from an authenticated FG se…
+     15|   const endpoint=c.ApiEndpointRegistry.find(e=>e.path==='/api/auth/sig…
+       |                                                                                                           ^
+     16|   expect(endpoint?.requestSchema?.parse({name:'FG Gamer',email:me.emai…
+     17|   expect(endpoint?.responseSchema.safeParse({token:null,user:{id:'sign…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > bounds signup/reset/change passwords and preserves spaces and Unicode verbatim
+AssertionError: expected undefined to be defined
+ ❯ test/auth-email.test.ts:22:96
+     20|  it('bounds signup/reset/change passwords and preserves spaces and Uni…
+     21|   for(const path of ['/api/auth/sign-up/email','/api/auth/reset-passwo…
+     22|    const endpoint=c.ApiEndpointRegistry.find(e=>e.path===path);expect(…
+       |                                                                                                ^
+     23|    const base=path.endsWith('sign-up/email')?{name:'FG',email:me.email…
+     24|    const field=path.endsWith('sign-up/email')?'password':'newPassword';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > requires current password for change, and rejects client actor/hash/grant overrides on all new mutations
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ test/auth-email.test.ts:31:156
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > allows only bounded relative same-origin callbacks and token queries
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ test/auth-email.test.ts:38:82
+     36|   for(const [path,field]of [['/api/auth/sign-up/email','callbackURL'],…
+     37|    const schema=c.ApiEndpointRegistry.find(e=>e.path===path)?.requestS…
+     38|    expect(schema?.safeParse({...base,[field]:'/auth/verify?source=FG'}…
+       |                                                                                  ^
+     39|    for(const value of ['https://evil.example/','//evil.example/','/\\e…
+     40|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > labels fresh attachment/status as session-only and excludes unsafe direct set-password transport
+AssertionError: expected undefined to be 'Authenticated' // Object.is equality
+
+- Expected:
+"Authenticated"
+
++ Received:
+undefined
+
+ ❯ test/auth-email.test.ts:44:206
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  test/auth-email.test.ts > AUTH02 owner identity and auth transports > validates native signin and generic mail/reset results without public provider/hash fields
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ test/auth-email.test.ts:49:274
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  13:32:34
+   Duration  1.13s (transform 51%, import 40%, tests 6%, worker 3%)
+

@@ -57,3 +57,4 @@
 | Approved AUTH02 requirements/mockup04 adopted; historical PASS and current contracts WIP preserved | T00-REBASE-AUTH02 |11 gate tests, exact derived rebuild, seven-source/frozen/scope audit, lint/diff | PASS (baseline only) |
 | Approved Sáng/Tối/Hệ thống plan adopted; light visual review pending; source WIP/history preserved | T00-REBASE-LIGHT01 | seven sources, frozen/WIP/readonly audit, lint/diff | PASS (metadata only) |
 | Current-member private room session discovery, strict bounded cursor query and existing Page DTO | T03-FIX12 |4 new/92 contracts tests,build,source/test/API/web types,lint,scope audit | PASS (contracts) |
+| AUTH02 nullable private identity; email/password transport schemas; existing credential/verification DB compatibility | AUTH02-DATA |7 RED/99 PASS contracts;real migrated PG and scrypt proof;build/types/lint/scope audit | PASS (contracts/schema audit only) |
