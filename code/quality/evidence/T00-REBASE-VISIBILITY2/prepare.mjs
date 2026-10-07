@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T00-REBASE-VISIBILITY2',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+assert(!ledger.tasks.some(t=>t.id==='T00-REBASE-VISIBILITY2'));
+fs.writeFileSync(`${dir}/previous-ledger.json`,JSON.stringify(ledger,null,2)+'\n');fs.writeFileSync(`${dir}/previous-baseline.json`,JSON.stringify(baseline,null,2)+'\n');
+for(const [name,file]of Object.entries({spec:'../.doc/01-product-spec.md',task:'../.doc/task.md',agents:'AGENTS.md',rootAgents:'../AGENTS.md',testing:'../.agents/rules/08-testing-and-evidence.md'}))fs.copyFileSync(file,`${dir}/${name}.md`);
+const hashes={...baseline.hashes,specSha256:hash('../.doc/01-product-spec.md'),taskSha256:hash('../.doc/task.md')};
+baseline.amendments.push({id:'TEST-VISIBILITY-01-REV2',date:'2026-10-07',previousHashes:baseline.hashes,hashes,evidence:`${dir}/review.md`,authorization:'Latest human-authored AGENTS/rule08: only UI/E2E headed; unit/integration/API/DB/load background allowed; no visible terminal/log requirement',scope:'Process only; no runtime behavior or historic evidence changes'});baseline.hashes=hashes;
+fs.writeFileSync('quality/spec-baseline.json',JSON.stringify(baseline,null,2)+'\n');
+for(const t of ledger.tasks){t.baselineAdoptions=[...(t.baselineAdoptions??[]),{previousSpecSha256:t.specSha256,newSpecSha256:hashes.specSha256,reviewTask:'T00-REBASE-VISIBILITY2',scopeImpact:'Only real UI/E2E require headed observation; prior stricter visible DB runs remain valid'}];t.specSha256=hashes.specSha256;}
+const task={id:'T00-REBASE-VISIBILITY2',status:'IN_PROGRESS',dependencies:['T00-REBASE-VISIBILITY'],specSha256:hashes.specSha256,startedAt:new Date().toISOString(),completedAt:null,commands:[],evidencePaths:[],outputsHash:null,blockers:[],writeAllowlist:['quality/spec-baseline.json','AGENTS.md',`${dir}/**`]};
+ledger.tasks.splice(ledger.tasks.findIndex(t=>t.id==='T06-FIX1'),0,task);Object.assign(ledger.tasks.find(t=>t.id==='T06-FIX1'),{status:'BLOCKED',dependencies:[task.id],blockers:['Latest user process amendment review']});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T06-FIX1/record.mjs','utf8').replaceAll('T06-FIX1','T00-REBASE-VISIBILITY2'));
+let audit=fs.readFileSync('quality/evidence/T00-REBASE-VISIBILITY/audit.mjs','utf8').replaceAll('T00-REBASE-VISIBILITY','T00-REBASE-VISIBILITY2');
+audit=audit.slice(0,audit.indexOf('const smoke='))+"console.log(JSON.stringify({baselines:6,historicPassRecordsUnchanged:previous.tasks.filter(t=>t.status==='PASS').length,frozenFiles:latest.size,checkerUnchanged:true,processOnlyAmendment:true}));\n";
+audit=audit.replace("for(const name of ['01-product-spec.md','02-frontend-design.md','task.md'])assert.equal(hash(`../.doc/${name}`),hash(`${dir}/${name}`));","assert.equal(hash('../.doc/01-product-spec.md'),hash(`${dir}/spec.md`));assert.equal(hash('../.doc/task.md'),hash(`${dir}/task.md`));");
+fs.writeFileSync(`${dir}/audit.mjs`,audit);
+fs.writeFileSync(`${dir}/review.md`,'# Latest TEST-VISIBILITY-01 process review\n\nHuman changes in root/code AGENTS, rule08, spec history and task process consistently limit observation to real UI/E2E headed browsers/apps. Unit/component DOM simulation, API/DB/integration/smoke/load can run in background, no terminal display required. Reviewed git diff: development policy only; product/features/design unchanged. Existing visible helpers remain frozen and optional, not used for subsequent DB/API tests. Prior DB51-test visible regression remains valid under the relaxed policy and is not rerun for presentation. Previous manifest/ledger preserved; historical status/output/command/evidence/timestamps unchanged. Baseline and appended process text code AGENTS are reviewed owner outputs; strict checker untouched.\n');
+console.log('Process-only revision prepared; audit required before PASS.');

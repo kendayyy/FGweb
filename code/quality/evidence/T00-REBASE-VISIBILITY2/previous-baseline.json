@@ -1,0 +1,214 @@
+{
+  "projectName": "FG",
+  "approval": "tôi chốt",
+  "approvalDate": "2026-10-04",
+  "approvalScope": "User explicitly approved the whole proposed T00 defaults package on 2026-10-04. Existing approved name FG and two mockups preserved.",
+  "baselineGitHead": "99ac4dacc8fb3e8a014d3c0d5c632caa683b0804",
+  "confirmedTechStack": {
+    "runtime": "Node24",
+    "language": "TypeScript",
+    "frontend": "React, Vite, Tailwind CSS, TanStack Query, React Router, Inter font (self-hosted)",
+    "backend": "NestJS",
+    "database": "PostgreSQL, Drizzle ORM",
+    "cacheAndQueue": "Redis, BullMQ",
+    "auth": "Better Auth (Discord provider only)",
+    "realtime": "Socket.IO",
+    "media": "Self-hosted LiveKit SFU",
+    "delivery": "Nodemailer (SMTP), Web Push (VAPID)"
+  },
+  "confirmedProductDefaults": {
+    "gameCatalog": [
+      "Liên Minh Huyền Thoại",
+      "Valorant",
+      "Teamfight Tactics (TFT)",
+      "Dota 2",
+      "Roblox",
+      "Liên Quân Mobile",
+      "Free Fire"
+    ],
+    "roomAndRoster": {
+      "maxRoomMembers": 50,
+      "playerCapacityDefinition": "Total roster capacity including owner (1-10)",
+      "advisoryRankAndRole": true
+    },
+    "recruitmentCardFields": [
+      "gameId",
+      "mode (free-text)",
+      "title",
+      "playerCapacity (total roster including owner)",
+      "now | scheduledAt",
+      "requirementText",
+      "experienceName (Roblox only)",
+      "experienceUrl (Roblox only)"
+    ],
+    "recruitmentPriority": "OPEN PUBLIC recruitments missing fewest players first; tiebreak by updatedAt desc, id asc",
+    "privacyBehavior": "PRIVATE closes public recruitment, retains room members and chat history",
+    "invitationPolicy": {
+      "default": "OWNER_APPROVAL",
+      "directInvitationRequiresConsent": true,
+      "roomInvitationScope": "membership only",
+      "playSessionInvitationScope": "enforces roster and active play slot"
+    },
+    "scheduledSessionBehavior": "Approved seats reserve scheduled roster; owner/helper with MANAGE_RECRUITMENT must explicitly start session manually; time alone never auto starts; atomic active slot allocation aborts on conflict",
+    "callLimitsAndLifecycle": {
+      "callsPerUser": 1,
+      "joinRequirement": "Leave old call first",
+      "callClosure": "Explicit last leave closes call immediately",
+      "networkDisconnectGraceSeconds": 30,
+      "heartbeatSeconds": 15,
+      "presenceTtlSeconds": 45
+    },
+    "externalLiveStream": {
+      "maxStreamsPerCall": 1,
+      "configuredBy": "Current call member",
+      "viewerSelection": "Per-user tab selection",
+      "syncPlayback": false,
+      "sfuRelay": false
+    },
+    "notifications": {
+      "inAppAndPush": [
+        "DM",
+        "mentions",
+        "friend_invites",
+        "team_invites",
+        "join_requests_and_results",
+        "reminders_10min"
+      ],
+      "email": [
+        "friend_invites",
+        "team_room_invites",
+        "reminders_10min"
+      ],
+      "lobbyAllMessagesPush": false
+    },
+    "blockBehavior": {
+      "stopsNewDmAndInvites": true,
+      "lobbyAuthorHiding": "Locally hidden for blocking user",
+      "autoKickFromRoom": false,
+      "historyDeletion": false
+    },
+    "uploadRules": {
+      "allowedTypes": [
+        "JPG",
+        "PNG",
+        "WebP"
+      ],
+      "maxSizeBytes": 5242880,
+      "maxMegaPixels": 20,
+      "reencode": "WebP",
+      "svgAllowed": false,
+      "gifAllowed": false
+    }
+  },
+  "performanceTargets": {
+    "p95RestLatencyMs": 500,
+    "p95ChatDeliveryLatencySec": 1,
+    "p95CallJoinLatencySec": 3,
+    "systemErrorRatePercent": 1,
+    "audioPacketLossPercent": 2,
+    "actualAudibleQualityTestRequired": true,
+    "mediaCapacityTarget": "1000 concurrent media users (10 max per call / 3 screen publishers / 1 main selected stream / 720p30)"
+  },
+  "deferredOperationalGates": {
+    "operationalCostCeiling": "No purchase without explicit user approval; user will approve cost ceiling after measured forecast before paid load tests/spending (T41). Does not block T00/T01 or forbid separately authorized staging purchases later.",
+    "credentialsSetup": "Discord OAuth Client ID/rotated Client Secret, SMTP credentials, VAPID keys and local origin configured in T02; Google removed by explicit user request.",
+    "launchAndModeration": "Launch date and moderation editorial policy to be decided by future operations; standard task contracts/ACLs define specific details."
+  },
+  "hashes": {
+    "specSha256": "526199af68c7c503468200481ac26590bbc8797db3fc68fee0cc500532c5ef80",
+    "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+    "taskSha256": "5095b5fb6087b13b400ebf88f74f950647b88ca50c08f4f811c22acb2b4e3bad",
+    "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+    "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+    "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+  },
+  "amendments": [
+    {
+      "userInstruction": "bỏ đăng nhập bằng google đi",
+      "affectedTasks": [
+        "T02",
+        "T08",
+        "T09",
+        "T39",
+        "T42"
+      ],
+      "date": "2026-10-04",
+      "evidence": "quality/evidence/AUTH-CHANGE-01/review.md",
+      "id": "AUTH-CHANGE-01",
+      "previousHashes": {
+        "specSha256": "5DC140E38AA99C516F8FA03D0169F9B402559C74560C5BDDF52698417767EFA5",
+        "designSha256": "B8192A6D4BA0F13989F7243AB17E4D7FA429A5E74FB3B17BE080DEC5F1A0BE2D",
+        "taskSha256": "B01CDADBEB4E86E74F49F83452A9866D432327FE8330F8CB5FBE3E3C2A5B7DAC",
+        "mockupLobbySha256": "9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF",
+        "mockupCallSha256": "C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9"
+      }
+    },
+    {
+      "id": "FEED-CHANGE-01",
+      "date": "2026-10-07",
+      "userInstruction": "bố cục ổn đó ghi vào các tài liệu để bên task coding và build làm",
+      "authorization": "quality/evidence/T00-REBASE-FEED/authorization.json",
+      "previousHashes": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "designSha256": "B8192A6D4BA0F13989F7243AB17E4D7FA429A5E74FB3B17BE080DEC5F1A0BE2D",
+        "taskSha256": "7F1DD73064655A52F7020D622265D8033776668B4BA52F7BA22F104A5F311218",
+        "mockupLobbySha256": "9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF",
+        "mockupCallSha256": "C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9"
+      },
+      "hashes": {
+        "specSha256": "82872cd3373de7f58432fb2efcd663acb46c3fd4c659f107e76bf09b6f0c5d77",
+        "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+        "taskSha256": "8862f60a258326789098f55d524409975ce102bac6d8002414f6b3d0f1fe765b",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+      },
+      "evidence": "quality/evidence/T00-REBASE-FEED/review.md",
+      "affectedTasks": [
+        "T38-FEED-DATA",
+        "T38-FEED-BE",
+        "T38-FEED-FE",
+        "T39",
+        "T40",
+        "T41",
+        "T42"
+      ]
+    },
+    {
+      "id": "TEST-VISIBILITY-01",
+      "date": "2026-10-07",
+      "previousHashes": {
+        "specSha256": "82872cd3373de7f58432fb2efcd663acb46c3fd4c659f107e76bf09b6f0c5d77",
+        "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+        "taskSha256": "8862f60a258326789098f55d524409975ce102bac6d8002414f6b3d0f1fe765b",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+      },
+      "hashes": {
+        "specSha256": "526199af68c7c503468200481ac26590bbc8797db3fc68fee0cc500532c5ef80",
+        "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+        "taskSha256": "5095b5fb6087b13b400ebf88f74f950647b88ca50c08f4f811c22acb2b4e3bad",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+      },
+      "evidence": "quality/evidence/T00-REBASE-VISIBILITY/review.md",
+      "authorization": "Current human-provided AGENTS.md and approved requirement handoff; TEST-VISIBILITY-01 explicitly authorizes visible local test windows",
+      "scope": "Development observation only; runtime product requirements and historic PASS outputs preserved"
+    }
+  ],
+  "additionalRequirements": {
+    "FEED-CHANGE-01": {
+      "specSection": 13,
+      "designSection": 10,
+      "executionStatus": "NOT_STARTED",
+      "checkpointOrder": [
+        "T38-FEED-DATA",
+        "T38-FEED-BE",
+        "T38-FEED-FE"
+      ],
+      "implementationBefore": "T39"
+    }
+  }
+}

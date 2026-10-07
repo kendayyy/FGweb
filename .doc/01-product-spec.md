@@ -200,7 +200,7 @@ Khả năng nền tảng được kiểm tra ngày 04/10/2026; cần kiểm tra 
 
 ## 12. Lịch sử thay đổi đã được chủ sản phẩm xác nhận
 
-- 07/10/2026 — TEST-VISIBILITY-01: Người dùng bổ sung tiêu chí project: kiểm thử local luôn có cửa sổ terminal/task và log realtime để quan sát; UI/E2E mở browser headed. Giữ evidence/exit code thật và cửa sổ kết quả; không chạy ẩn rồi chỉ báo summary. Không có GUI phải báo hạn chế trước run. Quy trình cụ thể ở task.md và testing rule08; đây là tiêu chí quy trình phát triển, không thay tính năng runtime FG.
+- 07/10/2026 — TEST-VISIBILITY-01 (đã điều chỉnh): Chỉ UI tương tác trên ứng dụng và E2E local phải hiện cửa sổ browser/app headed để quan sát. Không cần hiện terminal/log; unit/component DOM giả lập, integration/API/DB/smoke/load được chạy nền. Mọi test vẫn lưu evidence và exit code thật. UI/E2E không có GUI phải báo hạn chế trước run. Quy trình cụ thể ở task.md và testing rule08; đây là tiêu chí phát triển, không thay tính năng runtime FG.
 
 - 04/10/2026 — AUTH-CHANGE-01: Người dùng yêu cầu bỏ đăng nhập Google. FG chỉ hỗ trợ đăng nhập Discord; cập nhật T02, T08, T09 và nghiệm thu tương ứng. Better Auth, onboarding và session guard giữ theo phạm vi đã chốt. Client Secret không lưu trong tài liệu hoặc evidence.
 - 07/10/2026 — FEED-CHANGE-01: Người dùng chốt Bảng tin cộng đồng chung, đăng chữ/ảnh, thích, bình luận/trả lời, lọc game/loại bài và liên hệ qua hồ sơ/DM. Người dùng xác nhận bố cục mockup 03 ổn và yêu cầu ghi tài liệu để coding/build triển khai, giữ màu sắc/phong cách FG đã duyệt. Thêm ba checkpoint trước T39; không đánh PASS hoặc thay bằng chứng các task cũ chỉ vì thay yêu cầu.

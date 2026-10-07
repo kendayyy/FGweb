@@ -18,10 +18,10 @@ description: "FG requires real tests and evidence before each task passes."
 - Report kết quả thực tế; không bịa số tests, benchmark hoặc chi phí.
 
 ## TEST-VISIBILITY-01 — quan sát trực tiếp, xác nhận07/10/2026
-- Mỗi test run local (kể cả RED, regression, smoke và load) phải hiện cửa sổ terminal/task, tiêu đề hoặc dòng đầu có task ID/lệnh; stdout/stderr cập nhật trực tiếp, không chỉ đọc file log khi xong.
-- Với UI/E2E, mở browser headed để người dùng thấy thao tác; thêm `--headed` vào Playwright CLI. Terminal vẫn hiển thị log. Không tự chạy lại tests chỉ để quay màn hình sau khi đã chạy ẩn.
-- Giữ terminal/kết quả sau khi hoàn tất và hiện exit code thật. Lưu evidence cùng lần chạy; pipeline ghi log phải bảo toàn exit code của test, không lấy exit code Tee-Object/logger thay cho test.
-- Nếu launch helper qua Start-Process để hiện test window, dùng cửa sổ Visible/Normal theo yêu cầu này; thư mục chạy E:/FGweb/code, scripts/logs/artifacts chỉ trong code/. Không áp dụng quyền mở cửa sổ cho helpers không liên quan.
-- Không mở được GUI/cửa sổ, chạy CI hoặc host remote không GUI: báo rõ trước run, vẫn ghi kết quả kỹ thuật thật và hạn chế quan sát. Không âm thầm đánh tiêu chí quan sát local đạt nhờ headless/trace/video.
-- Không tự bật watch mode vô hạn, slow-motion làm đổi timeout, giảm tests hoặc task song song. Thiếu quan sát trực tiếp phải ghi rõ trong review/evidence, không giả PASS tiêu chí này.
+- Người dùng điều chỉnh cùng ngày: chỉ UI tương tác trên app và E2E local cần cửa sổ browser/app hiển thị thao tác thật (headed), gồm các vòng RED/sửa lỗi/regression thuộc loại này; thêm `--headed` vào Playwright CLI.
+- Không cần hiện terminal hoặc log, kể cả khi chạy UI/E2E. Unit/component test DOM giả lập, integration/API/DB/smoke/load được chạy nền, không cần dựng browser/cửa sổ giả.
+- Mọi run vẫn lưu evidence command/time/exit code/logs/hashes thật. Pipeline log bảo toàn exit code test, không lấy exit code Tee-Object/logger thay test. Không chạy lại chỉ để quay hình sau khi đã chạy ẩn.
+- Chỉ cửa sổ browser/app phục vụ UI/E2E được yêu cầu hiện. Nếu dùng Start-Process cho terminal/helper, vẫn dùng Hidden; cwd E:/FGweb/code, scripts/logs/artifacts trong code/.
+- UI/E2E không mở được GUI/cửa sổ, CI hoặc host không GUI: báo rõ trước run, ghi kết quả thật và hạn chế quan sát; không coi headless/trace/video là đã đạt quan sát trực tiếp local. Các tests khác chạy nền không vi phạm tiêu chí này.
+- Không tự bật watch vô hạn, slow-motion làm đổi timeout, giảm tests hoặc chạy task song song. Thiếu quan sát UI/E2E phải ghi rõ trong review/evidence, không giả PASS tiêu chí này.
 

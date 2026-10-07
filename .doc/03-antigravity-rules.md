@@ -55,7 +55,7 @@ Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem
 
 ## Kiểm trước buổi build
 
-**TEST-VISIBILITY-01, xác nhận07/10/2026:** Khi chạy test local, hiện cửa sổ terminal/task có log realtime và giữ kết quả/exit code để người dùng quan sát. UI/E2E mở browser headed; các test khác hiện terminal thật. Đọc rule08 và phần quan sát kiểm thử trong task.md; vẫn lưu evidence của run đó, không thay bằng summary hoặc video từ run khác. Nếu không GUI/công cụ không mở được cửa sổ thì báo trước và ghi hạn chế. Người dùng đã yêu cầu cửa sổ nhìn thấy được, không cần xin lại cho việc mở cửa sổ phục vụ test.
+**TEST-VISIBILITY-01, điều chỉnh07/10/2026:** Chỉ UI tương tác trên ứng dụng và E2E local mở browser/app headed để người dùng quan sát. Không cần hiện terminal/log; unit/component DOM giả lập, integration/API/DB/smoke/load được chạy nền. Đọc rule08 và task.md; mọi test vẫn lưu evidence/exit code thật. UI/E2E không có GUI/công cụ không mở được cửa sổ thì báo trước và ghi hạn chế. Người dùng đã yêu cầu cửa sổ UI/E2E nhìn thấy được, không cần xin lại; terminal/helper khác không cần hiện.
 
 1. Mở FGweb trong Antigravity; trong Customizations → Rules kiểm các workspace rules hiện lên và trigger đúng nếu surface có panel đó.
 2. Yêu cầu agent báo ba nguồn chuẩn, cwd build, task đầu chưa PASS và file rules cho phần sắp sửa.

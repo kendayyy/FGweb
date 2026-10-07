@@ -1,0 +1,6 @@
+# Latest TEST-VISIBILITY-01 process review
+
+Human changes in root/code AGENTS, rule08, spec history and task process consistently limit observation to real UI/E2E headed browsers/apps. Unit/component DOM simulation, API/DB/integration/smoke/load can run in background, no terminal display required. Reviewed git diff: development policy only; product/features/design unchanged. Existing visible helpers remain frozen and optional, not used for subsequent DB/API tests. Prior DB51-test visible regression remains valid under the relaxed policy and is not rerun for presentation. Previous manifest/ledger preserved; historical status/output/command/evidence/timestamps unchanged. Baseline and appended process text code AGENTS are reviewed owner outputs; strict checker untouched.
+Audit1 detected the already approved, suspended T06 schema/journal work. Audit2 separately pins exactly those two current WIP file hashes and their explicit T06 allowlist while checking all other frozen files. They are neither owned nor marked PASS by this metadata checkpoint. T06 still requires its own final audit. No task checker was relaxed.
+
+PASS: actual six-source/frozen historical evidence audit, lint and whitespace checks recorded exit0. No business source or test changed in this checkpoint.

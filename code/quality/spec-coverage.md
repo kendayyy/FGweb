@@ -49,3 +49,4 @@
 | Invitation optional persisted consent DTO, target-specific delegated permissions, GET settings/PUT grants aliases, strict actor fields and old routes | T03-FIX10 |7 new/81 contracts tests,build,lint,source/test/API/web types,scope audit | PASS (contracts) |
 | FEED-CHANGE-01 approved requirement/mockup adoption, historic evidence preservation, strict six-source baseline and future DATA/BE/FE order | T00-REBASE-FEED |9 checker tests;3230 latest hashes;41 historic PASS records;lint/scope | PASS (baseline only; feed NOT_STARTED) |
 | TEST-VISIBILITY-01 approved process adoption, visible retained terminal/exit preservation | T00-REBASE-VISIBILITY | real exit7 smoke, visible audit/lint/diff and terminal handle | PASS (development process; historical runs preserved) |
+| Latest TEST-VISIBILITY-01 revision: headed real UI/E2E only; background DB/API allowed | T00-REBASE-VISIBILITY2 | six baselines/historic frozen audit;lint/diff | PASS (process only) |

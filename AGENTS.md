@@ -30,7 +30,7 @@ Yêu cầu mới của người dùng có thể điều chỉnh project rules; g
 - Triển khai lần lượt T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE sau T38, trước T39; không nhảy task hiện tại. Rebaseline do thay yêu cầu phải có review/evidence, không tự đổi PASS hay nới checker.
 
 ## Quan sát kiểm thử trực tiếp — 07/10/2026
-- TEST-VISIBILITY-01: Mỗi lần chạy kiểm thử local phải mở/hiện cửa sổ terminal/task để người dùng quan sát log cập nhật trực tiếp; không chỉ chạy ẩn rồi gửi kết quả cuối.
-- Test UI/E2E mở trình duyệt có giao diện (headed); unit/integration/API/DB/load hiển thị terminal thật, không dựng cửa sổ website giả cho test không có UI.
-- Giữ cửa sổ và kết quả sau khi chạy để người dùng đọc; hiện task ID, lệnh, tiến trình và exit code, đồng thời lưu evidence trong code/. Không tự chạy watch vô hạn, chạy song song hay giảm assertions để trình diễn.
-- Không mở được cửa sổ hoặc chạy trên CI/host không có GUI thì báo rõ giới hạn trước khi chạy; không tự coi headless/background là đã đáp ứng tiêu chí quan sát local.
+- TEST-VISIBILITY-01 (đã điều chỉnh theo người dùng): Chỉ test UI tương tác trên ứng dụng và E2E local phải mở cửa sổ trình duyệt/app để người dùng quan sát thao tác thật, dùng headed.
+- Không cần hiện terminal hoặc log cho bất kỳ test nào. Unit/component test chạy DOM giả lập, integration/API/DB/smoke/load được chạy nền; không cần dựng browser giả.
+- Mọi test vẫn lưu command/time/exit code/logs/hashes và evidence thật trong code/. Không tự chạy watch vô hạn, chạy song song hay giảm assertions để trình diễn.
+- UI/E2E không mở được cửa sổ hoặc chạy trên CI/host không GUI thì báo rõ giới hạn trước run; không coi headless/trace/video là đã đáp ứng quan sát trực tiếp local.
