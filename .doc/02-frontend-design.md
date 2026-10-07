@@ -4,6 +4,8 @@ Ngày chốt: 04/10/2026 cho tên FG và mockup01/02; bổ sung bố cục Bản
 
 ## 1. Nguồn thiết kế
 
+THEME-CHANGE-01: người dùng duyệt khả năng chuyển Sáng/Tối/Hệ thống; bốn mockup bên dưới tiếp tục baseline tối/bố cục. Light được xem trực tiếp trên app và review ảnh thật theo mục12; chưa có hình thức light được chốt.
+
 - [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png).
 - [Phòng nhóm, gọi và live](./mockups/02-group-call-live.png).
 - [Bảng tin cộng đồng desktop/mobile](./mockups/03-community-feed-desktop-mobile.png), bố cục được duyệt ngày 07/10/2026.
@@ -144,3 +146,10 @@ T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt t
 - Khung đăng nhập gọn ở giữa desktop, một cột trên mobile; Email/Mật khẩu và nút hiện/ẩn, Quên mật khẩu, CTA Đăng nhập, divider “hoặc”, Tiếp tục với Discord, liên kết Đăng ký. Có lựa chọn Đăng nhập/Đăng ký; không thêm provider khác.
 - Các màn xác minh/reset/đổi/thêm mật khẩu dùng cùng components/tokens, thông báo trạng thái thật. Không hiển thị hash/token, thông tin kỹ thuật bảo mật hay badge “an toàn tuyệt đối” trong UI.
 - Bên coding/build triển khai theo task/rebaseline sau khi task hiện tại review PASS; bố cục đã chốt. Kiểm keyboard/focus, safe-area, input mobile16px và360px không overflow; screenshot thật1440/1280/390/360, UI/E2E headed theo TEST-VISIBILITY-01. Khung trình bày/điện thoại trong ảnh không build vào app; ảnh không là evidence auth/SMTP đã chạy.
+
+## 12. Theme light hoạt động — chờ review hình thức
+
+- Bộ chọn Sáng/Tối/Hệ thống trên global header, hiện cả trang login. Nút icon mặt trời/mặt trăng mở menu có nhãn, dấu lựa chọn và focus rõ; system thể hiện nhãn Hệ thống dù màu thực tế sáng/tối.
+- Semantic tokens dùng chung, không đổi layout: light canvas#F3F6FB/sidebar#FFFFFF/chat#F8FAFC/panel#FFFFFF/raised#EAF0F7/hover#DEE8F5/border#64748B; text main#172033/sub#334155/quiet#475569; action#1E5ADE/hover#184EC7/active#1442AD/focus#1E5ADE; online#147D46/warning#855500/danger#B4232D. Đây là palette triển khai để review, còn phải đo contrast thực tế trước PASS, không tự nhận đã duyệt hình thức.
+- Dùng data-theme trên html và color-scheme; giữ dark tokens hiện có. Rà màu hardcoded và status surfaces của app đang có; các màn chưa build phải dùng cùng semantic tokens. Không thay assets/video/iframe từ provider ngoài bằng filter đảo màu.
+- Screenshot app thật desktop/mobile và preview browser headed để người dùng chốt; không tạo bitmap thay bản thử chức năng người dùng yêu cầu.

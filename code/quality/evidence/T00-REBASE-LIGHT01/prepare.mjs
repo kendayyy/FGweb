@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/T00-REBASE-LIGHT01',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));assert(!ledger.tasks.some(t=>t.id==='T00-REBASE-LIGHT01'));
+fs.writeFileSync(`${dir}/previous-ledger.json`,JSON.stringify(ledger,null,2)+'\n');fs.writeFileSync(`${dir}/previous-baseline.json`,JSON.stringify(baseline,null,2)+'\n');
+const sources={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md'};
+for(const [key,file]of Object.entries(sources))fs.copyFileSync(file,`${dir}/${key}.md`);
+const authorization={thread:'01a114a3-ab20-70e2-b020-db31d489bffd',title:'Idea',humanTurn:'01a11506-b414-77b0-a0c6-8489d99d573e',instruction:'PLEASE IMPLEMENT THIS PLAN: Bản xem trước FG sáng với chức năng thật',scope:'Metadata review now because approved documents changed during same T03-FIX12 task. Finish current source task before theme implementation. LIGHT01-FE after AUTH02 checkpoints before T24-FIX1. User visual light approval still pending.'};fs.writeFileSync(`${dir}/authorization.json`,JSON.stringify(authorization,null,2)+'\n');
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!f.startsWith(`${dir}/`)&&!['quality/spec-baseline.json','quality/tasks.json','quality/spec-coverage.md'].includes(f)).map(f=>[f,hash(f)])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T03-FIX12/record.mjs','utf8').replaceAll('T03-FIX12','T00-REBASE-LIGHT01'));
+const oldHashes={...baseline.hashes};for(const [key,file]of Object.entries(sources))baseline.hashes[key]=hash(file);
+baseline.amendments.push({id:'THEME-CHANGE-01',adoptedAt:new Date().toISOString(),previousHashes:oldHashes,hashes:{...baseline.hashes},authorization,evidence:`${dir}/review.md`,implementation:'NOT_STARTED'});
+baseline.additionalRequirements??={};baseline.additionalRequirements.THEME_CHANGE_01={task:'LIGHT01-FE',status:'NOT_STARTED',visualApproval:'PENDING_REAL_APP_REVIEW'};
+fs.writeFileSync('quality/spec-baseline.json',JSON.stringify(baseline,null,2)+'\n');
+for(const t of ledger.tasks){t.baselineAdoptions??=[];t.baselineAdoptions.push({amendment:'THEME-CHANGE-01',previousSpecSha256:t.specSha256,currentSpecSha256:baseline.hashes.specSha256,evidence:`${dir}/review.md`});t.specSha256=baseline.hashes.specSha256;}
+const current=ledger.tasks.find(t=>t.id==='T03-FIX12');current.status='BLOCKED';current.blockers=['Approved theme documents changed baseline; metadata owner review only, source WIP preserved.'];
+const owner={id:'T00-REBASE-LIGHT01',status:'IN_PROGRESS',dependencies:['T00-REBASE-AUTH02'],specSha256:baseline.hashes.specSha256,inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},outputsHash:null,commands:[],evidencePaths:[],startedAt:new Date().toISOString(),completedAt:null,blockers:[],writeAllowlist:['quality/spec-baseline.json',`${dir}/**`]};
+ledger.tasks.splice(ledger.tasks.indexOf(current),0,owner);current.dependencies=[owner.id];
+const light={...owner,id:'LIGHT01-FE',status:'NOT_STARTED',dependencies:['AUTH02-FE'],inputsHash:{},startedAt:null,writeAllowlist:['apps/web/src/features/theme/**','apps/web/src/App.tsx','apps/web/src/main.tsx','apps/web/index.html','apps/web/src/styles/tokens.css','apps/web/src/styles/global.css','apps/web/test/theme.test.tsx','tests/e2e/theme.spec.ts','quality/evidence/LIGHT01-FE/**'],blockers:[]};
+const next=ledger.tasks.find(t=>t.id==='T24-FIX1');ledger.tasks.splice(ledger.tasks.indexOf(next),0,light);next.dependencies=['LIGHT01-FE'];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('Theme metadata owner active; original code untouched; LIGHT01-FE deferred until current contracts and AUTH02 PASS.');

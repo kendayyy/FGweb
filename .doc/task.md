@@ -23,6 +23,19 @@
 
 ## 1. Luật thực thi bắt buộc
 
+### THEME-CHANGE-01 — checkpoint LIGHT01-FE, chờ task hiện tại PASS
+
+User duyệt bản preview FG thật07/10/2026, spec mục15/design mục12. Tại kiểm tra yêu cầu này T03-FIX12 đang IN_PROGRESS, T25 BLOCKED; không thực thi theme song song hoặc vượt gate. Sau task hiện tại/tiền nhiệm review PASS, xử lý rebaseline có evidence và thêm LIGHT01-FE sau các AUTH02 checkpoints đã xếp trước đó, trước khi tiếp tục task kế tiếp. Giữ thứ tự FIX/ledger đang có; cập nhật bảng/ledger khi migration được review, không tự đổi PASS các task cũ. Phê duyệt này cho phép light khác dark palette, vẫn giữ layout/phong cách.
+
+**Files trong code/:** apps/web/src/features/theme/{theme,ThemeProvider,ThemeSwitcher}.{ts,tsx} theo trách nhiệm; apps/web/src/{App,main}.tsx; apps/web/index.html và bootstrap theme trước paint; apps/web/src/styles/{tokens,global}.css; CSS/components đang có màu hardcoded cần đổi sang semantic (pin đường dẫn vào allowlist trước task); apps/web/test/theme.test.tsx; tests/e2e/theme.spec.ts; quality/spec-coverage.md; quality/evidence/LIGHT01-FE/. Không sửa API/contracts/data/business logic để đổi theme.
+
+**Deliverable:** app local hiện tại/API DB thật + bộ chọn hoạt động ba giá trị; lưu fg.theme và đồng bộ tabs, storage fallback, system device changes, init trước paint, không remount/query invalidation/auth/socket restart. Rà màu theo spec/design; không mock feature chưa triển khai. Header global hiển thị control ở login; không nhân đôi control gây focus thừa.
+
+- [ ] **RED:** unit hành vi selection/persistence/device changes/storage denied+invalid/multi-tab; một composer chưa gửi giữ nội dung qua chuyển theme và auth provider không bị remount. Unit DOM mock không thay UI headed acceptance.
+- [ ] **Build:** implement tokens/initialization/provider/switcher; whitelist theme values và menu keyboard/Escape/focus;44px hit targets; CSS mobile không tràn. Theme chạy được cho guest và user hiện có, không API/migration mới.
+- [ ] **PASS kỹ thuật:** npm run test --workspace @fg/web -- test/theme.test.tsx; npm run test:e2e -- tests/e2e/theme.spec.ts --headed; lint/typecheck web; Vite build; evidence commands/time/exit codes/hashes. E2E dùng services thật: đổi/reload/system emulation/storage và keyboard; đo contrast cả themes,360px overflow; guest và authenticated session/composer. Không có auth credential/test account thì ghi phần thiếu thật.
+- [ ] **Review hình thức:** mở app local cho người dùng quan sát, lưu screenshots1440×900/1280×800/390×844/360×800 ở evidence, báo URL và limitations. Kỹ thuật PASS không thay user chốt light hình thức; không đánh PASS khi thiếu required evidence. Giữ trình tự Codex review/chốt và T39 regression cả themes.
+
 ### AUTH-CHANGE-02 — tài liệu bàn giao, chưa triển khai
 
 **Xác nhận bố cục07/10/2026:** Người dùng “tôi chốt mockup này”; ảnh04-login-desktop-mobile.png đã duyệt. Khi rebaseline AUTH-CHANGE-02, đưa hash ảnh04 vào manifest và kiểm tra baseline bắt buộc bên cạnh ba ảnh cũ, lưu review/evidence; không nới kiểm tra cũ hoặc sửa historical outputs. Không cần hỏi lại bố cục đăng nhập.

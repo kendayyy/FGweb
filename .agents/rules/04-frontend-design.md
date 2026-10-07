@@ -9,6 +9,7 @@ globs: "code/apps/web/**"
 - Dùng Inter self-host, Vietnamese glyphs; font gốc ảnh không xác định, không giả đã trích font chính xác.
 - Dùng shared CSS tokens theo primitive → semantic → component, không rải hex/theme khác từng màn.
 - Theme navy tối, CTA xanh, avatars tròn, borders mảnh, density chat và radii theo design.
+- THEME-CHANGE-01 cho phép light theo design mục12/spec mục15, bộ chọn Sáng/Tối/Hệ thống ở header/login, dark baseline giữ nguyên. Dùng semantic tokens, không remount/auth/socket restart khi đổi màu; LIGHT01-FE theo gate sau tiền nhiệm PASS, preview app thật để user review light.
 - Lobby desktop: game sidebar → chat lớn nhất → tuyển đội/online cạnh chat.
 - Mobile: selector game, tabs Chat/Tìm đội, controls đủ hit area và safe-area; không ép3cột.
 - Group: nhiều nhóm gọi; một video chính chọn nhanh; Mic/Rời cuộc gọi khác Kết thúc buổi chơi.

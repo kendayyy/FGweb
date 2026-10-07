@@ -1,0 +1,12 @@
+file:///E:/FGweb/code/quality/evidence/T00-REBASE-LIGHT01/audit.mjs:11
+const latest=new Map();for(const t of old.tasks.filter(t=>t.status==='PASS')){const current=ledger.tasks.find(c=>c.id===t.id);for(const field of ['status','commands','outputsHash','evidencePaths','startedAt','completedAt'])assert.deepEqual(current[field],t[field],`${t.id}/${field}`);for(const [f,h]of Object.entries(t.outputsHash.files))latest.set(f,h);for(const r of t.commands){assert.equal(r.exitCode,0);if(r.evidenceSha256)assert.equal(hash(r.evidencePath),r.evidenceSha256);}}
+                                                                                                                                                                                                                                                                                                                     ^
+
+TypeError: Cannot convert undefined or null to object
+    at Object.entries (<anonymous>)
+    at file:///E:/FGweb/code/quality/evidence/T00-REBASE-LIGHT01/audit.mjs:11:310
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0

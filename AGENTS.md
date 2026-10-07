@@ -33,6 +33,10 @@ Yêu cầu mới của người dùng có thể điều chỉnh project rules; g
 - FEED-CHANGE-01: Bảng tin cộng đồng chung, bài chữ/ảnh, thích, bình luận/trả lời và lọc game/loại bài. Đọc spec mục13, frontend-design mục10 và mockup03 desktop/mobile đã được duyệt bố cục; giữ màu sắc/phong cách FG.
 - Triển khai lần lượt T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE sau T38, trước T39; không nhảy task hiện tại. Rebaseline do thay yêu cầu phải có review/evidence, không tự đổi PASS hay nới checker.
 
+## Sáng/Tối/Hệ thống — THEME-CHANGE-01
+- User duyệt bản preview app thật ngày07/10/2026; đọc spec mục15, frontend-design mục12, LIGHT01-FE trong task.md. Light giữ layout/Inter/CTA xanh, dark baseline giữ nguyên; hình thức light cần review ảnh/app thật.
+- Không chạy song song task hiện tại; chỉ mở LIGHT01-FE sau tiền nhiệm PASS và rebaseline review, sau AUTH02 đã xếp trước đó. Không dựng data hoặc thành công auth/feed giả; headed UI/E2E, lưu evidence thật. Hiện chưa có bản preview light để tuyên bố hoàn thành.
+
 ## Quan sát kiểm thử trực tiếp — 07/10/2026
 - TEST-VISIBILITY-01 (đã điều chỉnh theo người dùng): Chỉ test UI tương tác trên ứng dụng và E2E local phải mở cửa sổ trình duyệt/app để người dùng quan sát thao tác thật, dùng headed.
 - Không cần hiện terminal hoặc log cho bất kỳ test nào. Unit/component test chạy DOM giả lập, integration/API/DB/smoke/load được chạy nền; không cần dựng browser giả.

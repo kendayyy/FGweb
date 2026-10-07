@@ -200,6 +200,8 @@ Khả năng nền tảng được kiểm tra ngày 04/10/2026; cần kiểm tra 
 
 ## 12. Lịch sử thay đổi đã được chủ sản phẩm xác nhận
 
+- 07/10/2026 — THEME-CHANGE-01: Người dùng duyệt kế hoạch bản xem trước sáng trên app FG thật, bộ chọn Sáng/Tối/Hệ thống và lưu trình duyệt; giữ chức năng API/DB hiện có, không giả Bảng tin/auth chưa triển khai. Checkpoint frontend chỉ bắt đầu sau task hiện tại PASS và rebaseline review. Hình thức light cần người dùng xem/chốt từ app và ảnh thật, không xem phê duyệt kế hoạch là duyệt ảnh chưa tồn tại.
+
 - 07/10/2026 — AUTH-UI-APPROVAL-04: Người dùng xác nhận “tôi chốt mockup này” cho mockup04-login-desktop-mobile.png. Chốt bố cục đăng nhập email/mật khẩu + Discord trên desktop/mobile, giữ phong cách FG. Bên coding/build dùng ảnh04 theo task AUTH-CHANGE-02; duyệt ảnh không là PASS triển khai.
 
 - 07/10/2026 — AUTH-CHANGE-02: Người dùng chốt thêm email/mật khẩu bên cạnh Discord; hash mật khẩu scrypt, xác minh email, reset/đổi mật khẩu, liên kết có xác minh và bảo vệ dữ liệu riêng. Thay giới hạn Discord-only của AUTH-CHANGE-01. Chỉ cập nhật tài liệu và tạo mockup04 để người dùng chốt bố cục; bên coding/build triển khai sau. Không chạy Antigravity, sửa runtime hoặc đánh PASS trong lần ghi tài liệu này.
@@ -249,3 +251,12 @@ Các mục dưới là mặc định kỹ thuật cho bản đầu, không phả
 - Email xác minh/reset dùng SMTP thật; thiếu SMTP hoặc địa chỉ test được người dùng chỉ định thì báo blocker phần delivery, không fake sent. Mail auth bắt buộc không phụ thuộc opt-out email thông báo cộng đồng.
 - Giao diện gồm đăng ký, xác minh/gửi lại, quên/reset/đổi mật khẩu và thêm mật khẩu cho Discord. Các CTA đăng nhập mở trang chọn phương thức; giữ phong cách FG. Mockup04 được người dùng chốt ngày07/10/2026, là baseline bố cục đăng nhập desktop/mobile cho coding/build.
 - Acceptance: API/DB thật kiểm luồng chính, email trùng, token replay/expired, sai mật khẩu/rate limit, ban/revoke và chống chiếm tài khoản; kiểm DB chứa salted hash (hai user cùng mật khẩu hash khác), không mật khẩu gốc; migration giữ dữ liệu Discord. UI/E2E local headed, mọi test có evidence/exit code thật. T39/T42 kiểm cả hai phương thức.
+
+## 15. Sáng / Tối / Hệ thống — THEME-CHANGE-01
+
+- Áp dụng app FG hiện có và các màn mới khi triển khai, gồm header/login/Lobby/phòng. Bộ chọn ba giá trị `light`/`dark`/`system`, mặc định system, lưu trên trình duyệt, không đồng bộ tài khoản hoặc thêm API/migration.
+- Theme tối giữ baseline; light giữ layout/Inter/CTA xanh, nền xám xanh nhạt/panel trắng/chữ navy. Hình thức light chờ review ảnh thật và app hoạt động, không tự đánh đã duyệt mockup05.
+- Chọn light/dark cố định; system theo prefers-color-scheme và thay đổi thiết bị trong phiên. Lưu key `fg.theme`; chỉ nhận ba giá trị. Storage bị chặn/giá trị sai thì khởi tạo system; vẫn đổi được trong phiên. Storage event đồng bộ tabs, xóa key trở về system. Áp dụng data-theme và color-scheme trước paint để tránh flash sai màu.
+- Nút header và trang login mở bộ chọn nhãn tiếng Việt, thể hiện lựa chọn đã lưu, dùng keyboard/Escape/focus/44px. Đổi màu không remount app, mất composer, auth session hoặc ngắt socket/call.
+- Preview dùng API/DB thật hiện có; chưa có Bảng tin hoặc email auth thì không dựng success/data giả. Thiếu service/credential hoặc quan sát UI không được phải ghi rõ; không coi UI đổi màu là mọi tính năng FG đã PASS.
+- Acceptance: ba chế độ/reload/device change/multi-tab/storage failure, keyboard, tương phản chữ4.5:1 và controls/focus3:1, mobile360px no overflow, không mất dữ liệu nhập/session. UI/E2E local headed; ảnh thật1440/1280/390/360 và user review light trước chốt hình thức.
