@@ -1,0 +1,259 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21772) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/invitations.integration.spec.ts (31.578 s)
+  ● T23 real invitation consent and delegated permissions › persists recipient consent before owner approval and exposes only the authorized queue
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:90:54)
+
+  ● T23 real invitation consent and delegated permissions › owner invitation still needs recipient consent; rejection adds no membership
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:100:26)
+
+  ● T23 real invitation consent and delegated permissions › DIRECT_MEMBER ROOM consent grants room and chat membership without occupying a team slot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:108:79)
+
+  ● T23 real invitation consent and delegated permissions › rechecks current policy at response and prevents helper settings changes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:115:119)
+
+  ● T23 real invitation consent and delegated permissions › private targets require current sender membership and matching room/session; forged consent is rejected
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      122 |  it('private targets require current sender membership and matching room/session; forged consent is rejected',async()=>{
+      123 |   const r=await room(),t=await team();
+    > 124 |   expect((await post('invitations','outsider',{targetType:'ROOM',roomId:r.id,receiverId:'recipient'})).status).toBe(403);
+          |                                                                                                                ^
+      125 |   expect((await post('invitations','owner-a',{targetType:'PLAY_SESSION',roomId:r.id,playSessionId:t.playSessionId,receiverId:'recipient'})).status).toBe(422);
+      126 |   expect((await post('invitations','owner-a',{targetType:'ROOM',roomId:r.id,receiverId:'recipient',recipientAcceptedAt:new Date().toISOString()})).status).toBe(422);
+      127 |   expect((await post('invitations','owner-a',{targetType:'ROOM',roomId:r.id,receiverId:'owner-a'})).status).toBe(422);
+
+      at Object.<anonymous> (test/invitations.integration.spec.ts:124:112)
+
+  ● T23 real invitation consent and delegated permissions › direct PLAY_SESSION accepts racing across two teams create exactly one active slot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:130:56)
+
+  ● T23 real invitation consent and delegated permissions › last roster seat is atomic for two invitation recipients
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:136:37)
+
+  ● T23 real invitation consent and delegated permissions › room capacity50 is distinct from roster capacity and two recipients cannot take the last room seat
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:147:11)
+
+  ● T23 real invitation consent and delegated permissions › scheduled invitation reserves roster only and preserves pending immediate join requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:155:11)
+
+  ● T23 real invitation consent and delegated permissions › only matching delegated permissions can approve each invitation target
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:163:11)
+
+  ● T23 real invitation consent and delegated permissions › same consent/approval retries preserve the final outcome without duplicate memberships or outbox
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:173:26)
+
+  ● T23 real invitation consent and delegated permissions › outbox failure rolls back recipient status, membership and active slot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:180:26)
+
+  ● T23 real invitation consent and delegated permissions › settings read and grant replacement require current authorization; owner-only rights cannot be delegated
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      185 |  it('settings read and grant replacement require current authorization; owner-only rights cannot be delegated',async()=>{
+      186 |   const r=await room();await addMember(r.id,'helper','HELPER');
+    > 187 |   const settings=await get(`rooms/${r.id}/settings`,'owner-a');expect(settings.status).toBe(200);expect(RoomSettingsSchema.parse(settings.body).invitePolicy).toBe('OWNER_APPROVAL');
+          |                                                                                        ^
+      188 |   expect((await get(`rooms/${r.id}/settings`,'outsider')).status).toBe(403);
+      189 |   expect((await put(`rooms/${r.id}/helpers/helper`,'helper',{permissions:['MANAGE_MEMBERS']})).status).toBe(403);
+      190 |   expect((await put(`rooms/${r.id}/helpers/helper`,'owner-a',{permissions:['OWNER_TRANSFER']})).status).toBe(422);
+
+      at Object.<anonymous> (test/invitations.integration.spec.ts:187:88)
+
+  ● T23 real invitation consent and delegated permissions › revoked sender membership and banned recipient cannot admit through an old invitation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      80 |  async function invite(roomId:string,sender='owner-a',receiver='recipient',playSessionId?:string){
+      81 |   const response=await post('invitations',sender,{targetType:playSessionId?'PLAY_SESSION':'ROOM',roomId,receiverId:receiver,...(playSessionId?{playSessionId}:{})});
+    > 82 |   expect(response.status).toBe(201);return InvitationSchema.parse(response.body);
+         |                           ^
+      83 |  }
+      84 |  const respond=(id:string,user='recipient',action='ACCEPT')=>patch(`invitations/${id}/respond`,user,{action});
+      85 |  const approve=(id:string,user='owner-a',action='ACCEPT')=>post(`invitations/${id}/approve`,user,{invitationId:id,action});
+
+      at invite (test/invitations.integration.spec.ts:82:27)
+      at Object.<anonymous> (test/invitations.integration.spec.ts:195:54)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        32.225 s, estimated 37 s
+Ran all test suites matching apps/api/test/invitations.integration.spec.ts.

@@ -1,0 +1,235 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2004) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/invitations.integration.spec.ts (36.111 s)
+  ● T23 real invitation consent and delegated permissions › persists recipient consent before owner approval and exposes only the authorized queue
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › owner invitation still needs recipient consent; rejection adds no membership
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › DIRECT_MEMBER ROOM consent grants room and chat membership without occupying a team slot
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › rechecks current policy at response and prevents helper settings changes
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › private targets require current sender membership and matching room/session; forged consent is rejected
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › direct PLAY_SESSION accepts racing across two teams create exactly one active slot
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › last roster seat is atomic for two invitation recipients
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › room capacity50 is distinct from roster capacity and two recipients cannot take the last room seat
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › scheduled invitation reserves roster only and preserves pending immediate join requests
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › only matching delegated permissions can approve each invitation target
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › same consent/approval retries preserve the final outcome without duplicate memberships or outbox
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › outbox failure rolls back recipient status, membership and active slot
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › settings read and grant replacement require current authorization; owner-only rights cannot be delegated
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+  ● T23 real invitation consent and delegated permissions › revoked sender membership and banned recipient cannot admit through an old invitation
+
+    connect EACCES 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   const db=await pool.connect();
+      32 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      33 |   await tables.seedGames(drizzle(pool,{schema:tables}));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:30:3)
+
+
+  ● Test suite failed to run
+
+    connect EACCES 127.0.0.1:55432
+
+      49 |    if(pool){
+      50 |     if(!/^t23_invites_[0-9]+_[a-z0-9]+$/.test(owned))throw Error('Unsafe fixture cleanup');
+    > 51 |     await pool.query(`DROP SCHEMA "${owned}" CASCADE`);
+         |     ^
+      52 |     expect((await pool.query('SELECT nspname FROM pg_namespace WHERE nspname=$1',[owned])).rowCount).toBe(0);
+      53 |    }
+      54 |   }finally{await pool?.end();process.env=saved;}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/invitations.integration.spec.ts:51:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        36.7 s
+Ran all test suites matching apps/api/test/invitations.integration.spec.ts.

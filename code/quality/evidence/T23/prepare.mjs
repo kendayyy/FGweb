@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T23',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T23');
+if(task.status!=='NOT_STARTED')throw Error('Do not overwrite an existing task run');
+Object.assign(task,{status:'IN_PROGRESS',startedAt:new Date().toISOString(),inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},writeAllowlist:['apps/api/src/modules/invitations/**','apps/api/src/modules/permissions/**','apps/api/test/invitations.integration.spec.ts',`${dir}/**`]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T22/record.mjs','utf8').replaceAll('T22','T23'));
+fs.writeFileSync(`${dir}/audit.mjs`,fs.readFileSync('quality/evidence/T03-FIX8/audit.mjs','utf8').replaceAll('T03-FIX8','T23'));
+fs.writeFileSync(`${dir}/test-types.json`,fs.readFileSync('quality/evidence/T22/test-types.json','utf8').replaceAll('team-approval.integration.spec.ts','invitations.integration.spec.ts'));
+console.log('T23 existing backend scope prepared; no locked source/contract/database changed.');
