@@ -1,0 +1,5 @@
+# AUTH02 baseline review — PASS
+
+Direct human approval from Idea and this coding/build thread is captured in authorization.json. Adopt seven mandatory sources, including approved auth mockup04. Eleven gate tests PASS after genuine RED; checker change only adds the required source, preserving all prerequisite/scope/hash/evidence checks. Historical PASS status, commands, output hashes, timestamps and evidence remain exactly unchanged; active spec provenance adopts approved amendment. Current T03-FIX12 source and test work remains byte-identical. First audit correctly caught ignored compiled WIP omitted from Git inventory; exact separate TypeScript rebuild proves all derived bytes, failed audit preserved. Original readonly/WIP snapshots retained.
+
+Order: finish T03-FIX12, then AUTH02-DATA/BE/FE, then T24-FIX1/T25. Auth implementation and SMTP delivery are not claimed here. Recipient namvupham2004@gmail.com is authorized for real verification/reset test delivery. No auth provider, database, production application or original mockup change in this metadata checkpoint.

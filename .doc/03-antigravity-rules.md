@@ -65,6 +65,10 @@ Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem
 
 ## Prompt khởi động
 
+### Bàn giao AUTH-CHANGE-02
+
+> Đọc spec mục14 và kế hoạch AUTH-CHANGE-02 trong task.md. Giữ Discord, thêm email/mật khẩu theo Better Auth; bảo vệ dữ liệu theo yêu cầu đã chốt. Mockup04 đã được người dùng chốt ngày07/10/2026; dùng bố cục này, không hỏi lại. Giữ task hiện tại và historical evidence, chỉ sau review PASS/rebaseline có evidence mới chạy lần lượt AUTH02-DATA/BE/FE. SMTP thật/test recipient do người dùng chỉ định; thiếu thì báo blocker, không fake success. UI/E2E headed, các test khác nền theo rule08.
+
 ### Khi nhận thay yêu cầu Bảng tin ngày07/10/2026
 
 > Đọc FEED-CHANGE-01 trong spec mục13, frontend-design mục10 và task.md; xem mockup03 đã duyệt. Giữ phong cách FG. Xử lý baseline migration có evidence trước khi tiếp tục build, giữ task đang xử lý và các FIX; không đổi PASS chỉ vì yêu cầu mới. Bảng tin triển khai tuần tự sau T38 qua T38-FEED-DATA/BE/FE rồi mới T39. API/DB/tests thật, không mock production, không code ngoài code/. Giữ Gemini3.6 Flash (High), Antigravity triển khai, Anti2 theo dõi, Codex review/chốt.
@@ -72,4 +76,3 @@ Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem
 > Đọc AGENTS.md và .agents/rules tại E:/FGweb. Đọc .doc/01-product-spec.md, .doc/02-frontend-design.md, .doc/task.md; xem mockup đã duyệt. Báo workspace root, cwd chạy build, nguồn spec, rules đang áp dụng và task đầu chưa PASS. Làm đúng một task theo thứ tự, không skip/parallel. Tên FG và UI đã duyệt. Chỉ code trong E:/FGweb/code; cài deps ở T01 và cấu hình APIs/smoke ở T02 trước business code. Lưu test evidence trước PASS, dừng đúng task nếu blocker. Không tự mua dịch vụ hoặc publish production.
 
 Đây là cấu hình project, không thay global rules/settings Antigravity của người dùng. Nếu phiên bản cũ không nhận .agents/rules, kiểm khả năng cập nhật/cấu hình theo documentation phiên bản đó; không tạo nhiều bản rule khác nhau gây lệch.
-

@@ -7,9 +7,10 @@ Ngày chốt: 04/10/2026 cho tên FG và mockup01/02; bổ sung bố cục Bản
 - [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png).
 - [Phòng nhóm, gọi và live](./mockups/02-group-call-live.png).
 - [Bảng tin cộng đồng desktop/mobile](./mockups/03-community-feed-desktop-mobile.png), bố cục được duyệt ngày 07/10/2026.
+- [Đăng nhập desktop/mobile](./mockups/04-login-desktop-mobile.png), người dùng chốt mockup ngày07/10/2026.
 - [Spec sản phẩm](./01-product-spec.md) quyết định hành vi và quyền truy cập.
 
-Ba ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
+Bốn ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
 
 Các giá trị dưới đây chuẩn hóa phong cách ảnh thành thông số để code nhất quán. Màu được lấy mẫu/điều chỉnh từ ảnh; không phải mọi pixel của ảnh AI đều có cùng màu. Font gốc không thể xác định chính xác từ ảnh raster; chọn **Inter** để triển khai gần phong cách đã duyệt, không tuyên bố đây là font gốc của ảnh.
 
@@ -121,6 +122,8 @@ Các số/bố cục thích ứng có thể thay đổi theo viewport và access
 
 ## 9. Xác nhận đã lưu
 
+AUTH-CHANGE-02 ngày07/10/2026: nghiệp vụ email/mật khẩu đã chốt; người dùng xác nhận “tôi chốt mockup này” cho mockup04. Khung đăng nhập desktop/mobile là baseline bố cục đã duyệt.
+
 Tên **FG** và phong cách ba mockup đã được người dùng duyệt trong chat. T00 không hỏi lại các mục này. Phần số liệu CSS được chuẩn hóa từ phong cách ảnh để implementer có hướng dẫn cụ thể; chỉ điều chỉnh kỹ thuật nhỏ cho tương phản/responsive nếu vẫn giữ thiết kế đã duyệt, ghi rõ trong evidence.
 
 T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt trong task.md; không coi duyệt giao diện là duyệt toàn bộ các đề xuất khác.
@@ -134,3 +137,10 @@ T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt t
 - Tái sử dụng Inter self-host, navy surfaces, CTA xanh, token/radius/borders/spacing và trạng thái tại mục3–5. Không chép theme Facebook, thêm hero/neon hoặc font mới.
 - Khung điện thoại/nhãn Máy tính/Điện thoại/03 là phần trình bày mockup, không build vào app. Icon ảnh của ô bình luận không thuộc scope; bình luận chữ theo spec mục13.
 - Checkpoint T38-FEED-FE và T39: screenshot UI thật ở1440×900,1280×800,390×844,360×800 với dữ liệu cố định, font đã load; review hierarchy/token/layout, không pixel-diff ảnh AI hoặc tự sửa snapshot để che sai lệch.
+
+## 11. Auth email/mật khẩu — mockup04 đã duyệt 07/10/2026
+
+- [Mockup04 desktop/mobile](./mockups/04-login-desktop-mobile.png) đã được người dùng chốt, là baseline bố cục đăng nhập. Giữ navy/blue/Inter/tokens FG; không hỏi lại bố cục này.
+- Khung đăng nhập gọn ở giữa desktop, một cột trên mobile; Email/Mật khẩu và nút hiện/ẩn, Quên mật khẩu, CTA Đăng nhập, divider “hoặc”, Tiếp tục với Discord, liên kết Đăng ký. Có lựa chọn Đăng nhập/Đăng ký; không thêm provider khác.
+- Các màn xác minh/reset/đổi/thêm mật khẩu dùng cùng components/tokens, thông báo trạng thái thật. Không hiển thị hash/token, thông tin kỹ thuật bảo mật hay badge “an toàn tuyệt đối” trong UI.
+- Bên coding/build triển khai theo task/rebaseline sau khi task hiện tại review PASS; bố cục đã chốt. Kiểm keyboard/focus, safe-area, input mobile16px và360px không overflow; screenshot thật1440/1280/390/360, UI/E2E headed theo TEST-VISIBILITY-01. Khung trình bày/điện thoại trong ảnh không build vào app; ảnh không là evidence auth/SMTP đã chạy.

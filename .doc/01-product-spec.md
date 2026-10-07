@@ -41,7 +41,7 @@ Khách chưa đăng nhập được xem Lobby, chat chung và thẻ tìm đội.
 
 ## 3. Tài khoản, hồ sơ và kết bạn
 
-Đăng nhập bằng Discord (dùng Better Auth Discord provider).
+Giữ đăng nhập Discord và bổ sung đăng ký/đăng nhập email + mật khẩu bằng Better Auth theo AUTH-CHANGE-02 ở mục14. Phạm vi và bố cục auth mockup04 đã được người dùng chốt ngày07/10/2026.
 
 Lần đầu đăng nhập, người dùng chọn biệt danh, ảnh đại diện và các game quan tâm rồi có thể vào Lobby. Có thể dùng ảnh từ tài khoản đăng nhập. Không bắt buộc hoàn thiện hồ sơ game trước khi chat hoặc tìm đội.
 
@@ -165,7 +165,7 @@ Quy định xử lý tập tin hình ảnh tải lên:
 
 ### Kịch bản nghiệm thu chính
 1. Khách xem Lobby và thẻ tuyển nhưng không thể gửi tin hoặc xin vào đội; chat riêng/phòng nhóm không bị lộ.
-2. Đăng nhập bằng Discord, hoàn thành hồ sơ ban đầu rồi vào Lobby mà không bắt buộc khai rank.
+2. Đăng nhập bằng Discord hoặc email + mật khẩu đã xác minh, hoàn thành hồ sơ ban đầu rồi vào Lobby mà không bắt buộc khai rank.
 3. Tin chat cập nhật trực tiếp; tải lịch sử, gửi ảnh, trả lời và @nhắc tên hoạt động đúng quyền.
 4. Từ Lobby có thể xem hồ sơ, nhắn riêng chưa kết bạn, gửi/chấp nhận lời mời kết bạn và chặn/báo cáo.
 5. Chủ đội duyệt yêu cầu dù hồ sơ không đáp ứng rank tham khảo; thẻ và số chỗ được cập nhật nhất quán.
@@ -200,6 +200,10 @@ Khả năng nền tảng được kiểm tra ngày 04/10/2026; cần kiểm tra 
 
 ## 12. Lịch sử thay đổi đã được chủ sản phẩm xác nhận
 
+- 07/10/2026 — AUTH-UI-APPROVAL-04: Người dùng xác nhận “tôi chốt mockup này” cho mockup04-login-desktop-mobile.png. Chốt bố cục đăng nhập email/mật khẩu + Discord trên desktop/mobile, giữ phong cách FG. Bên coding/build dùng ảnh04 theo task AUTH-CHANGE-02; duyệt ảnh không là PASS triển khai.
+
+- 07/10/2026 — AUTH-CHANGE-02: Người dùng chốt thêm email/mật khẩu bên cạnh Discord; hash mật khẩu scrypt, xác minh email, reset/đổi mật khẩu, liên kết có xác minh và bảo vệ dữ liệu riêng. Thay giới hạn Discord-only của AUTH-CHANGE-01. Chỉ cập nhật tài liệu và tạo mockup04 để người dùng chốt bố cục; bên coding/build triển khai sau. Không chạy Antigravity, sửa runtime hoặc đánh PASS trong lần ghi tài liệu này.
+
 - 07/10/2026 — TEST-VISIBILITY-01 (đã điều chỉnh): Chỉ UI tương tác trên ứng dụng và E2E local phải hiện cửa sổ browser/app headed để quan sát. Không cần hiện terminal/log; unit/component DOM giả lập, integration/API/DB/smoke/load được chạy nền. Mọi test vẫn lưu evidence và exit code thật. UI/E2E không có GUI phải báo hạn chế trước run. Quy trình cụ thể ở task.md và testing rule08; đây là tiêu chí phát triển, không thay tính năng runtime FG.
 
 - 04/10/2026 — AUTH-CHANGE-01: Người dùng yêu cầu bỏ đăng nhập Google. FG chỉ hỗ trợ đăng nhập Discord; cập nhật T02, T08, T09 và nghiệm thu tương ứng. Better Auth, onboarding và session guard giữ theo phạm vi đã chốt. Client Secret không lưu trong tài liệu hoặc evidence.
@@ -233,3 +237,15 @@ Các mục dưới là mặc định kỹ thuật cho bản đầu, không phả
 - Đăng chữ/ảnh, lọc, phân trang, thích/bỏ thích, bình luận/trả lời, sửa/xóa, hồ sơ/DM hoạt động từ API/DB thật; refresh giữ đúng dữ liệu, retry không nhân đôi lượt thích.
 - UI có loading/empty/error/guest, giữ nội dung nhập khi gửi lỗi, không tràn 360px, keyboard/focus sử dụng được. Screenshot thật tại 1440×900, 1280×800, 390×844, 360×800 đối chiếu mockup 03.
 - Bao gồm Bảng tin trong T39 hồi quy, T40 backup/restore, T41 tải API và T42 bàn giao; giữ nguyên yêu cầu voice/live/PWA/email và 1.000 media concurrent.
+
+## 14. Đăng ký web và bảo mật — AUTH-CHANGE-02
+
+- Giữ Discord; thêm đăng ký/đăng nhập email + mật khẩu, xác minh email, gửi lại xác minh, quên/reset/đổi mật khẩu. Tài khoản web phải xác minh email trước đăng nhập rồi dùng onboarding và đầy đủ FG như tài khoản Discord.
+- Better Auth hiện có hash mật khẩu bằng scrypt với salt; không lưu mật khẩu gốc hoặc ghi vào log. Mật khẩu12–128 ký tự, cho phép khoảng trắng/Unicode, không trim mật khẩu. Link xác minh24giờ, reset1giờ; server giới hạn gửi lại/thử đăng nhập.
+- Không tự ghép identities vì trùng email. Người dùng đăng nhập tài khoản Discord hiện có, xác minh quyền sở hữu email rồi thêm mật khẩu, giữ userId/hồ sơ/bạn bè/phòng. Đăng ký email đã có trả thông báo chung không tiết lộ tài khoản. Flow thêm mật khẩu cần xác minh mới gắn với session/user hiện tại, không chỉ dựa emailVerified cũ.
+- Đổi mật khẩu yêu cầu mật khẩu hiện tại; reset thành công thu hồi phiên cũ. Token hết hạn/đã dùng không được tái sử dụng. Ban và quyền session áp dụng cả hai phương thức.
+- DTO riêng của chủ tài khoản cho phép discordId=null; bỏ yêu cầu mọi user có Discord. Email chỉ trả chủ tài khoản qua API bảo vệ, public profile không lộ email/provider IDs/tokens/hash.
+- Thông tin cần đọc lại không hash một chiều: dùng HTTPS, kiểm quyền, mã hóa lưu trữ/backup và che thông tin nhạy cảm khỏi log/API công khai. Bản này không mã hóa riêng từng trường trong DB. T40 cần evidence mã hóa disk/backup và restore, không coi cấu hình văn bản là đã bảo mật thực tế.
+- Email xác minh/reset dùng SMTP thật; thiếu SMTP hoặc địa chỉ test được người dùng chỉ định thì báo blocker phần delivery, không fake sent. Mail auth bắt buộc không phụ thuộc opt-out email thông báo cộng đồng.
+- Giao diện gồm đăng ký, xác minh/gửi lại, quên/reset/đổi mật khẩu và thêm mật khẩu cho Discord. Các CTA đăng nhập mở trang chọn phương thức; giữ phong cách FG. Mockup04 được người dùng chốt ngày07/10/2026, là baseline bố cục đăng nhập desktop/mobile cho coding/build.
+- Acceptance: API/DB thật kiểm luồng chính, email trùng, token replay/expired, sai mật khẩu/rate limit, ban/revoke và chống chiếm tài khoản; kiểm DB chứa salted hash (hai user cùng mật khẩu hash khác), không mật khẩu gốc; migration giữ dữ liệu Discord. UI/E2E local headed, mọi test có evidence/exit code thật. T39/T42 kiểm cả hai phương thức.

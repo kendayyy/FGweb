@@ -11,7 +11,7 @@
     "backend": "NestJS",
     "database": "PostgreSQL, Drizzle ORM",
     "cacheAndQueue": "Redis, BullMQ",
-    "auth": "Better Auth (Discord provider only)",
+    "auth": "Better Auth (Discord plus verified email/password; AUTH02 implementation pending)",
     "realtime": "Socket.IO",
     "media": "Self-hosted LiveKit SFU",
     "delivery": "Nodemailer (SMTP), Web Push (VAPID)"
@@ -115,12 +115,13 @@
     "launchAndModeration": "Launch date and moderation editorial policy to be decided by future operations; standard task contracts/ACLs define specific details."
   },
   "hashes": {
-    "specSha256": "c711e350d296a341f29286227cb5f6af4e63551ff4fdbd0fdb1efac0433e6f1b",
-    "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
-    "taskSha256": "c309381e1c03979b07ce6364f064bf9cd3500dc452520259695e942e6efc8534",
+    "specSha256": "dd36beb6ae122e0d38c741692e0a04a20987e815ca04478ad71a75298fcb5a35",
+    "designSha256": "73c673cb44a660fb74ad08b6f8e39451f9f946926419d84f79c9b9d4700add87",
+    "taskSha256": "1c72ec26f898a58a2fe9554cd19e5c66c6d5d344c03f2b402631532cd68ec7a5",
     "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
     "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
-    "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+    "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec",
+    "mockupAuthSha256": "8ba50eee98b954fa90bd070491ef823c79e8f0182667189d71ad63f1e3567007"
   },
   "amendments": [
     {
@@ -219,6 +220,38 @@
       "evidence": "quality/evidence/T00-REBASE-VISIBILITY2/review.md",
       "authorization": "Latest human-authored AGENTS/rule08: only UI/E2E headed; unit/integration/API/DB/load background allowed; no visible terminal/log requirement",
       "scope": "Process only; no runtime behavior or historic evidence changes"
+    },
+    {
+      "id": "AUTH-CHANGE-02",
+      "date": "2026-10-07",
+      "previousHashes": {
+        "specSha256": "c711e350d296a341f29286227cb5f6af4e63551ff4fdbd0fdb1efac0433e6f1b",
+        "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+        "taskSha256": "c309381e1c03979b07ce6364f064bf9cd3500dc452520259695e942e6efc8534",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+      },
+      "hashes": {
+        "specSha256": "dd36beb6ae122e0d38c741692e0a04a20987e815ca04478ad71a75298fcb5a35",
+        "designSha256": "73c673cb44a660fb74ad08b6f8e39451f9f946926419d84f79c9b9d4700add87",
+        "taskSha256": "1c72ec26f898a58a2fe9554cd19e5c66c6d5d344c03f2b402631532cd68ec7a5",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec",
+        "mockupAuthSha256": "8ba50eee98b954fa90bd070491ef823c79e8f0182667189d71ad63f1e3567007"
+      },
+      "authorization": "quality/evidence/T00-REBASE-AUTH02/authorization.json",
+      "evidence": "quality/evidence/T00-REBASE-AUTH02/review.md",
+      "affectedTasks": [
+        "AUTH02-DATA",
+        "AUTH02-BE",
+        "AUTH02-FE",
+        "T39",
+        "T40",
+        "T42"
+      ],
+      "scope": "Discord plus verified email/password, approved fourth mockup; no historical PASS claim for new auth"
     }
   ],
   "additionalRequirements": {
@@ -232,6 +265,19 @@
         "T38-FEED-FE"
       ],
       "implementationBefore": "T39"
+    },
+    "AUTH-CHANGE-02": {
+      "specSection": 14,
+      "designSection": 11,
+      "executionStatus": "NOT_STARTED",
+      "checkpointOrder": [
+        "AUTH02-DATA",
+        "AUTH02-BE",
+        "AUTH02-FE"
+      ],
+      "afterCurrentCheckpoint": "T03-FIX12",
+      "implementationBefore": "T24-FIX1",
+      "testEmail": "namvupham2004@gmail.com"
     }
   }
 }

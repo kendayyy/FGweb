@@ -23,6 +23,22 @@
 
 ## 1. Luật thực thi bắt buộc
 
+### AUTH-CHANGE-02 — tài liệu bàn giao, chưa triển khai
+
+**Xác nhận bố cục07/10/2026:** Người dùng “tôi chốt mockup này”; ảnh04-login-desktop-mobile.png đã duyệt. Khi rebaseline AUTH-CHANGE-02, đưa hash ảnh04 vào manifest và kiểm tra baseline bắt buộc bên cạnh ba ảnh cũ, lưu review/evidence; không nới kiểm tra cũ hoặc sửa historical outputs. Không cần hỏi lại bố cục đăng nhập.
+
+Người dùng đã duyệt phạm vi spec mục14, sau đó chỉ định chỉ ghi tài liệu và tạo mockup đăng nhập để chốt trước coding/build. Người dùng đã chốt mockup04 ngày07/10/2026; lần cập nhật này chỉ ghi nhận duyệt, không triển khai hoặc thay ledger/baseline để vượt gate.
+
+Bố cục mockup04 đã duyệt. Sau khi task đang thực hiện được Codex review PASS, bên coding/build lập rebaseline có evidence, thêm tuần tự `AUTH02-DATA → AUTH02-BE → AUTH02-FE` ngay trước task kế tiếp chưa bắt đầu. Giữ task FIX và lịch sử PASS/hash/commands/evidence cũ; không chèn vào task đang chạy. Ba checkpoint bổ sung vào48 cơ sở, tổng51 khi được tích hợp vào bảng/ledger. Không tự biến đề xuất bố cục thành baseline đã duyệt.
+
+| Checkpoint bổ sung | Phạm vi files trong code/ | Deliverable / acceptance / tests |
+| --- | --- | --- |
+| AUTH02-DATA | packages/contracts/src/{auth,profiles,index}.ts; packages/contracts/test/auth-email.test.ts; packages/database/src/schema/auth.ts và migrations/test chỉ nếu cần; quality/api-contract.md | Khóa DTO discordId nullable, auth endpoints dưới /api/auth theo Better Auth hiện có; dữ liệu email riêng của owner; rà schema credential/verification hiện có, chỉ tạo migration cần thiết giữ dữ liệu Discord. Contract tests, producers/consumers tương thích và migration DB thật nếu có. |
+| AUTH02-BE | apps/api/src/modules/auth/; guards/hook session/ban liên quan; mail adapter trong API; apps/api/test/auth-email.integration.spec.ts; cấu hình SMTP/check-env và package manifest nếu cần; quality/api-contract.md | Enable email/password, verification24h/reset1h,12–128 không trim, scrypt, rate limit, email trùng generic, reset revoke, xác minh mới để thêm mật khẩu vào user hiện có. SMTP thật; thiếu credential/test recipient ghi blocker. DB/API integration kiểm hash/salt, replay/expiry/race, ban/session, ownership liên kết, log redaction và hồi quy Discord. Không tự ghép email hoặc setPassword endpoint thiếu xác minh. |
+| AUTH02-FE | apps/web/src/features/auth/ và router/CTA login/account settings liên quan (chốt allowlist cụ thể trước task); apps/web/test/auth-email.test.tsx; tests/e2e/auth-email.spec.ts; quality/spec-coverage.md | Login/register/verify/resend/forgot/reset/change/add-password dùng DTO/API thật, giữ FG và mockup04 đã duyệt. Unit tests form/error/pending/accessibility; headed E2E nhiều user + SMTP test được chỉ định, onboarding/Discord regression, ảnh thật1440/1280/390/360. Không fake email success, token vào logs hoặc snapshot che lỗi. |
+
+Mỗi checkpoint viết test RED hành vi → implementation → tests PASS + lint/typecheck + Codex review + evidence command/time/exitCode/hashes; chưa đủ bằng chứng không mở checkpoint sau. T39/T42 bổ sung nghiệm thu hai phương thức; T40 chứng minh HTTPS, disk/backup encryption và restore bằng evidence vận hành thật, không tuyên bố đã đạt từ feature test. Update mọi chỗ Discord-only trong docs/rules/CTA theo AUTH-CHANGE-02; AUTH-CHANGE-01 giữ như lịch sử bị thay thế, không xóa dấu vết.
+
 1. Working directory triển khai luôn là `E:\FGweb\code`. Chỉ đọc tài liệu ngoài thư mục này. Mọi source, tests, package manifests, lockfiles, configs, migrations, Docker/Caddy, scripts, .env, runtime assets, logs, build outputs và browser-test artifacts phải nằm trong `code/`.
 2. Ngoài `code/`, chỉ được sửa tài liệu trong `.doc/` khi có thay đổi yêu cầu do người dùng xác nhận hoặc cập nhật trạng thái task. `.agents/rules/*.md` và `AGENTS.md` là metadata hướng dẫn agent được người dùng yêu cầu; chỉ cập nhật theo yêu cầu, không chứa logic/cấu hình ứng dụng. Không tạo package.json, node_modules, scripts hay scaffolding ở `E:\FGweb` hoặc `.doc/`.
 3. Thứ tự đúng là **T00 → T01 → T02 → … → T16-FE → T17-BE → T17-FE → … → T42** theo bảng trong file. Không skip, không chạy đồng thời, không tự tick task tiền nhiệm. Một task BLOCKED/FAILED thì dừng tiến trình ở task đó, báo lý do và phần cần người dùng cung cấp.

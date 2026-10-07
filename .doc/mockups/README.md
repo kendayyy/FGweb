@@ -1,5 +1,10 @@
 # FG — Mockup đã được duyệt
 
+## Mockup04 — Đăng nhập, đã duyệt 07/10/2026
+
+- [04 — Đăng nhập desktop/mobile](./04-login-desktop-mobile.png), image_gen tích hợp ngày07/10/2026, tham chiếu phong cách ảnh03. Email/mật khẩu và Discord cùng một khung, tab Đăng nhập/Đăng ký, Quên mật khẩu và nút hiện/ẩn mật khẩu.
+- Người dùng xác nhận “tôi chốt mockup này” ngày07/10/2026. Mockup04 là baseline bố cục đăng nhập cho bên coding/build; nghiệp vụ AUTH-CHANGE-02 ở spec mục14. Không coi duyệt ảnh là bằng chứng auth/SMTP hoạt động.
+
 Ảnh01/02 tạo ngày04/10/2026 và ảnh03 ngày07/10/2026 bằng image_gen tích hợp, chưa phải website đã chạy.
 
 - [01 — Lobby desktop và mobile](./01-lobby-desktop-mobile.png): chat chung là trung tâm; tìm đội riêng cạnh chat; mobile chuyển tab Chat/Tìm đội; người online và trạng thái tự chọn.
@@ -18,4 +23,3 @@ Tên FG, theme tối, accent xanh, typography và bố cục đã được ngư�
 Ảnh02 minh họa desktop; điện thoại hỗ trợ gọi và xem live, không phát màn hình trực tiếp trong bản đầu. Các ô nguồn phát không có nghĩa client phải tải ba video full-quality cùng lúc: chỉ một video chính được subscribe, để giữ mục tiêu chi phí.
 
 Chưa triển khai code. Kế hoạch build ở [task.md](../task.md); nguồn yêu cầu ở [spec](../01-product-spec.md).
-

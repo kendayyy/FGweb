@@ -1,0 +1,76 @@
+✖ seven approved baseline sources validate together (36.5501ms)
+✔ modified specSha256 is rejected (13.1806ms)
+✔ modified designSha256 is rejected (16.9536ms)
+✔ modified taskSha256 is rejected (22.5847ms)
+✔ modified mockupLobbySha256 is rejected (20.6074ms)
+✔ modified mockupCallSha256 is rejected (17.7666ms)
+✔ modified mockupFeedSha256 is rejected (19.474ms)
+✖ modified mockupAuthSha256 is rejected (33.5654ms)
+✔ missing feed mockup hash cannot silently bypass the added source (19.0739ms)
+✔ existing gate still rejects failures, changed output, changed spec and broadened files (28.1458ms)
+✖ missing auth mockup hash cannot bypass new approved source (13.3762ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 8
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 434.2324
+
+✖ failing tests:
+
+test at quality\evidence\T00-REBASE-AUTH02\baseline-gate.test.mjs:11:1
+✖ seven approved baseline sources validate together (36.5501ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  6 !== 7
+  
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-AUTH02/baseline-gate.test.mjs:11:88)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 6,
+    expected: 7,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T00-REBASE-AUTH02\baseline-gate.test.mjs:12:37
+✖ modified mockupAuthSha256 is rejected (33.5654ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-AUTH02/baseline-gate.test.mjs:12:161)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /baseline/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T00-REBASE-AUTH02\baseline-gate.test.mjs:24:1
+✖ missing auth mockup hash cannot bypass new approved source (13.3762ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-AUTH02/baseline-gate.test.mjs:24:139)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /baseline/,
+    operator: 'throws',
+    diff: 'simple'
+  }

@@ -1,5 +1,17 @@
 # Prompt tạo mockup
 
+## 04 — Đăng nhập, đã duyệt 07/10/2026
+
+Ngày07/10/2026, image_gen tích hợp; ảnh03 là tham chiếu phong cách; kết quả04-login-desktop-mobile.png. Người dùng chốt mockup cùng ngày; baseline bố cục đăng nhập. Prompt gốc bên dưới giữ nguyên để truy vết quá trình tạo ảnh.
+
+```text
+Use case: ui-mockup. Create a crisp high-fidelity landscape FG login concept board, title outside UI "04 — ĐĂNG NHẬP", two clearly readable views: large desktop on left and mobile phone on right. Reference image is STYLE REFERENCE ONLY. Preserve existing FG navy-dark gaming community interface, restrained blue buttons, thin borders, Inter-like Vietnamese typography. Palette canvas #141A24, sidebar #11151C, panel #151B23, input #202936, border #303D50, blue #3E7FFD, foreground #EDF2FF, secondary #B6C2D9. No neon, no marketing hero, no invented security promises, no Facebook theme. Flat straight-on interface.
+
+Desktop is a focused standalone login page, not social feed: simple top left small "FG" wordmark, top right subtle "Về Bảng tin" back link. Center one 440px wide compact panel with 12px corners on generous calm navy empty space, no decorative gaming illustration. Heading "Đăng nhập FG", subtitle "Kết nối cùng cộng đồng game thủ". Two tab choices at top "Đăng nhập" selected with blue underline and "Đăng ký" inactive. Explicit field label "Email", empty input placeholder "ban@example.com". Label "Mật khẩu", password field with dots and eye visibility icon. Right aligned blue link "Quên mật khẩu?". Full width primary blue button "Đăng nhập". Thin divider with small "hoặc". Full width secondary dark outlined button with Discord icon and EXACT label "Tiếp tục với Discord". Footer sentence "Chưa có tài khoản? Đăng ký ngay" with linked part blue. Keep card compact and clean, generous padding24px, labels clearly readable, field height44px. No remember checkbox, no Google or other providers, no captcha widget, no fake security badge, no text about hash algorithms. No actual credentials. Card layout order email/password action then Discord alternative.
+
+Mobile phone view same login page, FG at header and simple back arrow, no bottom navigation during auth. Same two tabs, heading, email/password, eye icon, forgot link, blue login, divider, Discord button and registration footer. Fields and buttons large enough44px, comfortable readable15-16px text, fit narrow viewport with safe-area. Empty state with no loading, no error messages, no open keyboard. Light subtle phone frame outside app. Board labels "Máy tính", "Điện thoại". All Vietnamese text spelled correctly with diacritics. This is an unapproved visual concept for user review of the login layout, not a working website.
+```
+
 ## 03 — Bảng tin cộng đồng
 
 Ngày: 07/10/2026. Công cụ: image_gen tích hợp. Ảnh tham chiếu phong cách: `01-lobby-desktop-mobile.png`. Kết quả: `03-community-feed-desktop-mobile.png` — người dùng duyệt bố cục ngày07/10/2026; baseline Bảng tin, giữ phong cách FG.
@@ -36,4 +48,3 @@ Under stream, eight member avatars with clear speaker/muted icons, distinguish f
 Right-hand narrow group chat panel "Chat nhóm" with natural messages "Mình vào xem cùng nha", "Được, bật mic trò chuyện nhé", "Đổi sang góc nhìn của An đi", composer "Nhắn cho nhóm...". Show a small in-product member context popover over one avatar with "Âm lượng" slider and "Tắt tiếng với tôi" to communicate local listening control. A small button "Kết thúc buổi chơi" near the team roster, separate from "Rời cuộc gọi"; do not conflate leaving voice with leaving team or persistent room.
 Constraints: member-only calling/viewing, 10 total maximum call participants including viewers, at most 3 simultaneous screen sharers, one main stream selectable quickly. Multiple simultaneous voice subgroups in one persistent group. No webcam requirement, no recording button, no premium, no API/backend/developer details, no public streaming marketplace. No guest unrelated outsiders. Vietnamese with correct diacritics. Desktop only, straight-on flat screen, high fidelity readable typography, all elements contained in canvas. Board label top "02 — PHÒNG NHÓM & LIVE".
 ```
-

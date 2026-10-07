@@ -1,0 +1,146 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only mandatory seventh source added; no gate relaxation
++ actual - expected
+
++ "import fs from 'node:fs';\r\n" +
++   "import { createHash } from 'node:crypto';\r\n" +
++   "import { pathToFileURL } from 'node:url';\r\n" +
++   "import path from 'node:path';\r\n" +
++   "import { inside } from './check-env.mjs';\r\n" +
++   "const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');\r\n" +
++   "function allow(file,patterns){return patterns.some(p=>p.endsWith('/**')?file.startsWith(p.slice(0,-2)):file===p);}\r\n" +
++   'export function checkBaselines({root,baseline}){\r\n' +
+- "import fs from 'node:fs';\n" +
+-   "import { createHash } from 'node:crypto';\n" +
+-   "import { pathToFileURL } from 'node:url';\n" +
+-   "import path from 'node:path';\n" +
+-   "import { inside } from './check-env.mjs';\n" +
+-   "const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');\n" +
+-   "function allow(file,patterns){return patterns.some(p=>p.endsWith('/**')?file.startsWith(p.slice(0,-2)):file===p);}\n" +
+-   'export function checkBaselines({root,baseline}){\n' +
+    " const docs={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png'};\n" +
++   ' for(const [key,file]of Object.entries(docs)){\r\n' +
++   '  const expected=baseline.hashes?.[key];\r\n' +
++   "  if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');\r\n" +
++   ' }\r\n' +
++   ' return Object.keys(docs).length;\r\n' +
++   '}\r\n' +
++   'export function checkGate({root,tasks,id,specHash,requestedPaths=[]}){\r\n' +
++   " const index=tasks.findIndex(t=>t.id===id);if(index<0)throw new Error('unknown task');\r\n" +
++   " const target=tasks[index];if(target.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('spec baseline changed');\r\n" +
++   ' const previous=tasks.slice(0,index);\r\n' +
++   " if(previous.some(t=>t.status!=='PASS')||target.dependencies.some(d=>!previous.some(t=>t.id===d&&t.status==='PASS')))throw new Error('prerequisite not PASS');\r\n" +
++   " for(const file of requestedPaths){inside(root,file);if(!allow(file,target.writeAllowlist||[]))throw new Error('file outside task allowlist');}\r\n" +
++   ' const latest=new Map();for(const t of previous)for(const [file,digest] of Object.entries(t.outputsHash?.files||{}))latest.set(file,{digest,task:t});\r\n' +
++   " for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase())throw new Error('output hash changed');}\r\n" +
++   ' for(const t of previous){\r\n' +
++   "  if(t.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('predecessor spec changed');\r\n" +
++   "  if(!t.commands?.length||!t.evidencePaths?.length)throw new Error('missing evidence');\r\n" +
++   "  for(const file of t.evidencePaths)if(!fs.existsSync(inside(root,file)))throw new Error('missing evidence file');\r\n" +
++   "  for(const cmd of t.commands){if(t.writeAllowlist&&(!cmd.evidencePath||!cmd.evidenceSha256||!Number.isFinite(Date.parse(cmd.startedAt))||!Number.isFinite(Date.parse(cmd.completedAt))))throw new Error('incomplete command evidence');if(cmd.exitCode!==0)throw new Error('failed command');if(cmd.evidencePath){const file=inside(root,cmd.evidencePath);if(!fs.existsSync(file))throw new Error('missing command evidence');if(cmd.evidenceSha256&&hash(file)!==cmd.evidenceSha256)throw new Error('evidence hash changed');if(t.startedAt&&cmd.startedAt&&(Date.parse(cmd.startedAt)<Date.parse(t.startedAt)||Date.parse(cmd.completedAt)<Date.parse(cmd.startedAt)||Date.parse(cmd.completedAt)>Date.now()))throw new Error('stale evidence');}}\r\n" +
++   ' }\r\n' +
++   ' return target;\r\n' +
++   '}\r\n' +
++   "if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){try{const root=process.cwd();const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));const specHash=hash('../.doc/01-product-spec.md');checkBaselines({root,baseline});checkGate({root,tasks:ledger.tasks,id:process.argv[2],specHash,requestedPaths:process.argv.slice(3)});console.log('PASS: task prerequisites, evidence, hashes and requested write scope (no status changed)');}catch{console.error('FAIL: task gate rejected; check prerequisites, baseline, evidence, hashes and allowlist');process.exitCode=1;}}\r\n"
+-   ' for(const [key,file]of Object.entries(docs)){\n' +
+-   '  const expected=baseline.hashes?.[key];\n' +
+-   "  if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');\n" +
+-   ' }\n' +
+-   ' return Object.keys(docs).length;\n' +
+-   '}\n' +
+-   'export function checkGate({root,tasks,id,specHash,requestedPaths=[]}){\n' +
+-   " const index=tasks.findIndex(t=>t.id===id);if(index<0)throw new Error('unknown task');\n" +
+-   " const target=tasks[index];if(target.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('spec baseline changed');\n" +
+-   ' const previous=tasks.slice(0,index);\n' +
+-   " if(previous.some(t=>t.status!=='PASS')||target.dependencies.some(d=>!previous.some(t=>t.id===d&&t.status==='PASS')))throw new Error('prerequisite not PASS');\n" +
+-   " for(const file of requestedPaths){inside(root,file);if(!allow(file,target.writeAllowlist||[]))throw new Error('file outside task allowlist');}\n" +
+-   ' const latest=new Map();for(const t of previous)for(const [file,digest] of Object.entries(t.outputsHash?.files||{}))latest.set(file,{digest,task:t});\n' +
+-   " for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase())throw new Error('output hash changed');}\n" +
+-   ' for(const t of previous){\n' +
+-   "  if(t.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('predecessor spec changed');\n" +
+-   "  if(!t.commands?.length||!t.evidencePaths?.length)throw new Error('missing evidence');\n" +
+-   "  for(const file of t.evidencePaths)if(!fs.existsSync(inside(root,file)))throw new Error('missing evidence file');\n" +
+-   "  for(const cmd of t.commands){if(t.writeAllowlist&&(!cmd.evidencePath||!cmd.evidenceSha256||!Number.isFinite(Date.parse(cmd.startedAt))||!Number.isFinite(Date.parse(cmd.completedAt))))throw new Error('incomplete command evidence');if(cmd.exitCode!==0)throw new Error('failed command');if(cmd.evidencePath){const file=inside(root,cmd.evidencePath);if(!fs.existsSync(file))throw new Error('missing command evidence');if(cmd.evidenceSha256&&hash(file)!==cmd.evidenceSha256)throw new Error('evidence hash changed');if(t.startedAt&&cmd.startedAt&&(Date.parse(cmd.startedAt)<Date.parse(t.startedAt)||Date.parse(cmd.completedAt)<Date.parse(cmd.startedAt)||Date.parse(cmd.completedAt)>Date.now()))throw new Error('stale evidence');}}\n" +
+-   ' }\n' +
+-   ' return target;\n' +
+-   '}\n' +
+-   "if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){try{const root=process.cwd();const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));const specHash=hash('../.doc/01-product-spec.md');checkBaselines({root,baseline});checkGate({root,tasks:ledger.tasks,id:process.argv[2],specHash,requestedPaths:process.argv.slice(3)});console.log('PASS: task prerequisites, evidence, hashes and requested write scope (no status changed)');}catch{console.error('FAIL: task gate rejected; check prerequisites, baseline, evidence, hashes and allowlist');process.exitCode=1;}}\n"
+
+    at file:///E:/FGweb/code/quality/evidence/T00-REBASE-AUTH02/audit.mjs:25:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import fs from 'node:fs';\r\n" +
+    "import { createHash } from 'node:crypto';\r\n" +
+    "import { pathToFileURL } from 'node:url';\r\n" +
+    "import path from 'node:path';\r\n" +
+    "import { inside } from './check-env.mjs';\r\n" +
+    "const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');\r\n" +
+    "function allow(file,patterns){return patterns.some(p=>p.endsWith('/**')?file.startsWith(p.slice(0,-2)):file===p);}\r\n" +
+    'export function checkBaselines({root,baseline}){\r\n' +
+    " const docs={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png'};\n" +
+    ' for(const [key,file]of Object.entries(docs)){\r\n' +
+    '  const expected=baseline.hashes?.[key];\r\n' +
+    "  if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');\r\n" +
+    ' }\r\n' +
+    ' return Object.keys(docs).length;\r\n' +
+    '}\r\n' +
+    'export function checkGate({root,tasks,id,specHash,requestedPaths=[]}){\r\n' +
+    " const index=tasks.findIndex(t=>t.id===id);if(index<0)throw new Error('unknown task');\r\n" +
+    " const target=tasks[index];if(target.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('spec baseline changed');\r\n" +
+    ' const previous=tasks.slice(0,index);\r\n' +
+    " if(previous.some(t=>t.status!=='PASS')||target.dependencies.some(d=>!previous.some(t=>t.id===d&&t.status==='PASS')))throw new Error('prerequisite not PASS');\r\n" +
+    " for(const file of requestedPaths){inside(root,file);if(!allow(file,target.writeAllowlist||[]))throw new Error('file outside task allowlist');}\r\n" +
+    ' const latest=new Map();for(const t of previous)for(const [file,digest] of Object.entries(t.outputsHash?.files||{}))latest.set(file,{digest,task:t});\r\n' +
+    " for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase())throw new Error('output hash changed');}\r\n" +
+    ' for(const t of previous){\r\n' +
+    "  if(t.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('predecessor spec changed');\r\n" +
+    "  if(!t.commands?.length||!t.evidencePaths?.length)throw new Error('missing evidence');\r\n" +
+    "  for(const file of t.evidencePaths)if(!fs.existsSync(inside(root,file)))throw new Error('missing evidence file');\r\n" +
+    "  for(const cmd of t.commands){if(t.writeAllowlist&&(!cmd.evidencePath||!cmd.evidenceSha256||!Number.isFinite(Date.parse(cmd.startedAt))||!Number.isFinite(Date.parse(cmd.completedAt))))throw new Error('incomplete command evidence');if(cmd.exitCode!==0)throw new Error('failed command');if(cmd.evidencePath){const file=inside(root,cmd.evidencePath);if(!fs.existsSync(file))throw new Error('missing command evidence');if(cmd.evidenceSha256&&hash(file)!==cmd.evidenceSha256)throw new Error('evidence hash changed');if(t.startedAt&&cmd.startedAt&&(Date.parse(cmd.startedAt)<Date.parse(t.startedAt)||Date.parse(cmd.completedAt)<Date.parse(cmd.startedAt)||Date.parse(cmd.completedAt)>Date.now()))throw new Error('stale evidence');}}\r\n" +
+    ' }\r\n' +
+    ' return target;\r\n' +
+    '}\r\n' +
+    "if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){try{const root=process.cwd();const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));const specHash=hash('../.doc/01-product-spec.md');checkBaselines({root,baseline});checkGate({root,tasks:ledger.tasks,id:process.argv[2],specHash,requestedPaths:process.argv.slice(3)});console.log('PASS: task prerequisites, evidence, hashes and requested write scope (no status changed)');}catch{console.error('FAIL: task gate rejected; check prerequisites, baseline, evidence, hashes and allowlist');process.exitCode=1;}}\r\n",
+  expected: "import fs from 'node:fs';\n" +
+    "import { createHash } from 'node:crypto';\n" +
+    "import { pathToFileURL } from 'node:url';\n" +
+    "import path from 'node:path';\n" +
+    "import { inside } from './check-env.mjs';\n" +
+    "const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');\n" +
+    "function allow(file,patterns){return patterns.some(p=>p.endsWith('/**')?file.startsWith(p.slice(0,-2)):file===p);}\n" +
+    'export function checkBaselines({root,baseline}){\n' +
+    " const docs={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png'};\n" +
+    ' for(const [key,file]of Object.entries(docs)){\n' +
+    '  const expected=baseline.hashes?.[key];\n' +
+    "  if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');\n" +
+    ' }\n' +
+    ' return Object.keys(docs).length;\n' +
+    '}\n' +
+    'export function checkGate({root,tasks,id,specHash,requestedPaths=[]}){\n' +
+    " const index=tasks.findIndex(t=>t.id===id);if(index<0)throw new Error('unknown task');\n" +
+    " const target=tasks[index];if(target.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('spec baseline changed');\n" +
+    ' const previous=tasks.slice(0,index);\n' +
+    " if(previous.some(t=>t.status!=='PASS')||target.dependencies.some(d=>!previous.some(t=>t.id===d&&t.status==='PASS')))throw new Error('prerequisite not PASS');\n" +
+    " for(const file of requestedPaths){inside(root,file);if(!allow(file,target.writeAllowlist||[]))throw new Error('file outside task allowlist');}\n" +
+    ' const latest=new Map();for(const t of previous)for(const [file,digest] of Object.entries(t.outputsHash?.files||{}))latest.set(file,{digest,task:t});\n' +
+    " for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase())throw new Error('output hash changed');}\n" +
+    ' for(const t of previous){\n' +
+    "  if(t.specSha256.toLowerCase()!==specHash.toLowerCase())throw new Error('predecessor spec changed');\n" +
+    "  if(!t.commands?.length||!t.evidencePaths?.length)throw new Error('missing evidence');\n" +
+    "  for(const file of t.evidencePaths)if(!fs.existsSync(inside(root,file)))throw new Error('missing evidence file');\n" +
+    "  for(const cmd of t.commands){if(t.writeAllowlist&&(!cmd.evidencePath||!cmd.evidenceSha256||!Number.isFinite(Date.parse(cmd.startedAt))||!Number.isFinite(Date.parse(cmd.completedAt))))throw new Error('incomplete command evidence');if(cmd.exitCode!==0)throw new Error('failed command');if(cmd.evidencePath){const file=inside(root,cmd.evidencePath);if(!fs.existsSync(file))throw new Error('missing command evidence');if(cmd.evidenceSha256&&hash(file)!==cmd.evidenceSha256)throw new Error('evidence hash changed');if(t.startedAt&&cmd.startedAt&&(Date.parse(cmd.startedAt)<Date.parse(t.startedAt)||Date.parse(cmd.completedAt)<Date.parse(cmd.startedAt)||Date.parse(cmd.completedAt)>Date.now()))throw new Error('stale evidence');}}\n" +
+    ' }\n' +
+    ' return target;\n' +
+    '}\n' +
+    "if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){try{const root=process.cwd();const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));const specHash=hash('../.doc/01-product-spec.md');checkBaselines({root,baseline});checkGate({root,tasks:ledger.tasks,id:process.argv[2],specHash,requestedPaths:process.argv.slice(3)});console.log('PASS: task prerequisites, evidence, hashes and requested write scope (no status changed)');}catch{console.error('FAIL: task gate rejected; check prerequisites, baseline, evidence, hashes and allowlist');process.exitCode=1;}}\n",
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

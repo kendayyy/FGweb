@@ -25,6 +25,10 @@ Yêu cầu mới của người dùng có thể điều chỉnh project rules; g
 - Antigravity triển khai, Anti2 theo dõi, Codex review và chốt; giữ Gemini 3.6 Flash (High), một task mỗi lần, không mở task sau trước PASS.
 - Thay đổi này chỉ bỏ giới hạn số vòng sửa; không nới phạm vi files, quyền truy cập, acceptance, kiểm thử hay điều kiện PASS. Không giả success, sửa test để che lỗi hoặc tự đổi model.
 
+## AUTH-CHANGE-02 — 07/10/2026
+- Giữ Discord, thêm đăng ký/đăng nhập email+mật khẩu, xác minh/reset/đổi/thêm mật khẩu có xác minh; scrypt hash mật khẩu, dữ liệu riêng bảo vệ qua HTTPS/ACL/mã hóa lưu trữ/backup, không hash mọi trường. Đọc spec mục14 và bàn giao AUTH-CHANGE-02 trong task.md.
+- Người dùng chốt mockup04 đăng nhập desktop/mobile ngày07/10/2026; đọc frontend-design mục11, giữ bố cục/phong cách đã duyệt, không hỏi lại. Bên coding/build triển khai sau task hiện tại review PASS qua AUTH02-DATA → AUTH02-BE → AUTH02-FE, theo gate/rebaseline có evidence gồm hash ảnh04. Không đánh PASS tính năng từ duyệt ảnh; lần cập nhật này chỉ ghi tài liệu.
+
 ## Bảng tin được người dùng duyệt — 07/10/2026
 - FEED-CHANGE-01: Bảng tin cộng đồng chung, bài chữ/ảnh, thích, bình luận/trả lời và lọc game/loại bài. Đọc spec mục13, frontend-design mục10 và mockup03 desktop/mobile đã được duyệt bố cục; giữ màu sắc/phong cách FG.
 - Triển khai lần lượt T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE sau T38, trước T39; không nhảy task hiện tại. Rebaseline do thay yêu cầu phải có review/evidence, không tự đổi PASS hay nới checker.

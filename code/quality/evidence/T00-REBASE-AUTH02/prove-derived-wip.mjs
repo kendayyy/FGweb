@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T00-REBASE-AUTH02',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const before=JSON.parse(fs.readFileSync(`${dir}/suspended-contract-work.json`));
+for(const [f,h]of Object.entries(before))assert.equal(hash(f),h,f);
+const record=JSON.parse(fs.readFileSync('quality/evidence/T03-FIX12/codex-build-1.json'));
+assert.equal(record.exitCode,0);assert.equal(hash(record.evidencePath),record.evidenceSha256);
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const dist=Object.fromEntries(walk('packages/contracts/dist').map(f=>[f,hash(f)]));
+execFileSync(process.execPath,['node_modules/typescript/bin/tsc','-p','packages/contracts/tsconfig.json','--outDir',`${dir}/derived-proof`],{stdio:'inherit'});
+const compiled=Object.fromEntries(walk(`${dir}/derived-proof`).map(f=>[f.replace(`${dir}/derived-proof`,'packages/contracts/dist'),hash(f)]));
+assert.deepEqual(compiled,dist,'Ignored dist is exactly reproduced from unchanged suspended contracts source');
+for(const [f,h]of Object.entries(before))assert.equal(hash(f),h,f);
+fs.writeFileSync(`${dir}/derived-wip.json`,JSON.stringify({buildRecord:'quality/evidence/T03-FIX12/codex-build-1.json',reason:'Ignored compiled files omitted by git inventory; original snapshot retained. Exact rebuild proves partial owner output; no producer or historical source changed.',files:dist},null,2)+'\n');
+console.log(`Verified ${Object.keys(dist).length} derived suspended contract files by exact rebuild; original WIP untouched.`);
