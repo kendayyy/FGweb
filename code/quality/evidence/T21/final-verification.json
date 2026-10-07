@@ -1,0 +1,102 @@
+{
+  "task": "T21",
+  "executor": "Codex direct; Anti2 paused",
+  "checks": [
+    {
+      "command": "node scripts/verify-task.mjs T21",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:02:36.201Z",
+      "completedAt": "2026-10-07T03:02:50.197Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/web -- test/recruitments.test.tsx",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-06T19:52:08.224Z",
+      "completedAt": "2026-10-06T19:52:15.787Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-feature-final-3.txt",
+      "evidenceSha256": "aa6a00a75ca22a8716fff6cf770a1fab9d14b1b21039a83e40f0a8ce68ca3bc5"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/web -- --maxWorkers=1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:06:39.604Z",
+      "completedAt": "2026-10-07T03:08:21.731Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-regression-1.txt",
+      "evidenceSha256": "25bbfb71939cd8432ba88e95c3bca20e0dcc5ce2f3c5c9110c8413930a6644ab"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T21/test-types.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:08:38.569Z",
+      "completedAt": "2026-10-07T03:08:53.394Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/web/src/features/recruitments apps/web/src/features/lobby/LobbyPage.tsx apps/web/test/recruitments.test.tsx",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:08:39.083Z",
+      "completedAt": "2026-10-07T03:09:11.341Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/web",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:07:33.816Z",
+      "completedAt": "2026-10-07T03:07:38.364Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-build-3.txt",
+      "evidenceSha256": "8d4cbe11d7c85fce2aaf4adede133ac41d305c740fa6ad166c360a7e74aef629"
+    },
+    {
+      "command": "node quality/evidence/T21/native-recruitments.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:08:01.503Z",
+      "completedAt": "2026-10-07T03:08:26.537Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-native-4.txt",
+      "evidenceSha256": "b0ed079b096cdf7bc47217a444b7e8b7dfec8ba5427fcc455a671f04051fa51d"
+    },
+    {
+      "command": "node quality/evidence/T21/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:08:39.785Z",
+      "completedAt": "2026-10-07T03:08:54.072Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-audit-1.txt",
+      "evidenceSha256": "ca9b08d01b15cec91a7ac039e829a086ec439be674c8d116d70e5f9f9ba59d04"
+    },
+    {
+      "command": "git diff --check -- apps/web/src/features/lobby/LobbyPage.tsx apps/web/src/features/recruitments apps/web/test/recruitments.test.tsx quality/evidence/T21/*.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:09:31.903Z",
+      "completedAt": "2026-10-07T03:09:31.987Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T21/codex-wired-diff-1.txt",
+      "evidenceSha256": "bcdb56c0a8a071285f9978a2ba993981a1d0af56016791c13332ac50b6227ea2"
+    }
+  ],
+  "productionLobbyWiringApplied": true,
+  "productionBrowserVerified": true,
+  "screenshotsReviewed": "screenshots/t21_fe_1791342485794_oonzx5",
+  "physicalMobileDeviceVerified": false,
+  "mediaLoadVerified": false,
+  "failedRunsPreserved": true
+}

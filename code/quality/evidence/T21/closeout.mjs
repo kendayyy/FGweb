@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T21';
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T21');
+assert.equal(t.status,'IN_PROGRESS');
+const labels=['wired-gate-1','feature-final-3','wired-regression-1','wired-types-1','wired-lint-1','wired-build-3','wired-native-4','wired-audit-1','wired-diff-1'];
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert(fs.readFileSync(`${dir}/codex-wired-regression-1.txt`,'utf8').includes('130 passed'));
+assert(fs.readFileSync(`${dir}/codex-feature-final-3.txt`,'utf8').includes('26 passed'));
+assert(fs.readFileSync(`${dir}/codex-wired-native-4.txt`,'utf8').includes('"realCompiledApi":true'));
+assert(fs.readFileSync(`${dir}/review.md`,'utf8').includes('T21 Codex review: PASS'));
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({task:'T21',executor:'Codex direct; Anti2 paused',checks:records,productionLobbyWiringApplied:true,productionBrowserVerified:true,screenshotsReviewed:'screenshots/t21_fe_1791342485794_oonzx5',physicalMobileDeviceVerified:false,mediaLoadVerified:false,failedRunsPreserved:true},null,2)+'\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const evidence=walk(dir),outputs=[...walk('apps/web/src/features/recruitments'),'apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/recruitments.test.tsx',...evidence];
+Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,blockers:[],outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Recruitment cards, seven-game creation, Roblox experience, Bangkok UTC, persistent/private rooms, suggestions, filters and mobile chat retention | T21 |26 feature/130 frontend tests;real compiled API+PG+Redis built-web browser;four reviewed viewport captures;build/types/lint/scope | PASS |\n');
+console.log('T21 PASS; reviewed evidence frozen. T22 next.');

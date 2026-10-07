@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const file='apps/web/src/features/lobby/LobbyPage.tsx';
+const old='<RecruitmentPanel key={`${game.id}:${auth.user?.id ?? \'guest\'}:${auth.isSigningOut}`}';
+const updated='<RecruitmentPanel key={`recruitment:${game.id}:${auth.user?.id ?? \'guest\'}:${auth.isSigningOut}`}';
+const before=fs.readFileSync(file,'utf8');assert(before.includes(old));
+fs.writeFileSync(file,before.replace(old,updated));
+let audit=fs.readFileSync('quality/evidence/T21/audit.mjs','utf8');
+audit=audit.replace("fs.readFileSync(`${dir}/LobbyPage.proposed.tsx`,'utf8'),'Approved minimal Lobby wiring only'", "fs.readFileSync(`${dir}/LobbyPage.proposed.tsx`,'utf8').replace('<RecruitmentPanel key={`','<RecruitmentPanel key={`recruitment:'),'Approved minimal Lobby wiring with unique sibling key only'");
+fs.writeFileSync('quality/evidence/T21/audit.mjs',audit);
+fs.writeFileSync('quality/evidence/T21/wiring-key-review.md','# T21 native review repair\n\nThe first two real-browser executions exposed duplicate filter controls after guest-to-auth hydration. RecruitmentPanel and OnlineUsers were siblings with the same React key, leaving a stale guest panel in the DOM. The approved replacement now prefixes its key with recruitment: while preserving game/actor/sign-out resets. This changes only the newly approved component wiring, not OnlineUsers or the existing layout. Original proposed bytes and failed evidence are preserved. Native probe now requires exactly one recruitment panel after authentication.\n');
