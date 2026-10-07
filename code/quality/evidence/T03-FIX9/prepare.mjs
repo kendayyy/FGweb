@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T03-FIX9';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const index=ledger.tasks.findIndex(t=>t.id==='T22');
+if(ledger.tasks.some(t=>t.id==='T03-FIX9'))throw Error('Already prepared');
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+const startedAt=new Date().toISOString();
+ledger.tasks.splice(index,0,{id:'T03-FIX9',status:'IN_PROGRESS',dependencies:['T21'],specSha256:ledger.tasks[index].specSha256,inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},outputsHash:null,commands:[],evidencePaths:[],startedAt,completedAt:null,blockers:[],writeAllowlist:['packages/contracts/src/index.ts','packages/contracts/test/team-approval-transport.test.ts','quality/api-contract.md',`${dir}/**`]});
+const next=ledger.tasks.find(t=>t.id==='T22');next.dependencies=['T03-FIX9'];next.status='NOT_STARTED';next.blockers=[];next.writeAllowlist.push('apps/api/src/app.module.ts');
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/plan.md`,'# T03-FIX9 approved plan\n\nUser: “duyệt đề xuất và tiếp tục”. Approved T22/prerequisite-proposal.md. Single task: registry aliases and shared private TeamSnapshotSchema, keep old transports. RED new transport cases -> minimal contracts -> contracts suite/build/consumer types/lint/scope -> freeze PASS -> T22. Codex direct; Anti2 paused. Existing task ledger/evidence and code/ boundary take precedence over skill scratch/worktree locations and delegation.\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T21/record.mjs','utf8').replaceAll('T21','T03-FIX9'));
+console.log('Prepared approved T03-FIX9 before T22.');

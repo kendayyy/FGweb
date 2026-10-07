@@ -44,10 +44,12 @@ export const SocketMessageDeletedPayloadSchema = z.object({
   conversationId: IdSchema,
 });
 export const SocketRecruitmentUpdatedPayloadSchema = RecruitmentSchema;
-export const SocketTeamUpdatedPayloadSchema = z.object({
+export const TeamSnapshotSchema = z.object({
   playSession: PlaySessionSchema,
   roster: z.array(PlaySessionRosterSchema),
 });
+export type TeamSnapshotDTO = z.infer<typeof TeamSnapshotSchema>;
+export const SocketTeamUpdatedPayloadSchema = TeamSnapshotSchema;
 export const SocketRoomUpdatedPayloadSchema = RoomSchema;
 export const SocketCallUpdatedPayloadSchema = CallGroupSchema;
 export const SocketNotificationCreatedPayloadSchema = NotificationSchema;
@@ -148,9 +150,12 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/recruitments/:id', auth: 'Public', responseSchema: PublicRecruitmentSchema },
   { method: 'PATCH', path: '/api/v1/recruitments/:id/close', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: RecruitmentSchema },
   { method: 'PATCH', path: '/api/v1/recruitments/:id/reopen', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: RecruitmentSchema },
+  { method: 'POST', path: '/api/v1/recruitments/:id/requests', auth: 'Authenticated', responseSchema: JoinRequestSchema },
   { method: 'POST', path: '/api/v1/recruitments/:id/join-requests', auth: 'Authenticated', responseSchema: JoinRequestSchema },
   { method: 'GET', path: '/api/v1/recruitments/:id/join-requests', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: z.array(JoinRequestSchema) },
   { method: 'GET', path: '/api/v1/recruitments/me/joins', auth: 'Authenticated', responseSchema: z.array(JoinRequestSchema) },
+  { method: 'POST', path: '/api/v1/join-requests/:id/approve', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: JoinRequestSchema },
+  { method: 'POST', path: '/api/v1/join-requests/:id/reject', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: JoinRequestSchema },
   { method: 'PATCH', path: '/api/v1/join-requests/:id/respond', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: RespondJoinRequestSchema, responseSchema: JoinRequestSchema },
   { method: 'DELETE', path: '/api/v1/join-requests/:id/cancel', auth: 'Authenticated', requestSchema: CancelJoinRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
 
@@ -159,6 +164,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'PATCH', path: '/api/v1/invitations/:id/respond', auth: 'Authenticated', requestSchema: RespondInvitationSchema, responseSchema: InvitationSchema },
   { method: 'POST', path: '/api/v1/invitations/:id/approve', auth: 'RoomOwner', requestSchema: ApproveInvitationSchema, responseSchema: InvitationSchema },
 
+  { method: 'GET', path: '/api/v1/play-sessions/:id', auth: 'RoomMember', responseSchema: TeamSnapshotSchema },
   { method: 'POST', path: '/api/v1/play-sessions/:id/start', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: PlaySessionSchema },
   { method: 'POST', path: '/api/v1/play-sessions/:id/end', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: PlaySessionSchema },
   { method: 'POST', path: '/api/v1/play-sessions/:id/leave', auth: 'Authenticated', responseSchema: z.object({ success: z.boolean() }) },
