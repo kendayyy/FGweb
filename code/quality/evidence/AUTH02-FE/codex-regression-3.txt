@@ -1,0 +1,32 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (9 tests | 1 failed) 14643ms
+   ❯ T13 approved Lobby behavior (9)
+     × merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50 5298ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/lobby.test.tsx:87:5
+     85|         expect(screen.queryByText('Tin trễ từ Liên Minh')).not.toBeInT…
+     86|     });
+     87|     it('merges duplicate realtime/reconnect history by message ID and …
+       |     ^
+     88|         let requests = 0;
+     89|         let fetchedOlder = false;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 10 passed (11)
+      Tests  1 failed | 145 passed (146)
+   Start at  15:19:16
+   Duration  29.11s (tests 44%, environment 30%, transform 10%, import 10%, setup 6%, worker 1%)
+
+Environment  jsdom was created 11 times · 53.42s total, 30% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

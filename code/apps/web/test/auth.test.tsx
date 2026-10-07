@@ -151,7 +151,7 @@ describe('T09 Auth Features & Guards', () => {
         expect(ctas[0]).toBeInTheDocument();
       });
 
-      expect(screen.getAllByText(/Đăng nhập bằng Discord/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('link',{name:'Đăng nhập'}).length).toBeGreaterThan(0);
     });
   });
 

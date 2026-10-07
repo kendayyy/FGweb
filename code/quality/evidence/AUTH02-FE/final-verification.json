@@ -1,0 +1,219 @@
+{
+  "task": "AUTH02-FE",
+  "baselineScope": "d9 AUTH02 (12–128); approved newer password/admin changes pending next owner rebaseline",
+  "webFiles": 11,
+  "webTests": 147,
+  "newAuthCases": 17,
+  "headedE2e": 3,
+  "commands": [
+    {
+      "command": "node scripts/verify-task.mjs AUTH02-FE apps/web/src/features/auth/LoginForm.tsx apps/web/src/App.tsx apps/web/src/features/lobby/LobbyPage.tsx apps/web/test/auth-email.test.tsx apps/web/test/auth.test.tsx apps/web/test/codex-auth-ui-regressions.test.tsx tests/e2e/auth-email.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T07:26:19.658Z",
+      "completedAt": "2026-10-07T07:26:27.348Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node scripts/verify-task.mjs AUTH02-FE",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:12:08.552Z",
+      "completedAt": "2026-10-07T08:12:16.919Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-gate-2.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:24.942Z",
+      "completedAt": "2026-10-07T08:38:34.453Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-types-5.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/AUTH02-FE/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:34.567Z",
+      "completedAt": "2026-10-07T08:38:42.712Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-test-types-5.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:42.826Z",
+      "completedAt": "2026-10-07T08:38:45.453Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-build-4.txt",
+      "evidenceSha256": "6cbd891debbe3896c79374ea360d380dca5188df5c55a24f082fc38b027012bf"
+    },
+    {
+      "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/AUTH02-FE/playwright.config.ts --headed",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:45.596Z",
+      "completedAt": "2026-10-07T08:39:19.849Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-e2e-14.txt",
+      "evidenceSha256": "ce840aea3f67ec6ec632054d6a9bca401e20179062decccffd1537ace1712467"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/web/src/features/auth apps/web/src/App.tsx apps/web/src/features/lobby/LobbyPage.tsx apps/web/test/auth-email.test.tsx apps/web/test/auth.test.tsx apps/web/test/codex-auth-ui-regressions.test.tsx tests/e2e/auth-email.spec.ts quality/evidence/AUTH02-FE",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:41:33.272Z",
+      "completedAt": "2026-10-07T08:41:37.403Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-lint-3.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH02-FE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:41:37.503Z",
+      "completedAt": "2026-10-07T08:41:53.116Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-audit-2.txt",
+      "evidenceSha256": "6760d4c7b4fc1e59bf3445bcada05e4051d73fea677d392f2d9f38b323d897ad"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:41:53.281Z",
+      "completedAt": "2026-10-07T08:41:53.493Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-diff-2.txt",
+      "evidenceSha256": "9321eeaf13ef86e82f497eb75730e7d64858a0aba7d712493fba5aa72353e7fa"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/auth-email.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:36:55.425Z",
+      "completedAt": "2026-10-07T08:37:04.899Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-auth-email.txt",
+      "evidenceSha256": "9d883207f017d7370e62f863befe97548cf79a49ec388d979cae375307027337"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/auth.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:05.017Z",
+      "completedAt": "2026-10-07T08:37:12.800Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-auth.txt",
+      "evidenceSha256": "f06aeafeaf2aa0c3bbee073e0fb95a99035dced5f0bd538a8a7bad23c851110d"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/chat-rich.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:12.919Z",
+      "completedAt": "2026-10-07T08:37:19.616Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-chat-rich.txt",
+      "evidenceSha256": "4f4eae3afc08ef786008aa9014c66799a5ebf235a7bffb02a2f4dc588a4afd14"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:19.749Z",
+      "completedAt": "2026-10-07T08:37:25.406Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-codex-auth-regressions.txt",
+      "evidenceSha256": "ccae2ddd667631920d02bc520787b6927a55c1fec9ffdbb91697aac200a20054"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-ui-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:25.512Z",
+      "completedAt": "2026-10-07T08:37:30.882Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-codex-auth-ui-regressions.txt",
+      "evidenceSha256": "bdbd6c5d56f353f9121041e2e7d627c7d7abf4cc52859b81b25da021342d5e80"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/lobby.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:30.995Z",
+      "completedAt": "2026-10-07T08:37:42.052Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-lobby.txt",
+      "evidenceSha256": "82666eb75e42dda767b3ab95d5b6adf2154712dddec3848ae56b6a7855910f11"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/presence.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:42.173Z",
+      "completedAt": "2026-10-07T08:37:48.523Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-presence.txt",
+      "evidenceSha256": "8e7079ed8d19590798131567a43afa0484e522f1d3b7885b825eac626a39b5c8"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/profiles.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:48.615Z",
+      "completedAt": "2026-10-07T08:37:55.195Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-profiles.txt",
+      "evidenceSha256": "f14f02a502e03ab7e0e8f28310b60bdac6e622007d1a311fe6bffa1c38fa41d9"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/recruitments.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:37:55.301Z",
+      "completedAt": "2026-10-07T08:38:03.218Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-recruitments.txt",
+      "evidenceSha256": "c7f27c412f3233fa4532e56683c13b717931f0ea02982cf211034760bd9c24ce"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/rooms.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:03.329Z",
+      "completedAt": "2026-10-07T08:38:15.418Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-rooms.txt",
+      "evidenceSha256": "2a3f45d0779e2fabb09321e9448f8d354d0b9de19a0bc4666a08af3ba47335c0"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/social.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:38:15.511Z",
+      "completedAt": "2026-10-07T08:38:24.834Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-FE/codex-isolated-social.txt",
+      "evidenceSha256": "3ff8fced6af60ff97d0ce8cdcc42665a1e3edb45f9ebc252d8c1ff7e7ae6794c"
+    }
+  ],
+  "visualSizes": [
+    "1440x900",
+    "1280x800",
+    "390x844",
+    "360x800"
+  ],
+  "liveAmendedDocsPreserved": true,
+  "newPasswordPolicyOrAdminClaimed": false,
+  "productionMocks": false
+}

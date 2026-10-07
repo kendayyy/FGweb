@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/AUTH02-FE',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='AUTH02-FE');assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.id==='AUTH02-BE').status,'PASS');
+task.writeAllowlist=['apps/web/src/features/auth/**','apps/web/src/App.tsx','apps/web/src/features/lobby/LobbyPage.tsx','apps/web/test/auth-email.test.tsx','apps/web/test/auth.test.tsx','apps/web/test/codex-auth-ui-regressions.test.tsx','tests/e2e/auth-email.spec.ts',`${dir}/**`,'apps/web/dist/**'];
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.blockers=[];task.inputsHash={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),authorization:'Approved AUTH-CHANGE-02/spec14/mockup04 plus persistent broaden-write/locked-file grant. Exact router/CTA/old assertion scope in plan before edits.'};fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const own=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!own(f)).map(f=>[f,hash(f)])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/AUTH02-BE/record.mjs','utf8').replaceAll('AUTH02-BE','AUTH02-FE'));console.log('AUTH02-FE active; exact scope pinned.');

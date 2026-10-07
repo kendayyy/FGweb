@@ -4,40 +4,20 @@ import { useAuth } from './AuthProvider.js';
 import { Button } from '../../components/ui/Button.js';
 
 export const HeaderAuthWidget: React.FC = () => {
-  const { user, isLoading, isSigningOut, signIn, signOut } = useAuth();
+  const { user, isLoading, isSigningOut, signOut } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
-  const [failedAction, setFailedAction] = useState<'signIn' | 'signOut' | null>(null);
   const inRouter = useInRouterContext();
-
-  const handleSignIn = useCallback(async () => {
-    setAuthError(null);
-    setFailedAction(null);
-    try {
-      await signIn();
-    } catch (err) {
-      setFailedAction('signIn');
-      setAuthError(err instanceof Error ? err.message : 'Đăng nhập thất bại');
-    }
-  }, [signIn]);
 
   const handleSignOut = useCallback(async () => {
     setAuthError(null);
-    setFailedAction(null);
     try {
       await signOut();
     } catch (err) {
-      setFailedAction('signOut');
       setAuthError(err instanceof Error ? err.message : 'Đăng xuất thất bại');
     }
   }, [signOut]);
 
-  const handleRetry = useCallback(() => {
-    if (failedAction === 'signOut') {
-      handleSignOut();
-    } else {
-      handleSignIn();
-    }
-  }, [failedAction, handleSignIn, handleSignOut]);
+  const handleRetry = useCallback(() => {void handleSignOut();}, [handleSignOut]);
 
   if (isLoading) {
     return <div style={{ color: 'var(--text-quiet)', fontSize: '13px' }}>Đang tải...</div>;
@@ -133,13 +113,12 @@ export const HeaderAuthWidget: React.FC = () => {
 
       {!user ? (
         <div data-testid="guest-login-cta">
-          <Button variant="primary" size="md" onClick={handleSignIn}>
-            Đăng nhập bằng Discord
-          </Button>
+          {inRouter?<Link className="fg-btn fg-btn-primary" to="/login">Đăng nhập</Link>:<a className="fg-btn fg-btn-primary" href="/login">Đăng nhập</a>}
         </div>
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {renderUserLink()}
+          {inRouter?<Link className="fg-btn fg-btn-ghost" to="/auth/password">Mật khẩu</Link>:<a className="fg-btn fg-btn-ghost" href="/auth/password">Mật khẩu</a>}
 
           <Button
             data-testid="logout-button"

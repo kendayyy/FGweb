@@ -1,0 +1,587 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/auth-email.test.tsx (16 tests | 3 failed | 11 skipped) 1383ms
+   ❯ AUTH02-FE email forms and honest states (16)
+     × verification consumes the shared GET query once and never creates authenticated state 148ms
+     × expired or replayed verification is a friendly FG error with a working resend form 171ms
+     × malformed verification success does not claim the email was verified 131ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > verification consumes the shared GET query once and never creates authenticated state
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Xác minh email"
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"fg-auth-header"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "FG":
+  [36m<a[39m
+    [33mclass[39m=[32m"fg-auth-logo"[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "← Về Lobby":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "Về đăng nhập":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/login"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Xác minh email":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+    [33mclass[39m=[32m"fg-auth-card"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Xác minh email":
+  [36m<h1[39m
+    [33mid[39m=[32m"fg-auth-title"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-auth-intro"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Email":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"_r_2_"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mplaceholder[39m=[32m"ban@example.com"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Gửi lại xác minh":
+  [36m<button[39m
+    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+    [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-auth-header"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"fg-auth-logo"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0mFG[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0m← Về Lobby[0m
+        [36m</a>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-auth-page"[39m
+        [36m>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+            [33mclass[39m=[32m"fg-auth-card"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mid[39m=[32m"fg-auth-title"[39m
+            [36m>[39m
+              [0mXác minh email[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-intro"[39m
+            [36m>[39m
+              [0mKết nối cùng cộng đồng game thủ[0m
+            [36m</p>[39m
+            [36m<form>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-field"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mfor[39m=[32m"_r_2_"[39m
+                [36m>[39m
+                  [0mEmail[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mautocomplete[39m=[32m"email"[39m
+                  [33mid[39m=[32m"_r_2_"[39m
+                  [33mmaxlength[39m=[32m"254"[39m
+                  [33mplaceholder[39m=[32m"ban@example.com"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"email"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                [33mtype[39m=[32m"submit"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mGửi lại xác minh[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</form>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-auth-links"[39m
+            [36m>[39m
+              [36m<a[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/login"[39m
+              [36m>[39m
+                [0mVề đăng nhập[0m
+              [36m</a>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/auth-email.test.tsx:28:283
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > expired or replayed verification is a friendly FG error with a working resend form
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Xác minh email"
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"fg-auth-header"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "FG":
+  [36m<a[39m
+    [33mclass[39m=[32m"fg-auth-logo"[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "← Về Lobby":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "Về đăng nhập":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/login"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Xác minh email":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+    [33mclass[39m=[32m"fg-auth-card"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Xác minh email":
+  [36m<h1[39m
+    [33mid[39m=[32m"fg-auth-title"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-auth-intro"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Email":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"_r_3_"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mplaceholder[39m=[32m"ban@example.com"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Gửi lại xác minh":
+  [36m<button[39m
+    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+    [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-auth-header"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"fg-auth-logo"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0mFG[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0m← Về Lobby[0m
+        [36m</a>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-auth-page"[39m
+        [36m>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+            [33mclass[39m=[32m"fg-auth-card"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mid[39m=[32m"fg-auth-title"[39m
+            [36m>[39m
+              [0mXác minh email[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-intro"[39m
+            [36m>[39m
+              [0mKết nối cùng cộng đồng game thủ[0m
+            [36m</p>[39m
+            [36m<form>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-field"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mfor[39m=[32m"_r_3_"[39m
+                [36m>[39m
+                  [0mEmail[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mautocomplete[39m=[32m"email"[39m
+                  [33mid[39m=[32m"_r_3_"[39m
+                  [33mmaxlength[39m=[32m"254"[39m
+                  [33mplaceholder[39m=[32m"ban@example.com"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"email"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                [33mtype[39m=[32m"submit"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mGửi lại xác minh[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</form>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-auth-links"[39m
+            [36m>[39m
+              [36m<a[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/login"[39m
+              [36m>[39m
+                [0mVề đăng nhập[0m
+              [36m</a>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/auth-email.test.tsx:29:248
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > malformed verification success does not claim the email was verified
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Xác minh email"
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"fg-auth-header"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "FG":
+  [36m<a[39m
+    [33mclass[39m=[32m"fg-auth-logo"[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "← Về Lobby":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/"[39m
+  [36m/>[39m
+
+  Name "Về đăng nhập":
+  [36m<a[39m
+    [33mdata-discover[39m=[32m"true"[39m
+    [33mhref[39m=[32m"/login"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Xác minh email":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+    [33mclass[39m=[32m"fg-auth-card"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Xác minh email":
+  [36m<h1[39m
+    [33mid[39m=[32m"fg-auth-title"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-auth-intro"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Email":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"_r_4_"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mplaceholder[39m=[32m"ban@example.com"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Gửi lại xác minh":
+  [36m<button[39m
+    [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+    [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-auth-header"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"fg-auth-logo"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0mFG[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0m← Về Lobby[0m
+        [36m</a>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-auth-page"[39m
+        [36m>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+            [33mclass[39m=[32m"fg-auth-card"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mid[39m=[32m"fg-auth-title"[39m
+            [36m>[39m
+              [0mXác minh email[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-intro"[39m
+            [36m>[39m
+              [0mKết nối cùng cộng đồng game thủ[0m
+            [36m</p>[39m
+            [36m<form>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-field"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mfor[39m=[32m"_r_4_"[39m
+                [36m>[39m
+                  [0mEmail[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mautocomplete[39m=[32m"email"[39m
+                  [33mid[39m=[32m"_r_4_"[39m
+                  [33mmaxlength[39m=[32m"254"[39m
+                  [33mplaceholder[39m=[32m"ban@example.com"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"email"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                [33mtype[39m=[32m"submit"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mGửi lại xác minh[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</form>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-auth-links"[39m
+            [36m>[39m
+              [36m<a[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/login"[39m
+              [36m>[39m
+                [0mVề đăng nhập[0m
+              [36m</a>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/auth-email.test.tsx:30:221
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 2 passed | 11 skipped (16)
+   Start at  15:13:02
+   Duration  5.63s (environment 29%, tests 26%, transform 25%, import 14%, setup 5%)
+

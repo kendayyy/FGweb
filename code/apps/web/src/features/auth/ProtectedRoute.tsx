@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import {Link,useInRouterContext} from 'react-router-dom';
 import { useAuth } from './AuthProvider.js';
 import { Spinner } from '../../components/ui/Spinner.js';
 import { Button } from '../../components/ui/Button.js';
@@ -9,19 +10,14 @@ export interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, isLoading, isError, error, signIn, refetchUser } = useAuth();
+  const { user, isLoading, isError, error, refetchUser } = useAuth();
+  const inRouter=useInRouterContext();
 
   const handleRetry = useCallback(() => {
     refetchUser().catch((err) => {
       console.error('Refetch user error:', err);
     });
   }, [refetchUser]);
-
-  const handleSignIn = useCallback(() => {
-    signIn().catch((err) => {
-      console.error('Sign in error:', err);
-    });
-  }, [signIn]);
 
   if (isLoading) {
     return (
@@ -67,15 +63,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
                 ? 'Tài khoản của bạn chưa được cấp quyền vào vùng này hoặc phiên đã bị từ chối.'
                 : isNetworkError
                 ? 'Không thể kết nối đến máy chủ xác thực. Vui lòng kiểm tra kết nối và thử lại.'
-                : 'Nội dung này dành riêng cho thành viên FG. Vui lòng đăng nhập bằng Discord để tiếp tục.'}
+                : 'Nội dung này dành riêng cho thành viên FG. Vui lòng đăng nhập để tiếp tục.'}
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
               <Button variant="outline" onClick={handleRetry}>
                 Thử lại
               </Button>
-              <Button variant="primary" onClick={handleSignIn}>
-                Đăng nhập bằng Discord
-              </Button>
+              {inRouter?<Link to="/login" className="fg-btn fg-btn-primary">Đăng nhập</Link>:<a href="/login" className="fg-btn fg-btn-primary">Đăng nhập</a>}
             </div>
           </div>
         </Card>

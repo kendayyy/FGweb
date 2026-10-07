@@ -1,5 +1,8 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import {AuthHeader} from './features/auth/AuthFields.js';
+import {EmailFlowPage} from './features/auth/EmailFlowPage.js';
+import {PasswordSettingsPage} from './features/auth/PasswordSettingsPage.js';
 import { LoginForm, HeaderAuthWidget, ProtectedRoute, useAuth } from './features/auth/index.js';
 import { OnboardingPage } from './features/onboarding/index.js';
 import { ProfilePage } from './features/profiles/index.js';
@@ -7,10 +10,13 @@ import { LobbyPage } from './features/lobby/LobbyPage.js';
 import { RoomsPage } from './features/rooms/index.js';
 
 export const App: React.FC = () => {
+  const {user}=useAuth();
+  const location=useLocation();
+  const authPage=['/login','/register','/auth/verify','/auth/forgot','/auth/reset','/auth/add-password','/auth/password'].includes(location.pathname);
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Navigation Header */}
-      <header
+      {authPage?<AuthHeader/>:<header
         className="fg-app-header"
         style={{
           minHeight: '64px',
@@ -74,12 +80,18 @@ export const App: React.FC = () => {
         </div>
 
         <HeaderAuthWidget />
-      </header>
+      </header>}
 
       {/* Main Content Area */}
       <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>
         <Routes>
-          <Route path="/login" element={<LoginForm />} />
+          <Route path="/login" element={<LoginForm key="login" />} />
+          <Route path="/register" element={<LoginForm key="register" />} />
+          <Route path="/auth/verify" element={<EmailFlowPage key="verify" />} />
+          <Route path="/auth/forgot" element={<EmailFlowPage key="forgot" />} />
+          <Route path="/auth/reset" element={<EmailFlowPage key="reset" />} />
+          <Route path="/auth/add-password" element={<EmailFlowPage key="attach" />} />
+          <Route path="/auth/password" element={<PasswordSettingsPage key={user?.id??'guest'} />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
           <Route path="/users/:id" element={<ProfilePage />} />
           <Route path="/users/:id/profile" element={<ProfilePage />} />

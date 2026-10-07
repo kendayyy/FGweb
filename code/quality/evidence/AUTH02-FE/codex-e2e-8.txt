@@ -1,0 +1,60 @@
+
+Running 3 tests using 1 worker
+
+(node:22088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/3] tests\e2e\auth-email.spec.ts:37:1 › approved login layout, keyboard controls and native Discord authorization
+tests\e2e\auth-email.spec.ts:37:1 › approved login layout, keyboard controls and native Discord authorization
+Fixture diagnostic: (node:17160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Initial empty login console: Failed to load resource: the server responded with a status of 404 (Not Found)
+
+Initial empty login console: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+
+[2/3] tests\e2e\auth-email.spec.ts:47:1 › real signup, duplicate, verification, onboarding, change and reset revoke old session
+tests\e2e\auth-email.spec.ts:47:1 › real signup, duplicate, verification, onboarding, change and reset revoke old session
+Safe fixture proof: {"smtpDotTransparency":true}
+
+
+Safe fixture proof: {"mailedVerifyRecord":true,"ownedVerifyRecords":1,"payloadKeys":["email","jti","iat","exp"],"fresh":true,"tokenLength":261}
+
+
+Safe fixture proof: {"verifyRequest":true,"method":"GET","status":302,"tokenLength":261}
+
+
+Safe fixture proof: {"smtpDotTransparency":false}
+
+
+[3/3] tests\e2e\auth-email.spec.ts:65:1 › existing Discord gains password only after fresh mailed session-bound proof
+tests\e2e\auth-email.spec.ts:65:1 › existing Discord gains password only after fresh mailed session-bound proof
+Safe fixture proof: {"smtpDotTransparency":false}
+
+
+  1) tests\e2e\auth-email.spec.ts:65:1 › existing Discord gains password only after fresh mailed session-bound proof 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      65 | test('existing Discord gains password only after fresh mailed session-bound proof',async({page})=>{
+      66 |  await page.context().addCookies([{name:'better-auth.session_token',value:discord.cookie,url:base}]);await page.goto(`${base}/auth/password`);await page.getByRole('button',{name:'Gửi email thêm mật khẩu'}).click();await expect(page.getByRole('status')).toContainText('Đã gửi');
+    > 67 |  const link=await mailedLink(discord.email);await openLink(page,link);expect(new URL(page.url()).searchParams.has('token')).toBe(false);await page.getByLabel('Mật khẩu mới').fill(password);await page.getByLabel('Nhập lại mật khẩu').fill(password);await page.getByRole('button',{name:'Lưu mật khẩu'}).click();await expect(page.getByRole('status')).toContainText('Đã thêm');
+         |                                                                                                                             ^
+      68 |  const me=await page.request.get(`${base}/api/v1/me`);expect(me.status()).toBe(200);expect((await me.json()).id).toBe(discord.id);
+      69 |  await page.goto(`${base}/auth/password`);await expect(page.getByLabel('Mật khẩu hiện tại')).toBeVisible();
+      70 | });
+        at E:\FGweb\code\tests\e2e\auth-email.spec.ts:67:125
+
+    Error Context: .cache\auth02-fe\results\auth-email-existing-Discor-a2a36--mailed-session-bound-proof\error-context.md
+
+    Error Context: .cache\auth02-fe\results\auth-email-existing-Discor-a2a36--mailed-session-bound-proof\error-context.md
+
+
+  1 failed
+    tests\e2e\auth-email.spec.ts:65:1 › existing Discord gains password only after fresh mailed session-bound proof 
+  2 passed (23.8s)

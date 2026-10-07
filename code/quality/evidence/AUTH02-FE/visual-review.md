@@ -1,0 +1,3 @@
+# AUTH02-FE visual review
+
+Actual headed production app screenshots1440x900/1280x800/390x844/360x800 reviewed against approved mockup04. Centered bordered desktop card; one-column mobile; navy semantic tokens/Inter, blue CTA, login/register tabs, labeled email/password, eye toggle, forgot link, divider and Discord icon/action, signup footer retained. Four widths have no horizontal overflow; visible controls44px minimum and keyboard toggle tested. Mockup board/phone frame/sample credential not rendered. Back links use actual Lobby until later Feed task; no nonexistent Feed route/data. Light theme and admin mockup05 are separate later checkpoints.

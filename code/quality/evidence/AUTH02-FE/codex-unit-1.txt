@@ -1,0 +1,417 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/auth-email.test.tsx (8 tests | 1 failed) 1011ms
+   ❯ AUTH02-FE email forms and honest states (8)
+     × password settings requires current password and renders wrong-password failure 99ms
+ ❯ test/auth.test.tsx (9 tests | 1 failed) 1559ms
+   ❯ T09 Auth Features & Guards (9)
+     ❯ Denied OAuth / Error state and recovery (1)
+       × displays error UI when OAuth returns error parameter or API fails, allowing retry 1071ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > password settings requires current password and renders wrong-password failure
+Error: expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  mật khẩu
+Received:
+  Mật khẩu hiện tại không đúng.
+ ❯ test/auth-email.test.tsx:21:581
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/auth.test.tsx > T09 Auth Features & Guards > Denied OAuth / Error state and recovery > displays error UI when OAuth returns error parameter or API fails, allowing retry
+TestingLibraryElementError: Unable to find an element by: [data-testid="oauth-error-banner"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<header[39m
+        [33mclass[39m=[32m"fg-auth-header"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"fg-auth-logo"[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0mFG[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mdata-discover[39m=[32m"true"[39m
+          [33mhref[39m=[32m"/"[39m
+        [36m>[39m
+          [0m← Về Lobby[0m
+        [36m</a>[39m
+      [36m</header>[39m
+      [36m<main[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-auth-page"[39m
+        [36m>[39m
+          [36m<section[39m
+            [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+            [33mclass[39m=[32m"fg-auth-card"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mid[39m=[32m"fg-auth-title"[39m
+            [36m>[39m
+              [0mĐăng nhập FG[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-intro"[39m
+            [36m>[39m
+              [0mKết nối cùng cộng đồng game thủ[0m
+            [36m</p>[39m
+            [36m<nav[39m
+              [33maria-label[39m=[32m"Phương thức truy cập"[39m
+              [33mclass[39m=[32m"fg-auth-tabs"[39m
+            [36m>[39m
+              [36m<a[39m
+                [33maria-current[39m=[32m"page"[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/login"[39m
+              [36m>[39m
+                [0mĐăng nhập[0m
+              [36m</a>[39m
+              [36m<a[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/register"[39m
+              [36m>[39m
+                [0mĐăng ký[0m
+              [36m</a>[39m
+            [36m</nav>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-feedback fg-auth-error"[39m
+              [33mrole[39m=[32m"alert"[39m
+            [36m>[39m
+              [0mĐăng nhập Discord bị hủy hoặc thất bại. Vui lòng thử lại.[0m
+            [36m</p>[39m
+            [36m<form>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-field"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mfor[39m=[32m"_r_0_"[39m
+                [36m>[39m
+                  [0mEmail[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mautocomplete[39m=[32m"email"[39m
+                  [33mid[39m=[32m"_r_0_"[39m
+                  [33mmaxlength[39m=[32m"254"[39m
+                  [33mplaceholder[39m=[32m"ban@example.com"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"email"[39m
+                  [33mvalue[39m=[32m""[39m
+                [36m/>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-field"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mfor[39m=[32m"_r_1_"[39m
+                [36m>[39m
+                  [0mMật khẩu[0m
+                [36m</label>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"fg-auth-password"[39m
+                [36m>[39m
+                  [36m<input[39m
+                    [33mautocomplete[39m=[32m"current-password"[39m
+                    [33mid[39m=[32m"_r_1_"[39m
+                    [33mmaxlength[39m=[32m"128"[39m
+                    [33mrequired[39m=[32m""[39m
+                    [33mtype[39m=[32m"password"[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m/>[39m
+                  [36m<button[39m
+                    [33maria-label[39m=[32m"Hiện mật khẩu"[39m
+                    [33maria-pressed[39m=[32m"false"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"lucide lucide-eye"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"20"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"20"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"[39m
+                      [36m/>[39m
+                      [36m<circle[39m
+                        [33mcx[39m=[32m"12"[39m
+                        [33mcy[39m=[32m"12"[39m
+                        [33mr[39m=[32m"3"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<a[39m
+                [33mclass[39m=[32m"fg-auth-forgot"[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/auth/forgot"[39m
+              [36m>[39m
+                [0mQuên mật khẩu?[0m
+              [36m</a>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                [33mtype[39m=[32m"submit"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mĐăng nhập[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</form>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-auth-divider"[39m
+            [36m>[39m
+              [0mhoặc[0m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"fg-btn fg-btn-outline "[39m
+              [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0mTiếp tục với Discord[0m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"fg-auth-footer"[39m
+            [36m>[39m
+              [0mChưa có tài khoản?[0m
+              [0m [0m
+              [36m<a[39m
+                [33mdata-discover[39m=[32m"true"[39m
+                [33mhref[39m=[32m"/register"[39m
+              [36m>[39m
+                [0mĐăng ký ngay[0m
+              [36m</a>[39m
+            [36m</p>[39m
+          [36m</section>[39m
+        [36m</div>[39m
+      [36m</main>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"min-height: 100vh; display: flex; flex-direction: column;"[39m
+      [36m>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"fg-auth-header"[39m
+        [36m>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m"fg-auth-logo"[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [0mFG[0m
+          [36m</a>[39m
+          [36m<a[39m
+            [33mdata-discover[39m=[32m"true"[39m
+            [33mhref[39m=[32m"/"[39m
+          [36m>[39m
+            [0m← Về Lobby[0m
+          [36m</a>[39m
+        [36m</header>[39m
+        [36m<main[39m
+          [33mstyle[39m=[32m"flex: 1 1 0%; background-color: var(--bg-canvas);"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"fg-auth-page"[39m
+          [36m>[39m
+            [36m<section[39m
+              [33maria-labelledby[39m=[32m"fg-auth-title"[39m
+              [33mclass[39m=[32m"fg-auth-card"[39m
+            [36m>[39m
+              [36m<h1[39m
+                [33mid[39m=[32m"fg-auth-title"[39m
+              [36m>[39m
+                [0mĐăng nhập FG[0m
+              [36m</h1>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"fg-auth-intro"[39m
+              [36m>[39m
+                [0mKết nối cùng cộng đồng game thủ[0m
+              [36m</p>[39m
+              [36m<nav[39m
+                [33maria-label[39m=[32m"Phương thức truy cập"[39m
+                [33mclass[39m=[32m"fg-auth-tabs"[39m
+              [36m>[39m
+                [36m<a[39m
+                  [33maria-current[39m=[32m"page"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/login"[39m
+                [36m>[39m
+                  [0mĐăng nhập[0m
+                [36m</a>[39m
+                [36m<a[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/register"[39m
+                [36m>[39m
+                  [0mĐăng ký[0m
+                [36m</a>[39m
+              [36m</nav>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"fg-auth-feedback fg-auth-error"[39m
+                [33mrole[39m=[32m"alert"[39m
+              [36m>[39m
+                [0mĐăng nhập Discord bị hủy hoặc thất bại. Vui lòng thử lại.[0m
+              [36m</p>[39m
+              [36m<form>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"fg-auth-field"[39m
+                [36m>[39m
+                  [36m<label[39m
+                    [33mfor[39m=[32m"_r_0_"[39m
+                  [36m>[39m
+                    [0mEmail[0m
+                  [36m</label>[39m
+                  [36m<input[39m
+                    [33mautocomplete[39m=[32m"email"[39m
+                    [33mid[39m=[32m"_r_0_"[39m
+                    [33mmaxlength[39m=[32m"254"[39m
+                    [33mplaceholder[39m=[32m"ban@example.com"[39m
+                    [33mrequired[39m=[32m""[39m
+                    [33mtype[39m=[32m"email"[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m/>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"fg-auth-field"[39m
+                [36m>[39m
+                  [36m<label[39m
+                    [33mfor[39m=[32m"_r_1_"[39m
+                  [36m>[39m
+                    [0mMật khẩu[0m
+                  [36m</label>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"fg-auth-password"[39m
+                  [36m>[39m
+                    [36m<input[39m
+                      [33mautocomplete[39m=[32m"current-password"[39m
+                      [33mid[39m=[32m"_r_1_"[39m
+                      [33mmaxlength[39m=[32m"128"[39m
+                      [33mrequired[39m=[32m""[39m
+                      [33mtype[39m=[32m"password"[39m
+                      [33mvalue[39m=[32m""[39m
+                    [36m/>[39m
+                    [36m<button[39m
+                      [33maria-label[39m=[32m"Hiện mật khẩu"[39m
+                      [33maria-pressed[39m=[32m"false"[39m
+                      [33mtype[39m=[32m"button"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mclass[39m=[32m"lucide lucide-eye"[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mheight[39m=[32m"20"[39m
+                        [33mstroke[39m=[32m"currentColor"[39m
+                        [33mstroke-linecap[39m=[32m"round"[39m
+                        [33mstroke-linejoin[39m=[32m"round"[39m
+                        [33mstroke-width[39m=[32m"2"[39m
+                        [33mviewBox[39m=[32m"0 0 24 24"[39m
+                        [33mwidth[39m=[32m"20"[39m
+                        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [36m>[39m
+                        [36m<path[39m
+                          [33md[39m=[32m"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"[39m
+                        [36m/>[39m
+                        [36m<circle[39m
+                          [33mcx[39m=[32m"12"[39m
+                          [33mcy[39m=[32m"12"[39m
+                          [33mr[39m=[32m"3"[39m
+                        [36m/>[39m
+                      [36m</svg>[39m
+                    [36m</button>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"fg-auth-forgot"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/auth/forgot"[39m
+                [36m>[39m
+                  [0mQuên mật khẩu?[0m
+                [36m</a>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                  [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                  [33mtype[39m=[32m"submit"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mĐăng nhập[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+              [36m</form>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"fg-auth-divider"[39m
+              [36m>[39m
+                [0mhoặc[0m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-outline "[39m
+                [33mstyle[39m=[32m"min-height: 52px; padding: 0px 24px; font-size: 16px;"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mTiếp tục với Discord[0m
+                [36m</span>[39m
+              [36m</button>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"fg-auth-footer"[39m
+              [36m>[39m
+                [0mChưa có tài khoản?[0m
+                [0m [0m
+                [36m<a[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/register"[39m
+                [36m>[39m
+                  [0mĐăng ký ngay[0m
+                [36m</a>[39m
+              [36m</p>[39m
+            [36m</section>[39m
+          [36m</div>[39m
+        [36m</main>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ test/auth.test.tsx:123:13
+    121|       );
+    122|
+    123|       await waitFor(() => {
+       |             ^
+    124|         expect(screen.getByTestId('oauth-error-banner')).toBeInTheDocu…
+    125|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 2 passed (4)
+      Tests  2 failed | 22 passed (24)
+   Start at  14:32:21
+   Duration  8.05s (environment 42%, transform 17%, import 16%, tests 14%, setup 10%)
+

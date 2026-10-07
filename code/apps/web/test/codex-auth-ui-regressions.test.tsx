@@ -5,6 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthProvider, AUTH_QUERY_KEY } from '../src/features/auth/AuthProvider.js';
 import { HeaderAuthWidget } from '../src/features/auth/HeaderAuthWidget.js';
 import { ProtectedRoute } from '../src/features/auth/ProtectedRoute.js';
+import {LoginForm} from '../src/features/auth/LoginForm.js';
+import {MemoryRouter} from 'react-router-dom';
 const identity={id:'ui_review_user',displayName:'Review User',avatarUrl:null,email:'ui-review@example.com',emailVerified:true,discordId:'ui_review_discord',customStatus:'JUST_CHATTING',createdAt:'2026-10-05T00:00:00.000Z',updatedAt:'2026-10-05T00:00:00.000Z'};
 const clients: QueryClient[]=[];
 afterEach(()=>{for(const client of clients.splice(0))client.clear();vi.restoreAllMocks();});
@@ -22,10 +24,10 @@ describe('Codex T09 visible failure and recovery',()=>{
     fireEvent.click(screen.getByRole('button',{name:/Thử lại/i}));
     await waitFor(()=>expect(fetchSpy.mock.calls.filter(([input])=>String(input).includes('/sign-out')).length).toBe(2));
   });
-  it('shows failed header sign-in and retries the API rather than only logging to console',async()=>{
+  it('shows failed Discord choice sign-in and retries the API rather than only logging to console',async()=>{
     const fetchSpy=vi.spyOn(globalThis,'fetch').mockImplementation(async input=>new Response('{}',{status:String(input).includes('/sign-in/social')?503:401}));
-    show(<HeaderAuthWidget/>,null);
-    fireEvent.click(screen.getByRole('button',{name:/Đăng nhập bằng Discord/i}));
+    show(<MemoryRouter><LoginForm/></MemoryRouter>,null);
+    fireEvent.click(screen.getByRole('button',{name:'Tiếp tục với Discord'}));
     expect(await screen.findByRole('alert')).toBeVisible();
     fireEvent.click(screen.getByRole('button',{name:/Thử lại/i}));
     await waitFor(()=>expect(fetchSpy.mock.calls.filter(([input])=>String(input).includes('/sign-in/social')).length).toBe(2));

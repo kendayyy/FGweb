@@ -1,0 +1,51 @@
+
+Running 3 tests using 1 worker
+
+(node:1332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/3] tests\e2e\auth-email.spec.ts:37:1 › approved login layout, keyboard controls and native Discord authorization
+tests\e2e\auth-email.spec.ts:37:1 › approved login layout, keyboard controls and native Discord authorization
+Fixture diagnostic: (node:18204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Initial empty login console: Failed to load resource: the server responded with a status of 404 (Not Found)
+
+Initial empty login console: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+
+[2/3] tests\e2e\auth-email.spec.ts:47:1 › real signup, duplicate, verification, onboarding, change and reset revoke old session
+  1) tests\e2e\auth-email.spec.ts:47:1 › real signup, duplicate, verification, onboarding, change and reset revoke old session 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Đăng nhập FG' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Đăng nhập FG' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Đăng nhập FG' })
+
+
+      50 |  const verification=await mailedLink(email);
+      51 |  await login(page,email);await expect(page.getByRole('alert')).toContainText('xác minh');
+    > 52 |  await openLink(page,verification);await expect(page.getByRole('heading',{name:'Đăng nhập FG'})).toBeVisible();
+         |                                                                                                  ^
+      53 |  await login(page,email);await expect(page.getByTestId('onboarding-form')).toBeVisible();
+      54 |  await page.getByLabel('Biệt danh (Nickname) *',{exact:true}).fill('FG UI Gamer');await page.getByRole('checkbox',{name:'Valorant',exact:true}).check();await page.getByRole('button',{name:/Hoàn tất|Hoàn thành/}).click();
+      55 |  await expect(page.getByRole('link',{name:'Mật khẩu',exact:true})).toBeVisible();
+        at E:\FGweb\code\tests\e2e\auth-email.spec.ts:52:98
+
+    Error Context: .cache\auth02-fe\results\auth-email-real-signup-dup-7aeda-nd-reset-revoke-old-session\error-context.md
+
+    Error Context: .cache\auth02-fe\results\auth-email-real-signup-dup-7aeda-nd-reset-revoke-old-session\error-context.md
+
+
+[3/3] tests\e2e\auth-email.spec.ts:65:1 › existing Discord gains password only after fresh mailed session-bound proof
+  1 failed
+    tests\e2e\auth-email.spec.ts:47:1 › real signup, duplicate, verification, onboarding, change and reset revoke old session 
+  1 did not run
+  1 passed (23.1s)

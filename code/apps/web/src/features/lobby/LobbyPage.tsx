@@ -123,7 +123,7 @@ function ChatPane({ game, onSelectPeer }: {
                 if (viewport.current)
                     viewport.current.scrollTop = viewport.current.scrollHeight;
             }}>{unread} tin mới ↓</button>}
- <div className="fg-composer-wrap">{!canSend && <p className="fg-guest-note">{auth.isLoading ? 'Đang kiểm tra tài khoản…' : auth.isError ? 'Không xác minh được tài khoản.' : auth.user && !chat.conversationResolved ? 'Đang kết nối với Lobby…' : <>Bạn đang xem Lobby. <Link to="/login">Đăng nhập Discord</Link> để trò chuyện.</>}</p>}<RichComposer conversationId={chat.conversationId} disabled={!canSend} candidates={candidates} reply={reply} onCancelReply={() => setReply(null)} onSend={request => chat.send(request.content, request.clientMessageId, request)}/></div></>;
+ <div className="fg-composer-wrap">{!canSend && <p className="fg-guest-note">{auth.isLoading ? 'Đang kiểm tra tài khoản…' : auth.isError ? 'Không xác minh được tài khoản.' : auth.user && !chat.conversationResolved ? 'Đang kết nối với Lobby…' : <>Bạn đang xem Lobby. <Link to="/login">Đăng nhập</Link> để trò chuyện.</>}</p>}<RichComposer conversationId={chat.conversationId} disabled={!canSend} candidates={candidates} reply={reply} onCancelReply={() => setReply(null)} onSend={request => chat.send(request.content, request.clientMessageId, request)}/></div></>;
 }
 
 function PeerModal({ peer, onClose, onOpenDM }: { peer: UserSummary | ProfileDTO; onClose: () => void; onOpenDM: (convId: string) => void }) {
