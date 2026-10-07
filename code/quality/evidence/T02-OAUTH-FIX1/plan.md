@@ -1,0 +1,3 @@
+# T02-OAUTH-FIX1
+
+Windows excluded5173;temporary compiled preview used18080 but Discord initially rejected the new callback. Human provided Invalid OAuth2 redirect_uri image, configured the new callback, removed the old5173 and confirmed actual Discord login. Close this configuration correction sequentially before LIGHT01-FE. Pin env/Vite/smoke/active confirmation/evidence only;no auth logic, user data or DB/schema changes. Preserve all other local private fields and historical T02/T08/ADMIN evidence. Native main OAuth session/Me proof is readonly;keep the user session. Infra setup uses real checks rather than business logic TDD;Vite binding mismatch gets RED/PASS.

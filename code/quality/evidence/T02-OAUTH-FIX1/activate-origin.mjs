@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {parseEnv} from 'node:util';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const origin='http://localhost:18080',file='.env.local',original=fs.readFileSync(file,'utf8');
+const other=env=>Object.fromEntries(Object.entries(env).filter(([key])=>!['PUBLIC_ORIGIN','BETTER_AUTH_URL'].includes(key)));
+const before=other(parseEnv(original));
+let updated=original.replace(/^\s*(PUBLIC_ORIGIN|BETTER_AUTH_URL)\s*=.*$/gm,(_,key)=>`${key}=${origin}`);
+for(const key of ['PUBLIC_ORIGIN','BETTER_AUTH_URL'])if(!new RegExp(`^${key}=`, 'm').test(updated))updated+=`\n${key}=${origin}\n`;
+assert.deepEqual(other(parseEnv(updated)),before,'All private service/admin values must remain exact');
+fs.writeFileSync(file,updated);
+const proof=JSON.parse(fs.readFileSync('.runtime/auth-login/discord-session-proof.json'));
+assert.equal(proof.nativeMeStatus,200);assert.equal(proof.actualOAuthCreatedSession,true);assert.equal(proof.humanConfirmedDiscordLogin,true);
+fs.writeFileSync('quality/provider-config-confirmation.json',JSON.stringify({userConfirmed:true,confirmation:'Human reported actual Discord login works after configuring18080;old5173 was removed in portal',recordedAt:new Date().toISOString(),discordCallback:`${origin}/api/auth/callback/discord`,loginScopes:['identify','email'],source:'Actual main OAuth-created session and readonly native Me200 identity verification;no synthetic session seed',loginEndToEnd:true,evidence:'quality/evidence/T02-OAUTH-FIX1/discord-session-proof.json'},null,2)+'\n');
+fs.writeFileSync('quality/evidence/T02-OAUTH-FIX1/discord-session-proof.json',JSON.stringify(proof,null,2)+'\n');
+console.log(JSON.stringify({localOriginsAligned:true,origin,otherPrivateFieldsPreserved:true,otherFieldsSha256:createHash('sha256').update(JSON.stringify(before)).digest('hex'),historicalProviderEvidencePreserved:true}));

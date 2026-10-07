@@ -1,0 +1,9 @@
+# T02-OAUTH-FIX1 — PASS
+
+Windows excluded5173 caused the temporary runtime to move to18080 while Discord still expected the previously configured callback. Human provided the real Invalid OAuth2 redirect_uri page, configured18080 (removed old5173), then confirmed actual Discord login. Readonly verification used the actual OAuth-created main session, reconstructed its native signed cookie privately, and received native Me200 with valid MeDTO and matching stored Discord identity, no private credential fields. No synthetic user/session was seeded; the human session was preserved.
+
+The reviewed correction aligns local PUBLIC_ORIGIN/BETTER_AUTH_URL and normal Vite dev/preview to18080. Vite loads only PUBLIC_ORIGIN, keeping private config out of client values. Other private/service/admin fields are exact and audited. Active provider confirmation lives in quality/provider-config-confirmation.json; the smoke reads it when present, with the unchanged historical T02 record as fallback. Prior T02/T08/ADMIN PASS logs, frozen evidence and eight approved source baselines remain unchanged.
+
+The real Vite binding test first failed5173 vs18080, then passed dev/preview strict binding and actual API proxies. Eight real service smoke probes, config types, scoped lint, build, frozen-outside-owner/private-value audit and source diff check passed. SMTP smoke is connection/auth only; real Discord browser login was independently confirmed and its actual session verified. LiveKit smoke is room/token/health only, not a media load result. No feature/auth logic/DB schema/new dependencies/production publishing changed. Exact source/config/build artifacts were pinned under existing user scope authority before writes.
+
+Next:LIGHT01-FE;only after this owner freezes reviewed replacement hashes and the original next gate passes.

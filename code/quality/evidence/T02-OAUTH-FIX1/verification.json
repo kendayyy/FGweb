@@ -1,0 +1,151 @@
+{
+  "task": "T02-OAUTH-FIX1",
+  "status": "PASS",
+  "configBindingTests": 1,
+  "serviceProbes": 8,
+  "actualDiscordSession": {
+    "checkedAt": "2026-10-07T14:09:29.568Z",
+    "origin": "http://localhost:18080",
+    "humanConfirmedDiscordLogin": true,
+    "actualOAuthCreatedSession": true,
+    "nativeMeStatus": 200,
+    "meDtoValid": true,
+    "discordIdentityMatches": true,
+    "credentialFieldsExposed": false,
+    "cookieReconstructedPrivatelyFromActualSession": true,
+    "userSessionPreserved": true,
+    "privateValuesLogged": false
+  },
+  "commands": [
+    {
+      "command": "node scripts/verify-task.mjs T02-OAUTH-FIX1 apps/web/vite.config.ts scripts/smoke-services.mjs .env.local",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:07:40.455Z",
+      "completedAt": "2026-10-07T14:07:47.443Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node quality/evidence/T02-OAUTH-FIX1/activate-origin.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:09:24.153Z",
+      "completedAt": "2026-10-07T14:09:24.295Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-activate-origin-1.txt",
+      "evidenceSha256": "21720bfe88802996882660fcf60d8b4383b3157ab67829461407c46f37a756c4"
+    },
+    {
+      "command": "node --test quality/evidence/T02-OAUTH-FIX1/vite-origin.test.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:09:25.531Z",
+      "completedAt": "2026-10-07T14:09:26.850Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-vite-origin-green-1.txt",
+      "evidenceSha256": "ea573e930ded2e7f7f7a96714f6bf69f52e278f24a71f7dbcb5d37218bf6c391"
+    },
+    {
+      "command": "node quality/evidence/T02-OAUTH-FIX1/discord-session.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:09:28.683Z",
+      "completedAt": "2026-10-07T14:09:29.610Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-real-oauth-session-1.txt",
+      "evidenceSha256": "54da781bebc52fe2caa928602181725e9c013ef9ba97eefb6c54a857674625fd"
+    },
+    {
+      "command": "node scripts/smoke-services.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:09:31.288Z",
+      "completedAt": "2026-10-07T14:09:40.699Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-service-smoke-1.txt",
+      "evidenceSha256": "9efe84b912d8c278ee0914cc2012762637fd1950eac4eaf02f090daa77c53e6e"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit --module ESNext --moduleResolution Bundler --target ES2022 --skipLibCheck apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:10:29.383Z",
+      "completedAt": "2026-10-07T14:10:33.522Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-config-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/web/vite.config.ts scripts/smoke-services.mjs quality/evidence/T02-OAUTH-FIX1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:10:34.820Z",
+      "completedAt": "2026-10-07T14:10:39.345Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T02-OAUTH-FIX1/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:10:40.953Z",
+      "completedAt": "2026-10-07T14:10:45.381Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-audit-1.txt",
+      "evidenceSha256": "1eda72e705e48cd698bc36c608c64a971697b810760cc454afe61fd184a9da26"
+    },
+    {
+      "command": "node .runtime/auth-discord/pin-build.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:11:17.674Z",
+      "completedAt": "2026-10-07T14:11:17.870Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-pin-build-1.txt",
+      "evidenceSha256": "fa46158d5ed78cff16d5aadc609f8fe661f6494034ab62142a39fa0f9ee9f337"
+    },
+    {
+      "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:11:19.346Z",
+      "completedAt": "2026-10-07T14:11:22.373Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-web-build-1.txt",
+      "evidenceSha256": "3865403d2f5721e6fd323cb7607bd2182dcfaae9265aee5792f1e607b5509546"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/T02-OAUTH-FIX1/finish.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:12:38.894Z",
+      "completedAt": "2026-10-07T14:12:42.210Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-finish-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T02-OAUTH-FIX1/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:12:43.619Z",
+      "completedAt": "2026-10-07T14:12:49.045Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-audit-2.txt",
+      "evidenceSha256": "68888034ee9211faf234db0a33d95f8d9fbf7f344f88e6f2430330d9cdf7ffda"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T14:12:50.385Z",
+      "completedAt": "2026-10-07T14:12:50.560Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-source-diff-1.txt",
+      "evidenceSha256": "8fcb25cd990ea72edc2b08dbc7d76fc17b5c6ecfca31b26548a95d4727369613"
+    }
+  ]
+}

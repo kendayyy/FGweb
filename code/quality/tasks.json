@@ -16769,10 +16769,213 @@
       ]
     },
     {
+      "id": "T02-OAUTH-FIX1",
+      "status": "PASS",
+      "dependencies": [
+        "AUTH-ADMIN-SINGLE"
+      ],
+      "specSha256": "862ee06b350c4c46e392ae4a9669b00fe3f654229ec59ee09086bfb5739ffeb0",
+      "startedAt": "2026-10-07T14:07:39.094Z",
+      "completedAt": "2026-10-07T14:12:52.404Z",
+      "inputsHash": {
+        "viteConfig": "30ac4859864a41159677f8e335bc1ec20821eef4ba15bcc0a77606acb73b4590",
+        "smokeServices": "0221f31e5706881b412c253f764a631d1030b62ebb06d9ab0c89c9023b496fec",
+        "otherEnvFields": "23adb07f36a8c87d5a459f820c6809a71791c50be85de51aa0b2993a66f1091b"
+      },
+      "outputsHash": {
+        "specSha256": "862ee06b350c4c46e392ae4a9669b00fe3f654229ec59ee09086bfb5739ffeb0",
+        "files": {
+          "apps/web/vite.config.ts": "dffcd6f41297ef6b62895e52fa36ba3e1d4b68328fd92dbd7df926cb6407437d",
+          "scripts/smoke-services.mjs": "ac8911ede266b78b561fd75b279dd6ad709193ea371ac3d0b2a784604fdfef07",
+          "quality/provider-config-confirmation.json": "cd00010de87dd708b4bce3b4d01451e143f8a52c6c882e7c4f961d23901b4e7a",
+          "apps/web/dist/index.html": "2dad03cab39808016b5daceda74ee2172bf4b9561a8107ca7c959c7647725c7b",
+          "quality/evidence/T02-OAUTH-FIX1/review.md": "7011c427c58b4fe7bd4b582d4ae9a7e190ab8858104bd833f899930e4b734ad2",
+          "quality/evidence/T02-OAUTH-FIX1/verification.json": "896d6d6191304bd373b3d949aa5d967efe0ef3c21e800e9e5d79fe1eb6d2f98a",
+          "quality/evidence/T02-OAUTH-FIX1/discord-session-proof.json": "c60df2171f6e41c47d26fdb07c082cf89cf3c364ee1bd9c4c6a88b109dadb808"
+        }
+      },
+      "commands": [
+        {
+          "command": "node scripts/verify-task.mjs T02-OAUTH-FIX1 apps/web/vite.config.ts scripts/smoke-services.mjs .env.local",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:07:40.455Z",
+          "completedAt": "2026-10-07T14:07:47.443Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-gate-1.txt",
+          "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+        },
+        {
+          "command": "node quality/evidence/T02-OAUTH-FIX1/activate-origin.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:09:24.153Z",
+          "completedAt": "2026-10-07T14:09:24.295Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-activate-origin-1.txt",
+          "evidenceSha256": "21720bfe88802996882660fcf60d8b4383b3157ab67829461407c46f37a756c4"
+        },
+        {
+          "command": "node --test quality/evidence/T02-OAUTH-FIX1/vite-origin.test.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:09:25.531Z",
+          "completedAt": "2026-10-07T14:09:26.850Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-vite-origin-green-1.txt",
+          "evidenceSha256": "ea573e930ded2e7f7f7a96714f6bf69f52e278f24a71f7dbcb5d37218bf6c391"
+        },
+        {
+          "command": "node quality/evidence/T02-OAUTH-FIX1/discord-session.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:09:28.683Z",
+          "completedAt": "2026-10-07T14:09:29.610Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-real-oauth-session-1.txt",
+          "evidenceSha256": "54da781bebc52fe2caa928602181725e9c013ef9ba97eefb6c54a857674625fd"
+        },
+        {
+          "command": "node scripts/smoke-services.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:09:31.288Z",
+          "completedAt": "2026-10-07T14:09:40.699Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-service-smoke-1.txt",
+          "evidenceSha256": "9efe84b912d8c278ee0914cc2012762637fd1950eac4eaf02f090daa77c53e6e"
+        },
+        {
+          "command": "node node_modules/typescript/bin/tsc --noEmit --module ESNext --moduleResolution Bundler --target ES2022 --skipLibCheck apps/web/vite.config.ts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:10:29.383Z",
+          "completedAt": "2026-10-07T14:10:33.522Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-config-types-1.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node node_modules/eslint/bin/eslint.js apps/web/vite.config.ts scripts/smoke-services.mjs quality/evidence/T02-OAUTH-FIX1",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:10:34.820Z",
+          "completedAt": "2026-10-07T14:10:39.345Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-lint-1.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node quality/evidence/T02-OAUTH-FIX1/audit.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:10:40.953Z",
+          "completedAt": "2026-10-07T14:10:45.381Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-audit-1.txt",
+          "evidenceSha256": "1eda72e705e48cd698bc36c608c64a971697b810760cc454afe61fd184a9da26"
+        },
+        {
+          "command": "node .runtime/auth-discord/pin-build.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:11:17.674Z",
+          "completedAt": "2026-10-07T14:11:17.870Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-pin-build-1.txt",
+          "evidenceSha256": "fa46158d5ed78cff16d5aadc609f8fe661f6494034ab62142a39fa0f9ee9f337"
+        },
+        {
+          "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:11:19.346Z",
+          "completedAt": "2026-10-07T14:11:22.373Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-web-build-1.txt",
+          "evidenceSha256": "3865403d2f5721e6fd323cb7607bd2182dcfaae9265aee5792f1e607b5509546"
+        },
+        {
+          "command": "node node_modules/eslint/bin/eslint.js quality/evidence/T02-OAUTH-FIX1/finish.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:12:38.894Z",
+          "completedAt": "2026-10-07T14:12:42.210Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-finish-lint-1.txt",
+          "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": "node quality/evidence/T02-OAUTH-FIX1/audit.mjs",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:12:43.619Z",
+          "completedAt": "2026-10-07T14:12:49.045Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-audit-2.txt",
+          "evidenceSha256": "68888034ee9211faf234db0a33d95f8d9fbf7f344f88e6f2430330d9cdf7ffda"
+        },
+        {
+          "command": "git diff --check",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T14:12:50.385Z",
+          "completedAt": "2026-10-07T14:12:50.560Z",
+          "exitCode": 0,
+          "signal": null,
+          "evidencePath": "quality/evidence/T02-OAUTH-FIX1/codex-source-diff-1.txt",
+          "evidenceSha256": "8fcb25cd990ea72edc2b08dbc7d76fc17b5c6ecfca31b26548a95d4727369613"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T02-OAUTH-FIX1/plan.md",
+        "quality/evidence/T02-OAUTH-FIX1/review.md",
+        "quality/evidence/T02-OAUTH-FIX1/verification.json",
+        "quality/evidence/T02-OAUTH-FIX1/codex-gate-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-activate-origin-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-vite-origin-green-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-real-oauth-session-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-service-smoke-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-config-types-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-lint-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-audit-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-pin-build-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-web-build-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-finish-lint-1.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-audit-2.txt",
+        "quality/evidence/T02-OAUTH-FIX1/codex-source-diff-1.txt"
+      ],
+      "blockers": [],
+      "writeAllowlist": [
+        ".env.local",
+        "apps/web/vite.config.ts",
+        "scripts/smoke-services.mjs",
+        "quality/provider-config-confirmation.json",
+        "quality/evidence/T02-OAUTH-FIX1/**",
+        ".runtime/auth-discord/**",
+        "apps/web/dist/**"
+      ],
+      "authorization": "User requested Discord login repair, personally configured the18080 callback and confirmed actual Discord login. Persistent local Write Scope/locked file permission applies. Configuration correction only;preserve prior PASS/evidence and spec/design.",
+      "acceptance": [
+        "Single local origin18080 in env and Vite;other secret/service/admin values preserved",
+        "Active provider callback confirmation without rewriting T02 historical evidence",
+        "Real native service probes and existing OAuth-created session Me200/DTO/identity/no private fields;human confirmed browser login",
+        "Scoped lint/types/build and original next task gate"
+      ],
+      "scopeAmendments": [
+        {
+          "recordedAt": "2026-10-07T14:11:17.834Z",
+          "paths": [
+            "apps/web/dist/**"
+          ],
+          "reason": "Required Vite build of changed runtime config;compiled application logic is unchanged;pin artifacts before run under persistent local Write Scope authorization"
+        }
+      ]
+    },
+    {
       "id": "LIGHT01-FE",
       "status": "NOT_STARTED",
       "dependencies": [
-        "AUTH-ADMIN-SINGLE"
+        "T02-OAUTH-FIX1"
       ],
       "specSha256": "862ee06b350c4c46e392ae4a9669b00fe3f654229ec59ee09086bfb5739ffeb0",
       "inputsHash": {},
