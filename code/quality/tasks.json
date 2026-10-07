@@ -8875,18 +8875,40 @@
     },
     {
       "id": "T22",
-      "status": "NOT_STARTED",
+      "status": "BLOCKED",
       "dependencies": [
         "T21"
       ],
       "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-      "inputsHash": null,
+      "inputsHash": {
+        "head": "78bcf084b1aadf6f939a972fa5812e84f09ae398"
+      },
       "outputsHash": null,
-      "commands": [],
-      "evidencePaths": [],
-      "startedAt": null,
+      "commands": [
+        {
+          "command": "node scripts/verify-task.mjs T22",
+          "cwd": "E:\\FGweb\\code",
+          "startedAt": "2026-10-07T03:10:38.495Z",
+          "completedAt": "2026-10-07T03:10:43.609Z",
+          "exitCode": 0,
+          "evidencePath": "quality/evidence/T22/codex-prerequisite-gate-1.txt",
+          "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+        }
+      ],
+      "evidencePaths": [
+        "quality/evidence/T22/codex-prerequisite-gate-1.txt",
+        "quality/evidence/T22/prerequisite-proposal.md"
+      ],
+      "startedAt": "2026-10-07T03:10:38.491Z",
       "completedAt": null,
-      "blockers": []
+      "blockers": [
+        "Approve T03-FIX9 contract aliases/shared private team snapshot and minimal TeamsModule AppModule wiring in prerequisite-proposal.md"
+      ],
+      "writeAllowlist": [
+        "apps/api/src/modules/teams/**",
+        "apps/api/test/team-approval.integration.spec.ts",
+        "quality/evidence/T22/**"
+      ]
     },
     {
       "id": "T23",

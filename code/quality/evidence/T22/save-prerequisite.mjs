@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const now=new Date().toISOString();
+const command='node scripts/verify-task.mjs T22';
+const startedAt=new Date().toISOString();
+const output=execFileSync('node',['scripts/verify-task.mjs','T22'],{encoding:'utf8'});
+const evidencePath='quality/evidence/T22/codex-prerequisite-gate-1.txt';fs.writeFileSync(evidencePath,output);
+const record={command,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:0,evidencePath,evidenceSha256:createHash('sha256').update(output).digest('hex')};
+fs.writeFileSync('quality/evidence/T22/codex-prerequisite-gate-1.json',JSON.stringify(record,null,2)+'\n');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const t=ledger.tasks.find(t=>t.id==='T22');
+Object.assign(t,{status:'BLOCKED',startedAt:now,inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},commands:[record],evidencePaths:[evidencePath,'quality/evidence/T22/prerequisite-proposal.md'],writeAllowlist:['apps/api/src/modules/teams/**','apps/api/test/team-approval.integration.spec.ts','quality/evidence/T22/**'],blockers:['Approve T03-FIX9 contract aliases/shared private team snapshot and minimal TeamsModule AppModule wiring in prerequisite-proposal.md']});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('T22 prerequisite gate PASS; concrete scope prerequisite BLOCKED awaiting approval.');
