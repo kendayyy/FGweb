@@ -1,14 +1,15 @@
 # FG — Thiết kế frontend đã duyệt
 
-Ngày chốt: 04/10/2026. Người dùng xác nhận tên website **FG** và yêu cầu giữ màu sắc, font theo phong cách ảnh, bố cục của hai mockup đã lưu.
+Ngày chốt: 04/10/2026 cho tên FG và mockup01/02; bổ sung bố cục Bảng tin mockup03 ngày07/10/2026. Giữ màu sắc, font và phong cách FG đã duyệt.
 
 ## 1. Nguồn thiết kế
 
 - [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png).
 - [Phòng nhóm, gọi và live](./mockups/02-group-call-live.png).
+- [Bảng tin cộng đồng desktop/mobile](./mockups/03-community-feed-desktop-mobile.png), bố cục được duyệt ngày 07/10/2026.
 - [Spec sản phẩm](./01-product-spec.md) quyết định hành vi và quyền truy cập.
 
-Hai ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, avatars và hình game trong ảnh là dữ liệu minh họa.
+Ba ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
 
 Các giá trị dưới đây chuẩn hóa phong cách ảnh thành thông số để code nhất quán. Màu được lấy mẫu/điều chỉnh từ ảnh; không phải mọi pixel của ảnh AI đều có cùng màu. Font gốc không thể xác định chính xác từ ảnh raster; chọn **Inter** để triển khai gần phong cách đã duyệt, không tuyên bố đây là font gốc của ảnh.
 
@@ -120,6 +121,16 @@ Các số/bố cục thích ứng có thể thay đổi theo viewport và access
 
 ## 9. Xác nhận đã lưu
 
-Tên **FG** và phong cách hai mockup đã được người dùng duyệt trong chat. T00 không hỏi lại các mục này. Phần số liệu CSS được chuẩn hóa từ phong cách ảnh để implementer có hướng dẫn cụ thể; chỉ điều chỉnh kỹ thuật nhỏ cho tương phản/responsive nếu vẫn giữ thiết kế đã duyệt, ghi rõ trong evidence.
+Tên **FG** và phong cách ba mockup đã được người dùng duyệt trong chat. T00 không hỏi lại các mục này. Phần số liệu CSS được chuẩn hóa từ phong cách ảnh để implementer có hướng dẫn cụ thể; chỉ điều chỉnh kỹ thuật nhỏ cho tương phản/responsive nếu vẫn giữ thiết kế đã duyệt, ghi rõ trong evidence.
 
 T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt trong task.md; không coi duyệt giao diện là duyệt toàn bộ các đề xuất khác.
+
+## 10. Bảng tin cộng đồng — bố cục duyệt 07/10/2026
+
+- Baseline: mockup 03. Người dùng xác nhận “bố cục ổn” và yêu cầu ghi vào tài liệu coding/build; không hỏi lại màu sắc/phong cách FG đã duyệt.
+- Desktop: sidebar FG → Bảng tin active → Lobby → game; vùng chính có header, composer và bài đăng; panel phải là bộ lọc game/loại bài. Tỷ lệ tham khảo sidebar208px/panel280px, feed co giãn; tablet thu sidebar và chuyển bộ lọc lên đầu khi thiếu rộng.
+- Mobile dưới1024px: một cột; header Bảng tin, chọn game, chips loại bài, composer, bài và bình luận. Bottom navigation Bảng tin/Lobby/Bạn bè/Thông báo; Phòng của tôi từ menu. Có safe-area, controls ít nhất44px, không overflow tại360px.
+- Bài gồm avatar/tên/thời gian, nhãn game/loại, nội dung/ảnh, thích/bình luận, menu và liên hệ qua Nhắn riêng/hồ sơ. Reply lùi một cấp; không biến feed thành chat hoặc thẻ tuyển có số suất.
+- Tái sử dụng Inter self-host, navy surfaces, CTA xanh, token/radius/borders/spacing và trạng thái tại mục3–5. Không chép theme Facebook, thêm hero/neon hoặc font mới.
+- Khung điện thoại/nhãn Máy tính/Điện thoại/03 là phần trình bày mockup, không build vào app. Icon ảnh của ô bình luận không thuộc scope; bình luận chữ theo spec mục13.
+- Checkpoint T38-FEED-FE và T39: screenshot UI thật ở1440×900,1280×800,390×844,360×800 với dữ liệu cố định, font đã load; review hierarchy/token/layout, không pixel-diff ảnh AI hoặc tự sửa snapshot để che sai lệch.

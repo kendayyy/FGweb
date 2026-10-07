@@ -1,0 +1,50 @@
+{
+  "task": "T00-REBASE-FEED",
+  "checks": [
+    {
+      "command": "node --test quality/evidence/T00-REBASE-FEED/baseline-gate.test.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:53:54.320Z",
+      "completedAt": "2026-10-07T04:53:54.703Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T00-REBASE-FEED/codex-checker-1.txt",
+      "evidenceSha256": "86714c2bee936361cc535a19ee8745c131193433f829b1669f315be80950ebae"
+    },
+    {
+      "command": "node quality/evidence/T00-REBASE-FEED/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:53:55.001Z",
+      "completedAt": "2026-10-07T04:54:05.036Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T00-REBASE-FEED/codex-audit-1.txt",
+      "evidenceSha256": "3de905f3a683ac80ea25a05cfcf01c1e6f1493ec941e0bc6aa3686d9867bc0ce"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js scripts/verify-task.mjs quality/evidence/T00-REBASE-FEED/baseline-gate.test.mjs quality/evidence/T00-REBASE-FEED/adopt.mjs quality/evidence/T00-REBASE-FEED/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:54:05.201Z",
+      "completedAt": "2026-10-07T04:54:10.614Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T00-REBASE-FEED/codex-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git diff --cached --check -- quality/spec-baseline.json scripts/verify-task.mjs quality/evidence/T00-REBASE-FEED/*.mjs quality/evidence/T00-REBASE-FEED/*.json quality/tasks.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:55:45.477Z",
+      "completedAt": "2026-10-07T04:55:45.593Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T00-REBASE-FEED/codex-diff-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "checkerTests": 9,
+  "approvedSources": 6,
+  "historicPassTasksPreserved": 41,
+  "feedImplemented": false,
+  "bootstrapOwnerReview": true
+}

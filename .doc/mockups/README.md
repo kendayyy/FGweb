@@ -1,10 +1,15 @@
 # FG — Mockup đã được duyệt
 
-Hai ảnh được tạo bằng image_gen tích hợp ngày 04/10/2026, chưa phải website đã chạy.
+Ảnh01/02 tạo ngày04/10/2026 và ảnh03 ngày07/10/2026 bằng image_gen tích hợp, chưa phải website đã chạy.
 
 - [01 — Lobby desktop và mobile](./01-lobby-desktop-mobile.png): chat chung là trung tâm; tìm đội riêng cạnh chat; mobile chuyển tab Chat/Tìm đội; người online và trạng thái tự chọn.
 - [02 — Phòng nhóm, gọi và live](./02-group-call-live.png): phòng giữ lâu dài, nhiều nhóm gọi; một live chính chọn từ tối đa ba người phát; người xem vẫn có mic, âm lượng/local mute riêng.
 - [Prompt đầy đủ](./prompts.md).
+
+## Mockup Bảng tin — bố cục đã duyệt 07/10/2026
+
+- [03 — Bảng tin desktop và mobile](./03-community-feed-desktop-mobile.png), tạo bằng image_gen tích hợp ngày 07/10/2026 theo FEED-CHANGE-01. Giữ phong cách FG đã duyệt; minh họa bảng tin chung, lọc game/loại bài, đăng chữ/ảnh, thích, bình luận và nhắn riêng.
+- Người dùng đã xác nhận bố cục ổn và yêu cầu ghi tài liệu để coding/build triển khai. Ảnh03 là baseline bố cục Bảng tin, chưa là bằng chứng ứng dụng chạy. Icon ảnh trong ô bình luận là chi tiết ảnh sinh, không tự bổ sung yêu cầu ảnh đính kèm bình luận. Dữ liệu, logo và avatars chỉ là minh họa.
 
 Dữ liệu, avatars, hình và logo game chỉ là minh họa. Khi build dùng assets có quyền sử dụng hoặc placeholders; không coi ảnh AI là nguồn dữ liệu cho nghiệp vụ. Không thêm premium, camera, ghi hình hay channel theo chủ đề vì chúng không nằm trong spec.
 

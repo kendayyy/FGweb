@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T00-REBASE-FEED',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),index=ledger.tasks.findIndex(t=>t.id==='T06-FIX1');
+if(ledger.tasks.some(t=>t.id==='T00-REBASE-FEED'))throw Error('Already prepared');
+fs.writeFileSync(`${dir}/previous-ledger.json`,JSON.stringify(ledger,null,2)+'\n');fs.copyFileSync('quality/spec-baseline.json',`${dir}/previous-baseline.json`);
+const sha=createHash('sha256').update(fs.readFileSync('../.doc/01-product-spec.md')).digest('hex');
+ledger.tasks.find(t=>t.id==='T06-FIX1').status='BLOCKED';ledger.tasks.find(t=>t.id==='T06-FIX1').blockers=['User-approved FEED-CHANGE-01 baseline migration before continuing the existing consent migration; no DB source changed'];
+const task={id:'T00-REBASE-FEED',status:'IN_PROGRESS',dependencies:['T03-FIX10'],specSha256:sha,startedAt:new Date().toISOString(),completedAt:null,commands:[],evidencePaths:[],outputsHash:null,inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},blockers:[],writeAllowlist:['quality/spec-baseline.json','scripts/verify-task.mjs',`${dir}/**`]};ledger.tasks.splice(index,0,task);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T22/record.mjs','utf8').replaceAll('T22','T00-REBASE-FEED'));
+for(const name of ['01-product-spec.md','02-frontend-design.md','task.md'])fs.copyFileSync(`../.doc/${name}`,`${dir}/${name}`);
+fs.writeFileSync(`${dir}/authorization.json`,JSON.stringify({sourceThreadId:'01a114a3-ab20-70e2-b020-db31d489bffd',sourceTitle:'Idea',userTurnId:'01a114ae-7bd1-7582-bb79-c54a837ed445',userMessage:'bố cục ổn đó ghi vào các tài liệu để bên task coding và build làm',currentThreadInstruction:'tiếp tục làm',changeId:'FEED-CHANGE-01',source:'Direct human messages read with read_thread, not agent instructions',newFeatureImplemented:false},null,2)+'\n');
+console.log('Baseline owner checkpoint active; consent source paused, current documents preserved.');

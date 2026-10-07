@@ -1,5 +1,19 @@
 # Prompt tạo mockup
 
+## 03 — Bảng tin cộng đồng
+
+Ngày: 07/10/2026. Công cụ: image_gen tích hợp. Ảnh tham chiếu phong cách: `01-lobby-desktop-mobile.png`. Kết quả: `03-community-feed-desktop-mobile.png` — người dùng duyệt bố cục ngày07/10/2026; baseline Bảng tin, giữ phong cách FG.
+
+```text
+Use case: ui-mockup. Create ONE high-resolution landscape presentation board for the new FG community feed, with a large readable desktop app mockup on the left (75% board) and a matching mobile screen on the right (25%). Title outside UI: "03 — BẢNG TIN". The provided image is STYLE REFERENCE ONLY: preserve the FG approved dark gaming-community visual language, restrained dark navy surfaces, thin borders, blue buttons, circular illustrated avatars, Inter-like typography, compact readable density. Do not reproduce the Lobby content or change the theme. Exact palette: canvas #141A24, sidebar #11151C, panels #151B23, inputs #202936, border #303D50, action #3E7FFD, text #EDF2FF, secondary #B6C2D9, green #39D98A. Flat interface, no strong gradients, no neon, no marketing hero.
+
+Desktop UI: compact FG wordmark at top of 208px left sidebar. Blue-active "Bảng tin" item above "Lobby" then a divider and seven game entries: Liên Minh, Valorant, TFT, Dota 2, Roblox, Liên Quân, Free Fire; bottom links "Phòng của tôi", "Bạn bè", profile MinhAnh online. Main header "Bảng tin" with subtitle "Tìm bạn chơi · Chia sẻ · Thảo luận", message and notification icons right. Central readable feed about 620px wide, supporting slim right panel "Lọc bài viết" with game selector "Tất cả game" and category options "Tất cả", "Tìm bạn chơi", "Chia sẻ", "Thảo luận". No trending rankings, no follow actions, no ads, no reshare button.
+
+Feed top composer has MinhAnh avatar, placeholder "Bạn muốn chia sẻ gì với cộng đồng?", lower actions "Ảnh", "Chọn game", blue "Đăng bài". First complete text post by "Linhh", timestamp "15 phút", labels "Valorant" and "Tìm bạn chơi". Title "Tìm bạn chơi buổi tối". Body EXACT short readable Vietnamese: "Mình thường chơi từ 20:00 đến 23:00. Muốn tìm vài bạn chơi lâu dài, vui vẻ, không toxic." Inline subtle profile/message action "Nhắn riêng". Interaction row thumb icon "Thích", bubble "Bình luận", small counts "12 lượt thích · 4 bình luận". Below show one visible comment by HoàngNam: "Mình cũng chơi giờ này, kết bạn nhé!" with subtle "Trả lời" action and comment input "Viết bình luận...". Second post "MaiPhuong", "1 giờ", labels "Liên Minh" and "Chia sẻ", body "Một trận ARAM vui cùng bạn bè!" with a modest landscape game screenshot-style illustration inside post and likes/comments row, no share action. Posts use subtle borders and 12px corners with comfortable spacing, not enormous cards. Visual should unmistakably be a social feed, not chat bubbles or recruitment capacity cards.
+
+Mobile: consistent same feed, FG header "Bảng tin", compact game filter "Tất cả game", category chips, composer then first same post and comment, partial second post below. Fixed bottom navigation four items: "Bảng tin" active blue, "Lobby", "Bạn bè", "Thông báo". Comfortable Vietnamese text sizes and touch targets. All captions crisp, correctly accented Vietnamese. Decorative board label "Máy tính" and "Điện thoại" allowed outside app. Match style reference closely. This is a concept preview with fictional example data, not working software.
+```
+
 Ngày: 04/10/2026. Công cụ: image_gen tích hợp (không dùng CLI/API key riêng).
 
 ## 01

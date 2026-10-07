@@ -10,9 +10,16 @@
 >
 > **Spec:** [01-product-spec.md](./01-product-spec.md). Spec đã duyệt và các quyết định bổ sung ghi trong đó là nguồn chuẩn. Task không được tự ghi đè spec.
 >
-> **Mockup:** [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png) và [phòng nhóm/gọi/live](./mockups/02-group-call-live.png). Người dùng đã duyệt tên FG và thiết kế hai ảnh. Bắt buộc đọc [02-frontend-design.md](./02-frontend-design.md) để giữ màu/font/bố cục. Dữ liệu và logo minh họa không phải asset production.
+> **Mockup:** [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png), [phòng nhóm/gọi/live](./mockups/02-group-call-live.png) và [Bảng tin desktop/mobile](./mockups/03-community-feed-desktop-mobile.png). Người dùng đã duyệt tên FG và bố cục/phong cách ba ảnh; ảnh03 duyệt ngày07/10/2026. Bắt buộc đọc [02-frontend-design.md](./02-frontend-design.md). Dữ liệu và logo minh họa không phải asset production.
 >
-> **Status:** Tất cả task đang NOT_STARTED. Chỉ tạo kế hoạch và mockup; chưa cài dependencies dự án, chưa cấu hình API credentials, chưa build tính năng.
+> **Status:** Trạng thái thực thi và task sửa lỗi xem `code/quality/tasks.json` cùng evidence, không suy ra từ checkbox trong tài liệu. Ba task Bảng tin bổ sung dưới đây chưa triển khai; chưa thay ledger hoặc đánh PASS trong lần cập nhật tài liệu này.
+
+### FEED-CHANGE-01 — bàn giao yêu cầu duyệt 07/10/2026
+
+- Bảng tin là phần bản ra mắt theo spec mục13 và frontend-design mục10; mockup03 đã duyệt bố cục. Mặc định kỹ thuật được ghi rõ trong spec để implementer không suy diễn tính năng từ ảnh.
+- Thêm tuần tự `T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE` sau T38, trước T39. Kế hoạch cơ sở gồm48 checkpoint (45 cũ +3 Bảng tin); các task FIX trong ledger vẫn giữ nguyên thứ tự/quyền review. Tiếp tục xử lý task hiện tại và các blocker, không nhảy sang Bảng tin.
+- Trước tiếp tục build, Codex review thay yêu cầu và ghi evidence rebaseline với hash spec/design/task/ba mockup; bổ sung ba task NOT_STARTED cùng dependencies/writeAllowlist vào ledger và cho T39 phụ thuộc T38-FEED-FE. Đối chiếu checker có nhận hash ảnh03; chỉ cập nhật checker để kiểm thêm nguồn mới, không nới kiểm tra cũ. Không tự đổi PASS/hash các task cũ mà không đánh giá tác động và bằng chứng. Việc này cần được ghi nhận là migration baseline do yêu cầu người dùng, không phải tính năng đã pass.
+- T03/T05/T07 cũ là nguồn contracts/schema để mở rộng tại T38-FEED-DATA; không triển khai feed ngầm trong task hiện tại. T39 coverage phải gồm mục13; T40 backup/restore gồm bài/ảnh/bình luận; T41 thêm workload API feed mà vẫn giữ nguyên media benchmark; T42 phải có Bảng tin đầy đủ.
 
 ## 1. Luật thực thi bắt buộc
 
@@ -30,6 +37,12 @@
 12. Không tự mua dịch vụ, đăng ký tài khoản thay người dùng, gửi email cho người khác hoặc publish production. Có thể kiểm tra read-only cấu hình hiện có; thiếu tài khoản/keys/test device thì ghi BLOCKED, không fabricate.
 13. Sau task PASS: báo “ID — kết quả — files — kiểm thử — còn thiếu gì”, rồi chuyển đúng task tiếp theo. Có Git thì lưu checkpoint với files trong task, không dùng `git add .` để gom thay đổi ngoài phạm vi. Không mở nested repo nếu đã có repo cha.
 14. Không tuyên bố đạt 1.000 gọi/live dựa trên test 1.000 socket chat, mock load, kết quả của nhà cung cấp hoặc máy local nhỏ. T41 phải có bằng chứng trên cấu hình triển khai đo được.
+
+### Quan sát kiểm thử trực tiếp — TEST-VISIBILITY-01 (07/10/2026)
+
+Áp dụng mọi task có test, gồm các vòng RED/sửa lỗi/regression/smoke/load. Trước run, mở hoặc hiện terminal/task window người dùng có thể quan sát; hiển thị task ID, cwd E:/FGweb/code và lệnh, stream stdout/stderr ngay khi có output. Giữ terminal/kết quả sau run và hiện exit code thật. Với UI/E2E chạy headed (`npm run test:e2e -- --headed`, hoặc thêm `--headed` vào lệnh suite cụ thể) để browser thao tác hiện trên màn hình; không sửa timeout/assertion chỉ để trình diễn. Unit/integration/API/DB/load chỉ cần terminal thật.
+
+Evidence vẫn bắt buộc: command/time/exitCode/hashes/logs của chính lần chạy đó; thêm ghi nhận cửa sổ quan sát hoặc lý do không hiển thị. Launcher/logger nếu cần phải nằm code/ và có phạm vi được task cho phép; không tạo trong .doc/. Giữ exit code test khi tee log; không expose secret. Cửa sổ test được phép hiện theo yêu cầu người dùng này; không tự bật watch mode vô hạn hoặc task song song. Nếu môi trường không GUI/CI hoặc công cụ không mở được cửa sổ, báo rõ trước run và ghi hạn chế; headless không được tính đạt tiêu chí quan sát local. Thay đổi này không đánh PASS task hoặc nới chất lượng test.
 
 ### Trạng thái và bằng chứng
 
@@ -140,7 +153,7 @@ Toàn bộ các mục đề xuất đã được người dùng chốt với câ
 
 | Hạng mục | Quy định đã chốt |
 | --- | --- |
-| Giao diện — ĐÃ DUYỆT | Tên FG; giữ bố cục, màu và typography hai mockup theo 02-frontend-design.md. Không hỏi lại hoặc tự redesign; ảnh minh họa không là asset có license |
+| Giao diện — ĐÃ DUYỆT | Tên FG; giữ bố cục, màu và typography ba mockup theo 02-frontend-design.md. Không hỏi lại hoặc tự redesign; ảnh minh họa không là asset có license |
 | Tech stack | Stack mục 3; media self-hosted LiveKit có thể nhiều node theo benchmark, chưa chọn/mua VPS |
 | Room lâu dài | Max50member/room; playerCapacity (tổng quy mô đội gồm chủ đội) do owner chọn1–10; đây không phải giới hạn game chính thức |
 | Thẻ từng game | gameId, free-text mode, title, playerCapacity (tổng đội gồm chủ đội), now/scheduledAt, requirementText; Roblox thêm experienceName/URL; rank/role không hard gate |
@@ -228,7 +241,10 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 | T36 | FRONTEND / PWA | Cài màn hình chính và permission flow | T35 |
 | T37 | BACKEND | Báo cáo, xử lý vi phạm và admin website | T36 |
 | T38 | FRONTEND | Báo cáo, block và trang quản trị | T37 |
-| T39 | QA | Hồi quy end-to-end và đối chiếu toàn spec | T38 |
+| T38-FEED-DATA | CONTRACT / DATABASE | Contracts, schema và migrations Bảng tin | T38 |
+| T38-FEED-BE | BACKEND | API bài, ảnh, thích, bình luận và moderation | T38-FEED-DATA |
+| T38-FEED-FE | FRONTEND | Bảng tin desktop/mobile theo mockup03 | T38-FEED-BE |
+| T39 | QA | Hồi quy end-to-end và đối chiếu toàn spec | T38-FEED-FE |
 | T40 | OPS | Staging HTTPS, backups và cấu hình triển khai | T39 |
 | T41 | QA / PERFORMANCE | Kiểm thử 1.000 người gọi/live và dự toán | T40 |
 | T42 | RELEASE | Chốt bản ra mắt và bàn giao | T41 |
@@ -643,14 +659,44 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 - [ ] **Build:** Các controls user thường và admin rõ; ban/delete có lý do và confirmation. Không expose admin dữ liệu bằng hidden CSS; API checks đã test. Deleted messages state cập nhật realtime.
 - [ ] **PASS:** npm run test --workspace @fg/web -- test/moderation.test.tsx
 
+### T38-FEED-DATA — Contracts, schema và migrations Bảng tin
+
+**Phần:** CONTRACT / DATABASE. **Files:** code/packages/contracts/src/{feed,moderation,index}.ts; code/packages/contracts/test/feed.test.ts; code/packages/database/src/schema/{feed,moderation}.ts; code/packages/database/src/index.ts; code/packages/database/migrations/; code/packages/database/test/feed.test.ts; code/quality/{api-contract,spec-coverage}.md; code/quality/evidence/T38-FEED-DATA/
+
+**Tạo cho task sau:** DTO/schema cho FeedPost, FeedComment, loại bài, filters/cursors và các endpoints dưới prefix /api/v1: GET/POST /feed/posts; GET/PATCH/DELETE /feed/posts/:id; PUT/DELETE /feed/posts/:id/like; GET/POST /feed/posts/:id/comments; PATCH/DELETE /feed/comments/:id. Dùng upload staging/finalize hiện có với purpose FEED_POST và report endpoint hiện có mở rộng target FEED_POST/FEED_COMMENT; không tạo endpoint ghi ảnh không kiểm quyền. List response dùng pagination conventions FG, post trả counts và likedByMe; chỉ trả nickname/avatar/game data công khai của tác giả.
+
+- [ ] **RED / kiểm tra cần có:** contracts test cho giới hạn/spec mục13, unknown game/type, plain text, cursor và upload/report targets. DB thật: migration sạch và DB hiện có giữ dữ liệu; unique(postId,userId) khi hai lượt thích đồng thời; FK game/author/parent; parent khác bài hoặc không phải root bị từ chối trong transaction service có integration ở BE; soft delete/audit không public hóa assets private.
+- [ ] **Build:** Schema feed_posts, feed_post_images liên kết upload hiện có, feed_likes, feed_comments; deletedAt và parentCommentId; index feed `(createdAt,id)` kèm filters, comments theo `(postId,createdAt,id)`. Mỗi bài game/type/body, không có capacity/active slot; title không bắt buộc. Mở rộng report targets và ownership ảnh đúng spec, không thay contract chat/phòng.
+- [ ] **PASS:** npm run test --workspace @fg/contracts -- test/feed.test.ts; npm run test --workspace @fg/database -- test/feed.test.ts; lint/typecheck packages thay đổi; log migrate DB thật và evidence theo gate.
+
+### T38-FEED-BE — API bài, ảnh, thích, bình luận và moderation
+
+**Phần:** BACKEND. **Files:** code/apps/api/src/modules/feed/; code/apps/api/src/app.module.ts; code/apps/api/src/modules/{uploads,moderation}/; code/apps/api/test/feed.integration.spec.ts; code/apps/api/test/feed-assets.integration.spec.ts; code/quality/{api-contract,spec-coverage}.md; code/quality/evidence/T38-FEED-BE/
+
+**Tạo cho task sau:** Endpoints DTO từ DATA, DB persistence thật, feed filters/cursor và ownership/ban/admin/rate-limit checks. GET comments phân trang chronological cùng conventions; trả replies một cấp qua parentCommentId. Nhắn riêng dùng social API hiện có; không tạo hệ nhắn mới hoặc notification types mới cho feed.
+
+- [ ] **RED / kiểm tra cần có:** Guest đọc200/write401; nonowner edit/delete403, ban bị từ chối, admin report/delete có audit; XSS hiển thị text; sort/filter/cursor không duplicate; image upload quá giới hạn/sai owner; URL ảnh bài đã xóa không đọc được và ảnh phòng riêng không dùng trong feed; PUT/DELETE like retry/hai tab count đúng; comment cross-post/nested parent bị từ chối; xóa root giữ replies với placeholder, xóa bài chặn replies; block ẩn phía người chặn; upload/network failures không tạo success giả.
+- [ ] **Build:** Transactions cho publish/finalize ảnh và like/delete; dùng guards/rate limits hiện có; read loại deleted posts/comments và không lộ body/asset sau delete. Counts thật từ DB, không cache công khai response chứa likedByMe qua tài khoản. Report list/resolve nhận targets mới; không push/email mọi tương tác feed.
+- [ ] **PASS:** npm run test --workspace @fg/api -- --runInBand test/feed.integration.spec.ts test/feed-assets.integration.spec.ts; lint/typecheck API; chạy services integration thật và ghi evidence.
+
+### T38-FEED-FE — Bảng tin desktop/mobile theo mockup03
+
+**Phần:** FRONTEND. **Files:** code/apps/web/src/features/feed/; code/apps/web/src/ (chỉ router, app shell/navigation, uploads/social/moderation integration và UI chung cần cho feed; ghi danh sách cụ thể vào allowlist trước task); code/apps/web/test/feed.test.tsx; code/tests/e2e/feed.spec.ts; code/quality/spec-coverage.md; code/quality/evidence/T38-FEED-FE/
+
+**Tạo cho task sau:** /feed và /feed/posts/:id; sidebar/bottom nav, composer chữ/ảnh/game/type, feed filters, post detail, thích/bình luận/reply, edit/delete/report, hồ sơ/DM. Tái sử dụng tokens/components FG, không tạo theme mới.
+
+- [ ] **RED / kiểm tra cần có:** guest login CTA; filter/query cũ không ghi đè lựa chọn mới; pagination không trùng; submit failure giữ text/ảnh và rollback like; auth change clear cache; reply đúng root; deleted/denied post không lộ cache; upload failed không publish; keyboard/focus/360px không overflow; report và DM đúng user. E2E nhiều account trên API/DB thật: post→filter→like→comment/reply→profile/DM→owner edit/delete→admin resolve report; account khác không sửa; refresh vẫn đúng dữ liệu.
+- [ ] **Build:** Bám frontend-design mục10 và mockup03; giữ truy cập Lobby/game/phòng/bạn bè/thông báo. Comment text-only, không build icon ảnh ngoài scope; counts từ server, loading/empty/error/guest rõ ràng. Không socket/mock production, chia sẻ lại, follow hoặc thuật toán ranking. Nút xóa có xác nhận; ảnh/control truy cập được bằng keyboard.
+- [ ] **PASS:** npm run test --workspace @fg/web -- test/feed.test.tsx; npm run test:e2e -- tests/e2e/feed.spec.ts; lint/typecheck web; screenshot1440/1280/390/360 và Codex visual review so mockup03.
+
 ### T39 — Hồi quy end-to-end và đối chiếu toàn spec
 
-**Phần:** QA. **Files:** code/tests/e2e/{lobby,teams,rooms,permissions,privacy}.spec.ts; code/quality/spec-coverage.md; code/quality/evidence/T39/
+**Phần:** QA. **Files:** code/tests/e2e/{feed,lobby,teams,rooms,permissions,privacy}.spec.ts; code/quality/spec-coverage.md; code/quality/evidence/T39/
 
 **Tạo cho task sau:** Coverage mỗi mục spec→task→test→evidence; responsive screenshots actual app.
 
 - [ ] **RED / kiểm tra cần có:** Race approvals;11th call join;4th share; outsider private asset/WS/call; kicked rejoin; blocked invites; owner transfer; last-call closes; multi-room sessions; schedule conflicts. Desktop/mobile accessibility keyboard, contrast,360px no overflow.
-- [ ] **Build:** Chạy user journeys nhiều tài khoản: guest→login→Lobby→DM→recruit→approve→group→call→share→end→room persists. Không dùng mock success production hoặc bỏ test khó.
+- [ ] **Build:** Chạy user journeys nhiều tài khoản: guest→login→Lobby→DM→recruit→approve→group→call→share→end→room persists; thêm guest→feed→login→post/ảnh→lọc→like/comment/reply→DM→report/delete theo spec mục13, kiểm hồi quy navigation và privacy. Không dùng mock success production hoặc bỏ test khó.
 - [ ] **PASS:** npm run verify; npm run test:e2e
 
 ### T40 — Staging HTTPS, backups và cấu hình triển khai
@@ -660,7 +706,7 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 **Tạo cho task sau:** Staging cô lập data/secrets; runbook; restore proof; deploy/rollback scripts không auto publish.
 
 - [ ] **RED / kiểm tra cần có:** HTTPS/auth callbacks/websocket/TURN có probe; NAT/mobile network gọi được; restart worker không mất outbox; restore DB/ảnh xong room/chat đúng ACL; health readiness failures rõ; credentials không trong browser bundle.
-- [ ] **Build:** Triển khai đề xuất tự quản theo benchmark; media tách khỏi app/DB khi cần, Redis cho multi-node LiveKit. Không tự mua VPS/domain hoặc publish prod. Bind project artifacts trong code; backup DB+ảnh và restore staging; monitor app/API/calls/worker.
+- [ ] **Build:** Triển khai đề xuất tự quản theo benchmark; media tách khỏi app/DB khi cần, Redis cho multi-node LiveKit. Không tự mua VPS/domain hoặc publish prod. Bind project artifacts trong code; backup DB+ảnh và restore staging, gồm feed posts/likes/comments/ảnh và trạng thái xóa/report; monitor app/API/calls/worker.
 - [ ] **PASS:** npm run verify:staging; npm run backup:test; npm run restore:test
 
 ### T41 — Kiểm thử 1.000 người gọi/live và dự toán
@@ -670,7 +716,7 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 **Tạo cho task sau:** Báo cáo tải, bitrate, CPU/RAM/egress/TURN, chi phí theo traffic đo được; trạng thái PASS hoặc BLOCKED.
 
 - [ ] **RED / kiểm tra cần có:** 1000 concurrent30phút; max10/call,max3sharing; p95 API<500ms/chat delivery<1s/join<3s; lỗi<1%; audio packet loss<2% và audible sample pass. Ghi dropped frame/quality distribution, không đạt thì giữ task thất bại và tối ưu đúng scope.
-- [ ] **Build:** Tăng tải50→200→500→1000; load generators riêng không nằm chung media host. Hai profile ở mục 7, realtime calls chứ không 1000 WS-only. Network shaping + audio real kiểm riêng; không coi synthetic silent audio là đã chứng minh tiếng rõ. Xin giới hạn chi tiêu cụ thể trước paid load.
+- [ ] **Build:** Tăng tải50→200→500→1000; load generators riêng không nằm chung media host. Hai profile ở mục 7, realtime calls chứ không 1000 WS-only. Thêm đọc feed có filter/cursor và ghi like/comment trong workload API để kiểm SLO hiện có, không thay hai workload media. Network shaping + audio real kiểm riêng; không coi synthetic silent audio là đã chứng minh tiếng rõ. Xin giới hạn chi tiêu cụ thể trước paid load.
 - [ ] **PASS:** npm run load:api; npm run load:chat; npm run load:media; npm run load:network
 
 ### T42 — Chốt bản ra mắt và bàn giao
@@ -702,7 +748,7 @@ Paid load test cần trần chi tiêu người dùng chốt. Nếu ngân sách k
 
 Prompt mở đầu có thể dùng:
 
-> Đọc E:\FGweb\.doc\01-product-spec.md, E:\FGweb\.doc\02-frontend-design.md và E:\FGweb\.doc\task.md. Xem hai mockup trong .doc/mockups. Chỉ viết mã nguồn/cấu hình/test trong E:\FGweb\code. Bắt đầu T00; tên FG và giao diện hai mockup đã được tôi duyệt, không hỏi lại. Nếu còn nghiệp vụ/stack chưa chốt thì chỉ báo các mục đó trước khi build. Sau đó làm đúng từng task trong thứ tự đã ghi; cài dependencies ở T01 và cấu hình APIs/smoke ở T02 trước nghiệp vụ. Không tự sửa spec, skip task, chạy song song hoặc đánh PASS khi thiếu kiểm thử. Mỗi task báo files, commands, exit codes, evidence và blocker. Không tự mua dịch vụ hay deploy production.
+> Đọc E:\FGweb\.doc\01-product-spec.md, E:\FGweb\.doc\02-frontend-design.md và E:\FGweb\.doc\task.md. Xem ba mockup trong .doc/mockups. Chỉ viết mã nguồn/cấu hình/test trong E:\FGweb\code. Bắt đầu T00; tên FG và giao diện ba mockup đã được tôi duyệt, không hỏi lại. Nếu còn nghiệp vụ/stack chưa chốt thì chỉ báo các mục đó trước khi build. Sau đó làm đúng từng task trong thứ tự đã ghi; cài dependencies ở T01 và cấu hình APIs/smoke ở T02 trước nghiệp vụ. Không tự sửa spec, skip task, chạy song song hoặc đánh PASS khi thiếu kiểm thử. Mỗi task báo files, commands, exit codes, evidence và blocker. Không tự mua dịch vụ hay deploy production.
 
 Prompt cho lần tiếp:
 
@@ -727,7 +773,7 @@ Ngày kiểm tra:04/10/2026. Phiên bản hiện thực được khóa tại T01
 
 ## 10. Definition of Done toàn sản phẩm
 
-- Tất cả 45 tasks PASS theo ledger và evidence hợp lệ.
+- Tất cả48 checkpoint cơ sở (45 cũ +3 Bảng tin) và các task FIX phát sinh PASS theo ledger và evidence hợp lệ; không tính duyệt mockup là PASS tính năng.
 - Spec coverage không thiếu phần; UI actual được review so mockup đã duyệt.
 - Login Discord thật, DB migrations/restore thật, chat/recruit atomic, permissions/private assets, calls/live qua SFU thật.
 - Push trên iPhone installed PWA và Android thật; email delivery test thật; opt-out/revoke được kiểm.

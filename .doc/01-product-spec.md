@@ -1,15 +1,15 @@
 # FG — Đặc tả sản phẩm
 
-Ngày cập nhật: 04/10/2026.
+Ngày cập nhật: 07/10/2026.
 Trạng thái: Đã phê duyệt chính thức (T00 Baseline). Người dùng đã chốt toàn bộ gói đề xuất kỹ thuật và nghiệp vụ vào ngày 04/10/2026.
 
-Tên website đã chốt: **FG**. Người dùng đã duyệt phong cách hai mockup: giữ màu sắc, typography và bố cục khi build frontend. Hướng dẫn triển khai hình thức ở [02-frontend-design.md](./02-frontend-design.md); đây là tài liệu thiết kế đi cùng spec.
+Tên website đã chốt: **FG**. Người dùng đã duyệt phong cách ba mockup: giữ màu sắc, typography và bố cục khi build frontend. Hướng dẫn triển khai hình thức ở [02-frontend-design.md](./02-frontend-design.md); đây là tài liệu thiết kế đi cùng spec.
 
 ## 1. Mục tiêu và phạm vi ra mắt
 
 Website dành cho game thủ Việt Nam, giải quyết hai nhu cầu có ưu tiên ngang nhau: tìm đội để chơi ngay và kết bạn để chơi lâu dài. Ra mắt cho cộng đồng thật, sử dụng miễn phí, chưa có quảng cáo hoặc gói trả phí.
 
-Bản ra mắt đầu tiên gồm Lobby, tìm đội, hồ sơ, kết bạn, nhắn riêng, phòng nhóm lâu dài, gọi thoại, chia sẻ màn hình, xem live ngoài, PWA và thông báo. Không tách gọi thoại/live sang đợt phát hành sau.
+Bản ra mắt đầu tiên gồm Bảng tin cộng đồng, Lobby, tìm đội, hồ sơ, kết bạn, nhắn riêng, phòng nhóm lâu dài, gọi thoại, chia sẻ màn hình, xem live ngoài, PWA và thông báo. Không tách gọi thoại/live sang đợt phát hành sau.
 
 Hỗ trợ máy tính và điện thoại. Ưu tiên chi phí vận hành thấp nhất có thể; người dùng chưa chọn ngân sách tháng cố định và sẽ duyệt trần chi phí (cost ceiling) sau khi có số liệu dự toán đo được từ traffic/egress/TURN thực tế trước khi chạy các bài kiểm thử tải trả phí hoặc chi tiêu ở T41 (gate vận hành trì hoãn này không chặn T00/T01). Mục tiêu tải là 1.000 người đồng thời dùng gọi thoại hoặc xem live (1.000 media concurrent target), không chỉ 1.000 người mở website. Mục tiêu này bắt buộc phải được kiểm thử thực tế tại T41.
 
@@ -200,4 +200,36 @@ Khả năng nền tảng được kiểm tra ngày 04/10/2026; cần kiểm tra 
 
 ## 12. Lịch sử thay đổi đã được chủ sản phẩm xác nhận
 
+- 07/10/2026 — TEST-VISIBILITY-01: Người dùng bổ sung tiêu chí project: kiểm thử local luôn có cửa sổ terminal/task và log realtime để quan sát; UI/E2E mở browser headed. Giữ evidence/exit code thật và cửa sổ kết quả; không chạy ẩn rồi chỉ báo summary. Không có GUI phải báo hạn chế trước run. Quy trình cụ thể ở task.md và testing rule08; đây là tiêu chí quy trình phát triển, không thay tính năng runtime FG.
+
 - 04/10/2026 — AUTH-CHANGE-01: Người dùng yêu cầu bỏ đăng nhập Google. FG chỉ hỗ trợ đăng nhập Discord; cập nhật T02, T08, T09 và nghiệm thu tương ứng. Better Auth, onboarding và session guard giữ theo phạm vi đã chốt. Client Secret không lưu trong tài liệu hoặc evidence.
+- 07/10/2026 — FEED-CHANGE-01: Người dùng chốt Bảng tin cộng đồng chung, đăng chữ/ảnh, thích, bình luận/trả lời, lọc game/loại bài và liên hệ qua hồ sơ/DM. Người dùng xác nhận bố cục mockup 03 ổn và yêu cầu ghi tài liệu để coding/build triển khai, giữ màu sắc/phong cách FG đã duyệt. Thêm ba checkpoint trước T39; không đánh PASS hoặc thay bằng chứng các task cũ chỉ vì thay yêu cầu.
+
+## 13. Bảng tin cộng đồng — FEED-CHANGE-01
+
+### Phạm vi và bố cục đã duyệt
+
+- Bảng tin chung cho toàn FG, ngang hàng với Lobby; desktop ở sidebar phía trên danh sách game, mobile thêm Bảng tin vào bottom navigation cùng Lobby/Bạn bè/Thông báo. Vẫn truy cập được Phòng của tôi và danh mục game.
+- Nội dung gồm Tìm bạn chơi lâu dài, Chia sẻ khoảnh khắc và Thảo luận game. Lọc theo game và loại bài. Bảng tin bổ sung cho chat Lobby và thẻ tuyển buổi chơi, không thay các quy tắc tuyển đội/roster/phòng.
+- Bản đầu gồm đăng chữ/ảnh, thích/bỏ thích, bình luận/trả lời bình luận, mở hồ sơ và nhắn riêng qua chức năng hiện có. Không thêm chia sẻ lại, theo dõi người đăng hoặc feed xếp hạng bằng thuật toán.
+- [Mockup 03 — desktop/mobile](./mockups/03-community-feed-desktop-mobile.png) là baseline bố cục được người dùng duyệt ngày 07/10/2026. Giữ navy tối, accent xanh, Inter và design tokens FG. Khung trình bày, logo/ảnh/avatars/số liệu mẫu không là UI hoặc dữ liệu production.
+
+### Mặc định triển khai để coding/build có hành vi rõ ràng
+
+Các mục dưới là mặc định kỹ thuật cho bản đầu, không phải từng chi tiết đã được người dùng duyệt riêng trong mockup.
+
+- Bài công khai: guest xem feed/bài/bình luận; đăng, thích, bình luận và liên hệ cần Discord login. Chỉ tài khoản hợp lệ, không bị ban được ghi. Giữ quyền hồ sơ/DM/block hiện có.
+- Mỗi bài chọn một game trong danh mục và một loại `FIND_PLAYMATES` / `SHARE` / `DISCUSSION`. Nội dung plain text 1–5.000 ký tự sau trim; tối đa 4 ảnh. Không có trường tiêu đề bắt buộc; câu đầu có thể là tiêu đề như mockup. Áp dụng JPG/PNG/WebP, 5MiB/20MP và re-encode WebP hiện có.
+- Feed mới nhất trước, cursor ổn định `(createdAt,id)`, 20 mục/lần; lọc game/loại bài ở server. Không dùng updatedAt để đưa bài chỉnh sửa lên đầu. Truy cập trực tiếp `/feed/posts/:id` được để mở bài/bình luận.
+- Bình luận plain text 1–1.000 ký tự; trả lời một cấp với parent là bình luận gốc cùng bài. Không ảnh đính kèm bình luận; icon ảnh trong ô bình luận của mockup là chi tiết ảnh sinh, không tạo thêm scope.
+- Chủ nội dung được sửa/xóa bài hoặc bình luận của mình; admin được xóa nội dung vi phạm qua report/audit. Xóa bài ẩn toàn bài, bình luận và ảnh; xóa bình luận gốc giữ placeholder để các trả lời hợp lệ vẫn đọc được. Không để endpoint/URL ảnh đọc lại nội dung đã xóa.
+- Thích là một quan hệ duy nhất user/bài; PUT/DELETE idempotent, không đếm trùng khi retry hoặc hai tab. Không cho thích/bình luận bài đã xóa.
+- Block ẩn bài/bình luận của người bị chặn ở phía người chặn như Lobby; không hứa đây là quyền riêng tư của bài công khai. Report bài/bình luận tích hợp quản trị website hiện có; chống spam theo cơ chế rate limit server của FG.
+- V1 không thêm push/email hoặc loại thông báo riêng cho thích/bình luận. DM/kết bạn giữ chính sách thông báo hiện có. Không có yêu cầu socket realtime cho feed; cập nhật từ response thật và refetch, không fake counters/success.
+
+### Nghiệm thu bổ sung
+
+- Guest đọc được feed nhưng write bị từ chối; tài khoản khác không sửa/xóa nội dung ngoài quyền; ban, block và moderation có kiểm thử thật.
+- Đăng chữ/ảnh, lọc, phân trang, thích/bỏ thích, bình luận/trả lời, sửa/xóa, hồ sơ/DM hoạt động từ API/DB thật; refresh giữ đúng dữ liệu, retry không nhân đôi lượt thích.
+- UI có loading/empty/error/guest, giữ nội dung nhập khi gửi lỗi, không tràn 360px, keyboard/focus sử dụng được. Screenshot thật tại 1440×900, 1280×800, 390×844, 360×800 đối chiếu mockup 03.
+- Bao gồm Bảng tin trong T39 hồi quy, T40 backup/restore, T41 tải API và T42 bàn giao; giữ nguyên yêu cầu voice/live/PWA/email và 1.000 media concurrent.

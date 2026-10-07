@@ -115,11 +115,12 @@
     "launchAndModeration": "Launch date and moderation editorial policy to be decided by future operations; standard task contracts/ACLs define specific details."
   },
   "hashes": {
-    "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
-    "designSha256": "B8192A6D4BA0F13989F7243AB17E4D7FA429A5E74FB3B17BE080DEC5F1A0BE2D",
-    "taskSha256": "7F1DD73064655A52F7020D622265D8033776668B4BA52F7BA22F104A5F311218",
-    "mockupLobbySha256": "9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF",
-    "mockupCallSha256": "C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9"
+    "specSha256": "82872cd3373de7f58432fb2efcd663acb46c3fd4c659f107e76bf09b6f0c5d77",
+    "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+    "taskSha256": "8862f60a258326789098f55d524409975ce102bac6d8002414f6b3d0f1fe765b",
+    "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+    "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+    "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
   },
   "amendments": [
     {
@@ -141,6 +142,50 @@
         "mockupLobbySha256": "9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF",
         "mockupCallSha256": "C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9"
       }
+    },
+    {
+      "id": "FEED-CHANGE-01",
+      "date": "2026-10-07",
+      "userInstruction": "bố cục ổn đó ghi vào các tài liệu để bên task coding và build làm",
+      "authorization": "quality/evidence/T00-REBASE-FEED/authorization.json",
+      "previousHashes": {
+        "specSha256": "7041323FCAFE84BF51B080DB1EFDA6E151AD9253D6547DF4ADCEA79FB1901C83",
+        "designSha256": "B8192A6D4BA0F13989F7243AB17E4D7FA429A5E74FB3B17BE080DEC5F1A0BE2D",
+        "taskSha256": "7F1DD73064655A52F7020D622265D8033776668B4BA52F7BA22F104A5F311218",
+        "mockupLobbySha256": "9BEE58B594776A952D9FD60C004774534F22C2D9EDCE40AA7CA9A0625D0CF0DF",
+        "mockupCallSha256": "C6C2B0FF7CBB23D56D574F25F22D0AB07BE5DF45370FD204D018A45FAD13F2C9"
+      },
+      "hashes": {
+        "specSha256": "82872cd3373de7f58432fb2efcd663acb46c3fd4c659f107e76bf09b6f0c5d77",
+        "designSha256": "43facf92de131daa48bfce3f5a5483972968213147d1d0e94dc1b5c56f571fbe",
+        "taskSha256": "8862f60a258326789098f55d524409975ce102bac6d8002414f6b3d0f1fe765b",
+        "mockupLobbySha256": "9bee58b594776a952d9fd60c004774534f22c2d9edce40aa7ca9a0625d0cf0df",
+        "mockupCallSha256": "c6c2b0ff7cbb23d56d574f25f22d0ab07be5df45370fd204d018a45fad13f2c9",
+        "mockupFeedSha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+      },
+      "evidence": "quality/evidence/T00-REBASE-FEED/review.md",
+      "affectedTasks": [
+        "T38-FEED-DATA",
+        "T38-FEED-BE",
+        "T38-FEED-FE",
+        "T39",
+        "T40",
+        "T41",
+        "T42"
+      ]
     }
-  ]
+  ],
+  "additionalRequirements": {
+    "FEED-CHANGE-01": {
+      "specSection": 13,
+      "designSection": 10,
+      "executionStatus": "NOT_STARTED",
+      "checkpointOrder": [
+        "T38-FEED-DATA",
+        "T38-FEED-BE",
+        "T38-FEED-FE"
+      ],
+      "implementationBefore": "T39"
+    }
+  }
 }

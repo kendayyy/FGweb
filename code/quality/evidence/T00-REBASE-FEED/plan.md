@@ -1,0 +1,7 @@
+# Authorized FEED-CHANGE-01 baseline migration
+
+Human in Idea directly approved mockup03 and requested coding/build documentation; current user requests continuation. Those latest product instructions supersede the earlier temporary preserve/restore workaround. Keep the current completed feed plan; no further doc restoration. Review added requirement and three checkpoint order afterT38/beforeT39. Core game catalog, Discord, private rooms, recruitment capacity/approval, voice/live/PWA/email and1000 media target remain unchanged.
+
+Scope: baseline manifest, ordinary ledger/coverage metadata, checker only to validate a sixth feed mockup source, and own evidence. Preserve complete old ledger/baseline/evidence/source hashes. Completed statuses and output hashes are not rewritten; record previousSpecSha256 for the migration to active reviewed requirements after verified impact assessment. New feed checkpoints remain NOT_STARTED. Existing work waits on the owner checkpoint, then T06-FIX1/T23 resume.
+
+RED checker baseline tests -> add strict sixth-file verification without relaxing gate -> full owner audit of prior hashes/commands and unchanged historical output/status fields, current six-source hashes, approved future task order and frozen old docs -> source checker lint/old gate behavior tests/new gate smoke -> freeze owner PASS -> actual T06-FIX1 preflight with current baseline. This is reviewed requirement adoption, not retroactive feed success.
