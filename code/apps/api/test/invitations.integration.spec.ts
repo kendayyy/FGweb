@@ -55,6 +55,7 @@ describe('T23 real invitation consent and delegated permissions',()=>{
   }finally{await pool?.end();process.env=saved;}
  });
  beforeEach(async()=>{
+  await pool.query('DELETE FROM blocks');
   await pool.query('DELETE FROM notification_outbox; DELETE FROM notifications; DELETE FROM invitations; DELETE FROM active_play_slots; DELETE FROM join_requests; DELETE FROM recruitments; DELETE FROM team_members; DELETE FROM play_sessions; DELETE FROM permission_grants; DELETE FROM rooms; DELETE FROM admin_actions');
   await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
   await pool.query("UPDATE session SET expires_at=now()+interval '1 day'");
@@ -190,6 +191,43 @@ describe('T23 real invitation consent and delegated permissions',()=>{
   expect((await put(`rooms/${r.id}/helpers/helper`,'owner-a',{permissions:['OWNER_TRANSFER']})).status).toBe(422);
   expect((await post(`rooms/${r.id}/transfer-owner`,'helper',{newOwnerId:'helper'})).status).toBe(403);
   expect((await request(base).delete(`/api/v1/rooms/${r.id}`).set('Cookie',cookies.helper).set('Origin',origin)).status).toBe(403);
+ });
+ it('blocks in either direction prevent new invitations and later admission without removing existing members',async()=>{
+  const r=await room();
+  for(const [blocker,blocked]of [['owner-a','recipient'],['recipient','owner-a']]){
+   await pool.query('INSERT INTO blocks(id,blocker_id,blocked_id) VALUES($1,$2,$3)',['block-test',blocker,blocked]);
+   expect((await post('invitations','owner-a',{targetType:'ROOM',roomId:r.id,receiverId:'recipient'})).status).toBe(403);
+   expect((await pool.query('SELECT id FROM invitations')).rowCount).toBe(0);await pool.query('DELETE FROM blocks');
+  }
+  const i=await invite(r.id);await pool.query("INSERT INTO blocks(id,blocker_id,blocked_id) VALUES('later-block','recipient','owner-a')");
+  expect((await respond(i.id)).status).toBe(403);expect(await status(i.id)).toBe('PENDING');expect(await membership(r.id,'owner-a')).toBe(1);expect(await membership(r.id)).toBe(0);
+ });
+ it('revoking a helper grant removes its private review queue and prevents approval',async()=>{
+  const r=await room();await addMember(r.id);await addMember(r.id,'helper','HELPER');
+  expect((await put(`rooms/${r.id}/helpers/helper`,'owner-a',{permissions:['MANAGE_MEMBERS']})).status).toBe(200);
+  const i=await invite(r.id,'member');expect((await respond(i.id)).body.status).toBe('PENDING');
+  expect((await get('invitations/me','helper')).body.map((x:{id:string})=>x.id)).toContain(i.id);
+  expect((await put(`rooms/${r.id}/helpers/helper`,'owner-a',{permissions:[]})).status).toBe(200);
+  expect((await get('invitations/me','helper')).body).toEqual([]);expect((await approve(i.id,'helper')).status).toBe(403);expect(await membership(r.id)).toBe(0);
+ });
+ it('owner transfer uses the current owner rather than auto-admitting from a former owner invitation',async()=>{
+  const r=await room();await addMember(r.id,'second');const i=await invite(r.id);
+  expect((await post(`rooms/${r.id}/transfer-owner`,'owner-a',{newOwnerId:'second'})).status).toBe(200);
+  expect((await respond(i.id)).body.status).toBe('PENDING');expect(await membership(r.id)).toBe(0);
+  expect((await approve(i.id)).status).toBe(403);expect((await approve(i.id,'second')).status).toBe(201);
+ });
+ it('rechecks session expiry after waiting on a locked room without persisting consent',async()=>{
+  const r=await room(),i=await invite(r.id),lock=await pool.connect();let released=false;
+  try{
+   await lock.query('BEGIN');await lock.query('SELECT id FROM rooms WHERE id=$1 FOR UPDATE',[r.id]);
+   const pid=(await lock.query('SELECT pg_backend_pid() AS id')).rows[0].id;
+   const pending=respond(i.id).then(response=>response);
+   let waiting=false;const deadline=Date.now()+10000;
+   while(Date.now()<deadline){if((await pool.query('SELECT pid FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid))',[pid])).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,20));}
+   expect(waiting).toBe(true);await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='recipient'");
+   await lock.query('COMMIT');released=true;expect((await pending).status).toBe(401);
+   expect(await membership(r.id)).toBe(0);expect((await pool.query('SELECT status,recipient_accepted_at FROM invitations WHERE id=$1',[i.id])).rows[0]).toEqual({status:'PENDING',recipient_accepted_at:null});
+  }finally{if(!released)await lock.query('ROLLBACK');lock.release();}
  });
  it('revoked sender membership and banned recipient cannot admit through an old invitation',async()=>{
   const r=await room();await addMember(r.id);const i=await invite(r.id,'member');

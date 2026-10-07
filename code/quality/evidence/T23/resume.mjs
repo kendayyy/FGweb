@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T23',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T23');
+for(const id of ['T03-FIX10','T06-FIX1','T00-REBASE-VISIBILITY2'])assert.equal(ledger.tasks.find(t=>t.id===id).status,'PASS');
+assert.equal(task.status,'BLOCKED');Object.assign(task,{status:'IN_PROGRESS',blockers:[],inputsHash:{...task.inputsHash,resumedHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),approvedPrerequisites:['T03-FIX10','T06-FIX1']}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly-after-prerequisites.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+let audit=fs.readFileSync(`${dir}/audit.mjs`,'utf8').replace('readonly.json','readonly-after-prerequisites.json').replace('baselines:5','baselines:6');
+audit="import {checkBaselines} from '../../../scripts/verify-task.mjs';\n"+audit;
+audit=audit.replace("const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));","const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));\ncheckBaselines({root:process.cwd(),baseline});");
+fs.writeFileSync(`${dir}/audit.mjs`,audit);
+fs.appendFileSync(`${dir}/plan.md`,'\nApproved prerequisites now PASS. Current rule permits background API/DB tests; real UI/E2E remains headed. Refresh readonly snapshot against legitimate owner outputs and approved exact AppModule wiring. Continue persisted consent/target permissions/atomic admission using the14-test RED suite and additional blocked/session/current ACL cases. Local public schema was read-only verified empty; standard reviewed migrations may initialize it after owner PASS, without touching historical isolated schemas/journals.\n');
+console.log('T23 IN_PROGRESS; approved prerequisite owner outputs adopted.');

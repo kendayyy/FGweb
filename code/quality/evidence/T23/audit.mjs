@@ -1,3 +1,4 @@
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -8,14 +9,19 @@ const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
 const t=ledger.tasks.find(t=>t.id==='T23');
 const allow=f=>t.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
-const snapshot=JSON.parse(fs.readFileSync(`${dir}/readonly.json`));
+const snapshot=JSON.parse(fs.readFileSync(`${dir}/readonly-after-prerequisites.json`));
 for(const [f,h]of Object.entries(snapshot))assert.equal(hash(f),h,f);
 const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
 assert(files.every(f=>allow(f)||f in snapshot),'Unexpected file outside approved scope');
 const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+checkBaselines({root:process.cwd(),baseline});
 for(const [key,f]of Object.entries({specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png'}))assert.equal(hash(f),baseline.hashes[key].toLowerCase());
 const frozen=new Map();for(const p of ledger.tasks.slice(0,ledger.tasks.indexOf(t)))for(const [f,h]of Object.entries(p.outputsHash?.files??{}))frozen.set(f,h);
 let count=0;for(const [f,h]of frozen)if(!allow(f)){assert.equal(hash(f),h.toLowerCase(),f);count++;}
 const secrets=Object.entries(parseEnv(fs.readFileSync('.env.local','utf8'))).filter(([k,v])=>/(SECRET|PASSWORD|PRIVATE_KEY)/.test(k)&&v.length>=8).map(([,v])=>v);
 for(const f of files.filter(allow))assert(!secrets.some(s=>fs.readFileSync(f).includes(Buffer.from(s))),'Secret leak');
-console.log(JSON.stringify({scope:true,readonlyFiles:Object.keys(snapshot).length,frozenPredecessorFiles:count,baselines:5,configuredSecretLeak:false}));
+console.log(JSON.stringify({scope:true,readonlyFiles:Object.keys(snapshot).length,frozenPredecessorFiles:count,baselines:6,configuredSecretLeak:false}));
+
+const priorApp=execFileSync('git',['show',`${t.inputsHash.resumedHead}:code/apps/api/src/app.module.ts`],{encoding:'utf8'});
+const expectedApp=priorApp.replace("import { TeamsModule } from './modules/teams/teams.module.js';","import { TeamsModule } from './modules/teams/teams.module.js';\nimport { InvitationsModule } from './modules/invitations/invitations.module.js';").replace('RecruitmentsModule, TeamsModule]','RecruitmentsModule, TeamsModule, InvitationsModule]');
+assert.equal(fs.readFileSync('apps/api/src/app.module.ts','utf8'),expectedApp,'Exact approved InvitationsModule wiring only');
