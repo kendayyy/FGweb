@@ -1,0 +1,57 @@
+file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:60
+ }catch(e){try{await cleanup();}catch(c){throw new AggregateError([e,c],'Rooms fixture setup and cleanup failed',{cause:e});}throw e;}
+                                               ^
+
+AggregateError: Rooms fixture setup and cleanup failed
+    at createRecruitmentsHarness (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:60:48)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///E:/FGweb/code/quality/evidence/T22/native-review.mjs:4:9 {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:55432
+      at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async createRecruitmentsHarness (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:36:3)
+      at async file:///E:/FGweb/code/quality/evidence/T22/native-review.mjs:4:9 {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 55432
+  },
+  [errors]: [
+    Error: connect ECONNREFUSED 127.0.0.1:55432
+        at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async createRecruitmentsHarness (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:36:3)
+        at async file:///E:/FGweb/code/quality/evidence/T22/native-review.mjs:4:9 {
+      errno: -4078,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 55432
+    },
+    AggregateError: Owned rooms fixture cleanup failed
+        at cleanup (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:30:26)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async createRecruitmentsHarness (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:60:16)
+        at async file:///E:/FGweb/code/quality/evidence/T22/native-review.mjs:4:9 {
+      [errors]: [
+        Error: connect ECONNREFUSED 127.0.0.1:55432
+            at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+            at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+            at async file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:28:168
+            at async attempt (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:24:48)
+            at async cleanup (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:28:12)
+            at async createRecruitmentsHarness (file:///E:/FGweb/code/quality/evidence/T22/native-harness.mjs:60:16)
+            at async file:///E:/FGweb/code/quality/evidence/T22/native-review.mjs:4:9 {
+          errno: -4078,
+          code: 'ECONNREFUSED',
+          syscall: 'connect',
+          address: '127.0.0.1',
+          port: 55432
+        }
+      ]
+    }
+  ]
+}
+
+Node.js v24.21.0

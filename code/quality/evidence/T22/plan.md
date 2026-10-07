@@ -1,0 +1,5 @@
+# T22 approved implementation
+
+Codex direct; Anti2 paused. T03-FIX9 PASS, user approved minimal TeamsModule AppModule wiring. Read current spec/task/BE/database/contracts rules. RED real AppModule HTTP tests -> atomic TeamsService/controller/module and exact wiring -> PostgreSQL races/rollback/privacy/retry -> source/test lint/types/build + API regression + compiled native probe -> review/scope/freeze.
+
+Lock order: target room; sorted actor/applicant user rows; live actor auth session and room membership/grants; target play-session; request rows. Applicant user lock serializes all their approvals/cancellations. Authoritative capacity/slot checks after locks. No rank gate. Scheduled roster no active slot/no immediate-request cancellation. Notifications and existing notification_outbox written inside transaction; no socket broadcast before commit. Notification delivery is later T33. Shared snapshot for current members only. Invitation task later reuses public transaction-scoped admission method, never duplicated capacity logic.

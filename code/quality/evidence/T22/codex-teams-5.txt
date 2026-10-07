@@ -1,0 +1,40 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:1296) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/team-approval.integration.spec.ts (39.083 s)
+  ● T22 real atomic team approval › rechecks actor expiry after waiting on play-session lock before committing admission
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 201
+
+      111 |    for(let i=0;i<100;i++){const waits=await pool.query("SELECT pid FROM pg_stat_activity WHERE wait_event_type='Lock' AND query LIKE 'SELECT p.%FROM play_sessions p%FOR UPDATE'");if(waits.rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,20));}
+      112 |    expect(waiting).toBe(true);await new Promise(resolve=>setTimeout(resolve,2100));await block.query('COMMIT');
+    > 113 |    expect((await pending).status).toBe(401);expect(await state(a.id)).toBe('PENDING');expect((await pool.query('SELECT * FROM active_play_slots WHERE user_id=$1',['applicant'])).rowCount).toBe(0);
+          |                                   ^
+      114 |   }finally{await block.query('ROLLBACK');block.release();await pending;}
+      115 |  });
+      116 |  it('closed or ended recruitment cannot accept a pending applicant',async()=>{
+
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:113:35)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 15 passed, 16 total
+Snapshots:   0 total
+Time:        39.611 s
+Ran all test suites matching test/team-approval.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts

@@ -8,8 +8,9 @@ import { PresenceModule } from './modules/presence/presence.module.js';
 import { SocialModule } from './modules/social/social.module.js';
 import { RoomsModule } from './modules/rooms/rooms.module.js';
 import { RecruitmentsModule } from './modules/recruitments/recruitments.module.js';
+import { TeamsModule } from './modules/teams/teams.module.js';
 
 @Module({
-  imports: [AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule],
+  imports: [AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule],
 })
 export class AppModule {}

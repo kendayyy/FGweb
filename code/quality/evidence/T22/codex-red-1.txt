@@ -1,0 +1,249 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:29604) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/team-approval.integration.spec.ts (22.89 s)
+  ● T22 real atomic team approval › submits without rank gate; retries same identity and queues one owner notification
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › atomically adds room/chat membership, roster/slot, cancels only other now requests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › two teams approving same user concurrently have one success and other409
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › two applicants racing last seat have one success, loser remains pending
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › concurrent approval retries do not duplicate admission or outbox
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › scheduled acceptance reserves roster without active slot or cancelling now requests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › scheduled acceptance permits applicant already playing another active team
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › rejects unauthorized owner/helper, then permits exact recruitment grant
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › reject is idempotent, legacy respond preserved and contradictory accept conflicts
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › rollback at result outbox leaves roster, slot, counters and other requests unchanged
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › public room snapshot/list privacy requires actual current membership
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › rejects private/closed recruitment, forged actor/action and incomplete users
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › cancel belongs only to applicant and does not cancel another request
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+  ● T22 real atomic team approval › rejects revoked session and banned applicant at approval
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      22 |  beforeAll(async()=>{
+      23 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+    > 24 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);
+         |                                                                                                                    ^
+      25 |   const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+      26 |   await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+      27 |   for(const id of ['owner-a','owner-b','applicant','second','helper','outsider','incomplete']){
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:24:116)
+
+
+  ● Test suite failed to run
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      34 |   app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});await app.listen(0,'127.0.0.1');base=await app.getUrl();
+      35 |  });
+    > 36 |  afterAll(async()=>{try{if(app)await app.close();if(pool){if(!/^t22_teams_[0-9]+_[a-z0-9]+$/.test(owned))throw Error('Unsafe fixture cleanup');await pool.query(`DROP SCHEMA "${owned}" CASCADE`);expect((await pool.query('SELECT nspname FROM pg_namespace WHERE nspname=$1',[owned])).rowCount).toBe(0);}}finally{await pool?.end();process.env=saved;}});
+         |                                                                                                                                                ^
+      37 |  beforeEach(async()=>{
+      38 |   await pool.query('DELETE FROM notification_outbox; DELETE FROM notifications; DELETE FROM active_play_slots; DELETE FROM join_requests; DELETE FROM recruitments; DELETE FROM team_members; DELETE FROM play_sessions; DELETE FROM permission_grants; DELETE FROM rooms; DELETE FROM admin_actions');
+      39 |   await pool.query("UPDATE session SET expires_at=now()+interval '1 day'");
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:36:144)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        25.222 s
+Ran all test suites matching test/team-approval.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts

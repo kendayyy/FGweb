@@ -1,0 +1,5 @@
+# T22 expiry fixture diagnosis
+
+The wait regression still received201 after the additional live session checks. Source checks were present; the actual fixture deadline was not: Better Auth refreshes near-expiry sessions during the HTTP guard and extended the two-second expires_at. Therefore the initial review RED did not independently establish a missing expiry recheck bug. Extra source rechecks are retained as valid protection after blocking operations, but the earlier review notes' root-cause inference is superseded by this diagnosis.
+
+The owned isolated PostgreSQL fixture now installs a temporary session-update trigger preserving the owner session's hard deadline, then verifies the persisted expiry with clock_timestamp before releasing the play-session row lock. This does not mock the guard or transport or alter production session policy. It makes the exact expired-during-wait condition real and observable. Expected401, pending request and absence of an applicant slot are unchanged. Trigger/function cleanup occurs in finally. Normal HTTP Better Auth renewal remains untouched outside this one fixture.

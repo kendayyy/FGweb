@@ -1,0 +1,113 @@
+{
+  "task": "T22",
+  "executor": "Codex direct; Anti2 paused",
+  "checks": [
+    {
+      "command": "node scripts/verify-task.mjs T22",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T03:56:23.191Z",
+      "completedAt": "2026-10-07T03:56:29.100Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-gate-2.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/api -- --runInBand test/team-approval.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:14:03.575Z",
+      "completedAt": "2026-10-07T04:14:54.877Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-teams-6.txt",
+      "evidenceSha256": "c603051b30c980544e57b5e802852957bf8ccab86acdecf989c22c1742d7f798"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/api/src/modules/teams apps/api/src/app.module.ts apps/api/test/team-approval.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:16:30.708Z",
+      "completedAt": "2026-10-07T04:16:34.314Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-lint-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T22/test-types.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:16:34.418Z",
+      "completedAt": "2026-10-07T04:16:45.505Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-types-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run build --workspace @fg/api",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:10:54.453Z",
+      "completedAt": "2026-10-07T04:11:13.513Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-build-2.txt",
+      "evidenceSha256": "e1bdbf05d09d8a71597a1736bf4da495d35e58ebf80bfe41adf236e874e38b23"
+    },
+    {
+      "command": "node quality/evidence/T22/native-review.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:12:21.033Z",
+      "completedAt": "2026-10-07T04:12:43.078Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-native-2.txt",
+      "evidenceSha256": "ee5dd4219936d6598aa34add41bd04063e0688ce5d8be79dabe720e022f974a3"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/auth.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:22:43.129Z",
+      "completedAt": "2026-10-07T04:23:17.196Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-auth-cleanup-1.txt",
+      "evidenceSha256": "0e77fb9a68a133d257a71f785c83edf9777abe184c79f8556ccfc65ac783f495"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:23:27.489Z",
+      "completedAt": "2026-10-07T04:26:12.818Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-regression-3.txt",
+      "evidenceSha256": "f447d6eabb84adbb6567496402011113278644a5dfd71e851954906879f09310"
+    },
+    {
+      "command": "node quality/evidence/T22/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:26:28.757Z",
+      "completedAt": "2026-10-07T04:26:38.938Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-audit-final-2.txt",
+      "evidenceSha256": "2605a5db4b69275c04d2929dfc41276c1957f80b95f37db0b5016204978aa0b5"
+    },
+    {
+      "command": "git diff --cached --check -- apps/api/src/app.module.ts apps/api/src/modules/teams apps/api/test/team-approval.integration.spec.ts quality/evidence/T22/*.mjs quality/evidence/T22/*.md quality/evidence/T22/*.json quality/tasks.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:27:02.686Z",
+      "completedAt": "2026-10-07T04:27:02.816Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T22/codex-diff-final-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "tests": 16,
+  "apiRegressionTests": 182,
+  "realCompiledApiVerified": true,
+  "failedRunsPreserved": true,
+  "partialRun": "teams-3 interrupted by Windows reboot; not counted",
+  "mediaLoadVerified": false,
+  "notificationDeliveryVerified": false
+}

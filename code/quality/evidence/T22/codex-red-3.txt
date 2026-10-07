@@ -1,0 +1,270 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts
+
+(node:8612) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/team-approval.integration.spec.ts (26.628 s)
+  ● T22 real atomic team approval › submits without rank gate; retries same identity and queues one owner notification
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:49:34)
+
+  ● T22 real atomic team approval › atomically adds room/chat membership, roster/slot, cancels only other now requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:52:103)
+
+  ● T22 real atomic team approval › two teams approving same user concurrently have one success and other409
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:60:54)
+
+  ● T22 real atomic team approval › two applicants racing last seat have one success, loser remains pending
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:63:45)
+
+  ● T22 real atomic team approval › concurrent approval retries do not duplicate admission or outbox
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:66:28)
+
+  ● T22 real atomic team approval › scheduled acceptance reserves roster without active slot or cancelling now requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:69:70)
+
+  ● T22 real atomic team approval › scheduled acceptance permits applicant already playing another active team
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:72:70)
+
+  ● T22 real atomic team approval › rejects unauthorized owner/helper, then permits exact recruitment grant
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:75:28)
+
+  ● T22 real atomic team approval › reject is idempotent, legacy respond preserved and contradictory accept conflicts
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:81:28)
+
+  ● T22 real atomic team approval › rollback at result outbox leaves roster, slot, counters and other requests unchanged
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:84:54)
+
+  ● T22 real atomic team approval › public room snapshot/list privacy requires actual current membership
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:89:28)
+
+  ● T22 real atomic team approval › rejects private/closed recruitment, forged actor/action and incomplete users
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 404
+
+      91 |  });
+      92 |  it('rejects private/closed recruitment, forged actor/action and incomplete users',async()=>{
+    > 93 |   const c=await create();expect((await post(`recruitments/${c.id}/requests`,'applicant',{applicantId:'outsider'})).status).toBe(400);expect((await post(`recruitments/${c.id}/requests`,'incomplete')).status).toBe(403);const a=await apply(c.id);expect((await post(`join-requests/${a.id}/approve`,'owner-a',{action:'REJECT'})).status).toBe(400);
+         |                                                                                                                            ^
+      94 |   await pool.query("UPDATE rooms SET visibility='PRIVATE' WHERE id=$1",[c.roomId]);expect((await post(`recruitments/${c.id}/requests`,'second')).status).toBe(403);expect((await approve(a.id)).status).toBe(409);expect(await state(a.id)).toBe('PENDING');
+      95 |  });
+      96 |  it('cancel belongs only to applicant and does not cancel another request',async()=>{
+
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:93:124)
+
+  ● T22 real atomic team approval › cancel belongs only to applicant and does not cancel another request
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:97:28)
+
+  ● T22 real atomic team approval › rejects revoked session and banned applicant at approval
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      42 |  const get=(url:string,user='applicant')=>request(base).get(`/api/v1/${url}`).set('Cookie',cookies[user]);
+      43 |  async function create(owner='owner-a',scheduled=false,capacity=3){const r=await post('recruitments',owner,{gameId:game.id,gameTitle:game.title,title:'Đội test',mode:'ranked',requirementText:'Rank cao chỉ tham khảo',playerCapacity:capacity,timingType:scheduled?'scheduledAt':'now',...(scheduled?{scheduledAt:'2099-10-07T13:30:00Z'}:{})});expect(r.status).toBe(201);return RecruitmentSchema.parse(r.body);}
+    > 44 |  async function apply(id:string,user='applicant',legacy=false){const r=await post(`recruitments/${id}/${legacy?'join-requests':'requests'}`,user);expect(r.status).toBe(201);return JoinRequestSchema.parse(r.body);}
+         |                                                                                                                                                                    ^
+      45 |  const approve=(id:string,user='owner-a')=>post(`join-requests/${id}/approve`,user);
+      46 |  const state=async(id:string)=>(await pool.query('SELECT status FROM join_requests WHERE id=$1',[id])).rows[0]?.status;
+      47 |  const play=async(id:string)=>(await pool.query('SELECT play_session_id FROM recruitments WHERE id=$1',[id])).rows[0].play_session_id as string;
+
+      at apply (test/team-approval.integration.spec.ts:44:164)
+      at Object.<anonymous> (test/team-approval.integration.spec.ts:100:28)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        27.154 s
+Ran all test suites matching test/team-approval.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/team-approval.integration.spec.ts

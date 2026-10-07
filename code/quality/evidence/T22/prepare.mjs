@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T22',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T22');
+t.status='IN_PROGRESS';t.startedAt=new Date().toISOString();t.completedAt=null;t.blockers=[];t.commands=[];t.inputsHash={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allowed=f=>t.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allowed(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T21/record.mjs','utf8').replaceAll('T21','T22'));
+fs.writeFileSync(`${dir}/audit.mjs`,fs.readFileSync('quality/evidence/T03-FIX8/audit.mjs','utf8').replaceAll('T03-FIX8','T22'));
+fs.writeFileSync(`${dir}/test-types.json`,JSON.stringify({extends:'../../../apps/api/tsconfig.json',compilerOptions:{noEmit:true,rootDir:'../../..',types:['node','jest'],allowImportingTsExtensions:true},include:['../../../apps/api/src/**/*.ts','../../../apps/api/test/team-approval.integration.spec.ts','../../../apps/api/test/test-cookie-helper.ts']},null,2)+'\n');
+fs.writeFileSync(`${dir}/plan.md`,'# T22 approved implementation\n\nCodex direct; Anti2 paused. T03-FIX9 PASS, user approved minimal TeamsModule AppModule wiring. Read current spec/task/BE/database/contracts rules. RED real AppModule HTTP tests -> atomic TeamsService/controller/module and exact wiring -> PostgreSQL races/rollback/privacy/retry -> source/test lint/types/build + API regression + compiled native probe -> review/scope/freeze.\n\nLock order: target room; sorted actor/applicant user rows; live actor auth session and room membership/grants; target play-session; request rows. Applicant user lock serializes all their approvals/cancellations. Authoritative capacity/slot checks after locks. No rank gate. Scheduled roster no active slot/no immediate-request cancellation. Notifications and existing notification_outbox written inside transaction; no socket broadcast before commit. Notification delivery is later T33. Shared snapshot for current members only. Invitation task later reuses public transaction-scoped admission method, never duplicated capacity logic.\n');

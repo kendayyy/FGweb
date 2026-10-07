@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T22',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const labels=['gate-2','teams-6','lint-final-1','types-final-1','build-2','native-2','auth-cleanup-1','regression-3','audit-final-2','diff-final-2'];
+const records=labels.map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert(fs.readFileSync(`${dir}/codex-teams-6.txt`,'utf8').includes('16 passed'));
+const regression=fs.readFileSync(`${dir}/codex-regression-3.txt`,'utf8');
+assert(regression.includes('182 passed'));
+assert(/Test Suites:\s+11 passed, 11 total/.test(regression));
+assert.equal(JSON.parse(fs.readFileSync(`${dir}/codex-red-3.json`)).exitCode,1);
+let review=fs.readFileSync(`${dir}/review.md`,'utf8');review=review.replace('# T22 Codex review (final checks pending)','# T22 Codex review: PASS');review+='\nFinal182 complete API tests PASS;16 task integration tests and compiled native checks PASS. Final source/test types, lint, production build, scope/frozen/spec/secrets audit and whitespace checks recorded exit0. T22 may be frozen PASS.\n';fs.writeFileSync(`${dir}/review.md`,review);
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({task:'T22',executor:'Codex direct; Anti2 paused',checks:records,tests:16,apiRegressionTests:182,realCompiledApiVerified:true,failedRunsPreserved:true,partialRun:'teams-3 interrupted by Windows reboot; not counted',mediaLoadVerified:false,notificationDeliveryVerified:false},null,2)+'\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),t=ledger.tasks.find(t=>t.id==='T22');assert.equal(t.status,'IN_PROGRESS');
+const evidence=walk(dir),outputs=[...walk('apps/api/src/modules/teams'),'apps/api/src/app.module.ts','apps/api/test/team-approval.integration.spec.ts',...evidence];
+Object.assign(t,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,blockers:[],outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Team apply/approve/reject/cancel, current owner/helper ACL, atomic capacity/unique active slot/cancellation, scheduled roster, private snapshots, session wait recheck and rollback/outbox dedup | T22 |16 real PostgreSQL HTTP tests;182 full API tests;compiled AppModule native probe;build/lint/types/scope | PASS |\n');
+console.log('T22 PASS; reviewed evidence frozen; T23 next.');
