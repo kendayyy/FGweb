@@ -334,6 +334,12 @@ export type PlaySessionActionRequest = z.infer<typeof PlaySessionActionRequestSc
 export const PlaySessionRequestDecisionSchema = RespondJoinRequestSchema.strict();
 export type PlaySessionRequestDecision = z.infer<typeof PlaySessionRequestDecisionSchema>;
 
+export const ListRoomPlaySessionsQuerySchema = z.object({
+ limit: z.number().int().min(1).max(50).default(20),
+ cursor: z.string().min(1).max(500).optional(),
+}).strict();
+export type ListRoomPlaySessionsQuery = z.infer<typeof ListRoomPlaySessionsQuerySchema>;
+
 export const RespondInvitationSchema = z.object({
   action: z.enum(['ACCEPT', 'REJECT']),
 }).strict();

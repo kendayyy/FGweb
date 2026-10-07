@@ -56,3 +56,4 @@
 | Manual scheduled start/atomic whole roster; private member approval; distinct leave/end/room/call; live ACL/session recheck; notification dedup | T24 |16 PG/HTTP tests,216 API regression,native compiled probe,build,types,lint,strict scope audit | PASS; media not claimed |
 | Approved AUTH02 requirements/mockup04 adopted; historical PASS and current contracts WIP preserved | T00-REBASE-AUTH02 |11 gate tests, exact derived rebuild, seven-source/frozen/scope audit, lint/diff | PASS (baseline only) |
 | Approved Sáng/Tối/Hệ thống plan adopted; light visual review pending; source WIP/history preserved | T00-REBASE-LIGHT01 | seven sources, frozen/WIP/readonly audit, lint/diff | PASS (metadata only) |
+| Current-member private room session discovery, strict bounded cursor query and existing Page DTO | T03-FIX12 |4 new/92 contracts tests,build,source/test/API/web types,lint,scope audit | PASS (contracts) |

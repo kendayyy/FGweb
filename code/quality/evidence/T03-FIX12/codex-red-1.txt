@@ -1,0 +1,48 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/room-play-sessions.test.ts (4 tests | 3 failed) 12ms
+   ❯ T03-FIX12 member-only persistent-room session discovery (4)
+     × declares a current member read with no owner/helper-only gate or public access 7ms
+     × accepts bounded cursor pagination, keeps defaults and rejects actor/room overrides 1ms
+     × uses existing play session DTOs for scheduled/active/ended history in Page responses 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/room-play-sessions.test.ts > T03-FIX12 member-only persistent-room session discovery > declares a current member read with no owner/helper-only gate or public access
+AssertionError: expected undefined to be defined
+ ❯ test/room-play-sessions.test.ts:7:43
+      5| describe('T03-FIX12 member-only persistent-room session discovery',()=…
+      6|  it('declares a current member read with no owner/helper-only gate or …
+      7|   const endpoint=route();expect(endpoint).toBeDefined();expect(endpoin…
+       |                                           ^
+      8|   expect(endpoint?.responseSchema?.parse({data:[],hasMore:false})).toE…
+      9|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  test/room-play-sessions.test.ts > T03-FIX12 member-only persistent-room session discovery > accepts bounded cursor pagination, keeps defaults and rejects actor/room overrides
+AssertionError: expected undefined to be defined
+ ❯ test/room-play-sessions.test.ts:11:54
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  test/room-play-sessions.test.ts > T03-FIX12 member-only persistent-room session discovery > uses existing play session DTOs for scheduled/active/ended history in Page responses
+AssertionError: expected undefined to be defined
+ ❯ test/room-play-sessions.test.ts:15:55
+     13|  });
+     14|  it('uses existing play session DTOs for scheduled/active/ended histor…
+     15|   const schema=route()?.responseSchema;expect(schema).toBeDefined();
+       |                                                       ^
+     16|   for(const state of ['SCHEDULED','ACTIVE','ENDED'])expect(schema?.par…
+     17|   expect(schema?.safeParse({data:[{...play,state:'PUBLIC'}],hasMore:fa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  13:07:52
+   Duration  933ms (transform 53%, import 40%, worker 4%, tests 2%)
+

@@ -1,0 +1,3 @@
+# T25 preflight
+
+T24 PASS fb82721; one task at a time. Preserve FG navy/Inter layout and room chat. Build actual request statuses, owner/exact helper queue, nonoptimistic approval, conflict refresh, scheduled start, roster leave/end distinct from room/call, invitation consent/approval and settings policy/grants. Use shared API validation and real backend, no production mocks. DOM unit/component tests may run background; real local UI/E2E must be headed. Prior broad scope authorization permits concrete owner FIX prerequisites/limited integration wiring after review and strict gates; never silently edit frozen source under T25.

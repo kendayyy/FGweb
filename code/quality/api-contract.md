@@ -173,6 +173,12 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - **POST `/api/v1/play-sessions/:id/leave`** [Auth: Authenticated] -> Request: `PlaySessionActionRequestSchema` / Response: `{ success: boolean }`. Release caller's roster/active slot independently of room and call. No actor supplied by client.
 - `PlaySessionActionRequestSchema` accepts omitted/empty bodies and rejects null/extra fields. Session/path identity comes from server authorization; DTO/schema validation does not itself enforce membership or atomic allocation. T24 implements and verifies producers, T25 imports shared contracts; no runtime producer change is claimed by this checkpoint.
 
+### T03-FIX12 — room play-session discovery (T25 prerequisite)
+
+- **GET `/api/v1/rooms/:id/play-sessions`** [Auth: RoomMember] -> Query: `ListRoomPlaySessionsQuerySchema` / Response: existing `Page<PlaySessionDTO>`. Current authenticated/onboarded member reads scheduled/active/ended sessions in this persistent room, including PRIVATE rooms with CLOSED cards. Ordinary members can read; this endpoint exposes no manager request queue, call data or provider/account secrets. Guest401, nonmember403, unknown room404. Keep public OPEN/PUBLIC recruitment discovery unchanged.
+- Pagination default20, maximum50. Stable newest `(createdAt,id)` descending; opaque base64url cursor encodes UTC createdAt/id. Server validates cursor before SQL, uses strict query normalization and rejects actor/room overrides, invalid cursor/limit422. Fetch limit+1 to derive hasMore; nextCursor only when additional rows remain. No unbounded room history read or guessed play-session IDs.
+- Producer authorization/cursor enforcement is verified by T24-FIX1, while T25 imports shared response/query contracts. This contract checkpoint adds no database migration, runtime producer, public card field or product feature.
+
 ### 5.8 Voice / Screen Share Calls
 - **POST `/api/v1/rooms/:roomId/calls`** [Auth: RoomMember] -> Response: `CallGroupSchema`
 - **GET `/api/v1/rooms/:roomId/calls`** [Auth: RoomMember] -> Response: `z.array(CallGroupSchema)`

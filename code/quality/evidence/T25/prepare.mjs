@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T25'),dir='quality/evidence/T25';
+assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.id==='T24').status,'PASS');
+Object.assign(task,{status:'IN_PROGRESS',startedAt:new Date().toISOString(),inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},writeAllowlist:['apps/web/src/features/team-roster/**','apps/web/src/features/room-settings/**','apps/web/src/features/invitations/**','apps/web/test/team-roster.test.tsx',`${dir}/**`]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T24/record.mjs','utf8').replaceAll('T24','T25'));
+fs.writeFileSync(`${dir}/plan.md`,'# T25 preflight\n\nT24 PASS fb82721; one task at a time. Preserve FG navy/Inter layout and room chat. Build actual request statuses, owner/exact helper queue, nonoptimistic approval, conflict refresh, scheduled start, roster leave/end distinct from room/call, invitation consent/approval and settings policy/grants. Use shared API validation and real backend, no production mocks. DOM unit/component tests may run background; real local UI/E2E must be headed. Prior broad scope authorization permits concrete owner FIX prerequisites/limited integration wiring after review and strict gates; never silently edit frozen source under T25.\n');
+console.log('T25 preflight active.');

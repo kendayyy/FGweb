@@ -1,0 +1,61 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/room-play-sessions.test.ts (4 tests | 2 failed) 55ms
+   ❯ T03-FIX12 member-only persistent-room session discovery (4)
+     × declares a current member read with no owner/helper-only gate or public access 31ms
+     × uses existing play session DTOs for scheduled/active/ended history in Page responses 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/room-play-sessions.test.ts > T03-FIX12 member-only persistent-room session discovery > declares a current member read with no owner/helper-only gate or public access
+ZodError: [
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      "items"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+ ❯ test/room-play-sessions.test.ts:8:36
+      6|  it('declares a current member read with no owner/helper-only gate or …
+      7|   const endpoint=route();expect(endpoint).toBeDefined();expect(endpoin…
+      8|   expect(endpoint?.responseSchema?.parse({data:[],hasMore:false})).toE…
+       |                                    ^
+      9|  });
+     10|  it('accepts bounded cursor pagination, keeps defaults and rejects act…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/room-play-sessions.test.ts > T03-FIX12 member-only persistent-room session discovery > uses existing play session DTOs for scheduled/active/ended history in Page responses
+ZodError: [
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      "items"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+ ❯ test/room-play-sessions.test.ts:16:68
+     14|  it('uses existing play session DTOs for scheduled/active/ended histor…
+     15|   const schema=route()?.responseSchema;expect(schema).toBeDefined();
+     16|   for(const state of ['SCHEDULED','ACTIVE','ENDED'])expect(schema?.par…
+       |                                                                    ^
+     17|   expect(schema?.safeParse({data:[{...play,state:'PUBLIC'}],hasMore:fa…
+     18|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 15 passed (16)
+      Tests  2 failed | 90 passed (92)
+   Start at  13:08:15
+   Duration  3.87s (import 65%, transform 25%, tests 7%, worker 4%)
+
+    Isolate  16 workers spawned · ~500ms startup each (spawn + environment, per file)
+             at least ~643ms faster with isolate: false — reuses workers across files instead of one per file
+
