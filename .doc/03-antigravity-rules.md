@@ -65,6 +65,10 @@ Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem
 
 ## Prompt khởi động
 
+### Bàn giao SUPPORT-ADMIN-01 / AUTH-PASSWORD-03
+
+> Đọc spec mục16, design mục13 và checkpoint bổ sung trong task.md. Mockup05 admin dark đã duyệt; bot chỉ receipt, admin trả lời thật, góp ý và private notes đúng ACL. Admin duy nhất kingame theo userId server, bỏ cấp quyền từ ADMIN_DISCORD_IDS/nhiều IDs. Người dùng đổi policy password mới8–128/chữ hoa/ký tự đặc biệt, apply signup/change/reset/attach/provision; login account cũ không bị khóa vì composition mới. Không password/hash/email riêng trong docs/repo/logs. Email owner đã chỉ định riêng; mật khẩu ban đầu thiếu special, cần input đáp ứng qua local bảo mật trước provision. Không chạy song song task đang IN_PROGRESS; gate/rebaseline review gồm ảnh05 trước bổ sung AUTH-ADMIN-SINGLE và T36-SUPPORT-DATA, mở rộng T37/T38. Không giả tạo tài khoản hoặc PASS từ mockup; headed UI/E2E, DB/API thật.
+
 ### Bàn giao AUTH-CHANGE-02
 
 > Đọc spec mục14 và kế hoạch AUTH-CHANGE-02 trong task.md. Giữ Discord, thêm email/mật khẩu theo Better Auth; bảo vệ dữ liệu theo yêu cầu đã chốt. Mockup04 đã được người dùng chốt ngày07/10/2026; dùng bố cục này, không hỏi lại. Giữ task hiện tại và historical evidence, chỉ sau review PASS/rebaseline có evidence mới chạy lần lượt AUTH02-DATA/BE/FE. SMTP thật/test recipient do người dùng chỉ định; thiếu thì báo blocker, không fake success. UI/E2E headed, các test khác nền theo rule08.

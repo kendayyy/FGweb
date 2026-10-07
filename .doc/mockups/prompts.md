@@ -1,5 +1,29 @@
 # Prompt tạo mockup
 
+## 05 — Quản trị / hỗ trợ, đã duyệt 07/10/2026
+
+Image_gen tích hợp, tham chiếu phong cách ảnh03; kết quả `05-admin-support-desktop.png`. Người dùng đã chốt bố cục; dữ liệu mẫu không là evidence kiểm quyền/hoạt động thật. Trạng thái list/detail phải đồng nhất khi build. Prompt gốc giữ để truy vết; tên admin MinhAnh là mẫu, yêu cầu mới cấp duy nhất kingame.
+
+```text
+Use case: ui-mockup. Create one high-resolution landscape desktop mockup of the FG administrator support inbox. Provided image is style reference only: match approved FG dark navy surfaces, restrained blue CTA, thin borders, Inter-like readable Vietnamese typography, compact density and circular avatars. Palette #141A24 canvas, #11151C sidebar, #151B23 panel, #202936 raised, #303D50 border, #3E7FFD blue, #EDF2FF text, #B6C2D9 secondary. Title outside screen "05 — QUẢN TRỊ FG". Straight-on polished app screen, all controls readable, no phone, no marketing hero, no neon, no graphs with fabricated business claims.
+
+Full-height app with left narrow sidebar width200px: small FG wordmark and subtitle "Quản trị"; navigation "Tổng quan", active blue "Chat hỗ trợ" with unread badge "5", "Góp ý / Báo lỗi" badge "3", "Báo cáo vi phạm", "Nhật ký quản trị". Bottom admin avatar "MinhAnh", role "Admin website", subtle "Về FG". Only administrator view, no public site navbar or access-control implementation details.
+
+Main header "Góp ý & Hỗ trợ", subtitle "Tiếp nhận và phản hồi cộng đồng", small top-right bell with unread red dot, compact admin status "Đang trực" green dot. Below header a slim tab strip "Chat hỗ trợ" active and "Góp ý / Báo lỗi", no giant KPI cards.
+
+Three workspace columns next to sidebar: ticket list about280px; wide chat about600px; details about260px. Ticket list heading "Hộp thư", search input "Tìm cuộc hỗ trợ...", filter chips "Tất cả", "Chưa đọc", dropdown "Trạng thái". Four rows with avatar, name, one-line last-message snippet, time and small status badges. Selected "HoàngNam", "Không nhận được email xác minh", "2 phút", blue unread badge2, state "Mới". Other rows "Linhh" "Mình không vào được phòng nhóm" "Đang xử lý"; "QuangDuy" "Cảm ơn bạn đã hỗ trợ!" "Đã giải quyết"; "MaiPhuong" "Mình cần hướng dẫn bật thông báo" "Mới". Keep no real email/phone/address shown.
+
+Center selected conversation header avatar HoàngNam, subtitle "Hỗ trợ tài khoản", amber status "Đang xử lý", button "Đánh dấu đã giải quyết" outlined blue. Conversation with clear chronology and short crisp Vietnamese:
+user bubble "Mình đăng ký FG nhưng chưa nhận được email xác minh."
+system acknowledgement centered small muted label "Hệ thống · Đã nhận yêu cầu. Admin sẽ phản hồi khi có thể."
+user bubble "Mình đã kiểm tra thư rác rồi."
+admin blue bubble with sender "MinhAnh · Admin" text "Chào bạn, bạn thử gửi lại email xác minh giúp mình nhé. Nếu vẫn chưa nhận được, mình sẽ kiểm tra tiếp."
+user bubble "Được nhé, mình thử lại."
+Show times14:20,14:21,14:23 subtly. System bot ONLY confirms receipt, does not pretend to give AI answers. No password/reset token/secret in messages. Composer fixed at bottom with large plain text box "Nhập phản hồi cho người dùng...", primary blue "Gửi phản hồi", small helper "Không yêu cầu người dùng cung cấp mật khẩu." No attachments or AI suggestions buttons.
+
+Right details panel heading "Chi tiết yêu cầu"; fields "Mã yêu cầu" "#HT-0128", "Người gửi" "HoàngNam", "Chủ đề" "Tài khoản", "Trạng thái" dropdown "Đang xử lý", "Tiếp nhận lúc" "Hôm nay, 14:20". Divider; "Ghi chú nội bộ" with lock icon and subtitle "Chỉ admin xem"; note "Kiểm tra tình trạng gửi email xác minh." and small secondary "Lưu ghi chú". Bottom short "Lịch sử xử lý" two entries "14:20 · Tạo yêu cầu", "14:22 · Chuyển sang Đang xử lý". Keep whitespace and hierarchy balanced, no deeply nested cards. Accurate Vietnamese diacritics and realistic screen proportions. This is unapproved visual concept with fictional sample data for review, not working software or proof of security.
+```
+
 ## 04 — Đăng nhập, đã duyệt 07/10/2026
 
 Ngày07/10/2026, image_gen tích hợp; ảnh03 là tham chiếu phong cách; kết quả04-login-desktop-mobile.png. Người dùng chốt mockup cùng ngày; baseline bố cục đăng nhập. Prompt gốc bên dưới giữ nguyên để truy vết quá trình tạo ảnh.

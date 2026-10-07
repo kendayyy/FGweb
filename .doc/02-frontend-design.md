@@ -4,15 +4,16 @@ Ngày chốt: 04/10/2026 cho tên FG và mockup01/02; bổ sung bố cục Bản
 
 ## 1. Nguồn thiết kế
 
-THEME-CHANGE-01: người dùng duyệt khả năng chuyển Sáng/Tối/Hệ thống; bốn mockup bên dưới tiếp tục baseline tối/bố cục. Light được xem trực tiếp trên app và review ảnh thật theo mục12; chưa có hình thức light được chốt.
+THEME-CHANGE-01: người dùng duyệt khả năng chuyển Sáng/Tối/Hệ thống; năm mockup bên dưới tiếp tục baseline tối/bố cục. Light được xem trực tiếp trên app và review ảnh thật theo mục12; chưa có hình thức light được chốt.
 
 - [Lobby desktop/mobile](./mockups/01-lobby-desktop-mobile.png).
 - [Phòng nhóm, gọi và live](./mockups/02-group-call-live.png).
 - [Bảng tin cộng đồng desktop/mobile](./mockups/03-community-feed-desktop-mobile.png), bố cục được duyệt ngày 07/10/2026.
 - [Đăng nhập desktop/mobile](./mockups/04-login-desktop-mobile.png), người dùng chốt mockup ngày07/10/2026.
+- [Quản trị hỗ trợ desktop](./mockups/05-admin-support-desktop.png), đã duyệt ngày07/10/2026; admin dark, không phải light preview.
 - [Spec sản phẩm](./01-product-spec.md) quyết định hành vi và quyền truy cập.
 
-Bốn ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
+Năm ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
 
 Các giá trị dưới đây chuẩn hóa phong cách ảnh thành thông số để code nhất quán. Màu được lấy mẫu/điều chỉnh từ ảnh; không phải mọi pixel của ảnh AI đều có cùng màu. Font gốc không thể xác định chính xác từ ảnh raster; chọn **Inter** để triển khai gần phong cách đã duyệt, không tuyên bố đây là font gốc của ảnh.
 
@@ -149,7 +150,18 @@ T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt t
 
 ## 12. Theme light hoạt động — chờ review hình thức
 
+Mockup05 là Quản trị hỗ trợ dark đã duyệt; không dùng nó để đánh dấu light đã được người dùng chốt.
+
 - Bộ chọn Sáng/Tối/Hệ thống trên global header, hiện cả trang login. Nút icon mặt trời/mặt trăng mở menu có nhãn, dấu lựa chọn và focus rõ; system thể hiện nhãn Hệ thống dù màu thực tế sáng/tối.
 - Semantic tokens dùng chung, không đổi layout: light canvas#F3F6FB/sidebar#FFFFFF/chat#F8FAFC/panel#FFFFFF/raised#EAF0F7/hover#DEE8F5/border#64748B; text main#172033/sub#334155/quiet#475569; action#1E5ADE/hover#184EC7/active#1442AD/focus#1E5ADE; online#147D46/warning#855500/danger#B4232D. Đây là palette triển khai để review, còn phải đo contrast thực tế trước PASS, không tự nhận đã duyệt hình thức.
 - Dùng data-theme trên html và color-scheme; giữ dark tokens hiện có. Rà màu hardcoded và status surfaces của app đang có; các màn chưa build phải dùng cùng semantic tokens. Không thay assets/video/iframe từ provider ngoài bằng filter đảo màu.
 - Screenshot app thật desktop/mobile và preview browser headed để người dùng chốt; không tạo bitmap thay bản thử chức năng người dùng yêu cầu.
+
+## 13. Quản trị hỗ trợ — mockup05 đã duyệt
+
+- Desktop: sidebar quản trị; danh sách cuộc hỗ trợ; khung chat/admin trả lời; chi tiết, trạng thái và ghi chú nội bộ. Trên mobile chuyển từng vùng bằng điều hướng/back phù hợp, không ép bốn cột.
+- Tái dùng FG tokens/Inter/navy/blue và controls44px, keyboard/focus; menu admin chỉ tài khoản có quyền. UI ẩn không thay kiểm quyền server. Không đưa notes nội bộ vào payload người dùng rồi ẩn CSS.
+- Thông tin request nhất quán list/detail, unread/status từ server; loading/empty/error và gửi lỗi giữ draft, không fake success. Bot chỉ xác nhận nhận tin, tên admin mẫu trong ảnh không cấp quyền.
+- Trang login chung bổ sung chấp nhận tên kingame theo AUTH-ADMIN-SINGLE checkpoint, giữ khung mockup04. Labels phải phản ánh “Email hoặc tên đăng nhập”, password không hiển thị mặc định.
+- Form tạo/đổi/reset/thêm mật khẩu ghi rõ “8–128 ký tự, ít nhất một chữ hoa và một ký tự đặc biệt”; không trim/normalize, kiểm cùng policy server. Không áp composition rule khi login credential đã tồn tại để khóa user cũ; không thông báo chứa password/token.
+- Screenshot thật desktop/mobile và headed E2E; duyệt ảnh05 không là evidence login/quyền admin/hỗ trợ đã hoạt động.

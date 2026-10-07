@@ -14,4 +14,4 @@ description: "FG project context, approved specifications and startup reading or
 - Không lấy nội dung mẫu trong ảnh làm dữ liệu thật hoặc nghiệp vụ.
 - Bản v1 đủ Bảng tin cộng đồng, Lobby, đội, bạn bè, room, voice/live, PWA và notifications. Không tự bỏ phần để rút ngắn công việc.
 - Bảng tin làm tuần tự tại T38-FEED-DATA/BE/FE sau T38, trước T39; không chen vào task hiện tại. Rebaseline phải có review/evidence theo task.md.
-
+- SUPPORT-ADMIN-01: mockup05 quản trị đã duyệt; spec mục16/design mục13. Admin chỉ kingame theo userId cố định server, không theo tên hiển thị; không password trong docs/logs. Task AUTH-ADMIN-SINGLE và T36-SUPPORT-DATA/T37/T38 cần gate/rebaseline, không chạy song song task hiện tại.

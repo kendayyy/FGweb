@@ -37,7 +37,13 @@ Yêu cầu mới của người dùng có thể điều chỉnh project rules; g
 - User duyệt bản preview app thật ngày07/10/2026; đọc spec mục15, frontend-design mục12, LIGHT01-FE trong task.md. Light giữ layout/Inter/CTA xanh, dark baseline giữ nguyên; hình thức light cần review ảnh/app thật.
 - Không chạy song song task hiện tại; chỉ mở LIGHT01-FE sau tiền nhiệm PASS và rebaseline review, sau AUTH02 đã xếp trước đó. Không dựng data hoặc thành công auth/feed giả; headed UI/E2E, lưu evidence thật. Hiện chưa có bản preview light để tuyên bố hoàn thành.
 
+## SUPPORT-ADMIN-01 — 07/10/2026
+- Mockup05 quản trị hỗ trợ đã duyệt; đọc spec mục16 và design mục13. Form góp ý/báo lỗi, chat riêng với admin, bot chỉ xác nhận nhận tin, notes nội bộ chỉ admin. Mockup05 không phải light preview.
+- Chỉ tài khoản kingame có quyền admin, login qua trang chung; quyền gắn duy nhất userId trong ADMIN_USER_IDS server, bỏ đường ADMIN_DISCORD_IDS/nhiều admin. Không cấp theo tên/email client hoặc helper. APIs/realtime phải enforce và revoke khi logout/ban/thu hồi quyền.
+- AUTH-PASSWORD-03 thay policy cũ: mật khẩu mới8–128 Unicode code points,1 chữ hoa Lu và1 ký tự đặc biệt P/S, không trim/normalize; áp dụng cả provision kingame, ngoại lệ độ dài cũ không miễn composition. Email admin đã được cung cấp riêng; mật khẩu ban đầu chưa có ký tự đặc biệt, cần đặt qua local bảo mật trước provision. Không password/hash/email riêng trong docs/repo/logs/API; dùng salted scrypt. Task AUTH-ADMIN-SINGLE cần gate/review, không ghi đã tạo tài khoản khi chưa có evidence.
+
 ## Quan sát kiểm thử trực tiếp — 07/10/2026
+
 - TEST-VISIBILITY-01 (đã điều chỉnh theo người dùng): Chỉ test UI tương tác trên ứng dụng và E2E local phải mở cửa sổ trình duyệt/app để người dùng quan sát thao tác thật, dùng headed.
 - Không cần hiện terminal hoặc log cho bất kỳ test nào. Unit/component test chạy DOM giả lập, integration/API/DB/smoke/load được chạy nền; không cần dựng browser giả.
 - Mọi test vẫn lưu command/time/exit code/logs/hashes và evidence thật trong code/. Không tự chạy watch vô hạn, chạy song song hay giảm assertions để trình diễn.

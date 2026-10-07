@@ -20,3 +20,4 @@ globs: "code/apps/web/**"
 - Chụp actual UI tại1440x900,1280x800,390x844,360x800; so hierarchy/token/layout, không pixel-diff ảnh concept có khung.
 - Không auto-update snapshots để che lệch; thay đổi style lớn cần người dùng review before/after.
 - Bảng tin: desktop sidebar phía trên game, composer/feed và bộ lọc bên phải; mobile một cột, bottom nav Bảng tin/Lobby/Bạn bè/Thông báo. Giữ tokens FG; comment chữ, không ảnh theo icon sinh trong mockup. Scope/tests theo spec mục13 và T38-FEED-FE.
+- Mockup05 admin dark đã duyệt; hộp thư/chat/chi tiết-notes theo design mục13. Admin kingame login khung04 với email/tên đăng nhập; menu Quản trị chỉ quyền server. Không lộ notes qua hidden CSS, không giả quyền/online/success, ảnh không chứng minh account được provision.

@@ -6,7 +6,7 @@ import { inside } from './check-env.mjs';
 const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 function allow(file,patterns){return patterns.some(p=>p.endsWith('/**')?file.startsWith(p.slice(0,-2)):file===p);}
 export function checkBaselines({root,baseline}){
- const docs={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png'};
+ const docs={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png',mockupAdminSha256:'../.doc/mockups/05-admin-support-desktop.png'};
  for(const [key,file]of Object.entries(docs)){
   const expected=baseline.hashes?.[key];
   if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');

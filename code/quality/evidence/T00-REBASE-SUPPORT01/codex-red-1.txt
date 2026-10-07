@@ -1,0 +1,78 @@
+✖ eight approved baseline sources validate together (23.6687ms)
+✔ modified specSha256 is rejected (9.7579ms)
+✔ modified designSha256 is rejected (10.2881ms)
+✔ modified taskSha256 is rejected (10.8638ms)
+✔ modified mockupLobbySha256 is rejected (12.1063ms)
+✔ modified mockupCallSha256 is rejected (14.5386ms)
+✔ modified mockupFeedSha256 is rejected (14.0036ms)
+✔ modified mockupAuthSha256 is rejected (17.2234ms)
+✖ modified mockupAdminSha256 is rejected (15.4654ms)
+✔ missing feed mockup hash cannot silently bypass the added source (12.5883ms)
+✔ existing gate still rejects failures, changed output, changed spec and broadened files (22.9374ms)
+✔ missing auth mockup hash cannot bypass new approved source (14.6163ms)
+✖ missing admin mockup hash cannot bypass the eighth source (15.5574ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 10
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 346.825
+
+✖ failing tests:
+
+test at quality\evidence\T00-REBASE-SUPPORT01\baseline-gate.test.mjs:11:1
+✖ eight approved baseline sources validate together (23.6687ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  7 !== 8
+  
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-SUPPORT01/baseline-gate.test.mjs:11:88)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 7,
+    expected: 8,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T00-REBASE-SUPPORT01\baseline-gate.test.mjs:12:37
+✖ modified mockupAdminSha256 is rejected (15.4654ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-SUPPORT01/baseline-gate.test.mjs:12:161)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /baseline/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T00-REBASE-SUPPORT01\baseline-gate.test.mjs:26:1
+✖ missing admin mockup hash cannot bypass the eighth source (15.5574ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-SUPPORT01/baseline-gate.test.mjs:26:139)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /baseline/,
+    operator: 'throws',
+    diff: 'simple'
+  }

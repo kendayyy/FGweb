@@ -1,5 +1,10 @@
 # FG — Mockup đã được duyệt
 
+## Mockup05 — Quản trị hỗ trợ, đã duyệt 07/10/2026
+
+- [05 — Quản trị / Chat hỗ trợ desktop](./05-admin-support-desktop.png): hộp thư, chat với admin, chi tiết trạng thái và ghi chú nội bộ. Giữ phong cách FG; tạo bằng image_gen tích hợp, prompt lưu trong prompts.md.
+- Người dùng đã duyệt bố cục và yêu cầu bàn giao coding/build. Đây là baseline admin dark, không phải light preview. Dữ liệu mẫu không chứng minh chức năng hoặc quyền admin; MinhAnh trong ảnh là tên mẫu, admin duy nhất thực tế theo yêu cầu mới là kingame. Trạng thái cùng request trong list/detail phải đồng nhất khi build.
+
 ## Mockup04 — Đăng nhập, đã duyệt 07/10/2026
 
 - [04 — Đăng nhập desktop/mobile](./04-login-desktop-mobile.png), image_gen tích hợp ngày07/10/2026, tham chiếu phong cách ảnh03. Email/mật khẩu và Discord cùng một khung, tab Đăng nhập/Đăng ký, Quên mật khẩu và nút hiện/ẩn mật khẩu.
