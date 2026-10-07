@@ -13,3 +13,9 @@
 - Không tạo source tại root E:/FGweb hoặc .doc; không bỏ tests hay giả PASS.
 - File này đã được chuẩn bị trước build. T02 đọc và duy trì, không overwrite để xóa các ràng buộc.
 
+## TEST-VISIBILITY-01 — yêu cầu người dùng ngày07/10/2026
+- Tất cả kiểm thử local chạy với cửa sổ terminal/task hiện cho người dùng, log stdout/stderr cập nhật trực tiếp và giữ kết quả/exit code sau khi xong. Không chỉ chạy ẩn rồi đưa summary.
+- UI/E2E dùng trình duyệt headed; `npm run test:e2e -- --headed` cho full suite, hoặc thêm `--headed` vào lệnh test cụ thể. Unit/integration/API/DB/load hiển thị terminal thật; không cần cửa sổ browser giả.
+- Lưu log/time/exit code/hashes như hiện tại, không lộ secrets; kiểm stdout realtime không thay bằng chứng test. Không GUI/CI phải báo rõ hạn chế; không âm thầm thay bằng headless cho local.
+- Đây là yêu cầu hiển thị cửa sổ tương tác do người dùng chỉ định, cho phép mở terminal/browser nhìn thấy được phục vụ test. Không bật watch vô hạn hoặc nhiều task song song.
+

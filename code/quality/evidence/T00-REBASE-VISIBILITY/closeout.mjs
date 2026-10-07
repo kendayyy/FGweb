@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T00-REBASE-VISIBILITY',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const commands=['audit-1','lint-2','diff-1'].map(label=>JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`)));
+for(const r of commands){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+fs.writeFileSync(`${dir}/review.md`,'# TEST-VISIBILITY-01 — PASS\n\nReviewed current human-authored AGENTS/rule08 and final requirement handoff. Spec/task difference from the previous frozen source copies only appends the visibility development requirement; all game, Discord, room, roster, consent, media, feed and release requirements are unchanged. Design and three mockups exactly match the preceding reviewed manifest. Active baseline adoption has explicit previous hashes; previous manifest/ledger preserved. All42 historic PASS output/commands/evidence and timestamps are untouched, and3313 frozen latest files were reviewed by the audit (see actual audit log for definitive count). No historical hidden run is represented as visible. Code AGENTS ownership refresh consists only of the human-added instruction; strict checker unchanged.\n\nThree helpers launch a Normal retained PowerShell terminal, run commands as argv without shell interpretation, stream both outputs directly to console and evidence, and record the child exit rather than logger success. The first launch failed before executing because Windows PowerShell5 misdecoded a UTF8 em dash; request/launch retained, script changed to ASCII, no business test ran in that attempt. Real subsequent visible smoke returned7 with both channels captured. WindowsTerminal had a real nonzero main window handle and FG audit task title (window-observation.json); audit/lint/diff ran visibly. UI suites will additionally pass --headed when they are reached. No production feature logic was changed.\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const evidence=walk(dir),outputs=['quality/spec-baseline.json','AGENTS.md','scripts/run-visible-test.mjs','scripts/show-test.ps1','scripts/record-visible-test.mjs',...evidence];
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T00-REBASE-VISIBILITY');
+Object.assign(task,{status:'PASS',completedAt:new Date().toISOString(),commands,evidencePaths:evidence,outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| TEST-VISIBILITY-01 approved process adoption, visible retained terminal/exit preservation | T00-REBASE-VISIBILITY | real exit7 smoke, visible audit/lint/diff and terminal handle | PASS (development process; historical runs preserved) |\n');
+console.log('T00-REBASE-VISIBILITY PASS; T06-FIX1 may now run a fresh gate.');

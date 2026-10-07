@@ -55,13 +55,19 @@ Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem
 
 ## Kiểm trước buổi build
 
+**TEST-VISIBILITY-01, xác nhận07/10/2026:** Khi chạy test local, hiện cửa sổ terminal/task có log realtime và giữ kết quả/exit code để người dùng quan sát. UI/E2E mở browser headed; các test khác hiện terminal thật. Đọc rule08 và phần quan sát kiểm thử trong task.md; vẫn lưu evidence của run đó, không thay bằng summary hoặc video từ run khác. Nếu không GUI/công cụ không mở được cửa sổ thì báo trước và ghi hạn chế. Người dùng đã yêu cầu cửa sổ nhìn thấy được, không cần xin lại cho việc mở cửa sổ phục vụ test.
+
 1. Mở FGweb trong Antigravity; trong Customizations → Rules kiểm các workspace rules hiện lên và trigger đúng nếu surface có panel đó.
 2. Yêu cầu agent báo ba nguồn chuẩn, cwd build, task đầu chưa PASS và file rules cho phần sắp sửa.
-3. Tên FG và hai mockup đã duyệt; chỉ hỏi các mục T00 chưa được duyệt, không hỏi lại UI.
+3. Tên FG và ba mockup đã duyệt; ảnh03 Bảng tin được duyệt bố cục ngày07/10/2026. Đọc spec mục13, frontend-design mục10 và task.md cho FEED-CHANGE-01; không hỏi lại UI.
 4. T01 dependencies, T02 services/smoke; chưa PASS thì không viết feature code.
 5. Chỉ sau setup mới có gate checker/ledger tự động. Rules Markdown không tự chặn filesystem writes; agent phải tuân thủ và evidence checker sẽ được T02 triển khai.
 
 ## Prompt khởi động
+
+### Khi nhận thay yêu cầu Bảng tin ngày07/10/2026
+
+> Đọc FEED-CHANGE-01 trong spec mục13, frontend-design mục10 và task.md; xem mockup03 đã duyệt. Giữ phong cách FG. Xử lý baseline migration có evidence trước khi tiếp tục build, giữ task đang xử lý và các FIX; không đổi PASS chỉ vì yêu cầu mới. Bảng tin triển khai tuần tự sau T38 qua T38-FEED-DATA/BE/FE rồi mới T39. API/DB/tests thật, không mock production, không code ngoài code/. Giữ Gemini3.6 Flash (High), Antigravity triển khai, Anti2 theo dõi, Codex review/chốt.
 
 > Đọc AGENTS.md và .agents/rules tại E:/FGweb. Đọc .doc/01-product-spec.md, .doc/02-frontend-design.md, .doc/task.md; xem mockup đã duyệt. Báo workspace root, cwd chạy build, nguồn spec, rules đang áp dụng và task đầu chưa PASS. Làm đúng một task theo thứ tự, không skip/parallel. Tên FG và UI đã duyệt. Chỉ code trong E:/FGweb/code; cài deps ở T01 và cấu hình APIs/smoke ở T02 trước business code. Lưu test evidence trước PASS, dừng đúng task nếu blocker. Không tự mua dịch vụ hoặc publish production.
 

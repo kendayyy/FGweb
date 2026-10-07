@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+const dir='quality/evidence/T00-REBASE-VISIBILITY',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+assert(!ledger.tasks.some(t=>t.id==='T00-REBASE-VISIBILITY'));
+fs.writeFileSync(`${dir}/previous-ledger.json`,JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/previous-baseline.json`,JSON.stringify(baseline,null,2)+'\n');
+for(const name of ['01-product-spec.md','02-frontend-design.md','task.md'])fs.copyFileSync(`../.doc/${name}`,`${dir}/${name}`);
+for(const file of ['../AGENTS.md','AGENTS.md','../.agents/rules/08-testing-and-evidence.md'])fs.copyFileSync(file,`${dir}/${file==='AGENTS.md'?'code-AGENTS.md':file==='../AGENTS.md'?'root-AGENTS.md':'testing-rule.md'}`);
+const paths={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',taskSha256:'../.doc/task.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png'};
+const hashes=Object.fromEntries(Object.entries(paths).map(([k,f])=>[k,hash(f)]));
+for(const key of ['designSha256','mockupLobbySha256','mockupCallSha256','mockupFeedSha256'])assert.equal(hashes[key],baseline.hashes[key]);
+baseline.amendments.push({id:'TEST-VISIBILITY-01',date:'2026-10-07',previousHashes:baseline.hashes,hashes,evidence:`${dir}/review.md`,authorization:'Current human-provided AGENTS.md and approved requirement handoff; TEST-VISIBILITY-01 explicitly authorizes visible local test windows',scope:'Development observation only; runtime product requirements and historic PASS outputs preserved'});
+baseline.hashes=hashes;
+fs.writeFileSync('quality/spec-baseline.json',JSON.stringify(baseline,null,2)+'\n');
+for(const task of ledger.tasks){task.baselineAdoptions=[...(task.baselineAdoptions??[]),{previousSpecSha256:task.specSha256,newSpecSha256:hashes.specSha256,reviewTask:'T00-REBASE-VISIBILITY',scopeImpact:'Visible local testing required going forward; historic runs are not retrospectively claimed visible'}];task.specSha256=hashes.specSha256;}
+const task={id:'T00-REBASE-VISIBILITY',status:'IN_PROGRESS',dependencies:['T00-REBASE-FEED'],specSha256:hashes.specSha256,startedAt:new Date().toISOString(),completedAt:null,commands:[],evidencePaths:[],outputsHash:null,inputsHash:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),blockers:[],writeAllowlist:['quality/spec-baseline.json','AGENTS.md','scripts/run-visible-test.mjs','scripts/show-test.ps1','scripts/record-visible-test.mjs',`${dir}/**`]};
+const index=ledger.tasks.findIndex(t=>t.id==='T06-FIX1');ledger.tasks.splice(index,0,task);
+Object.assign(ledger.tasks.find(t=>t.id==='T06-FIX1'),{status:'BLOCKED',dependencies:[task.id],blockers:['Reviewed TEST-VISIBILITY-01 baseline prerequisite']});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/plan.md`,'# TEST-VISIBILITY-01 baseline/tooling checkpoint\n\nHuman-authored rules authorize actual Normal PowerShell windows, realtime stdout/stderr, preserved result and actual child exit code. Review diff: only process rule in spec/task; design and all three mockups unchanged. Preserve previous manifest/ledger; refresh active adoption metadata only. Own baseline, appended code AGENTS instruction and three visible-test helpers; no checker or product logic changes. Real visible exit7 smoke proves failure cannot become PASS, then visible audit validates six hashes, old PASS output/command/evidence preservation, stdout/stderr and exit7 capture, normal retained terminal launch. Lint/diff and frozen file audit required. Earlier hidden runs remain honestly recorded. T06 resumes only after fresh gate.\n');
+console.log('Baseline observation checkpoint active; historic outputs unchanged.');

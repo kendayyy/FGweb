@@ -5,7 +5,7 @@ Workspace mở tại E:/FGweb. Shell cài/build/test làm việc tại E:/FGweb/
 ## Đọc trước khi làm
 1. .doc/01-product-spec.md — nghiệp vụ.
 2. .doc/02-frontend-design.md — tên FG và thiết kế đã duyệt.
-3. .doc/task.md — thứ tự45tasks, acceptance, tests và evidence.
+3. .doc/task.md — thứ tự task (48 checkpoint cơ sở và các task FIX trong ledger), acceptance, tests và evidence.
 4. .agents/rules/*.md — rule chung và rule của phần đang sửa.
 
 ## Bất biến
@@ -24,3 +24,13 @@ Yêu cầu mới của người dùng có thể điều chỉnh project rules; g
 - Với FG, bỏ giới hạn hai vòng review/refactor cùng một lỗi của Antigravity. Tiếp tục sửa và kiểm thử trong task hiện tại đến khi Codex review đạt hoặc có blocker thực sự cần người dùng.
 - Antigravity triển khai, Anti2 theo dõi, Codex review và chốt; giữ Gemini 3.6 Flash (High), một task mỗi lần, không mở task sau trước PASS.
 - Thay đổi này chỉ bỏ giới hạn số vòng sửa; không nới phạm vi files, quyền truy cập, acceptance, kiểm thử hay điều kiện PASS. Không giả success, sửa test để che lỗi hoặc tự đổi model.
+
+## Bảng tin được người dùng duyệt — 07/10/2026
+- FEED-CHANGE-01: Bảng tin cộng đồng chung, bài chữ/ảnh, thích, bình luận/trả lời và lọc game/loại bài. Đọc spec mục13, frontend-design mục10 và mockup03 desktop/mobile đã được duyệt bố cục; giữ màu sắc/phong cách FG.
+- Triển khai lần lượt T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE sau T38, trước T39; không nhảy task hiện tại. Rebaseline do thay yêu cầu phải có review/evidence, không tự đổi PASS hay nới checker.
+
+## Quan sát kiểm thử trực tiếp — 07/10/2026
+- TEST-VISIBILITY-01: Mỗi lần chạy kiểm thử local phải mở/hiện cửa sổ terminal/task để người dùng quan sát log cập nhật trực tiếp; không chỉ chạy ẩn rồi gửi kết quả cuối.
+- Test UI/E2E mở trình duyệt có giao diện (headed); unit/integration/API/DB/load hiển thị terminal thật, không dựng cửa sổ website giả cho test không có UI.
+- Giữ cửa sổ và kết quả sau khi chạy để người dùng đọc; hiện task ID, lệnh, tiến trình và exit code, đồng thời lưu evidence trong code/. Không tự chạy watch vô hạn, chạy song song hay giảm assertions để trình diễn.
+- Không mở được cửa sổ hoặc chạy trên CI/host không có GUI thì báo rõ giới hạn trước khi chạy; không tự coi headless/background là đã đáp ứng tiêu chí quan sát local.

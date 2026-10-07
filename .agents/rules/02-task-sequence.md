@@ -6,6 +6,7 @@ description: "Follow FG task.md sequentially without skipped tasks or false comp
 # FG — Thứ tự task
 - Đọc bảng thứ tự chính xác trong .doc/task.md: có T16-FE, T17-BE, T17-FE; không suy ra thứ tự chỉ bằng số.
 - Mỗi lần đúng một task; không chạy task/agent song song và không tự giao subagent.
+- FEED-CHANGE-01 đã duyệt07/10/2026: T38 → T38-FEED-DATA → T38-FEED-BE → T38-FEED-FE → T39. Giữ các task FIX trong ledger; thay baseline theo review/evidence, không tự chỉnh trạng thái PASS.
 - Bắt đầu task đầu tiên chưa PASS. FAILED/BLOCKED phải xử lý trước khi chuyển tiếp.
 - T00 khóa phần yêu cầu còn mở; T01 dependencies; T02 APIs/smoke; sau đó mới logic nghiệp vụ.
 - Khi checker đã có, chạy npm run task:check -- <ID> trước task. T00–T02 dùng checklist/evidence thủ công.
