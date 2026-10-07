@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T03-FIX11',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const records=['gate-1','contracts-1','build-1','test-types-1','lint-1','api-types-1','web-types-1','audit-1','diff-1'].map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert.equal(JSON.parse(fs.readFileSync(`${dir}/codex-red-1.json`)).exitCode,1);
+assert(fs.readFileSync(`${dir}/codex-red-1.txt`,'utf8').includes('6 failed | 1 passed'));
+assert(fs.readFileSync(`${dir}/codex-contracts-1.txt`,'utf8').includes('88 passed'));
+fs.writeFileSync(`${dir}/review.md`,'# T03-FIX11 Codex review: PASS\n\nAuthorization: prior human grants to broaden write scope/touch locked files, latest continue instruction; specific proposal and authorization evidence remain in T24. T24 is suspended during owner contract task. Seven new transport cases observed six absent-contract failures and one compatibility pass before implementation; all88 contracts tests PASS. Member join/manager queue+decision reuse existing JoinRequest DTO. Shared strict empty body preserves omitted bodies; strict decision forbids client actor/status overrides. Existing public, invitation and private snapshot paths retained. Build/source-test types and API/web consumers, lint, six baseline/frozen/read-only/secrets audit and whitespace PASS. This task declares validation/permissions; it does not claim runtime authorization, capacity or producer enforcement. No database, producer or frontend source changed; resume T24 under exact approved AppModule extension. Failed RED log preserved.\n');
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({task:'T03-FIX11',tests:88,newTests:7,checks:records,producerImplemented:false,failedRunsPreserved:true},null,2)+'\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T03-FIX11'),evidence=walk(dir);
+assert.equal(task.status,'IN_PROGRESS');
+const outputs=['packages/contracts/src/teams.ts','packages/contracts/src/index.ts','packages/contracts/test/play-session-transport.test.ts','quality/api-contract.md',...walk('packages/contracts/dist'),...evidence];
+Object.assign(task,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Current-member play session join/manager queue+decision; strict empty lifecycle/action bodies; old transports | T03-FIX11 |7 new/88 contracts tests,build,lint,source/test/API/web types,scope audit | PASS (contracts) |\n');
+console.log('T03-FIX11 PASS; resume T24 next.');

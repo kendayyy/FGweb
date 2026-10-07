@@ -52,3 +52,4 @@
 | Latest TEST-VISIBILITY-01 revision: headed real UI/E2E only; background DB/API allowed | T00-REBASE-VISIBILITY2 | six baselines/historic frozen audit;lint/diff | PASS (process only) |
 | Durable recipient consent; nullable additive upgrade/empty migration/UTC/rollback/legacy preservation | T06-FIX1 |5 actual PostgreSQL task tests;51 DB regression;schema/journal audit;build/types/lint/scope | PASS (local application journal absent; no reset or apply claimed) |
 | ROOM/PLAY_SESSION invitation consent, current policy/helper ACL, settings/grants, atomic room/team capacity, block/session/ban/privacy/idempotency/rollback | T23 |18 real PG HTTP tests;12 suites/200 API regression;compiled AppModule probe;build/types/lint/scope | PASS |
+| Current-member play session join/manager queue+decision; strict empty lifecycle/action bodies; old transports | T03-FIX11 |7 new/88 contracts tests,build,lint,source/test/API/web types,scope audit | PASS (contracts) |

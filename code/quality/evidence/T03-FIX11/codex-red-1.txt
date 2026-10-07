@@ -1,0 +1,67 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/play-session-transport.test.ts (7 tests | 6 failed) 23ms
+   ❯ T03-FIX11 current-member play session transport (7)
+     × declares member join without admitting or accepting client identities 9ms
+     × declares current owner/exact recruitment helper queue using existing request DTOs 1ms
+     × requires exact delegated permission for response and rejects actor/status overrides 1ms
+     × start rejects unrecognized lifecycle fields and keeps compatible empty bodies 3ms
+     × end rejects unrecognized lifecycle fields and keeps compatible empty bodies 2ms
+     × leave rejects unrecognized lifecycle fields and keeps compatible empty bodies 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > declares member join without admitting or accepting client identities
+AssertionError: expected undefined to be defined
+ ❯ test/play-session-transport.test.ts:7:82
+      5| describe('T03-FIX11 current-member play session transport',()=>{
+      6|  it('declares member join without admitting or accepting client identi…
+      7|   const endpoint=route('POST','/api/v1/play-sessions/:id/join');expect…
+       |                                                                                  ^
+      8|   expect(endpoint?.responseSchema?.parse(sample)).toEqual(sample);
+      9|   expect(endpoint?.requestSchema?.parse({})).toEqual({});
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > declares current owner/exact recruitment helper queue using existing request DTOs
+AssertionError: expected undefined to be defined
+ ❯ test/play-session-transport.test.ts:13:85
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > requires exact delegated permission for response and rejects actor/status overrides
+AssertionError: expected undefined to be defined
+ ❯ test/play-session-transport.test.ts:17:105
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > start rejects unrecognized lifecycle fields and keeps compatible empty bodies
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > end rejects unrecognized lifecycle fields and keeps compatible empty bodies
+ FAIL  test/play-session-transport.test.ts > T03-FIX11 current-member play session transport > leave rejects unrecognized lifecycle fields and keeps compatible empty bodies
+AssertionError: expected undefined to deeply equal {}
+
+- Expected:
+{}
+
++ Received:
+undefined
+
+ ❯ test/play-session-transport.test.ts:23:46
+     21|  it.each(['start','end','leave'])('%s rejects unrecognized lifecycle f…
+     22|   const endpoint=route('POST',`/api/v1/play-sessions/:id/${action}`);e…
+     23|   expect(endpoint?.requestSchema?.parse({})).toEqual({});expect(endpoi…
+       |                                              ^
+     24|   if(action==='leave')expect(endpoint?.responseSchema?.parse({success:…
+     25|   else{expect(endpoint?.responseSchema).toBe(c.PlaySessionSchema);expe…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  12:47:24
+   Duration  1.26s (transform 50%, import 42%, worker 4%, tests 3%)
+

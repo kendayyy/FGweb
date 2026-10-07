@@ -328,6 +328,12 @@ export const RespondJoinRequestSchema = z.object({
 });
 export type RespondJoinRequest = z.infer<typeof RespondJoinRequestSchema>;
 
+// Identity and session targets are taken from the authenticated request/path.
+export const PlaySessionActionRequestSchema = z.object({}).strict().default({});
+export type PlaySessionActionRequest = z.infer<typeof PlaySessionActionRequestSchema>;
+export const PlaySessionRequestDecisionSchema = RespondJoinRequestSchema.strict();
+export type PlaySessionRequestDecision = z.infer<typeof PlaySessionRequestDecisionSchema>;
+
 export const RespondInvitationSchema = z.object({
   action: z.enum(['ACCEPT', 'REJECT']),
 }).strict();

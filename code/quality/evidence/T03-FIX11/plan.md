@@ -1,0 +1,3 @@
+# T03-FIX11 contract prerequisite
+
+Use prior human broad/locked-file authorization, current continue instruction and concrete T24/prerequisite-proposal.md. T24 is suspended, not PASS; T03-FIX11 is the only active task. Add member join/manager queue+respond, shared strict empty lifecycle body and strict ACCEPT/REJECT action; reuse response DTOs. Preserve T22 public endpoints and current snapshots. RED then full contracts/build/test types/API-web consumer types/lint/scope/baseline review. No producer or DB changes here; exact AppModule extension belongs to resumed T24. Host leave question remains separate, no new policy in contracts.

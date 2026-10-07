@@ -1,0 +1,99 @@
+{
+  "task": "T03-FIX11",
+  "tests": 88,
+  "newTests": 7,
+  "checks": [
+    {
+      "command": "node scripts/verify-task.mjs T03-FIX11 packages/contracts/src/teams.ts packages/contracts/src/index.ts packages/contracts/test/play-session-transport.test.ts quality/api-contract.md",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:46:56.380Z",
+      "completedAt": "2026-10-07T05:47:03.608Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root packages/contracts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:48:08.237Z",
+      "completedAt": "2026-10-07T05:48:15.240Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-contracts-1.txt",
+      "evidenceSha256": "a6e1e9680d5fef0bc56c2fe40c860f71a5b348a70e3097502e075ff65b2ffc6b"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p packages/contracts/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:48:25.417Z",
+      "completedAt": "2026-10-07T05:48:38.458Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T03-FIX11/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:48:48.998Z",
+      "completedAt": "2026-10-07T05:48:56.701Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/teams.ts packages/contracts/src/index.ts packages/contracts/test/play-session-transport.test.ts quality/evidence/T03-FIX11",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:49:54.466Z",
+      "completedAt": "2026-10-07T05:49:59.682Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:49:05.888Z",
+      "completedAt": "2026-10-07T05:49:20.984Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-api-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:49:42.858Z",
+      "completedAt": "2026-10-07T05:49:53.033Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-web-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T03-FIX11/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:50:07.941Z",
+      "completedAt": "2026-10-07T05:50:19.165Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-audit-1.txt",
+      "evidenceSha256": "6a0d98e42c4a1da2dfdc6ec82302ce0b6a55e458808e9f7700ef1a0f5d6673b4"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:50:31.744Z",
+      "completedAt": "2026-10-07T05:50:31.873Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX11/codex-diff-1.txt",
+      "evidenceSha256": "69da47edde745ff23096e0784db4dc149317c6802602a024889cf05dce8d3fe6"
+    }
+  ],
+  "producerImplemented": false,
+  "failedRunsPreserved": true
+}

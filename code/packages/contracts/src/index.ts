@@ -14,6 +14,7 @@ import {UploadImageRequestSchema,AttachmentUrlSchema,ImageContentSchema} from '.
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
 import { RoomSchema, RoomSettingsSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
+import {PlaySessionActionRequestSchema,PlaySessionRequestDecisionSchema} from './teams.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
 import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
 import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, ListFriendRequestsQuerySchema, PendingFriendRequestSchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
@@ -167,9 +168,12 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/invitations/:id/approve', auth: 'RoomHelperOrOwner', requestSchema: ApproveInvitationSchema, responseSchema: InvitationSchema },
 
   { method: 'GET', path: '/api/v1/play-sessions/:id', auth: 'RoomMember', responseSchema: TeamSnapshotSchema },
-  { method: 'POST', path: '/api/v1/play-sessions/:id/start', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: PlaySessionSchema },
-  { method: 'POST', path: '/api/v1/play-sessions/:id/end', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: PlaySessionSchema },
-  { method: 'POST', path: '/api/v1/play-sessions/:id/leave', auth: 'Authenticated', responseSchema: z.object({ success: z.boolean() }) },
+  { method: 'POST', path: '/api/v1/play-sessions/:id/join', auth: 'RoomMember', requestSchema: PlaySessionActionRequestSchema, responseSchema: JoinRequestSchema },
+  { method: 'GET', path: '/api/v1/play-sessions/:id/requests', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: z.array(JoinRequestSchema) },
+  { method: 'POST', path: '/api/v1/play-sessions/:id/requests/:requestId/respond', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: PlaySessionRequestDecisionSchema, responseSchema: JoinRequestSchema },
+  { method: 'POST', path: '/api/v1/play-sessions/:id/start', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: PlaySessionActionRequestSchema, responseSchema: PlaySessionSchema },
+  { method: 'POST', path: '/api/v1/play-sessions/:id/end', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: PlaySessionActionRequestSchema, responseSchema: PlaySessionSchema },
+  { method: 'POST', path: '/api/v1/play-sessions/:id/leave', auth: 'Authenticated', requestSchema: PlaySessionActionRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
 
   { method: 'POST', path: '/api/v1/rooms/:roomId/calls', auth: 'RoomMember', responseSchema: CallGroupSchema },
   { method: 'GET', path: '/api/v1/rooms/:roomId/calls', auth: 'RoomMember', responseSchema: z.array(CallGroupSchema) },
