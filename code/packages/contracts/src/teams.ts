@@ -18,6 +18,10 @@ export type JoinRequestState = z.infer<typeof JoinRequestStateSchema>;
 
 export const InviteTargetSchema = z.enum(['ROOM', 'PLAY_SESSION']);
 export type InviteTarget = z.infer<typeof InviteTargetSchema>;
+export const InvitationApprovalPermissionByTarget = Object.freeze({
+  ROOM: 'MANAGE_MEMBERS',
+  PLAY_SESSION: 'MANAGE_RECRUITMENT',
+} as const);
 
 export const InvitationStatusSchema = z.enum([
   'PENDING',
@@ -280,6 +284,7 @@ export const RoomInvitationSchema = z.object({
   receiver: UserSummarySchema.optional(),
   roomId: IdSchema,
   status: InvitationStatusSchema,
+  recipientAcceptedAt: IsoDateTimeSchema.optional(),
   createdAt: IsoDateTimeSchema,
 });
 
@@ -293,6 +298,7 @@ export const PlaySessionInvitationSchema = z.object({
   roomId: IdSchema,
   playSessionId: IdSchema,
   status: InvitationStatusSchema,
+  recipientAcceptedAt: IsoDateTimeSchema.optional(),
   createdAt: IsoDateTimeSchema,
 });
 
@@ -307,13 +313,13 @@ export const CreateInvitationRequestSchema = z.discriminatedUnion('targetType', 
     targetType: z.literal('ROOM'),
     receiverId: IdSchema,
     roomId: IdSchema,
-  }),
+  }).strict(),
   z.object({
     targetType: z.literal('PLAY_SESSION'),
     receiverId: IdSchema,
     roomId: IdSchema,
     playSessionId: IdSchema,
-  }),
+  }).strict(),
 ]);
 export type CreateInvitationRequest = z.infer<typeof CreateInvitationRequestSchema>;
 
@@ -324,7 +330,7 @@ export type RespondJoinRequest = z.infer<typeof RespondJoinRequestSchema>;
 
 export const RespondInvitationSchema = z.object({
   action: z.enum(['ACCEPT', 'REJECT']),
-});
+}).strict();
 export type RespondInvitation = z.infer<typeof RespondInvitationSchema>;
 
 export const CancelJoinRequestSchema = z.object({
@@ -335,7 +341,7 @@ export type CancelJoinRequest = z.infer<typeof CancelJoinRequestSchema>;
 export const ApproveInvitationSchema = z.object({
   invitationId: IdSchema,
   action: z.enum(['ACCEPT', 'REJECT']),
-});
+}).strict();
 export type ApproveInvitation = z.infer<typeof ApproveInvitationSchema>;
 
 // Public discovery exposes only open cards attached to public rooms.

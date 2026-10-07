@@ -1,0 +1,17 @@
+diff --git a/.doc/task.md b/.doc/task.md
+index 80eeb46..8adb0e6 100644
+--- a/.doc/task.md
++++ b/.doc/task.md
+@@ -16,6 +16,12 @@
+ 
+ ## 1. Luật thực thi bắt buộc
+ 
++### Yêu cầu bổ sung FEED-CHANGE-01 — 07/10/2026
++
++Người dùng đã xác nhận Bảng tin chung của FG (product spec mục 13), giữ màu sắc/phong cách đã duyệt (frontend-design mục 10). Chỉ ghi nhận yêu cầu; chưa thêm task thực thi, đổi thứ tự 45 tasks hoặc đánh PASS.
++
++Trước triển khai cần lập kế hoạch bổ sung tuần tự cho schema/contracts, API bài/thích/bình luận, frontend Bảng tin, moderation và kiểm thử. Đối chiếu các task liên quan: T03 contracts, T05–T07 schema, T09/T13 navigation và UI, T14 ảnh, T17 hồ sơ/DM/block, T33–T35 nếu chốt thêm thông báo, T37–T39 moderation/hồi quy và T42 bàn giao. Đây là danh sách ảnh hưởng để review, không cấp quyền triển khai Bảng tin trong các task hiện tại. Khi kế hoạch tích hợp được chốt, cập nhật acceptance/tests/coverage và tái lập baseline theo gate hiện có; không sửa ledger/checker để vượt gate do spec hash thay đổi.
++
+ 1. Working directory triển khai luôn là `E:\FGweb\code`. Chỉ đọc tài liệu ngoài thư mục này. Mọi source, tests, package manifests, lockfiles, configs, migrations, Docker/Caddy, scripts, .env, runtime assets, logs, build outputs và browser-test artifacts phải nằm trong `code/`.
+ 2. Ngoài `code/`, chỉ được sửa tài liệu trong `.doc/` khi có thay đổi yêu cầu do người dùng xác nhận hoặc cập nhật trạng thái task. `.agents/rules/*.md` và `AGENTS.md` là metadata hướng dẫn agent được người dùng yêu cầu; chỉ cập nhật theo yêu cầu, không chứa logic/cấu hình ứng dụng. Không tạo package.json, node_modules, scripts hay scaffolding ở `E:\FGweb` hoặc `.doc/`.
+ 3. Thứ tự đúng là **T00 → T01 → T02 → … → T16-FE → T17-BE → T17-FE → … → T42** theo bảng trong file. Không skip, không chạy đồng thời, không tự tick task tiền nhiệm. Một task BLOCKED/FAILED thì dừng tiến trình ở task đó, báo lý do và phần cần người dùng cung cấp.

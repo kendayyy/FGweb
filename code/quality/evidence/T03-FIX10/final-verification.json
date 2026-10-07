@@ -1,0 +1,109 @@
+{
+  "task": "T03-FIX10",
+  "tests": 81,
+  "newTests": 7,
+  "checks": [
+    {
+      "command": "node scripts/verify-task.mjs T03-FIX10 packages/contracts/src/teams.ts packages/contracts/src/index.ts packages/contracts/test/invitation-transport.test.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:36:32.389Z",
+      "completedAt": "2026-10-07T04:36:51.859Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root packages/contracts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:38:57.247Z",
+      "completedAt": "2026-10-07T04:39:04.066Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-contracts-2.txt",
+      "evidenceSha256": "ca06767b26a33f715f1b37ac9c968babb002a6ca4596c708f6290580866fae39"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p packages/contracts/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:38:11.113Z",
+      "completedAt": "2026-10-07T04:38:17.355Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T03-FIX10/test-types.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:39:08.490Z",
+      "completedAt": "2026-10-07T04:39:18.195Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/teams.ts packages/contracts/src/index.ts packages/contracts/test/invitation-transport.test.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:39:08.551Z",
+      "completedAt": "2026-10-07T04:39:17.744Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:39:18.341Z",
+      "completedAt": "2026-10-07T04:39:40.077Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-api-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:40:56.267Z",
+      "completedAt": "2026-10-07T04:41:06.733Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-web-types-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T03-FIX10/restore-baseline-docs.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:45:03.491Z",
+      "completedAt": "2026-10-07T04:45:04.085Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-restore-docs-1.txt",
+      "evidenceSha256": "be9f3acce292a086d2d7acee8ea00e19f3023ea8db85eef4f3e1be6d18642488"
+    },
+    {
+      "command": "node quality/evidence/T03-FIX10/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:45:04.228Z",
+      "completedAt": "2026-10-07T04:45:12.216Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-audit-3.txt",
+      "evidenceSha256": "db85ca0122a2fa1ed0789e05276616c477a3602f2a3668538caf1d84cf4c1e9e"
+    },
+    {
+      "command": "git diff --cached --check -- packages/contracts/src/teams.ts packages/contracts/src/index.ts packages/contracts/test/invitation-transport.test.ts quality/api-contract.md quality/evidence/T03-FIX10/*.mjs quality/evidence/T03-FIX10/*.json quality/evidence/T03-FIX10/*.md :(exclude)quality/evidence/T03-FIX10/doc-change/** quality/tasks.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T04:45:33.597Z",
+      "completedAt": "2026-10-07T04:45:33.707Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T03-FIX10/codex-diff-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "producerImplemented": false,
+  "failedRunsPreserved": true
+}

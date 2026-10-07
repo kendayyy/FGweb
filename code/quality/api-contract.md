@@ -153,7 +153,16 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - **POST `/api/v1/invitations`** [Auth: Authenticated] -> Request: `CreateInvitationRequestSchema` | Response: `InvitationSchema`
 - **GET `/api/v1/invitations/me`** [Auth: Authenticated] -> Response: `z.array(InvitationSchema)`
 - **PATCH `/api/v1/invitations/:id/respond`** [Auth: Authenticated] -> Request: `RespondInvitationSchema` | Response: `InvitationSchema`
-- **POST `/api/v1/invitations/:id/approve`** [Auth: RoomOwner] -> Request: `ApproveInvitationSchema` | Response: `InvitationSchema`
+- **POST `/api/v1/invitations/:id/approve`** [Auth: RoomHelperOrOwner] -> Request: `ApproveInvitationSchema` | Response: `InvitationSchema`. Exact target-specific permission from `InvitationApprovalPermissionByTarget`: ROOM `MANAGE_MEMBERS`, PLAY_SESSION `MANAGE_RECRUITMENT`; owner implicit. Body invitationId must match path.
+
+### T03-FIX10 — consent, settings and delegated invitation approval
+
+- **GET `/api/v1/rooms/:id/settings`** [Auth: RoomMember] -> `RoomSettingsSchema`, current membership/session required.
+- **PUT `/api/v1/rooms/:id/helpers/:userId`** [Auth: RoomOwner] -> `UpdateHelperPermissionsRequestSchema` / `RoomMemberSchema`, same full grant replacement as existing PATCH alias. Owner-only transfer/dissolve cannot be granted.
+- Both invitation DTO targets include optional server-produced `recipientAcceptedAt` UTC ISO. Existing DTO payloads without it remain compatible. Create/respond/approve schemas strictly reject extra actor/consent fields; actor always comes from the authenticated session.
+- PENDING without consent awaits receiver; PENDING with consent awaits authorized management under current OWNER_APPROVAL. ACCEPTED means committed admission. Respond can be performed only by receiver; management approval before consent returns409. Owner-sent invitations and DIRECT_MEMBER invitations still require recipient consent. Current policy, sender membership, receiver eligibility and management grant are checked before each mutation.
+- Existing GET `/invitations/me` returns sent/received invitations and consented pending invitations the actor currently has target-specific permission to review. No unrelated private room invitations. Old create/respond/approve transports remain compatible.
+- ROOM admission adds room/chat membership only, limited to50 members. PLAY_SESSION uses T22 shared atomic roster/active-slot capacity rules; scheduled invitation reserves roster without immediate occupation. Final retries preserve outcome; contradictory action409. No notification delivery or producer implementation is claimed by this contracts task; those checks belong to T23/T33.
 - **POST `/api/v1/play-sessions/:id/start`** [Auth: Authenticated] -> Response: `PlaySessionSchema`
 - **POST `/api/v1/play-sessions/:id/end`** [Auth: Authenticated] -> Response: `PlaySessionSchema`
 - **POST `/api/v1/play-sessions/:id/leave`** [Auth: Authenticated] -> Response: `{ success: boolean }`

@@ -12,7 +12,7 @@ import { MeDTOSchema } from './auth.js';
 import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
 import {UploadImageRequestSchema,AttachmentUrlSchema,ImageContentSchema} from './uploads.js';
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
-import { RoomSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
+import { RoomSchema, RoomSettingsSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
 import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
@@ -136,9 +136,11 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/rooms/own', auth: 'Authenticated', requestSchema: ListOwnRoomsQuerySchema, responseSchema: createPageSchema(RoomSchema) },
   { method: 'POST', path: '/api/v1/rooms', auth: 'Authenticated', requestSchema: CreateRoomRequestSchema, responseSchema: RoomSchema },
   { method: 'GET', path: '/api/v1/rooms/:id', auth: 'RoomMember', responseSchema: RoomSchema },
+  { method: 'GET', path: '/api/v1/rooms/:id/settings', auth: 'RoomMember', responseSchema: RoomSettingsSchema },
   { method: 'PATCH', path: '/api/v1/rooms/:id/settings', auth: 'RoomOwner', requestSchema: UpdateRoomSettingsRequestSchema, responseSchema: RoomSchema },
   { method: 'GET', path: '/api/v1/rooms/:id/members', auth: 'RoomMember', responseSchema: z.array(RoomMemberSchema) },
   { method: 'PATCH', path: '/api/v1/rooms/:id/helpers/:userId', auth: 'RoomOwner', requestSchema: UpdateHelperPermissionsRequestSchema, responseSchema: RoomMemberSchema },
+  { method: 'PUT', path: '/api/v1/rooms/:id/helpers/:userId', auth: 'RoomOwner', requestSchema: UpdateHelperPermissionsRequestSchema, responseSchema: RoomMemberSchema },
   { method: 'DELETE', path: '/api/v1/rooms/:id/members/:userId', auth: 'Authenticated', responseSchema: z.object({ success: z.boolean() }) },
   { method: 'POST', path: '/api/v1/rooms/:id/transfer-owner', auth: 'RoomOwner', requestSchema: TransferRoomOwnerSchema, responseSchema: RoomSchema },
   { method: 'DELETE', path: '/api/v1/rooms/:id', auth: 'RoomOwner', responseSchema: z.object({ success: z.boolean() }) },
@@ -162,7 +164,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/invitations', auth: 'Authenticated', requestSchema: CreateInvitationRequestSchema, responseSchema: InvitationSchema },
   { method: 'GET', path: '/api/v1/invitations/me', auth: 'Authenticated', responseSchema: z.array(InvitationSchema) },
   { method: 'PATCH', path: '/api/v1/invitations/:id/respond', auth: 'Authenticated', requestSchema: RespondInvitationSchema, responseSchema: InvitationSchema },
-  { method: 'POST', path: '/api/v1/invitations/:id/approve', auth: 'RoomOwner', requestSchema: ApproveInvitationSchema, responseSchema: InvitationSchema },
+  { method: 'POST', path: '/api/v1/invitations/:id/approve', auth: 'RoomHelperOrOwner', requestSchema: ApproveInvitationSchema, responseSchema: InvitationSchema },
 
   { method: 'GET', path: '/api/v1/play-sessions/:id', auth: 'RoomMember', responseSchema: TeamSnapshotSchema },
   { method: 'POST', path: '/api/v1/play-sessions/:id/start', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', responseSchema: PlaySessionSchema },

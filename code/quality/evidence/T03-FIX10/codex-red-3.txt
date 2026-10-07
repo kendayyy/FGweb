@@ -1,0 +1,130 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/invitation-transport.test.ts (7 tests | 6 failed) 81ms
+   ❯ T03-FIX10 invitation consent and transport (7)
+     × preserves optional server consent for ROOM without breaking old payloads 43ms
+     × preserves optional server consent for PLAY_SESSION without breaking old payloads 11ms
+     × declares member-only settings read with the existing schema 2ms
+     × declares owner-only PUT grants as compatible with old PATCH 2ms
+     × maps exact delegated approval rights by target and retains the existing action transport 3ms
+     × rejects forged server consent/actor fields in invitation mutations 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > preserves optional server consent for ROOM without breaking old payloads
+AssertionError: expected { id: 'invite', …(6) } to deeply equal { id: 'invite', …(7) }
+
+- Expected
++ Received
+
+  {
+    "createdAt": "2026-10-07T00:00:00Z",
+    "id": "invite",
+    "receiverId": "receiver",
+-   "recipientAcceptedAt": "2026-10-07T00:01:00Z",
+    "roomId": "room",
+    "senderId": "sender",
+    "status": "PENDING",
+    "targetType": "ROOM",
+  }
+
+ ❯ test/invitation-transport.test.ts:10:45
+      8|   expect(c.InvitationSchema.safeParse(data).success).toBe(true);
+      9|   const consent={...data,recipientAcceptedAt:'2026-10-07T00:01:00Z'};
+     10|   expect(c.InvitationSchema.parse(consent)).toEqual(consent);
+       |                                             ^
+     11|   expect(c.InvitationSchema.safeParse({...consent,recipientAcceptedAt:…
+     12|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > preserves optional server consent for PLAY_SESSION without breaking old payloads
+AssertionError: expected { id: 'invite', …(7) } to deeply equal { id: 'invite', …(8) }
+
+- Expected
++ Received
+
+  {
+    "createdAt": "2026-10-07T00:00:00Z",
+    "id": "invite",
+    "playSessionId": "play",
+    "receiverId": "receiver",
+-   "recipientAcceptedAt": "2026-10-07T00:01:00Z",
+    "roomId": "room",
+    "senderId": "sender",
+    "status": "PENDING",
+    "targetType": "PLAY_SESSION",
+  }
+
+ ❯ test/invitation-transport.test.ts:10:45
+      8|   expect(c.InvitationSchema.safeParse(data).success).toBe(true);
+      9|   const consent={...data,recipientAcceptedAt:'2026-10-07T00:01:00Z'};
+     10|   expect(c.InvitationSchema.parse(consent)).toEqual(consent);
+       |                                             ^
+     11|   expect(c.InvitationSchema.safeParse({...consent,recipientAcceptedAt:…
+     12|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > declares member-only settings read with the existing schema
+AssertionError: expected undefined to be defined
+ ❯ test/invitation-transport.test.ts:14:77
+     12|  });
+     13|  it('declares member-only settings read with the existing schema',()=>{
+     14|   const endpoint=route('GET','/api/v1/rooms/:id/settings');expect(endp…
+       |                                                                             ^
+     15|   expect(route('PATCH','/api/v1/rooms/:id/settings')?.responseSchema).…
+     16|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > declares owner-only PUT grants as compatible with old PATCH
+AssertionError: expected undefined to be defined
+ ❯ test/invitation-transport.test.ts:19:86
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > maps exact delegated approval rights by target and retains the existing action transport
+AssertionError: expected undefined to deeply equal { ROOM: 'MANAGE_MEMBERS', …(1) }
+
+- Expected:
+{
+  "PLAY_SESSION": "MANAGE_RECRUITMENT",
+  "ROOM": "MANAGE_MEMBERS",
+}
+
++ Received:
+undefined
+
+ ❯ test/invitation-transport.test.ts:25:22
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/invitation-transport.test.ts > T03-FIX10 invitation consent and transport > rejects forged server consent/actor fields in invitation mutations
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/invitation-transport.test.ts:37:161
+     35|  });
+     36|  it('rejects forged server consent/actor fields in invitation mutation…
+     37|   expect(c.CreateInvitationRequestSchema.safeParse({targetType:'ROOM',…
+       |                                                                                                                                                                 ^
+     38|   expect(c.RespondInvitationSchema.safeParse({action:'ACCEPT',receiver…
+     39|   expect(c.ApproveInvitationSchema.safeParse({invitationId:'invite',ac…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  11:37:40
+   Duration  1.21s (transform 48%, import 39%, tests 10%, worker 3%)
+
