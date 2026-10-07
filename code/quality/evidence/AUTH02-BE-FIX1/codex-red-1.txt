@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:9312) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-email.integration.spec.ts (25.58 s)
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › mails the FG verification screen and exposes JSON success/replay/expiry without a redirect
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "/auth/verify"
+    Received: "/api/auth/verify-email"
+
+       99 |   const text=sink.messages.filter(m=>m.to===address).at(-1)?.text??'';
+      100 |   const link=new URL(text.match(/https?:\/\/[^\s<>]+/)![0]);
+    > 101 |   expect(link.origin).toBe(origin);expect(link.pathname).toBe('/auth/verify');expect([...link.searchParams.keys()]).toEqual(['token']);
+          |                                                          ^
+      102 |   const native=`/api/auth/verify-email?${new URLSearchParams({token:link.searchParams.get('token')!})}`;
+      103 |   const valid=await request().get(native);expect(valid.status).toBe(200);expect(valid.body).toEqual({status:true,user:null});expect(valid.headers.location).toBeUndefined();
+      104 |   const replay=await request().get(native);expect(replay.status).toBe(400);expect(replay.body.code).toBe('INVALID_TOKEN');expect(replay.headers.location).toBeUndefined();
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:101:58)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 skipped, 15 total
+Snapshots:   0 total
+Time:        28.002 s, estimated 36 s
+Ran all test suites matching apps/api/test/auth-email.integration.spec.ts with tests matching "mails the FG verification screen".

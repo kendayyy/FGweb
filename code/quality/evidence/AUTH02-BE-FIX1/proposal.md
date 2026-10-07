@@ -1,0 +1,5 @@
+# AUTH02-BE-FIX1
+
+Review found mailed verification links navigate to native JSON when the token is expired or replayed. Existing contracts already expose GET /api/auth/verify-email with JSON success/error. Mail a same-origin /auth/verify?token= link so the frontend can consume that endpoint and display truthful FG states. Keep nonce, signing,24h expiry, atomic consumption, no auto signin and all security policy.
+
+Authorized by persistent permission to broaden write scope/touch locked files. Exact owner scope: auth.service.ts mail URL construction; auth-email.integration.spec.ts mail-link consumer adapter + SMTP dot transparency + new real integration case; generated API dist; this evidence directory. No contracts/database/dependencies change. Frontend WIP captured byte-for-byte, seven-source baseline and original FE gate retained. Temporarily restore only frozen prior frontend outputs to their verified exact hashes; run the unmodified strict owner gate. Restore identical WIP only after owner PASS and strict FE prerequisite gate. No checker changes or historical evidence edits.

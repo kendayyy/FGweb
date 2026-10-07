@@ -48,11 +48,11 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
       enabled: true,requireEmailVerification:true,autoSignIn:false,minPasswordLength:12,maxPasswordLength:128,resetPasswordTokenExpiresIn:3600,revokeSessionsOnPasswordReset:true,
       sendResetPassword:async({user,url})=>{await sendAuthMail(mail,from,user.email,'RESET',url);},
     },
-    emailVerification:{expiresIn:86400,sendOnSignUp:true,sendOnSignIn:false,autoSignInAfterVerification:false,sendVerificationEmail:async({user,url})=>{
+    emailVerification:{expiresIn:86400,sendOnSignUp:true,sendOnSignIn:false,autoSignInAfterVerification:false,sendVerificationEmail:async({user})=>{
       // Native JWTs without a nonce can repeat within a second on resend.
       // Keep Better Auth signing/validation while making each mailed link unique.
       const token=await createEmailVerificationToken(options.secret,user.email,undefined,86400,{jti:randomUUID()});
-      const link=new URL(url);link.searchParams.set('token',token);
+      const link=new URL('/auth/verify',options.baseURL);link.searchParams.set('token',token);
       await security.recordEmailToken(user.id,token);await sendAuthMail(mail,from,user.email,'VERIFY',link.toString());
     }},
     socialProviders: {

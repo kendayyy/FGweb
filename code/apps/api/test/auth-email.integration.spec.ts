@@ -26,7 +26,7 @@ async function smtpSink(){
   let buffer='',data=false,to='';
   socket.on('data',chunk=>{buffer+=chunk;while(true){
    if(data){const end=buffer.indexOf('\r\n.\r\n');if(end<0)return;const raw=buffer.slice(0,end);buffer=buffer.slice(end+5);data=false;
-    const split=raw.indexOf('\r\n\r\n'),headers=raw.slice(0,split),body=raw.slice(split+4);
+    const split=raw.indexOf('\r\n\r\n'),headers=raw.slice(0,split),body=raw.slice(split+4).replace(/^\.\./gm,'.');
     const text=/Content-Transfer-Encoding: base64/i.test(headers)?Buffer.from(body.replace(/\s/g,''),'base64').toString('utf8'):body.replace(/=\r\n/g,'').replace(/=([a-f0-9]{2})/gi,(_,hex:string)=>String.fromCharCode(parseInt(hex,16)));
     messages.push({to,text});socket.write('250 queued-local\r\n');continue;
    }
@@ -54,7 +54,11 @@ describe('AUTH02 real HTTP, PostgreSQL and SMTP security',()=>{
  };
  const lastLink=(address:string)=>{
   const text=sink.messages.filter(m=>m.to===address).at(-1)?.text??'';
-  const match=text.match(/https?:\/\/[^\s<>]+/);expect(Boolean(match)).toBe(true);return new URL(match![0]);
+  const match=text.match(/https?:\/\/[^\s<>]+/);expect(Boolean(match)).toBe(true);const link=new URL(match![0]);
+  // API-only security tests consume the token through its native producer.
+  // The separately asserted mailed URL opens the real frontend instead.
+  if(link.pathname==='/auth/verify'){link.pathname='/api/auth/verify-email';link.searchParams.set('callbackURL','/login?verified=1');}
+  return link;
  };
  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
@@ -93,6 +97,20 @@ describe('AUTH02 real HTTP, PostgreSQL and SMTP security',()=>{
   const owner=await credential(address),service=new AuthService();service.setDb(db);expect(MeDTOSchema.parse(await service.getUserMe(owner.id)).discordId).toBeNull();
   const profiles=new ProfilesService();profiles.setDb(db);expect(PrivateProfileSchema.parse(await profiles.getPrivateProfile(owner.id)).discordId).toBeNull();const publicProfile=PublicProfileSchema.parse(await profiles.getPublicProfile(owner.id));expect(publicProfile).not.toHaveProperty('email');expect(publicProfile).not.toHaveProperty('discordId');
   const expired=email();await signUp(expired);const expiredLink=lastLink(expired);expiredLink.searchParams.delete('callbackURL');await pool.query("UPDATE verification SET expires_at=now()-interval '1 second' WHERE identifier LIKE 'fg-email:%'");expect((await request().get(`${expiredLink.pathname}${expiredLink.search}`)).status).toBe(400);expect((await credential(expired)).email_verified).toBe(false);
+ });
+ it('mails the FG verification screen and exposes JSON success/replay/expiry without a redirect',async()=>{
+  const address=email();await signUp(address);
+  const text=sink.messages.filter(m=>m.to===address).at(-1)?.text??'';
+  const link=new URL(text.match(/https?:\/\/[^\s<>]+/)![0]);
+  expect(link.origin).toBe(origin);expect(link.pathname).toBe('/auth/verify');expect([...link.searchParams.keys()]).toEqual(['token']);
+  const native=`/api/auth/verify-email?${new URLSearchParams({token:link.searchParams.get('token')!})}`;
+  const valid=await request().get(native);expect(valid.status).toBe(200);expect(valid.body).toEqual({status:true,user:null});expect(valid.headers.location).toBeUndefined();
+  const replay=await request().get(native);expect(replay.status).toBe(400);expect(replay.body.code).toBe('INVALID_TOKEN');expect(replay.headers.location).toBeUndefined();
+  const expired=email();await signUp(expired);const expiredText=sink.messages.filter(m=>m.to===expired).at(-1)?.text??'';
+  const expiredLink=new URL(expiredText.match(/https?:\/\/[^\s<>]+/)![0]);
+  await pool.query("UPDATE verification SET expires_at=now()-interval '1 second' WHERE identifier LIKE 'fg-email:%'");
+  expect((await request().get(`/api/auth/verify-email?${new URLSearchParams({token:expiredLink.searchParams.get('token')!})}`)).status).toBe(400);
+  expect((await credential(expired)).email_verified).toBe(false);
  });
  it('requires valid email/password and rejects unknown identities, short/oversized or actor override requests',async()=>{
   const address=email();await signUp(address);await verify(address);

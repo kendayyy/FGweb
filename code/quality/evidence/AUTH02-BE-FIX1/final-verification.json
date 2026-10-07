@@ -1,0 +1,81 @@
+{
+  "task": "AUTH02-BE-FIX1",
+  "commands": [
+    {
+      "command": "node scripts/verify-task.mjs AUTH02-BE-FIX1 apps/api/src/modules/auth/auth.service.ts apps/api/test/auth-email.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:05:17.160Z",
+      "completedAt": "2026-10-07T08:05:23.112Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:06:28.027Z",
+      "completedAt": "2026-10-07T08:10:20.306Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-regression-1.txt",
+      "evidenceSha256": "2d57ecd12ba44ee1b4df209af72cb985aaacb56ccd56abec13c631d67cf2fa99"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:10:45.526Z",
+      "completedAt": "2026-10-07T08:11:06.964Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/AUTH02-BE/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:11:07.336Z",
+      "completedAt": "2026-10-07T08:11:20.702Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/api/src/modules/auth/auth.service.ts apps/api/test/auth-email.integration.spec.ts quality/evidence/AUTH02-BE-FIX1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:11:47.730Z",
+      "completedAt": "2026-10-07T08:11:51.225Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-lint-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH02-BE-FIX1/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:11:51.327Z",
+      "completedAt": "2026-10-07T08:11:54.960Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-audit-2.txt",
+      "evidenceSha256": "4e89ebb73fc73f712c1a17e7ba786570949fe5d6c98cc1b3388c569849244bc8"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:11:55.054Z",
+      "completedAt": "2026-10-07T08:11:55.155Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH02-BE-FIX1/codex-diff-2.txt",
+      "evidenceSha256": "0f5688a93d0fce1ae6abf87dabe39e61591bd81dc33acc0b3a5bdee53263341e"
+    }
+  ],
+  "apiTests": 231,
+  "newIntegrationCases": 1,
+  "initialRedFailures": 1,
+  "strictGatePassed": true,
+  "frozenFrontendWipPreserved": true,
+  "contractsAndSecurityPolicyUnchanged": true
+}
