@@ -1,0 +1,65 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/invitation-consent.test.ts (5 tests | 4 failed) 9353ms
+   ❯ T06-FIX1 durable consent migration on actual PostgreSQL (5)
+     × forward migration preserves all legacy invitation states and does not fabricate consent 32ms
+     × empty migration creates a nullable timestamptz with no default consent 3258ms
+     × persists UTC consent across PostgreSQL session timezones without changing invitation status 7ms
+     × transaction rollback restores pending consent and status after a constraint failure 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/invitation-consent.test.ts > T06-FIX1 durable consent migration on actual PostgreSQL > forward migration preserves all legacy invitation states and does not fabricate consent
+error: column "recipient_accepted_at" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/invitation-consent.test.ts:44:15
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/invitation-consent.test.ts > T06-FIX1 durable consent migration on actual PostgreSQL > empty migration creates a nullable timestamptz with no default consent
+AssertionError: expected undefined to deeply equal { …(3) }
+
+- Expected:
+{
+  "column_default": null,
+  "data_type": "timestamp with time zone",
+  "is_nullable": "YES",
+}
+
++ Received:
+undefined
+
+ ❯ test/invitation-consent.test.ts:52:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/invitation-consent.test.ts > T06-FIX1 durable consent migration on actual PostgreSQL > persists UTC consent across PostgreSQL session timezones without changing invitation status
+error: column "recipient_accepted_at" of relation "invitations" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/invitation-consent.test.ts:56:44
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/invitation-consent.test.ts > T06-FIX1 durable consent migration on actual PostgreSQL > transaction rollback restores pending consent and status after a constraint failure
+error: column "recipient_accepted_at" of relation "invitations" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/invitation-consent.test.ts:63:4
+     61|   await client.query('BEGIN');
+     62|   try{
+     63|    await client.query("UPDATE invitations SET recipient_accepted_at=cl…
+       |    ^
+     64|    await expect(client.query("UPDATE invitations SET receiver_id='miss…
+     65|   }finally{await client.query('ROLLBACK');}
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  12:05:36
+   Duration  11.69s (tests 83%, import 12%, transform 4%, worker 1%)
+

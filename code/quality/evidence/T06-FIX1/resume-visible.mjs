@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/T06-FIX1',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T06-FIX1');
+assert.equal(ledger.tasks.find(t=>t.id==='T00-REBASE-VISIBILITY').status,'PASS');
+Object.assign(task,{status:'IN_PROGRESS',blockers:[],inputsHash:{...task.inputsHash,visibleBaselineHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly-after-visible-baseline.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/audit.mjs`,fs.readFileSync(`${dir}/audit.mjs`,'utf8').replace('readonly-after-rebaseline.json','readonly-after-visible-baseline.json').replace('baselines:5','baselines:6'));
+console.log('T06-FIX1 resumes with visible tests; old RED and failed gate runs preserved.');

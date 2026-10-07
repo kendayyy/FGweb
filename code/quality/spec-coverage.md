@@ -50,3 +50,4 @@
 | FEED-CHANGE-01 approved requirement/mockup adoption, historic evidence preservation, strict six-source baseline and future DATA/BE/FE order | T00-REBASE-FEED |9 checker tests;3230 latest hashes;41 historic PASS records;lint/scope | PASS (baseline only; feed NOT_STARTED) |
 | TEST-VISIBILITY-01 approved process adoption, visible retained terminal/exit preservation | T00-REBASE-VISIBILITY | real exit7 smoke, visible audit/lint/diff and terminal handle | PASS (development process; historical runs preserved) |
 | Latest TEST-VISIBILITY-01 revision: headed real UI/E2E only; background DB/API allowed | T00-REBASE-VISIBILITY2 | six baselines/historic frozen audit;lint/diff | PASS (process only) |
+| Durable recipient consent; nullable additive upgrade/empty migration/UTC/rollback/legacy preservation | T06-FIX1 |5 actual PostgreSQL task tests;51 DB regression;schema/journal audit;build/types/lint/scope | PASS (local application journal absent; no reset or apply claimed) |

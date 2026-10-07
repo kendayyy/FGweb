@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T06-FIX1',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T06-FIX1');
+if(task.status!=='BLOCKED'||ledger.tasks.find(t=>t.id==='T00-REBASE-FEED').status!=='PASS')throw Error('Baseline prerequisite not PASS');
+task.status='IN_PROGRESS';task.blockers=[];task.inputsHash={...task.inputsHash,resumedHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),baselineReview:'T00-REBASE-FEED'};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly-after-rebaseline.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+let audit=fs.readFileSync(`${dir}/audit.mjs`,'utf8').replace('`${dir}/readonly.json`','`${dir}/readonly-after-rebaseline.json`');
+audit="import {checkBaselines} from '../../../scripts/verify-task.mjs';\n"+audit;
+audit=audit.replace("const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));","const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));\ncheckBaselines({root:process.cwd(),baseline});");
+fs.writeFileSync(`${dir}/audit.mjs`,audit);console.log('T06-FIX1 resumed after reviewed six-source baseline; prior failed/RED evidence retained.');

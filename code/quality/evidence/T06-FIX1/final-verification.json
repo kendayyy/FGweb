@@ -1,0 +1,164 @@
+{
+  "task": "T06-FIX1",
+  "checks": [
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/verify-task.mjs T06-FIX1 packages/database/src/schema/recruitments.ts packages/database/migrations/meta/_journal.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:11:11.743Z",
+      "completedAt": "2026-10-07T05:11:17.089Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-gate-4.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root packages/database test/invitation-consent.test.ts",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "packages/database",
+        "test/invitation-consent.test.ts"
+      ],
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:06:12.683Z",
+      "completedAt": "2026-10-07T05:06:26.051Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-consent-1.txt",
+      "evidenceSha256": "a118117cca49c6935de793aa2cc0a809210b9bc1d563152e2ade8d6fe33e026c",
+      "observation": {
+        "mode": "visible-powershell",
+        "keepOpen": true,
+        "realtimeStdoutStderr": true,
+        "requestPath": "E:\\FGweb\\code\\quality\\evidence\\T06-FIX1\\visible-consent-1-request.json"
+      }
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root packages/database",
+      "argv": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "packages/database"
+      ],
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:06:37.295Z",
+      "completedAt": "2026-10-07T05:07:21.485Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-database-all-1.txt",
+      "evidenceSha256": "a5dfc92b041515fb43de4b2b5adbef61a3a001929666bac5462224f12001a430",
+      "observation": {
+        "mode": "visible-powershell",
+        "keepOpen": true,
+        "realtimeStdoutStderr": true,
+        "requestPath": "E:\\FGweb\\code\\quality\\evidence\\T06-FIX1\\visible-database-all-1-request.json"
+      }
+    },
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run db:generate --workspace @fg/database -- --name invitation_consent",
+      "argv": [
+        "node",
+        "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "db:generate",
+        "--workspace",
+        "@fg/database",
+        "--",
+        "--name",
+        "invitation_consent"
+      ],
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:05:58.840Z",
+      "completedAt": "2026-10-07T05:06:02.638Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-generate-1.txt",
+      "evidenceSha256": "2c6ba5a5d3e5e1a902ed6755ab2b13b643311f9554b91828b71e30439c98d22c",
+      "observation": {
+        "mode": "visible-powershell",
+        "keepOpen": true,
+        "realtimeStdoutStderr": true,
+        "requestPath": "E:\\FGweb\\code\\quality\\evidence\\T06-FIX1\\visible-generate-1-request.json"
+      }
+    },
+    {
+      "command": "node quality/evidence/T06-FIX1/migration-audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:11:21.173Z",
+      "completedAt": "2026-10-07T05:11:21.299Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-migration-audit-1.txt",
+      "evidenceSha256": "60870f196c90da110ca93ff100afaa377cf1293cb9126c32c3cd47dcf475767e"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T06-FIX1/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:11:21.426Z",
+      "completedAt": "2026-10-07T05:11:28.858Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p packages/database/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:11:29.010Z",
+      "completedAt": "2026-10-07T05:11:35.416Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:11:56.625Z",
+      "completedAt": "2026-10-07T05:12:08.714Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-api-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js packages/database/src/schema/recruitments.ts packages/database/test/invitation-consent.test.ts quality/evidence/T06-FIX1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:13:46.955Z",
+      "completedAt": "2026-10-07T05:13:50.621Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-lint-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T06-FIX1/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:13:50.725Z",
+      "completedAt": "2026-10-07T05:13:58.271Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-audit-final-1.txt",
+      "evidenceSha256": "90bc278d4cf14fcd46eefed70f828ebd4303d26399bcc04fa1064463e309f569"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:13:58.389Z",
+      "completedAt": "2026-10-07T05:13:58.485Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T06-FIX1/codex-diff-final-1.txt",
+      "evidenceSha256": "29a24b00ec0d9d963286141a100b6014f044eb2eb43cb7df4cf022e3464e2865"
+    }
+  ],
+  "postgresTaskTests": 5,
+  "databaseRegressionTests": 51,
+  "nullableConsentOnly": true,
+  "localApplicationMigrationApplied": false,
+  "failedRunsPreserved": true
+}

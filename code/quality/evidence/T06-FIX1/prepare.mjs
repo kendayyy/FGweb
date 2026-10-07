@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T06-FIX1',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T06-FIX1');
+if(task.status!=='NOT_STARTED')throw Error('Do not replace a task run');
+Object.assign(task,{status:'IN_PROGRESS',startedAt:new Date().toISOString(),inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T22/record.mjs','utf8').replaceAll('T22','T06-FIX1'));
+fs.writeFileSync(`${dir}/audit.mjs`,fs.readFileSync('quality/evidence/T03-FIX8/audit.mjs','utf8').replaceAll('T03-FIX8','T06-FIX1'));
+fs.writeFileSync(`${dir}/test-types.json`,JSON.stringify({extends:'../../../packages/database/tsconfig.json',compilerOptions:{noEmit:true,rootDir:'../../..'},include:['../../../packages/database/src/**/*.ts','../../../packages/database/test/invitation-consent.test.ts']},null,2)+'\n');
+fs.writeFileSync(`${dir}/plan.md`,'# Approved T06-FIX1\n\nUser approved T23/prerequisite-proposal.md. T03-FIX10 PASS. Real PG tests first: legacy ROOM/PLAY_SESSION statuses and null consent preserved; empty schema; UTC timestamp; rollback; old constraints. Add only nullable timestamptz recipient_accepted_at with generated0006_invitation_consent migration/snapshot and appended journal. No false consent/default/backfill, no reset/destructive migration. Full DB suite/build/lint/types and migration/source/read-only/spec/frozen audit -> PASS -> apply reviewed additive migration to local service using existing migration procedure -> T23. Code cwd maintained.\n');
+console.log('T06-FIX1 active: additive invitation consent only.');

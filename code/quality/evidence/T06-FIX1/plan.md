@@ -1,0 +1,3 @@
+# Approved T06-FIX1
+
+User approved T23/prerequisite-proposal.md. T03-FIX10 PASS. Real PG tests first: legacy ROOM/PLAY_SESSION statuses and null consent preserved; empty schema; UTC timestamp; rollback; old constraints. Add only nullable timestamptz recipient_accepted_at with generated0006_invitation_consent migration/snapshot and appended journal. No false consent/default/backfill, no reset/destructive migration. Full DB suite/build/lint/types and migration/source/read-only/spec/frozen audit -> PASS -> apply reviewed additive migration to local service using existing migration procedure -> T23. Code cwd maintained.

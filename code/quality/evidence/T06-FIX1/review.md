@@ -1,0 +1,7 @@
+# T06-FIX1 Codex review — PASS
+
+Generated migration adds exactly one nullable timestamptz recipient_accepted_at with no default/backfill. Old six journal entries and every old snapshot schema property unchanged; original constraints preserved. Five real PostgreSQL tests cover eight populated legacy invitations across both targets/four final states, clean migration, UTC roundtrip, rollback and constraints; visible RED2 had4 missing-column failures and1 original-constraint PASS, then5 PASS. Full DB suite51/51 PASS on7 files; actual fixture cleanup assertions passed. Build/source-test types/API consumer types/lint and final scope/frozen six-source/secret audit passed. Derived database outputs only were built.
+
+Reviewed process-only rebaselines occurred during task and historical evidence is retained. Strict gate4 was run against hash-verified original prerequisite bytes while preserving approved WIP, then WIP restored byte-identically. The unmodified gate was not weakened. Final tests apply equally under the current policy; no feature requirement changed.
+
+Application DB local migration was not applied in this owner task: read-only preflight found no canonical fg_migrations journal; it refused to infer/reset. Disposable tested schemas were migrated safely. After owner PASS the next task can inspect local initialization under the existing migration procedure; no local-data/runtime completion is claimed here.

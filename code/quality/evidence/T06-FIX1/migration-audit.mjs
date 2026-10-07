@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const root='packages/database/migrations';
+const old=JSON.parse(fs.readFileSync(`${root}/meta/0005_snapshot.json`)),current=JSON.parse(fs.readFileSync(`${root}/meta/0006_snapshot.json`));
+assert.equal(current.prevId,old.id);
+assert.deepEqual(current.tables['public.invitations'].columns.recipient_accepted_at,{name:'recipient_accepted_at',type:'timestamp with time zone',primaryKey:false,notNull:false});
+delete current.tables['public.invitations'].columns.recipient_accepted_at;
+for(const key of Object.keys(old).filter(k=>!['id','prevId'].includes(k)))assert.deepEqual(current[key],old[key],key);
+const baseline=JSON.parse(fs.readFileSync('quality/evidence/T06-FIX1/baseline-migrations/meta/_journal.json')),journal=JSON.parse(fs.readFileSync(`${root}/meta/_journal.json`));
+assert.deepEqual(journal.entries.slice(0,6),baseline.entries);assert.equal(journal.entries.length,7);assert.equal(journal.entries[6].tag,'0006_invitation_consent');
+assert.equal(fs.readFileSync(`${root}/0006_invitation_consent.sql`,'utf8').trim(),'ALTER TABLE "invitations" ADD COLUMN "recipient_accepted_at" timestamp with time zone;');
+console.log('Only nullable consent column added; all old snapshot schema and migration journal entries preserved.');

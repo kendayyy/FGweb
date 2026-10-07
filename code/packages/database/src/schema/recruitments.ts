@@ -90,6 +90,7 @@ export const invitations = pgTable(
     roomId: text('room_id').notNull(),
     playSessionId: text('play_session_id'),
     status: text('status').notNull().default('PENDING'),
+    recipientAcceptedAt: timestamp('recipient_accepted_at', { withTimezone: true, mode: 'date' }),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
   },
   (table) => [
