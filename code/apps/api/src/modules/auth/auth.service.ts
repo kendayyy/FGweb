@@ -7,16 +7,25 @@ import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, desc, and, inArray } from 'drizzle-orm';
 import * as schema from '@fg/database';
 import { MeDTO, MeDTOSchema } from '@fg/contracts';
+import type {Transporter} from 'nodemailer';
+import {authMailTransport,sendAuthMail} from './auth-mail.js';
+import {createAuthSecurity} from './auth-security.js';
+import {APIError,createEmailVerificationToken} from 'better-auth/api';
+import {randomUUID} from 'node:crypto';
 
 export interface FgAuthOptions {
   baseURL: string;
   secret: string;
   discordClientId: string;
   discordClientSecret: string;
+  mailTransport?:Transporter;
+  mailFrom?:string;
 }
 
 export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthOptions) {
   const isHttps = options.baseURL.startsWith('https://');
+  const mail=options.mailTransport??authMailTransport(),from=options.mailFrom??process.env.SMTP_FROM!;
+  const security=createAuthSecurity(db,mail,from,options.baseURL);
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: 'pg',
@@ -29,10 +38,23 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
     }),
     baseURL: options.baseURL,
     secret: options.secret,
-    disabledPaths: ['/get-access-token', '/refresh-token'],
+    disabledPaths: ['/get-access-token', '/refresh-token','/set-password'],
+    logger:{disabled:true},
+    plugins:[security.plugin],
+    hooks:{before:security.before},
+    rateLimit:{enabled:true,window:60,max:100,customRules:{'/sign-in/email':{window:60,max:5},'/sign-up/email':{window:60,max:5},'/send-verification-email':{window:60,max:3},'/request-password-reset':{window:60,max:3},'/fg/password-challenge':{window:60,max:3}}},
+    databaseHooks:{session:{create:{before:async session=>{if(await security.banned(session.userId))throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});}}}},
     emailAndPassword: {
-      enabled: false,
+      enabled: true,requireEmailVerification:true,autoSignIn:false,minPasswordLength:12,maxPasswordLength:128,resetPasswordTokenExpiresIn:3600,revokeSessionsOnPasswordReset:true,
+      sendResetPassword:async({user,url})=>{await sendAuthMail(mail,from,user.email,'RESET',url);},
     },
+    emailVerification:{expiresIn:86400,sendOnSignUp:true,sendOnSignIn:false,autoSignInAfterVerification:false,sendVerificationEmail:async({user,url})=>{
+      // Native JWTs without a nonce can repeat within a second on resend.
+      // Keep Better Auth signing/validation while making each mailed link unique.
+      const token=await createEmailVerificationToken(options.secret,user.email,undefined,86400,{jti:randomUUID()});
+      const link=new URL(url);link.searchParams.set('token',token);
+      await security.recordEmailToken(user.id,token);await sendAuthMail(mail,from,user.email,'VERIFY',link.toString());
+    }},
     socialProviders: {
       discord: {
         clientId: options.discordClientId,
@@ -47,6 +69,8 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
     },
     advanced: {
       useSecureCookies: isHttps,
+      disableOriginCheck:false,
+      disableCSRFCheck:false,
     },
   });
 }
@@ -217,10 +241,6 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
         )
       );
 
-    if (!discordAccount) {
-      throw new Error(`Discord account identity missing for user: ${userId}`);
-    }
-
     const [profile] = await this.db
       .select()
       .from(schema.profiles)
@@ -239,7 +259,7 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       avatarUrl: profile ? profile.avatarUrl : (dbUser.image ?? null),
       email: dbUser.email,
       emailVerified: dbUser.emailVerified,
-      discordId: discordAccount.accountId,
+      discordId: discordAccount?.accountId??null,
       customStatus: profile?.customStatus || 'JUST_CHATTING',
       createdAt: dbUser.createdAt.toISOString(),
       updatedAt: dbUser.updatedAt.toISOString(),

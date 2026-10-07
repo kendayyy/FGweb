@@ -144,13 +144,6 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
         )
       );
 
-    if (!discordAccount) {
-      throw new NotFoundException({
-        code: ErrorCode.NOT_FOUND,
-        message: `Discord identity missing for user: ${userId}`,
-      });
-    }
-
     const [profile] = await this.db
       .select()
       .from(schema.profiles)
@@ -193,7 +186,7 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
       gameProfiles,
       createdAt: dbUser.createdAt.toISOString(),
       email: dbUser.email,
-      discordId: discordAccount.accountId,
+      discordId: discordAccount?.accountId??null,
       emailVerified: dbUser.emailVerified,
     };
 

@@ -1,0 +1,199 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:7668) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.error
+    2026-10-07T06:47:57.244Z ERROR [Better Auth]: Reset password isn't enabled.Please pass an emailAndPassword.sendResetPassword function in your auth config!
+
+      at LogFunc (../../node_modules/@better-auth/core/dist/env/logger.mjs:64:35)
+      at Object.error (../../node_modules/@better-auth/core/dist/env/logger.mjs:72:82)
+      at ../../node_modules/better-auth/dist/api/routes/password.mjs:52:22
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:55
+      at runWithEndpointContext (../../node_modules/@better-auth/core/dist/context/endpoint-context.mjs:45:53)
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:11
+      at internalHandler (../../node_modules/better-call/src/endpoint.ts:626:20)
+      at ../../node_modules/better-auth/dist/api/dispatch.mjs:231:18
+      at processRequest (../../node_modules/better-call/src/router.ts:260:11)
+      at handler (../../node_modules/better-call/src/router.ts:301:16)
+      at ../../node_modules/@better-auth/core/dist/context/transaction.mjs:37:13
+      at Server.<anonymous> (../../node_modules/better-call/src/adapters/node/index.ts:12:27)
+
+  console.error
+    2026-10-07T06:47:57.313Z ERROR [Better Auth]: Verification email isn't enabled.
+
+      at LogFunc (../../node_modules/@better-auth/core/dist/env/logger.mjs:64:35)
+      at Object.error (../../node_modules/@better-auth/core/dist/env/logger.mjs:72:82)
+      at ../../node_modules/better-auth/dist/api/routes/email-verification.mjs:93:22
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:55
+      at runWithEndpointContext (../../node_modules/@better-auth/core/dist/context/endpoint-context.mjs:45:53)
+      at ../../node_modules/@better-auth/core/dist/api/index.mjs:56:11
+      at internalHandler (../../node_modules/better-call/src/endpoint.ts:626:20)
+      at ../../node_modules/better-auth/dist/api/dispatch.mjs:231:18
+      at processRequest (../../node_modules/better-call/src/router.ts:260:11)
+      at handler (../../node_modules/better-call/src/router.ts:301:16)
+      at ../../node_modules/@better-auth/core/dist/context/transaction.mjs:37:13
+      at Server.<anonymous> (../../node_modules/better-call/src/adapters/node/index.ts:12:27)
+
+FAIL apps/api/test/auth-email.integration.spec.ts (22.855 s)
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › enables verified email auth with explicit password/token policy and disabled unsafe routes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      80 |  afterAll(async()=>{if(server)await new Promise<void>(resolve=>server.close(()=>resolve()));if(sink){sink.transport.close();await sink.close();}if(pool)await pool.end();if(admin){await admin.query(`DROP SCHEMA "${schemaName}" CASCADE`);await admin.end();}});
+      81 |  it('enables verified email auth with explicit password/token policy and disabled unsafe routes',()=>{
+    > 82 |   expect(auth.options.emailAndPassword?.enabled).toBe(true);expect(auth.options.emailAndPassword?.requireEmailVerification).toBe(true);expect(auth.options.emailAndPassword?.minPasswordLength).toBe(12);expect(auth.options.emailAndPassword?.maxPasswordLength).toBe(128);expect(auth.options.emailVerification?.expiresIn).toBe(86400);expect(auth.options.emailAndPassword?.resetPasswordTokenExpiresIn).toBe(3600);expect(auth.options.emailAndPassword?.revokeSessionsOnPasswordReset).toBe(true);expect(auth.options.account?.accountLinking?.enabled).toBe(false);
+         |                                                  ^
+      83 |   expect(auth.options.disabledPaths).toContain('/set-password');expect(auth.options.disabledPaths).toContain('/get-access-token');expect(auth.options.disabledPaths).toContain('/refresh-token');
+      84 |  });
+      85 |  it('creates no pre-verification session, preserves password spaces and salts separately; duplicate is generic',async()=>{
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:82:50)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › creates no pre-verification session, preserves password spaces and salts separately; duplicate is generic
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      58 |  };
+      59 |  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
+    > 60 |  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
+         |                                                                                                                                                ^
+      61 |  const login=async(address:string)=>{const response=await post('/sign-in/email',{email:address,password});expect(response.status).toBe(200);return (response.headers['set-cookie'] as unknown as string[]).map(c=>c.split(';')[0]).join('; ');};
+      62 |  const credential=async(address:string)=>{
+      63 |   const result=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return result.rows[0] as {id:string;email_verified:boolean;password:string};
+
+      at signUp (test/auth-email.integration.spec.ts:60:144)
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:86:47)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › verifies once, rejects replay/expired token and returns nullable email-only owner DTOs
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      58 |  };
+      59 |  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
+    > 60 |  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
+         |                                                                                                                                                ^
+      61 |  const login=async(address:string)=>{const response=await post('/sign-in/email',{email:address,password});expect(response.status).toBe(200);return (response.headers['set-cookie'] as unknown as string[]).map(c=>c.split(';')[0]).join('; ');};
+      62 |  const credential=async(address:string)=>{
+      63 |   const result=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return result.rows[0] as {id:string;email_verified:boolean;password:string};
+
+      at signUp (test/auth-email.integration.spec.ts:60:144)
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:92:25)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › requires valid email/password and rejects unknown identities, short/oversized or actor override requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      58 |  };
+      59 |  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
+    > 60 |  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
+         |                                                                                                                                                ^
+      61 |  const login=async(address:string)=>{const response=await post('/sign-in/email',{email:address,password});expect(response.status).toBe(200);return (response.headers['set-cookie'] as unknown as string[]).map(c=>c.split(';')[0]).join('; ');};
+      62 |  const credential=async(address:string)=>{
+      63 |   const result=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return result.rows[0] as {id:string;email_verified:boolean;password:string};
+
+      at signUp (test/auth-email.integration.spec.ts:60:144)
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:98:25)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › resets once, revokes old sessions, expires links and handles concurrent consumption atomically
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      58 |  };
+      59 |  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
+    > 60 |  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
+         |                                                                                                                                                ^
+      61 |  const login=async(address:string)=>{const response=await post('/sign-in/email',{email:address,password});expect(response.status).toBe(200);return (response.headers['set-cookie'] as unknown as string[]).map(c=>c.split(';')[0]).join('; ');};
+      62 |  const credential=async(address:string)=>{
+      63 |   const result=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return result.rows[0] as {id:string;email_verified:boolean;password:string};
+
+      at signUp (test/auth-email.integration.spec.ts:60:144)
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:104:25)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › requires current password for change and revokes other sessions
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      58 |  };
+      59 |  const verify=async(address:string)=>{const link=lastLink(address);return request().get(`${link.pathname}${link.search}`).set('X-Forwarded-For',`198.51.100.${sequence++}`);};
+    > 60 |  const signUp=async(address:string)=>{const result=await post('/sign-up/email',{name:'FG Gamer',email:address,password});expect(result.status).toBe(200);return result;};
+         |                                                                                                                                                ^
+      61 |  const login=async(address:string)=>{const response=await post('/sign-in/email',{email:address,password});expect(response.status).toBe(200);return (response.headers['set-cookie'] as unknown as string[]).map(c=>c.split(';')[0]).join('; ');};
+      62 |  const credential=async(address:string)=>{
+      63 |   const result=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return result.rows[0] as {id:string;email_verified:boolean;password:string};
+
+      at signUp (test/auth-email.integration.spec.ts:60:144)
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:111:25)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › old Discord verification does not attach password; fresh link bound to current user/session retains identity
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 404
+
+      114 |  });
+      115 |  it('old Discord verification does not attach password; fresh link bound to current user/session retains identity',async()=>{
+    > 116 |   const owner=await discord(),other=await discord();expect((await post('/fg/password-attach',{token:'guess',newPassword:password},owner.cookie)).status).toBe(400);expect((await post('/fg/password-challenge',{},owner.cookie)).status).toBe(200);
+          |                                                                                                                                                          ^
+      117 |   const link=lastLink(owner.address),token=link.searchParams.get('token')!;expect((await post('/fg/password-attach',{token,newPassword:password},other.cookie)).status).toBe(403);
+      118 |   expect((await post('/fg/password-attach',{token,newPassword:password},owner.cookie)).status).toBe(200);expect((await post('/fg/password-attach',{token,newPassword:password},owner.cookie)).status).toBe(400);
+      119 |   const current=await credential(owner.address);expect(current.id).toBe(owner.id);expect((await pool.query('SELECT bio FROM profiles WHERE user_id=$1',[owner.id])).rows[0].bio).toBe('Keep community');expect((await pool.query('SELECT provider_id FROM account WHERE user_id=$1 ORDER BY provider_id',[owner.id])).rows.map(r=>r.provider_id)).toEqual(['credential','discord']);expect((await request().get('/api/auth/fg/password-status').set('Cookie',owner.cookie)).body).toEqual({hasPassword:true});
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:116:154)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › cannot merge or add missing credential through public reset; session revoke/ban/expiry blocks attachment
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      120 |  });
+      121 |  it('cannot merge or add missing credential through public reset; session revoke/ban/expiry blocks attachment',async()=>{
+    > 122 |   const owner=await discord(),mailCount=sink.messages.length;const result=await post('/request-password-reset',{email:owner.address,redirectTo:'/auth/reset'});expect(result.status).toBe(200);expect(sink.messages.length).toBe(mailCount);expect((await pool.query('SELECT id FROM account WHERE user_id=$1 AND provider_id=$2',[owner.id,'credential'])).rowCount).toBe(0);
+          |                                                                                                                                                                                      ^
+      123 |   expect((await post('/fg/password-challenge',{})).status).toBe(401);await post('/fg/password-challenge',{},owner.cookie);const token=lastLink(owner.address).searchParams.get('token')!;
+      124 |   await pool.query('DELETE FROM session WHERE id=$1',[owner.sessionId]);expect((await post('/fg/password-attach',{token,newPassword:password},owner.cookie)).status).toBe(401);
+      125 |   const banned=await discord();await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,created_at) VALUES($1,$2,$2,$3,now())',[randomUUID(),banned.id,'BAN']);expect((await post('/fg/password-challenge',{},banned.cookie)).status).toBe(403);
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:122:182)
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › rate-limits login attempts and mail resend without sending to unknown accounts
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+      126 |  });
+      127 |  it('rate-limits login attempts and mail resend without sending to unknown accounts',async()=>{
+    > 128 |   const unknown=email(),before=sink.messages.length;const response=await post('/send-verification-email',{email:unknown});expect(response.status).toBe(200);expect(sink.messages.length).toBe(before);
+          |                                                                                                                                                   ^
+      129 |   const statuses=[];for(let i=0;i<7;i++)statuses.push((await post('/sign-in/email',{email:unknown,password},undefined,'203.0.113.90')).status);expect(statuses).toContain(429);expect(statuses.filter(s=>s===401).length).toBeGreaterThan(0);
+      130 |  });
+      131 | });
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:128:147)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 9 total
+Snapshots:   0 total
+Time:        23.262 s
+Ran all test suites matching apps/api/test/auth-email.integration.spec.ts.

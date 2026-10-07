@@ -608,7 +608,9 @@ describe('T08 - Discord Auth, Session Guard & Security (Integration)', () => {
   it('disables automatic account linking by email', async () => {
     const authConfig = authService.getAuthConfig();
     expect(authConfig.account?.accountLinking?.enabled).toBe(false);
-    expect(authConfig.emailAndPassword?.enabled).toBe(false);
+    // AUTH-CHANGE-02 supersedes the Discord-only policy; retain OAuth defenses.
+    expect(authConfig.emailAndPassword?.enabled).toBe(true);
+    expect(authConfig.emailAndPassword?.requireEmailVerification).toBe(true);
   });
 
   it('handles POST /api/auth/sign-in/social with JSON payload, returns Discord OAuth URL with state, and rejects invalid Origin', async () => {

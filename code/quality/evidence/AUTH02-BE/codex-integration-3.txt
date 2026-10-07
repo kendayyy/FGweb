@@ -1,0 +1,28 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:11848) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-email.integration.spec.ts (32.634 s)
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › requires valid email/password and rejects unknown identities, short/oversized or actor override requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 403
+
+       99 |   expect((await post('/sign-in/email',{email:address,password:'wrong-password'})).status).toBe(401);expect((await post('/sign-in/email',{email:email(),password})).status).toBe(401);
+      100 |   for(const invalid of ['short','x'.repeat(129)])expect((await post('/sign-up/email',{name:'FG',email:email(),password:invalid})).status).toBe(400);
+    > 101 |   expect((await post('/sign-in/email',{email:address,password,userId:'forged'})).status).toBe(400);expect((await post('/sign-up/email',{name:'FG',email:email(),password,callbackURL:'https://evil.example/'})).status).toBe(400);
+          |                                                                                                                                                                                                                         ^
+      102 |  });
+      103 |  it('resets once, revokes old sessions, expires links and handles concurrent consumption atomically',async()=>{
+      104 |   const address=email();await signUp(address);await verify(address);const cookie=await login(address);
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:101:217)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        33.017 s
+Ran all test suites matching apps/api/test/auth-email.integration.spec.ts.

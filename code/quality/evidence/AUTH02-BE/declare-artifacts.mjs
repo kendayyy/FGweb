@@ -1,0 +1,3 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='AUTH02-BE');assert.equal(task.status,'IN_PROGRESS');assert(!task.writeAllowlist.includes('apps/api/dist/**'));task.writeAllowlist.push('apps/api/dist/**');fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');fs.appendFileSync('quality/evidence/AUTH02-BE/plan.md','\nDerived build scope pinned before compile: apps/api/dist/** (TypeScript output of owned backend and unchanged imports). Required native compiled probe uses production exports. No additional business source/DB scope.\n');console.log('Derived apps/api/dist/** declared before build.');

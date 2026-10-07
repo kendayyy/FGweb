@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3136) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-email.integration.spec.ts (32.781 s)
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › returns a real delivery error when the SMTP server refuses the recipient and does not forge success
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 200
+
+      160 |   const transport=nodemailer.createTransport({host:'127.0.0.1',port,secure:false,connectionTimeout:1000}),options={baseURL:origin,secret,discordClientId:process.env.DISCORD_CLIENT_ID!,discordClientSecret:process.env.DISCORD_CLIENT_SECRET!,mailTransport:transport,mailFrom:'auth@fixture.invalid'};
+      161 |   const unavailable=http.createServer(toNodeHandler(createFgAuth(db,options)));await new Promise<void>(resolve=>unavailable.listen(0,'127.0.0.1',resolve));
+    > 162 |   try{const result=await supertest(unavailable).post('/api/auth/sign-up/email').set('Origin',origin).send({name:'FG',email:address,password});expect(result.status).toBe(503);expect(result.body.code).toBe('AUTH_EMAIL_UNAVAILABLE');}
+          |                                                                                                                                                                     ^
+      163 |   finally{transport.close();await new Promise<void>(resolve=>unavailable.close(()=>resolve()));}
+      164 |  });
+      165 | });
+
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:162:165)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        33.309 s
+Ran all test suites matching apps/api/test/auth-email.integration.spec.ts.
