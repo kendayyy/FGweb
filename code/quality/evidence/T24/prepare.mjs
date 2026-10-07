@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T24',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T24');
+assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.id==='T23').status,'PASS');
+Object.assign(task,{status:'IN_PROGRESS',startedAt:new Date().toISOString(),inputsHash:{head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim()},writeAllowlist:['apps/api/src/modules/play-sessions/**','apps/api/test/play-sessions.integration.spec.ts',`${dir}/**`]});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):f===p)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,createHash('sha256').update(fs.readFileSync(f)).digest('hex')])),null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T23/record.mjs','utf8').replaceAll('T23','T24'));
+let audit=fs.readFileSync('quality/evidence/T23/audit.mjs','utf8');audit=audit.slice(0,audit.indexOf('const priorApp='));audit=audit.replaceAll('T23','T24').replace('readonly-after-prerequisites.json','readonly.json');fs.writeFileSync(`${dir}/audit.mjs`,audit);
+fs.writeFileSync(`${dir}/test-types.json`,fs.readFileSync('quality/evidence/T23/test-types.json','utf8').replaceAll('invitations.integration.spec.ts','play-sessions.integration.spec.ts'));
+fs.writeFileSync(`${dir}/plan.md`,'# T24 behavioral preflight\n\nSpec4/5 requires manual start, current roster approval, atomic slots, room/call persistence. Own only play-sessions modules, its test/evidence. No locked source edits before approved prerequisite. Start/leave/end contracts exist; member join/queue/approval contracts are absent, AppModule lacks PlaySessionsModule. Prepare real PG HTTP RED tests plus exact proposal before asking to extend contract/AppModule ownership. Reuse join_requests via the play session recruitment and T22 transaction admission; no duplicate consent or new database schema. Host leave behavior question remains optional; recommended host uses end and regular members leave separately, no silent implementation of a new policy.\n');
+console.log('T24 preflight active; locked contracts/AppModule unchanged.');

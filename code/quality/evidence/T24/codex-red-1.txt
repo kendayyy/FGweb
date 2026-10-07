@@ -1,0 +1,160 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3220) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/play-sessions.integration.spec.ts (28.339 s)
+  ● T24 real invitation consent and delegated permissions › member request in a private room with closed recruitment waits for exact manager approval
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › clock does not start a scheduled team; manual start allocates all roster slots atomically and retries safely
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › scheduled start conflict rolls back the entire team and preserves the other active team and pending requests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › two scheduled starts competing for one user commit only one complete active team
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › leaving roster releases only the caller slot while keeping room/chat/call and other roster members
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › end is idempotent, closes recruitment and releases slots without deleting room/call/chat or historical roster
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › spectating does not grant roster or slots and nonmanagers cannot start/end/approve
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › private session membership, guest auth, forged actors and cross-session request identity are enforced
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › last roster seat approval is atomic and rejection/retries do not grant seats
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+  ● T24 real invitation consent and delegated permissions › end prevents pending member admission and a later start never resurrects an ended session
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      28 |   const connection=new URL(env.DATABASE_URL!);connection.searchParams.set('options',`-c search_path=${owned}`);
+      29 |   pool=new pg.Pool({connectionString:connection.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});
+    > 30 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      31 |   schemaCreated=true;
+      32 |   const db=await pool.connect();
+      33 |   try{await migrate(drizzle(db),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});}finally{db.release();}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:30:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       10 failed, 10 total
+Snapshots:   0 total
+Time:        29.593 s
+Ran all test suites matching apps/api/test/play-sessions.integration.spec.ts.

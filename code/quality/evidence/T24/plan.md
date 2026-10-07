@@ -1,0 +1,7 @@
+# T24 behavioral preflight
+
+Spec4/5 requires manual start, current roster approval, atomic slots, room/call persistence. Own only play-sessions modules, its test/evidence. No locked source edits before approved prerequisite. Start/leave/end contracts exist; member join/queue/approval contracts are absent, AppModule lacks PlaySessionsModule. Prepare real PG HTTP RED tests plus exact proposal before asking to extend contract/AppModule ownership. Reuse join_requests via the play session recruitment and T22 transaction admission; no duplicate consent or new database schema. Host leave behavior question remains optional; recommended host uses end and regular members leave separately, no silent implementation of a new policy.
+
+## Resume after prerequisite
+
+T03-FIX11 PASS e0b1d2f under prior human broad write/locked-file grants, recorded in authorization.json. Exact AppModule import/register only; all other implementation inside play-sessions/. Optional host question received no choice after reasonable opportunity; stated recommended default from spec's explicit host end: host leave409 directing explicit end, regular player leave independent. No automatic end/host succession. Eleven primary HTTP/PG behaviors were RED before implementation; five further review cases cover banned/removed reservations, notification dedup, host default, session expiry and helper grant revocation while blocked on a real room lock. Call-leave fixture checks database lifecycle independence only; actual voice admission/media belong to T26 onward. No media/load claim.

@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T24',hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+const records=['gate-1','gate-2','lifecycle-3','regression-1','native-1','build-1','test-types-2','lint-final-1','audit-final-1','diff-final-1'].map(l=>JSON.parse(fs.readFileSync(`${dir}/codex-${l}.json`)));
+for(const r of records){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert.equal(JSON.parse(fs.readFileSync(`${dir}/codex-red-3.json`)).exitCode,1);
+assert(fs.readFileSync(`${dir}/codex-red-3.txt`,'utf8').includes('11 failed, 11 total'));
+assert(fs.readFileSync(`${dir}/codex-lifecycle-3.txt`,'utf8').includes('16 passed, 16 total'));
+const regression=fs.readFileSync(`${dir}/codex-regression-1.txt`,'utf8');assert(regression.includes('216 passed, 216 total'));
+fs.writeFileSync(`${dir}/review.md`,'# T24 Codex review: PASS\n\n16 real PostgreSQL/HTTP cases and216 full API tests PASS;11 primary cases observed missing endpoint404 RED before implementation. Native compiled AppModule probe passes private member approval/reservation/manual start/leave/idempotent end. Room lock then sorted users and play/request locks match T22/T23 admission order; room/roles/grants/session freshness rechecked after wait and before commit, with actual expiry/revocation lock tests. Start reserves no slot merely by clock arrival; full reserved roster allocates atomically, competing starts commit only one team, conflict/ban/removed member rolls back entire start and preserves other sessions. Existing TeamsService transaction/admit reused; no frozen team/invitation/DB source edit. Leave/end preserve room/chat/call; end preserves historical roster, closes cards/cancels pending requests and prevents resurrection. Private/closed-card member queue requires current exact management rights; strict shared bodies reject forged actor and cross-session request. Durable validated request/result notifications dedup in transaction; delivery not claimed. Host explicit-end recommendation used as stated optional default; regular players leave independently, no automatic host succession/end. RED1 was service-offline, later failed ban fixture used wrong column corrected to existing actor_id without lowering assertions; failures preserved. Build/test source types/lint, six baselines/all predecessor/read-only/secrets scope and exact two-line AppModule wiring audit PASS. Call-leave fixture proves DB lifecycle independence only; actual voice/live and1000 media load remain later tasks, not verified here.\n');
+fs.writeFileSync(`${dir}/final-verification.json`,JSON.stringify({task:'T24',tests:16,regressionTests:216,checks:records,failedRunsPreserved:true,realCompiledApp:true,realPostgres:true,mediaLoadVerified:false},null,2)+'\n');
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name).replaceAll('\\','/')]);
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T24'),evidence=walk(dir);
+assert.equal(task.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.id==='T03-FIX11').status,'PASS');
+const outputs=[...walk('apps/api/src/modules/play-sessions'),'apps/api/test/play-sessions.integration.spec.ts','apps/api/src/app.module.ts',...evidence];
+Object.assign(task,{status:'PASS',completedAt:new Date().toISOString(),commands:records,evidencePaths:evidence,blockers:[],outputsHash:{specSha256:hash('../.doc/01-product-spec.md'),files:Object.fromEntries(outputs.map(f=>[f,hash(f)]))}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','| Manual scheduled start/atomic whole roster; private member approval; distinct leave/end/room/call; live ACL/session recheck; notification dedup | T24 |16 PG/HTTP tests,216 API regression,native compiled probe,build,types,lint,strict scope audit | PASS; media not claimed |\n');
+console.log('T24 PASS; T25 next.');

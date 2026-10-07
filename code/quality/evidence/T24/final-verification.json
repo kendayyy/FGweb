@@ -1,0 +1,111 @@
+{
+  "task": "T24",
+  "tests": 16,
+  "regressionTests": 216,
+  "checks": [
+    {
+      "command": "node scripts/verify-task.mjs T24 apps/api/test/play-sessions.integration.spec.ts quality/evidence/T24/plan.md",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:37:03.989Z",
+      "completedAt": "2026-10-07T05:37:19.729Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node scripts/verify-task.mjs T24 apps/api/src/app.module.ts apps/api/test/play-sessions.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:51:14.448Z",
+      "completedAt": "2026-10-07T05:51:21.266Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-gate-2.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/play-sessions.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:56:49.811Z",
+      "completedAt": "2026-10-07T05:57:26.246Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-lifecycle-3.txt",
+      "evidenceSha256": "3922c9bb71f04e4b830b63873cc0d3b2d7b2658344d6d09b96701370d7916e3e"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:58:41.252Z",
+      "completedAt": "2026-10-07T06:02:26.758Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-regression-1.txt",
+      "evidenceSha256": "d1425f8f9bc7b5495bc9680ebfdafae108939f50105f4d086a2fdb9aa35bf741"
+    },
+    {
+      "command": "node quality/evidence/T24/native-review.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:58:03.418Z",
+      "completedAt": "2026-10-07T05:58:15.178Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-native-1.txt",
+      "evidenceSha256": "d8ffe505a2c590133f71755ecdfdc8308def65b8d4416848479dc53594bdffde"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T05:57:45.973Z",
+      "completedAt": "2026-10-07T05:57:57.652Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/T24/test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T06:02:31.978Z",
+      "completedAt": "2026-10-07T06:02:45.627Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-test-types-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/api/src/modules/play-sessions apps/api/src/app.module.ts apps/api/test/play-sessions.integration.spec.ts quality/evidence/T24",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T06:03:04.201Z",
+      "completedAt": "2026-10-07T06:03:07.584Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-lint-final-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T24/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T06:03:16.000Z",
+      "completedAt": "2026-10-07T06:03:24.536Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-audit-final-1.txt",
+      "evidenceSha256": "4f8964a076a003600f6c8ea062d612d72688004df4800335d729fca9ac5b67b1"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T06:03:29.351Z",
+      "completedAt": "2026-10-07T06:03:29.448Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T24/codex-diff-final-1.txt",
+      "evidenceSha256": "172b3f0a4665cd2cf9e5c33a138580249a91e035f860e6fb1c76147a5133d817"
+    }
+  ],
+  "failedRunsPreserved": true,
+  "realCompiledApp": true,
+  "realPostgres": true,
+  "mediaLoadVerified": false
+}

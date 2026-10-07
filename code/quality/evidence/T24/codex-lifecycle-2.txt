@@ -1,0 +1,24 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:11848) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/play-sessions.integration.spec.ts (34.309 s)
+  ● T24 real play session lifecycle and roster approval › banned or removed reserved members abort start without partial slots
+
+    error: column "admin_id" of relation "admin_actions" does not exist
+
+      155 |  it('banned or removed reserved members abort start without partial slots',async()=>{
+      156 |   const t=await team();await reserve(t);
+    > 157 |   await pool.query("INSERT INTO admin_actions(id,admin_id,target_user_id,action) VALUES('reserve-ban','owner-b','recipient','BAN')");
+          |   ^
+      158 |   expect((await post(`play-sessions/${t.playSessionId}/start`)).status).toBe(403);expect(await slots('owner-a')).toBe(0);expect(await slots('recipient')).toBe(0);
+      159 |   await pool.query("DELETE FROM admin_actions WHERE id='reserve-ban'");await pool.query('DELETE FROM room_members WHERE room_id=$1 AND user_id=$2',[t.roomId,'recipient']);
+      160 |   expect((await post(`play-sessions/${t.playSessionId}/start`)).status).toBe(403);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:157:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 15 passed, 16 total
+Snapshots:   0 total
+Time:        34.707 s, estimated 42 s
+Ran all test suites matching apps/api/test/play-sessions.integration.spec.ts.

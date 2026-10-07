@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const dir='quality/evidence/T24',ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const task=ledger.tasks.find(t=>t.id==='T24'),fix=ledger.tasks.find(t=>t.id==='T03-FIX11');
+assert.equal(task.status,'BLOCKED');assert.equal(fix.status,'PASS');
+const hash=f=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+for(const [f,h]of Object.entries(JSON.parse(fs.readFileSync(`${dir}/readonly.json`))))assert.equal(hash(f),fix.outputsHash.files[f]??h,f);
+const allow=f=>task.writeAllowlist.some(p=>p.endsWith('/**')?f.startsWith(p.slice(0,-2)):p===f)||['quality/tasks.json','quality/spec-coverage.md'].includes(f);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+fs.writeFileSync(`${dir}/readonly-after-prerequisite.json`,JSON.stringify(Object.fromEntries(files.filter(f=>!allow(f)).map(f=>[f,hash(f)])),null,2)+'\n');
+Object.assign(task,{status:'IN_PROGRESS',blockers:[],inputsHash:{...task.inputsHash,resumedHead:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),approvedPrerequisites:['T03-FIX11'],authorization:'quality/evidence/T24/authorization.json'}});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+let audit=fs.readFileSync(`${dir}/audit.mjs`,'utf8').replace("`${dir}/readonly.json`","`${dir}/readonly-after-prerequisite.json`");
+audit+=`\nconst priorApp=execFileSync('git',['show',ledger.tasks.find(t=>t.id==='T24').inputsHash.resumedHead+':code/apps/api/src/app.module.ts'],{encoding:'utf8'});\nconst expectedApp=priorApp.replace("import { InvitationsModule } from './modules/invitations/invitations.module.js';","import { InvitationsModule } from './modules/invitations/invitations.module.js';\\nimport { PlaySessionsModule } from './modules/play-sessions/play-sessions.module.js';").replace('TeamsModule, InvitationsModule]','TeamsModule, InvitationsModule, PlaySessionsModule]');\nassert.equal(fs.readFileSync('apps/api/src/app.module.ts','utf8'),expectedApp,'Only exact PlaySessionsModule import/register authorized');\n`;
+fs.writeFileSync(`${dir}/audit.mjs`,audit);
+console.log('T24 resumed after T03-FIX11 PASS; baseline/read-only changes checked against exact prerequisite outputs.');

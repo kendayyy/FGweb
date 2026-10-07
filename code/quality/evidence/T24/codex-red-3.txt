@@ -1,0 +1,202 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6236) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/play-sessions.integration.spec.ts (37.27 s)
+  ● T24 real play session lifecycle and roster approval › member request in a private room with closed recruitment waits for exact manager approval
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      85 |   const t=await team();await member(t.roomId);
+      86 |   expect((await request(base).patch(`/api/v1/rooms/${t.roomId}/settings`).set('Cookie',cookies['owner-a']).set('Origin',origin).send({visibility:'PRIVATE'})).status).toBe(200);
+    > 87 |   const r=await join(t.playSessionId);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');expect(await roster(t.playSessionId)).toEqual(['owner-a']);
+         |                                                        ^
+      88 |   expect((await get(`play-sessions/${t.playSessionId}/requests`)).body.map((x:{id:string})=>x.id)).toContain(r.body.id);
+      89 |   expect((await get(`play-sessions/${t.playSessionId}/requests`,'recipient')).status).toBe(403);
+      90 |   expect((await respond(t.playSessionId,r.body.id)).status).toBe(201);expect(await roster(t.playSessionId)).toEqual(['owner-a','recipient']);expect(await slots('recipient')).toBe(0);
+
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:87:56)
+
+  ● T24 real play session lifecycle and roster approval › clock does not start a scheduled team; manual start allocates all roster slots atomically and retries safely
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:93:24)
+
+  ● T24 real play session lifecycle and roster approval › scheduled start conflict rolls back the entire team and preserves the other active team and pending requests
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:102:32)
+
+  ● T24 real play session lifecycle and roster approval › two scheduled starts competing for one user commit only one complete active team
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:109:48)
+
+  ● T24 real play session lifecycle and roster approval › leaving roster releases only the caller slot while keeping room/chat/call and other roster members
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:115:24)
+
+  ● T24 real play session lifecycle and roster approval › end is idempotent, closes recruitment and releases slots without deleting room/call/chat or historical roster
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:122:24)
+
+  ● T24 real play session lifecycle and roster approval › spectating does not grant roster or slots and nonmanagers cannot start/end/approve
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      130 |  it('spectating does not grant roster or slots and nonmanagers cannot start/end/approve',async()=>{
+      131 |   const t=await team();await member(t.roomId,'helper');await member(t.roomId);expect((await put(`rooms/${t.roomId}/helpers/helper`,'owner-a',{permissions:['MANAGE_CALLS']})).status).toBe(200);
+    > 132 |   expect(await slots('recipient')).toBe(0);expect(await roster(t.playSessionId)).toEqual(['owner-a']);const req=await join(t.playSessionId);expect(req.status).toBe(201);
+          |                                                                                                                                                                ^
+      133 |   for(const action of ['start','end'])expect((await post(`play-sessions/${t.playSessionId}/${action}`,'helper')).status).toBe(403);
+      134 |   expect((await respond(t.playSessionId,req.body.id,'helper')).status).toBe(403);
+      135 |   expect((await put(`rooms/${t.roomId}/helpers/helper`,'owner-a',{permissions:['MANAGE_RECRUITMENT']})).status).toBe(200);expect((await respond(t.playSessionId,req.body.id,'helper')).status).toBe(201);expect((await post(`play-sessions/${t.playSessionId}/start`,'helper')).status).toBe(201);
+
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:132:160)
+
+  ● T24 real play session lifecycle and roster approval › private session membership, guest auth, forged actors and cross-session request identity are enforced
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      136 |  });
+      137 |  it('private session membership, guest auth, forged actors and cross-session request identity are enforced',async()=>{
+    > 138 |   const a=await team(),b=await team('owner-b');await member(a.roomId);const req=await join(a.playSessionId);expect(req.status).toBe(201);
+          |                                                                                                                                ^
+      139 |   expect((await join(a.playSessionId,'outsider')).status).toBe(403);expect((await request(base).post(`/api/v1/play-sessions/${a.playSessionId}/join`).set('Origin',origin).send({})).status).toBe(401);
+      140 |   expect((await post(`play-sessions/${a.playSessionId}/join`,'recipient',{userId:'second'})).status).toBe(422);expect((await post(`play-sessions/${a.playSessionId}/start`,'owner-a',{userId:'owner-b'})).status).toBe(422);
+      141 |   expect((await respond(b.playSessionId,req.body.id,'owner-b')).status).toBe(422);expect((await pool.query('SELECT status FROM join_requests WHERE id=$1',[req.body.id])).rows[0].status).toBe('PENDING');
+
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:138:128)
+
+  ● T24 real play session lifecycle and roster approval › last roster seat approval is atomic and rejection/retries do not grant seats
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      142 |  });
+      143 |  it('last roster seat approval is atomic and rejection/retries do not grant seats',async()=>{
+    > 144 |   const t=await team('owner-a',true,2);await member(t.roomId);await member(t.roomId,'second');const a=await join(t.playSessionId),b=await join(t.playSessionId,'second');expect(a.status).toBe(201);expect(b.status).toBe(201);
+          |                                                                                                                                                                                           ^
+      145 |   const results=await Promise.all([respond(t.playSessionId,a.body.id),respond(t.playSessionId,b.body.id)]);expect(results.map(r=>r.status).sort()).toEqual([201,409]);expect((await roster(t.playSessionId)).length).toBe(2);
+      146 |   const loser=results[0].status===409?a:b;expect((await respond(t.playSessionId,loser.body.id,'owner-a','REJECT')).body.status).toBe('REJECTED');expect((await respond(t.playSessionId,loser.body.id,'owner-a','REJECT')).body.status).toBe('REJECTED');expect((await respond(t.playSessionId,loser.body.id)).status).toBe(409);
+      147 |  });
+
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:144:187)
+
+  ● T24 real play session lifecycle and roster approval › leaving a call does not remove roster or release an active game slot
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      76 |  const respond=(play:string,id:string,user='owner-a',action='ACCEPT')=>post(`play-sessions/${play}/requests/${id}/respond`,user,{action});
+      77 |  async function reserve(t:{roomId:string;playSessionId:string},user='recipient'){
+    > 78 |   await member(t.roomId,user);const r=await join(t.playSessionId,user);expect(r.status).toBe(201);expect(r.body.status).toBe('PENDING');
+         |                                                                                         ^
+      79 |   const accepted=await respond(t.playSessionId,r.body.id);expect(accepted.status).toBe(201);expect(accepted.body.status).toBe('ACCEPTED');return r.body.id as string;
+      80 |  }
+      81 |  const slots=async(user:string)=>(await pool.query('SELECT user_id FROM active_play_slots WHERE user_id=$1',[user])).rowCount;
+
+      at reserve (test/play-sessions.integration.spec.ts:78:89)
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:149:24)
+
+  ● T24 real play session lifecycle and roster approval › end prevents pending member admission and a later start never resurrects an ended session
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      154 |  });
+      155 |  it('end prevents pending member admission and a later start never resurrects an ended session',async()=>{
+    > 156 |   const t=await team();await member(t.roomId);const req=await join(t.playSessionId);expect(req.status).toBe(201);expect((await post(`play-sessions/${t.playSessionId}/end`)).status).toBe(201);
+          |                                                                                                        ^
+      157 |   expect((await respond(t.playSessionId,req.body.id)).status).toBe(409);expect((await post(`play-sessions/${t.playSessionId}/start`)).status).toBe(409);expect((await join(t.playSessionId)).status).toBe(409);
+      158 |   expect(TeamSnapshotSchema.parse((await get(`play-sessions/${t.playSessionId}`)).body).playSession.state).toBe('ENDED');
+      159 |  });
+
+      at Object.<anonymous> (test/play-sessions.integration.spec.ts:156:104)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 11 total
+Snapshots:   0 total
+Time:        37.792 s, estimated 57 s
+Ran all test suites matching apps/api/test/play-sessions.integration.spec.ts.

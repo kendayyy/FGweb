@@ -10,8 +10,9 @@ import { RoomsModule } from './modules/rooms/rooms.module.js';
 import { RecruitmentsModule } from './modules/recruitments/recruitments.module.js';
 import { TeamsModule } from './modules/teams/teams.module.js';
 import { InvitationsModule } from './modules/invitations/invitations.module.js';
+import { PlaySessionsModule } from './modules/play-sessions/play-sessions.module.js';
 
 @Module({
-  imports: [AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule],
+  imports: [AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule, PlaySessionsModule],
 })
 export class AppModule {}
