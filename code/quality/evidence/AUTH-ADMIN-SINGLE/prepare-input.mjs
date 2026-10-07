@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {parseEnv} from 'node:util';
+const file='.runtime/auth-admin/admin-input.env',local=parseEnv(fs.readFileSync('.env.local','utf8'));
+assert(!fs.existsSync(file),'Preserve existing private admin input');
+assert(local.SMTP_USER&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(local.SMTP_USER),'Local owner email is unavailable; do not invent a recipient');
+fs.mkdirSync('.runtime/auth-admin',{recursive:true});
+fs.writeFileSync(file,`# Server-only ignored input; never paste password into chat/repo/logs.\n# Password:8–128 Unicode code points;one uppercase Lu and one special P/S.\n# Keep password inside quotes to preserve spaces and # characters.\nFG_ADMIN_USER_ID=${randomUUID()}\nFG_ADMIN_EMAIL=${local.SMTP_USER}\nFG_ADMIN_INITIAL_PASSWORD=""\n`,{flag:'wx'});
+console.log(JSON.stringify({file,userIdPrepared:true,localOwnerEmailPrepared:true,passwordProvided:false,accountCreated:false,adminRightsGranted:false}));

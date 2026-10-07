@@ -1,0 +1,42 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:15688) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-admin.integration.spec.ts (30.997 s)
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › logs the reserved alias into only the configured verified credential identity and returns native cookies
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      126 |  it('logs the reserved alias into only the configured verified credential identity and returns native cookies',async()=>{
+      127 |   const owner=await existing('kingame'),other=await existing('Ordinary');process.env.ADMIN_USER_IDS=owner.id;
+    > 128 |   const logged=await post('/fg/sign-in/admin',{username:'kingame',password});expect(logged.status).toBe(200);expect(logged.body.user.id).toBe(owner.id);expect(logged.body.user).not.toHaveProperty('password');
+          |                                                                                                                                      ^
+      129 |   const session=await supertest(server).get('/api/auth/get-session').set('Cookie',cookie(logged));expect(session.body.user.id).toBe(owner.id);expect(await service.isUserAdmin(session.body.user.id)).toBe(true);
+      130 |   expect((await post('/fg/sign-in/admin',{username:'kingame',password:'wrong'})).status).toBe(401);
+      131 |   expect((await post('/fg/sign-in/admin',{username:'kingame',password,userId:other.id})).status).toBe(400);
+
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:128:134)
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › rate limits the alias and enforces logout/revoke/ban without trusting an old session
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      80 |  const email=()=>`admin-${randomUUID()}@fixture.invalid`;
+      81 |  const post=(path:string,body:object,cookie?:string,ip?:string)=>{const req=supertest(server).post(`/api/auth${path}`).set('Origin',origin).set('X-Forwarded-For',ip??`198.51.100.${sequence++}`);if(cookie)req.set('Cookie',cookie);return req.send(body);};
+    > 82 |  const cookie=(response:supertest.Response)=>(response.headers['set-cookie'] as unknown as string[]).map(value=>value.split(';')[0]).join('; ');
+         |                                                                                                      ^
+      83 |  const verify=async(address:string)=>{const text=sink.messages.filter(m=>m.to===address).at(-1)?.text??'',link=new URL(text.match(/https?:\/\/[^\s<>]+/)![0]);const result=await supertest(server).get('/api/auth/verify-email').query({token:link.searchParams.get('token')});expect(result.status).toBe(200);};
+      84 |  const stored=async(address:string)=>{const rows=await pool.query('SELECT u.id,u.email_verified,a.password FROM "user" u JOIN account a ON a.user_id=u.id WHERE u.email=$1 AND a.provider_id=$2',[address,'credential']);return rows.rows[0] as {id:string;email_verified:boolean;password:string};};
+      85 |  const existing=async(name:string,pass=password)=>{const id=randomUUID(),address=email(),hash=await hashPassword(pass);await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,name,address]);await pool.query('INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,$3,$2,$4,now(),now())',[randomUUID(),id,'credential',hash]);return{id,address,hash};};
+
+      at cookie (test/auth-admin.integration.spec.ts:82:102)
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:140:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 10 passed, 12 total
+Snapshots:   0 total
+Time:        31.477 s
+Ran all test suites matching apps/api/test/auth-admin.integration.spec.ts.

@@ -1,3 +1,4 @@
+import {hashFgPassword} from '../src/modules/auth/auth-password.js';
 import { NestFactory } from '@nestjs/core';
 import { INestApplication, Controller, Get, Post, UseGuards, Module, HttpCode } from '@nestjs/common';
 import supertest from 'supertest';
@@ -399,7 +400,7 @@ describe('T08 - Discord Auth, Session Guard & Security (Integration)', () => {
     // Admin user (matching ADMIN_USER_IDS = admin_user_id_123)
     await db.insert(schema.user).values({
       id: adminUserId,
-      name: 'Admin User',
+      name: 'kingame',
       email: 'real_admin@fg.vn',
       emailVerified: true,
       createdAt: now,
@@ -413,6 +414,8 @@ describe('T08 - Discord Auth, Session Guard & Security (Integration)', () => {
       createdAt: now,
       updatedAt: now,
     });
+
+    await db.insert(schema.account).values({ id: 'sole_admin_credential', accountId: adminUserId, providerId: 'credential', userId: adminUserId, password: await hashFgPassword('Fixture!Credential8'), createdAt: now, updatedAt: now });
 
     const regCookie = await createSignedSessionCookie(secret, regSessionToken);
     const adminCookie = await createSignedSessionCookie(secret, adminSessionToken);
@@ -432,7 +435,7 @@ describe('T08 - Discord Auth, Session Guard & Security (Integration)', () => {
     expect(res.body).toEqual({ admin: true });
   });
 
-  it('grants admin only when the authenticated user owns an allowlisted Discord identity', async () => {
+  it('denies admin even when the authenticated user owns the legacy Discord allowlisted identity', async () => {
     const userId = `discord_admin_${Date.now()}`;
     const token = `discord_admin_session_${Date.now()}`;
     const now = new Date();
@@ -445,7 +448,7 @@ describe('T08 - Discord Auth, Session Guard & Security (Integration)', () => {
       process.env.ADMIN_DISCORD_IDS = 'someone_else';
       await supertest(app.getHttpServer()).get('/api/v1/admin/test').set('Cookie', cookie).expect(403);
       process.env.ADMIN_DISCORD_IDS = 'allowlisted_discord_identity';
-      await supertest(app.getHttpServer()).get('/api/v1/admin/test').set('Cookie', cookie).expect(200);
+      await supertest(app.getHttpServer()).get('/api/v1/admin/test').set('Cookie', cookie).expect(403);
     } finally {
       if (savedDiscordIds === undefined) delete process.env.ADMIN_DISCORD_IDS;
       else process.env.ADMIN_DISCORD_IDS = savedDiscordIds;

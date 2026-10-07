@@ -1,0 +1,575 @@
+{
+  "task": "AUTH-ADMIN-SINGLE",
+  "status": "PASS",
+  "verifiedLocal": {
+    "contracts": 108,
+    "api": 245,
+    "apiSuites": 15,
+    "web": 152,
+    "webFiles": 12,
+    "headedE2E": 4
+  },
+  "commands": [
+    {
+      "command": "node scripts/verify-task.mjs AUTH-ADMIN-SINGLE packages/contracts/src/auth.ts packages/contracts/src/index.ts apps/api/src/modules/auth/auth.service.ts apps/web/src/features/auth/LoginForm.tsx .env.local",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T08:50:39.293Z",
+      "completedAt": "2026-10-07T08:50:46.485Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-gate-1.txt",
+      "evidenceSha256": "13057d6481ab0660733161ed894fc40bdabfb017024d44d8f5b4a31e17c99354"
+    },
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --project contracts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:03:48.331Z",
+      "completedAt": "2026-10-07T09:03:54.173Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-contracts-green-1.txt",
+      "evidenceSha256": "7e9779685d00b5c38360700372c3d2cc29b8fd8f2f23c49329132e28efed2c12"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p packages/contracts/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:04:39.895Z",
+      "completedAt": "2026-10-07T09:04:46.128Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-contracts-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:20:27.534Z",
+      "completedAt": "2026-10-07T09:20:39.925Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-api-build-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:26:55.039Z",
+      "completedAt": "2026-10-07T09:30:55.885Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-api-full-regression-1.txt",
+      "evidenceSha256": "cb8ef6917aa8a3879782ff260b49dfa6ca3d33b360c5cba87c67ccebd7fd69cc"
+    },
+    {
+      "command": "node --env-file=.env.local --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/auth-admin.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:35:29.281Z",
+      "completedAt": "2026-10-07T09:36:08.705Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-provision-race-collision-1.txt",
+      "evidenceSha256": "565ad7752fa419ae308e24e05ba6205a9e8da89c146a38afa319f4602e29c53b"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:22:15.954Z",
+      "completedAt": "2026-10-07T09:22:23.761Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/AUTH-ADMIN-SINGLE/api-test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:23:41.378Z",
+      "completedAt": "2026-10-07T09:23:52.593Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-api-test-types-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/AUTH-ADMIN-SINGLE/web-test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:22:52.802Z",
+      "completedAt": "2026-10-07T09:23:00.805Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p quality/evidence/AUTH-ADMIN-SINGLE/contract-test-types.json --noEmit",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:37:16.898Z",
+      "completedAt": "2026-10-07T09:37:22.555Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-contracts-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:23:14.431Z",
+      "completedAt": "2026-10-07T09:23:16.945Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-build-1.txt",
+      "evidenceSha256": "7eb19eff5438f928af5259c5aa694dfb2e84c5a9b0c05faa5dd3113717d98857"
+    },
+    {
+      "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/AUTH-ADMIN-SINGLE/playwright.config.ts --headed",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:23:59.318Z",
+      "completedAt": "2026-10-07T09:24:52.185Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-headed-e2e-1.txt",
+      "evidenceSha256": "4326b5a1272ee4887805583a483836e86f44683e4f265d824be1c9cc4020d8ca"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js packages/contracts/src/auth.ts packages/contracts/src/index.ts packages/contracts/test/auth-email.test.ts packages/contracts/test/auth-admin.test.ts apps/api/src/modules/auth apps/api/src/modules/profiles/profiles.service.ts apps/api/test/auth-email.integration.spec.ts apps/api/test/auth-admin.integration.spec.ts apps/api/test/auth.integration.spec.ts apps/web/src/features/auth apps/web/test/auth-email.test.tsx apps/web/test/auth-admin.test.tsx tests/e2e/auth-admin.spec.ts tests/e2e/auth-email.spec.ts scripts/provision-admin.mjs scripts/check-admin-config.mjs quality/evidence/AUTH-ADMIN-SINGLE",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:38:27.998Z",
+      "completedAt": "2026-10-07T09:38:32.323Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-lint-3.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:33:56.447Z",
+      "completedAt": "2026-10-07T09:34:05.716Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-owner-audit-1.txt",
+      "evidenceSha256": "d3125e5aac3059b03e1aa98a56131044b4831f74dfa878d423d2a72b5b307c51"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:39:16.533Z",
+      "completedAt": "2026-10-07T09:39:16.684Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-diff-check-1.txt",
+      "evidenceSha256": "bd9b1685dfbc1b80428d913691300581f1fb363aa487380f7172f26658ac0d26"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth-admin.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:31:51.969Z",
+      "completedAt": "2026-10-07T09:31:59.024Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-1.txt",
+      "evidenceSha256": "473ca10486b24b37cc52446c8a280b76e3e224518bb3f255a45d11464884f566"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth-email.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:31:59.120Z",
+      "completedAt": "2026-10-07T09:32:06.951Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-2.txt",
+      "evidenceSha256": "6a9051a8039b1db84ce4a6c5bf901de514a6253f4749278a1efcfd845d8ce5f3"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:07.049Z",
+      "completedAt": "2026-10-07T09:32:13.258Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-3.txt",
+      "evidenceSha256": "01dd71df7300e08db9d62a5e0f8412bc191a0968c0c7aabac5cf1f4744603fe4"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/chat-rich.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:13.352Z",
+      "completedAt": "2026-10-07T09:32:18.765Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-4.txt",
+      "evidenceSha256": "891d9911003b5e102c2d154fad7cb59d2f17a96d010195daba42a755e5d86b53"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:18.866Z",
+      "completedAt": "2026-10-07T09:32:22.905Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-5.txt",
+      "evidenceSha256": "c5f1b96276e15ac5cd5739b04e6118fb86efea7c81800b5a2b002076fe67a812"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-ui-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:23.019Z",
+      "completedAt": "2026-10-07T09:32:29.047Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-6.txt",
+      "evidenceSha256": "07a2428a7159f97c87371aae383ae2e0c7d56ba2c99360d2945a5507a7b9ae70"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/lobby.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:29.171Z",
+      "completedAt": "2026-10-07T09:32:38.183Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-7.txt",
+      "evidenceSha256": "ae0c6238907ea90963ca19e1e03d58f489eea2bdcfb9b98992b48ef58a46e066"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/presence.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:38.286Z",
+      "completedAt": "2026-10-07T09:32:44.187Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-8.txt",
+      "evidenceSha256": "d47714a4c3d43e78a89735e041f4ae92bcb4f188e71d87bd1c3937f3fa5a2368"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/profiles.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:44.276Z",
+      "completedAt": "2026-10-07T09:32:50.960Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-9.txt",
+      "evidenceSha256": "7ce25d484e69b6ddcf5408e670aead9a66dfb5b887e583428ac1cb7fb59e92f4"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/recruitments.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:51.066Z",
+      "completedAt": "2026-10-07T09:32:59.449Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-10.txt",
+      "evidenceSha256": "3e46a8eeab5f34c769773b84c4759ae655bb3841c27b0a73717dee2cbc56a701"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/rooms.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:32:59.554Z",
+      "completedAt": "2026-10-07T09:33:09.797Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-11.txt",
+      "evidenceSha256": "7759c3599e79495bd756a27613dcf7e34aa3eed337a7d1b118e92b52212bdb99"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/social.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:33:09.883Z",
+      "completedAt": "2026-10-07T09:33:18.559Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-web-regression-12.txt",
+      "evidenceSha256": "abb8ae4cdb2519b350c8ffa74052e2776b47e3edf3ebfb0d1b2f6ef3a83c5662"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/checkpoint.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:42:17.164Z",
+      "completedAt": "2026-10-07T09:42:20.339Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-checkpoint-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T09:42:21.494Z",
+      "completedAt": "2026-10-07T09:42:31.421Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-owner-audit-2.txt",
+      "evidenceSha256": "d3125e5aac3059b03e1aa98a56131044b4831f74dfa878d423d2a72b5b307c51"
+    },
+    {
+      "command": "node scripts/check-admin-config.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:11:50.925Z",
+      "completedAt": "2026-10-07T13:11:51.274Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-admin-local-input-3.txt",
+      "evidenceSha256": "ef693496078598ef10c32b3631bde2699334c8a9e815565e71f1fd82015cd003"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/resume-owner.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:12:35.630Z",
+      "completedAt": "2026-10-07T13:12:35.821Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-resume-owner-1.txt",
+      "evidenceSha256": "ff7c81b330cbadab384730bb2a0c9ed574d7956aeb653c7f136294642bf479db"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:12:37.450Z",
+      "completedAt": "2026-10-07T13:12:48.009Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-owner-audit-3.txt",
+      "evidenceSha256": "d3125e5aac3059b03e1aa98a56131044b4831f74dfa878d423d2a72b5b307c51"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs prepare",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:13:06.700Z",
+      "completedAt": "2026-10-07T13:13:14.170Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-prepare-1.txt",
+      "evidenceSha256": "8c5799ec8cd511088d5f65b44fa6ec591e059a2b0be4327731dd57f0c4d1a934"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/main-verification-mail.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:16:05.326Z",
+      "completedAt": "2026-10-07T13:16:12.766Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-verification-mail-1.txt",
+      "evidenceSha256": "bd3e2c81b1a52a428b3e728f282a7e2bcb191862ac9ce4f0bfb9513f94e45434"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs status",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:16:31.017Z",
+      "completedAt": "2026-10-07T13:16:35.105Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-status-before-1.txt",
+      "evidenceSha256": "3ed080a864a341f818b60d1d6ec3ce16c0f22da3e57153dee59a7e6832f22a5e"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs prepare",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:17:20.965Z",
+      "completedAt": "2026-10-07T13:17:22.799Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-prepare-repeat-1.txt",
+      "evidenceSha256": "8dc3739b65739e2f99033d106691beacbc83fd5c08858726a9d65d73cb957c3a"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/resume-owner.mjs quality/evidence/AUTH-ADMIN-SINGLE/local-origin.mjs quality/evidence/AUTH-ADMIN-SINGLE/local-server.mjs quality/evidence/AUTH-ADMIN-SINGLE/main-verification-mail.mjs quality/evidence/AUTH-ADMIN-SINGLE/main-login.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:17:23.842Z",
+      "completedAt": "2026-10-07T13:17:28.086Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-resume-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/main-state-audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:18:14.493Z",
+      "completedAt": "2026-10-07T13:18:15.628Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-state-audit-1.txt",
+      "evidenceSha256": "da10445b3f4b190329c5a3cc403d64b00392c890a57e3df16a00d45aa1873f24"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/main-state-audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:18:47.746Z",
+      "completedAt": "2026-10-07T13:18:50.878Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-resume-lint-2.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:18:51.855Z",
+      "completedAt": "2026-10-07T13:19:01.224Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-owner-audit-4.txt",
+      "evidenceSha256": "d3125e5aac3059b03e1aa98a56131044b4831f74dfa878d423d2a72b5b307c51"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs status",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:19:13.886Z",
+      "completedAt": "2026-10-07T13:19:17.293Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-status-after-mail-1.txt",
+      "evidenceSha256": "3ed080a864a341f818b60d1d6ec3ce16c0f22da3e57153dee59a7e6832f22a5e"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/checkpoint-ownership.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:20:01.538Z",
+      "completedAt": "2026-10-07T13:20:04.503Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-ownership-checkpoint-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/checkpoint-ownership.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:20:05.878Z",
+      "completedAt": "2026-10-07T13:20:06.231Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-ownership-checkpoint-1.txt",
+      "evidenceSha256": "23457b704673191c21bee6b30e3731b6ebfa64ea5c49d42f8236ebf30a4c0581"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:20:07.475Z",
+      "completedAt": "2026-10-07T13:20:07.691Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-diff-check-3.txt",
+      "evidenceSha256": "bd9b1685dfbc1b80428d913691300581f1fb363aa487380f7172f26658ac0d26"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/main-state-audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:28:25.405Z",
+      "completedAt": "2026-10-07T13:28:26.289Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-login-issue-state-1.txt",
+      "evidenceSha256": "b73b298e3194af304a23c2b9cef1e6eacf1150701422f323594dafdc79373838"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/resume-activation.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:29:11.818Z",
+      "completedAt": "2026-10-07T13:29:12.042Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-resume-activation-1.txt",
+      "evidenceSha256": "e5fc8837ee0334c25592fe84b1d7e6773733715f0b0ead9a7822c7705ce78f09"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/alias-before-activation.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:29:13.126Z",
+      "completedAt": "2026-10-07T13:29:13.738Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-alias-before-activation-1.txt",
+      "evidenceSha256": "15921e89775c9062aa2205f423c8acacc7a0ffdcdd2ba75bfb252a34eb5e290a"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs activate",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:29:15.052Z",
+      "completedAt": "2026-10-07T13:29:18.836Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-activate-1.txt",
+      "evidenceSha256": "b858fd7e95d35f40cea7d15e12e21826c40a8daed8fcf0e99426b2ff4808283b"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/main-login.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:29:31.146Z",
+      "completedAt": "2026-10-07T13:29:40.149Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-headed-login-1.txt",
+      "evidenceSha256": "03043b768c1e88da06d4abdddbe088eb146e354b1dcd5a8775860e05a42247b0"
+    },
+    {
+      "command": "node scripts/provision-admin.mjs prepare",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:30:12.505Z",
+      "completedAt": "2026-10-07T13:30:14.155Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-main-prepare-verified-1.txt",
+      "evidenceSha256": "8470c1d24253c809df1a472592b3e77ddc679932ca530350643a98603da40cad"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/resume-activation.mjs quality/evidence/AUTH-ADMIN-SINGLE/alias-before-activation.mjs quality/evidence/AUTH-ADMIN-SINGLE/main-login.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:30:15.482Z",
+      "completedAt": "2026-10-07T13:30:18.743Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-activation-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/AUTH-ADMIN-SINGLE/finish-owner.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:31:38.176Z",
+      "completedAt": "2026-10-07T13:31:41.243Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-finish-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/AUTH-ADMIN-SINGLE/audit.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:31:42.678Z",
+      "completedAt": "2026-10-07T13:31:51.970Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-owner-audit-5.txt",
+      "evidenceSha256": "d3125e5aac3059b03e1aa98a56131044b4831f74dfa878d423d2a72b5b307c51"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T13:32:03.662Z",
+      "completedAt": "2026-10-07T13:32:03.784Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/AUTH-ADMIN-SINGLE/codex-diff-check-4.txt",
+      "evidenceSha256": "bd9b1685dfbc1b80428d913691300581f1fb363aa487380f7172f26658ac0d26"
+    }
+  ],
+  "mainProvisioning": true,
+  "mainEmailVerification": true,
+  "blocker": null,
+  "mainAdminActivated": true,
+  "temporaryLocalRuntime": {
+    "origin": "http://localhost:18080",
+    "reason": "Windows IPv4 and IPv6 excluded TCP ranges include5173. Configured provider origin was preserved; actual verification remailed for the local runtime."
+  },
+  "completedAt": "2026-10-07T13:32:05.388Z",
+  "mainNativeLogin": {
+    "verifiedAt": "2026-10-07T13:29:39.273Z",
+    "headed": true,
+    "realMainDatabase": true,
+    "nativeAliasStatus": 200,
+    "authenticatedMeStatus": 200,
+    "fixedIdentityMatches": true,
+    "httpOnlyCookie": true,
+    "soleServerAdmin": true,
+    "logoutStatus": 200,
+    "afterLogoutStatus": 401
+  }
+}

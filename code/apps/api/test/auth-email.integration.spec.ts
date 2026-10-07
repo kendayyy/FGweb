@@ -9,7 +9,7 @@ import {migrate} from 'drizzle-orm/node-postgres/migrator';
 import nodemailer from 'nodemailer';
 import supertest from 'supertest';
 import {toNodeHandler} from 'better-auth/node';
-import {verifyPassword} from 'better-auth/crypto';
+import {verifyFgPassword as verifyPassword} from '../src/modules/auth/auth-password.js';
 import * as schema from '@fg/database';
 import {MeDTOSchema,PrivateProfileSchema,PublicProfileSchema} from '@fg/contracts';
 import {AuthService,createFgAuth} from '../src/modules/auth/auth.service.js';
@@ -42,7 +42,7 @@ async function smtpSink(){
  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));const port=(server.address() as net.AddressInfo).port;
  return {messages,transport:nodemailer.createTransport({host:'127.0.0.1',port,secure:false,connectionTimeout:3000,socketTimeout:5000}),close:async()=>{for(const socket of sockets)socket.destroy();await new Promise<void>(resolve=>server.close(()=>resolve()));}};
 }
-const origin='http://localhost:5173',secret='auth02_test_secret_32_chars_random_fixture',password='  kiểm thử Ω dài  ';
+const origin='http://localhost:5173',secret='auth02_test_secret_32_chars_random_fixture',password='  kiểm thử Ω! dài  ';
 describe('AUTH02 real HTTP, PostgreSQL and SMTP security',()=>{
  let admin:pg.Client,pool:pg.Pool,db:ReturnType<typeof drizzle<typeof schema>>,schemaName:string;
  let sink:Awaited<ReturnType<typeof smtpSink>>,server:http.Server,auth:ReturnType<typeof createFgAuth>;
@@ -83,7 +83,7 @@ describe('AUTH02 real HTTP, PostgreSQL and SMTP security',()=>{
  },60000);
  afterAll(async()=>{if(server)await new Promise<void>(resolve=>server.close(()=>resolve()));if(sink){sink.transport.close();await sink.close();}if(pool)await pool.end();if(admin){await admin.query(`DROP SCHEMA "${schemaName}" CASCADE`);await admin.end();}});
  it('enables verified email auth with explicit password/token policy and disabled unsafe routes',()=>{
-  expect(auth.options.emailAndPassword?.enabled).toBe(true);expect(auth.options.emailAndPassword?.requireEmailVerification).toBe(true);expect(auth.options.emailAndPassword?.minPasswordLength).toBe(12);expect(auth.options.emailAndPassword?.maxPasswordLength).toBe(128);expect(auth.options.emailVerification?.expiresIn).toBe(86400);expect(auth.options.emailAndPassword?.resetPasswordTokenExpiresIn).toBe(3600);expect(auth.options.emailAndPassword?.revokeSessionsOnPasswordReset).toBe(true);expect(auth.options.account?.accountLinking?.enabled).toBe(false);
+  expect(auth.options.emailAndPassword?.enabled).toBe(true);expect(auth.options.emailAndPassword?.requireEmailVerification).toBe(true);expect(auth.options.emailAndPassword?.minPasswordLength).toBe(8);expect(auth.options.emailAndPassword?.maxPasswordLength).toBe(256);expect(auth.options.emailVerification?.expiresIn).toBe(86400);expect(auth.options.emailAndPassword?.resetPasswordTokenExpiresIn).toBe(3600);expect(auth.options.emailAndPassword?.revokeSessionsOnPasswordReset).toBe(true);expect(auth.options.account?.accountLinking?.enabled).toBe(false);
   expect(auth.options.disabledPaths).toContain('/set-password');expect(auth.options.disabledPaths).toContain('/get-access-token');expect(auth.options.disabledPaths).toContain('/refresh-token');
  });
  it('creates no pre-verification session, preserves password spaces and salts separately; duplicate is generic',async()=>{
@@ -124,14 +124,14 @@ describe('AUTH02 real HTTP, PostgreSQL and SMTP security',()=>{
  it('resets once, revokes old sessions, expires links and handles concurrent consumption atomically',async()=>{
   const address=email();await signUp(address);await verify(address);const cookie=await login(address);
   const req=await post('/request-password-reset',{email:address,redirectTo:'/auth/reset'});expect(req.status).toBe(200);const link=lastLink(address),token=link.pathname.split('/').at(-1)!;
-  const next='new password with spaces';const results=await Promise.all([post('/reset-password',{token,newPassword:next}),post('/reset-password',{token,newPassword:next})]);expect(results.map(r=>r.status).sort()).toEqual([200,400]);
+  const next='New password with spaces!';const results=await Promise.all([post('/reset-password',{token,newPassword:next}),post('/reset-password',{token,newPassword:next})]);expect(results.map(r=>r.status).sort()).toEqual([200,400]);
   expect((await post('/reset-password',{token,newPassword:next})).status).toBe(400);expect((await request().get('/api/auth/get-session').set('Cookie',cookie)).body).toBeNull();expect((await post('/sign-in/email',{email:address,password})).status).toBe(401);expect((await post('/sign-in/email',{email:address,password:next})).status).toBe(200);
   await post('/request-password-reset',{email:address,redirectTo:'/auth/reset'});const expired=lastLink(address).pathname.split('/').at(-1)!;await pool.query("UPDATE verification SET expires_at=now()-interval '1 second' WHERE identifier LIKE 'reset-password:%'");expect((await post('/reset-password',{token:expired,newPassword:password})).status).toBe(400);
  });
  it('requires current password for change and revokes other sessions',async()=>{
   const address=email();await signUp(address);await verify(address);const cookie=await login(address),other=await login(address);
-  expect((await post('/change-password',{currentPassword:'wrong-password',newPassword:'next-password-12'},cookie)).status).toBe(400);
-  expect((await post('/change-password',{currentPassword:password,newPassword:'next-password-12'},cookie)).status).toBe(200);expect((await request().get('/api/auth/get-session').set('Cookie',other)).body).toBeNull();expect((await post('/sign-in/email',{email:address,password:'next-password-12'})).status).toBe(200);
+  expect((await post('/change-password',{currentPassword:'wrong-password',newPassword:'Next-password-12'},cookie)).status).toBe(400);
+  expect((await post('/change-password',{currentPassword:password,newPassword:'Next-password-12'},cookie)).status).toBe(200);expect((await request().get('/api/auth/get-session').set('Cookie',other)).body).toBeNull();expect((await post('/sign-in/email',{email:address,password:'Next-password-12'})).status).toBe(200);
  });
  it('old Discord verification does not attach password; fresh link bound to current user/session retains identity',async()=>{
   const owner=await discord(),other=await discord();expect((await post('/fg/password-attach',{token:'guess',newPassword:password},owner.cookie)).status).toBe(400);expect((await post('/fg/password-challenge',{},owner.cookie)).status).toBe(200);

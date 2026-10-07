@@ -1,0 +1,5 @@
+import fs from 'node:fs';
+for(const file of ['apps/web/src/features/auth/EmailFlowPage.tsx','apps/web/src/features/auth/PasswordSettingsPage.tsx']){
+ let source=fs.readFileSync(file,'utf8');source=source.replace('AuthCard,AuthFeedback,','AuthCard,AuthFeedback,PASSWORD_POLICY_HELP,').replace("new Error('Mật khẩu mới cần 12–128 ký tự.')","new Error(PASSWORD_POLICY_HELP)").replace('Mật khẩu 12–128 ký tự. Khoảng trắng được giữ nguyên.','{PASSWORD_POLICY_HELP}');fs.writeFileSync(file,source);
+}
+const file='apps/web/src/features/auth/email-api.ts';let source=fs.readFileSync(file,'utf8');source=source.replace("import {ApiEndpointRegistry} from '@fg/contracts';","import {ApiEndpointRegistry} from '@fg/contracts';\nimport {PASSWORD_POLICY_HELP} from './AuthFields.js';").replace('Email hoặc mật khẩu không đúng.','Email, tên đăng nhập hoặc mật khẩu không đúng.').replace("new Error('Kiểm tra email, thông tin và mật khẩu (12–128 ký tự cho mật khẩu mới).')","new Error(`Kiểm tra thông tin. ${PASSWORD_POLICY_HELP}`)");fs.writeFileSync(file,source);

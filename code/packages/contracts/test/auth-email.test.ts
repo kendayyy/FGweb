@@ -13,7 +13,7 @@ describe('AUTH02 owner identity and auth transports',()=>{
  });
  it('keeps native signup response separate from an authenticated FG session',()=>{
   const endpoint=c.ApiEndpointRegistry.find(e=>e.path==='/api/auth/sign-up/email');expect(endpoint?.auth).toBe('Public');
-  expect(endpoint?.requestSchema?.parse({name:'FG Gamer',email:me.email,password:'  mật khẩu Ω  '})).toHaveProperty('password','  mật khẩu Ω  ');
+  expect(endpoint?.requestSchema?.parse({name:'FG Gamer',email:me.email,password:'  mật khẩu Ω@  '})).toHaveProperty('password','  mật khẩu Ω@  ');
   expect(endpoint?.responseSchema.safeParse({token:null,user:{id:'signup-result',name:'FG Gamer',email:me.email,emailVerified:false,image:null,createdAt:stamp,updatedAt:stamp}}).success).toBe(true);
   expect(endpoint?.responseSchema.safeParse({token:'unexpected-session',user:{}}).success).toBe(false);
  });
@@ -22,19 +22,19 @@ describe('AUTH02 owner identity and auth transports',()=>{
    const endpoint=c.ApiEndpointRegistry.find(e=>e.path===path);expect(endpoint?.requestSchema).toBeDefined();
    const base=path.endsWith('sign-up/email')?{name:'FG',email:me.email}:path.endsWith('change-password')?{currentPassword:'current-long-password'}:{token:'opaque-email-token'};
    const field=path.endsWith('sign-up/email')?'password':'newPassword';
-   for(const pass of ['  mật khẩu Ω  ',' '.repeat(12),'x'.repeat(128)])expect(endpoint?.requestSchema?.parse({...base,[field]:pass})).toHaveProperty(field,pass);
-   for(const pass of ['x'.repeat(11),'x'.repeat(129)])expect(endpoint?.requestSchema?.safeParse({...base,[field]:pass}).success).toBe(false);
+   for(const pass of ['  mật khẩu Ω@  ','Abcdefg!','A!'+ 'x'.repeat(126)])expect(endpoint?.requestSchema?.parse({...base,[field]:pass})).toHaveProperty(field,pass);
+   for(const pass of ['A!'+'x'.repeat(5),'A!'+'x'.repeat(127),' '.repeat(12),'x'.repeat(128)])expect(endpoint?.requestSchema?.safeParse({...base,[field]:pass}).success).toBe(false);
   }
  });
  it('requires current password for change, and rejects client actor/hash/grant overrides on all new mutations',()=>{
-  const requests=[['/api/auth/sign-up/email',{name:'FG',email:me.email,password:'long-password-12'}],['/api/auth/sign-in/email',{email:me.email,password:'long-password-12'}],['/api/auth/send-verification-email',{email:me.email}],['/api/auth/request-password-reset',{email:me.email}],['/api/auth/reset-password',{token:'email-token',newPassword:'long-password-12'}],['/api/auth/change-password',{currentPassword:'old-password-12',newPassword:'new-password-12'}],['/api/auth/fg/password-challenge',{}],['/api/auth/fg/password-attach',{token:'email-token',newPassword:'long-password-12'}]] as const;
+  const requests=[['/api/auth/sign-up/email',{name:'FG',email:me.email,password:'Long-password-12'}],['/api/auth/sign-in/email',{email:me.email,password:'Long-password-12'}],['/api/auth/send-verification-email',{email:me.email}],['/api/auth/request-password-reset',{email:me.email}],['/api/auth/reset-password',{token:'email-token',newPassword:'Long-password-12'}],['/api/auth/change-password',{currentPassword:'old-password-12',newPassword:'New-password-12'}],['/api/auth/fg/password-challenge',{}],['/api/auth/fg/password-attach',{token:'email-token',newPassword:'Long-password-12'}]] as const;
   for(const [path,request]of requests){const schema=c.ApiEndpointRegistry.find(e=>e.path===path)?.requestSchema;expect(schema?.safeParse(request).success).toBe(true);for(const key of ['userId','sessionId','emailVerified','hash','providerId'])expect(schema?.safeParse({...request,[key]:'forged'}).success).toBe(false);}
   const change=c.ApiEndpointRegistry.find(e=>e.path==='/api/auth/change-password')?.requestSchema;
-  expect(change?.safeParse({newPassword:'long-password-12'}).success).toBe(false);expect(change?.safeParse({currentPassword:'old-password-12',newPassword:'long-password-12',revokeOtherSessions:false}).success).toBe(false);
+  expect(change?.safeParse({newPassword:'Long-password-12'}).success).toBe(false);expect(change?.safeParse({currentPassword:'old-password-12',newPassword:'Long-password-12',revokeOtherSessions:false}).success).toBe(false);
  });
  it('allows only bounded relative same-origin callbacks and token queries',()=>{
   for(const [path,field]of [['/api/auth/sign-up/email','callbackURL'],['/api/auth/send-verification-email','callbackURL'],['/api/auth/request-password-reset','redirectTo']] as const){
-   const schema=c.ApiEndpointRegistry.find(e=>e.path===path)?.requestSchema;const base=path.endsWith('sign-up/email')?{name:'FG',email:me.email,password:'long-password-12'}:{email:me.email};
+   const schema=c.ApiEndpointRegistry.find(e=>e.path===path)?.requestSchema;const base=path.endsWith('sign-up/email')?{name:'FG',email:me.email,password:'Long-password-12'}:{email:me.email};
    expect(schema?.safeParse({...base,[field]:'/auth/verify?source=FG'}).success).toBe(true);
    for(const value of ['https://evil.example/','//evil.example/','/\\evil.example/','/auth\nwrong','x'.repeat(2049)])expect(schema?.safeParse({...base,[field]:value}).success).toBe(false);
   }

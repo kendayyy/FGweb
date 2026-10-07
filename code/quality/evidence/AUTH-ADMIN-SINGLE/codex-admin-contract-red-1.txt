@@ -1,0 +1,35 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/auth-admin.test.ts (9 tests | 2 failed) 23ms
+   ❯ sole-admin username transport (2)
+     × accepts only the reserved alias with credential proof, never client grants 6ms
+     × uses the verified native session response and strips private credential fields 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/auth-admin.test.ts > sole-admin username transport > accepts only the reserved alias with credential proof, never client grants
+AssertionError: expected undefined to be defined
+ ❯ packages/contracts/test/auth-admin.test.ts:15:102
+     13| describe('sole-admin username transport',()=>{
+     14|  it('accepts only the reserved alias with credential proof, never clie…
+     15|   const endpoint=ApiEndpointRegistry.find(e=>e.path==='/api/auth/fg/si…
+       |                                                                                                      ^
+     16|   const body={username:'kingame',password:'legacy lower password'};
+     17|   expect(endpoint?.requestSchema?.parse(body)).toEqual(body);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |contracts| packages/contracts/test/auth-admin.test.ts > sole-admin username transport > uses the verified native session response and strips private credential fields
+AssertionError: expected undefined to be defined
+ ❯ packages/contracts/test/auth-admin.test.ts:23:102
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 7 passed (9)
+   Start at  16:03:29
+   Duration  861ms (transform 52%, import 43%, tests 4%, worker 1%)
+

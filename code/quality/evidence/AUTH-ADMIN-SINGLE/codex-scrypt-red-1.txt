@@ -1,0 +1,43 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18660) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-admin.integration.spec.ts (18.305 s)
+  ● AUTH-PASSWORD-03 configured scrypt behavior › keeps compatibility-distinct Unicode passwords different in both directions
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      14 |   for(const [password,other] of [['Ａbcdefg!','Abcdefg!'],['A\u0301bcdef!','Ábcdef!x']]){
+      15 |    const hash=await codec.hash(password);expect(await codec.verify({hash,password})).toBe(true);
+    > 16 |    expect(await codec.verify({hash,password:password.normalize('NFKC')})).toBe(false);
+         |                                                                           ^
+      17 |    expect(await codec.verify({hash,password:other})).toBe(false);
+      18 |   }
+      19 |   const hash=await codec.hash('Abcdefg!');expect(await codec.verify({hash,password:'Ａbcdefg!'})).toBe(false);
+
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:16:75)
+
+  ● AUTH-PASSWORD-03 configured scrypt behavior › allows the native UTF16 envelope while shared schemas bound Unicode code points
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 8
+    Received: 12
+
+      35 |  });
+      36 |  it('allows the native UTF16 envelope while shared schemas bound Unicode code points',()=>{
+    > 37 |   expect(auth.options.emailAndPassword?.minPasswordLength).toBe(8);
+         |                                                            ^
+      38 |   expect(auth.options.emailAndPassword?.maxPasswordLength).toBe(256);
+      39 |  });
+      40 | });
+
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:37:60)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 3 passed, 5 total
+Snapshots:   0 total
+Time:        18.695 s
+Ran all test suites matching apps/api/test/auth-admin.integration.spec.ts.

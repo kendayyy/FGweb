@@ -10,23 +10,23 @@ test.describe.configure({mode:'serial'});
 let fixture:ChildProcess,discord:{id:string;email:string;cookie:string};
 let createdEmail='';
 const pending=new Map<string,(message:Record<string,unknown>)=>void>();
-let base='';const password='  FG real UI password Ω  ',nextPassword='  FG changed UI password Ω  ';
+let base='';const password='  FG real UI password Ω!  ',nextPassword='  FG changed UI password Ω!  ';
 async function freePort(port:number){const server=net.createServer();await new Promise<void>((resolve,reject)=>{server.once('error',()=>reject(new Error(`Required fixture port ${port} is occupied; no unrelated process stopped.`)));server.listen(port,'127.0.0.1',resolve);});await new Promise<void>(resolve=>server.close(()=>resolve()));}
 async function mailedLink(to:string){const id=randomUUID();return await new Promise<string>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(new Error('No SMTP mail received by local fixture.'));},5000);pending.set(id,message=>{clearTimeout(timer);if(typeof message.link!=='string')reject(new Error('No mailed link.'));else resolve(message.link);});fixture.send({id,kind:'mail',to});});}
 async function expireVerification(to:string){const id=randomUUID();return await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Verification fixture expiry timed out.')),5000);pending.set(id,message=>{clearTimeout(timer);if(message.expired===true)resolve();else reject(new Error('No owned verification token expired.'));});fixture.send({id,kind:'expire-verification',to});});}
 async function openLink(page:Page,link:string){try{await page.goto(link);}catch{throw new Error('Mailed link navigation failed (token omitted).');}}
-async function login(page:Page,email:string,value=password){await page.goto(`${base}/login`);await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Mật khẩu',{exact:true}).fill(value);await page.getByRole('button',{name:'Đăng nhập',exact:true}).click();}
+async function login(page:Page,email:string,value=password){await page.goto(`${base}/login`);await page.getByLabel('Email hoặc tên đăng nhập',{exact:true}).fill(email);await page.getByLabel('Mật khẩu',{exact:true}).fill(value);await page.getByRole('button',{name:'Đăng nhập',exact:true}).click();}
 async function capture(page:Page){for(const [width,height]of [[1440,900],[1280,800],[390,844],[360,800]]){
  await page.setViewportSize({width,height});await page.evaluate(()=>document.fonts.ready);await expect(page.getByRole('heading',{name:'Đăng nhập FG'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
  const undersized=await page.locator('a,button,input').evaluateAll(elements=>elements.filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&(r.width<44||r.height<44);}).map(e=>e.tagName));expect(undersized).toEqual([]);
- await page.screenshot({path:`quality/evidence/AUTH02-FE/screenshots/${width}x${height}-login.png`,fullPage:true});
+ await page.screenshot({path:`.runtime/auth-admin/regression-screenshots/${width}x${height}-login.png`,fullPage:true});
 }}
 test.beforeAll(async()=>{
  await freePort(465);const reservation=net.createServer();await new Promise<void>(resolve=>reservation.listen(0,'127.0.0.1',resolve));const webPort=(reservation.address() as net.AddressInfo).port;await new Promise<void>(resolve=>reservation.close(()=>resolve()));base=`http://localhost:${webPort}`;
- fs.mkdirSync('.runtime/auth02-fe',{recursive:true});fs.mkdirSync('quality/evidence/AUTH02-FE/screenshots',{recursive:true});
- execFileSync('C:/Program Files/Git/usr/bin/openssl.exe',['req','-x509','-newkey','rsa:2048','-nodes','-keyout','.runtime/auth02-fe/key.pem','-out','.runtime/auth02-fe/cert.pem','-days','2','-subj','/CN=localhost','-addext','subjectAltName=DNS:localhost,IP:127.0.0.1'],{stdio:'ignore'});
- fixture=spawn(process.execPath,['quality/evidence/AUTH02-FE/fixture-server.mjs'],{cwd:process.cwd(),env:{...process.env,FG_AUTH02_WEB_PORT:String(webPort),NODE_EXTRA_CA_CERTS:path.resolve('.runtime/auth02-fe/cert.pem')},stdio:['ignore','pipe','pipe','ipc'],windowsHide:true});
+ fs.mkdirSync('.runtime/auth-admin',{recursive:true});fs.mkdirSync('.runtime/auth-admin/regression-screenshots',{recursive:true});
+ execFileSync('C:/Program Files/Git/usr/bin/openssl.exe',['req','-x509','-newkey','rsa:2048','-nodes','-keyout','.runtime/auth-admin/key.pem','-out','.runtime/auth-admin/cert.pem','-days','2','-subj','/CN=localhost','-addext','subjectAltName=DNS:localhost,IP:127.0.0.1'],{stdio:'ignore'});
+ fixture=spawn(process.execPath,['quality/evidence/AUTH-ADMIN-SINGLE/fixture-server.mjs'],{cwd:process.cwd(),env:{...process.env,FG_AUTH02_WEB_PORT:String(webPort),NODE_EXTRA_CA_CERTS:path.resolve('.runtime/auth-admin/cert.pem')},stdio:['ignore','pipe','pipe','ipc'],windowsHide:true});
  fixture.stdout?.on('data',chunk=>console.log('Safe fixture proof:',String(chunk)));const protectedValues=Object.values(parseEnv(fs.readFileSync('.env.local','utf8'))).filter((value):value is string=>typeof value==='string'&&value.length>=8);
  fixture.stderr?.on('data',chunk=>{let text=String(chunk);for(const value of protectedValues)text=text.replaceAll(value,'[REDACTED]');console.log('Fixture diagnostic:',text.replace(/https?:\/\/\S+/g,'[URL]'));});
  fixture.on('message',(message:Record<string,unknown>)=>{if(typeof message.id==='string'){pending.get(message.id)?.(message);pending.delete(message.id);}});
@@ -34,13 +34,13 @@ test.beforeAll(async()=>{
 });
 test.afterAll(async()=>{
  if(fixture&&fixture.exitCode===null){await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned fixture cleanup timed out.'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed.'));});fixture.send({kind:'stop'});});}
- for(const file of ['.runtime/auth02-fe/key.pem','.runtime/auth02-fe/cert.pem'])if(fs.existsSync(file))fs.unlinkSync(file);
+ for(const file of ['.runtime/auth-admin/key.pem','.runtime/auth-admin/cert.pem'])if(fs.existsSync(file))fs.unlinkSync(file);
 });
 test('approved login layout, keyboard controls and native Discord authorization',async({page})=>{
  page.on('pageerror',error=>console.log('Initial empty login page error:',error.message.replace(/https?:\/\/\S+/g,'[URL]')));
  page.on('console',message=>{if(message.type()==='error')console.log('Initial empty login console:',message.text().replace(/https?:\/\/\S+/g,'[URL]'));});
  await page.goto(`${base}/login`);await capture(page);await page.setViewportSize({width:1280,height:800});
- await page.getByLabel('Email',{exact:true}).focus();await page.keyboard.press('Tab');await expect(page.getByLabel('Mật khẩu',{exact:true})).toBeFocused();await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Hiện mật khẩu'})).toBeFocused();await page.keyboard.press('Enter');await expect(page.getByLabel('Mật khẩu',{exact:true})).toHaveAttribute('type','text');await page.getByRole('button',{name:'Ẩn mật khẩu'}).click();
+ await page.getByLabel('Email hoặc tên đăng nhập',{exact:true}).focus();await page.keyboard.press('Tab');await expect(page.getByLabel('Mật khẩu',{exact:true})).toBeFocused();await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Hiện mật khẩu'})).toBeFocused();await page.keyboard.press('Enter');await expect(page.getByLabel('Mật khẩu',{exact:true})).toHaveAttribute('type','text');await page.getByRole('button',{name:'Ẩn mật khẩu'}).click();
  // Actual auth middleware generates OAuth state. Prevent only external navigation
  // so the human is not asked to authenticate again in this isolated fixture.
  const response=await page.request.post(`${base}/api/auth/sign-in/social`,{headers:{Origin:base},data:{provider:'discord',callbackURL:`${base}/`,errorCallbackURL:`${base}/login?error=oauth_denied`}});

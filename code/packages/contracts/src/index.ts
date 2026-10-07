@@ -8,7 +8,7 @@ import {
   createPageSchema,
   ApiErrorResponseSchema,
 } from './common.js';
-import { MeDTOSchema,SignUpEmailRequestSchema,SignInEmailRequestSchema,SendVerificationEmailRequestSchema,VerifyEmailQuerySchema,RequestPasswordResetSchema,ResetPasswordRequestSchema,ChangePasswordRequestSchema,PasswordChallengeRequestSchema,AttachPasswordRequestSchema,PasswordStatusResponseSchema,AuthStatusResponseSchema,AuthMailResponseSchema,SignUpEmailResponseSchema,SignInEmailResponseSchema,VerifyEmailResponseSchema,ChangePasswordResponseSchema } from './auth.js';
+import { MeDTOSchema,SignUpEmailRequestSchema,SignInEmailRequestSchema,SignInAdminRequestSchema,SendVerificationEmailRequestSchema,VerifyEmailQuerySchema,RequestPasswordResetSchema,ResetPasswordRequestSchema,ChangePasswordRequestSchema,PasswordChallengeRequestSchema,AttachPasswordRequestSchema,PasswordStatusResponseSchema,AuthStatusResponseSchema,AuthMailResponseSchema,SignUpEmailResponseSchema,SignInEmailResponseSchema,VerifyEmailResponseSchema,ChangePasswordResponseSchema } from './auth.js';
 import { PublicProfileSchema, PrivateProfileSchema, UpdateProfileRequestSchema, OnboardingRequestSchema, UpdateInterestsRequestSchema, InterestsResponseSchema, UpdateGameProfileRequestSchema, GameProfileSchema } from './profiles.js';
 import {UploadImageRequestSchema,AttachmentUrlSchema,ImageContentSchema} from './uploads.js';
 import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, AttachmentSchema, LobbyMessagesQuerySchema } from './messages.js';
@@ -100,6 +100,7 @@ export interface ApiEndpointDefinition {
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   {method:'POST',path:'/api/auth/sign-up/email',auth:'Public',requestSchema:SignUpEmailRequestSchema,responseSchema:SignUpEmailResponseSchema},
   {method:'POST',path:'/api/auth/sign-in/email',auth:'Public',requestSchema:SignInEmailRequestSchema,responseSchema:SignInEmailResponseSchema},
+  {method:'POST',path:'/api/auth/fg/sign-in/admin',auth:'Public',requestSchema:SignInAdminRequestSchema,responseSchema:SignInEmailResponseSchema},
   {method:'POST',path:'/api/auth/send-verification-email',auth:'Public',requestSchema:SendVerificationEmailRequestSchema,responseSchema:AuthStatusResponseSchema},
   {method:'GET',path:'/api/auth/verify-email',auth:'Public',requestSchema:VerifyEmailQuerySchema,responseSchema:VerifyEmailResponseSchema},
   {method:'POST',path:'/api/auth/request-password-reset',auth:'Public',requestSchema:RequestPasswordResetSchema,responseSchema:AuthMailResponseSchema},

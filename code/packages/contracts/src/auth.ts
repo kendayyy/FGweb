@@ -33,7 +33,9 @@ export const AuthSessionMetadataSchema = z.object({
 export type AuthSessionMetadata = z.infer<typeof AuthSessionMetadataSchema>;
 
 // Private auth transports; passwords are never trimmed or transformed.
-export const AuthPasswordSchema=z.string().min(12).max(128);
+export const AuthPasswordSchema=z.string().refine(value=>value.length<=256&&[...value].length>=8&&[...value].length<=128,{message:'Mật khẩu cần 8–128 ký tự Unicode.',abort:true}).refine(value=>/\p{Lu}/u.test(value),'Mật khẩu cần ít nhất một chữ hoa.').refine(value=>/[\p{P}\p{S}]/u.test(value),'Mật khẩu cần ít nhất một ký tự đặc biệt.');
+// Existing credential proof must not composition-gate legacy accounts.
+export const AuthExistingPasswordSchema=z.string().refine(value=>value.length>0&&value.length<=256&&[...value].length<=128,{message:'Mật khẩu cần 1–128 ký tự Unicode.',abort:true});
 export const AuthEmailSchema=z.string().email().max(254);
 export const AuthCallbackPathSchema=z.string().min(1).max(2048).refine(
  path=>/^\/(?!\/)/.test(path)&&!path.includes('\\')&&[...path].every(char=>char.charCodeAt(0)>=32&&char.charCodeAt(0)!==127)&&!/%(?:2f|5c)/i.test(path),
@@ -42,8 +44,10 @@ export const AuthCallbackPathSchema=z.string().min(1).max(2048).refine(
 export const AuthEmailTokenSchema=z.string().min(1).max(2048);
 export const SignUpEmailRequestSchema=z.object({name:z.string().min(2).max(50),email:AuthEmailSchema,password:AuthPasswordSchema,callbackURL:AuthCallbackPathSchema.optional()}).strict();
 export type SignUpEmailRequest=z.infer<typeof SignUpEmailRequestSchema>;
-export const SignInEmailRequestSchema=z.object({email:AuthEmailSchema,password:z.string().min(1).max(128),rememberMe:z.boolean().optional(),callbackURL:AuthCallbackPathSchema.optional()}).strict();
+export const SignInEmailRequestSchema=z.object({email:AuthEmailSchema,password:AuthExistingPasswordSchema,rememberMe:z.boolean().optional(),callbackURL:AuthCallbackPathSchema.optional()}).strict();
 export type SignInEmailRequest=z.infer<typeof SignInEmailRequestSchema>;
+export const SignInAdminRequestSchema=z.object({username:z.literal('kingame'),password:AuthExistingPasswordSchema,rememberMe:z.boolean().optional(),callbackURL:AuthCallbackPathSchema.optional()}).strict();
+export type SignInAdminRequest=z.infer<typeof SignInAdminRequestSchema>;
 export const SendVerificationEmailRequestSchema=z.object({email:AuthEmailSchema,callbackURL:AuthCallbackPathSchema.optional()}).strict();
 export type SendVerificationEmailRequest=z.infer<typeof SendVerificationEmailRequestSchema>;
 export const VerifyEmailQuerySchema=z.object({token:AuthEmailTokenSchema,callbackURL:AuthCallbackPathSchema.optional()}).strict();
@@ -52,7 +56,7 @@ export const RequestPasswordResetSchema=z.object({email:AuthEmailSchema,redirect
 export type RequestPasswordReset=z.infer<typeof RequestPasswordResetSchema>;
 export const ResetPasswordRequestSchema=z.object({token:AuthEmailTokenSchema,newPassword:AuthPasswordSchema}).strict();
 export type ResetPasswordRequest=z.infer<typeof ResetPasswordRequestSchema>;
-export const ChangePasswordRequestSchema=z.object({currentPassword:z.string().min(1).max(128),newPassword:AuthPasswordSchema,revokeOtherSessions:z.literal(true).default(true)}).strict();
+export const ChangePasswordRequestSchema=z.object({currentPassword:AuthExistingPasswordSchema,newPassword:AuthPasswordSchema,revokeOtherSessions:z.literal(true).default(true)}).strict();
 export type ChangePasswordRequest=z.infer<typeof ChangePasswordRequestSchema>;
 export const PasswordChallengeRequestSchema=z.object({}).strict().default({});
 export const AttachPasswordRequestSchema=z.object({token:AuthEmailTokenSchema,newPassword:AuthPasswordSchema}).strict();

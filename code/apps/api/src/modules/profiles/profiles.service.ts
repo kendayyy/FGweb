@@ -29,6 +29,7 @@ import {
   ErrorCode,
 } from '@fg/contracts';
 import { z } from 'zod';
+import {isReservedAdminName,soleAdminUserId} from '../auth/auth-admin.js';
 
 @Injectable()
 export class ProfilesService implements OnModuleInit, OnModuleDestroy {
@@ -47,6 +48,11 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
 
   public setDb(db: NodePgDatabase<typeof schema>) {
     this.db = db;
+  }
+
+  private checkReservedName(userId:string,name?:string) {
+    if(name===undefined)return;
+    if((isReservedAdminName(name)&&userId!==soleAdminUserId())||(userId===soleAdminUserId()&&name!=='kingame'))throw new UnprocessableEntityException({code:ErrorCode.INVALID_INPUT,message:'Tên này được dành riêng cho quản trị.'});
   }
 
   private initDatabase() {
@@ -229,6 +235,7 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
     body: UpdateProfileRequest,
     userImage?: string | null
   ): Promise<PrivateProfileDTO> {
+    this.checkReservedName(userId,body.displayName);
     const [dbUser] = await this.db
       .select()
       .from(schema.user)
@@ -346,6 +353,7 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
     body: OnboardingRequest,
     userImage?: string | null
   ): Promise<PrivateProfileDTO> {
+    this.checkReservedName(userId,body.displayName);
     const [dbUser] = await this.db
       .select()
       .from(schema.user)

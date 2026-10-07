@@ -1,0 +1,41 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import pg from 'pg';
+import {drizzle} from 'drizzle-orm/node-postgres';
+import * as schema from '@fg/database';
+import {loadAdminConfig} from '../../../scripts/check-admin-config.mjs';
+process.env.PLAYWRIGHT_BROWSERS_PATH=path.resolve('.cache/ms-playwright');
+const {chromium}=await import('@playwright/test');
+const config=loadAdminConfig();assert(config.ready,'Local private input must remain valid');
+const {app,input}=config,base='http://localhost:18080';
+assert(app.ADMIN_USER_IDS===input.userId,'Sole local binding must be activated first');
+Object.assign(process.env,app,{PUBLIC_ORIGIN:base,BETTER_AUTH_URL:base});
+let browser,pool,phase='launch';
+try{
+ browser=await chromium.launch({headless:false,slowMo:200});
+ const context=await browser.newContext({viewport:{width:1280,height:800}});
+ const page=await context.newPage();
+ phase='native-login';await page.goto(`${base}/login`);
+ await page.getByLabel('Email hoặc tên đăng nhập',{exact:true}).fill('kingame');
+ await page.getByLabel('Mật khẩu',{exact:true}).fill(input.password);
+ const responsePromise=page.waitForResponse(response=>response.url()===`${base}/api/auth/fg/sign-in/admin`&&response.request().method()==='POST');
+ await page.getByRole('button',{name:'Đăng nhập',exact:true}).click();
+ const response=await responsePromise;assert.equal(response.status(),200,'Native reserved alias login must succeed');
+ await page.getByRole('heading',{name:'Hoàn tất hồ sơ ban đầu'}).waitFor();
+ phase='real-session';const me=await context.request.get(`${base}/api/v1/me`);
+ assert.equal(me.status(),200,'Actual authenticated Me must succeed');
+ assert((await me.json()).id===input.userId,'Session must belong to the fixed sole identity');
+ const cookies=await context.cookies();assert(cookies.some(cookie=>cookie.name.includes('session_token')&&cookie.httpOnly),'Real HttpOnly session cookie is required');
+ phase='server-role';pool=new pg.Pool({connectionString:app.DATABASE_URL,max:2,connectionTimeoutMillis:5000});
+ const {AuthService}=await import('../../../apps/api/dist/modules/auth/auth.service.js');
+ const service=new AuthService();service.setDb(drizzle(pool,{schema}));assert(await service.isUserAdmin(input.userId),'Verified sole server identity must have admin role');
+ phase='logout';const logout=await context.request.post(`${base}/api/auth/sign-out`,{headers:{Origin:base},data:{}});
+ assert.equal(logout.status(),200,'Native logout must succeed');
+ assert.equal((await context.request.get(`${base}/api/v1/me`)).status(),401,'Logged-out session must be denied');
+ await page.goto(`${base}/login`);
+ console.log(JSON.stringify({headed:true,realMainDatabase:true,nativeAliasStatus:200,authenticatedMeStatus:200,fixedIdentityMatches:true,httpOnlyCookie:true,soleServerAdmin:true,logoutStatus:200,afterLogoutStatus:401,privateValuesLogged:false}));
+ fs.writeFileSync('quality/evidence/AUTH-ADMIN-SINGLE/main-login-proof.json',JSON.stringify({verifiedAt:new Date().toISOString(),headed:true,realMainDatabase:true,nativeAliasStatus:200,authenticatedMeStatus:200,fixedIdentityMatches:true,httpOnlyCookie:true,soleServerAdmin:true,logoutStatus:200,afterLogoutStatus:401},null,2)+'\n');
+}catch{
+ console.error(JSON.stringify({actualMainLoginFailed:true,phase,privateValuesOmitted:true}));process.exitCode=1;
+}finally{if(browser)await browser.close();if(pool)await pool.end();}

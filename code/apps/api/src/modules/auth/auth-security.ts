@@ -1,12 +1,13 @@
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {NodePgDatabase} from 'drizzle-orm/node-postgres';
 import {and,eq,inArray,desc,gt,sql} from 'drizzle-orm';
-import {APIError,createAuthEndpoint,createAuthMiddleware,sessionMiddleware,getSessionFromCtx} from 'better-auth/api';
-import {hashPassword} from 'better-auth/crypto';
+import {APIError,createAuthEndpoint,createAuthMiddleware,sessionMiddleware,getSessionFromCtx,signInEmail} from 'better-auth/api';
+import {hashFgPassword} from './auth-password.js';
 import type {Transporter} from 'nodemailer';
 import * as schema from '@fg/database';
-import {ApiEndpointRegistry,PasswordChallengeRequestSchema,AttachPasswordRequestSchema,VerifyEmailQuerySchema,RequestPasswordResetSchema,ResetPasswordRequestSchema} from '@fg/contracts';
+import {ApiEndpointRegistry,PasswordChallengeRequestSchema,AttachPasswordRequestSchema,VerifyEmailQuerySchema,RequestPasswordResetSchema,ResetPasswordRequestSchema,SignInAdminRequestSchema} from '@fg/contracts';
 import {sendAuthMail} from './auth-mail.js';
+import {soleAdminUserId,isReservedAdminName} from './auth-admin.js';
 
 type Db=NodePgDatabase<typeof schema>;
 type Session={session:{id:string;userId:string};user:{id:string;email:string}};
@@ -39,6 +40,17 @@ export function createAuthSecurity(db:Db,mail:Transporter,from:string,baseURL:st
   // propagate them instead of returning success after SMTP failure.
   runInBackgroundOrAwait:async(task:Promise<unknown>|unknown)=>{await task;},
  }}),endpoints:{
+  fgSignInAdmin:createAuthEndpoint('/fg/sign-in/admin',{method:'POST',body:SignInAdminRequestSchema,metadata:{noStore:true}},async ctx=>{
+   const userId=soleAdminUserId();
+   const [user]=userId?await db.select().from(schema.user).where(eq(schema.user.id,userId)).limit(1):[];
+   if(!user||user.name!=='kingame'||!await hasPassword(user.id)){
+    await hashFgPassword(ctx.body.password);
+    throw new APIError('UNAUTHORIZED',{code:'INVALID_EMAIL_OR_PASSWORD',message:'Thông tin đăng nhập không đúng.'});
+   }
+   // Invoke the installed native producer with its real context. It verifies
+   // credentials/email and creates cookies through native session/ban hooks.
+   return signInEmail()({...ctx,asResponse:true,body:{email:user.email,password:ctx.body.password,rememberMe:ctx.body.rememberMe,callbackURL:ctx.body.callbackURL}});
+  }),
   fgPasswordStatus:createAuthEndpoint('/fg/password-status',{method:'GET',use:[sessionMiddleware],metadata:{noStore:true}},async ctx=>{await requireCurrent(ctx.context.session);return ctx.json({hasPassword:await hasPassword(ctx.context.session.user.id)});}),
   fgPasswordChallenge:createAuthEndpoint('/fg/password-challenge',{method:'POST',body:PasswordChallengeRequestSchema,use:[sessionMiddleware],metadata:{noStore:true}},async ctx=>{
    const session=ctx.context.session,token=randomBytes(32).toString('base64url'),now=new Date();
@@ -47,7 +59,7 @@ export function createAuthSecurity(db:Db,mail:Transporter,from:string,baseURL:st
    return ctx.json({status:true});
   }),
   fgPasswordAttach:createAuthEndpoint('/fg/password-attach',{method:'POST',body:AttachPasswordRequestSchema,use:[sessionMiddleware],metadata:{noStore:true}},async ctx=>{
-   const session=ctx.context.session,hashed=await hashPassword(ctx.body.newPassword);
+   const session=ctx.context.session,hashed=await hashFgPassword(ctx.body.newPassword);
    await db.transaction(async tx=>{
     await tx.select().from(schema.user).where(eq(schema.user.id,session.user.id)).for('update');const user=await requireCurrent(session,tx);
     const [challenge]=await tx.select().from(schema.verification).where(and(eq(schema.verification.identifier,`fg-password:${digest(ctx.body.token)}`),gt(schema.verification.expiresAt,sql`clock_timestamp() AT TIME ZONE 'UTC'`))).for('update');if(!challenge)throw invalid();
@@ -60,6 +72,11 @@ export function createAuthSecurity(db:Db,mail:Transporter,from:string,baseURL:st
   }),
  }};
  const before=createAuthMiddleware(async ctx=>{
+  if(ctx.path==='/sign-up/email'&&typeof ctx.body?.name==='string'&&isReservedAdminName(ctx.body.name))throw new APIError('BAD_REQUEST',{code:'RESERVED_USERNAME',message:'Tên này được dành riêng cho quản trị.'});
+  if(ctx.path==='/update-user'&&typeof ctx.body?.name==='string'){
+   const user=await requireCurrent(await getSessionFromCtx(ctx));
+   if((isReservedAdminName(ctx.body.name)&&user.id!==soleAdminUserId())||(user.id===soleAdminUserId()&&ctx.body.name!=='kingame'))throw new APIError('BAD_REQUEST',{code:'RESERVED_USERNAME',message:'Tên này được dành riêng cho quản trị.'});
+  }
   const endpoint=ApiEndpointRegistry.find(e=>e.path===`/api/auth${ctx.path}`),isQuery=ctx.path==='/verify-email';
   const parsed=endpoint?.requestSchema?.safeParse(isQuery?ctx.query:ctx.body);if(parsed&&!parsed.success)throw new APIError('BAD_REQUEST',{code:'INVALID_AUTH_REQUEST',message:'Thông tin xác thực không hợp lệ.'});
   if(ctx.path==='/verify-email')await consumeEmailToken(VerifyEmailQuerySchema.parse(ctx.query).token);

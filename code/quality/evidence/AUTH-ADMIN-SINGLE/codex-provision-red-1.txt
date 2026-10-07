@@ -1,0 +1,61 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:11084) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-admin.integration.spec.ts (36.724 s)
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › provisions only one pending owner, retries without resetting the hash and activates only after real verification
+
+    Configuration error:
+
+    Could not locate module ../src/modules/auth/auth-provision.js mapped as:
+    $1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^(\.\.?\/.*)\.js$/": "$1"
+      },
+      "resolver": undefined
+    }
+
+      143 |  },30000);
+      144 |  it('provisions only one pending owner, retries without resetting the hash and activates only after real verification',async()=>{
+    > 145 |   const module=await import('../src/modules/auth/auth-provision.js');
+          |                ^
+      146 |   const userId=randomUUID(),address=email(),input={userId,email:address,password};
+      147 |   const first=await module.provisionAdminAccount(db,input);expect(first).toEqual({created:true,verified:false});
+      148 |   const before=await stored(address);expect(before.id).toBe(userId);expect(before.email_verified).toBe(false);
+
+      at createNoMappedModuleFoundError (../../node_modules/jest-resolve/build/index.js:1322:17)
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:145:16)
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › rejects invalid input, occupied identities and an existing kingame owned by another account
+
+    Configuration error:
+
+    Could not locate module ../src/modules/auth/auth-provision.js mapped as:
+    $1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^(\.\.?\/.*)\.js$/": "$1"
+      },
+      "resolver": undefined
+    }
+
+      157 |  });
+      158 |  it('rejects invalid input, occupied identities and an existing kingame owned by another account',async()=>{
+    > 159 |   const module=await import('../src/modules/auth/auth-provision.js');
+          |                ^
+      160 |   // Remove only the preceding test's ownership marker in this isolated schema;
+      161 |   // its occupied kingame remains and must cause refusal instead of takeover.
+      162 |   await pool.query('DELETE FROM verification WHERE identifier=$1',['fg-admin-provision:v1']);
+
+      at createNoMappedModuleFoundError (../../node_modules/jest-resolve/build/index.js:1322:17)
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:159:16)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 12 passed, 14 total
+Snapshots:   0 total
+Time:        37.155 s
+Ran all test suites matching apps/api/test/auth-admin.integration.spec.ts.

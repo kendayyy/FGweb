@@ -12,6 +12,8 @@ import {authMailTransport,sendAuthMail} from './auth-mail.js';
 import {createAuthSecurity} from './auth-security.js';
 import {APIError,createEmailVerificationToken} from 'better-auth/api';
 import {randomUUID} from 'node:crypto';
+import {hashFgPassword,verifyFgPassword} from './auth-password.js';
+import {soleAdminUserId,isReservedAdminName} from './auth-admin.js';
 
 export interface FgAuthOptions {
   baseURL: string;
@@ -42,10 +44,11 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
     logger:{disabled:true},
     plugins:[security.plugin],
     hooks:{before:security.before},
-    rateLimit:{enabled:true,window:60,max:100,customRules:{'/sign-in/email':{window:60,max:5},'/sign-up/email':{window:60,max:5},'/send-verification-email':{window:60,max:3},'/request-password-reset':{window:60,max:3},'/fg/password-challenge':{window:60,max:3}}},
-    databaseHooks:{session:{create:{before:async session=>{if(await security.banned(session.userId))throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});}}}},
+    rateLimit:{enabled:true,window:60,max:100,customRules:{'/fg/sign-in/admin':{window:60,max:5},'/sign-in/email':{window:60,max:5},'/sign-up/email':{window:60,max:5},'/send-verification-email':{window:60,max:3},'/request-password-reset':{window:60,max:3},'/fg/password-challenge':{window:60,max:3}}},
+    databaseHooks:{user:{create:{before:async user=>{if(isReservedAdminName(user.name))throw new APIError('BAD_REQUEST',{code:'RESERVED_USERNAME',message:'Tên này được dành riêng cho quản trị.'});}}},session:{create:{before:async session=>{if(await security.banned(session.userId))throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});}}}},
     emailAndPassword: {
-      enabled: true,requireEmailVerification:true,autoSignIn:false,minPasswordLength:12,maxPasswordLength:128,resetPasswordTokenExpiresIn:3600,revokeSessionsOnPasswordReset:true,
+      enabled: true,requireEmailVerification:true,autoSignIn:false,minPasswordLength:8,maxPasswordLength:256,resetPasswordTokenExpiresIn:3600,revokeSessionsOnPasswordReset:true,
+      password:{hash:hashFgPassword,verify:verifyFgPassword},
       sendResetPassword:async({user,url})=>{await sendAuthMail(mail,from,user.email,'RESET',url);},
     },
     emailVerification:{expiresIn:86400,sendOnSignUp:true,sendOnSignIn:false,autoSignInAfterVerification:false,sendVerificationEmail:async({user})=>{
@@ -186,39 +189,11 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
   }
 
   public async isUserAdmin(userId: string): Promise<boolean> {
-    if (!userId) return false;
-
-    const adminUserIds = (process.env.ADMIN_USER_IDS || '')
-      .split(',')
-      .map((u) => u.trim())
-      .filter(Boolean);
-
-    if (adminUserIds.includes(userId)) {
-      return true;
-    }
-
-    const adminDiscordIds = (process.env.ADMIN_DISCORD_IDS || '')
-      .split(',')
-      .map((i) => i.trim())
-      .filter(Boolean);
-
-    if (adminDiscordIds.length > 0) {
-      const [discordAccount] = await this.db
-        .select()
-        .from(schema.account)
-        .where(
-          and(
-            eq(schema.account.userId, userId),
-            eq(schema.account.providerId, 'discord')
-          )
-        );
-
-      if (discordAccount && adminDiscordIds.includes(discordAccount.accountId)) {
-        return true;
-      }
-    }
-
-    return false;
+    if (!userId||userId!==soleAdminUserId()||await this.isUserBanned(userId)) return false;
+    const [user]=await this.db.select().from(schema.user).where(eq(schema.user.id,userId)).limit(1);
+    if(!user||user.name!=='kingame'||!user.emailVerified)return false;
+    const [credential]=await this.db.select({id:schema.account.id}).from(schema.account).where(and(eq(schema.account.userId,userId),eq(schema.account.accountId,userId),eq(schema.account.providerId,'credential'))).limit(1);
+    return Boolean(credential);
   }
 
   public async getUserMe(userId: string): Promise<MeDTO> {

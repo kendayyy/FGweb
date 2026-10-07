@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/AUTH-ADMIN-SINGLE',hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(item=>item.id==='AUTH-ADMIN-SINGLE');
+assert.equal(task.status,'BLOCKED');assert.equal(checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json'))}),8);
+for(const [file,sha] of Object.entries(task.pendingOutputsHash.files))assert.equal(hash(file),sha,file);
+const record=JSON.parse(fs.readFileSync(`${dir}/codex-login-issue-state-1.json`));assert.equal(record.exitCode,0);assert.equal(hash(record.evidencePath),record.evidenceSha256);
+const state=JSON.parse(fs.readFileSync(record.evidencePath));assert.equal(state.ownerVerified,true);assert.equal(state.protectedOwnerBindingMatches,true);assert.equal(state.exactPrivatePasswordVerified,true);
+task.resumeHistory.push({resumedAt:new Date().toISOString(),previousBlockedAt:task.blockedAt,previousBlockers:task.blockers,reason:'Actual main native owner verification is now confirmed. The human reported alias login failure before sole server ID activation; complete authorized activation and headed real login checks.'});
+task.status='IN_PROGRESS';task.blockers=[];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({task:task.id,status:task.status,baselineCount:8,resumeFingerprintMatches:true,ownerVerified:true,activationPending:true}));
