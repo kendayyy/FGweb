@@ -1,5 +1,7 @@
 # FG
 
+<img src="apps/web/public/brand/icon-512.png" alt="Logo FG" width="112" height="112" />
+
 Ứng dụng cộng đồng game: React/Vite frontend, NestJS API, PostgreSQL/Drizzle,
 Redis, LiveKit và OpenBao. Mã nguồn ứng dụng nằm trong thư mục `code/`.
 Spec, thiết kế và thứ tự checkpoint nằm trong `../.doc/`.
