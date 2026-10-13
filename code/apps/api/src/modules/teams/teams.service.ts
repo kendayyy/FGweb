@@ -23,7 +23,15 @@ export class TeamsService implements OnModuleInit,OnModuleDestroy {
  }
  async onModuleDestroy(){await this.pool?.end();}
  async transaction<T>(run:(db:PoolClient)=>Promise<T>):Promise<T>{
-  const db=await this.pool.connect();try{await db.query('BEGIN ISOLATION LEVEL READ COMMITTED');await db.query("SET LOCAL TIME ZONE 'UTC'");const result=await run(db);await db.query('COMMIT');return result;}
+  let db:PoolClient;
+  try{db=await this.pool.connect();}
+  catch(error){
+   // A failed new handshake can outlive another client's return to this pool.
+   // Before BEGIN, take that ready client once; never replay a transaction.
+   if(!(error instanceof Error)||error.message!=='Connection terminated due to connection timeout'||this.pool.idleCount===0||this.pool.waitingCount!==0)throw error;
+   db=await this.pool.connect();
+  }
+  try{await db.query('BEGIN ISOLATION LEVEL READ COMMITTED');await db.query("SET LOCAL TIME ZONE 'UTC'");const result=await run(db);await db.query('COMMIT');return result;}
   catch(error){await db.query('ROLLBACK');if(error instanceof HttpException)throw error;const code=error&&typeof error==='object'&&'code'in error?String(error.code):'';if(['23505','40001','40P01'].includes(code))roomError(ErrorCode.ACTIVE_PLAY_CONFLICT,'Concurrent team operation conflicted');throw error;}
   finally{db.release();}
  }

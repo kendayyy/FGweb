@@ -1,0 +1,4087 @@
+{
+  "at": "2026-10-13T07:15:01.516Z",
+  "diagnosticOnly": true,
+  "apiBuild": 31,
+  "webBuild": 4,
+  "run": "t30-native-cf2c5dc7457b4265a3fbf63a24f4d103",
+  "health": {
+    "owned-lifecycle-query-timing-health.json": {
+      "at": "2026-10-13T07:14:21.707Z",
+      "failureCount": 0,
+      "droppedCount": 0,
+      "poolCount": 1,
+      "clientCount": 5,
+      "records": 2838,
+      "instancesRestored": true,
+      "prototypesUnchanged": true,
+      "noQueryTextArgumentsOrResults": true
+    },
+    "owned-native-read-timing-health.json": {
+      "at": "2026-10-13T07:14:21.720Z",
+      "failureCount": 0,
+      "droppedCount": 0,
+      "records": 476,
+      "serviceCount": 1,
+      "clientMethods": 452,
+      "instancesRestored": true,
+      "prototypesUnchanged": true,
+      "noArgumentsOrResultsLogged": true
+    },
+    "owned-room-timing-health.json": {
+      "at": "2026-10-13T07:14:21.802Z",
+      "methodCount": 44,
+      "failureCount": 0,
+      "droppedCount": 0,
+      "timerStopped": true,
+      "instancesRestored": true,
+      "prototypesUnchanged": true,
+      "records": 6959
+    },
+    "pg-blocking-health.json": {
+      "at": "2026-10-13T07:14:21.795Z",
+      "failureCount": 0,
+      "droppedCount": 0,
+      "samples": 626,
+      "timerStopped": true,
+      "actualClientEnded": true,
+      "readonly": true,
+      "noQueryTextOrParameters": true
+    }
+  },
+  "querySummary": {
+    "BEGIN": {
+      "count": 156,
+      "totalMs": 8770,
+      "maxMs": 773.27
+    },
+    "SET": {
+      "count": 156,
+      "totalMs": 7615,
+      "maxMs": 677.31
+    },
+    "WEBHOOK": {
+      "count": 33,
+      "totalMs": 1926,
+      "maxMs": 278.92
+    },
+    "COMMIT": {
+      "count": 156,
+      "totalMs": 19072,
+      "maxMs": 911.37
+    },
+    "ROOM_GROUP_LOCK": {
+      "count": 125,
+      "totalMs": 22253,
+      "maxMs": 2433.73
+    },
+    "MEMBER": {
+      "count": 128,
+      "totalMs": 5587,
+      "maxMs": 565.53
+    },
+    "PUBLISH_SLOT": {
+      "count": 129,
+      "totalMs": 5429,
+      "maxMs": 631.36
+    },
+    "GROUP": {
+      "count": 180,
+      "totalMs": 122,
+      "maxMs": 18.73
+    },
+    "LEASE_POLICY": {
+      "count": 242,
+      "totalMs": 12756,
+      "maxMs": 818.17
+    },
+    "ADMISSION": {
+      "count": 114,
+      "totalMs": 3861,
+      "maxMs": 233.29
+    }
+  },
+  "slowPasses": [
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1405,
+      "ok": true,
+      "at": "2026-10-13T07:12:44.194Z",
+      "durationMs": 3946.12,
+      "start": "2026-10-13T07:12:40.248Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 622,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:40.531Z",
+          "durationMs": 276.38
+        },
+        {
+          "type": "finish",
+          "id": 623,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:40.899Z",
+          "durationMs": 367.65
+        },
+        {
+          "type": "finish",
+          "id": 624,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:41.869Z",
+          "durationMs": 969.83
+        },
+        {
+          "type": "finish",
+          "id": 625,
+          "kind": "MEMBER",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:42.707Z",
+          "durationMs": 520.09
+        },
+        {
+          "type": "finish",
+          "id": 626,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:43.544Z",
+          "durationMs": 818.17
+        },
+        {
+          "type": "finish",
+          "id": 627,
+          "kind": "ADMISSION",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:43.604Z",
+          "durationMs": 59.78
+        },
+        {
+          "type": "finish",
+          "id": 628,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:43.742Z",
+          "durationMs": 138.58
+        },
+        {
+          "type": "finish",
+          "id": 629,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:43.912Z",
+          "durationMs": 169.47
+        },
+        {
+          "type": "finish",
+          "id": 630,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:44.194Z",
+          "durationMs": 280.96
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 111,
+          "ok": true,
+          "at": "2026-10-13T07:12:42.187Z",
+          "durationMs": 318.59
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:12:41.998Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 155
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1588
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 218
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:42.313Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 472
+            },
+            {
+              "pid": 18881,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 1905
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 535
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:42.802Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 858
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 128
+            },
+            {
+              "pid": 18881,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2291
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 921
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 345
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:43.213Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1394
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 665
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 2828
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1458
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 882
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:43.379Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1646
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 917
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 3080
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1710
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1134
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:43.712Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1918
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1189
+            },
+            {
+              "pid": 18881,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 3352
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1982
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1405
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:43.944Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2176
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1447
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 3610
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2240
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1663
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1495,
+      "ok": true,
+      "at": "2026-10-13T07:12:48.776Z",
+      "durationMs": 2481.63,
+      "start": "2026-10-13T07:12:46.295Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 635,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:46.648Z",
+          "durationMs": 352.7
+        },
+        {
+          "type": "finish",
+          "id": 636,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:46.751Z",
+          "durationMs": 102.63
+        },
+        {
+          "type": "finish",
+          "id": 637,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:47.826Z",
+          "durationMs": 1075.34
+        },
+        {
+          "type": "finish",
+          "id": 638,
+          "kind": "MEMBER",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:47.925Z",
+          "durationMs": 21.06
+        },
+        {
+          "type": "finish",
+          "id": 639,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:48.035Z",
+          "durationMs": 110.41
+        },
+        {
+          "type": "finish",
+          "id": 640,
+          "kind": "ADMISSION",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:48.054Z",
+          "durationMs": 18.56
+        },
+        {
+          "type": "finish",
+          "id": 641,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:48.081Z",
+          "durationMs": 26.9
+        },
+        {
+          "type": "finish",
+          "id": 642,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:48.186Z",
+          "durationMs": 104.95
+        },
+        {
+          "type": "finish",
+          "id": 643,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:48.776Z",
+          "durationMs": 589.9
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 112,
+          "ok": true,
+          "at": "2026-10-13T07:12:47.904Z",
+          "durationMs": 75.38
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:12:47.011Z",
+          "rows": [
+            {
+              "pid": 18744,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2302
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18744
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 628
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:47.299Z",
+          "rows": [
+            {
+              "pid": 18744,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 2541
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18744
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 867
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:47.477Z",
+          "rows": [
+            {
+              "pid": 18660,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 214
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18660
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1119
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:47.753Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18657
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1402
+            },
+            {
+              "pid": 18657,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 417
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:47.976Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 158
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 146
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 1654
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18659,
+                18657,
+                18660
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 868
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 157
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:48.355Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 426
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 414
+            },
+            {
+              "pid": 18881,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 1921
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18659,
+                18657,
+                18660
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1136
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 425
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:48.776Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 875
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 863
+            },
+            {
+              "pid": 18881,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 2370
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18659,
+                18657,
+                18660
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1585
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 874
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1545,
+      "ok": true,
+      "at": "2026-10-13T07:12:54.526Z",
+      "durationMs": 3851.53,
+      "start": "2026-10-13T07:12:50.675Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 645,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:50.748Z",
+          "durationMs": 72.5
+        },
+        {
+          "type": "finish",
+          "id": 646,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:50.797Z",
+          "durationMs": 48.79
+        },
+        {
+          "type": "finish",
+          "id": 647,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:52.564Z",
+          "durationMs": 1767.08
+        },
+        {
+          "type": "finish",
+          "id": 648,
+          "kind": "MEMBER",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:53.045Z",
+          "durationMs": 168.56
+        },
+        {
+          "type": "finish",
+          "id": 649,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:53.248Z",
+          "durationMs": 203
+        },
+        {
+          "type": "finish",
+          "id": 650,
+          "kind": "ADMISSION",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:53.344Z",
+          "durationMs": 96.17
+        },
+        {
+          "type": "finish",
+          "id": 651,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:53.549Z",
+          "durationMs": 215.79
+        },
+        {
+          "type": "finish",
+          "id": 652,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:53.870Z",
+          "durationMs": 309.73
+        },
+        {
+          "type": "finish",
+          "id": 653,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:12:54.526Z",
+          "durationMs": 655.68
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 113,
+          "ok": true,
+          "at": "2026-10-13T07:12:52.876Z",
+          "durationMs": 312.66
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:12:51.068Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18656
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 296
+            },
+            {
+              "pid": 18656,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 98
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:51.181Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18656
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 487
+            },
+            {
+              "pid": 18656,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 289
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:51.686Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 170
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18659
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 930
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:51.863Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18657
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1109
+            },
+            {
+              "pid": 18657,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 299
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:52.179Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 305
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18659
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1356
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:52.415Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 190
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18659
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1621
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:52.879Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 183
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 165
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1940
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 164
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 180
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 147
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:53.250Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 685
+            },
+            {
+              "pid": 18743,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1434
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 667
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 2442
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 666
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 682
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 649
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:53.588Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 948
+            },
+            {
+              "pid": 18743,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1697
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 930
+            },
+            {
+              "pid": 18881,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2705
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 929
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 945
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 911
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:12:53.964Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1490
+            },
+            {
+              "pid": 18744,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1863
+            },
+            {
+              "pid": 18743,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2239
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1473
+            },
+            {
+              "pid": 18881,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 3248
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1472
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1488
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1454
+            },
+            {
+              "pid": 18741,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1380
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1639,
+      "ok": true,
+      "at": "2026-10-13T07:13:07.099Z",
+      "durationMs": 6026.29,
+      "start": "2026-10-13T07:13:01.072Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 668,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:01.072Z",
+          "durationMs": 911.37
+        },
+        {
+          "type": "finish",
+          "id": 669,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:01.846Z",
+          "durationMs": 773.27
+        },
+        {
+          "type": "finish",
+          "id": 670,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:02.523Z",
+          "durationMs": 677.31
+        },
+        {
+          "type": "finish",
+          "id": 671,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:03.108Z",
+          "durationMs": 584.21
+        },
+        {
+          "type": "finish",
+          "id": 672,
+          "kind": "MEMBER",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:04.564Z",
+          "durationMs": 565.53
+        },
+        {
+          "type": "finish",
+          "id": 673,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:05.241Z",
+          "durationMs": 676.9
+        },
+        {
+          "type": "finish",
+          "id": 674,
+          "kind": "ADMISSION",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:05.465Z",
+          "durationMs": 224.08
+        },
+        {
+          "type": "finish",
+          "id": 675,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:06.097Z",
+          "durationMs": 631.36
+        },
+        {
+          "type": "finish",
+          "id": 676,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:06.654Z",
+          "durationMs": 557.47
+        },
+        {
+          "type": "finish",
+          "id": 677,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:07.099Z",
+          "durationMs": 444.09
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 117,
+          "ok": true,
+          "at": "2026-10-13T07:13:03.999Z",
+          "durationMs": 891.18
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:13:03.991Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 904
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2256
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 13
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 903
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 920
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:04.579Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1495
+            },
+            {
+              "pid": 18881,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2847
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 604
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1494
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1511
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:05.459Z",
+          "rows": [
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2628
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1137
+            },
+            {
+              "pid": 18881,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 3979
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1737
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2627
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2644
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:06.629Z",
+          "rows": [
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1885
+            },
+            {
+              "pid": 18881,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 4727
+            },
+            {
+              "pid": 18656,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2485
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 37
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 72
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1861,
+      "ok": true,
+      "at": "2026-10-13T07:13:18.828Z",
+      "durationMs": 2383.34,
+      "start": "2026-10-13T07:13:16.445Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 750,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:16.511Z",
+          "durationMs": 63.79
+        },
+        {
+          "type": "finish",
+          "id": 751,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:16.586Z",
+          "durationMs": 75.14
+        },
+        {
+          "type": "finish",
+          "id": 753,
+          "kind": "GROUP",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:16.820Z",
+          "durationMs": 3.95
+        },
+        {
+          "type": "finish",
+          "id": 754,
+          "kind": "GROUP",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:16.865Z",
+          "durationMs": 0.24
+        },
+        {
+          "type": "finish",
+          "id": 752,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:17.822Z",
+          "durationMs": 1235.75
+        },
+        {
+          "type": "finish",
+          "id": 755,
+          "kind": "MEMBER",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:18.199Z",
+          "durationMs": 66.67
+        },
+        {
+          "type": "finish",
+          "id": 756,
+          "kind": "LEASE_POLICY",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:18.246Z",
+          "durationMs": 47.3
+        },
+        {
+          "type": "finish",
+          "id": 757,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:18.367Z",
+          "durationMs": 120.42
+        },
+        {
+          "type": "finish",
+          "id": 758,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:18.828Z",
+          "durationMs": 461.11
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listRooms",
+          "id": 130,
+          "ok": true,
+          "at": "2026-10-13T07:13:16.816Z",
+          "durationMs": 77.16
+        },
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 131,
+          "ok": true,
+          "at": "2026-10-13T07:13:17.914Z",
+          "durationMs": 91.7
+        },
+        {
+          "type": "finish",
+          "method": "listRooms",
+          "id": 132,
+          "ok": true,
+          "at": "2026-10-13T07:13:18.132Z",
+          "durationMs": 218.27
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:13:16.691Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 172
+            },
+            {
+              "pid": 18742,
+              "queryKind": "OTHER",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 750
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:16.961Z",
+          "rows": [
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 389
+            },
+            {
+              "pid": 18742,
+              "queryKind": "OTHER",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 966
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:17.135Z",
+          "rows": [
+            {
+              "pid": 18899,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 139
+            },
+            {
+              "pid": 18940,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 334
+            },
+            {
+              "pid": 18744,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 284
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 640
+            },
+            {
+              "pid": 18742,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1217
+            },
+            {
+              "pid": 18741,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 285
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:17.445Z",
+          "rows": [
+            {
+              "pid": 18899,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 413
+            },
+            {
+              "pid": 18940,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 608
+            },
+            {
+              "pid": 18744,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 559
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 914
+            },
+            {
+              "pid": 18742,
+              "queryKind": "OTHER",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1491
+            },
+            {
+              "pid": 18741,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 560
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:17.676Z",
+          "rows": [
+            {
+              "pid": 18899,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 672
+            },
+            {
+              "pid": 18940,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 866
+            },
+            {
+              "pid": 18744,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 817
+            },
+            {
+              "pid": 18881,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1172
+            },
+            {
+              "pid": 18742,
+              "queryKind": "SESSION_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1750
+            },
+            {
+              "pid": 18741,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18742
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 818
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:18.532Z",
+          "rows": [
+            {
+              "pid": 18899,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18881
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1439
+            },
+            {
+              "pid": 18881,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 1940
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 2126,
+      "ok": true,
+      "at": "2026-10-13T07:13:31.458Z",
+      "durationMs": 2296.36,
+      "start": "2026-10-13T07:13:29.162Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 879,
+          "kind": "BEGIN",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:29.243Z",
+          "durationMs": 79.92
+        },
+        {
+          "type": "finish",
+          "id": 880,
+          "kind": "SET",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:29.423Z",
+          "durationMs": 179.64
+        },
+        {
+          "type": "finish",
+          "id": 881,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.026Z",
+          "durationMs": 602.74
+        },
+        {
+          "type": "finish",
+          "id": 882,
+          "kind": "MEMBER",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.788Z",
+          "durationMs": 60.12
+        },
+        {
+          "type": "finish",
+          "id": 884,
+          "kind": "GROUP",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.821Z",
+          "durationMs": 0.68
+        },
+        {
+          "type": "finish",
+          "id": 883,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.828Z",
+          "durationMs": 39.46
+        },
+        {
+          "type": "finish",
+          "id": 885,
+          "kind": "ADMISSION",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.848Z",
+          "durationMs": 19.87
+        },
+        {
+          "type": "finish",
+          "id": 886,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:31.111Z",
+          "durationMs": 263.54
+        },
+        {
+          "type": "finish",
+          "id": 887,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:31.132Z",
+          "durationMs": 20.86
+        },
+        {
+          "type": "finish",
+          "id": 888,
+          "kind": "COMMIT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:31.458Z",
+          "durationMs": 325.8
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 148,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.728Z",
+          "durationMs": 702.49
+        },
+        {
+          "type": "finish",
+          "method": "listRooms",
+          "id": 149,
+          "ok": true,
+          "at": "2026-10-13T07:13:30.820Z",
+          "durationMs": 84.72
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:13:30.739Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1418
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 351
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 239
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 685
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:30.823Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1615
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 549
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 436
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 882
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:31.139Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1955
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 889
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 145
+            },
+            {
+              "pid": 18658,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 777
+            },
+            {
+              "pid": 18657,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1223
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 2168,
+      "ok": true,
+      "at": "2026-10-13T07:13:35.615Z",
+      "durationMs": 3496.18,
+      "start": "2026-10-13T07:13:32.119Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 890,
+          "kind": "BEGIN",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:32.281Z",
+          "durationMs": 162.02
+        },
+        {
+          "type": "finish",
+          "id": 891,
+          "kind": "BEGIN",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:32.288Z",
+          "durationMs": 158.78
+        },
+        {
+          "type": "finish",
+          "id": 892,
+          "kind": "SET",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:32.448Z",
+          "durationMs": 167.42
+        },
+        {
+          "type": "finish",
+          "id": 893,
+          "kind": "SET",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:32.453Z",
+          "durationMs": 165.22
+        },
+        {
+          "type": "finish",
+          "id": 895,
+          "kind": "WEBHOOK",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:32.496Z",
+          "durationMs": 42.05
+        },
+        {
+          "type": "finish",
+          "id": 896,
+          "kind": "COMMIT",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:33.066Z",
+          "durationMs": 570.45
+        },
+        {
+          "type": "finish",
+          "id": 894,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:34.882Z",
+          "durationMs": 2433.73
+        },
+        {
+          "type": "finish",
+          "id": 897,
+          "kind": "MEMBER",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:34.998Z",
+          "durationMs": 48.02
+        },
+        {
+          "type": "finish",
+          "id": 898,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.016Z",
+          "durationMs": 18.54
+        },
+        {
+          "type": "finish",
+          "id": 899,
+          "kind": "ADMISSION",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.059Z",
+          "durationMs": 42.92
+        },
+        {
+          "type": "finish",
+          "id": 900,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.133Z",
+          "durationMs": 73.66
+        },
+        {
+          "type": "finish",
+          "id": 901,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.264Z",
+          "durationMs": 131.31
+        },
+        {
+          "type": "finish",
+          "id": 902,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.308Z",
+          "durationMs": 43.22
+        },
+        {
+          "type": "finish",
+          "id": 903,
+          "kind": "COMMIT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.615Z",
+          "durationMs": 307.16
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 150,
+          "ok": true,
+          "at": "2026-10-13T07:13:34.950Z",
+          "durationMs": 67.29
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:13:32.501Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 342
+            },
+            {
+              "pid": 18899,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1295
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:33.061Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 777
+            },
+            {
+              "pid": 18899,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 1730
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 17
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:33.313Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1068
+            },
+            {
+              "pid": 18899,
+              "queryKind": "OTHER",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2021
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 308
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:33.808Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1426
+            },
+            {
+              "pid": 18899,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2379
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 666
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 322
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:34.140Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1945
+            },
+            {
+              "pid": 18899,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2897
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1185
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 841
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:34.366Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2191
+            },
+            {
+              "pid": 18899,
+              "queryKind": "PUBLISH_SLOT_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 3143
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1431
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1088
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:34.759Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2524
+            },
+            {
+              "pid": 18899,
+              "queryKind": "PROFILE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 3476
+            },
+            {
+              "pid": 18940,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1326
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1763
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1104
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "tuple",
+              "transactionMs": 1420
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:34.951Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2787
+            },
+            {
+              "pid": 18940,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1589
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2027
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 102
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1367
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1683
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:35.233Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "active",
+              "waitType": null,
+              "waitEvent": "OTHER",
+              "transactionMs": 3052
+            },
+            {
+              "pid": 18940,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1854
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2292
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 367
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1632
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1948
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:35.596Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 3300
+            },
+            {
+              "pid": 18940,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2102
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2539
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 614
+            },
+            {
+              "pid": 18742,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1880
+            },
+            {
+              "pid": 18655,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2195
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 2222,
+      "ok": true,
+      "at": "2026-10-13T07:13:38.742Z",
+      "durationMs": 3134.8,
+      "start": "2026-10-13T07:13:35.615Z",
+      "queries": [
+        {
+          "type": "finish",
+          "id": 903,
+          "kind": "COMMIT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.615Z",
+          "durationMs": 307.16
+        },
+        {
+          "type": "finish",
+          "id": 904,
+          "kind": "BEGIN",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:35.790Z",
+          "durationMs": 174.14
+        },
+        {
+          "type": "finish",
+          "id": 905,
+          "kind": "SET",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:36.014Z",
+          "durationMs": 224.37
+        },
+        {
+          "type": "finish",
+          "id": 907,
+          "kind": "GROUP",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:36.810Z",
+          "durationMs": 0.36
+        },
+        {
+          "type": "finish",
+          "id": 906,
+          "kind": "ROOM_GROUP_LOCK",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:37.964Z",
+          "durationMs": 1950.36
+        },
+        {
+          "type": "finish",
+          "id": 908,
+          "kind": "MEMBER",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.012Z",
+          "durationMs": 14.55
+        },
+        {
+          "type": "finish",
+          "id": 909,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.024Z",
+          "durationMs": 11.49
+        },
+        {
+          "type": "finish",
+          "id": 910,
+          "kind": "ADMISSION",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.035Z",
+          "durationMs": 11.22
+        },
+        {
+          "type": "finish",
+          "id": 911,
+          "kind": "ADMISSION",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.043Z",
+          "durationMs": 7.59
+        },
+        {
+          "type": "finish",
+          "id": 912,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.064Z",
+          "durationMs": 20.8
+        },
+        {
+          "type": "finish",
+          "id": 914,
+          "kind": "GROUP",
+          "pid": 18881,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.115Z",
+          "durationMs": 0.83
+        },
+        {
+          "type": "finish",
+          "id": 913,
+          "kind": "MEMBER",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.350Z",
+          "durationMs": 286.08
+        },
+        {
+          "type": "finish",
+          "id": 915,
+          "kind": "PUBLISH_SLOT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.459Z",
+          "durationMs": 109.37
+        },
+        {
+          "type": "finish",
+          "id": 916,
+          "kind": "LEASE_POLICY",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.524Z",
+          "durationMs": 72.56
+        },
+        {
+          "type": "finish",
+          "id": 917,
+          "kind": "COMMIT",
+          "pid": 18928,
+          "ok": true,
+          "at": "2026-10-13T07:13:38.741Z",
+          "durationMs": 217.42
+        }
+      ],
+      "native": [
+        {
+          "type": "finish",
+          "method": "listRooms",
+          "id": 151,
+          "ok": true,
+          "at": "2026-10-13T07:13:36.809Z",
+          "durationMs": 313.63
+        },
+        {
+          "type": "finish",
+          "method": "listParticipants",
+          "id": 152,
+          "ok": true,
+          "at": "2026-10-13T07:13:37.998Z",
+          "durationMs": 33.24
+        }
+      ],
+      "blockers": [
+        {
+          "at": "2026-10-13T07:13:36.083Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18940
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 270
+            },
+            {
+              "pid": 18940,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2702
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:36.529Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18940
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 694
+            },
+            {
+              "pid": 18940,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "IO",
+              "waitEvent": "OTHER",
+              "transactionMs": 3125
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:37.178Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18899
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1383
+            },
+            {
+              "pid": 18899,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 2081
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:37.383Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18659
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 1613
+            },
+            {
+              "pid": 18659,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 215
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:37.948Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "ROOM_QUERY",
+              "blockers": [
+                18659
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 2010
+            },
+            {
+              "pid": 18659,
+              "queryKind": "COMMIT",
+              "blockers": [],
+              "state": "active",
+              "waitType": "LWLock",
+              "waitEvent": "WALWrite",
+              "transactionMs": 611
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:38.017Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "MEMBER_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2252
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 81
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:38.354Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "OTHER",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2510
+            },
+            {
+              "pid": 18899,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 324
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 339
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 33
+            }
+          ]
+        },
+        {
+          "at": "2026-10-13T07:13:38.577Z",
+          "rows": [
+            {
+              "pid": 18928,
+              "queryKind": "LEASE_QUERY",
+              "blockers": [],
+              "state": "idle in transaction",
+              "waitType": "Client",
+              "waitEvent": "ClientRead",
+              "transactionMs": 2775
+            },
+            {
+              "pid": 18899,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 589
+            },
+            {
+              "pid": 18659,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 604
+            },
+            {
+              "pid": 18660,
+              "queryKind": "GROUP_QUERY",
+              "blockers": [
+                18928
+              ],
+              "state": "active",
+              "waitType": "Lock",
+              "waitEvent": "transactionid",
+              "transactionMs": 299
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "gatewayFailures": [],
+  "slowNative": [
+    {
+      "type": "finish",
+      "method": "listRooms",
+      "id": 116,
+      "ok": true,
+      "at": "2026-10-13T07:12:59.935Z",
+      "durationMs": 520.1
+    },
+    {
+      "type": "finish",
+      "method": "listParticipants",
+      "id": 117,
+      "ok": true,
+      "at": "2026-10-13T07:13:03.999Z",
+      "durationMs": 891.18
+    },
+    {
+      "type": "finish",
+      "method": "listParticipants",
+      "id": 148,
+      "ok": true,
+      "at": "2026-10-13T07:13:30.728Z",
+      "durationMs": 702.49
+    }
+  ],
+  "slowMethods": [
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1068,
+      "ok": true,
+      "at": "2026-10-13T07:12:27.493Z",
+      "durationMs": 5406.56
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1406,
+      "ok": true,
+      "at": "2026-10-13T07:12:44.194Z",
+      "durationMs": 3939.31
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1405,
+      "ok": true,
+      "at": "2026-10-13T07:12:44.194Z",
+      "durationMs": 3946.12
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1428,
+      "ok": true,
+      "at": "2026-10-13T07:12:46.678Z",
+      "durationMs": 4232.45
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1438,
+      "ok": true,
+      "at": "2026-10-13T07:12:49.656Z",
+      "durationMs": 6778.8
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1509,
+      "ok": true,
+      "at": "2026-10-13T07:12:50.770Z",
+      "durationMs": 3716
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "claim",
+      "id": 1508,
+      "ok": true,
+      "at": "2026-10-13T07:12:50.770Z",
+      "durationMs": 3716.03
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1546,
+      "ok": true,
+      "at": "2026-10-13T07:12:54.526Z",
+      "durationMs": 3851.22
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1545,
+      "ok": true,
+      "at": "2026-10-13T07:12:54.526Z",
+      "durationMs": 3851.53
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1564,
+      "ok": true,
+      "at": "2026-10-13T07:12:55.024Z",
+      "durationMs": 3352.36
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1563,
+      "ok": true,
+      "at": "2026-10-13T07:12:55.024Z",
+      "durationMs": 3352.4
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1540,
+      "ok": true,
+      "at": "2026-10-13T07:12:56.328Z",
+      "durationMs": 6391.86
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1539,
+      "ok": true,
+      "at": "2026-10-13T07:12:56.328Z",
+      "durationMs": 6391.91
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1580,
+      "ok": false,
+      "at": "2026-10-13T07:12:57.795Z",
+      "durationMs": 5043.78
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1612,
+      "ok": true,
+      "at": "2026-10-13T07:13:01.048Z",
+      "durationMs": 4059.68
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1611,
+      "ok": true,
+      "at": "2026-10-13T07:13:01.048Z",
+      "durationMs": 4059.78
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "room",
+      "id": 1635,
+      "ok": true,
+      "at": "2026-10-13T07:13:02.525Z",
+      "durationMs": 3110.56
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1623,
+      "ok": true,
+      "at": "2026-10-13T07:13:02.775Z",
+      "durationMs": 4820.28
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1622,
+      "ok": true,
+      "at": "2026-10-13T07:13:02.775Z",
+      "durationMs": 4820.3
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1627,
+      "ok": true,
+      "at": "2026-10-13T07:13:03.971Z",
+      "durationMs": 5887.44
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1626,
+      "ok": true,
+      "at": "2026-10-13T07:13:03.971Z",
+      "durationMs": 5887.47
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1631,
+      "ok": true,
+      "at": "2026-10-13T07:13:05.242Z",
+      "durationMs": 6362.08
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1630,
+      "ok": true,
+      "at": "2026-10-13T07:13:05.242Z",
+      "durationMs": 6362.11
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1640,
+      "ok": true,
+      "at": "2026-10-13T07:13:07.099Z",
+      "durationMs": 6026.15
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1639,
+      "ok": true,
+      "at": "2026-10-13T07:13:07.099Z",
+      "durationMs": 6026.29
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1652,
+      "ok": true,
+      "at": "2026-10-13T07:13:08.233Z",
+      "durationMs": 4242.82
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 1651,
+      "ok": true,
+      "at": "2026-10-13T07:13:08.233Z",
+      "durationMs": 4242.86
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1656,
+      "ok": true,
+      "at": "2026-10-13T07:13:09.712Z",
+      "durationMs": 5130.98
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1649,
+      "ok": true,
+      "at": "2026-10-13T07:13:09.960Z",
+      "durationMs": 6590.5
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1657,
+      "ok": true,
+      "at": "2026-10-13T07:13:09.982Z",
+      "durationMs": 5380.4
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1647,
+      "ok": true,
+      "at": "2026-10-13T07:13:12.380Z",
+      "durationMs": 9200.08
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1689,
+      "ok": true,
+      "at": "2026-10-13T07:13:12.882Z",
+      "durationMs": 4960.04
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1686,
+      "ok": true,
+      "at": "2026-10-13T07:13:13.973Z",
+      "durationMs": 6075.21
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 2128,
+      "ok": true,
+      "at": "2026-10-13T07:13:34.456Z",
+      "durationMs": 5280.3
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 2162,
+      "ok": true,
+      "at": "2026-10-13T07:13:34.886Z",
+      "durationMs": 3720.08
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "claim",
+      "id": 2161,
+      "ok": true,
+      "at": "2026-10-13T07:13:34.886Z",
+      "durationMs": 3720.25
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 2148,
+      "ok": true,
+      "at": "2026-10-13T07:13:34.937Z",
+      "durationMs": 4182.43
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 2169,
+      "ok": true,
+      "at": "2026-10-13T07:13:35.615Z",
+      "durationMs": 3496.03
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 2168,
+      "ok": true,
+      "at": "2026-10-13T07:13:35.615Z",
+      "durationMs": 3496.18
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 2187,
+      "ok": true,
+      "at": "2026-10-13T07:13:36.535Z",
+      "durationMs": 3216.42
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 2186,
+      "ok": true,
+      "at": "2026-10-13T07:13:36.535Z",
+      "durationMs": 3216.45
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 2179,
+      "ok": true,
+      "at": "2026-10-13T07:13:38.348Z",
+      "durationMs": 5818.13
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 2178,
+      "ok": true,
+      "at": "2026-10-13T07:13:38.574Z",
+      "durationMs": 6066.87
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 2223,
+      "ok": true,
+      "at": "2026-10-13T07:13:38.742Z",
+      "durationMs": 3134.65
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 2222,
+      "ok": true,
+      "at": "2026-10-13T07:13:38.742Z",
+      "durationMs": 3134.8
+    }
+  ],
+  "nativeAcceptance": false
+}

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-13T05:42:02.961Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 Native90 initial CallsService PG new-handshake timeout returns HTTP500 although pool idle1 before/idle2 after failure and no queued checkout. Locked pg-pool source and realPG TCP proxy RED2/4 reproduce ready-backend loss before BEGIN; no-idle timeout and non-timeout database failure controls pass. On exact new-handshake timeout only, acquire an existing idle client once when no waiter precedes us; no transaction replay, no wait/backoff/config/deadline/authorization changes. Preserve BEGIN/UTC/body/COMMIT/ROLLBACK/release exact; original call/lease/quota regressions and full headed native remain required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "proposed": "quality/evidence/T30/calls-connect-recovery-reviewed1.ts",
+      "beforeSha256": "0540b03f2fe3581145bdd15056363184a2fea0134cd93cd4cf7e8fd86c633df2",
+      "afterSha256": "8c5c054eac2ed814d5bc83baf79e51e4873d157856cb16fd9baab3cbac259441"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/calls-connect-recovery-adoption-plan1.json",
+    "sha256": "8eb3834a7305e3a2c879e8070777f9493108e660e7c9d704ff5777480344ffbb"
+  },
+  "nativeAcceptancePending": true
+}

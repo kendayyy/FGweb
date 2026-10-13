@@ -1,0 +1,193 @@
+{
+  "at": "2026-10-13T08:13:45.756Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 statistics23 real PG shows lifecycle group-lock owner1035 idle waiting Windows client across serial eligibility and no-op policy queries, gateway57014 removals while lease factors valid. RealPG RED1/13 proves two redundant lease/policy reads with six retained peers; all original10 and fresh changed-peer revocation/screen-end controls pass. Evaluate union of locked member and native identities once per current pass with existing liveLeasesWithPolicy. Share only no-op policy proof when no member release or slot deletion occurred; after deletion use original fresh batch, every actual native permission mutation retains fresh syncLiveNativePermissions. Preserve all room/group/member locks, predicates, heartbeat SQL, grace, release, quota/slot mutation, authority, deadlines; full regressions/native required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-policy-reuse-reviewed1.ts",
+      "beforeSha256": "03a5cc4d3006bd97456ac712d3ba7507b65fae3d15c2ecd2bfe31c3c290acf66",
+      "afterSha256": "c30b77151ce5bfc01a8678e7a5ac6fc96da7fde5d1fc742e1d6996425e1602db"
+    },
+    {
+      "path": "apps/api/src/modules/calls/publishing.service.ts",
+      "proposed": "quality/evidence/T30/publishing-policy-reuse-reviewed1.ts",
+      "beforeSha256": "6e9b6d504b5527309e8bf77454dddbd093dad42a128cc1bec11638f7cdec8030",
+      "afterSha256": "abd86221029d23ae45ba28925fa5c4e318b9290790ef0c1be2b5288950ee606f"
+    },
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "proposed": "quality/evidence/T30/calls-policy-reuse-reviewed1.ts",
+      "beforeSha256": "8c5c054eac2ed814d5bc83baf79e51e4873d157856cb16fd9baab3cbac259441",
+      "afterSha256": "c7c72f52b4fecc145e35b5b177d6272de376b8a9c62441be57427b8a9c75c290"
+    }
+  ],
+  "reverseExact": true,
+  "changes": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "edits": [
+        [
+          "import {liveLeases} from './lease-store.js';",
+          "import {liveLeasesWithPolicy} from './lease-store.js';"
+        ],
+        [
+          "   const eligible=new Set((await liveLeases(db,members.flatMap(member=>member.lease_id?[member.lease_id]:[]))).map(lease=>lease.id));",
+          "   const evaluated=await liveLeasesWithPolicy(db,[...members.flatMap(member=>member.lease_id?[member.lease_id]:[]),...participants.map(peer=>peer.identity)]);\n   const eligible=new Set(evaluated.map(current=>current.lease.id));"
+        ],
+        [
+          "   await this.publishing.reconcileWithin(db,id,participants,time,ended);",
+          "   // Same-pass no-op proof is reusable only while this group lock protects unchanged members/slots.\n   await this.publishing.reconcileWithin(db,id,participants,time,ended,released.length?undefined:evaluated);"
+        ]
+      ]
+    },
+    {
+      "path": "apps/api/src/modules/calls/publishing.service.ts",
+      "edits": [
+        [
+          "import {liveLease} from './lease-store.js';",
+          "import {liveLease,type liveLeasesWithPolicy} from './lease-store.js';"
+        ],
+        [
+          "ended?:{identity:string;at:number}){",
+          "ended?:{identity:string;at:number},samePass?:Awaited<ReturnType<typeof liveLeasesWithPolicy>>){"
+        ],
+        [
+          "    for(const row of rows){const peer=people.find",
+          "    let slotsChanged=false;\n    for(const row of rows){const peer=people.find"
+        ],
+        [
+          "await db.query('DELETE FROM call_publish_slots WHERE id=$1',[row.id]);seen.delete(row.id);",
+          "await db.query('DELETE FROM call_publish_slots WHERE id=$1',[row.id]);slotsChanged=true;seen.delete(row.id);"
+        ],
+        [
+          "    await this.calls.syncNativeParticipantPermissions(db,people);",
+          "    // Slot release invalidates the earlier reservation proof; mutations always recheck fresh policy.\n    await this.calls.syncNativeParticipantPermissions(db,people,slotsChanged?undefined:samePass);"
+        ]
+      ]
+    },
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "edits": [
+        [
+          " async syncNativeParticipantPermissions(db:PoolClient,people:ParticipantInfo[]):Promise<void>{\n  const evaluated=new Map((await liveLeasesWithPolicy(db,people.map(p=>p.identity))).map(p=>[p.lease.id,p]));",
+          " async syncNativeParticipantPermissions(db:PoolClient,people:ParticipantInfo[],samePass?:Awaited<ReturnType<typeof liveLeasesWithPolicy>>):Promise<void>{\n  // Optional proof belongs to the current locked lifecycle pass, with unchanged membership/slots.\n  const evaluated=new Map((samePass??await liveLeasesWithPolicy(db,people.map(p=>p.identity))).map(p=>[p.lease.id,p]));"
+        ]
+      ]
+    }
+  ],
+  "red": {
+    "command": "node quality/evidence/T30/run-lifecycle-policy-reuse3.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-13T08:12:13.681Z",
+    "completedAt": "2026-10-13T08:13:08.177Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-policy-reuse-red-3.txt",
+    "evidenceSha256": "3062b2fde7ad1f94975e602cf969512b1275b35f626d8d610663a2e03aa92d62"
+  },
+  "cleanup": [
+    {
+      "path": "quality/evidence/T30/noop-write-cleanup-a3a9360d847f4a5dbffad3204d2dd783.json",
+      "recordedAt": "2026-10-13T08:13:07.606Z",
+      "schemaRemoved": true,
+      "poolEnded": true,
+      "prototypesRestored": true,
+      "envRestored": true,
+      "appClosed": true,
+      "observations": [
+        {
+          "kind": "first",
+          "count": 1,
+          "rowCount": 1,
+          "timestampExact": true,
+          "disconnectNull": true
+        },
+        {
+          "kind": "repeated",
+          "count": 1,
+          "rowCount": 0,
+          "ctidUnchanged": true,
+          "xminUnchanged": true,
+          "timestampUnchanged": true
+        },
+        {
+          "kind": "reconnect",
+          "count": 1,
+          "rowCount": 1,
+          "disconnectCleared": true,
+          "firstTimestampRetained": true
+        },
+        {
+          "kind": "revoked",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "expired",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "absentGrace",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        },
+        {
+          "kind": "unconnected",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        },
+        {
+          "kind": "sixMemberHeartbeatBatch",
+          "members": 6,
+          "first": {
+            "count": 1,
+            "rowCount": 6
+          },
+          "repeat": {
+            "count": 1,
+            "rowCount": 0
+          },
+          "firstTimestampExact": true,
+          "repeatedTuplesUnchanged": true
+        },
+        {
+          "kind": "sixUnchangedPolicyBatch",
+          "members": 6,
+          "policyReads": [
+            "fg_live_call_admission_policies_v1"
+          ],
+          "rpcs": 0
+        },
+        {
+          "kind": "freshBeforeMutationRpc",
+          "firstUpdated": true,
+          "secondRevokedBeforeItsRpc": true,
+          "secondRpcSkipped": true
+        },
+        {
+          "kind": "sharedSnapshotFreshNativeMutation",
+          "mutations": 5,
+          "secondRevokedPeerSkipped": true
+        },
+        {
+          "kind": "sharedSnapshotInvalidatedAfterSlotDelete",
+          "slotDeleted": true,
+          "freshMicrophoneOnlyNativePermission": true
+        }
+      ],
+      "errorCount": 0
+    }
+  ],
+  "existingTenUnchanged": true,
+  "freshNativeMutationBodyUnchanged": true,
+  "slotDeleteFallsBackToFreshRead": true,
+  "externalDtoAndHttpUnchanged": true,
+  "nativeAcceptance": false
+}

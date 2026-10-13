@@ -1,0 +1,121 @@
+{
+  "at": "2026-10-13T05:43:04.717Z",
+  "mode": "green",
+  "results": [
+    {
+      "kind": "recovery-success",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        6545,
+        6544,
+        6543,
+        6542
+      ],
+      "bodyCalls": 1,
+      "bodyPid": 6545,
+      "elapsedMs": 5028,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": null,
+      "passed": true
+    },
+    {
+      "kind": "recovery-business-error",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        6563,
+        6562,
+        6561,
+        6560
+      ],
+      "bodyCalls": 1,
+      "bodyPid": 6563,
+      "elapsedMs": 5056,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "Error",
+        "code": null,
+        "connectTimeout": false,
+        "businessSentinel": true
+      },
+      "rollbackVerified": true,
+      "passed": true
+    },
+    {
+      "kind": "no-idle-timeout",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        6574,
+        6573,
+        6572,
+        6571
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 5004,
+      "idleAtEnd": 0,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "Error",
+        "code": null,
+        "connectTimeout": true,
+        "businessSentinel": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "non-timeout-connect-error",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        6592,
+        6591,
+        6590,
+        6589
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 25,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "error",
+        "code": "3D000",
+        "connectTimeout": false,
+        "businessSentinel": false
+      },
+      "passed": true
+    }
+  ],
+  "cleanup": [
+    {
+      "kind": "recovery-success",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "recovery-business-error",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "no-idle-timeout",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "non-timeout-connect-error",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    }
+  ],
+  "envRestored": true
+}

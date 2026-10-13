@@ -1,0 +1,459 @@
+{
+  "at": "2026-10-13T05:52:09.002Z",
+  "reviewer": "Codex",
+  "apiBuild": 30,
+  "source": {
+    "at": "2026-10-13T05:41:02.728Z",
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "T30 Native90 initial CallsService PG new-handshake timeout returns HTTP500 although pool idle1 before/idle2 after failure and no queued checkout. Locked pg-pool source and realPG TCP proxy RED2/4 reproduce ready-backend loss before BEGIN; no-idle timeout and non-timeout database failure controls pass. On exact new-handshake timeout only, acquire an existing idle client once when no waiter precedes us; no transaction replay, no wait/backoff/config/deadline/authorization changes. Preserve BEGIN/UTC/body/COMMIT/ROLLBACK/release exact; original call/lease/quota regressions and full headed native remain required.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/calls.service.ts",
+        "proposed": "quality/evidence/T30/calls-connect-recovery-reviewed1.ts",
+        "beforeSha256": "0540b03f2fe3581145bdd15056363184a2fea0134cd93cd4cf7e8fd86c633df2",
+        "afterSha256": "8c5c054eac2ed814d5bc83baf79e51e4873d157856cb16fd9baab3cbac259441"
+      }
+    ],
+    "reverseByteExact": true,
+    "edits": [
+      [
+        "  const db=await this.pool.connect();try{await db.query('BEGIN');",
+        "  let db:PoolClient;\n  try{db=await this.pool.connect();}\n  catch(error){\n   // A failed new handshake can outlive another client's return to this pool.\n   // Before BEGIN, take that ready client once; never replay a transaction.\n   if(!(error instanceof Error)||error.message!=='Connection terminated due to connection timeout'||this.pool.idleCount===0||this.pool.waitingCount!==0)throw error;\n   db=await this.pool.connect();\n  }\n  try{await db.query('BEGIN');"
+      ]
+    ],
+    "redCommand": {
+      "command": "node quality/evidence/T30/calls-connect-recovery-probe2.mjs red",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:39:53.483Z",
+      "completedAt": "2026-10-13T05:40:13.903Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-calls-connect-recovery-red-2.txt",
+      "evidenceSha256": "5e07151f35c8e18e7fadeed1a505e18e869f8a8fd89f02294eb8d5f917bb25a7"
+    },
+    "actualPg": {
+      "at": "2026-10-13T05:40:13.846Z",
+      "mode": "red",
+      "results": [
+        {
+          "kind": "recovery-success",
+          "actualPg": true,
+          "acceptedTcp": 5,
+          "warmedPids": [
+            6150,
+            6149,
+            6148,
+            6147
+          ],
+          "bodyCalls": 0,
+          "bodyPid": null,
+          "elapsedMs": 5017,
+          "idleAtEnd": 1,
+          "totalAtEnd": 4,
+          "error": {
+            "name": "Error",
+            "code": null,
+            "connectTimeout": true,
+            "businessSentinel": false
+          },
+          "passed": false,
+          "assertion": "A ready backend must rescue the failed initial handshake"
+        },
+        {
+          "kind": "recovery-business-error",
+          "actualPg": true,
+          "acceptedTcp": 5,
+          "warmedPids": [
+            6161,
+            6160,
+            6159,
+            6158
+          ],
+          "bodyCalls": 0,
+          "bodyPid": null,
+          "elapsedMs": 5008,
+          "idleAtEnd": 1,
+          "totalAtEnd": 4,
+          "error": {
+            "name": "Error",
+            "code": null,
+            "connectTimeout": true,
+            "businessSentinel": false
+          },
+          "passed": false,
+          "assertion": "Original transaction-body error must propagate without retry"
+        },
+        {
+          "kind": "no-idle-timeout",
+          "actualPg": true,
+          "acceptedTcp": 5,
+          "warmedPids": [
+            6180,
+            6179,
+            6178,
+            6177
+          ],
+          "bodyCalls": 0,
+          "bodyPid": null,
+          "elapsedMs": 5012,
+          "idleAtEnd": 0,
+          "totalAtEnd": 4,
+          "error": {
+            "name": "Error",
+            "code": null,
+            "connectTimeout": true,
+            "businessSentinel": false
+          },
+          "passed": true
+        },
+        {
+          "kind": "non-timeout-connect-error",
+          "actualPg": true,
+          "acceptedTcp": 5,
+          "warmedPids": [
+            6192,
+            6191,
+            6190,
+            6189
+          ],
+          "bodyCalls": 0,
+          "bodyPid": null,
+          "elapsedMs": 32,
+          "idleAtEnd": 1,
+          "totalAtEnd": 4,
+          "error": {
+            "name": "error",
+            "code": "3D000",
+            "connectTimeout": false,
+            "businessSentinel": false
+          },
+          "passed": true
+        }
+      ],
+      "cleanup": [
+        {
+          "kind": "recovery-success",
+          "poolEnded": true,
+          "remainingClients": 0,
+          "proxyClosed": true
+        },
+        {
+          "kind": "recovery-business-error",
+          "poolEnded": true,
+          "remainingClients": 0,
+          "proxyClosed": true
+        },
+        {
+          "kind": "no-idle-timeout",
+          "poolEnded": true,
+          "remainingClients": 0,
+          "proxyClosed": true
+        },
+        {
+          "kind": "non-timeout-connect-error",
+          "poolEnded": true,
+          "remainingClients": 0,
+          "proxyClosed": true
+        }
+      ],
+      "envRestored": true
+    },
+    "productionPoolSamples": [
+      {
+        "type": "owned-service-pool",
+        "at": "2026-10-13T05:28:34.946Z",
+        "service": "CallsService",
+        "pids": [
+          4495,
+          4496,
+          4497,
+          4498,
+          4624
+        ],
+        "total": 6,
+        "idle": 1,
+        "waiting": 0
+      },
+      {
+        "type": "owned-service-pool",
+        "at": "2026-10-13T05:28:35.959Z",
+        "service": "CallsService",
+        "pids": [
+          4495,
+          4496,
+          4497,
+          4498,
+          4624
+        ],
+        "total": 5,
+        "idle": 2,
+        "waiting": 0
+      },
+      {
+        "type": "owned-service-pool",
+        "at": "2026-10-13T05:28:36.966Z",
+        "service": "CallsService",
+        "pids": [
+          4495,
+          4496,
+          4497,
+          4498,
+          4624
+        ],
+        "total": 5,
+        "idle": 4,
+        "waiting": 0
+      }
+    ],
+    "dependency": "pg-pool locked local implementation: connect enqueues FIFO when idle exists; no preceding waiter permits reuse without newClient",
+    "beforeBeginOnly": true,
+    "secondAcquireErrorsPropagate": true,
+    "allBusinessAndRollbackCodeUnchanged": true
+  },
+  "build": {
+    "recordedAt": "2026-10-13T05:43:05.274Z",
+    "reviewer": "Codex",
+    "commandEvidence": "quality/evidence/T30/codex-t30-api-build-30.json",
+    "compiledChanges": [
+      {
+        "path": "apps/api/dist/modules/calls/calls.service.js",
+        "beforeSha256": "b8679e3ab28fd5e77c49c658d79cea8b7078d5f980ec7c3f88d6841b709a4d41",
+        "afterSha256": "521e4bfa42c092b290882a7817d020265343db4db6cce2cd5080bdd90c8f3103"
+      },
+      {
+        "path": "apps/api/dist/modules/calls/calls.service.js.map",
+        "beforeSha256": "3aba9a4d238dc06c4054d58be64e43c128f133a834c81061a17fd30bc02ea7e3",
+        "afterSha256": "49350e8bde489f5cb3b9ee0dabdb651e7d4a815a30c98d214873c636868714c7"
+      }
+    ],
+    "allOtherCompiledFilesUnchanged": true,
+    "nativeAcceptancePending": true
+  },
+  "realPgRecoveryCases": 4,
+  "currentOriginalCallCases": 39,
+  "currentOriginalPublishingCases": 11,
+  "currentOriginalPublishingGatewayCases": 16,
+  "currentLeaseCases": 23,
+  "coalescingMeaningfulControls": 18,
+  "canonicalSmokeChecks": 20,
+  "compiledOthersUnchanged": 264,
+  "records": [
+    {
+      "command": "node quality/evidence/T30/adopt-exact.mjs calls-connect-recovery-source1 quality/evidence/T30/calls-connect-recovery-adoption-plan1.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:41:39.194Z",
+      "completedAt": "2026-10-13T05:42:21.994Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-calls-connect-recovery-source-adoption-1.txt",
+      "evidenceSha256": "1c0c0fdf5c42dc5b18190f337bb8c5d2b9a26549be785badc79e316304b11417"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --incremental false",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:42:23.138Z",
+      "completedAt": "2026-10-13T05:42:43.706Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-30.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T30/adopt-api-build-30-reviewed1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:43:04.862Z",
+      "completedAt": "2026-10-13T05:43:33.296Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build30-adoption-1.txt",
+      "evidenceSha256": "a45fae45c82a7b6cc21010513aa3e6bbf1800114affefbc1bbb6a0d59d4dad79"
+    },
+    {
+      "command": "node quality/evidence/T30/calls-connect-recovery-probe2.mjs red",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:39:53.483Z",
+      "completedAt": "2026-10-13T05:40:13.903Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-calls-connect-recovery-red-2.txt",
+      "evidenceSha256": "5e07151f35c8e18e7fadeed1a505e18e869f8a8fd89f02294eb8d5f917bb25a7"
+    },
+    {
+      "command": "node quality/evidence/T30/calls-connect-recovery-probe2.mjs green",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:42:43.969Z",
+      "completedAt": "2026-10-13T05:43:04.757Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-calls-connect-recovery-green-1.txt",
+      "evidenceSha256": "0c24af866ae96a3aed4fc93b4c1d60526caefbd9b3b78364dce6bcc432cd4684"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux1.mjs call-admission call-gateway call-controls",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:44:05.583Z",
+      "completedAt": "2026-10-13T05:46:07.144Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-call-build30-regressions-1.txt",
+      "evidenceSha256": "352fc8bb700b1817e18502414fc50b1e4fcf2164306867da8ce0c9add3c1ff74"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:46:07.353Z",
+      "completedAt": "2026-10-13T05:47:24.995Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-build30-alone-1.txt",
+      "evidenceSha256": "b9544da5636e65ef09f1d5cd1f165557e19ca1967e54837ddcbb25bd0c70be94"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing-gateway",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:47:25.136Z",
+      "completedAt": "2026-10-13T05:48:38.568Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-gateway-build30-alone-1.txt",
+      "evidenceSha256": "355022bf2efb5e57ad264d483076e3121b74a3d8ce82b52f709099a0dc3aed16"
+    },
+    {
+      "command": "node quality/evidence/T30/run-call-participant-lease-batch2.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:48:38.751Z",
+      "completedAt": "2026-10-13T05:49:17.289Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-lease-guards-build30-green-1.txt",
+      "evidenceSha256": "36ad5722b47ae406636c71660c743a09035dbeee409225185fdd55a7c297e59c"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-coalescing-build30-web4-reviewed1.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:49:17.394Z",
+      "completedAt": "2026-10-13T05:50:15.821Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-coalescing-build30-green-1.txt",
+      "evidenceSha256": "ef303af604b5948391ad402ba79e9975d936887dd3e53b5db9a1423cc0e3119e"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-codex-gateway-linux9-normal.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:50:16.065Z",
+      "completedAt": "2026-10-13T05:51:04.460Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-codex-gateway-linux-normal-9.txt",
+      "evidenceSha256": "3a858fc035b861dc2479538d5314f4e8473802321c0731ea7e6d9884628c4287"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-codex-gateway-linux9-media-io.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:51:04.565Z",
+      "completedAt": "2026-10-13T05:51:46.368Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-codex-gateway-linux-media-io-9.txt",
+      "evidenceSha256": "5155b24c4977a4ebb82649fcb0ef45439811f0c1702b0d2c45b2d9d4644cfa99"
+    },
+    {
+      "command": "node quality/evidence/T30/supabase-test-resource162.mjs restore",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:51:46.496Z",
+      "completedAt": "2026-10-13T05:51:59.127Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-supabase-restore-162.txt",
+      "evidenceSha256": "7819d0570d5eba507ead86ccdae12820ae382e20e988443c769b5e0b9a5e6f2e"
+    }
+  ],
+  "cleanups": [
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-2451fd7a-a2d5-4024-8433-a2be5e9ccde2.json",
+      "completedAt": "2026-10-13T05:46:07.084Z",
+      "names": [
+        "call-admission",
+        "call-gateway",
+        "call-controls"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-87f7a9db-6289-4593-9af4-8c53d0db6a45",
+        "gateway-914fb157-5aa3-46bc-a919-9c06b3652e9d",
+        "gateway-e2f734c6-8a41-413b-9588-6ed56e300dc2",
+        "temporary-regression-2451fd7a-a2d5-4024-8433-a2be5e9ccde2"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-c91881dc-4e6f-41a8-b872-b76a371ab8a7.json",
+      "completedAt": "2026-10-13T05:47:24.966Z",
+      "names": [
+        "publishing"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-98e93776-39d5-47dd-bd96-7a3c7461b087",
+        "temporary-regression-c91881dc-4e6f-41a8-b872-b76a371ab8a7"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-4203dddf-24ba-4dfa-b6e4-e5d834dd52ff.json",
+      "completedAt": "2026-10-13T05:48:38.530Z",
+      "names": [
+        "publishing-gateway"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-129f19a0-8e9c-4e66-9a3f-11ece8597bcc",
+        "temporary-regression-4203dddf-24ba-4dfa-b6e4-e5d834dd52ff"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-9e39f21d-b746-4b5f-b19d-56fdfb69d3c5.json",
+      "completedAt": "2026-10-13T05:49:17.262Z",
+      "names": [
+        "call-participant-lease-batch"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-9e39f21d-b746-4b5f-b19d-56fdfb69d3c5"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/coalescing-build30-web4-review1.json",
+      "sha256": "dd61f840e4d38f0da7b9c9690a9eec33485246fbd578554f3cce218c9ca4af43",
+      "checks": 18,
+      "expectedFixtureExit": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-gateway-trace-fixture-smoke-linux-review9-normal.json",
+      "sha256": "e1cd77a8cd3e31b6ac108a6e6c855337b4d3426615c33deb9af414057a17f756",
+      "checks": 10,
+      "expectedFixtureExit": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-gateway-trace-fixture-smoke-linux-review9-media-io.json",
+      "sha256": "169ffb65abd8556a9aec471ebd422aa670522be21f28a67773dc03d137617009",
+      "checks": 10,
+      "expectedFixtureExit": 1
+    }
+  ],
+  "photosInspected": true,
+  "telegramSent": true,
+  "cleanupVerified": true,
+  "supabaseRestored": true,
+  "priorPassesUnchanged": 80,
+  "nativeAcceptancePending": true,
+  "noCockpitStartup": true
+}

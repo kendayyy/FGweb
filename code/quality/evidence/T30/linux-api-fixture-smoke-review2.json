@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-10-13T09:04:48.736Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-api-linux2.mjs",
+    "sha256": "5fbfa93091bffb6ffe7890b8942dbe98685663e7075344a3551d92fa1b3b2696"
+  },
+  "phases": [
+    {
+      "at": "2026-10-13T09:04:10.882Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-13T09:04:17.149Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-13T09:04:17.168Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-13T09:04:24.909Z",
+      "phase": "api"
+    }
+  ],
+  "checks": [],
+  "closed": {
+    "code": 1,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": false,
+    "webClosed": false
+  },
+  "removed": [
+    "gateway-fcd854cd-58d5-44ca-bdf2-f16f65565c22",
+    "temporary-built-smoke-385de9fc-2184-46f5-b572-1c364b202fe4"
+  ],
+  "retained": [],
+  "errors": [
+    {
+      "name": "Error",
+      "phase": "api",
+      "message": "Owned fixture failed at api"
+    },
+    {
+      "phase": "cleanup",
+      "message": "Owned cleanup not confirmed"
+    },
+    {
+      "phase": "inspector lifecycle",
+      "message": "Actual clean own-client settlement not proven"
+    }
+  ],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

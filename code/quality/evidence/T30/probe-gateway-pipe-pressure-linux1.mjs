@@ -1,0 +1,9 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {spawn} from 'node:child_process';import {createHash} from 'node:crypto';
+assert.equal(process.platform,'linux');const name=process.argv[2];assert(/^codex-gateway-pg-only[0-9]+\.cjs$/.test(name));const raw=fs.readFileSync('/probe/'+name,'utf8'),start=raw.indexOf('function writeStdoutSync(str) {'),end=raw.indexOf('\nfunction flushBufferSync()',start);assert(start>=0&&end>start);
+const payload='SAFE_SYNTHETIC_PIPE_RECORD\n'.repeat(100000),expected=createHash('sha256').update(payload).digest('hex');
+const source=`const fs=require('node:fs');${raw.slice(start,end)};try{writeStdoutSync('SAFE_SYNTHETIC_PIPE_RECORD\\n'.repeat(100000));}catch(e){process.stderr.write(JSON.stringify({code:['EAGAIN','EWOULDBLOCK','EINTR','EPIPE'].includes(e.code)?e.code:'OTHER'})+'\\n');process.exitCode=1;}`;
+const child=spawn(process.execPath,['-e',source],{stdio:['ignore','pipe','pipe']});let count=0;const digest=createHash('sha256');let diagnostic='';child.stderr.on('data',b=>diagnostic+=b.toString());
+// Real Linux nonblocking child stdout; intentionally delay its consumer to exercise pipe pressure.
+await new Promise(resolve=>setTimeout(resolve,150));child.stdout.on('data',b=>{count+=b.length;digest.update(b);});
+const code=await new Promise(resolve=>child.once('close',c=>resolve(c??1)));const actual=digest.digest('hex');let cause=null;try{cause=JSON.parse(diagnostic.trim()).code;}catch{assert.equal(diagnostic,'');}
+const result={realLinuxPipe:true,node:process.version,source:name,payloadBytes:Buffer.byteLength(payload),actualBytes:count,allBytesDelivered:actual===expected&&count===Buffer.byteLength(payload),childExitCode:code,safeIoCode:cause};console.log(JSON.stringify(result));assert.equal(code,0,'Original synchronous writer failed on real nonblocking stdout');assert(result.allBytesDelivered,'Every byte must arrive exactly once');

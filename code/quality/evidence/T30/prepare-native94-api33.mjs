@@ -1,0 +1,13 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30',read=n=>fs.readFileSync(d+'/'+n,'utf8'),put=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'});
+let entry=read('enter-native93-build31-web4-reviewed1.mjs').replaceAll('native93','native94');
+const anchor="...j('api-build-31-review1.json').compiledChanges.map(f=>[f.path,f.afterSha256]),";assert.equal(entry.split(anchor).length,2);
+entry=entry.replace(anchor,anchor+"...j('lifecycle-policy-reuse-adoption-plan1.json').files.map(f=>[f.path,f.afterSha256]),...j('api-build-32-review1.json').compiledChanges.map(f=>[f.path,f.afterSha256]),...j('policy-member-boundary-adoption-plan2.json').files.map(f=>[f.path,f.afterSha256]),...j('api-build-33-review1.json').compiledChanges.map(f=>[f.path,f.afterSha256]),");
+const point=' const result={';assert.equal(entry.split(point).length,2);
+entry=entry.replace(point,"record('codex-t30-api33-policy-affected-review-1.json');const policy33=j('policy-reuse-api33-affected-review1.json');assert(policy33.policyControls===14&&policy33.originalBackendCases===66&&policy33.callLeaseCases===23&&policy33.lifecycleLeaseCases===10&&policy33.nativeReadCases===10&&policy33.coalescingControls===18&&policy33.canonicalSmokeChecks===20&&policy33.allRuntimeCleanupVerified&&policy33.supabaseRestored&&policy33.eligibilityObserverAssertionsUnchanged&&policy33.nativeMutationFreshnessPreserved);"+point);
+entry=entry.replace('apiBuild:31','apiBuild:33').replace('currentBuild31TeamGuards:true','currentBuild33PolicyGuards:true,policyReuseControls:14,currentBuild31TeamGuards:true').replaceAll('Build31 entry','Build33 entry');
+put('enter-native94-build33-web4-reviewed1.mjs',entry);
+put('supabase-test-resource185.mjs',read('supabase-test-resource184.mjs').replaceAll('resource184','resource185'));
+put('reclaim-docker-page-cache26.mjs',read('reclaim-docker-page-cache25.mjs').replaceAll('docker-page-cache-reclaim25.json','docker-page-cache-reclaim26.json'));
+let driver=read('run-native93-build31-web4-python-driver1.mjs').replaceAll('native93','native94').replaceAll('native-93','native-94').replaceAll('resource169','resource185').replaceAll('stop-169','stop-185').replaceAll('restore-169','restore-185').replaceAll('reclaim-docker-page-cache18','reclaim-docker-page-cache26').replaceAll('reclaim-18','reclaim-26').replaceAll('enter-native94-build31','enter-native94-build33');
+put('run-native94-build33-web4-python-driver1.mjs',driver);
+console.log('Original frozen native94 prepared, requires fresh API33 affected review; no priority/statistics fixture changes.');

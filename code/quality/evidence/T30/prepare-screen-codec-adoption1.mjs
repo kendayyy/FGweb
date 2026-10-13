@@ -1,0 +1,19 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';const d='quality/evidence/T30',p='apps/web/src/features/calls/media.ts',old=fs.readFileSync(p,'utf8'),h=s=>createHash('sha256').update(s).digest('hex');
+const helper=`function preferredScreenCodec(): 'h264' | undefined {
+  try {
+    if (typeof RTCRtpSender !== 'undefined' &&
+        RTCRtpSender.getCapabilities?.('video')?.codecs.some(codec => codec.mimeType.toLowerCase() === 'video/h264')) {
+      return 'h264';
+    }
+  } catch {
+    // Keep the SDK default when the browser cannot report codec capabilities.
+  }
+  return undefined;
+}
+
+`;
+const edits=[['function isTrackEnded(track: MediaStreamTrack): boolean {',helper+'function isTrackEnded(track: MediaStreamTrack): boolean {'],['          source: Track.Source.ScreenShare,\n          screenShareEncoding:','          source: Track.Source.ScreenShare,\n          videoCodec: preferredScreenCodec(),\n          screenShareEncoding:']];let next=old;for(const[a,b]of edits){assert.equal(next.split(a).length,2);next=next.replace(a,b);}let reversed=next;for(const[a,b]of [...edits].reverse())reversed=reversed.replace(b,a);assert.equal(reversed,old);
+const red=JSON.parse(fs.readFileSync(d+'/codex-t30-screen-codec-red-1.json'));assert.equal(red.exitCode,1);assert(fs.readFileSync(red.evidencePath,'utf8').includes('1 failed | 36 passed'));const benchmark=JSON.parse(fs.readFileSync(d+'/codec-benchmark-result-review1.json'));assert(benchmark.cases.every(c=>c.capability.supported));assert(benchmark.cases.find(c=>c.codec==='h264').meanEncodeMsPerFrame<benchmark.cases.find(c=>c.codec==='vp8').meanEncodeMsPerFrame);
+const proposed=d+'/media-screen-codec-reviewed1.ts';fs.writeFileSync(proposed,next,{flag:'wx'});const plan={reviewer:'Codex',unresolvedSourceFindings:[],reason:'T30 current VP8 software native measurements and real SDK/SFU codec probe show H264 lower observed encode time per frame. Prefer H264 only when browser sender capabilities advertise it; retain SDK default VP8 for missing/throwing/no-H264 capability API. Same720p30/low priority/simulcast/adaptive/dynacast, original capture/permission/quota/audio/unpublish logic unchanged. Meaningful RED1/37, original33 and fallback3 pass. Hardware and native acceptance not claimed; full tests/real capture required.',files:[{path:p,proposed,beforeSha256:h(old),afterSha256:h(next)}]};fs.writeFileSync(d+'/screen-codec-adoption-plan1.json',JSON.stringify(plan,null,2)+'\n',{flag:'wx'});fs.writeFileSync(d+'/screen-codec-source-review1.json',JSON.stringify({...plan,at:new Date().toISOString(),reverseByteExact:true,edits,redCommand:red,benchmarkReview:{path:d+'/codec-benchmark-result-review1.json',sha256:h(fs.readFileSync(d+'/codec-benchmark-result-review1.json'))}},null,2)+'\n',{flag:'wx'});
+let full=fs.readFileSync(d+'/web-lazy-media-full-vitest2.config.mts','utf8');full=full.replace("'../../quality/evidence/T30/web-lazy-media-tests2/*.test.tsx'","'../../quality/evidence/T30/web-lazy-media-tests2/*.test.tsx','../../quality/evidence/T30/screen-codec-tests1/*.test.tsx'").replace("exclude:['test/call-controls.test.tsx']","exclude:['test/call-controls.test.tsx','test/live-viewer.test.tsx']");fs.writeFileSync(d+'/screen-codec-full-vitest1.config.mts',full,{flag:'wx'});
+fs.appendFileSync('../.doc/history.md','\n- Coding and build 2 — T30 — '+new Date().toISOString()+': screen codec meaningful RED1/37 (H264 preference absent), original33+fallback3 passed; narrow media.ts2anchors reverse exact draft reviewed using actual codec benchmark limitations. New helper capability-only H264 preference, all capture/audio/quota/720p30/adaptive/dynacast/simulcast flows retained. Evidence screen-codec-source-review1.json; adoption/fulltests/native pending.\n');console.log('Narrow reviewed screen codec source draft and full280-case configuration prepared.');

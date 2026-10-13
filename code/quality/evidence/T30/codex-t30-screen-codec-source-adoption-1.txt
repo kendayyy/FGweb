@@ -1,0 +1,12 @@
+file:///E:/FGweb/code/scripts/verify-task.mjs:68
+ for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase()&&!reviewed?.outputs.has(file))throw new Error('output hash changed');}
+                                                                                                                                                                                                                                                                                 ^
+
+Error: output hash changed
+    at checkGate (file:///E:/FGweb/code/scripts/verify-task.mjs:68:274)
+    at file:///E:/FGweb/code/quality/evidence/T30/adopt-exact.mjs:2:540
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0

@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',read=n=>fs.readFileSync(d+'/'+n,'utf8'),put=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'}),h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+assert.equal(JSON.parse(read('codex-t30-resume-stock-gate-1.json')).exitCode,0);
+for(const n of ['native-browser-timing19.spec.ts','playwright-browser-timing19.config.ts','run-native-browser-timing19-parent.mjs'])put(n.replace('timing19','timing20'),read(n).replaceAll('browser-timing19','browser-timing20'));
+assert.equal(read('native-browser-timing20.spec.ts'),read('native-browser-timing19.spec.ts'));
+const review=JSON.parse(read('browser-timing19-source-review.json'));
+for(const p of review.pins)assert.equal(h(p.path),p.sha256);
+review.at=new Date().toISOString();review.apiBuild=31;review.currentEntryReview=d+'/native93-entry-review1.json';
+review.pins=review.pins.map(p=>{const path=p.path.replace('native-browser-timing19.spec.ts','native-browser-timing20.spec.ts');return {path,sha256:h(path)};});
+put('browser-timing20-source-review.json',JSON.stringify(review,null,2)+'\n');
+put('preflight-browser-timing20.mjs',read('preflight-browser-timing19.mjs').replaceAll('browser-timing19','browser-timing20').replaceAll('codex-t30-native91-entry-review-1.json','codex-t30-native93-entry-review-1.json').replaceAll('API30','API31'));
+put('supabase-test-resource170.mjs',read('supabase-test-resource169.mjs').replaceAll('resource169','resource170'));
+put('reclaim-docker-page-cache19.mjs',read('reclaim-docker-page-cache18.mjs').replaceAll('docker-page-cache-reclaim18.json','docker-page-cache-reclaim19.json'));
+put('run-native-browser-timing20-resource.mjs',read('run-native-browser-timing19-resource.mjs').replaceAll('browser-timing19','browser-timing20').replaceAll('browser-timing-19','browser-timing-20').replaceAll('resource165','resource170').replaceAll('stop-165','stop-170').replaceAll('restore-165','restore-170').replaceAll('page-cache-reclaim-16','page-cache-reclaim-19').replaceAll('reclaim-docker-page-cache16','reclaim-docker-page-cache19'));
+fs.appendFileSync('../.doc/history.md','\n- Tiếp tục task FG — T30 — '+review.at+': prepared read-only headed timing20 API31/web4 following native93 third-share failure and five actual gateway group-lock57014. Existing reviewed diagnostic test body byte identical to timing19, original native assertions/deadlines/source unchanged. Sequential driver resource170 finally restores exact containers, Telegram actual viewport producer retained. Evidence code/'+d+'/browser-timing20-source-review.json.\n');
+console.log('Timing20 prepared: read-only current API31/web4 observers, unchanged diagnostic test body.');

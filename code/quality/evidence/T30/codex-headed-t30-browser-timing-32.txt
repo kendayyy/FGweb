@@ -1,0 +1,43 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-browser-timing32.spec.ts --config quality/evidence/T30/playwright-browser-timing32.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:48120) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-browser-timing32.spec.ts:62:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (4.2m)
+
+
+  1) quality\evidence\T30\native-browser-timing32.spec.ts:62:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: Native observation failed
+
+      24 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+      25 | });
+    > 26 | async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+         |                                                                                                                                                                                                                                                                                                                           ^
+      27 | async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+      28 |  activePage=page;await page.bringToFront();await captureUiStep(page,{task:'T30',runId,step:++step,title:'T30 — chia sẻ màn hình thật',action,result,startedAt,headed:true,privacySafe:true,status,maskSelectors:['.fg-private-chat','.fg-crypto-sas','[data-demo-private]']});
+      29 | }
+        at _pending$get (E:\FGweb\code\quality\evidence\T30\native-browser-timing32.spec.ts:26:315)
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T30\native-browser-timing32.spec.ts:18:79)
+
+    Error: Owned fixture cleanup failed
+
+      22 |  for(const[key,{page}]of windows)if(!page.isClosed()){try{const timing=await page.evaluate(()=>{const own=window as unknown as {t30CaptureCalls:Array<Record<string,unknown>>;t30CaptureTiming?:unknown[];t30ClaimTiming?:unknown[];t30Captures:MediaStream[]};return{at:Date.now(),captures:own.t30CaptureTiming??[],claims:own.t30ClaimTiming??[],captureCount:own.t30Captures.length,tracks:own.t30Captures.flatMap(s=>s.getTracks().map(t=>({kind:t.kind,state:t.readyState}))),alert:document.querySelector('[role=alert]')?.textContent?.slice(0,300)??null};});fs.writeFileSync(evidence+'/capture-claim-timing-'+key+'.json',JSON.stringify(timing,null,2)+'\n',{flag:'wx'});}catch{fs.writeFileSync(evidence+'/capture-claim-timing-'+key+'-failure.json',JSON.stringify({at:new Date().toISOString(),readFailed:true})+'\n',{flag:'wx'});}}
+      23 |  for(const browser of browsers)await browser.close();
+    > 24 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+         |                                                                                                                                                                                                                                                              ^
+      25 | });
+      26 | async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+      27 | async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T30\native-browser-timing32.spec.ts:24:254)
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing32-T3-3efa7-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing32-T3-3efa7-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-browser-timing32.spec.ts:62:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

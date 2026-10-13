@@ -1,0 +1,44 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T30',hash=value=>createHash('sha256').update(value).digest('hex');
+const read=p=>fs.readFileSync(p),put=(p,v)=>fs.writeFileSync(p,v,{flag:'wx'});
+const baselinePath='quality/spec-baseline.json',oldBytes=read(baselinePath),baseline=JSON.parse(oldBytes);
+const ledgerBytes=read('quality/tasks.json'),ledger=JSON.parse(ledgerBytes),task=ledger.tasks.find(t=>t.id==='T30');
+assert.equal(task.status,'IN_PROGRESS');
+const historical=ledger.tasks.slice(0,ledger.tasks.indexOf(task));
+assert.equal(historical.length,80);assert(historical.every(t=>t.status==='PASS'));
+const document=read('../.doc/task.md').toString('utf8');
+let original=document;
+for(const id of ['GITHUB-AUTO-PUSH-01','CODEX-ONLY-01']){
+ const pattern=new RegExp('^> \\*\\*'+id+'[^\\r\\n]*\\r?\\n\\r?\\n','m');
+ assert(pattern.test(original));original=original.replace(pattern,'');
+}
+assert.equal(hash(original),baseline.hashes.taskSha256,'Only the two authorized directive paragraphs may differ');
+const checkerHash=hash(read('scripts/verify-task.mjs'));
+const reviewPath=dir+'/user-document-baseline-review1.json';
+const review={at:new Date().toISOString(),reviewer:'Codex',authorization:['AGENTS.md CODEX-ONLY-01 12/10/2026','AGENTS.md GITHUB-AUTO-PUSH-01 13/10/2026'],reason:'Pin exactly two already authorized workflow paragraphs; task order, acceptance, deadlines and all product requirements remain byte identical after reversal.',beforeTaskSha256:baseline.hashes.taskSha256,afterTaskSha256:hash(read('../.doc/task.md')),exactReverse:true,historicalPassCount:80,checkerSha256:checkerHash};
+put(reviewPath,JSON.stringify(review,null,2)+'\n');
+put(dir+'/user-document-task-before1.md',original);put(dir+'/user-document-task-after1.md',document);
+put(dir+'/user-document-baseline-before1.json',oldBytes);
+baseline.amendments.push({id:'T30-USER-WORKFLOW-BASELINE-01',adoptedAt:review.at,evidence:reviewPath,authorization:review.authorization,previousTaskSha256:review.beforeTaskSha256,taskSha256:review.afterTaskSha256,scope:review.reason});
+baseline.hashes.taskSha256=review.afterTaskSha256;
+const nextBytes=JSON.stringify(baseline,null,2)+'\n';
+put(dir+'/user-document-baseline-after1.json',nextBytes);
+const amendment={source:reviewPath,reason:review.reason,paths:[baselinePath]};
+task.writeAllowlist.push(baselinePath);task.approvedScopeAmendments.push(amendment);
+const manifest=JSON.parse(read(task.gateRebaseline.manifestPath));assert(!manifest.outputTransitions.some(t=>t.path===baselinePath));
+const owner=historical.filter(t=>t.outputsHash?.files?.[baselinePath]).at(-1);assert.equal(hash(oldBytes),owner.outputsHash.files[baselinePath]);
+manifest.outputTransitions.push({path:baselinePath,previousTaskId:owner.id,beforeSha256:hash(oldBytes),afterSha256:hash(nextBytes),scopeSha256:hash(JSON.stringify(amendment)),requiredEvidence:[reviewPath,dir+'/user-document-baseline-before1.json',dir+'/user-document-baseline-after1.json',dir+'/user-document-task-before1.md',dir+'/user-document-task-after1.md'].map(path=>({path,sha256:hash(read(path))}))});
+const manifestPath=dir+'/user-document-baseline-gate-manifest1.json';put(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+task.gateRebaseline={version:1,manifestPath,manifestSha256:hash(read(manifestPath))};task.evidencePaths.push(reviewPath,manifestPath);
+checkBaselines({root:process.cwd(),baseline});
+assert.deepEqual(ledger.tasks.slice(0,80),JSON.parse(ledgerBytes).tasks.slice(0,80));
+assert.equal(hash(read('scripts/verify-task.mjs')),checkerHash);
+assert.equal(hash(read('quality/tasks.json')),hash(ledgerBytes));assert.equal(hash(read(baselinePath)),hash(oldBytes));
+fs.writeFileSync(baselinePath,nextBytes);
+try{checkGate({root:process.cwd(),tasks:ledger.tasks,id:'T30',specHash:baseline.hashes.specSha256});}catch(error){fs.writeFileSync(baselinePath,oldBytes);throw error;}
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md','\n- Tiếp tục task FG — T30 — '+review.at+': reviewed baseline delta is exactly CODEX-ONLY-01 and GITHUB-AUTO-PUSH-01 paragraphs (reverse equals pinned task hash). Adopted current task document pin via reviewed baseline output transition; stock checker unchanged, 80 historical PASS rows unchanged, T30 IN_PROGRESS. Evidence code/'+reviewPath+'. No product code/test/assertion/deadline changes.\n');
+console.log('Authorized document baseline reconciled through reviewed lineage; 80 PASS unchanged, checker unchanged.');

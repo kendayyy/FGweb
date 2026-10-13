@@ -1,0 +1,190 @@
+{
+  "poolSummary": [
+    {
+      "service": "RoomsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 4,
+      "pids": [
+        722,
+        723,
+        724,
+        725
+      ]
+    },
+    {
+      "service": "TeamsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 4,
+      "pids": [
+        739,
+        740,
+        741,
+        742
+      ]
+    },
+    {
+      "service": "CallsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 5,
+      "pids": [
+        743,
+        744,
+        745,
+        746,
+        833
+      ]
+    },
+    {
+      "service": "CallLifecycleService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 2,
+      "pids": [
+        756,
+        780,
+        825,
+        912
+      ]
+    }
+  ],
+  "hostSummary": {
+    "path": "quality/evidence/T30/native-host-observation-eb272de7-1d3f-4cd3-9c69-f231589bcd27.json",
+    "minFreeGB": 1.7795181274414062,
+    "maxCpu": 100,
+    "dropped": 0
+  },
+  "controllerErrors": [
+    {
+      "status": 500,
+      "causes": [
+        {
+          "layer": 0,
+          "name": "Error",
+          "code": null,
+          "kind": "PG_CONNECT_TIMEOUT",
+          "sites": [
+            {
+              "source": "PG_POOL",
+              "line": 45,
+              "column": 11
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 62,
+              "column": 20
+            }
+          ]
+        },
+        {
+          "layer": 1,
+          "name": "Error",
+          "code": null,
+          "kind": "PG_CONNECTION_TERMINATED",
+          "sites": []
+        }
+      ],
+      "type": "controller-error",
+      "at": "2026-10-13T05:03:04.031Z",
+      "route": "API_OTHER",
+      "code": null,
+      "kind": "PG_CONNECT_TIMEOUT"
+    }
+  ],
+  "slowMethods": [
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 209,
+      "ok": true,
+      "at": "2026-10-13T05:02:38.010Z",
+      "durationMs": 2043.51
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 595,
+      "ok": true,
+      "at": "2026-10-13T05:02:58.057Z",
+      "durationMs": 2325.19
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 594,
+      "ok": true,
+      "at": "2026-10-13T05:02:58.057Z",
+      "durationMs": 2325.46
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 596,
+      "ok": false,
+      "at": "2026-10-13T05:03:00.817Z",
+      "durationMs": 5035.87
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 634,
+      "ok": false,
+      "at": "2026-10-13T05:03:03.992Z",
+      "durationMs": 5228.31
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 633,
+      "ok": false,
+      "at": "2026-10-13T05:03:03.992Z",
+      "durationMs": 5228.34
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 680,
+      "ok": true,
+      "at": "2026-10-13T05:03:04.331Z",
+      "durationMs": 2016.49
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 679,
+      "ok": true,
+      "at": "2026-10-13T05:03:04.331Z",
+      "durationMs": 2016.51
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 672,
+      "ok": true,
+      "at": "2026-10-13T05:03:07.260Z",
+      "durationMs": 5268.89
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 699,
+      "ok": true,
+      "at": "2026-10-13T05:03:07.699Z",
+      "durationMs": 2520.2
+    }
+  ],
+  "sdkRemovals": [],
+  "pgFailures": []
+}

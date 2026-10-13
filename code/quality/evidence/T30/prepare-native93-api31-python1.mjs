@@ -1,0 +1,17 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30',read=n=>fs.readFileSync(d+'/'+n,'utf8'),put=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'});
+put('supabase-test-resource169.mjs',read('supabase-test-resource168.mjs').replaceAll('resource168','resource169'));
+put('reclaim-docker-page-cache18.mjs',read('reclaim-docker-page-cache17.mjs').replaceAll('docker-page-cache-reclaim17.json','docker-page-cache-reclaim18.json'));
+let entry=read('enter-native92-build30-web4-reviewed1.mjs').replaceAll('native92','native93');
+const anchor="...j('api-build-30-review1.json').compiledChanges.map(f=>[f.path,f.afterSha256]),";assert.equal(entry.split(anchor).length,2);
+entry=entry.replace(anchor,anchor+"...j('teams-connect-recovery-adoption-plan1.json').files.map(f=>[f.path,f.afterSha256]),...j('api-build-31-review1.json').compiledChanges.map(f=>[f.path,f.afterSha256]),");
+const point=' const result={';assert.equal(entry.split(point).length,2);
+entry=entry.replace(point,"record('codex-t30-api31-teams-affected-review-1.json');const teams31=j('teams-connect-api31-affected-review1.json');assert(teams31.totalOriginalCases===98&&teams31.realPgRecoveryCases===4&&teams31.cleanupVerified&&teams31.supabaseRestored);"+point);
+entry=entry.replace('apiBuild:30','apiBuild:31').replace('currentBuild30Guards:true','currentBuild31TeamGuards:true,currentBuild30Guards:true').replaceAll('Build30 entry','Build31 entry');
+put('enter-native93-build31-web4-reviewed1.mjs',entry);
+let driver=read('run-native92-build30-web4-cpu-driver1.mjs').replaceAll('native92','native93').replaceAll('native-92','native-93').replaceAll('resource166','resource169').replaceAll('stop-166','stop-169').replaceAll('restore-166','restore-169').replaceAll('reclaim-docker-page-cache17','reclaim-docker-page-cache18').replaceAll('reclaim-17','reclaim-18').replaceAll('enter-native93-build30','enter-native93-build31');
+const old="spawn('powershell.exe',['-NoProfile','-File',d+'/observe-native93-host-cpu.ps1','-OutputPath',output,'-StopPath',stop]";
+const next="spawn('C:/Users/PC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe',[d+'/observe-native-host-cpu1.py','--output',output,'--stop',stop,'--seconds','600','--interval','5']";
+assert.equal(driver.split(old).length,2);driver=driver.replace(old,next);
+driver=driver.replace('try{for(const [label,args]',"assert.equal(JSON.parse(fs.readFileSync(d+'/codex-t30-host-cpu-python-smoke-1.json')).exitCode,0);assert(JSON.parse(fs.readFileSync(d+'/host-cpu-python-smoke1.json')).samples.length>=2);try{for(const [label,args]");
+put('run-native93-build31-web4-python-driver1.mjs',driver);
+console.log('Native93 API31 preflight requires reviewed 98 authority cases and successful read-only Python observer smoke; original headed test unchanged.');

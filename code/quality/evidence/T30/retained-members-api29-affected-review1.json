@@ -1,0 +1,422 @@
+{
+  "at": "2026-10-13T05:25:12.840Z",
+  "reviewer": "Codex",
+  "apiBuild": 29,
+  "source": {
+    "at": "2026-10-13T05:10:35.225Z",
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "T30 actual readonly Timing18 shows ordinary lifecycle passes use11serial SQL statements and up to2817ms; meaningful realPG RED2/10 proves two redundant empty/history scans with a locked retained member, existing7 and last-revoked-close8 pass. Skip only empty-group checks when current FOR UPDATE member snapshot minus actual release list proves nonempty. Preserve room SHARE/group/member UPDATE locks, fresh eligibility, permissions, disconnect grace, expired/revoked release, empty/new/closed/missing group handling and all native operations. No PASS/deadline changes; affected regressions and native required.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+        "proposed": "quality/evidence/T30/lifecycle-retained-members-reviewed1.ts",
+        "beforeSha256": "cf158955cf7f173e045360e5a0b71a3691549af248c0eb3720c72180d926a12f",
+        "afterSha256": "03a5cc4d3006bd97456ac712d3ba7507b65fae3d15c2ecd2bfe31c3c290acf66"
+      }
+    ],
+    "reverseByteExact": true,
+    "edits": [
+      [
+        "   if(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query(\"SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1\",[`fg:admission-committed:${id}`])).rowCount)closed=await this.closeLocked(db,id,time);",
+        "   // The locked member snapshot and our release list already prove a nonempty group.\n   // Empty groups still use the original history/admission checks and closeLocked guard.\n   if(!members.some(member=>!released.includes(member.id))&&(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query(\"SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1\",[`fg:admission-committed:${id}`])).rowCount))closed=await this.closeLocked(db,id,time);"
+      ]
+    ],
+    "redCommand": {
+      "command": "node quality/evidence/T30/run-retained-members-tests1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:08:46.084Z",
+      "completedAt": "2026-10-13T05:09:49.290Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-retained-members-red-1.txt",
+      "evidenceSha256": "bdbf58faa6c8df1bf86ea6a3510c2be1374a14d8f9437e8c61501ec1a6ed294b"
+    },
+    "cleanup": {
+      "path": "quality/evidence/T30/noop-write-cleanup-6381cdd55fcd4ead91e711af14203d7b.json",
+      "recordedAt": "2026-10-13T05:09:48.658Z",
+      "schemaRemoved": true,
+      "poolEnded": true,
+      "prototypesRestored": true,
+      "envRestored": true,
+      "appClosed": true,
+      "observations": [
+        {
+          "kind": "first",
+          "count": 1,
+          "rowCount": 1,
+          "timestampExact": true,
+          "disconnectNull": true
+        },
+        {
+          "kind": "repeated",
+          "count": 1,
+          "rowCount": 0,
+          "ctidUnchanged": true,
+          "xminUnchanged": true,
+          "timestampUnchanged": true
+        },
+        {
+          "kind": "reconnect",
+          "count": 1,
+          "rowCount": 1,
+          "disconnectCleared": true,
+          "firstTimestampRetained": true
+        },
+        {
+          "kind": "revoked",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "expired",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "absentGrace",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        },
+        {
+          "kind": "unconnected",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        },
+        {
+          "kind": "retainedMemberEmptyChecks",
+          "absent": false,
+          "emptyChecks": 2,
+          "groupOpen": true,
+          "memberRetained": true
+        },
+        {
+          "kind": "retainedMemberEmptyChecks",
+          "absent": true,
+          "emptyChecks": 2,
+          "groupOpen": true,
+          "memberRetained": true
+        },
+        {
+          "kind": "lastMemberClosed",
+          "revoked": true,
+          "closed": true
+        }
+      ],
+      "errorCount": 0
+    },
+    "queryTimingEvidence": "quality/evidence/T30/browser-timing18-query-analysis1.json",
+    "remainingMembersLocked": true,
+    "publishingDoesNotMutateMembers": true
+  },
+  "build": {
+    "recordedAt": "2026-10-13T05:14:08.234Z",
+    "reviewer": "Codex",
+    "commandEvidence": "quality/evidence/T30/codex-t30-api-build-29.json",
+    "compiledChanges": [
+      {
+        "path": "apps/api/dist/modules/calls/call-lifecycle.service.js",
+        "beforeSha256": "513f2abc8dcb9bfa540eab8a2aba82322d82a337facd8e43995cb933f03e6cce",
+        "afterSha256": "84f043145252a699291c582e56718d7cc349cc2f7743581134c253708c24b04e"
+      },
+      {
+        "path": "apps/api/dist/modules/calls/call-lifecycle.service.js.map",
+        "beforeSha256": "2f05d688c7dcdeb37ef4598ade5f388ef65f08e3aecd3222e9fc620fe996f215",
+        "afterSha256": "6d17dae1052b6f8e4015b3d56f8597f181222ca578f4730a86424237476f6058"
+      }
+    ],
+    "allOtherCompiledFilesUnchanged": true,
+    "nativeAcceptancePending": true
+  },
+  "realPgRetainedMemberCases": 10,
+  "originalNoopBodiesRetained": 7,
+  "addedRetainedMemberCases": 3,
+  "currentOriginalCallCases": 39,
+  "currentOriginalPublishingCases": 11,
+  "currentOriginalPublishingGatewayCases": 16,
+  "currentLeaseCases": 23,
+  "currentLifecycleLeaseCases": 10,
+  "currentNativeReadCases": 10,
+  "coalescingMeaningfulControls": 18,
+  "canonicalSmokeChecks": 20,
+  "compiledOthersUnchanged": 264,
+  "records": [
+    {
+      "command": "node quality/evidence/T30/adopt-exact.mjs lifecycle-retained-members-source1 quality/evidence/T30/lifecycle-retained-members-adoption-plan1.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:10:36.779Z",
+      "completedAt": "2026-10-13T05:12:02.348Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-retained-members-source-adoption-1.txt",
+      "evidenceSha256": "29a3f927efa6add3ad6f502aeeda8853d94f65f61c8009235757e844d7a20841"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --incremental false",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:13:49.261Z",
+      "completedAt": "2026-10-13T05:14:07.422Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-29.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T30/adopt-api-build-29-reviewed1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:14:07.623Z",
+      "completedAt": "2026-10-13T05:14:27.311Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build29-adoption-1.txt",
+      "evidenceSha256": "a45fae45c82a7b6cc21010513aa3e6bbf1800114affefbc1bbb6a0d59d4dad79"
+    },
+    {
+      "command": "node quality/evidence/T30/lifecycle-native-read-control3.mjs green",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:14:27.404Z",
+      "completedAt": "2026-10-13T05:14:33.060Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-native-read-build29-green-1.txt",
+      "evidenceSha256": "27630a48b3b59645d5c5e6a2be12775eb95e2189dcbf8310ac5167d0881a78b7"
+    },
+    {
+      "command": "node quality/evidence/T30/run-retained-members-tests1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:08:46.084Z",
+      "completedAt": "2026-10-13T05:09:49.290Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-retained-members-red-1.txt",
+      "evidenceSha256": "bdbf58faa6c8df1bf86ea6a3510c2be1374a14d8f9437e8c61501ec1a6ed294b"
+    },
+    {
+      "command": "node quality/evidence/T30/run-retained-members-tests1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:13:04.560Z",
+      "completedAt": "2026-10-13T05:13:48.445Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-retained-members-green-2.txt",
+      "evidenceSha256": "1237100f7546c11161486eeff4514537dd29ee01f0937ea6ed29ca0123359328"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux1.mjs call-admission call-gateway call-controls",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:14:33.203Z",
+      "completedAt": "2026-10-13T05:16:27.404Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-call-build29-regressions-1.txt",
+      "evidenceSha256": "8296c099a31748523ce60da97c95ff252226df0394bebede0091194bad27dde1"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:16:27.562Z",
+      "completedAt": "2026-10-13T05:17:26.634Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-build29-alone-1.txt",
+      "evidenceSha256": "c5822ac23b1b9eca73c47773846be3e8613dda87d6c428e8302cb409f7a701ce"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing-gateway",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:17:26.814Z",
+      "completedAt": "2026-10-13T05:18:34.224Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-gateway-build29-alone-1.txt",
+      "evidenceSha256": "4bab76c23b0a62663564158f7d90e1cb40b51c5416335dbed289b2b712ed1950"
+    },
+    {
+      "command": "node quality/evidence/T30/run-call-participant-lease-batch2.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:18:34.608Z",
+      "completedAt": "2026-10-13T05:19:10.191Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-lease-guards-build29-green-1.txt",
+      "evidenceSha256": "cf35bb31938bbb61377e3d6d66df0d2ed23e49dc20f0eee0f6f7a879239e350a"
+    },
+    {
+      "command": "node quality/evidence/T30/run-lifecycle-lease-batch3.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:20:49.889Z",
+      "completedAt": "2026-10-13T05:21:34.167Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-lease-batch-build29-green-1.txt",
+      "evidenceSha256": "1ec608b2b0689f9258fd623e9b11b7d47c549cb2bf78f92e3a7f5c3caea164ca"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-coalescing-build29-web4-reviewed1.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:21:34.349Z",
+      "completedAt": "2026-10-13T05:22:18.656Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-coalescing-build29-green-1.txt",
+      "evidenceSha256": "60f16b07bb7de3b660a0e1771c704fa2b5d3ab6c90d05acf4dccfef69a352269"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-codex-gateway-linux8-normal.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:22:18.758Z",
+      "completedAt": "2026-10-13T05:22:58.866Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-codex-gateway-linux-normal-8.txt",
+      "evidenceSha256": "699316dfc0f2bf2078188e62abca7c799a1c6c2654d6aac237a9676423b6c346"
+    },
+    {
+      "command": "node quality/evidence/T30/probe-codex-gateway-linux8-media-io.mjs canonical",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:22:58.974Z",
+      "completedAt": "2026-10-13T05:23:38.394Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-codex-gateway-linux-media-io-8.txt",
+      "evidenceSha256": "d11c3a2cfae610a38fff07a8b5648f5fc62f06dde3c5c818ddbb9161e8340f34"
+    },
+    {
+      "command": "node quality/evidence/T30/supabase-test-resource159.mjs restore",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:19:10.396Z",
+      "completedAt": "2026-10-13T05:19:22.791Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-supabase-restore-159.txt",
+      "evidenceSha256": "7819d0570d5eba507ead86ccdae12820ae382e20e988443c769b5e0b9a5e6f2e"
+    },
+    {
+      "command": "node quality/evidence/T30/supabase-test-resource160.mjs restore",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T05:23:38.529Z",
+      "completedAt": "2026-10-13T05:23:49.641Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-supabase-restore-160.txt",
+      "evidenceSha256": "7819d0570d5eba507ead86ccdae12820ae382e20e988443c769b5e0b9a5e6f2e"
+    }
+  ],
+  "cleanups": [
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-9350d912-ec34-407e-8f0b-2369404026ff.json",
+      "completedAt": "2026-10-13T05:13:48.415Z",
+      "names": [
+        "retained-members"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-9350d912-ec34-407e-8f0b-2369404026ff"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-2f12dc95-638c-4cba-86e9-79fdfca81769.json",
+      "completedAt": "2026-10-13T05:16:27.379Z",
+      "names": [
+        "call-admission",
+        "call-gateway",
+        "call-controls"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-24557f2a-4b39-44db-a19f-a919aa6d276b",
+        "gateway-8f06de1b-6fd3-40f8-92a8-ea5578ae9f5a",
+        "gateway-f1b274e1-e1af-4645-83b6-bbf86d14c30d",
+        "temporary-regression-2f12dc95-638c-4cba-86e9-79fdfca81769"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-3230faa2-92fb-4be2-a32f-63c1c5e1d507.json",
+      "completedAt": "2026-10-13T05:17:26.611Z",
+      "names": [
+        "publishing"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-ba13346e-3df6-4f48-bfe8-9c71212588eb",
+        "temporary-regression-3230faa2-92fb-4be2-a32f-63c1c5e1d507"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-66aa5f43-6ba8-4f7e-b217-63a0ac533709.json",
+      "completedAt": "2026-10-13T05:18:34.172Z",
+      "names": [
+        "publishing-gateway"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-a580493a-ac73-4159-9ce6-f416a0862cea",
+        "temporary-regression-66aa5f43-6ba8-4f7e-b217-63a0ac533709"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-d3e8199a-6d1e-4830-b759-4fa53cca3667.json",
+      "completedAt": "2026-10-13T05:19:10.157Z",
+      "names": [
+        "call-participant-lease-batch"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-d3e8199a-6d1e-4830-b759-4fa53cca3667"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-d4866730-d4eb-44d9-af69-4b6fae3b16b0.json",
+      "completedAt": "2026-10-13T05:21:34.139Z",
+      "names": [
+        "lifecycle-lease-batch"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-d4866730-d4eb-44d9-af69-4b6fae3b16b0"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/coalescing-build29-web4-review1.json",
+      "sha256": "58b2edd63203fcead8c52adbb280111330bcea9b7db695ec1fd95579b91ef81b",
+      "checks": 18,
+      "expectedFixtureExit": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-gateway-trace-fixture-smoke-linux-review8-normal.json",
+      "sha256": "5b3e110b5fe85f732a1912c1aed1563578340cd2e6cc59704c8a34162789e68c",
+      "checks": 10,
+      "expectedFixtureExit": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-gateway-trace-fixture-smoke-linux-review8-media-io.json",
+      "sha256": "55ca26491e236af3981e2548f8f5658281e49ae1d1f3818fc6787969e7b6281b",
+      "checks": 10,
+      "expectedFixtureExit": 1
+    }
+  ],
+  "greenAfterAdoptionGate": true,
+  "photosInspected": true,
+  "telegramSent": true,
+  "cleanupVerified": true,
+  "supabaseRestored": true,
+  "priorPassesUnchanged": 80,
+  "nativeAcceptancePending": true,
+  "noCockpitStartup": true
+}

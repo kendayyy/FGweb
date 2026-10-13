@@ -1,0 +1,209 @@
+{
+  "at": "2026-10-13T05:41:02.728Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 Native90 initial CallsService PG new-handshake timeout returns HTTP500 although pool idle1 before/idle2 after failure and no queued checkout. Locked pg-pool source and realPG TCP proxy RED2/4 reproduce ready-backend loss before BEGIN; no-idle timeout and non-timeout database failure controls pass. On exact new-handshake timeout only, acquire an existing idle client once when no waiter precedes us; no transaction replay, no wait/backoff/config/deadline/authorization changes. Preserve BEGIN/UTC/body/COMMIT/ROLLBACK/release exact; original call/lease/quota regressions and full headed native remain required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "proposed": "quality/evidence/T30/calls-connect-recovery-reviewed1.ts",
+      "beforeSha256": "0540b03f2fe3581145bdd15056363184a2fea0134cd93cd4cf7e8fd86c633df2",
+      "afterSha256": "8c5c054eac2ed814d5bc83baf79e51e4873d157856cb16fd9baab3cbac259441"
+    }
+  ],
+  "reverseByteExact": true,
+  "edits": [
+    [
+      "  const db=await this.pool.connect();try{await db.query('BEGIN');",
+      "  let db:PoolClient;\n  try{db=await this.pool.connect();}\n  catch(error){\n   // A failed new handshake can outlive another client's return to this pool.\n   // Before BEGIN, take that ready client once; never replay a transaction.\n   if(!(error instanceof Error)||error.message!=='Connection terminated due to connection timeout'||this.pool.idleCount===0||this.pool.waitingCount!==0)throw error;\n   db=await this.pool.connect();\n  }\n  try{await db.query('BEGIN');"
+    ]
+  ],
+  "redCommand": {
+    "command": "node quality/evidence/T30/calls-connect-recovery-probe2.mjs red",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-13T05:39:53.483Z",
+    "completedAt": "2026-10-13T05:40:13.903Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-calls-connect-recovery-red-2.txt",
+    "evidenceSha256": "5e07151f35c8e18e7fadeed1a505e18e869f8a8fd89f02294eb8d5f917bb25a7"
+  },
+  "actualPg": {
+    "at": "2026-10-13T05:40:13.846Z",
+    "mode": "red",
+    "results": [
+      {
+        "kind": "recovery-success",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          6150,
+          6149,
+          6148,
+          6147
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5017,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": false,
+        "assertion": "A ready backend must rescue the failed initial handshake"
+      },
+      {
+        "kind": "recovery-business-error",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          6161,
+          6160,
+          6159,
+          6158
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5008,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": false,
+        "assertion": "Original transaction-body error must propagate without retry"
+      },
+      {
+        "kind": "no-idle-timeout",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          6180,
+          6179,
+          6178,
+          6177
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5012,
+        "idleAtEnd": 0,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": true
+      },
+      {
+        "kind": "non-timeout-connect-error",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          6192,
+          6191,
+          6190,
+          6189
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 32,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "error",
+          "code": "3D000",
+          "connectTimeout": false,
+          "businessSentinel": false
+        },
+        "passed": true
+      }
+    ],
+    "cleanup": [
+      {
+        "kind": "recovery-success",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "recovery-business-error",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "no-idle-timeout",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "non-timeout-connect-error",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      }
+    ],
+    "envRestored": true
+  },
+  "productionPoolSamples": [
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T05:28:34.946Z",
+      "service": "CallsService",
+      "pids": [
+        4495,
+        4496,
+        4497,
+        4498,
+        4624
+      ],
+      "total": 6,
+      "idle": 1,
+      "waiting": 0
+    },
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T05:28:35.959Z",
+      "service": "CallsService",
+      "pids": [
+        4495,
+        4496,
+        4497,
+        4498,
+        4624
+      ],
+      "total": 5,
+      "idle": 2,
+      "waiting": 0
+    },
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T05:28:36.966Z",
+      "service": "CallsService",
+      "pids": [
+        4495,
+        4496,
+        4497,
+        4498,
+        4624
+      ],
+      "total": 5,
+      "idle": 4,
+      "waiting": 0
+    }
+  ],
+  "dependency": "pg-pool locked local implementation: connect enqueues FIFO when idle exists; no preceding waiter permits reuse without newClient",
+  "beforeBeginOnly": true,
+  "secondAcquireErrorsPropagate": true,
+  "allBusinessAndRollbackCodeUnchanged": true
+}

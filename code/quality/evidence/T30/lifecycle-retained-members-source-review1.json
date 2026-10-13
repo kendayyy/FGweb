@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-13T05:10:35.225Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 actual readonly Timing18 shows ordinary lifecycle passes use11serial SQL statements and up to2817ms; meaningful realPG RED2/10 proves two redundant empty/history scans with a locked retained member, existing7 and last-revoked-close8 pass. Skip only empty-group checks when current FOR UPDATE member snapshot minus actual release list proves nonempty. Preserve room SHARE/group/member UPDATE locks, fresh eligibility, permissions, disconnect grace, expired/revoked release, empty/new/closed/missing group handling and all native operations. No PASS/deadline changes; affected regressions and native required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-retained-members-reviewed1.ts",
+      "beforeSha256": "cf158955cf7f173e045360e5a0b71a3691549af248c0eb3720c72180d926a12f",
+      "afterSha256": "03a5cc4d3006bd97456ac712d3ba7507b65fae3d15c2ecd2bfe31c3c290acf66"
+    }
+  ],
+  "reverseByteExact": true,
+  "edits": [
+    [
+      "   if(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query(\"SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1\",[`fg:admission-committed:${id}`])).rowCount)closed=await this.closeLocked(db,id,time);",
+      "   // The locked member snapshot and our release list already prove a nonempty group.\n   // Empty groups still use the original history/admission checks and closeLocked guard.\n   if(!members.some(member=>!released.includes(member.id))&&(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query(\"SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1\",[`fg:admission-committed:${id}`])).rowCount))closed=await this.closeLocked(db,id,time);"
+    ]
+  ],
+  "redCommand": {
+    "command": "node quality/evidence/T30/run-retained-members-tests1.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-13T05:08:46.084Z",
+    "completedAt": "2026-10-13T05:09:49.290Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-retained-members-red-1.txt",
+    "evidenceSha256": "bdbf58faa6c8df1bf86ea6a3510c2be1374a14d8f9437e8c61501ec1a6ed294b"
+  },
+  "cleanup": {
+    "path": "quality/evidence/T30/noop-write-cleanup-6381cdd55fcd4ead91e711af14203d7b.json",
+    "recordedAt": "2026-10-13T05:09:48.658Z",
+    "schemaRemoved": true,
+    "poolEnded": true,
+    "prototypesRestored": true,
+    "envRestored": true,
+    "appClosed": true,
+    "observations": [
+      {
+        "kind": "first",
+        "count": 1,
+        "rowCount": 1,
+        "timestampExact": true,
+        "disconnectNull": true
+      },
+      {
+        "kind": "repeated",
+        "count": 1,
+        "rowCount": 0,
+        "ctidUnchanged": true,
+        "xminUnchanged": true,
+        "timestampUnchanged": true
+      },
+      {
+        "kind": "reconnect",
+        "count": 1,
+        "rowCount": 1,
+        "disconnectCleared": true,
+        "firstTimestampRetained": true
+      },
+      {
+        "kind": "revoked",
+        "count": 0,
+        "rowCount": null,
+        "released": true,
+        "revoked": true
+      },
+      {
+        "kind": "expired",
+        "count": 0,
+        "rowCount": null,
+        "released": true,
+        "revoked": true
+      },
+      {
+        "kind": "absentGrace",
+        "retainedBeforeBoundary": true,
+        "releasedAtBoundary": true
+      },
+      {
+        "kind": "unconnected",
+        "retainedBeforeBoundary": true,
+        "releasedAtBoundary": true
+      },
+      {
+        "kind": "retainedMemberEmptyChecks",
+        "absent": false,
+        "emptyChecks": 2,
+        "groupOpen": true,
+        "memberRetained": true
+      },
+      {
+        "kind": "retainedMemberEmptyChecks",
+        "absent": true,
+        "emptyChecks": 2,
+        "groupOpen": true,
+        "memberRetained": true
+      },
+      {
+        "kind": "lastMemberClosed",
+        "revoked": true,
+        "closed": true
+      }
+    ],
+    "errorCount": 0
+  },
+  "queryTimingEvidence": "quality/evidence/T30/browser-timing18-query-analysis1.json",
+  "remainingMembersLocked": true,
+  "publishingDoesNotMutateMembers": true
+}

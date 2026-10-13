@@ -1,0 +1,205 @@
+{
+  "at": "2026-10-13T06:37:07.838Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 Native92 new-handshake PG500 stack line34 matches TeamsService.transaction, actual Teams pool idle3 before/idle2 after error with no queued waiter. RealPG TCP proxy Teams RED2/4 reproduces lost ready backend; no-idle timeout/other PG error controls pass. Acquire ready client once only on exact initial new-handshake timeout, before unchanged READ COMMITTED BEGIN/UTC/body/COMMIT/ROLLBACK/conflict mapping/release. Preserve startup4/max16/connect5000/statement10000; no retry body or wait/backoff. Full affected team authority/race regressions and original headed T30 acceptance remain required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "proposed": "quality/evidence/T30/teams-connect-recovery-reviewed1.ts",
+      "beforeSha256": "ab22b8dd31026fbb7b4be3dc4295a868138ca069918ca02149f9ff31ced2e592",
+      "afterSha256": "fbaddbba75c98d6346fc433a8ffa612a1989d93f6a2685279d5e28c35b804557"
+    }
+  ],
+  "reverseByteExact": true,
+  "edits": [
+    [
+      "  const db=await this.pool.connect();try{",
+      "  let db:PoolClient;\n  try{db=await this.pool.connect();}\n  catch(error){\n   // A failed new handshake can outlive another client's return to this pool.\n   // Before BEGIN, take that ready client once; never replay a transaction.\n   if(!(error instanceof Error)||error.message!=='Connection terminated due to connection timeout'||this.pool.idleCount===0||this.pool.waitingCount!==0)throw error;\n   db=await this.pool.connect();\n  }\n  try{"
+    ]
+  ],
+  "redCommand": {
+    "command": "node quality/evidence/T30/teams-connect-recovery-probe1.mjs red",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-13T06:33:55.306Z",
+    "completedAt": "2026-10-13T06:34:13.012Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-teams-connect-recovery-red-1.txt",
+    "evidenceSha256": "5e07151f35c8e18e7fadeed1a505e18e869f8a8fd89f02294eb8d5f917bb25a7"
+  },
+  "actualPg": {
+    "at": "2026-10-13T06:34:12.974Z",
+    "mode": "red",
+    "results": [
+      {
+        "kind": "recovery-success",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          13542,
+          13541,
+          13540,
+          13539
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5008,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": false,
+        "assertion": "A ready backend must rescue the failed initial handshake"
+      },
+      {
+        "kind": "recovery-business-error",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          13560,
+          13559,
+          13558,
+          13557
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5003,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": false,
+        "assertion": "Original transaction-body error must propagate without retry"
+      },
+      {
+        "kind": "no-idle-timeout",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          13578,
+          13577,
+          13576,
+          13575
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 5010,
+        "idleAtEnd": 0,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "Error",
+          "code": null,
+          "connectTimeout": true,
+          "businessSentinel": false
+        },
+        "passed": true
+      },
+      {
+        "kind": "non-timeout-connect-error",
+        "actualPg": true,
+        "acceptedTcp": 5,
+        "warmedPids": [
+          13589,
+          13588,
+          13587,
+          13586
+        ],
+        "bodyCalls": 0,
+        "bodyPid": null,
+        "elapsedMs": 23,
+        "idleAtEnd": 1,
+        "totalAtEnd": 4,
+        "error": {
+          "name": "error",
+          "code": "3D000",
+          "connectTimeout": false,
+          "businessSentinel": false
+        },
+        "passed": true
+      }
+    ],
+    "cleanup": [
+      {
+        "kind": "recovery-success",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "recovery-business-error",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "no-idle-timeout",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      },
+      {
+        "kind": "non-timeout-connect-error",
+        "poolEnded": true,
+        "remainingClients": 0,
+        "proxyClosed": true
+      }
+    ],
+    "envRestored": true
+  },
+  "productionPoolSamples": [
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T06:26:05.652Z",
+      "service": "TeamsService",
+      "pids": [
+        12344,
+        12345,
+        12346,
+        12347
+      ],
+      "total": 5,
+      "idle": 3,
+      "waiting": 0
+    },
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T06:26:06.888Z",
+      "service": "TeamsService",
+      "pids": [
+        12344,
+        12345,
+        12346,
+        12347
+      ],
+      "total": 4,
+      "idle": 4,
+      "waiting": 0
+    },
+    {
+      "type": "owned-service-pool",
+      "at": "2026-10-13T06:26:07.891Z",
+      "service": "TeamsService",
+      "pids": [
+        12344,
+        12345,
+        12346,
+        12347
+      ],
+      "total": 4,
+      "idle": 2,
+      "waiting": 0
+    }
+  ],
+  "compiledStackLineMatched": 34,
+  "beforeBeginOnly": true,
+  "allBusinessAndRollbackCodeUnchanged": true
+}

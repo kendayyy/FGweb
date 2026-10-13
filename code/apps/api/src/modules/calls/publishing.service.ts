@@ -6,7 +6,7 @@ import {TrackSource} from 'livekit-server-sdk';
 import {ErrorCode} from '@fg/contracts';
 import {roomError} from '../rooms/rooms.service.js';
 import {CallsService} from './calls.service.js';
-import {liveLease} from './lease-store.js';
+import {liveLease,type liveLeasesWithPolicy} from './lease-store.js';
 
 @Injectable()
 export class PublishingService {
@@ -25,16 +25,18 @@ export class PublishingService {
   });}
   forget(id:string){this.observed.delete(id);}
   /** Caller holds the room/group transaction lock; no nested transaction or quota race. */
-  async reconcileWithin(db:PoolClient,id:string,people:ParticipantInfo[],now:Date,ended?:{identity:string;at:number}){
+  async reconcileWithin(db:PoolClient,id:string,people:ParticipantInfo[],now:Date,ended?:{identity:string;at:number},samePass?:Awaited<ReturnType<typeof liveLeasesWithPolicy>>){
     const seen=this.observed.get(id)??new Set<string>();this.observed.set(id,seen);
     const rows=(await db.query<{id:string;user_id:string;created_at:Date;identity:string|null}>("SELECT p.id,p.user_id,p.created_at AT TIME ZONE 'UTC' AS created_at,a.id AS identity FROM call_publish_slots p LEFT JOIN call_members m ON m.call_group_id=p.call_group_id AND m.user_id=p.user_id AND m.left_at IS NULL LEFT JOIN call_admissions a ON a.call_member_id=m.id AND a.revoked_at IS NULL WHERE p.call_group_id=$1",[id])).rows;
     const current=new Set(rows.map(r=>r.id));for(const key of seen)if(!current.has(key))seen.delete(key);
+    let slotsChanged=false;
     for(const row of rows){const peer=people.find(p=>p.identity===row.identity),screen=peer?.tracks.some(t=>t.source===TrackSource.SCREEN_SHARE);
       if(screen){seen.add(row.id);continue;}
       const lease=row.identity?await liveLease(db,row.identity):undefined;
       const stopped=ended?.identity===row.identity&&row.created_at.getTime()<=ended.at;
-      if(!lease||seen.has(row.id)||stopped||now.getTime()-row.created_at.getTime()>=30000){await db.query('DELETE FROM call_publish_slots WHERE id=$1',[row.id]);seen.delete(row.id);}
+      if(!lease||seen.has(row.id)||stopped||now.getTime()-row.created_at.getTime()>=30000){await db.query('DELETE FROM call_publish_slots WHERE id=$1',[row.id]);slotsChanged=true;seen.delete(row.id);}
     }
-    await this.calls.syncNativeParticipantPermissions(db,people);
+    // Slot release invalidates the earlier reservation proof; mutations always recheck fresh policy.
+    await this.calls.syncNativeParticipantPermissions(db,people,slotsChanged?undefined:samePass);
   }
 }

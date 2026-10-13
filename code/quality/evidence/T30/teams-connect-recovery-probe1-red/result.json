@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-13T06:34:12.974Z",
+  "mode": "red",
+  "results": [
+    {
+      "kind": "recovery-success",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        13542,
+        13541,
+        13540,
+        13539
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 5008,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "Error",
+        "code": null,
+        "connectTimeout": true,
+        "businessSentinel": false
+      },
+      "passed": false,
+      "assertion": "A ready backend must rescue the failed initial handshake"
+    },
+    {
+      "kind": "recovery-business-error",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        13560,
+        13559,
+        13558,
+        13557
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 5003,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "Error",
+        "code": null,
+        "connectTimeout": true,
+        "businessSentinel": false
+      },
+      "passed": false,
+      "assertion": "Original transaction-body error must propagate without retry"
+    },
+    {
+      "kind": "no-idle-timeout",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        13578,
+        13577,
+        13576,
+        13575
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 5010,
+      "idleAtEnd": 0,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "Error",
+        "code": null,
+        "connectTimeout": true,
+        "businessSentinel": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "non-timeout-connect-error",
+      "actualPg": true,
+      "acceptedTcp": 5,
+      "warmedPids": [
+        13589,
+        13588,
+        13587,
+        13586
+      ],
+      "bodyCalls": 0,
+      "bodyPid": null,
+      "elapsedMs": 23,
+      "idleAtEnd": 1,
+      "totalAtEnd": 4,
+      "error": {
+        "name": "error",
+        "code": "3D000",
+        "connectTimeout": false,
+        "businessSentinel": false
+      },
+      "passed": true
+    }
+  ],
+  "cleanup": [
+    {
+      "kind": "recovery-success",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "recovery-business-error",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "no-idle-timeout",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    },
+    {
+      "kind": "non-timeout-connect-error",
+      "poolEnded": true,
+      "remainingClients": 0,
+      "proxyClosed": true
+    }
+  ],
+  "envRestored": true
+}

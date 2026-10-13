@@ -1,0 +1,34 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ ../../quality/evidence/T30/screen-codec-tests1/live-viewer-codec.test.tsx (37 tests | 1 failed) 2797ms
+   ❯ T30 approved LiveViewer and screen share behavior (RED proposal) (37)
+     × preserves capture/claim/release with codec capability advertised H264 43ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  ../../quality/evidence/T30/screen-codec-tests1/live-viewer-codec.test.tsx > T30 approved LiveViewer and screen share behavior (RED proposal) > preserves capture/claim/release with codec capability advertised H264
+AssertionError: expected undefined to be 'h264' // Object.is equality
+
+- Expected:
+"h264"
+
++ Received:
+undefined
+
+ ❯ ../../quality/evidence/T30/screen-codec-tests1/live-viewer-codec.test.tsx:1546:92
+    1544|       await waitFor(()=>expect(screen.getByRole('button',{name:/Dừng c…
+    1545|       const publish=mockTransport.latestRoom!.localParticipant.publish…
+    1546|       expect(publish).toHaveBeenCalledTimes(1);expect(publish.mock.cal…
+       |                                                                                            ^
+    1547|       expect(publish.mock.calls[0][1].screenShareEncoding).toEqual(exp…
+    1548|       expect(getDisplayMediaMock).toHaveBeenCalledTimes(1);expect(requ…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 36 passed (37)
+   Start at  11:22:09
+   Duration  53.91s (environment 81%, setup 11%, tests 5%, transform 2%, import 1%)
+

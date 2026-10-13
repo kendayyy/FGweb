@@ -32,7 +32,15 @@ export class CallsService implements OnModuleInit,OnModuleDestroy {
   return {client:new RoomServiceClient(server,key,secret,{requestTimeout:10}),admission,key,secret};
  }
  private async transaction<T>(run:(db:PoolClient)=>Promise<T>):Promise<T>{
-  const db=await this.pool.connect();try{await db.query('BEGIN');await db.query("SET LOCAL TIME ZONE 'UTC'");const result=await run(db);await db.query('COMMIT');return result;}
+  let db:PoolClient;
+  try{db=await this.pool.connect();}
+  catch(error){
+   // A failed new handshake can outlive another client's return to this pool.
+   // Before BEGIN, take that ready client once; never replay a transaction.
+   if(!(error instanceof Error)||error.message!=='Connection terminated due to connection timeout'||this.pool.idleCount===0||this.pool.waitingCount!==0)throw error;
+   db=await this.pool.connect();
+  }
+  try{await db.query('BEGIN');await db.query("SET LOCAL TIME ZONE 'UTC'");const result=await run(db);await db.query('COMMIT');return result;}
   catch(error){await db.query('ROLLBACK');if(error instanceof HttpException)throw error;if(error&&typeof error==='object'&&'code'in error&&['23505','40001','40P01'].includes(String(error.code)))roomError(ErrorCode.ACTIVE_PLAY_CONFLICT,'Concurrent call admission conflict');throw error;}finally{db.release();}
  }
  private async actor(db:PoolClient,user:string,session:string){
@@ -187,8 +195,9 @@ export class CallsService implements OnModuleInit,OnModuleDestroy {
   await this.applyNativePermissionUpdate(this.config().client,evaluated.lease.room_name,evaluated.lease.id,known,evaluated.permission);
   return known;
  }
- async syncNativeParticipantPermissions(db:PoolClient,people:ParticipantInfo[]):Promise<void>{
-  const evaluated=new Map((await liveLeasesWithPolicy(db,people.map(p=>p.identity))).map(p=>[p.lease.id,p]));
+ async syncNativeParticipantPermissions(db:PoolClient,people:ParticipantInfo[],samePass?:Awaited<ReturnType<typeof liveLeasesWithPolicy>>):Promise<void>{
+  // Optional proof belongs to the current locked lifecycle pass, with unchanged membership/slots.
+  const evaluated=new Map((samePass??await liveLeasesWithPolicy(db,people.map(p=>p.identity))).map(p=>[p.lease.id,p]));
   for(const known of people){const current=evaluated.get(known.identity);if(!current)continue;
    const old=known.permission,permission=current.permission;
    // A batch only proves a no-op; every native mutation re-reads current authority.

@@ -1,0 +1,7 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',r=n=>fs.readFileSync(d+'/'+n,'utf8'),w=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'}),h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const old=r('run-native95-resource.mjs');assert(old.includes('run-native-native95-parent.mjs'));
+const next=old.replace('run-native-native95-parent.mjs','run-native95-parent.mjs').replace('preflight-native95-canonical1.mjs','preflight-native95-canonical2.mjs');w('run-native95-resource2.mjs',next);
+const pins=JSON.parse(r('native95-source-pins1.json'));pins.pins=pins.pins.filter(p=>!p.path.endsWith('/run-native95-resource.mjs'));pins.pins.push({path:d+'/run-native95-resource2.mjs',sha256:h(d+'/run-native95-resource2.mjs')});w('native95-source-pins2.json',JSON.stringify(pins,null,2)+'\n');
+w('preflight-native95-canonical2.mjs',r('preflight-native95-canonical1.mjs').replace('native95-source-pins1.json','native95-source-pins2.json'));
+fs.appendFileSync('../.doc/history.md','\n- Coding and build 2 — T30 — '+new Date().toISOString()+': pre-run source review caught generated driver1 parent filename typo; preserve driver1 and write corrected driver2/pins2/preflight2 before any run. No test or application change, no failed/synthetic execution claimed. Canonical adoption gate still running.\n');console.log('Driver2 exact parent filename verified; no native run started.');

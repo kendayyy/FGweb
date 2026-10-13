@@ -6,7 +6,7 @@ import {randomUUID} from 'node:crypto';
 import {RoomServiceClient,WebhookReceiver} from 'livekit-server-sdk';
 import {ParticipantInfo,ParticipantInfo_State} from '@livekit/protocol';
 import {CallsService} from './calls.service.js';
-import {liveLeases} from './lease-store.js';
+import {liveLeasesWithPolicy} from './lease-store.js';
 
 interface Deferred<T=void> {
  promise: Promise<T>;
@@ -172,7 +172,8 @@ export class CallLifecycleService implements OnModuleInit,OnModuleDestroy {
    const members=(await db.query(`SELECT m.id,m.user_id,a.id AS lease_id,a.connected_at,a.disconnected_at,a.expires_at,a.revoked_at
     FROM call_members m LEFT JOIN call_admissions a ON a.call_member_id=m.id AND a.revoked_at IS NULL WHERE m.call_group_id=$1 AND m.left_at IS NULL FOR UPDATE OF m`,[id])).rows;
    // Fresh eligibility after canonical room/group and member locks; never reuse a previous pass.
-   const eligible=new Set((await liveLeases(db,members.flatMap(member=>member.lease_id?[member.lease_id]:[]))).map(lease=>lease.id));
+   const evaluated=await liveLeasesWithPolicy(db,members.flatMap(member=>member.lease_id?[member.lease_id]:[]));
+   const eligible=new Set(evaluated.map(current=>current.lease.id));
    const released:string[]=[],presentAdmissions:string[]=[];
    for(const member of members){
     if(!member.lease_id||!eligible.has(member.lease_id)){released.push(member.id);continue;}
@@ -186,12 +187,17 @@ export class CallLifecycleService implements OnModuleInit,OnModuleDestroy {
    }
    if(presentAdmissions.length)await db.query('UPDATE call_admissions SET connected_at=COALESCE(connected_at,$2),disconnected_at=NULL WHERE id=ANY($1::text[]) AND revoked_at IS NULL AND (connected_at IS NULL OR disconnected_at IS NOT NULL)',[presentAdmissions,time]);
    await this.release(db,released,time);
-   await this.publishing.reconcileWithin(db,id,participants,time,ended);
+   // Same-pass no-op proof is reusable only while this group lock protects unchanged members/slots.
+   // Unknown native identities retain the original fresh policy-read path.
+   const samePass=!released.length&&participants.every(peer=>eligible.has(peer.identity))?evaluated:undefined;
+   await this.publishing.reconcileWithin(db,id,participants,time,ended,samePass);
    // A newly created group has no joined/reserved members yet. It must stay
    // available for the first admission, rather than closing in its first sweep.
    // An empty group with native presence is eligible to close if historical members
    // were retained or a matching internal committed-admission marker is present.
-   if(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query("SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1",[`fg:admission-committed:${id}`])).rowCount)closed=await this.closeLocked(db,id,time);
+   // The locked member snapshot and our release list already prove a nonempty group.
+   // Empty groups still use the original history/admission checks and closeLocked guard.
+   if(!members.some(member=>!released.includes(member.id))&&(!nativeExists||(await db.query('SELECT id FROM call_members WHERE call_group_id=$1 LIMIT 1',[id])).rowCount||(await db.query("SELECT id FROM webhook_events WHERE event_id=$1 AND event_type='FG_ADMISSION_COMMITTED' LIMIT 1",[`fg:admission-committed:${id}`])).rowCount))closed=await this.closeLocked(db,id,time);
   });
   if(closed)await this.deleteNative(id);
  }

@@ -1,3 +1,5 @@
+import {observeOwnedInspector} from './owned-inspector-timing2.mjs';
+import {startOwnedPostgres} from './owned-postgres-tmpfs1.mjs';
 import 'reflect-metadata';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,17 +17,17 @@ import {NestFactory} from '@nestjs/core';
 import {makeSignature} from 'better-auth/crypto';
 import {raw} from 'express';
 import {RoomServiceClient} from 'livekit-server-sdk';
-import {startGatewayFixture} from './private-gateway-codex-linux-reviewed2.mjs';
+import {startGatewayFixture} from './private-gateway-api-direct-owned-postgres8.mjs';
 import {createOwnedErrorObserver} from './codex-owned-error-observer4.mjs';
 const env=parseEnv(fs.readFileSync('.env.local','utf8')),schema=`t30_screen_${randomUUID().replaceAll('-','')}`,secret=randomUUID()+randomUUID();
 const evidence=process.env.FG_T30_EVIDENCE_DIR;
 assert(evidence?.startsWith('quality/evidence/T30/'));fs.mkdirSync(evidence,{recursive:true});
 const report={schemaRemoved:false,mediaRemoved:false,presenceRemoved:false,appClosed:false,webClosed:false};
-let pool,redis,app,web,fixture,created=false,namespace='',phase='port',sfu;
+let ownedPostgres,pool,redis,app,web,fixture,created=false,namespace='',phase='port',sfu;
 let inspectorClient,inspectorPid=null,inspectorReserved=false,inspectorReleased=false;
 let inspectorExpectedEnd=false,actualSocketEnded=false,poolEnded=false;
 let inspectorFailureCount=0,inspectorWriteFailureCount=0,inspectorHealthy=false;
-let codexErrorObserver;
+let codexErrorObserver;let stopOwnedInspector;
 const sockets=new Set();
 const mark=name=>{phase=name;process.send?.({kind:'phase',name});};
 const ALLOWED_NAMES=new Set(['Error','TypeError','TimeoutError','SocketEndError']);
@@ -66,10 +68,11 @@ function recordSafeFailure(err){
  }
 }
 async function cleanup(){
+ if(stopOwnedInspector)stopOwnedInspector();
  const errors=[];
  async function attempt(name,fn){
   try{await fn();}
-  catch{errors.push(new Error(`Cleanup failed: ${name}`));}
+  catch{errors.push(new Error(`Cleanup failed: ${name}`));fs.appendFileSync(evidence+'/cleanup-attempt-failures.jsonl',JSON.stringify({at:new Date().toISOString(),operation:name})+'\n');}
  }
  if(fixture?.stopGatewayObservation)await attempt('gatewayObserverStop',async()=>{const health=await fixture.stopGatewayObservation();fs.writeFileSync(evidence+'/gateway-observer-stop-health.json',JSON.stringify(health,null,2)+'\n',{flag:'wx'});});
  if(app){
@@ -205,6 +208,7 @@ async function cleanup(){
    }
   });
  }
+ if(ownedPostgres)await attempt('ownedPostgres',async()=>{await ownedPostgres.close();delete process.env.FG_T30_PRIVATE_DATABASE_FILE;});
  await attempt('cleanupReport',async()=>{
   fs.writeFileSync(`${evidence}/cleanup.json`,JSON.stringify(report,null,2)+'\n');
  });
@@ -260,8 +264,8 @@ async function cleanup(){
 }
 try{
  async function availablePort(){const reservation=reservePort();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));const port=reservation.address().port;await new Promise(r=>reservation.close(r));return port;}
- const port=await availablePort(),apiPort=await availablePort(),origin=`http://127.0.0.1:${port}`;
- const scoped=new URL(env.DATABASE_URL);scoped.searchParams.set('options',`-c search_path=${schema}`);namespace=createHash('sha256').update(JSON.stringify([scoped.host,scoped.pathname,scoped.searchParams.get('options')])).digest('hex').slice(0,16);
+ const port=await availablePort(),apiPort=port,origin=`http://127.0.0.1:${port}`;
+ ownedPostgres=await startOwnedPostgres({evidence});env.DATABASE_URL=ownedPostgres.databaseURL;process.env.FG_T30_PRIVATE_DATABASE_FILE=ownedPostgres.file;const scoped=new URL(env.DATABASE_URL);scoped.searchParams.set('options',`-c search_path=${schema}`);namespace=createHash('sha256').update(JSON.stringify([scoped.host,scoped.pathname,scoped.searchParams.get('options')])).digest('hex').slice(0,16);
  mark('database');pool=new pg.Pool({connectionString:scoped.href,max:20,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${schema}"`);created=true;
  await migrate(drizzle(pool),{migrationsFolder:path.resolve('packages/database/migrations'),migrationsSchema:schema});const games=await tables.seedGames(drizzle(pool,{schema:tables})),game=games.find(g=>g.title==='Valorant');assert(game);
  const actors={};
@@ -293,8 +297,9 @@ try{
  mark('redis');redis=new Redis(env.REDIS_URL,{connectTimeout:5000,retryStrategy:()=>null});await redis.ping();
  mark('media');fixture=await startGatewayFixture({databaseURL:scoped.href,key:env.LIVEKIT_API_KEY,secret:env.LIVEKIT_API_SECRET,origin,turnTcp:true,webhookUrl:`http://host.docker.internal:${apiPort}/api/media/webhook`});
  Object.assign(process.env,env,{DATABASE_URL:scoped.href,BETTER_AUTH_SECRET:secret,PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,LIVEKIT_SERVER_URL:fixture.server,LIVEKIT_ADMISSION_URL:fixture.ws,FG_UPLOADS_DIR:path.resolve('.runtime/t30/uploads')});delete process.env.ADMIN_USER_IDS;delete process.env.ADMIN_DISCORD_IDS;
- mark('api');const {AppModule}=await import('../../../apps/api/dist/app.module.js');app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});codexErrorObserver=createOwnedErrorObserver({app,evidenceDir:evidence});app.use('/api/media/webhook',raw({type:()=>true,limit:'64kb'}));await app.listen(apiPort,'0.0.0.0');const api=`http://127.0.0.1:${apiPort}`;
+ mark('api');const {startLinuxApi}=await import('./linux-api-container-helper9.mjs');app=await startLinuxApi({environment:{...process.env},apiPort,evidence,media:fixture});namespace=app.namespace;const api=app.api;
  sfu=new RoomServiceClient(fixture.server,env.LIVEKIT_API_KEY,env.LIVEKIT_API_SECRET);
+ stopOwnedInspector=observeOwnedInspector({client:inspectorClient,sfu,evidence});
  async function post(route,actor,body){const response=await fetch(`${api}/api/v1/${route}`,{method:'POST',headers:{Cookie:`better-auth.session_token=${actor.cookie}`,Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(body??{})});assert([200,201].includes(response.status),`Fixture ${route.split('/')[0]} status ${response.status}`);return response.json();}
  const card=await post('recruitments',actors.sender,{gameId:game.id,gameTitle:game.title,title:'Chơi cùng bạn',mode:'ranked',playerCapacity:2,timingType:'now'}),roomId=card.roomId;
  const play=(await pool.query('SELECT id FROM play_sessions WHERE room_id=$1',[roomId])).rows[0];assert(play);
@@ -305,40 +310,18 @@ try{
  }
  const other=await post('rooms',actors.receiver,{name:'Phòng thứ hai',gameId:game.id,gameTitle:game.title,visibility:'PRIVATE',playerCapacity:2});
  mark('web');
- const build=JSON.parse(fs.readFileSync('quality/evidence/T30/codex-t30-build-3.json','utf8'));
+ const build=JSON.parse(fs.readFileSync('quality/evidence/T30/codex-t30-build-4.json','utf8'));
  assert.equal(build.exitCode,0);
- const review=JSON.parse(fs.readFileSync('quality/evidence/T30/t30-build-3-index-review.json','utf8'));
- assert.equal(review.afterSha256,"9decc88df8366d646c6fd3291506f81434b91fa5e18f809b49234a4b0d2e7625");
+ const review=JSON.parse(fs.readFileSync('quality/evidence/T30/t30-build-4-index-review.json','utf8'));
+ assert.equal(review.afterSha256,"d3b795cf78814b7835d36a9f5f744bea11366c02c32e5bdc44c8ab2f4f13f8ec");
  assert.equal(createHash('sha256').update(fs.readFileSync('apps/web/dist/index.html')).digest('hex'),review.afterSha256);
- const pinnedAssets=[{"path":"apps/web/dist/assets/index-BVpguvHe.js","sha256":"5095f6fb140f10c3a8bf5cfaa4fd3dd765783130e200154ea7efebaf5b7f51f8"},{"path":"apps/web/dist/assets/index-Dr0NL-IN.css","sha256":"4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"},{"path":"apps/web/dist/assets/media-DYvs06og.js","sha256":"33be396bd156a3b31aa74bd69424566720568fa8915d23b99797059bebfe85b7"}];
- const chunks=JSON.parse(fs.readFileSync('quality/evidence/T30/web-lazy-media-chunk-review1.json','utf8'));
+ const pinnedAssets=[{"path":"apps/web/dist/assets/index-Db-qa7Fx.js","sha256":"449fae01509c5df05f120f81b7033cebba23942146153b61aac12006fb54ad63"},{"path":"apps/web/dist/assets/index-Dr0NL-IN.css","sha256":"4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"},{"path":"apps/web/dist/assets/media-B05Mq9Gp.js","sha256":"2051e70b3aff5bdfa8c489350e0e2bb69f24542746c2189e734f9c810ac6b276"}];
+ const chunks=JSON.parse(fs.readFileSync('quality/evidence/T30/web-screen-codec-chunk-review1.json','utf8'));
  assert.deepEqual(chunks.assets.map(({path,sha256})=>({path,sha256})),pinnedAssets);
  assert.equal(review.activeAssets.length,2);
  for(const asset of review.activeAssets)assert(pinnedAssets.some(p=>p.path===asset.path&&p.sha256===asset.sha256));
  for(const asset of pinnedAssets){assert(asset.path.startsWith('apps/web/dist/assets/'));assert.equal(createHash('sha256').update(fs.readFileSync(asset.path)).digest('hex'),asset.sha256);}
- const {preview,loadConfigFromFile}=await import(pathToFileURL(path.resolve('apps/web/node_modules/vite/dist/node/index.js')).href);
- const loaded=await loadConfigFromFile({command:'serve',mode:'production'},path.resolve('apps/web/vite.config.ts'));assert(loaded);
- const {fgSecurityHeadersPlugin}=await import(pathToFileURL(path.resolve('apps/web/security-headers.mjs')).href);
- const plugins=loaded.config.plugins.map(p=>p?.name==='fg-security-headers'?fgSecurityHeadersPlugin([origin,fixture.server,fixture.ws]):p);
- assert(loaded.config.plugins.some(p=>p?.name==='fg-security-headers'));
- const previewServer=await preview({
-  ...loaded.config,
-  plugins,
-  configFile:false,
-  root:path.resolve('apps/web'),
-  server:{host:'127.0.0.1',port,strictPort:true,proxy:{'/api':api,'/socket.io':{target:api,ws:true}}},
-  preview:{host:'127.0.0.1',port,strictPort:true,proxy:{'/api':api,'/socket.io':{target:api,ws:true}}}
- });
- web={
-  httpServer:previewServer.httpServer,
-  close:()=>new Promise((resolve,reject)=>{
-   previewServer.httpServer.close(err=>{
-    if(!err||err.code==='ERR_SERVER_NOT_RUNNING')resolve();
-    else reject(err);
-   });
-  })
- };
- web.httpServer.on('connection',socket=>{sockets.add(socket);socket.on('close',()=>sockets.delete(socket));});
+ web={close:async()=>{const proof=JSON.parse(fs.readFileSync(evidence+'/linux-api-close.json'));assert(proof.appClosed&&proof.httpServerClosed&&proof.graceful,'Actual shared API/web HTTP server close not proven');}};
  process.send?.({kind:'ready',origin,actors,roomId,otherRoomId:other.id,turnPort:fixture.turnPort,inspectorPid});
  process.on('message',async message=>{
   if(message.kind==='shape')try{assert(fixture.shaperControl);const response=await fetch(fixture.shaperControl+'/shape',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(message.policy)});assert.equal(response.status,200);process.send?.({id:message.id,...await response.json()});}catch{process.send?.({id:message.id,failed:true});}

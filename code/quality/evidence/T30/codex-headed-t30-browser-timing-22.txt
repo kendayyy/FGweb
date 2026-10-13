@@ -1,0 +1,31 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-browser-timing22.spec.ts --config quality/evidence/T30/playwright-browser-timing22.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:30708) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-browser-timing22.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1ms)
+
+
+  1) quality\evidence\T30\native-browser-timing22.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: Fixture failed; inspect sanitized evidence
+
+      17 |  fixture=fork('quality/evidence/T30/fixture-server-blocking14-statistics.mjs',[],options);
+      18 |  fixture.on('message',(m:Record<string,unknown>)=>{if(typeof m.id==='string'){pending.get(m.id)?.(m);pending.delete(m.id);}if(m.kind==='phase')fs.appendFileSync(evidence+'/phases.txt',new Date().toISOString()+' '+m.name+'\n');if(m.kind==='failed')fs.writeFileSync(evidence+'/setup-failure.json',JSON.stringify(m,null,2)+'\n');});
+    > 19 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture startup timeout')),110000);fixture.on('message',(m:Record<string,unknown>)=>{if(m.kind==='ready'){ready=m as unknown as Ready;clearTimeout(timer);resolve();}if(m.kind==='failed'){clearTimeout(timer);reject(Error('Fixture failed; inspect sanitized evidence'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(Error('Fixture exited before readiness'));});});
+         |                                                                                                                                                                                                                                                                                                                  ^
+      20 | });
+      21 | test.afterAll(async()=>{
+      22 |  for(const browser of browsers)await browser.close();
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T30\native-browser-timing22.spec.ts:19:306)
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing22-T3-ad0f0-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing22-T3-ad0f0-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-browser-timing22.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

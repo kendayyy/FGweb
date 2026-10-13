@@ -1,0 +1,34 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-browser-timing26.spec.ts --config quality/evidence/T30/playwright-browser-timing26.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:56908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-browser-timing26.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (2.8m)
+
+
+  1) quality\evidence\T30\native-browser-timing26.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      66 |   const third=await openActor('third',true);await join(third);await share(third);await expect.poll(async()=>Number((await ask('inspect')).publisherSlots)).toBe(3);
+      67 |   const fourth=await openActor('fourth',true);await join(fourth);await fourth.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(fourth.getByRole('alert')).toContainText('3');await expect.poll(()=>fourth.evaluate(()=>{const w=window as unknown as CaptureWindow;return w.t30Captures.flatMap(s=>s.getTracks()).every(t=>t.readyState==='ended');})).toBe(true);expect((await ask('inspect')).publisherSlots).toBe(3);await checkpoint(fourth,'Người thứ tư thử chia sẻ','Server trả lỗi quota; capture thật đã dừng, vẫn chỉ ba suất phát');
+    > 68 |   const before=await stats(viewer);await viewer.waitForTimeout(10000);const baseline=await stats(viewer);const transportBefore=await ask('shaping-stats');const baselineAudio=delta(before,baseline).filter(r=>r.kind==='audio'&&r.packetsDelta>100);expect(baselineAudio.length).toBeGreaterThan(0);const shapedPolicy={bitsPerSecond:640000,delayMs:25};expect((await ask('shape',{policy:shapedPolicy})).success).toBe(true);await viewer.waitForTimeout(20000);const shaped=await stats(viewer),shapedRows=delta(baseline,shaped),audio=shapedRows.filter(r=>r.kind==='audio'&&r.packetsDelta>0),video=shapedRows.filter(r=>r.kind==='video'&&r.bytesDelta>1000);expect(audio.length).toBeGreaterThan(0);for(const row of audio){expect(row.packetsDelta).toBeGreaterThan(100);expect(Math.max(0,row.lostDelta)/(row.packetsDelta+Math.max(0,row.lostDelta))).toBeLessThan(0.05);expect(row.jitter).toBeLessThan(0.2);}expect(video).toHaveLength(1);expect(shaped.relay).toBe(true);const transport=await ask('shaping-stats');expect(shaped.at-baseline.at).toBeGreaterThanOrEqual(19000);expect(transport.settings).toEqual(shapedPolicy);const sumBytes=(value:Record<string,unknown>)=>(value.peers as Array<{toBrowserBytes:number}>).reduce((sum,p)=>sum+p.toBrowserBytes,0);expect(sumBytes(transport)).toBeGreaterThan(sumBytes(transportBefore));fs.writeFileSync(evidence+'/network-benchmark.json',JSON.stringify({startedAt:before.at,baselineEnd:baseline.at,shapedEnd:shaped.at,policy:shapedPolicy,baseline:delta(before,baseline),shaped:shapedRows,transportBefore,transport,physicalAudibilityMeasured:false,packetLossSimulation:false},null,2)+'\n');expect((await ask('shape',{policy:{bitsPerSecond:0,delayMs:0}})).success).toBe(true);await checkpoint(viewer,'Giới hạn TURN TCP thật','Đã đo audio RTP và một video dưới pacing 640kbps/25ms; không suy ra nghe vật lý');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+      69 |   const mobile=await openActor('denied',false,true);await join(mobile);await expect(mobile.getByRole('button',{name:'Chia sẻ màn hình',exact:true})).toHaveCount(0);await expect(mobile.locator('.fg-live-guidance')).toContainText('Thiết bị di động');await receiveOne(mobile);
+      70 |   for(const [page,width,height]of [[viewer,1440,900],[viewer,1280,800],[mobile,390,844],[mobile,360,800]] as const){activePage=page;await page.bringToFront();await page.setViewportSize({width,height});for(const theme of ['dark','light']){const current=await page.locator('html').getAttribute('data-theme');if(current!==theme)await page.getByRole('button',{name:theme==='light'?'Chuyển sang Sáng':'Chuyển sang Tối',exact:true}).click();await page.evaluate(()=>document.fonts.ready);const size=await page.locator('.fg-live-stage').boundingBox();expect(size).not.toBeNull();expect(Math.abs(size!.width/size!.height-16/9)).toBeLessThan(0.03);const tabs=page.getByRole('tablist',{name:'Danh sách luồng phát'}).getByRole('tab');for(let i=0;i<await tabs.count();i++){const box=await tabs.nth(i).boundingBox();expect(box?.height??0).toBeGreaterThanOrEqual(44);}expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);await checkpoint(page,`Viewport ${width}×${height} ${theme}`,'Video16:9, selector44px, không overflow trang; native call tiếp tục');}}
+      71 |   activePage=viewer;await viewer.bringToFront();await viewer.setViewportSize({width:1440,height:900});const selector=viewer.getByRole('tablist',{name:'Danh sách luồng phát'}),first=selector.getByRole('tab').first();await first.focus();await first.press('End');await expect(selector.getByRole('tab').last()).toBeFocused();await expect(selector.getByRole('tab').last()).toHaveAttribute('aria-selected','true');await selector.getByRole('tab').last().press('Home');await expect(first).toBeFocused();await expect(first).toHaveAttribute('aria-selected','true');await checkpoint(viewer,'Chọn nguồn bằng bàn phím','Home/End giữ focus và chọn đúng nguồn');
+        at E:\FGweb\code\quality\evidence\T30\native-browser-timing26.spec.ts:68:667
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing26-T3-f0439-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing26-T3-f0439-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-browser-timing26.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

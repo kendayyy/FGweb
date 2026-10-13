@@ -48,6 +48,18 @@ interface AttachedVideoRecord {
   isLocal: boolean;
 }
 
+function preferredScreenCodec(): 'h264' | undefined {
+  try {
+    if (typeof RTCRtpSender !== 'undefined' &&
+        RTCRtpSender.getCapabilities?.('video')?.codecs.some(codec => codec.mimeType.toLowerCase() === 'video/h264')) {
+      return 'h264';
+    }
+  } catch {
+    // Keep the SDK default when the browser cannot report codec capabilities.
+  }
+  return undefined;
+}
+
 function isTrackEnded(track: MediaStreamTrack): boolean {
   return track.readyState === 'ended';
 }
@@ -482,6 +494,7 @@ export function createMediaSession(
       try {
         videoPub = await room.localParticipant.publishTrack(videoTrack, {
           source: Track.Source.ScreenShare,
+          videoCodec: preferredScreenCodec(),
           screenShareEncoding: { ...ScreenSharePresets.h720fps30.encoding, priority: 'low' },
         });
       } catch (err) {

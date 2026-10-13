@@ -1,0 +1,134 @@
+{
+  "recordedAt": "2026-10-13T10:29:35.975Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-api-owned-postgres8.mjs",
+    "sha256": "eb5efece97e8a9c1cdbaa27dec8aea46633701842df372d152c9eda346bb26e6"
+  },
+  "phases": [
+    {
+      "at": "2026-10-13T10:28:42.221Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-13T10:28:44.443Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-13T10:28:44.465Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-13T10:28:52.352Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-13T10:29:06.165Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "d3b795cf78814b7835d36a9f5f744bea11366c02c32e5bdc44c8ab2f4f13f8ec",
+      "noDevRuntime": true,
+      "cspSha256": "7738616f19016e34cadf29dada51272d610d2eb6040721426dba9d3cca86031c"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Db-qa7Fx.js",
+      "status": 200,
+      "sha256": "449fae01509c5df05f120f81b7033cebba23942146153b61aac12006fb54ad63"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/media-B05Mq9Gp.js",
+      "status": 200,
+      "sha256": "2051e70b3aff5bdfa8c489350e0e2bb69f24542746c2189e734f9c810ac6b276"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "actual Linux API anonymous denied",
+      "status": 401
+    },
+    {
+      "kind": "actual Linux API other private room ACL denied",
+      "status": 403
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-13T10:29:07.905Z",
+      "idleEndedAt": "2026-10-13T10:29:18.948Z",
+      "idleMs": 11043.6976,
+      "backendPid": 49,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "actual canonical private gateway native JoinResponse and unchanged binary subscription",
+      "joined": true
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 49,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-13T10:29:35.920Z",
+        "backendPid": 49,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-19747476-f45d-4633-a29b-279d0346b53b",
+    "temporary-built-smoke-e0036d16-7b79-4175-8674-921bcbef2f5b"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

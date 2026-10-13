@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30',run='t30-native-a5293f5202ac4ac49ff60f6ee6728deb',b=d+'/'+run,j=n=>JSON.parse(fs.readFileSync(b+'/'+n)),rows=n=>fs.readFileSync(b+'/'+n,'utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+const health={};for(const n of ['owned-lifecycle-query-timing-health.json','owned-native-read-timing-health.json','owned-room-timing-health.json','pg-blocking-health.json']){const r=j(n);health[n]=r;assert.equal(r.failureCount,0);assert.equal(r.droppedCount,0);}
+const queries=rows('owned-lifecycle-query-timing.jsonl'),methods=rows('owned-room-timing.jsonl'),native=rows('owned-native-read-timing.jsonl'),blocks=rows('pg-blocking.jsonl');
+const methodsStart=new Map(methods.filter(r=>r.type==='start').map(r=>[r.id,r]));
+const querySummary={};for(const r of queries.filter(r=>r.type==='finish')){const s=querySummary[r.kind]??={count:0,totalMs:0,maxMs:0};s.count++;s.totalMs+=r.durationMs;s.maxMs=Math.max(s.maxMs,r.durationMs);}for(const s of Object.values(querySummary))s.totalMs=Math.round(s.totalMs);
+const slowPasses=methods.filter(r=>r.type==='finish'&&r.method==='reconcilePass'&&r.durationMs>2000).map(r=>{const start=methodsStart.get(r.id);return {...r,start:start.at,queries:queries.filter(q=>q.type==='finish'&&q.at>=start.at&&q.at<=r.at),native:native.filter(q=>q.type==='finish'&&q.at>=start.at&&q.at<=r.at),blockers:blocks.filter(q=>q.at>=start.at&&q.at<=r.at)};});
+const lines=fs.readFileSync(b+'/media-diagnostics.txt','utf8').split('\n'),prefix='[FG_GATEWAY_OBSERVER] ';
+const gateway=lines.filter(l=>l.startsWith(prefix)).map(l=>JSON.parse(l.slice(prefix.length))),failures=gateway.filter(r=>r.ok===false);
+const result={at:new Date().toISOString(),diagnosticOnly:true,apiBuild:31,webBuild:4,run,health,querySummary,slowPasses,gatewayFailures:failures,slowNative:native.filter(r=>r.type==='finish'&&r.durationMs>500),slowMethods:methods.filter(r=>r.type==='finish'&&r.durationMs>3000),nativeAcceptance:false};
+fs.writeFileSync(d+'/browser-timing21-query-analysis1.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({querySummary,gatewayFailures:failures,passes:slowPasses.map(({queries,native,blockers,...r})=>({...r,slowQueries:queries.filter(q=>q.durationMs>500),slowNative:native.filter(q=>q.durationMs>500),maxBlockerTransactionMs:Math.max(0,...blockers.flatMap(s=>s.rows.filter(r=>r.blockers.length===0).map(r=>r.transactionMs||0)))}))},null,2));

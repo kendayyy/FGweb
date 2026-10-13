@@ -1,0 +1,21 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',read=n=>fs.readFileSync(d+'/'+n,'utf8'),put=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'}),h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+assert.equal(JSON.parse(read('codex-t30-resume-stock-gate-final-1.json')).exitCode,0);
+let fixture=read('fixture-server-blocking13-lease-reasons.mjs');
+const anchor=" mark('web');";assert.equal(fixture.split(anchor).length,2);
+const addition=` assert(/^t30_screen_[a-f0-9]{32}$/.test(schema));
+ const ownedTables=(await pool.query('SELECT tablename FROM pg_tables WHERE schemaname=$1 ORDER BY tablename',[schema])).rows.map(r=>r.tablename);
+ assert(ownedTables.length>50);for(const table of ownedTables){assert(/^[a-z_][a-z0-9_]*$/.test(table));await pool.query('ANALYZE "'+schema+'"."'+table+'"');}
+ fs.writeFileSync(evidence+'/owned-statistics.json',JSON.stringify({at:new Date().toISOString(),syntheticSchemaOnly:true,tables:ownedTables,settingsChanged:false,dataChanged:false,diagnosticOnly:true},null,2)+'\\n',{flag:'wx'});
+`;
+fixture=fixture.replace(anchor,addition+anchor);assert.equal(fixture.replace(addition,''),read('fixture-server-blocking13-lease-reasons.mjs'));put('fixture-server-blocking14-statistics.mjs',fixture);
+const spec=read('native-browser-timing21.spec.ts').replace('fixture-server-blocking13-lease-reasons.mjs','fixture-server-blocking14-statistics.mjs');put('native-browser-timing22.spec.ts',spec);assert.equal(spec.replace('fixture-server-blocking14-statistics.mjs','fixture-server-blocking13-lease-reasons.mjs'),read('native-browser-timing21.spec.ts'));
+for(const n of ['playwright-browser-timing21.config.ts','run-native-browser-timing21-parent.mjs'])put(n.replace('timing21','timing22'),read(n).replaceAll('browser-timing21','browser-timing22'));
+const review=JSON.parse(read('browser-timing21-source-review.json'));review.at=new Date().toISOString();review.statisticsHypothesis='Fresh synthetic fixture statistics may cause expensive plans during real media load; owned-table ANALYZE only, no production configuration/data/source change.';review.fixtureDeltaReverseExact=true;review.diagnosticOnly=true;
+review.pins=review.pins.map(p=>{const path=p.path.replace('native-browser-timing21.spec.ts','native-browser-timing22.spec.ts').replace('fixture-server-blocking13-lease-reasons.mjs','fixture-server-blocking14-statistics.mjs');return {path,sha256:h(path)};});put('browser-timing22-source-review.json',JSON.stringify(review,null,2)+'\n');
+put('preflight-browser-timing22.mjs',read('preflight-browser-timing21.mjs').replaceAll('browser-timing21','browser-timing22'));
+put('supabase-test-resource173.mjs',read('supabase-test-resource172.mjs').replaceAll('resource172','resource173'));
+put('reclaim-docker-page-cache21.mjs',read('reclaim-docker-page-cache20.mjs').replaceAll('docker-page-cache-reclaim20.json','docker-page-cache-reclaim21.json'));
+put('run-native-browser-timing22-resource.mjs',read('run-native-browser-timing21-resource.mjs').replaceAll('browser-timing21','browser-timing22').replaceAll('browser-timing-21','browser-timing-22').replaceAll('resource172','resource173').replaceAll('stop-172','stop-173').replaceAll('restore-172','restore-173').replaceAll('page-cache-reclaim-20','page-cache-reclaim-21').replaceAll('reclaim-docker-page-cache20','reclaim-docker-page-cache21'));
+fs.appendFileSync('../.doc/history.md','\n- Tiếp tục đến hết task FG — T30 — '+review.at+': prepare single-variable diagnostic22: ANALYZE only tables in owned synthetic schema after fixture seed. Test body/assertions/deadlines unchanged, fixture delta reverses exactly; API31/web4 unchanged, no production DB setting/data change. Motivation actual timing21 broad SQL latencies and observer smoke statistics dependence; hypothesis not proven. Evidence code/'+d+'/browser-timing22-source-review.json; noPASS/noT31/noCockpit.\n');
+console.log('Owned schema statistics diagnostic22 prepared; native acceptance remains pending.');

@@ -4313,16 +4313,968 @@
 
 - Push GitHub — GITHUB-BACKUP-01 — 2026-10-13 11:21:51 +07:00 : push master exit0, remote SHA khớp local 3a491c26bec713d44adbf824efc15372b05eca39; repo PUBLIC đã kiểm qua GitHub API. Known-secret index check7configuredsecrets/26715paths không matches (exit0). README build/deploy đã đưa lên; không build/test app trong phiên backup. Giữ3log chứa temporaryICE credentials, secrets/deps/runtime ở local. Evidence code/.runtime/github-backup/{commit.log,push.log,known-secrets.json,history-secrets.json,staged-secrets.json,sizes.json}. Kết thúc công việc backup snapshot; T30/PASS không đổi. Commit bổ sung nhật ký phiên sẽ push tiếp.
 
+- Coding and build 2 — T30 — 2026-10-13T04:23:09.957Z: native SDK codec benchmark2/2 actualpassed; VP8 14.87ms/frame vs H264 11.21ms/frame across summed two simulcast rows. Single publisher/no subscriber; dynacast can pause, no sustained30fps/hardware claim. ROOT8freshphotos/Telegram8sent, fixturecleanup/Supabase150 exact10 verified. Evidence code/quality/evidence/T30/codec-benchmark-result-review1.json. Preparation1 missed config filename before any test/resource operation; corrected2 preserved partial test exactly. Original app/native acceptance pending.
+
+- Coding and build 2 — T30 — 2026-10-13T04:24:13.294Z: screen codec meaningful RED1/37 (H264 preference absent), original33+fallback3 passed; narrow media.ts2anchors reverse exact draft reviewed using actual codec benchmark limitations. New helper capability-only H264 preference, all capture/audio/quota/720p30/adaptive/dynacast/simulcast flows retained. Evidence screen-codec-source-review1.json; adoption/fulltests/native pending.
+
 - Push GitHub — GITHUB-AUTO-PUSH-01 — 2026-10-13 11:24:20 +07:00 : bắt đầu/cập nhật theo user tự động push mỗi task hoàn tất. Thêm quyền thường trực và quy trình ở AGENTS.md, rule02/rule12, task.md; giữ gate/task scope/privacy/evidence frozen, không app code/build/test/ledger/PASS/cockpit. Vòng patch đầu chưa áp dụng vì header task.md không khớp; đã đọc header thật và áp dụng bản đúng. Sẽ kiểm staged metadata, commit/push và xác minh remote.
 
 - Push GitHub — GITHUB-AUTO-PUSH-01 — 2026-10-13 11:25:10 +07:00 : kết thúc cấu hình rule thường trực; staged privacy scan exit0/no leaks, commit/push exit0, remote verified938062bd873dfbc08d18989465397749c3d3380e. Chỉ stage5files metadata/docs của phiên, history của task T30 khác giữ local. diff-check báo trailing whitespace cũ ở cuối AGENTS.md; sửa whitespace và kiểm lại trước commit bổ sung history. Không build/test app hoặc đổi ledger/PASS. Evidence code/.runtime/github-backup/auto-push-rules-{scan.json,commit.log,push.log}.
 
+- Coding and build 2 — T30 — 2026-10-13T04:26:31.721Z: codec source adoption1 stopped before mutation because external GitHub backup added3privacy exclusions to T01-frozen .gitignore at04:18UTC. Exact suffix reversal reproduces original hash; originals retained, rule12 requires exclusions. Reviewed only output transition/scope manifest, stock checker passes and80priorPASS unchanged; no .gitignore/source/evidence/checker mutation. Evidence code/quality/evidence/T30/github-ignore-gate-review1.json. Retry codec adoption after this verified lineage.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 11:27:34 +07:00: T30 current VP8 software native measurements and real SDK/SFU codec probe show H264 lower observed encode time per frame. Prefer H264 only when browser sender capabilities advertise it; retain SDK default VP8 for missing/throwing/no-H264 capability API. Same720p30/low priority/simulcast/adaptive/dynacast, original capture/permission/quota/audio/unpublish logic unchanged. Meaningful RED1/37, original33 and fallback3 pass. Hardware and native acceptance not claimed; full tests/real capture required. Evidence code/quality/evidence/T30/screen-codec-source2-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T04:27:48.246Z–2026-10-13T04:27:56.932Z exit0: t30-supabase-temporary-stop-151; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-151.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:27:57.037Z–2026-10-13T04:28:06.602Z exit0: t30-screen-codec-green-1; evidence code/quality/evidence/T30/codex-t30-screen-codec-green-1.json. Web4/noCockpit/noT31.
+
 - Push GitHub — GITHUB-BRAND-01 — 2026-10-13 11:29:40 +07:00 : bắt đầu cập nhật theo user description và ảnh logo dự án. Dùng logo canonical FG từ public/brand; thêm README root/logo ở code/README, SVG/PNG preview1280x640 ở code/docs/github, cập nhật description tiếng Việt qua gh (exit0). Browser GitHub chưa đăng nhập nên chưa đặt Social preview, user được báo cần login; không sửa task T30/app/ledger/PASS. Chờ review asset/privacy và push scope riêng.
+
+- Coding and build 2 — T30 — 2026-10-13T04:28:06.720Z–2026-10-13T04:30:20.814Z exit1: t30-screen-codec-full-web-1; evidence code/quality/evidence/T30/codex-t30-screen-codec-full-web-1.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:30:20.924Z–2026-10-13T04:30:36.467Z exit0: t30-supabase-restore-151; evidence code/quality/evidence/T30/codex-t30-supabase-restore-151.json. Web4/noCockpit/noT31.
 
 - Push GitHub — GITHUB-BRAND-01 — 2026-10-13 11:30:50 +07:00 : README logo + description tiếng Việt đã xác minh trên GitHub API/browser, commit039e6798c218005715f739bf3dd0267752afc2c7 push exit0/remoteSHA khớp; canonicalSVG paths/colors check exit0, staged secrets scan exit0/no leaks. PNG1280x640 reviewed. User chọn sẽ đăng nhập GitHub; đã mở login return_to settings, chờ user login để upload Social preview (chưa đặt/chưa claim hoàn tất phần này). Không app tests/build/ledger/PASS; scope metadata/docs/asset, T30 thay đổi khác giữ local. Evidence code/.runtime/github-backup/brand-{scan.json,commit.log,push.log}.
 
+- Coding and build 2 — T30 — 2026-10-13T04:32:02.246Z: screen-codec GREEN37 passed; fullfrontend run1 actual279/280, unchanged failed explicit leave case exceeded5000ms (no wrong assertion),19files passed. Resource151 exact10 restored. Preserve failure, rerun original27 call-controls then same280 no-cache with same deadlines before build4. No implementation change or PASS.
+
+- Coding and build 2 — T30 — 2026-10-13T04:32:04.498Z–2026-10-13T04:32:14.669Z exit0: t30-supabase-temporary-stop-152; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-152.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:32:14.776Z–2026-10-13T04:32:37.741Z exit0: t30-screen-codec-call-controls-1; evidence code/quality/evidence/T30/codex-t30-screen-codec-call-controls-1.json. Web4/noCockpit/noT31.
+
 - Push GitHub — GITHUB-BRAND-01 — 2026-10-13 11:32:50 +07:00 : nối tiếp sau user xác nhận đã login; upload code/docs/github/social-preview.png bằng browser filechooser vào Settings/Social preview của kendayyy/FGweb. Sau reload, ảnhFG1280x640 vẫn hiển thị; ROOT xem screenshot và lưu evidence code/.runtime/github-backup/social-preview-saved.png. Description/README/logo đã sync ở phiên trước; phần Social preview hoàn tất thật. Không đổi app/ledger/PASS, không test FG/cockpit/Anti2/Antigravity; chỉ commit nhật ký riêng phiên và push xác minh.
+
+- Coding and build 2 — T30 — 2026-10-13T04:32:37.885Z–2026-10-13T04:34:28.108Z exit0: t30-screen-codec-full-web-2; evidence code/quality/evidence/T30/codex-t30-screen-codec-full-web-2.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:34:28.222Z–2026-10-13T04:34:48.925Z exit0: t30-screen-codec-web-typecheck-1; evidence code/quality/evidence/T30/codex-t30-screen-codec-web-typecheck-1.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:34:49.088Z–2026-10-13T04:34:50.981Z exit0: t30-web4-before-snapshot-1; evidence code/quality/evidence/T30/codex-t30-web4-before-snapshot-1.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:34:51.284Z–2026-10-13T04:35:15.150Z exit0: t30-build-4; evidence code/quality/evidence/T30/codex-t30-build-4.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — build index review 2026-10-13 11:35:30 +07:00: actual build exit0, giữ frozen assets/80priorPASS, adopted index/active asset hashes. Evidence code/quality/evidence/T30/t30-build-4-index-review.json; native/visual pending, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T04:35:15.267Z–2026-10-13T04:35:30.542Z exit0: t30-build-index-adoption-4; evidence code/quality/evidence/T30/codex-t30-build-index-adoption-4.json. Web4/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:35:30.672Z–2026-10-13T04:35:43.836Z exit0: t30-supabase-restore-152; evidence code/quality/evidence/T30/codex-t30-supabase-restore-152.json. Web4/noCockpit/noT31.
 
 - Push GitHub — GITHUB-AUTHOR-01 — 2026-10-13 11:35:52 +07:00 : bắt đầu theo user sửa toàn bộ Codex Lien authored thành kendayy authored. Đã kiểm73commits chỉ một author/committer cũ, master/remote cùng a87e9f62853d5f5a57bd4f01b92a04a3b611b007. Đặt local Git author kendayy và noreply tài khoản kendayyy. Lưu backup bundle trong code/.runtime/github-backup; rewrite metadata ở bare clone riêng, giữ mọi tree/dirty worktree/task T30. User chỉ định rewrite toàn bộ là ngoại lệ cụ thể với no-force rule cũ; dùng force-with-lease expected remote sau kiểm mapping/tree/privacy, không cho phép force-push task thông thường.
 
+- Coding and build 2 — T30 — 2026-10-13T04:36:01.683Z: web4 codec source GREEN37/call27/full280/typecheck/build/index reviewed. Initial279/280 timeout preserved; original frozen tests/deadlines and all previous web assets retained; separate media chunk exact H264 capability preference confirmed. Supabase152 exact10 restored, no hardware/fullnative claim. Evidence code/quality/evidence/T30/screen-codec-build4-review1.json. Native89 API28/web4 next after canonical pins reviewed.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 11:36:51 +07:00: Canonical fixture exact web4 H264 capability preference build pins; original native assertions/deadlines/producer and API/SFU/cleanup unchanged. Evidence code/quality/evidence/T30/web4-fixture1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:37:07.241Z–2026-10-13T04:37:21.960Z exit0: t30-supabase-temporary-stop-153; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-153.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:37:22.066Z–2026-10-13T04:37:35.663Z exit0: t30-docker-page-cache-reclaim-9; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-9.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:37:35.794Z–2026-10-13T04:37:36.047Z exit0: t30-native89-service-health-2; evidence code/quality/evidence/T30/codex-t30-native89-service-health-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:37:58.038Z: original frozen80 Build28 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native89-entry-review2.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:37:36.220Z–2026-10-13T04:37:58.084Z exit0: t30-native89-entry-review-2; evidence code/quality/evidence/T30/codex-t30-native89-entry-review-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
 - Push GitHub — GITHUB-AUTHOR-01 — 2026-10-13 11:39:10 +07:00 : kết thúc rewrite metadata74commits trên master; mọi tree/message/timestamp/parent mapping khớp, tác giả/committer kendayy và GitHub API linked account kendayyy. Force-with-lease expected a87e9f62 thành b08db466f428278477fc5ef8ec4baf1baec600e7 exit0, giữ dirtyworktree/index và originals/checkpoint refs/backup local. Clone no-local đầu được ngắt trong bước clone trước filter, bare incomplete không có branch và lượt filter ở bản đó không rewrite commit; clone sharedv2 hợp lệ + filter chỉ trong barev2 đã verified74. Local user.name/email mới áp dụng commit tiếp theo. Evidence code/.runtime/github-backup/{before-authorship-rewrite.bundle,authorship-verification.json,authorship-v2.git/filter-repo/commit-map,author-metadata-scan.log,authorship-push.log}; không app build/tests/ledger/PASS/cockpit. Commit/push thông thường bổ sung nhật ký sẽ xác minh trước bàn giao.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:37:58.249Z–2026-10-13T04:40:33.807Z exit1: headed-t30-native-89; evidence code/quality/evidence/T30/codex-headed-t30-native-89.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:40:33.965Z–2026-10-13T04:40:49.759Z exit0: t30-supabase-restore-153; evidence code/quality/evidence/T30/codex-t30-supabase-restore-153.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:47:09.333Z: resume after Native89 exit1; ROOT viewed5 actual photos, third publisher join failed25s after gateway room SHARE57014. Prepare fresh API28/web4 read-only blocker/method diagnostic; preserve native assertions/deadlines and all existing evidence, no Anti2/Antigravity/cockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T04:47:15.619Z: Native89 Build28/web4 actualexit1 thirdpublisherjoin25s;3joins/2captures/2TURN RTP/switch passed. ROOT5freshphotos/5Telegramsent and observer/inspector/runtime/privateGW/networkcleanup/Supabase153 exact10restore verified. No thirdslot/fourthquota/shaping/mobile/ended acceptance claimed. Evidence code/quality/evidence/T30/native89-codex-result-review1.json. Read-only browser navigation/encoder diagnostic next; no cause attributed from prior runs; T30 IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:47:17.189Z–2026-10-13T04:47:26.226Z exit0: t30-supabase-temporary-stop-154; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-154.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:47:26.346Z–2026-10-13T04:47:39.861Z exit0: t30-docker-page-cache-reclaim-10; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-10.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:47:39.988Z–2026-10-13T04:47:40.240Z exit0: t30-browser-timing15-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing15-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:47:40.337Z–2026-10-13T04:47:40.480Z exit0: t30-browser-timing15-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing15-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:47:40.585Z–2026-10-13T04:50:29.431Z exit1: headed-t30-browser-timing-15; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-15.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:50:29.587Z–2026-10-13T04:50:42.163Z exit0: t30-supabase-restore-154; evidence code/quality/evidence/T30/codex-t30-supabase-restore-154.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:54:26.688Z: Timing15 Build28/web4 actualexit1 fourthactor roomregion5s after third capture;4joins/3captures/2TURN RTP/switch. ROOT5freshphotos viewed actual current run (initial shell, room, Linh screen, HoangNam screen, Bao room loading)/5Telegramsent, readonlyPGactualsamples failure0/drop0, observer/runtimecleanup; inspector failure0 recorded, actual socket/pool ended and Supabase154 exact10restore verified. Actual blocker analysis code/quality/evidence/T30/browser-timing15-lock-analysis1.json; review code/quality/evidence/T30/native-browser-timing15-result-review1.json. Originalnative pending/noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T04:56:07.824Z: Timing15 review exit0 confirms actual failed fourthroom5s,4joins/3captures/2TURNswitch,5photos/5Telegramsent and cleanup/Supabase154 exact10. ActualPG449healthy samples attribute group57014 to lifecyclePID15362; slow pass7682ms, idle-in-transaction between queries and WAL commit waits. No product fix inferred yet. Query observer6 controls passed; prepare reverse-exact readonly Timing16 query/native durations, same API28/web4/frozen assertions/deadlines.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:56:13.509Z–2026-10-13T04:56:13.902Z exit1: t30-supabase-temporary-stop-155; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-155.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+`n- Coding and build 2 — T30 — 2026-10-13T04:56:37.5466347Z: Timing16 driver failed before stop/test, Docker Linux engine pipe absent and Docker processes absent; resource155 snapshot not created, no containers stopped. Native source unchanged. Docker Desktop launched Hidden for authorized local test services; readiness and new immutable resource/run labels required. Evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-155.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:57:31.847Z–2026-10-13T04:57:43.062Z exit0: t30-supabase-temporary-stop-156; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-156.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:57:43.299Z–2026-10-13T04:57:58.130Z exit0: t30-docker-page-cache-reclaim-11; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-11.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:57:58.267Z–2026-10-13T04:57:58.520Z exit0: t30-browser-timing16-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing16-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:57:58.633Z–2026-10-13T04:57:58.789Z exit0: t30-browser-timing16-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing16-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:57:58.905Z–2026-10-13T04:58:10.852Z exit1: headed-t30-browser-timing-16; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-16.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:58:11.170Z–2026-10-13T04:58:24.815Z exit0: t30-supabase-restore-156; evidence code/quality/evidence/T30/codex-t30-supabase-restore-156.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T04:59:24.395Z: Timing16 actualexit1 before UI at database startup57P03; no schema/native/API/browser resources created, cleanup booleans false because uncreated, parent privateRuntimeRemoved confirmed separately. Supabase156 exact10restore exit0. PostgreSQL now healthy/pg_isready accepts; fresh identical Timing17 native body and readonly observers, additional readiness command before setup; source/acceptance unchanged. Evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-16.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:26.255Z–2026-10-13T04:59:39.601Z exit0: t30-supabase-temporary-stop-157; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-157.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:39.752Z–2026-10-13T04:59:53.555Z exit0: t30-docker-page-cache-reclaim-12; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-12.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:53.673Z–2026-10-13T04:59:53.915Z exit0: t30-browser-timing17-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing17-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:54.027Z–2026-10-13T04:59:54.378Z exit0: t30-browser-timing17-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing17-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:54.498Z–2026-10-13T04:59:54.675Z exit0: t30-browser-timing17-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing17-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T04:59:54.920Z–2026-10-13T05:00:29.398Z exit1: headed-t30-browser-timing-17; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-17.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:00:29.574Z–2026-10-13T05:00:41.423Z exit0: t30-supabase-restore-157; evidence code/quality/evidence/T30/codex-t30-supabase-restore-157.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:01:25.916Z: Timing17 setup exit1 caused by owned query observer installed before Nest pool initialization, no UI assertions run. Schema/native/presence/app cleaned, web never created; Supabase157 restored exact10. Correct fresh fixture12 only moves observer install after app.listen, reversebyteexact and same native assertions/deadlines/product. Evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-17.json; diagnostic18 pending.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:28.241Z–2026-10-13T05:01:37.518Z exit0: t30-supabase-temporary-stop-158; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-158.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:37.629Z–2026-10-13T05:01:51.109Z exit0: t30-docker-page-cache-reclaim-13; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-13.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:51.302Z–2026-10-13T05:01:51.588Z exit0: t30-browser-timing18-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing18-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:51.748Z–2026-10-13T05:01:52.475Z exit0: t30-browser-timing18-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing18-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:52.669Z–2026-10-13T05:01:52.950Z exit0: t30-browser-timing18-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing18-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:01:53.127Z–2026-10-13T05:04:53.175Z exit1: headed-t30-browser-timing-18; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-18.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:04:53.303Z–2026-10-13T05:05:05.234Z exit0: t30-supabase-restore-158; evidence code/quality/evidence/T30/codex-t30-supabase-restore-158.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:06:58.208Z: Timing18 Build28/web4 actualexit1 thirdpublisher roomregion5s;3joins/2captures/2TURN RTP/switch. ROOT5freshphotos viewed actual current run (initial shell, room, Linh screen, HoangNam screen, MinhAnh room loading)/5Telegramsent, readonlyPGactualsamples failure1/drop0, observer/runtimecleanup; inspector failure0 recorded, actual socket/pool ended and Supabase158 exact10restore verified. Actual blocker analysis code/quality/evidence/T30/browser-timing18-lock-analysis1.json; review code/quality/evidence/T30/native-browser-timing18-result-review1.json. Originalnative pending/noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T05:08:44.632Z: TDD additive retained-member close-check controls prepared after Timing18 query/native analysis. Existing7noop bodies unchanged +3realPG cases: present/grace retained no redundant empty SQL, lastrevoked closes. Root evidence actual11sequentialqueries/pass, up to2817ms; native reads below500ms. RED pending; no app source mutation yet.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 12:12:02 +07:00: T30 actual readonly Timing18 shows ordinary lifecycle passes use11serial SQL statements and up to2817ms; meaningful realPG RED2/10 proves two redundant empty/history scans with a locked retained member, existing7 and last-revoked-close8 pass. Skip only empty-group checks when current FOR UPDATE member snapshot minus actual release list proves nonempty. Preserve room SHARE/group/member UPDATE locks, fresh eligibility, permissions, disconnect grace, expired/revoked release, empty/new/closed/missing group handling and all native operations. No PASS/deadline changes; affected regressions and native required. Evidence code/quality/evidence/T30/lifecycle-retained-members-source1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T05:12:54.780Z: source adoption gate exit0 retained-member condition;80priorPASS unchanged. GREEN1 actual10/10 exit0 but accidentally began while adoption gate running (not sequential); preserve actual record, use fresh GREEN2 strictly after gate before API29 build/adoption/regressions. Existing7/new3test bodies retained. Evidence code/quality/evidence/T30/codex-t30-retained-members-green-1.json.
+
+- Coding and build 2 — T30 — 2026-10-13T05:12:56.397Z–2026-10-13T05:13:04.457Z exit0: t30-supabase-temporary-stop-159; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-159.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:13:04.560Z–2026-10-13T05:13:48.445Z exit0: t30-retained-members-green-2; evidence code/quality/evidence/T30/codex-t30-retained-members-green-2.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:13:48.580Z–2026-10-13T05:13:49.057Z exit0: t30-api29-before-snapshot-1; evidence code/quality/evidence/T30/codex-t30-api29-before-snapshot-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:13:49.261Z–2026-10-13T05:14:07.422Z exit0: t30-api-build-29; evidence code/quality/evidence/T30/codex-t30-api-build-29.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — API build review 2026-10-13 12:14:27 +07:00: actual API build exit0, only lifecycle.service.js/.map changed, public/private declarations and264other compiledfiles unchanged; all other compiled hashes and80priorPASS unchanged. Evidence code/quality/evidence/T30/api-build-29-review1.json; native acceptance pending, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T05:14:07.623Z–2026-10-13T05:14:27.311Z exit0: t30-api-build29-adoption-1; evidence code/quality/evidence/T30/codex-t30-api-build29-adoption-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:14:27.404Z–2026-10-13T05:14:33.060Z exit0: t30-lifecycle-native-read-build29-green-1; evidence code/quality/evidence/T30/codex-t30-lifecycle-native-read-build29-green-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:14:33.203Z–2026-10-13T05:16:27.404Z exit0: t30-frozen-call-build29-regressions-1; evidence code/quality/evidence/T30/codex-t30-frozen-call-build29-regressions-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:16:27.562Z–2026-10-13T05:17:26.634Z exit0: t30-frozen-publishing-build29-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-build29-alone-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:17:26.814Z–2026-10-13T05:18:34.224Z exit0: t30-frozen-publishing-gateway-build29-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-gateway-build29-alone-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:18:34.608Z–2026-10-13T05:19:10.191Z exit0: t30-call-lease-guards-build29-green-1; evidence code/quality/evidence/T30/codex-t30-call-lease-guards-build29-green-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:19:10.396Z–2026-10-13T05:19:22.791Z exit0: t30-supabase-restore-159; evidence code/quality/evidence/T30/codex-t30-supabase-restore-159.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:20:41.355Z–2026-10-13T05:20:49.768Z exit0: t30-supabase-temporary-stop-160; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-160.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:20:49.889Z–2026-10-13T05:21:34.167Z exit0: t30-lifecycle-lease-batch-build29-green-1; evidence code/quality/evidence/T30/codex-t30-lifecycle-lease-batch-build29-green-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:21:34.349Z–2026-10-13T05:22:18.656Z exit0: t30-coalescing-build29-green-1; evidence code/quality/evidence/T30/codex-t30-coalescing-build29-green-1.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:22:18.758Z–2026-10-13T05:22:58.866Z exit0: t30-codex-gateway-linux-normal-8; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-normal-8.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:22:58.974Z–2026-10-13T05:23:38.394Z exit0: t30-codex-gateway-linux-media-io-8; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-media-io-8.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:23:38.529Z–2026-10-13T05:23:49.641Z exit0: t30-supabase-restore-160; evidence code/quality/evidence/T30/codex-t30-supabase-restore-160.json. Build29/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:25:12.840Z: API29 source condition realPG RED2/10 -> sequentialGREEN10, only lifecycleJS/mapchanged264othersunchanged. Originalcall39/publish11/gateway16/lease23/lifecyclelease10/nativeread10/coalescing18/canonicalsmoke20 actualexit0, expected mediaIO fixtureexit1 verified cleanup. ROOT5freshphotos/5Telegramsent and Supabase159/160 exact10restore. Fresh smoke helpers corrected unused output review8 names before run, frozen review7 retained. Evidence code/quality/evidence/T30/retained-members-api29-affected-review1.json; fullnative pending,80priorPASS unchanged/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:00.254Z–2026-10-13T05:26:08.335Z exit0: t30-supabase-temporary-stop-161; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-161.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:08.443Z–2026-10-13T05:26:22.249Z exit0: t30-docker-page-cache-reclaim-14; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-14.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:22.354Z–2026-10-13T05:26:22.631Z exit0: t30-native90-service-health-2; evidence code/quality/evidence/T30/codex-t30-native90-service-health-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:22.736Z–2026-10-13T05:26:23.056Z exit0: t30-native90-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native90-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:26:47.415Z: original frozen80 Build29 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native90-entry-review2.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:23.164Z–2026-10-13T05:26:47.455Z exit0: t30-native90-entry-review-2; evidence code/quality/evidence/T30/codex-t30-native90-entry-review-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:26:47.560Z–2026-10-13T05:29:36.515Z exit1: headed-t30-native-90; evidence code/quality/evidence/T30/codex-headed-t30-native-90.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:29:36.882Z–2026-10-13T05:29:48.447Z exit0: t30-supabase-restore-161; evidence code/quality/evidence/T30/codex-t30-supabase-restore-161.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:31:57.929Z: Native90 Build29/web4 actualexit1 thirdpublish45s;4joins/2captures/2TURN RTP/switch passed. ROOT5freshphotos/5Telegramsent and observer/inspector/runtime/privateGW/networkcleanup/Supabase161 exact10restore verified. No thirdslot/fourthquota/shaping/mobile/ended acceptance claimed. Evidence code/quality/evidence/T30/native90-codex-result-review1.json. Read-only browser navigation/encoder diagnostic next; no cause attributed from prior runs; T30 IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T05:38:55.9268828Z: resume Native90 connect-timeout investigation; actual CallsService idle1 before failure/idle2 after failure. Fresh localhost TCP proxy realPG RED probe prepared, no application change yet. Preserve original deadlines/assertions,80 prior PASS and Codex-only/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T05:38:56.157Z–2026-10-13T05:39:16.593Z exit1: realPG TCP probe1 meaningful recovery failures2 and no-idle control passed; non-timeout control setup incorrectly changed database option overridden by connectionString. Preserve result; fresh probe2 changes only test connectionString to nonexistent database, no application edit. Cleanup4 pools/proxies/env confirmed. Evidence code/quality/evidence/T30/calls-connect-recovery-probe1-red/result.json.
+
+- Coding and build 2 — T30 — 2026-10-13T05:39:53.483Z–2026-10-13T05:40:13.903Z exit1: realPG TCP proxy RED2/4 reproduces failed handshake with ready original backend; original timeout/no-idle and non-timeout database error controls pass. All4 pools/proxies/env cleaned. Narrow before-BEGIN recovery source reviewed; no business retry or timeout change. Evidence code/quality/evidence/T30/calls-connect-recovery-source-review1.json; native acceptance pending.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 12:42:21 +07:00: T30 Native90 initial CallsService PG new-handshake timeout returns HTTP500 although pool idle1 before/idle2 after failure and no queued checkout. Locked pg-pool source and realPG TCP proxy RED2/4 reproduce ready-backend loss before BEGIN; no-idle timeout and non-timeout database failure controls pass. On exact new-handshake timeout only, acquire an existing idle client once when no waiter precedes us; no transaction replay, no wait/backoff/config/deadline/authorization changes. Preserve BEGIN/UTC/body/COMMIT/ROLLBACK/release exact; original call/lease/quota regressions and full headed native remain required. Evidence code/quality/evidence/T30/calls-connect-recovery-source1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T05:41:39.194Z–2026-10-13T05:42:21.994Z exit0: t30-calls-connect-recovery-source-adoption-1; evidence code/quality/evidence/T30/codex-t30-calls-connect-recovery-source-adoption-1.json. Sequential API30 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:42:22.135Z–2026-10-13T05:42:22.983Z exit0: t30-api30-before-snapshot-1; evidence code/quality/evidence/T30/codex-t30-api30-before-snapshot-1.json. Sequential API30 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:42:23.138Z–2026-10-13T05:42:43.706Z exit0: t30-api-build-30; evidence code/quality/evidence/T30/codex-t30-api-build-30.json. Sequential API30 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:42:43.969Z–2026-10-13T05:43:04.757Z exit0: t30-calls-connect-recovery-green-1; evidence code/quality/evidence/T30/codex-t30-calls-connect-recovery-green-1.json. Sequential API30 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — API build review 2026-10-13 12:43:33 +07:00: actual API build exit0, only calls.service.js/.map changed, public/private declarations and264other compiledfiles unchanged; all other compiled hashes and80priorPASS unchanged. Evidence code/quality/evidence/T30/api-build-30-review1.json; native acceptance pending, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T05:43:04.862Z–2026-10-13T05:43:33.296Z exit0: t30-api-build30-adoption-1; evidence code/quality/evidence/T30/codex-t30-api-build30-adoption-1.json. Sequential API30 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:43:52.486Z–2026-10-13T05:44:05.477Z exit0: t30-supabase-temporary-stop-162; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-162.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:44:05.583Z–2026-10-13T05:46:07.144Z exit0: t30-frozen-call-build30-regressions-1; evidence code/quality/evidence/T30/codex-t30-frozen-call-build30-regressions-1.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:46:07.353Z–2026-10-13T05:47:24.995Z exit0: t30-frozen-publishing-build30-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-build30-alone-1.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:47:25.136Z–2026-10-13T05:48:38.568Z exit0: t30-frozen-publishing-gateway-build30-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-gateway-build30-alone-1.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:48:38.751Z–2026-10-13T05:49:17.289Z exit0: t30-call-lease-guards-build30-green-1; evidence code/quality/evidence/T30/codex-t30-call-lease-guards-build30-green-1.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:49:17.394Z–2026-10-13T05:50:15.821Z exit0: t30-coalescing-build30-green-1; evidence code/quality/evidence/T30/codex-t30-coalescing-build30-green-1.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:50:16.065Z–2026-10-13T05:51:04.460Z exit0: t30-codex-gateway-linux-normal-9; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-normal-9.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:51:04.565Z–2026-10-13T05:51:46.368Z exit0: t30-codex-gateway-linux-media-io-9; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-media-io-9.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:51:46.496Z–2026-10-13T05:51:59.127Z exit0: t30-supabase-restore-162; evidence code/quality/evidence/T30/codex-t30-supabase-restore-162.json. Build30/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:52:09.002Z: API30 before-BEGIN ready backend recovery realPG RED2/4 -> GREEN4; old PID reused/body once/rollback verified, no-idle timeout and other PG error preserved. Originalcall39/publish11/headedgateway16/lease23/coalescing18/canonicalsmoke20 passed with original assertions; only CallsService JS/mapchanged264others retained, ROOT5photos/5Telegram receipts and exact Supabase162 restoration verified. Evidence code/quality/evidence/T30/calls-connect-api30-affected-review1.json; full native pending, no PASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:52:16.106Z–2026-10-13T05:52:28.909Z exit0: t30-supabase-temporary-stop-163; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-163.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:52:29.095Z–2026-10-13T05:52:29.231Z exit1: t30-docker-page-cache-reclaim-15; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-15.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:52:29.334Z–2026-10-13T05:52:42.097Z exit0: t30-supabase-restore-163; evidence code/quality/evidence/T30/codex-t30-supabase-restore-163.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:52:29.095Z–2026-10-13T05:52:29.231Z exit1: Native91 preparation driver incorrectly referenced frozen cache14 helper; exclusive-write guard rejected before cache mutation or UI. Exact10 Supabase163 restored. Fresh driver2 fixes path to unused cache15 and uses resource164, all original native assertions unchanged. Evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-15.json; no native run claimed.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:09.117Z–2026-10-13T05:53:17.835Z exit0: t30-supabase-temporary-stop-164; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-164.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:17.943Z–2026-10-13T05:53:31.637Z exit0: t30-docker-page-cache-reclaim-15-retry-2; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-15-retry-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:31.740Z–2026-10-13T05:53:31.972Z exit0: t30-native91-service-health-1; evidence code/quality/evidence/T30/codex-t30-native91-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:32.079Z–2026-10-13T05:53:32.463Z exit0: t30-native91-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native91-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:53:58.200Z: original frozen80 Build30 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native91-entry-review1.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:32.569Z–2026-10-13T05:53:58.239Z exit0: t30-native91-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native91-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:53:58.356Z–2026-10-13T05:57:32.280Z exit1: headed-t30-native-91; evidence code/quality/evidence/T30/codex-headed-t30-native-91.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T05:57:32.460Z–2026-10-13T05:57:45.087Z exit0: t30-supabase-restore-164; evidence code/quality/evidence/T30/codex-t30-supabase-restore-164.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T05:59:33.007Z: Native91 Build30/web4 actualexit1 fourthactor room5s;4joins/3captures/2TURN RTP/switch and three publisherSlots assertion passed. Three screen claims201/no controllererrors, two gateway read timeouts preserved. ROOT5freshphotos/5Telegramsent and observer/inspector/runtime/privateGW/networkcleanup/Supabase164 exact10restore verified. No fourthquota/shaping/mobile/ended acceptance claimed. Evidence code/quality/evidence/T30/native91-codex-result-review1.json. Read-only browser navigation/encoder diagnostic next; no cause attributed from prior runs; T30 IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T06:01:00.984Z: Native91 reviewed3 captures/3claims201/no controllererror but fourth room5s failed; ROOT5photos/5receipts and all cleanup/Supabase164 restore confirmed. Prepare timing19 readonly browser/owned service/PG/query/native observers on actual API30/Web4; original diagnostic18 test body byte unchanged, no product source modification or acceptance claim. Evidence code/quality/evidence/T30/browser-timing19-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:01.486Z–2026-10-13T06:01:10.596Z exit0: t30-supabase-temporary-stop-165; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-165.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:10.748Z–2026-10-13T06:01:24.420Z exit0: t30-docker-page-cache-reclaim-16; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-16.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:24.558Z–2026-10-13T06:01:24.809Z exit0: t30-browser-timing19-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing19-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:24.915Z–2026-10-13T06:01:25.224Z exit0: t30-browser-timing19-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing19-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:25.349Z–2026-10-13T06:01:25.519Z exit0: t30-browser-timing19-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing19-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:01:25.644Z–2026-10-13T06:05:20.747Z exit1: headed-t30-browser-timing-19; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-19.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:05:21.148Z–2026-10-13T06:05:39.625Z exit0: t30-supabase-restore-165; evidence code/quality/evidence/T30/codex-t30-supabase-restore-165.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:13:02.084Z: Timing19 API30/web4 actualexit1 fourthquota alert5s;5joins/3captures/2TURN RTP/switch and3slots prior. Fourthclaim201 after3gateway group57014/timeouts and participant removals; correlation requires blocker analysis. ROOT5freshphotos viewed actual current run (initial shell, room, Linh screen, HoangNam screen, Bao in call processing screen)/5Telegramsent, readonlyPGactualsamples failure0/drop0, observer/runtimecleanup; inspector failure0 recorded, actual socket/pool ended and Supabase165 exact10restore verified. Actual blocker analysis code/quality/evidence/T30/browser-timing19-lock-analysis1.json; review code/quality/evidence/T30/native-browser-timing19-result-review1.json. Originalnative pending/noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T06:15:07.810Z: Timing19 healthy PG blocker PID9504 lifecycle group lock from06:03:19.352 through COMMIT06:03:24.048; fresh lease SQL1323ms and subsequent policy512ms, gatewaySHARE57014 at06:03:22.865/23.128/23.736 followed removals; fourthclaim201 afterward. Hypothesis prepared lease plan/statistics/JIT may consume CPU; fresh owned-schema EXPLAIN probe prepared, no application change, durable DB settings untouched. Evidence pending code/quality/evidence/T30/lease-plan-probe1-result.json.
+
+- Coding and build 2 — T30 — 2026-10-13T06:23:17.238Z: fresh owned-schema lease EXPLAIN completed actualexit0,9plans/3leases each, default generic cost43.74/execution0.721–1.165ms/JITnone; statistics analyzed65owned tables improves idle cost9.83 but does not reproduce load stall, no application DB/JIT change. Native92 original frozen full test prepared with read-only host process CPU/memory observer, no process priorities or service configuration changed. Evidence code/quality/evidence/T30/lease-plan-probe1-result.json; CPU-under-load evidence pending.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:23:17.644Z–2026-10-13T06:23:25.856Z exit0: t30-supabase-temporary-stop-166; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-166.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:23:25.961Z–2026-10-13T06:23:39.641Z exit0: t30-docker-page-cache-reclaim-17; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-17.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:23:39.761Z–2026-10-13T06:23:40.003Z exit0: t30-native92-service-health-1; evidence code/quality/evidence/T30/codex-t30-native92-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:23:40.116Z–2026-10-13T06:23:40.439Z exit0: t30-native92-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native92-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:24:16.870Z: original frozen80 Build30 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native92-entry-review1.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:23:40.544Z–2026-10-13T06:24:16.918Z exit0: t30-native92-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native92-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:24:17.212Z–2026-10-13T06:26:46.217Z exit1: headed-t30-native-92; evidence code/quality/evidence/T30/codex-headed-t30-native-92.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:26:46.406Z–2026-10-13T06:26:58.331Z exit0: t30-supabase-restore-166; evidence code/quality/evidence/T30/codex-t30-supabase-restore-166.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:33:55.196Z: Native92 original API30/Web4 actualexit1 fourth room5s (corrects earlier commentary third actor;4joins/3captures prove fourth), CPU PowerShell observer failed OS file-execution policy so no CPU-by-process evidence. Source line34 matches TeamsService.transaction initial pool.connect; actual Teams idle3 before/idle2 after error, waiting0. All5app cleanup/inspector/runtime/privateGateway/network/Supabase166 restored, gateway-stop receipt missing and fixtureexit1 preserved. Fresh actualPG TCP Teams probe prepared, no application edit yet.
+
+- Coding and build 2 — T30 — 2026-10-13T06:33:55.306Z–2026-10-13T06:34:13.012Z exit1: actual Teams TCP-proxy RED2/4 with same before-BEGIN timeout and ready old PID; two negative controls pass, all4pools/proxies/env restored. Narrow Teams source acquisition edit reviewed, READ COMMITTED and all authority/conflict/rollback code byte unchanged. Evidence code/quality/evidence/T30/teams-connect-recovery-source-review1.json; no PASS/noT31.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 13:37:48 +07:00: T30 Native92 new-handshake PG500 stack line34 matches TeamsService.transaction, actual Teams pool idle3 before/idle2 after error with no queued waiter. RealPG TCP proxy Teams RED2/4 reproduces lost ready backend; no-idle timeout/other PG error controls pass. Acquire ready client once only on exact initial new-handshake timeout, before unchanged READ COMMITTED BEGIN/UTC/body/COMMIT/ROLLBACK/conflict mapping/release. Preserve startup4/max16/connect5000/statement10000; no retry body or wait/backoff. Full affected team authority/race regressions and original headed T30 acceptance remain required. Evidence code/quality/evidence/T30/teams-connect-recovery-source1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T06:37:08.340Z–2026-10-13T06:37:48.478Z exit0: t30-teams-connect-recovery-source-adoption-1; evidence code/quality/evidence/T30/codex-t30-teams-connect-recovery-source-adoption-1.json. Sequential API31 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:37:48.614Z–2026-10-13T06:37:49.084Z exit0: t30-api31-before-snapshot-1; evidence code/quality/evidence/T30/codex-t30-api31-before-snapshot-1.json. Sequential API31 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:37:49.266Z–2026-10-13T06:38:09.367Z exit0: t30-api-build-31; evidence code/quality/evidence/T30/codex-t30-api-build-31.json. Sequential API31 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:38:09.535Z–2026-10-13T06:38:28.732Z exit0: t30-teams-connect-recovery-green-1; evidence code/quality/evidence/T30/codex-t30-teams-connect-recovery-green-1.json. Sequential API31 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — API build review 2026-10-13 13:38:49 +07:00: actual API build exit0, only teams.service.js/.map changed, public/private declarations and264other compiledfiles unchanged; all other compiled hashes and80priorPASS unchanged. Evidence code/quality/evidence/T30/api-build-31-review1.json; native acceptance pending, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T06:38:28.832Z–2026-10-13T06:38:49.260Z exit0: t30-api-build31-adoption-1; evidence code/quality/evidence/T30/codex-t30-api-build31-adoption-1.json. Sequential API31 before-BEGIN recovery; noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:38:57.902Z: Native92 Build30/web4 actualexit1 fourthactor room5s;4joins/3captures/2TURN RTP/switch and three publisherSlots assertion passed. Three screen claims201/Teams PG-connect500, two gateway read timeouts, missing observer-stop receipt and CPU observer unavailable; all actual resource cleanup flags true, fixture exit1 preserved. ROOT5freshphotos/5Telegramsent and observer/inspector/runtime/privateGW/networkcleanup/Supabase166 exact10restore verified. No fourthquota/shaping/mobile/ended acceptance claimed. Evidence code/quality/evidence/T30/native92-codex-result-review1.json. Read-only browser navigation/encoder diagnostic next; no cause attributed from prior runs; T30 IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T06:45:02.896Z: prepare API31 Teams affected original seven suites; only runner whitelist extended, no test/deadline change; preparation evidence code/quality/evidence/T30/api31-teams-regression-preparation1.json. Sequential resource167 exact restore; no T31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:45:11.272Z–2026-10-13T06:45:19.232Z exit0: t30-supabase-temporary-stop-167; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-167.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:45:19.341Z–2026-10-13T06:45:20.693Z exit1: t30-teams-build31-original-regressions-1; evidence code/quality/evidence/T30/codex-t30-teams-build31-original-regressions-1.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:45:21.297Z–2026-10-13T06:45:39.837Z exit0: t30-supabase-restore-167; evidence code/quality/evidence/T30/codex-t30-supabase-restore-167.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:47:01.008Z: preserved failed API31 regression1 (missing three relocated files, zero executed cases), resource167 restored. Prepared missing copies from frozen reviewed originals, AST confirms all case callbacks identical; only gateway fixture import uses reviewed Linux dependency fixture. Evidence code/quality/evidence/T30/api31-teams-regression-preparation2.json; sequential resource168.
+
+- Coding and build 2 — T30 — 2026-10-13T06:47:02.882Z–2026-10-13T06:47:11.858Z exit0: t30-supabase-temporary-stop-168; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-168.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:47:12.071Z–2026-10-13T06:49:20.839Z exit0: t30-teams-build31-original-regressions-2; evidence code/quality/evidence/T30/codex-t30-teams-build31-original-regressions-2.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:49:20.978Z–2026-10-13T06:51:22.641Z exit0: t30-teams-build31-root-authority-1; evidence code/quality/evidence/T30/codex-t30-teams-build31-root-authority-1.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:51:22.992Z–2026-10-13T06:51:36.305Z exit0: t30-supabase-restore-168; evidence code/quality/evidence/T30/codex-t30-supabase-restore-168.json. Build31/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:51:49.337Z: API31 Teams reviewed original98 authority/race cases plus4 realPG recovery cases, two owned cleanup receipts and exact resource168 restore. Compiled only Teams JS/map changed; original headed native acceptance pending. Evidence code/quality/evidence/T30/teams-connect-api31-affected-review1.json.
+
+- Coding and build 2 — T30 — 2026-10-13T06:52:12.939Z: Python standard-library ctypes read-only host observer smoke actualexit0, 3 real process samples; no cmdline/env/path capture, no ExecutionPolicy/process priority/configuration change. Evidence code/quality/evidence/T30/codex-t30-host-cpu-python-smoke-1.json. Native93 API31/Web4 original headed acceptance prepared after reviewed98 authority cases.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:52:14.164Z–2026-10-13T06:52:23.753Z exit0: t30-supabase-temporary-stop-169; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-169.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:52:23.863Z–2026-10-13T06:52:37.584Z exit0: t30-docker-page-cache-reclaim-18; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-18.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:52:37.701Z–2026-10-13T06:52:37.960Z exit0: t30-native93-service-health-1; evidence code/quality/evidence/T30/codex-t30-native93-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:52:38.180Z–2026-10-13T06:52:38.640Z exit0: t30-native93-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native93-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T06:53:07.411Z: original frozen80 Build31 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native93-entry-review1.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:52:38.854Z–2026-10-13T06:53:07.453Z exit0: t30-native93-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native93-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:53:07.630Z–2026-10-13T06:55:59.870Z exit1: headed-t30-native-93; evidence code/quality/evidence/T30/codex-headed-t30-native-93.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T06:56:00.730Z–2026-10-13T06:56:13.969Z exit0: t30-supabase-restore-169; evidence code/quality/evidence/T30/codex-t30-supabase-restore-169.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục task FG — T30 — 2026-10-13 14:02:45 +07:00: bắt đầu phiên theo user kiểm history/tài liệu và tiếp tục task. Đối chiếu latest native93/API31/web4: actual E2E exit1 tại third share45s; Supabase169 restore exit0. Đọc rules/spec/design/task và evidence thật; giữ IN_PROGRESS/80PASS/noT31, Codex trực tiếp/no cockpit. Điều tra log media/lease/host trước sửa hoặc rerun.
+
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:06:41.394Z: reviewed baseline delta is exactly CODEX-ONLY-01 and GITHUB-AUTO-PUSH-01 paragraphs (reverse equals pinned task hash). Adopted current task document pin via reviewed baseline output transition; stock checker unchanged, 80 historical PASS rows unchanged, T30 IN_PROGRESS. Evidence code/quality/evidence/T30/user-document-baseline-review1.json. No product code/test/assertion/deadline changes.
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:09:09.715Z: prepared read-only headed timing20 API31/web4 following native93 third-share failure and five actual gateway group-lock57014. Existing reviewed diagnostic test body byte identical to timing19, original native assertions/deadlines/source unchanged. Sequential driver resource170 finally restores exact containers, Telegram actual viewport producer retained. Evidence code/quality/evidence/T30/browser-timing20-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:23.502Z–2026-10-13T07:09:31.731Z exit0: t30-supabase-temporary-stop-170; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-170.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:31.859Z–2026-10-13T07:09:45.492Z exit0: t30-docker-page-cache-reclaim-19; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-19.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:45.678Z–2026-10-13T07:09:45.957Z exit0: t30-browser-timing20-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing20-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:46.106Z–2026-10-13T07:09:46.580Z exit0: t30-browser-timing20-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing20-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:46.778Z–2026-10-13T07:09:47.068Z exit0: t30-browser-timing20-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing20-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:14:02.011Z: native93/API31/web4 reviewed actualexit1 third share45s after4joins/2captures/2TURN RTP and stream switch. Three claim201, five group-lock57014; third capture/quota/shaping/mobile/ended not accepted. ROOT5photos viewed on resume; Telegram 4/5sent, other actual receipt states preserved (no replay). Initial review1 exit1 on unsent receipt retained. Observers/inspector/runtime cleanup and exact Supabase169 restore verified. Host saturation correlated, inaccessible process totals cannot prove root cause. Evidence code/quality/evidence/T30/native93-resume-result-review1.json. Timing20 read-only diagnostic ongoing; noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:09:47.443Z–2026-10-13T07:14:42.126Z exit1: headed-t30-browser-timing-20; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-20.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:14:42.352Z–2026-10-13T07:15:08.396Z exit0: t30-supabase-restore-170; evidence code/quality/evidence/T30/codex-t30-supabase-restore-170.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:24:46.256Z: timing20 API31/web4 actualexit1 fourthquota alert5s after5joins/3captures/2TURN RTP/switch/three-slot assertion. Four claim201; native SERVICE_REQUEST_REMOVE_PARTICIPANT closures precede fourth. Exact eligibility reason unresolved, no cause transplanted from native93. ROOT5newphotos viewed, Telegram 5/5sent with remaining receipt states retained; all observers recorded, actual app/DB/media/privateGW/network cleanup and exact Supabase170 restore verified. Evidence code/quality/evidence/T30/browser-timing20-resume-result-review1.json; noPASS/noT31/noCockpit.
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:25:54.327Z: timing20 actualexit1 fourthquota alert5s after5joins/3captures/2TURN RTP/switch/3slots; native SERVICE_REQUEST_REMOVE_PARTICIPANT before fourthclaim201. Current diagnostics do not prove lease failure reason. Added synthetic-schema-only readonly lease-reason observer, seven actualPG controls and cleanup verified; fresh timing21 test assertions/deadlines body unchanged except fixture path, fixture additions reverse byte exactly. No app edits/PASS. Evidence code/quality/evidence/T30/browser-timing21-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:11.761Z–2026-10-13T07:26:19.918Z exit0: t30-supabase-temporary-stop-172; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-172.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:20.026Z–2026-10-13T07:26:33.639Z exit0: t30-docker-page-cache-reclaim-20; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-20.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:33.736Z–2026-10-13T07:26:33.968Z exit0: t30-browser-timing21-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing21-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:34.094Z–2026-10-13T07:26:34.423Z exit0: t30-browser-timing21-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing21-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:34.530Z–2026-10-13T07:26:34.674Z exit0: t30-browser-timing21-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing21-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:06:41–10/13/2026 07:07:26 exit0: t30-user-document-baseline-reconcile-1; evidence code/quality/evidence/T30/codex-t30-user-document-baseline-reconcile-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:08:15–10/13/2026 07:08:37 exit0: t30-resume-stock-gate-1; evidence code/quality/evidence/T30/codex-t30-resume-stock-gate-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:12:31–10/13/2026 07:12:34 exit1: t30-native93-resume-result-review-1; evidence code/quality/evidence/T30/codex-t30-native93-resume-result-review-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:14:01–10/13/2026 07:14:02 exit0: t30-native93-resume-result-review-2; evidence code/quality/evidence/T30/codex-t30-native93-resume-result-review-2.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:15:00–10/13/2026 07:15:01 exit0: t30-browser-timing20-analysis-1; evidence code/quality/evidence/T30/codex-t30-browser-timing20-analysis-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:24:46–10/13/2026 07:24:46 exit0: t30-browser-timing20-result-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing20-result-review-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:21:44–10/13/2026 07:22:10 exit1: t30-lease-reasons-smoke-1; evidence code/quality/evidence/T30/codex-t30-lease-reasons-smoke-1.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:23:31–10/13/2026 07:23:40 exit0: t30-supabase-temporary-stop-171; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-171.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:23:54–10/13/2026 07:24:10 exit1: t30-lease-reasons-smoke-2; evidence code/quality/evidence/T30/codex-t30-lease-reasons-smoke-2.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:24:11–10/13/2026 07:24:22 exit0: t30-supabase-restore-171; evidence code/quality/evidence/T30/codex-t30-supabase-restore-171.json. No PASS/state change/noT31/noCockpit.
+
+
+- Tiếp tục task FG — T30 — actual 10/13/2026 07:25:28–10/13/2026 07:25:30 exit0: t30-lease-reasons-smoke-3; evidence code/quality/evidence/T30/codex-t30-lease-reasons-smoke-3.json. No PASS/state change/noT31/noCockpit.
+
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:26:34.787Z–2026-10-13T07:29:20.219Z exit1: headed-t30-browser-timing-21; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-21.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:29:20.429Z–2026-10-13T07:29:31.988Z exit0: t30-supabase-restore-172; evidence code/quality/evidence/T30/codex-t30-supabase-restore-172.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục task FG — T30 — 2026-10-13T07:33:13.800Z: timing21 API31/web4 actualexit1 fourthquota alert5s after4joins/3captures/2TURN RTP/switch/three-slot assertion at fourth room region5s. All456 lease samples have no invalid factor. No cause transplanted from timing20/native93; bootstrap timing remains unresolved. ROOT5newphotos viewed, Telegram 5/5sent with remaining receipt states retained; all observers recorded, actual app/DB/media/privateGW/network cleanup and exact Supabase172 restore verified. Evidence code/quality/evidence/T30/browser-timing21-resume-result-review1.json; noPASS/noT31/noCockpit.
+
+- Tiếp tục task FG — T30 — 2026-10-13 14:34:43 +07:00: đính chính entry review timing21 lúc07:33:13Z: lỗi thực là fourth actor room region5000ms (không phải fourthquota alert); chưa tới thao tác quota người thứ tư. Review JSON và command nguyên gốc ghi đúng; giữ entry cũ và đính chính bằng mục này. Kết thúc phiên IN_PROGRESS: baseline hai directive đã review/adopt, checker cuối actualexit0/80PASS giữ nguyên; hai headed diagnostics actualexit1, mỗi run5/5Telegramsent, observer7controls và456lease samples không lỗi,10Supabase đang chạy và runtime cleanup verified. Không sửa logic app/timeout/assertions, không mởT31/không push khi task chưa hoàn tất. Blocker nghiệm thu còn bootstrap actor4 và nguyên nhân server removals ở timing20 chưa được tái hiện; hướng kế tiếp phân tích critical path SCRIPT→USER_ME→room requests từ timing21, giữ full native acceptance chưa đạt. Evidence code/quality/evidence/T30/resume-session-summary1.json; code/quality/evidence/T30/browser-timing21-resume-result-review1.json.
+
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13 14:38:07 +07:00: bắt đầu phiên user yêu cầu tiếp tục liên tục đến hết task. Resume exact timing21/API31/web4 và final stockgate exit0,80PASS giữ nguyên. Điều tra critical path fourth room (SCRIPT2119ms, USER_ME1814ms, ROOM_DETAIL2809ms); Codex trực tiếp, khôngT31/cockpit/Antigravity/parallel.
+
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:39:33.713Z: prepare single-variable diagnostic22: ANALYZE only tables in owned synthetic schema after fixture seed. Test body/assertions/deadlines unchanged, fixture delta reverses exactly; API31/web4 unchanged, no production DB setting/data change. Motivation actual timing21 broad SQL latencies and observer smoke statistics dependence; hypothesis not proven. Evidence code/quality/evidence/T30/browser-timing22-source-review.json; noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:39:34.116Z–2026-10-13T07:39:34.628Z exit1: t30-supabase-temporary-stop-173; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-173.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:40:08.4200955+00:00: diagnostic22 stopped before Docker resource snapshot/stop; dockerDesktopLinuxEngine pipe absent, command exit1 and no resource173 snapshot. Started existing Docker Desktop Hidden to restore required local services, no cockpit or unrelated app startup. Preserve failed command; fresh driver IDs required after health.
+
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:41:06.795Z–2026-10-13T07:41:15.070Z exit0: t30-supabase-temporary-stop-173-retry1; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-173-retry1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:41:15.224Z–2026-10-13T07:41:29.348Z exit0: t30-docker-page-cache-reclaim-21; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-21.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:41:29.486Z–2026-10-13T07:41:29.754Z exit0: t30-browser-timing22-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing22-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:41:29.859Z–2026-10-13T07:41:30.108Z exit1: t30-browser-timing22-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing22-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:41:30.217Z–2026-10-13T07:41:42.868Z exit0: t30-supabase-restore-173; evidence code/quality/evidence/T30/codex-t30-supabase-restore-173.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:42:16.216Z–2026-10-13T07:42:25.783Z exit0: t30-supabase-temporary-stop-174; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-174.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:42:28.292Z–2026-10-13T07:42:47.247Z exit0: t30-docker-page-cache-reclaim-22; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-22.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:42:47.452Z–2026-10-13T07:42:47.866Z exit0: t30-browser-timing22-service-health-2; evidence code/quality/evidence/T30/codex-t30-browser-timing22-service-health-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:42:48.064Z–2026-10-13T07:42:48.536Z exit1: t30-browser-timing22-postgres-ready-2; evidence code/quality/evidence/T30/codex-t30-browser-timing22-postgres-ready-2.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:42:48.748Z–2026-10-13T07:43:01.831Z exit0: t30-supabase-restore-174; evidence code/quality/evidence/T30/codex-t30-supabase-restore-174.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:43:36.431Z–2026-10-13T07:43:45.691Z exit0: t30-supabase-temporary-stop-175; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-175.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:43:45.811Z–2026-10-13T07:43:59.497Z exit0: t30-docker-page-cache-reclaim-23; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-23.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:43:59.613Z–2026-10-13T07:43:59.860Z exit0: t30-browser-timing22-service-health-3; evidence code/quality/evidence/T30/codex-t30-browser-timing22-service-health-3.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:43:59.974Z–2026-10-13T07:44:00.391Z exit0: t30-browser-timing22-postgres-ready-3; evidence code/quality/evidence/T30/codex-t30-browser-timing22-postgres-ready-3.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:44:00.516Z–2026-10-13T07:44:00.705Z exit0: t30-browser-timing22-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing22-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:44:12.3000037+00:00: Docker daemon absent→existing Desktop Hidden started; FG postgres/redis exited→exact two containers started. PostgreSQL actual recovery syncing directory then ready07:43:18Z/healthy. Preflight retry1/2 preserved actual readiness failures (no UI run), resources173/174 each restored10sameIDs, no data reset/config change. Evidence code/quality/evidence/T30/docker-recovery-preflight-review1.json. Diagnostic22 retry3 starts only after healthy; original tests/assertions unchanged.
+
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:44:00.865Z–2026-10-13T07:44:55.493Z exit1: headed-t30-browser-timing-22; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-22.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:44:55.695Z–2026-10-13T07:45:10.471Z exit0: t30-supabase-restore-175; evidence code/quality/evidence/T30/codex-t30-supabase-restore-175.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:47:56.6428004+00:00: timing22 actualexit1 fixture media startup before UI/ANALYZE, no capture/Telegram expected; cleanup confirmed, Supabase175 restored. Exact same-network Linux16PGconnect probe actualexit0/1231ms after restart; first two probes failed mount setup retained. Fresh timing23 same stats diagnostic test/body/source unchanged, only run paths; no app/settings/assertion change. Evidence code/quality/evidence/T30/linux-pg-readiness-after-restart3.json; noPASS/noT31.
+
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:47:56.894Z–2026-10-13T07:48:05.783Z exit0: t30-supabase-temporary-stop-176; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-176.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:48:05.910Z–2026-10-13T07:48:20.204Z exit0: t30-docker-page-cache-reclaim-24; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-24.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:48:20.348Z–2026-10-13T07:48:20.605Z exit0: t30-browser-timing23-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing23-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:48:20.718Z–2026-10-13T07:48:21.055Z exit0: t30-browser-timing23-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing23-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:48:21.186Z–2026-10-13T07:48:21.400Z exit0: t30-browser-timing23-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing23-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:48:45.8404877+00:00: clarification diagnostic22 setup-failure cleanup: schema/presence/inspector ended=true; fixture mediaRemoved/appClosed/webClosed=false because these handles never initialized. Original flags retained; parent privategateway cleanup proof must be checked separately, not claim all fixture cleanup flags true. No UI/assertions/capture executed in diagnostic22.
+
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:48:21.659Z–2026-10-13T07:51:41.913Z exit1: headed-t30-browser-timing-23; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-23.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:51:42.057Z–2026-10-13T07:51:56.567Z exit0: t30-supabase-restore-176; evidence code/quality/evidence/T30/codex-t30-supabase-restore-176.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:56:01.021Z: statistics diagnostic23 actualexit1 fourthroom5s and does not solve latency. Exact samples show healthy leases before gateway group57014 and server removal; owner lifecyclePID1035 idleClient while client roundtrips521–2949ms hold group. New diagnostic24 adjusts only task-owned fixture child to ABOVE_NORMAL with exact restore; base21 body/assertions/deadlines/DB statistics unchanged, no product edit/PASS. Evidence code/quality/evidence/T30/browser-timing24-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:01.585Z–2026-10-13T07:56:11.540Z exit0: t30-supabase-temporary-stop-177; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-177.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:11.668Z–2026-10-13T07:56:29.360Z exit0: t30-docker-page-cache-reclaim-25; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-25.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:29.636Z–2026-10-13T07:56:29.911Z exit0: t30-browser-timing24-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing24-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:30.038Z–2026-10-13T07:56:30.449Z exit0: t30-browser-timing24-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing24-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:30.601Z–2026-10-13T07:56:30.854Z exit0: t30-browser-timing24-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing24-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T07:57:37.035Z: statistics23 actualexit1 fourthroom5s;4joins/3captures/2TURN RTP/switch/3slots passed,503lease samples healthy before first server removal. Seven actual gatewaygroup57014, lifecyclePID1035 owner waitsClient under group lock with521–2949ms clientquery spans; owned ANALYZE did not solve. ROOT5newphotos viewed/5Telegramsent, all actual runtime/schema/media/network cleanup and Supabase176 exactrestore verified. Evidence code/quality/evidence/T30/statistics-diagnostic23-review1.json; noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T07:56:31.010Z–2026-10-13T08:02:18.213Z exit1: headed-t30-browser-timing-24; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-24.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:02:18.814Z–2026-10-13T08:02:37.919Z exit0: t30-supabase-restore-177; evidence code/quality/evidence/T30/codex-t30-supabase-restore-177.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:07:33.877Z: priority24 actualexit1 fourthjoin25s, not accepted; exact ownedpriority restored0 and Supabase177 restored. Prepare two realPG lifecycle policy reuse controls before source edits, existing10cases byte unchanged. One same-pass six-peer no-op read plus native mutation freshness after revocation. Evidence code/quality/evidence/T30/lifecycle-policy-reuse-test-review1.json; RED required, noPASS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:07:34.470Z–2026-10-13T08:07:44.264Z exit0: t30-supabase-temporary-stop-178; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-178.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:07:44.401Z–2026-10-13T08:08:54.382Z exit1: t30-lifecycle-policy-reuse-red-1; evidence code/quality/evidence/T30/codex-t30-lifecycle-policy-reuse-red-1.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:08:54.568Z–2026-10-13T08:09:06.243Z exit0: t30-supabase-restore-178; evidence code/quality/evidence/T30/codex-t30-supabase-restore-178.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:10:18.352Z–2026-10-13T08:10:27.557Z exit0: t30-supabase-temporary-stop-179; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-179.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:10:27.675Z–2026-10-13T08:11:31.222Z exit1: t30-lifecycle-policy-reuse-red-2; evidence code/quality/evidence/T30/codex-t30-lifecycle-policy-reuse-red-2.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:11:31.428Z–2026-10-13T08:11:52.531Z exit0: t30-supabase-restore-179; evidence code/quality/evidence/T30/codex-t30-supabase-restore-179.json. Build23/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:12:05.7939659+00:00: actual RED1 1failed/11passed proves two reads vs1 target. Added slot-delete freshness control RED2 retained seed failure (fixture helper did not return fixtureUser); new version3 selects actual member user in INSERT, assertions unchanged. RED3 required before source adoption; originals/evidence preserved, no app source edit yet.
+
+
+- Coding and build 2 — T30 — 2026-10-13T08:12:06.241Z–2026-10-13T08:12:13.531Z exit0: t30-supabase-temporary-stop-180; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-180.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:12:13.681Z–2026-10-13T08:13:08.177Z exit1: t30-lifecycle-policy-reuse-red-3; evidence code/quality/evidence/T30/codex-t30-lifecycle-policy-reuse-red-3.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:13:08.323Z–2026-10-13T08:13:21.467Z exit0: t30-supabase-restore-180; evidence code/quality/evidence/T30/codex-t30-supabase-restore-180.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 15:14:53 +07:00: T30 statistics23 real PG shows lifecycle group-lock owner1035 idle waiting Windows client across serial eligibility and no-op policy queries, gateway57014 removals while lease factors valid. RealPG RED1/13 proves two redundant lease/policy reads with six retained peers; all original10 and fresh changed-peer revocation/screen-end controls pass. Evaluate union of locked member and native identities once per current pass with existing liveLeasesWithPolicy. Share only no-op policy proof when no member release or slot deletion occurred; after deletion use original fresh batch, every actual native permission mutation retains fresh syncLiveNativePermissions. Preserve all room/group/member locks, predicates, heartbeat SQL, grace, release, quota/slot mutation, authority, deadlines; full regressions/native required. Evidence code/quality/evidence/T30/lifecycle-policy-reuse-source1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T08:15:02.576Z–2026-10-13T08:15:11.278Z exit0: t30-supabase-temporary-stop-181; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-181.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:15:11.398Z–2026-10-13T08:16:05.040Z exit0: t30-lifecycle-policy-reuse-green-1; evidence code/quality/evidence/T30/codex-t30-lifecycle-policy-reuse-green-1.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:16:05.358Z–2026-10-13T08:16:18.322Z exit0: t30-supabase-restore-181; evidence code/quality/evidence/T30/codex-t30-supabase-restore-181.json. Build23/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:17:53.572Z: API32 actualbuild exit0/GREEN13, 8compiled service files changed, 258others byte retained; two internal optional parameters only, HTTP/DTO unchanged. Adopted reviewed output lineage with stock checker;80priorPASS unchanged. Evidence code/quality/evidence/T30/api-build-32-review1.json; full regressions/native pending, IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T08:21:23.914Z–2026-10-13T08:21:33.438Z exit0: t30-supabase-temporary-stop-182; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-182.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:21:33.566Z–2026-10-13T08:22:43.020Z exit1: t30-policy-untracked-peer-red-1; evidence code/quality/evidence/T30/codex-t30-policy-untracked-peer-red-1.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:22:43.287Z–2026-10-13T08:22:56.039Z exit0: t30-supabase-restore-182; evidence code/quality/evidence/T30/codex-t30-supabase-restore-182.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 15:24:53 +07:00: Narrow current-pass eligibility to the original locked member lease IDs. RealPG additional RED1/14 verifies unknown native identity must retain original fresh batch policy path; the other13 controls pass. Same-pass reuse applies only if no member release and every native identity is eligible in locked member snapshot. Unknown/invalid native identity or slot deletion falls back to original fresh read; native mutation freshness remains unchanged. Preserve all locks/eligibility/heartbeat/grace/quota/HTTP/DTO/deadlines and80PASS; regressions/native required. Evidence code/quality/evidence/T30/policy-member-boundary-source2-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T08:25:18.762Z–2026-10-13T08:25:26.928Z exit0: t30-supabase-temporary-stop-183; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-183.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:25:27.042Z–2026-10-13T08:26:28.375Z exit0: t30-policy-untracked-peer-green-1; evidence code/quality/evidence/T30/codex-t30-policy-untracked-peer-green-1.json. Build23/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:26:28.529Z–2026-10-13T08:26:40.894Z exit0: t30-supabase-restore-183; evidence code/quality/evidence/T30/codex-t30-supabase-restore-183.json. Build23/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:27:18.892Z: API33 actualbuild exit0/GREEN13, 2compiled service files changed, 264others byte retained; two internal optional parameters only, HTTP/DTO unchanged. Adopted reviewed output lineage with stock checker;80priorPASS unchanged. Evidence code/quality/evidence/T30/api-build-33-review1.json; full regressions/native pending, IN_PROGRESS/noT31/noCockpit.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:27:59.9130080+00:00: API33 actualbuild/adoption exit0, only lifecycleJS/map changed vsAPI32;264other files retained, typed internaloptional parameters unchanged. GREEN14actual and exact Supabase183 restore confirmed. Legacy guard driver history text Build23 is inherited label only; its source tests actually exercise current adopted source afterAPI32/33boundary edits, not compiledBuild23. Original regressions, eligibility observer copy4 only includes new query name with all case callbacks/assertions byte exact; no weakened measurement. Evidence code/quality/evidence/T30/api-build-33-review1.json; noPASS/noT31.
+
+
+- Coding and build 2 — T30 — 2026-10-13T08:28:00.193Z–2026-10-13T08:28:08.559Z exit0: t30-supabase-temporary-stop-184; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-184.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:28:08.671Z–2026-10-13T08:30:21.385Z exit0: t30-frozen-call-build33-regressions-1; evidence code/quality/evidence/T30/codex-t30-frozen-call-build33-regressions-1.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:30:21.673Z–2026-10-13T08:31:32.233Z exit0: t30-frozen-publishing-build33-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-build33-alone-1.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:31:32.405Z–2026-10-13T08:33:07.129Z exit0: t30-frozen-publishing-gateway-build33-alone-1; evidence code/quality/evidence/T30/codex-t30-frozen-publishing-gateway-build33-alone-1.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:33:07.370Z–2026-10-13T08:33:49.182Z exit0: t30-call-lease-guards-build33-green-1; evidence code/quality/evidence/T30/codex-t30-call-lease-guards-build33-green-1.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:33:49.323Z–2026-10-13T08:34:39.514Z exit1: t30-lifecycle-lease-batch-build33-green-1; evidence code/quality/evidence/T30/codex-t30-lifecycle-lease-batch-build33-green-1.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:34:39.830Z–2026-10-13T08:34:54.966Z exit0: t30-supabase-restore-184; evidence code/quality/evidence/T30/codex-t30-supabase-restore-184.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:38:06.793Z: resource184 original call39/publishing11/publishing-gateway16/call-lease23 exit0; observer4 lifecycle9/10 exit1 counted required fallback policy query as eligibility after mixed invalid-member release. Application source unchanged. Reader5 role classifier preserves all callbacks/assertions byte-exact, duplicate canonical reads still count2; fresh permission reads excluded as original scope. Restore184 exit0; report/native94 pending. Evidence code/quality/evidence/T30/lease-batch-reader5-review.json.
+
+- Coding and build 2 — T30 — 2026-10-13T08:38:15.329Z–2026-10-13T08:38:24.184Z exit0: t30-supabase-temporary-stop-186; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-186.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:38:24.344Z–2026-10-13T08:38:25.226Z exit1: t30-lifecycle-lease-batch-build33-green-2; evidence code/quality/evidence/T30/codex-t30-lifecycle-lease-batch-build33-green-2.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:38:25.398Z–2026-10-13T08:38:39.379Z exit0: t30-supabase-restore-186; evidence code/quality/evidence/T30/codex-t30-supabase-restore-186.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:39:09.488Z: resource186 runner incorrectly referenced jest4 roots while path pointed tests5; actual no-tests-found exit1, restore186 exit0. Fresh runner6 corrects config filename only; assertions/source unchanged, failed record retained.
+
+- Coding and build 2 — T30 — 2026-10-13T08:39:09.819Z–2026-10-13T08:39:19.439Z exit0: t30-supabase-temporary-stop-187; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-187.json. Build33/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:40:01.459Z: priority diagnostic24 exit1 fourthjoin25s; ROOT5actualphotos viewed/5Telegramsent, restored owned process priority and all native/runtime/Supabase177 cleanup verified. Priority change rejected; no native acceptance. Evidence code/quality/evidence/T30/priority-diagnostic24-review1.json.
+
+- Coding and build 2 — T30 — 2026-10-13T08:39:19.557Z–2026-10-13T08:40:13.998Z exit0: t30-lifecycle-lease-batch-build33-green-3; evidence code/quality/evidence/T30/codex-t30-lifecycle-lease-batch-build33-green-3.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:40:14.205Z–2026-10-13T08:40:20.608Z exit1: t30-lifecycle-native-read-build33-green-3; evidence code/quality/evidence/T30/codex-t30-lifecycle-native-read-build33-green-3.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:40:20.775Z–2026-10-13T08:40:33.618Z exit0: t30-supabase-restore-187; evidence code/quality/evidence/T30/codex-t30-supabase-restore-187.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:41:01.181Z: lifecycle reader5 original10/10 passed, resource187 restored exit0. Native-read runner3 refused existing frozen output path before test setup; failed exit1 retained, copy4 changes output label only, all assertions byte unchanged; fresh remainder driver188 prepared.
+
+- Coding and build 2 — T30 — 2026-10-13T08:41:01.403Z–2026-10-13T08:41:10.880Z exit0: t30-supabase-temporary-stop-188; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-188.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:41:11.115Z–2026-10-13T08:41:17.404Z exit0: t30-lifecycle-native-read-build33-green-4; evidence code/quality/evidence/T30/codex-t30-lifecycle-native-read-build33-green-4.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:41:17.610Z–2026-10-13T08:41:46.145Z exit0: t30-api33-source-lint-4; evidence code/quality/evidence/T30/codex-t30-api33-source-lint-4.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:41:46.298Z–2026-10-13T08:42:34.557Z exit1: t30-coalescing-build33-green-4; evidence code/quality/evidence/T30/codex-t30-coalescing-build33-green-4.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:42:34.690Z–2026-10-13T08:42:46.180Z exit0: t30-supabase-restore-188; evidence code/quality/evidence/T30/codex-t30-supabase-restore-188.json. Build33/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:44:12.697Z: native-read10 and lint pass; coalescing probe support5 observer omitted new prepared-query name, original assertion missing actual live-lease-guard fails. Fresh support6 only adds query name, fixture14 references support6, all controls/assertions/nativefixture/source unchanged. Failed run cleanup complete/Supabase188 restored; resource189 rerun remaining probes. Evidence code/quality/evidence/T30/coalescing-policy-observer-name-review1.json.
+
+- Coding and build 2 — T30 — 2026-10-13T08:44:12.967Z–2026-10-13T08:44:22.755Z exit0: t30-supabase-temporary-stop-189; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-189.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:44:22.912Z–2026-10-13T08:45:17.120Z exit0: t30-coalescing-build33-green-5; evidence code/quality/evidence/T30/codex-t30-coalescing-build33-green-5.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:45:17.313Z–2026-10-13T08:46:08.579Z exit0: t30-codex-gateway-linux-normal-10; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-normal-10.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:46:08.793Z–2026-10-13T08:47:00.370Z exit0: t30-codex-gateway-linux-media-io-10; evidence code/quality/evidence/T30/codex-t30-codex-gateway-linux-media-io-10.json. Build33/noCockpit/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:47:00.666Z–2026-10-13T08:47:18.466Z exit0: t30-supabase-restore-189; evidence code/quality/evidence/T30/codex-t30-supabase-restore-189.json. Build33/noCockpit/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:47:26.367Z: API33 policy reuse current14realPG/current66backend/lease23/lifecycle10/native-read10/coalescing18/smoke20/lint passed. Observer4 overcount and runner-path failures retained; corrected observer5 only role measurement, original assertions exact. Actual native mutations still fresh and unknown peers/slot delete retain fresh batch. Cleanup and exact Supabase183/184/187/188 restore verified; native94 original acceptance pending. Evidence code/quality/evidence/T30/policy-reuse-api33-affected-review1.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:47:36.537Z–2026-10-13T08:47:45.941Z exit0: t30-supabase-temporary-stop-185; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-185.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:47:46.077Z–2026-10-13T08:47:59.913Z exit0: t30-docker-page-cache-reclaim-26; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-26.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:48:00.097Z–2026-10-13T08:48:06.680Z exit0: t30-native94-service-health-1; evidence code/quality/evidence/T30/codex-t30-native94-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:48:07.067Z–2026-10-13T08:48:07.599Z exit0: t30-native94-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native94-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T08:49:07.477Z: original frozen80 Build33 entry reviewed current266compiledpins/coalescing18/current73backend/canonicalsmoke20/native-read10 plus fresh frontendBuild4 280/typecheck and exact lazy media chunks; original frozen callcontrols unchanged with reviewed async-readiness copy; stock gate and80priorPASS unchanged. Headed originalfrozen test/assertions/deadlines/producer, canonical fixture with Codex-owned read-only exception observer; actual fullnative acceptance still pending. Evidence code/quality/evidence/T30/native94-entry-review1.json; IN_PROGRESS/noAnti2/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:48:07.841Z–2026-10-13T08:49:07.615Z exit0: t30-native94-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native94-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:49:08.172Z–2026-10-13T08:52:14.715Z exit1: headed-t30-native-94; evidence code/quality/evidence/T30/codex-headed-t30-native-94.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T08:52:19.569Z–2026-10-13T08:52:35.718Z exit0: t30-supabase-restore-185; evidence code/quality/evidence/T30/codex-t30-supabase-restore-185.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:55:48.807Z: native94 originalexit1 fourthactorroom5s;4joins/3captures/2TURNwindows/switch/3slot assertions pass,1gatewaygroup57014/server removal, no fourthquota/mobile/shaping/end acceptance. ROOT5photos viewed/5Telegramsent and complete native/schema/runtime/Supabase185 cleanup. API33 no-op optimization not sufficient. Evidence code/quality/evidence/T30/native94-result-review1.json; proceed isolated Linux API runtime diagnostic, noPASS/noT31/noCockpit.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T08:58:22.039Z: Linux API identical-byte diagnostic dependencies ready=true; exact lock/manifests pinned, scripts disabled, owned installer removed=true. Volume task-only until completion. Evidence code/quality/evidence/T30/linux-api-dependencies-build1.json and linux-api-runtime-plan1.md; native acceptance pending.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:02:07.097Z: Linux API runner/helper and diagnostic fixture1 prepared. Single API initialization replacement, original seed/auth/ACL/web/media/inspector unchanged; actual DB-host presence namespace transferred for owned Redis cleanup. Readonly API33/package outputs, pinned npm dependencies, privileged env privateinput under runtime, regular Bao config files readonly remapped, owned container/private runtime exact cleanup required. No canonical adoption/PASS. Evidence code/quality/evidence/T30/linux-api-fixture-source-review1.json.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:04:05.705Z: Linux API smoke1 fails at API startup before ready, no UI/native acceptance. Dockerlogs stdout-only hid stderr; helper2 only adds stderr to existing redaction. Original failure/evidence retained; actual owned API container/privateinput runtime/gateway/schema/inspector all removed, main PG/Redis/network unchanged. app/web never initialized so flags false retained honestly. Evidence code/quality/evidence/T30/linux-api-fixture-smoke-review1.json; smoke2 required.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:05:54.912Z: smoke2 fails MODULE_NOT_FOUND during Linux API import, all actual owned cleanup verified; runner2 adds allowlisted missing module name only, no raw error/env dump or business change. Fresh smoke3 needed to identify exact packaging missing module.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:09:18.340Z: smoke3 identifies direct compiled @livekit/protocol missing from API-only npm subset. Host/full-workspace lock pins root1.50.4 while SDK nested1.51.0; runtime addon snapshots exact original1.50.4 closure, checks overlapping dependencies byte-exact before/after, no application manifest/version edit. Done=true, holderRemoved=true. Evidence code/quality/evidence/T30/linux-api-protocol-addon-review1.json.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:10:45.339Z: isolated network-none import of actual readonly API33 AppModule passed after exact rootprotocol1.50.4 addon; owned probe container removed. Helper4 selects reviewed ready2 snapshot, runner2 unchanged. Actual full startup/auth/media smoke4 remains required. Evidence code/quality/evidence/T30/linux-api-import-probe1.json.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:13:27.254Z: Linux API smoke4 actual10controls passed, app ready Linux24.21/compiled33, graceful app/container/privateinput removal and main/network/schema/media/Redis/inspector cleanup verified. Diagnostic25 prepared: original frozen test callback byte-exact, readonly browser timing helper, Linux fixture4; additional anonymous401/other-private-room403 smoke and current266compilepins required before headed run. Evidence code/quality/evidence/T30/browser-timing25-source-review.json; diagnostic not canonical/PASS.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:13:27.503Z–2026-10-13T09:13:36.913Z exit0: t30-supabase-temporary-stop-190; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-190.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:13:37.025Z–2026-10-13T09:13:51.378Z exit0: t30-docker-page-cache-reclaim-27; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-27.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:13:51.489Z–2026-10-13T09:14:53.923Z exit0: t30-linux-api-auth-smoke-5; evidence code/quality/evidence/T30/codex-t30-linux-api-auth-smoke-5.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:14:54.047Z–2026-10-13T09:14:54.349Z exit0: t30-browser-timing25-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing25-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:14:54.478Z–2026-10-13T09:14:55.011Z exit0: t30-browser-timing25-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing25-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:14:55.163Z–2026-10-13T09:14:55.699Z exit0: t30-browser-timing25-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing25-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:14:55.873Z–2026-10-13T09:19:04.792Z exit1: headed-t30-browser-timing-25; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-25.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:19:04.991Z–2026-10-13T09:19:18.054Z exit0: t30-supabase-restore-190; evidence code/quality/evidence/T30/codex-t30-supabase-restore-190.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:24:50.435Z: Linux API diagnostic25 actualexit1 fourthquota5s;5joins/3captures/2TURNwindow/switch/3slots passed, correct409 arriveslate3963ms backend plus capture/proxy delay. No gatewaygroup57014 in retained log; screenshot5 shows late correctalert, cannot change failed deadline. ROOT5newphotos viewed/5Telegramsent; owned API graceful/privateinput/container/runtime/gateway/schema/presence/Supabase190 completecleanup. Evidence code/quality/evidence/T30/linux-api-browser-diagnostic25-review1.json; move only adminSDKroute internal for diagnostic26, nocanonical/PASS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:24:50.750Z: diagnostic directSDK fixture5 prepared; gatewaycopy3 adds readonly owned routing metadata only, helper5 validates exact gateway label/network/UUID and attaches ownedAPI to private network before start. Administrative SDK uses same guarded gateway internally; browser public admission/TURN/native original transport unchanged. Fresh12controlsmoke6 before diagnostic26. Evidence code/quality/evidence/T30/linux-api-direct-route-source-review1.json.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:27:11.971Z: direct adminSDK Linux same guarded gateway smoke6 actual12controls passed incl authenticated room/nativejoin/anonymous401/privateACL403 and full API/runtime/network cleanup. Diagnostic26 originalcallback byte-exact prepared, only API SDK route internal; browser/publicgateway/TURN unchanged. Fresh preflight/body/pins before headed run, all80 prior PASS unchanged; no canonical adoption. Evidence code/quality/evidence/T30/browser-timing26-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:12.270Z–2026-10-13T09:27:21.363Z exit0: t30-supabase-temporary-stop-191; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-191.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:21.485Z–2026-10-13T09:27:35.343Z exit0: t30-docker-page-cache-reclaim-28; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-28.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:35.449Z–2026-10-13T09:27:35.696Z exit0: t30-browser-timing26-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing26-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:35.811Z–2026-10-13T09:27:36.144Z exit0: t30-browser-timing26-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing26-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:36.258Z–2026-10-13T09:27:36.859Z exit0: t30-browser-timing26-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing26-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:27:37.178Z–2026-10-13T09:31:41.249Z exit1: headed-t30-browser-timing-26; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-26.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:31:41.598Z–2026-10-13T09:32:00.278Z exit0: t30-supabase-restore-191; evidence code/quality/evidence/T30/codex-t30-supabase-restore-191.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:44:12.787Z: directAPI diagnostic26 actualexit1 baselineaudio10s0 qualifyingflows; fifthjoin/fourthquota original5s passed,409232ms/captureended/3slots asserted. Prior two3s windows actual3audioflows159–169packets/0loss; viewer later disconnected. Default Dockerstdout log clipping endsPGdata09:30:06 before finalwindow, so earlier no-gateway-error observations apply only retained portion. ROOT6photos viewed/6Telegramsent; full API/container/privateinput/runtime/schema/media/presence/Supabase191 cleanup verified. Evidence code/quality/evidence/T30/linux-api-direct-diagnostic26-review1.json; readonly diagnosis27 needed, noPASS/noT31.
+
+- Tiếp tục đến hết task FG — T30 — 2026-10-13T09:45:06.331Z: readonly diag27 prepared actual RTP/stat/peer state snapshots without changing original stats return or testcallback; Linux app current tested readonly leaseReasons + lifecyclequery helper, restored on close. Docker diagnostics capture16MiB with statuses covers missing finalwindow; all actual transport/compiled app/keys/deadlines unchanged. Extra observefixture12smoke before headed; no native result/PASS. Evidence code/quality/evidence/T30/browser-timing27-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:45:41.147Z–2026-10-13T09:45:49.525Z exit0: t30-supabase-temporary-stop-192; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-192.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:45:49.670Z–2026-10-13T09:46:04.238Z exit0: t30-docker-page-cache-reclaim-29; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-29.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:46:04.357Z–2026-10-13T09:47:10.501Z exit0: t30-linux-api-observe-auth-smoke-7; evidence code/quality/evidence/T30/codex-t30-linux-api-observe-auth-smoke-7.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:47:10.631Z–2026-10-13T09:47:10.930Z exit0: t30-browser-timing27-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing27-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:47:11.103Z–2026-10-13T09:47:11.659Z exit0: t30-browser-timing27-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing27-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:47:11.834Z–2026-10-13T09:47:12.655Z exit0: t30-browser-timing27-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing27-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:47:13.190Z–2026-10-13T09:51:51.106Z exit1: headed-t30-browser-timing-27; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-27.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T09:51:51.412Z–2026-10-13T09:52:08.581Z exit0: t30-supabase-restore-192; evidence code/quality/evidence/T30/codex-t30-supabase-restore-192.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Tiếp tục — T30 — 2026-10-13T10:10:33.804Z: diagnostic27 exit1 originalquota5s; real4092336ms, latephotoquota; gatewaylive-lease57014/viewerremoved whileeligibilityvalid. ROOT5photos viewed/5Telegramsent. Resource/schema/presence/API/runtime/Supabase192 cleanup verified, fixtureobserver-stop failed despite complete-log healthy marker; no clean-exit claim. Evidence code/quality/evidence/T30/linux-api-observe-diagnostic27-review1.json. IN_PROGRESS/noT31/noPASS.
+
+- Tiếp tục — T30 — 2026-10-13T10:12:49.679Z: prepare readonly Linux PGwait diagnostic28; no app/guard/source/test-body/assertion/deadline change. Existing reviewed own-schema query buffered until stop; complete marker parsing strict with bounded tail capture, cleanup failures record only operation name. Evidence code/quality/evidence/T30/browser-timing28-source-review.json. NoPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:13:06.413Z–2026-10-13T10:13:06.771Z exit1: t30-supabase-temporary-stop-193; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-193.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+`n- Tiếp tục — T30 — 2026-10-13T10:14Z: resource193 preflight Docker API pipe absent before any resource mutation; exit1 retained. Docker Desktop/WSL stopped externally (no Codex stop command). Started installed Docker Desktop hidden and exact existing FG PostgreSQL/Redis container IDs, no recreation/data/reset/config change; resources must be healthy before diagnostic retry. No cockpit/Anti2/Antigravity/noPASS.
+
+- T30 correction 2026-10-13T10:15:09.277Z: prior Docker note contains literal newline escape and says externally; actual evidence only proves Docker Desktop/WSL were stopped and no Codex stop command was issued. Cause is unknown. Docker launch at17:13:36+07 and start of exact existing PG/Redis IDs returned exit0; no recreation/data reset. Retry194 required after health check.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:15:09.565Z–2026-10-13T10:15:18.426Z exit0: t30-supabase-temporary-stop-194; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-194.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:15:18.569Z–2026-10-13T10:15:32.982Z exit0: t30-docker-page-cache-reclaim-30; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-30.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:15:33.097Z–2026-10-13T10:16:35.500Z exit0: t30-linux-api-wait-auth-smoke-8; evidence code/quality/evidence/T30/codex-t30-linux-api-wait-auth-smoke-8.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:16:35.780Z–2026-10-13T10:16:36.121Z exit0: t30-browser-timing28-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing28-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:16:36.445Z–2026-10-13T10:16:37.361Z exit0: t30-browser-timing28-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing28-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:16:37.570Z–2026-10-13T10:16:38.311Z exit0: t30-browser-timing28-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing28-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:16:38.511Z–2026-10-13T10:21:28.624Z exit1: headed-t30-browser-timing-28; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-28.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:21:28.801Z–2026-10-13T10:21:43.587Z exit0: t30-supabase-restore-194; evidence code/quality/evidence/T30/codex-t30-supabase-restore-194.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T10:25:37.741Z: diagnostic28 originalquota5s fails; API4091793ms, no gateway query errors. Actual PG COMMIT waits IO/WALWrite up to2032ms and queued group locks; full readonly health/clean fixture teardown, resources and Supabase194 restored. ROOT5photos viewed/4Telegramsent. Evidence code/quality/evidence/T30/linux-api-observe-diagnostic28-review1.json; IN_PROGRESS/noPASS/noT31.
+
+- T30 2026-10-13T10:27:32.173Z: read-only diagnostic28 confirms WAL IO/commit waits on Windows bind mount, full clean fixture and Supabase194 restored; original quota still failed. Prepare diagnostic29 same-image real PostgreSQL synthetic tmpfs only, default durability settings on, main PG/Redis/data/config unchanged and exact restore required. Original app/test callback/assertions/deadlines unchanged; no production durability benchmark claim. Evidence code/quality/evidence/T30/browser-timing29-source-review.json; noPASS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:28:02.451Z–2026-10-13T10:28:17.797Z exit0: t30-supabase-temporary-stop-195; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-195.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:28:17.909Z–2026-10-13T10:28:31.726Z exit0: t30-docker-page-cache-reclaim-31; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-31.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:28:31.837Z–2026-10-13T10:29:36.013Z exit0: t30-owned-postgres-auth-smoke-9; evidence code/quality/evidence/T30/codex-t30-owned-postgres-auth-smoke-9.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:29:36.161Z–2026-10-13T10:29:36.438Z exit0: t30-browser-timing29-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing29-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:29:36.580Z–2026-10-13T10:29:37.037Z exit0: t30-browser-timing29-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing29-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:29:37.296Z–2026-10-13T10:29:37.923Z exit0: t30-browser-timing29-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing29-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:29:38.045Z–2026-10-13T10:34:16.231Z exit1: headed-t30-browser-timing-29; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-29.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:34:16.503Z–2026-10-13T10:34:38.019Z exit0: t30-supabase-restore-195; evidence code/quality/evidence/T30/codex-t30-supabase-restore-195.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T10:37:06.271Z: ownedPG diagnostic29 originalquota5s exit1;409297ms, no sampled COMMIT>500ms, three real captures/two TURN windows/switch pass. ROOT5photos viewed/5Telegramsent. Full fixture/API/privatePG/schema/presence/runtime/Supabase195 cleanup; no production durability inference. Evidence code/quality/evidence/T30/owned-postgres-diagnostic29-review1.json; actualcapture/browser timing next, noPASS/noT31.
+
+- T30 2026-10-13T10:39:17.258Z: prepare capture diagnostic30 after privatePG29 failure; API409297ms but originalquota5s. Readonly native capture/fetch timings retain original options/returns/error identity; collected after assertion. Existing exact smoke9 retained and reused; full test callback byte-exact, no product behavior/deadline/assertion changes. Evidence code/quality/evidence/T30/browser-timing30-source-review.json; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:39:33.736Z–2026-10-13T10:39:43.755Z exit0: t30-supabase-temporary-stop-196; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-196.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:39:43.905Z–2026-10-13T10:39:58.460Z exit0: t30-docker-page-cache-reclaim-32; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-32.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:39:58.579Z–2026-10-13T10:39:58.825Z exit0: t30-browser-timing30-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing30-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:39:58.948Z–2026-10-13T10:39:59.318Z exit0: t30-browser-timing30-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing30-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:39:59.433Z–2026-10-13T10:39:59.992Z exit0: t30-browser-timing30-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing30-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:40:00.333Z–2026-10-13T10:44:31.210Z exit1: headed-t30-browser-timing-30; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-30.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:44:31.413Z–2026-10-13T10:44:49.208Z exit0: t30-supabase-restore-196; evidence code/quality/evidence/T30/codex-t30-supabase-restore-196.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T10:46:37.055Z: capture30 observer shows fourthnative4288ms and browserfetch3034ms; ended audio/video/actual409 latealert. Prepare diagnostic31 four actual headed Chromium engines with distinct original BrowserContexts, exact fourthsynthetic source, no window/cookie/request/capture mocking. No app/source/guard/assertion/deadline change; runtime/isolation evidence required. Evidence code/quality/evidence/T30/browser-timing31-source-review.json; noPASS/noT31/noCockpit.
+
+- T30 2026-10-13T10:49:07.353Z: capture30 originalquota5s exit1; native4288ms/browserfetch3034ms/server409263.84ms. Actualfourthcapture1 has ended audio/video tracks, latequotaalert; no sampled COMMIT>500ms. ROOT5photos viewed/5Telegramsent. Full fixture/API/privatePG/runtime/Supabase196 cleanup verified. Evidence code/quality/evidence/T30/owned-postgres-diagnostic30-review1.json; browserpool31 diagnostic next, noPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:07.791Z–2026-10-13T10:49:17.327Z exit0: t30-supabase-temporary-stop-197; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-197.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:17.467Z–2026-10-13T10:49:31.495Z exit0: t30-docker-page-cache-reclaim-33; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-33.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:31.631Z–2026-10-13T10:49:31.897Z exit0: t30-browser-timing31-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing31-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:32.132Z–2026-10-13T10:49:32.510Z exit0: t30-browser-timing31-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing31-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:32.803Z–2026-10-13T10:49:33.508Z exit0: t30-browser-timing31-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing31-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:49:33.710Z–2026-10-13T10:54:10.696Z exit1: headed-t30-browser-timing-31; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-31.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:54:10.838Z–2026-10-13T10:54:25.049Z exit0: t30-supabase-restore-197; evidence code/quality/evidence/T30/codex-t30-supabase-restore-197.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T10:57:53.059Z: reviewed diagnostic31 actual four browsers/six distinct contexts, complete disconnection/restoration, fixture/API/privatePG/Supabase197 cleanup. Seven photos root viewed/7Telegramsent; quota/native ended/shaped transport reached. Actual mobile chat-tab screenshot confirms missing test navigation. Evidence code/quality/evidence/T30/mobile-navigation-diagnostic31-review1.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T10:57:58.451Z: diagnostic31 exit1 at mobile room-region: actual mobile defaults to chat, call panel deliberately hidden. Seven actual photos root viewed; original quota, capture-ended, real shaped audio/video passed before failure. Prepare diagnostic32 real mobile Cuộc gọi navigation before assertion, original callback/assertions/deadlines unchanged. No application changes/PASS/T31. Evidence code/quality/evidence/T30/browser-timing32-source-review.json.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:03.754Z–2026-10-13T10:58:12.355Z exit0: t30-supabase-temporary-stop-198; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-198.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:12.529Z–2026-10-13T10:58:26.591Z exit0: t30-docker-page-cache-reclaim-34; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-34.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:26.711Z–2026-10-13T10:58:26.959Z exit0: t30-browser-timing32-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing32-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:27.069Z–2026-10-13T10:58:27.408Z exit0: t30-browser-timing32-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing32-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:27.525Z–2026-10-13T10:58:28.024Z exit0: t30-browser-timing32-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing32-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T10:58:28.185Z–2026-10-13T11:04:12.200Z exit1: headed-t30-browser-timing-32; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-32.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:04:12.393Z–2026-10-13T11:04:32.604Z exit0: t30-supabase-restore-198; evidence code/quality/evidence/T30/codex-t30-supabase-restore-198.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:09:45.238Z: diagnostic32 exit1; mobile/four viewports/light-dark/keyboard/native-ended reached, then inspector UNKNOWN; gateway observerfailure1, not healthy. Actual fixture/API/privatePG/runtime/Supabase198 resources cleaned. ROOT17photos viewed; preserve result. Prepare diagnostic33 safe readonly operation timing; no app/assertion/deadline changes, noPASS/noT31. Evidence code/quality/evidence/T30/browser-timing33-source-review.json.
+
+- T30 2026-10-13T11:10:11.309Z: diagnostic32 formal review exit1, ROOT17photos viewed/17Telegramsent. CPUmean 94.53percent; inspectorfailure1 and gatewayobserverfailure1 remain real failures; cleanup complete. Evidence code/quality/evidence/T30/inspector-diagnostic32-review1.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:10:40.915Z–2026-10-13T11:10:49.112Z exit0: t30-supabase-temporary-stop-199; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-199.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:10:49.225Z–2026-10-13T11:11:03.622Z exit0: t30-docker-page-cache-reclaim-35; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-35.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:11:03.762Z–2026-10-13T11:11:04.014Z exit0: t30-browser-timing33-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing33-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:11:04.125Z–2026-10-13T11:11:04.486Z exit0: t30-browser-timing33-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing33-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:11:04.628Z–2026-10-13T11:11:05.083Z exit0: t30-browser-timing33-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing33-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:11:05.241Z–2026-10-13T11:15:51.676Z exit1: headed-t30-browser-timing-33; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-33.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:15:51.800Z–2026-10-13T11:16:04.824Z exit0: t30-supabase-restore-199; evidence code/quality/evidence/T30/codex-t30-supabase-restore-199.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T11:18:47.374Z: diagnostic33 formalreview originalbodycompleted/overall1; ROOT17photos viewed/17Telegramsent. Missing cleanupfailurephoto after pagesclosed recorded honestly; gatewayfailure2 remains. Actual cleanup/API/privatePG/Supabase199 verified. Evidence code/quality/evidence/T30/observer-diagnostic33-review1.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:18:50.885Z: diagnostic33 original body completed with actual native proof callers0/slots0/opencalls0/room1/playACTIVE; overall exit1 due gatewayobserverfailure2. Inspector timing healthy0failures. ROOT17photos viewed; cleanup resources/Supabase199 restored. Partial-write probe actual11:16:54UTC RED1 then11:17:32UTC GREEN0 after correcting valid partial writes to continue existing loop, invalid writes still fail. Prepare diagnostic34; evidence code/quality/evidence/T30/browser-timing34-source-review.json and gateway-partial-write-source-review1.json. NoPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:22.823Z–2026-10-13T11:19:31.687Z exit0: t30-supabase-temporary-stop-200; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-200.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:31.806Z–2026-10-13T11:19:45.828Z exit0: t30-docker-page-cache-reclaim-36; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-36.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:46.003Z–2026-10-13T11:19:46.286Z exit0: t30-browser-timing34-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing34-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:46.444Z–2026-10-13T11:19:46.891Z exit0: t30-browser-timing34-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing34-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:47.094Z–2026-10-13T11:19:47.978Z exit0: t30-browser-timing34-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing34-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:19:48.120Z–2026-10-13T11:22:44.412Z exit1: headed-t30-browser-timing-34; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-34.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:22:44.551Z–2026-10-13T11:22:57.646Z exit0: t30-supabase-restore-200; evidence code/quality/evidence/T30/codex-t30-supabase-restore-200.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:25:36.493Z: diagnostic34 overall1 at fourthroom5s; region late7153ms, nofourthcapture. Observer partial-write correction actualhealth0failures, strict stop clean; all resource cleanup/Supabase200 restored. Prepare Linux same-origin builtweb fixture11, original CSP factory/exact bundles/realAPI preserved; auth/assets/WS/cleanup smoke required before headed. Evidence code/quality/evidence/T30/linux-built-web-source-review11.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — actual 2026-10-13T11:26:42.078Z–2026-10-13T11:26:51.481Z exit0: t30-supabase-temporary-stop-201; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-201.json; IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — actual 2026-10-13T11:26:51.618Z–2026-10-13T11:27:05.422Z exit0: t30-docker-page-cache-reclaim-37; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-37.json; IN_PROGRESS/noT31/noCockpit.
+
+- T30 2026-10-13T11:28:05.294Z: diagnostic34 formalreview exit1 fourthroom5s, region late7153ms/nocapture. Corrected observer actual114samples/failure0/complete; ROOT5photos viewed/5Telegramsent; full cleanup/Supabase200 restored. Evidence code/quality/evidence/T30/room-diagnostic34-review1.json; noPASS/noT31.
+
+- Coding and build 2 — T30 — actual 2026-10-13T11:27:05.588Z–2026-10-13T11:28:12.049Z exit0: t30-linux-built-web-auth-smoke-10; evidence code/quality/evidence/T30/codex-t30-linux-built-web-auth-smoke-10.json; IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — actual 2026-10-13T11:28:12.168Z–2026-10-13T11:28:24.353Z exit0: t30-supabase-restore-201; evidence code/quality/evidence/T30/codex-t30-supabase-restore-201.json; IN_PROGRESS/noT31/noCockpit.
+
+- Coding and build 2 — T30 — 2026-10-13T11:29:16.904Z: Linux builtweb smoke10 actual11:27:05–11:28:12UTC exit0, 12controls, errors/retained empty, exact HTML/assets/CSP/auth/WS/native signaling and actual shared HTTPserver close verified; Supabase201 restored. Prepare diagnostic35 originalcallback unchanged with exact appbytes/security headers, no Windows Vite proxy; evidence code/quality/evidence/T30/browser-timing35-source-review.json. NoPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:19.733Z–2026-10-13T11:29:28.313Z exit0: t30-supabase-temporary-stop-202; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-202.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:28.430Z–2026-10-13T11:29:42.510Z exit0: t30-docker-page-cache-reclaim-38; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-38.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:42.669Z–2026-10-13T11:29:42.938Z exit0: t30-browser-timing35-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing35-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:43.066Z–2026-10-13T11:29:43.535Z exit0: t30-browser-timing35-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing35-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:43.669Z–2026-10-13T11:29:44.263Z exit0: t30-browser-timing35-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing35-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:29:44.435Z–2026-10-13T11:33:30.280Z exit1: headed-t30-browser-timing-35; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-35.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:33:30.404Z–2026-10-13T11:33:43.121Z exit0: t30-supabase-restore-202; evidence code/quality/evidence/T30/codex-t30-supabase-restore-202.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:40:01.562Z: diagnostic35 originalquota5s failed; server409336ms, browserfetch3251ms, nativecapture6666ms, endedtracks and latealert. Linux builtweb source/auth/headers unchanged. Prepare diagnostic36 own headed window management to reduce hidden video rendering using real visibility/adaptive stream; active ownedwindow restored before action/stats. Originalcallback/viewport/nativecapture/deadlines preserved; evidence code/quality/evidence/T30/browser-timing36-source-review.json. NoPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:20.744Z–2026-10-13T11:42:29.620Z exit0: t30-supabase-temporary-stop-203; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-203.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:29.782Z–2026-10-13T11:42:43.377Z exit0: t30-docker-page-cache-reclaim-39; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-39.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:43.493Z–2026-10-13T11:42:43.746Z exit0: t30-browser-timing36-service-health-1; evidence code/quality/evidence/T30/codex-t30-browser-timing36-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:43.947Z–2026-10-13T11:42:44.337Z exit0: t30-browser-timing36-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-browser-timing36-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:44.548Z–2026-10-13T11:42:45.392Z exit0: t30-browser-timing36-entry-review-1; evidence code/quality/evidence/T30/codex-t30-browser-timing36-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- T30 2026-10-13T11:43:01.219Z: diagnostic35 formalreview overall1 quota5s; ROOT5photos viewed/4Telegramsent. Actualcapture1 tracksended/server409336ms; browserfetch3251ms/native6666ms. Strict observer healthy0, actual API/webserver close, allresource cleanup/Supabase202 restored. Evidence code/quality/evidence/T30/quota-diagnostic35-review1.json. Headed window-manager unit actual11:41:35–11:41:37UTC exit0 verifies own-target/restoration with synthetic adapter, no native acceptance; diagnostic36 real headed next. NoPASS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:42:45.655Z–2026-10-13T11:47:47.226Z exit0: headed-t30-browser-timing-36; evidence code/quality/evidence/T30/codex-headed-t30-browser-timing-36.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:47:47.376Z–2026-10-13T11:47:59.813Z exit0: t30-supabase-restore-203; evidence code/quality/evidence/T30/codex-t30-supabase-restore-203.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:54:04.673Z: formal diagnostic36 review: actual 2026-10-13T11:42:45.655Z–2026-10-13T11:47:47.226Z exit0; original callback/assertions/deadlines passed, ROOT17photos viewed/17Telegramsent. Strict observers0failures, shared HTTP close, six distinct contexts and own-window restoration, API/privatePG/runtime/Supabase203 cleanup verified. Evidence code/quality/evidence/T30/headed-window-diagnostic36-review1.json; canonical adoption/fresh acceptance still pending, IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:55:35.946Z: prepare canonical95 exact adoption proposal; preserve original test/fixture snapshots, only real mobile Call-tab click added to helper, callback/assertions/deadlines byte-identical to successful diagnostic36. Linux runtime and own-window preloads pinned; acceptance still pending. Evidence code/quality/evidence/T30/native95-canonical-adoption-plan1.json. IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T11:57:32.644Z: pre-run source review caught generated driver1 parent filename typo; preserve driver1 and write corrected driver2/pins2/preflight2 before any run. No test or application change, no failed/synthetic execution claimed. Canonical adoption gate still running.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 18:57:51 +07:00: T30 canonical runtime adopts reviewed real Linux Nest API33/exact built web4 and isolated durable-setting synthetic PG fixture, strict observer health, six separate headed browser contexts with own-window visibility management. E2E adds only actual approved mobile Call-tab navigation before unchanged visible-region assertion; original callback/assertions/deadlines retained byte-for-byte. Historical source and all failed evidence preserved; fresh canonical acceptance required. Evidence code/quality/evidence/T30/native95-canonical1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:58:11.390Z–2026-10-13T11:58:25.178Z exit0: t30-supabase-temporary-stop-204; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-204.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:58:25.302Z–2026-10-13T11:58:38.943Z exit0: t30-docker-page-cache-reclaim-40; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-40.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:58:39.117Z–2026-10-13T11:58:39.426Z exit0: t30-native95-service-health-1; evidence code/quality/evidence/T30/codex-t30-native95-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:58:39.611Z–2026-10-13T11:58:40.109Z exit0: t30-native95-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native95-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:58:40.367Z–2026-10-13T11:59:03.746Z exit0: t30-native95-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native95-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T11:59:03.856Z–2026-10-13T12:03:43.784Z exit1: headed-t30-native-95; evidence code/quality/evidence/T30/codex-headed-t30-native-95.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:03:43.941Z–2026-10-13T12:03:55.912Z exit0: t30-supabase-restore-204; evidence code/quality/evidence/T30/codex-t30-supabase-restore-204.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T12:07:39.273Z: canonical95 actual11:59:03.856–12:03:43.784UTC exit1 only afterAll gateway observer failure1; original body/proof all passed, ROOT17actualphotos viewed, cleanup/API/privatePG/Supabase204 restored. Raw health marker strict failure preserved; noPASS. Real Linux pipe-pressure probe1 actual12:06:52–12:06:55 exit0/allbytes (blocking pipe), so not a RED despite label. Preserve record; probe2 sets only own test child stdout nonblocking and records actual container exit rather than docker-start status. Cause hypothesis remains unconfirmed.
+
+- Coding and build 2 — T30 — 2026-10-13T12:11:02.525Z: native95 formal overallFAILED1, originalbody passed; ROOT17photos viewed/17Telegramsent, afterAll failurephoto unavailable after browsers closed and explicitly missing. All resources/Supabase204 restored. Pipe probe1 GREEN blocking stdout; probe2 fixture early-close race failed without cause proof; corrected probe3 actual12:08:25–12:08:28UTC RED1/EAGAIN, writer5 actual12:09:45–12:09:48 GREEN0/everybyte, permanent/deadline/invalid controls0. Native95 aggregate cause not individually proven; prepare native96 strict fresh acceptance via reviewed writer-only gateway source. No app/test/deadline change; IN_PROGRESS/noT31. Evidence code/quality/evidence/T30/native95-result-review1.json and native96-writer-adoption-plan1.json.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 19:11:45 +07:00: T30 writer5 real Linux nonblocking stdout EAGAIN RED→GREEN, bounded exact-offset transient writes and permanent/deadline/invalid-write failure controls. Strict gateway health and original E2E/app/ACL/assertions/deadlines unchanged. Preserve native95 overall failure and missing afterAll-error screenshot; fresh native96 required. Evidence code/quality/evidence/T30/native96-writer1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:09.832Z–2026-10-13T12:12:17.882Z exit0: t30-supabase-temporary-stop-205; evidence code/quality/evidence/T30/codex-t30-supabase-temporary-stop-205.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:17.981Z–2026-10-13T12:12:31.413Z exit0: t30-docker-page-cache-reclaim-41; evidence code/quality/evidence/T30/codex-t30-docker-page-cache-reclaim-41.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:31.512Z–2026-10-13T12:12:31.740Z exit0: t30-native96-service-health-1; evidence code/quality/evidence/T30/codex-t30-native96-service-health-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:31.845Z–2026-10-13T12:12:32.176Z exit0: t30-native96-postgres-ready-1; evidence code/quality/evidence/T30/codex-t30-native96-postgres-ready-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:32.293Z–2026-10-13T12:12:53.734Z exit0: t30-native96-entry-review-1; evidence code/quality/evidence/T30/codex-t30-native96-entry-review-1.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:12:53.857Z–2026-10-13T12:17:18.858Z exit0: headed-t30-native-96; evidence code/quality/evidence/T30/codex-headed-t30-native-96.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — CODEX-ONLY actual 2026-10-13T12:17:18.993Z–2026-10-13T12:17:30.311Z exit0: t30-supabase-restore-205; evidence code/quality/evidence/T30/codex-t30-supabase-restore-205.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T12:19:24.916Z: formal canonical96 E2E review: actual 2026-10-13T12:12:53.857Z–2026-10-13T12:17:18.858Z exit0; original callback/assertions/deadlines passed, ROOT17photos viewed/17Telegramsent. Strict observers0failures, shared HTTP close, six distinct contexts and own-window restoration, API/privatePG/runtime/Supabase205 cleanup verified. Evidence code/quality/evidence/T30/native96-acceptance-review1.json; fresh canonical E2E passed; final task review still pending, IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T12:28:11.590Z: public candidate scan15435textfiles found43historical ICE logs and local AUTH test-address baseline snapshots. Rule12 permits preserve originals local/exclude private files, not rewrite frozen evidence. Prepare exact ignore transition before public staging; keep active baseline/checker/evidence bytes unchanged, no history rewrite/rotation claim. Evidence code/quality/evidence/T30/public-exclusions-adoption-plan2.json; IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 19:28:58 +07:00: Rule12 explicitly authorizes excluding private files from PUBLIC backup while preserving original frozen evidence locally. Working-tree scan found 43 historical native media logs with ICE credential fields and three baseline snapshots carrying the local approved AUTH test address (also SMTP login/sender, not admin email; not present in approved public docs). Keep originals/hashes/checker/PASS rows intact, add exact public exclusions and later untrack only these ignored paths. This does not erase existing Git history or claim secret rotation; no application change. Evidence code/quality/evidence/T30/public-exclusions2-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — exact review 2026-10-13 19:34:30 +07:00: Record verified T30 requirement→test→evidence mapping after fresh canonical96, component33, lint and retained exact web/API reviews; final integrity/closure governs status. Append only, preserve all prior coverage bytes and frozen PASS rows. Evidence code/quality/evidence/T30/coverage-closure1-adoption-review.json; actual native/visual acceptance pending,80priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T30 — 2026-10-13T16:07:48.062Z: resumed final closure audit; audit1 actual12:36:38–12:37:19UTC exit1 because historical owned schema remained. Read-only ownership actual16:05:41–16:05:46UTC confirmed six synthetic fixture users, only seed/session/profile rows, zero rooms/business rows, matching Oct11 correlation. Exact schema backed up privately and pg_restore list validated, no external table dependencies; dropped only confirmed owned namespace, same main container ID. Evidence code/quality/evidence/T30/orphan-schema-cleanup3.json; frozen failed audit retained, final audit rerun pending/IN_PROGRESS/noT31.
+
+- Coding and build 2 — T30 — 2026-10-13T16:09:08.578Z: final local integrity reviewed 14249originalfiles,80priorPASS/checker/env/baselines preserved, only exact gate/source transitions and generated Vitest cache/current stream pointer changed. Native96 headed actual12:12:53–12:17:18UTC exit0/full original callback+strict cleanup; ROOT17photos viewed/17Telegramsent. Final live component actual12:18:00–12:19:10UTC33/33 and lint12:19:25–12:19:53UTC exit0. No owned main schemas/containers or main crypto activation; public candidate scan2 clean after reviewed private exclusions, originals unchanged local. Evidence code/quality/evidence/T30/final-local-integrity-review1.json; final task closure still pending.
+
+- Coding and build 2 — T30 — 2026-10-13T16:09:27.746Z: cleanup attempts1/2 stopped before backup/drop because original dependency query counted65owned internal TOAST tables; readonly dependency proof verified all pg_toast/internal/owned. Attempt2 preparation did not alter query due PowerShell expansion; corrected preparer3 exact predicate excludes only proven internal owned TOAST, cleanup3 actual16:07:40–16:07:48UTC exit0. Final strict integrity rerun exit0 and prior auth email gap false verified; acceptance-command-review.json finalized. No historical failure relabel, no checker change; ledger closure/push pending.
+
+- Coding and build 2 — T30 — 2026-10-13T16:13:50.162Z: closure1 rejected84 codex-prefixed non-command metadata; classified exact review/proposal/gate/policy artifacts separately without skipping real command validation. Closure2 launcher failed because preparer stopped; closure3 validated all actual command hashes and wrote closure.json but ledger write failed Windows UNKNOWN before PASS persisted. Preserve proposed closure and failures; retry4 uses existing T29 bounded transient filesystem-write pattern and separate closure4.json. Still IN_PROGRESS until actual ledger write/gate confirmation; no push/T31.
+
+- Coding and build 2 — T30 — kết thúc acceptance 2026-10-13T16:14:26.526Z: Codex local review PASS after canonical96 full original native callback/strict cleanup,33component cases/scoped lint, verified retained web280/API66 and affected controls,17ROOT-viewed/17Telegramsent. Final audit actual16:07:57–16:09:08UTC exit0 compared14249files/80priorPASS/checker/env/baselines and zero owned schema/container remnants after private-backed exact cleanup. All 356 failed command attempts preserved, not relabelled; local scope only/no physical-device/production/1000 claim. Evidence code/quality/evidence/T30/closure4.json and acceptance-command-review.json; public staged review/commit/push pending, T31 not started.

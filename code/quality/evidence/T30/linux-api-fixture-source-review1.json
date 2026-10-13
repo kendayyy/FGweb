@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-13T09:02:07.094Z",
+  "reverseExact": true,
+  "delta": [
+    "mark('api');const {AppModule}=await import('../../../apps/api/dist/app.module.js');app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});codexErrorObserver=createOwnedErrorObserver({app,evidenceDir:evidence});app.use('/api/media/webhook',raw({type:()=>true,limit:'64kb'}));await app.listen(apiPort,'0.0.0.0');const api=`http://127.0.0.1:${apiPort}`;",
+    "mark('api');const {startLinuxApi}=await import('./linux-api-container-helper1.mjs');app=await startLinuxApi({environment:{...process.env},apiPort,evidence});namespace=app.namespace;const api=app.api;"
+  ],
+  "compiledApplicationUnchanged": true,
+  "originalAuthCookiesAndAcl": true,
+  "originalBuiltWebAndHeadedE2EUnchanged": true,
+  "presenceNamespaceUsesActualTranslatedDatabase": true,
+  "newFixtureDiagnosticOnly": true,
+  "cleanupRequiresContainerAndPrivateRuntimeRemoval": true,
+  "dependencyLockUnchanged": true
+}

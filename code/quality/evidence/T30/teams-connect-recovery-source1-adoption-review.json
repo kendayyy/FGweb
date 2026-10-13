@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-13T06:37:29.920Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 Native92 new-handshake PG500 stack line34 matches TeamsService.transaction, actual Teams pool idle3 before/idle2 after error with no queued waiter. RealPG TCP proxy Teams RED2/4 reproduces lost ready backend; no-idle timeout/other PG error controls pass. Acquire ready client once only on exact initial new-handshake timeout, before unchanged READ COMMITTED BEGIN/UTC/body/COMMIT/ROLLBACK/conflict mapping/release. Preserve startup4/max16/connect5000/statement10000; no retry body or wait/backoff. Full affected team authority/race regressions and original headed T30 acceptance remain required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "proposed": "quality/evidence/T30/teams-connect-recovery-reviewed1.ts",
+      "beforeSha256": "ab22b8dd31026fbb7b4be3dc4295a868138ca069918ca02149f9ff31ced2e592",
+      "afterSha256": "fbaddbba75c98d6346fc433a8ffa612a1989d93f6a2685279d5e28c35b804557"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/teams-connect-recovery-adoption-plan1.json",
+    "sha256": "73435d89f91ae337728b837932f0571d45769825d1d822ea9c3e57c33abd4941"
+  },
+  "nativeAcceptancePending": true
+}

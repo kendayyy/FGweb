@@ -1,0 +1,7112 @@
+{
+  "at": "2026-10-13T04:51:01.101Z",
+  "health": {
+    "at": "2026-10-13T04:50:19.868Z",
+    "failureCount": 0,
+    "droppedCount": 0,
+    "samples": 449,
+    "timerStopped": true,
+    "actualClientEnded": true,
+    "readonly": true,
+    "noQueryTextOrParameters": true
+  },
+  "pairs": {
+    "CallsService <- TeamsService": {
+      "count": 1,
+      "maxTransactionMs": 62
+    },
+    "CallsService <- CallLifecycleService": {
+      "count": 28,
+      "maxTransactionMs": 5692
+    },
+    "SignalingGateway <- CallLifecycleService": {
+      "count": 162,
+      "maxTransactionMs": 3004
+    },
+    "CallLifecycleService <- SignalingGateway": {
+      "count": 14,
+      "maxTransactionMs": 825
+    },
+    "SignalingGateway <- CallsService": {
+      "count": 30,
+      "maxTransactionMs": 1307
+    },
+    "CallsService <- CallsService": {
+      "count": 14,
+      "maxTransactionMs": 2938
+    },
+    "SignalingGateway <- SignalingGateway": {
+      "count": 1,
+      "maxTransactionMs": 50
+    },
+    "CallLifecycleService <- CallsService": {
+      "count": 20,
+      "maxTransactionMs": 2999
+    },
+    "CallsService <- SignalingGateway": {
+      "count": 2,
+      "maxTransactionMs": 1129
+    }
+  },
+  "firstFailures": [
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-13T04:49:42.141Z",
+      "completedAt": "2026-10-13T04:49:45.145Z",
+      "durationMs": 3004.6,
+      "poolIndex": 0,
+      "backendPid": 15269,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-13T04:49:50.112Z",
+      "completedAt": "2026-10-13T04:49:53.114Z",
+      "durationMs": 3002.21,
+      "poolIndex": 0,
+      "backendPid": 15267,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-13T04:49:50.290Z",
+      "completedAt": "2026-10-13T04:49:53.292Z",
+      "durationMs": 3001.73,
+      "poolIndex": 0,
+      "backendPid": 15271,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-13T04:49:50.754Z",
+      "completedAt": "2026-10-13T04:49:53.756Z",
+      "durationMs": 3002.05,
+      "poolIndex": 0,
+      "backendPid": 15269,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-13T04:49:51.027Z",
+      "completedAt": "2026-10-13T04:49:54.030Z",
+      "durationMs": 3002.87,
+      "poolIndex": 0,
+      "backendPid": 15270,
+      "ok": false,
+      "sqlState": "57014"
+    }
+  ],
+  "failureWindow": [
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15339
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 56,
+      "at": "2026-10-13T04:48:31.035Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15339,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15339,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 137,
+      "at": "2026-10-13T04:48:31.035Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15339,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 393,
+      "at": "2026-10-13T04:48:36.096Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15339
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 226,
+      "at": "2026-10-13T04:48:36.096Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15339,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15339
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 201,
+      "at": "2026-10-13T04:48:36.298Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15339,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15339
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 928,
+      "at": "2026-10-13T04:48:36.298Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15339,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15339,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 602,
+      "at": "2026-10-13T04:48:36.298Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15339
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 435,
+      "at": "2026-10-13T04:48:36.298Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15339,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 87,
+      "at": "2026-10-13T04:48:39.215Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 720,
+      "at": "2026-10-13T04:48:39.215Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 62,
+      "at": "2026-10-13T04:48:40.173Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 83,
+      "at": "2026-10-13T04:48:40.173Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 56,
+      "at": "2026-10-13T04:48:40.173Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 86,
+      "at": "2026-10-13T04:48:41.203Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 102,
+      "at": "2026-10-13T04:48:41.203Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 111,
+      "at": "2026-10-13T04:48:42.265Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 153,
+      "at": "2026-10-13T04:48:42.265Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 185,
+      "at": "2026-10-13T04:48:42.265Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 179,
+      "at": "2026-10-13T04:48:42.482Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 324,
+      "at": "2026-10-13T04:48:42.482Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 365,
+      "at": "2026-10-13T04:48:42.482Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 397,
+      "at": "2026-10-13T04:48:42.482Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 178,
+      "at": "2026-10-13T04:48:42.482Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 138,
+      "at": "2026-10-13T04:48:43.275Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 136,
+      "at": "2026-10-13T04:48:43.275Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 94,
+      "at": "2026-10-13T04:48:43.275Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 132,
+      "at": "2026-10-13T04:48:45.104Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 346,
+      "at": "2026-10-13T04:48:45.104Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 401,
+      "at": "2026-10-13T04:48:45.353Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 48,
+      "at": "2026-10-13T04:48:45.353Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 43,
+      "at": "2026-10-13T04:48:45.353Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 589,
+      "at": "2026-10-13T04:48:45.353Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 260,
+      "at": "2026-10-13T04:48:45.353Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 237,
+      "at": "2026-10-13T04:48:45.597Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 139,
+      "at": "2026-10-13T04:48:45.597Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 170,
+      "at": "2026-10-13T04:48:48.270Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 715,
+      "at": "2026-10-13T04:48:48.270Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 200,
+      "at": "2026-10-13T04:48:48.508Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 415,
+      "at": "2026-10-13T04:48:48.508Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 199,
+      "at": "2026-10-13T04:48:48.508Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 960,
+      "at": "2026-10-13T04:48:48.508Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 202,
+      "at": "2026-10-13T04:48:48.508Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 460,
+      "at": "2026-10-13T04:48:48.786Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 675,
+      "at": "2026-10-13T04:48:48.786Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 459,
+      "at": "2026-10-13T04:48:48.786Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1220,
+      "at": "2026-10-13T04:48:48.786Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 462,
+      "at": "2026-10-13T04:48:48.786Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 762,
+      "at": "2026-10-13T04:48:49.072Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 977,
+      "at": "2026-10-13T04:48:49.072Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 761,
+      "at": "2026-10-13T04:48:49.072Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1523,
+      "at": "2026-10-13T04:48:49.072Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 764,
+      "at": "2026-10-13T04:48:49.072Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1091,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1307,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1090,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 314,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15271,
+        15272,
+        15269,
+        15270
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 174,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15271,
+          "owner": "SignalingGateway"
+        },
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        },
+        {
+          "pid": 15269,
+          "owner": "SignalingGateway"
+        },
+        {
+          "pid": 15270,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1852,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1093,
+      "at": "2026-10-13T04:48:49.415Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15272
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 354,
+      "at": "2026-10-13T04:48:49.584Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1273,
+      "at": "2026-10-13T04:48:49.584Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15272
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 611,
+      "at": "2026-10-13T04:48:49.854Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 60,
+      "at": "2026-10-13T04:48:49.854Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 858,
+      "at": "2026-10-13T04:48:50.103Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 176,
+      "at": "2026-10-13T04:48:50.103Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 76,
+      "at": "2026-10-13T04:48:50.873Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 59,
+      "at": "2026-10-13T04:48:50.873Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 212,
+      "at": "2026-10-13T04:48:50.873Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 59,
+      "at": "2026-10-13T04:48:50.873Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15272
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 96,
+      "at": "2026-10-13T04:48:51.438Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 238,
+      "at": "2026-10-13T04:48:51.438Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 297,
+      "at": "2026-10-13T04:48:53.451Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 163,
+      "at": "2026-10-13T04:48:53.451Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 194,
+      "at": "2026-10-13T04:48:53.451Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 210,
+      "at": "2026-10-13T04:48:55.620Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 607,
+      "at": "2026-10-13T04:48:55.620Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 473,
+      "at": "2026-10-13T04:48:55.904Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 52,
+      "at": "2026-10-13T04:48:55.904Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 870,
+      "at": "2026-10-13T04:48:55.904Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 52,
+      "at": "2026-10-13T04:48:55.904Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 243,
+      "at": "2026-10-13T04:48:56.306Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 732,
+      "at": "2026-10-13T04:48:56.306Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 311,
+      "at": "2026-10-13T04:48:56.306Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "SESSION_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1129,
+      "at": "2026-10-13T04:48:56.306Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 310,
+      "at": "2026-10-13T04:48:56.306Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 505,
+      "at": "2026-10-13T04:48:56.396Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 993,
+      "at": "2026-10-13T04:48:56.396Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 573,
+      "at": "2026-10-13T04:48:56.396Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1390,
+      "at": "2026-10-13T04:48:56.396Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 572,
+      "at": "2026-10-13T04:48:56.396Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 52,
+      "at": "2026-10-13T04:48:56.704Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15270
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 289,
+      "at": "2026-10-13T04:48:56.704Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15270,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 196,
+      "at": "2026-10-13T04:48:56.934Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 536,
+      "at": "2026-10-13T04:48:56.934Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 457,
+      "at": "2026-10-13T04:48:57.204Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 798,
+      "at": "2026-10-13T04:48:57.204Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 64,
+      "at": "2026-10-13T04:48:57.204Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 716,
+      "at": "2026-10-13T04:48:57.451Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1057,
+      "at": "2026-10-13T04:48:57.451Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 323,
+      "at": "2026-10-13T04:48:57.451Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15272
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 140,
+      "at": "2026-10-13T04:48:58.517Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 105,
+      "at": "2026-10-13T04:48:58.517Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 170,
+      "at": "2026-10-13T04:48:58.727Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 171,
+      "at": "2026-10-13T04:48:58.727Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 387,
+      "at": "2026-10-13T04:48:58.727Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 437,
+      "at": "2026-10-13T04:48:58.995Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 438,
+      "at": "2026-10-13T04:48:58.995Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 655,
+      "at": "2026-10-13T04:48:58.995Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 218,
+      "at": "2026-10-13T04:48:59.494Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 235,
+      "at": "2026-10-13T04:48:59.494Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 236,
+      "at": "2026-10-13T04:48:59.494Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 331,
+      "at": "2026-10-13T04:48:59.494Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 250,
+      "at": "2026-10-13T04:49:01.550Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 152,
+      "at": "2026-10-13T04:49:01.550Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 59,
+      "at": "2026-10-13T04:49:02.598Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 183,
+      "at": "2026-10-13T04:49:02.598Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 303,
+      "at": "2026-10-13T04:49:02.823Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 427,
+      "at": "2026-10-13T04:49:02.823Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15308,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 610,
+      "at": "2026-10-13T04:49:03.720Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 253,
+      "at": "2026-10-13T04:49:03.720Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15308,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 777,
+      "at": "2026-10-13T04:49:03.890Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 421,
+      "at": "2026-10-13T04:49:03.890Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 30,
+      "at": "2026-10-13T04:49:04.723Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 40,
+      "at": "2026-10-13T04:49:10.116Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 487,
+      "at": "2026-10-13T04:49:10.116Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 619,
+      "at": "2026-10-13T04:49:10.116Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 251,
+      "at": "2026-10-13T04:49:10.474Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 312,
+      "at": "2026-10-13T04:49:10.474Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 76,
+      "at": "2026-10-13T04:49:10.474Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 759,
+      "at": "2026-10-13T04:49:10.474Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 891,
+      "at": "2026-10-13T04:49:10.474Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 543,
+      "at": "2026-10-13T04:49:10.801Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 603,
+      "at": "2026-10-13T04:49:10.801Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 367,
+      "at": "2026-10-13T04:49:10.801Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1050,
+      "at": "2026-10-13T04:49:10.801Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 1182,
+      "at": "2026-10-13T04:49:10.801Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 152,
+      "at": "2026-10-13T04:49:13.286Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1053,
+      "at": "2026-10-13T04:49:13.286Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 710,
+      "at": "2026-10-13T04:49:13.286Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 34,
+      "at": "2026-10-13T04:49:15.164Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 792,
+      "at": "2026-10-13T04:49:15.164Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 311,
+      "at": "2026-10-13T04:49:15.164Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 13,
+      "at": "2026-10-13T04:49:17.139Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 503,
+      "at": "2026-10-13T04:49:17.139Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 84,
+      "at": "2026-10-13T04:49:18.217Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 476,
+      "at": "2026-10-13T04:49:18.217Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 392,
+      "at": "2026-10-13T04:49:18.217Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 146,
+      "at": "2026-10-13T04:49:18.739Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 314,
+      "at": "2026-10-13T04:49:18.739Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 402,
+      "at": "2026-10-13T04:49:18.972Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 570,
+      "at": "2026-10-13T04:49:18.972Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15309,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 133,
+      "at": "2026-10-13T04:49:18.972Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 102,
+      "at": "2026-10-13T04:49:19.781Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 164,
+      "at": "2026-10-13T04:49:19.781Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 311,
+      "at": "2026-10-13T04:49:20.036Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15310
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 421,
+      "at": "2026-10-13T04:49:20.036Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15310,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15272
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 50,
+      "at": "2026-10-13T04:49:20.269Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15272,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 667,
+      "at": "2026-10-13T04:49:20.269Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 309,
+      "at": "2026-10-13T04:49:22.134Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 751,
+      "at": "2026-10-13T04:49:22.134Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 251,
+      "at": "2026-10-13T04:49:22.470Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 622,
+      "at": "2026-10-13T04:49:22.470Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1064,
+      "at": "2026-10-13T04:49:22.470Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 756,
+      "at": "2026-10-13T04:49:22.905Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1127,
+      "at": "2026-10-13T04:49:22.905Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1569,
+      "at": "2026-10-13T04:49:22.905Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15308,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 501,
+      "at": "2026-10-13T04:49:24.150Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15308
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 172,
+      "at": "2026-10-13T04:49:24.150Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15308,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15267
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 442,
+      "at": "2026-10-13T04:49:24.454Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15267,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 411,
+      "at": "2026-10-13T04:49:24.454Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 678,
+      "at": "2026-10-13T04:49:24.651Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 77,
+      "at": "2026-10-13T04:49:24.651Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 65,
+      "at": "2026-10-13T04:49:25.408Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15271
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 68,
+      "at": "2026-10-13T04:49:25.408Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15271,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 60,
+      "at": "2026-10-13T04:49:26.254Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 271,
+      "at": "2026-10-13T04:49:26.254Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 58,
+      "at": "2026-10-13T04:49:26.254Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 60,
+      "at": "2026-10-13T04:49:26.254Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 401,
+      "at": "2026-10-13T04:49:30.783Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PROFILE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 433,
+      "at": "2026-10-13T04:49:30.783Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 581,
+      "at": "2026-10-13T04:49:30.905Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 613,
+      "at": "2026-10-13T04:49:30.905Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15271,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 167,
+      "at": "2026-10-13T04:49:31.218Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 857,
+      "at": "2026-10-13T04:49:31.218Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 468,
+      "at": "2026-10-13T04:49:31.218Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15271
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 888,
+      "at": "2026-10-13T04:49:31.218Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15271,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 162,
+      "at": "2026-10-13T04:49:31.499Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1097,
+      "at": "2026-10-13T04:49:31.499Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 708,
+      "at": "2026-10-13T04:49:31.499Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15271
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1129,
+      "at": "2026-10-13T04:49:31.499Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15271,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 272,
+      "at": "2026-10-13T04:49:32.065Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1598,
+      "at": "2026-10-13T04:49:32.065Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1208,
+      "at": "2026-10-13T04:49:32.065Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1629,
+      "at": "2026-10-13T04:49:32.065Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 291,
+      "at": "2026-10-13T04:49:32.065Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 553,
+      "at": "2026-10-13T04:49:32.202Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1879,
+      "at": "2026-10-13T04:49:32.202Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1489,
+      "at": "2026-10-13T04:49:32.202Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1910,
+      "at": "2026-10-13T04:49:32.202Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 572,
+      "at": "2026-10-13T04:49:32.202Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 851,
+      "at": "2026-10-13T04:49:32.573Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2177,
+      "at": "2026-10-13T04:49:32.573Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1788,
+      "at": "2026-10-13T04:49:32.573Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2208,
+      "at": "2026-10-13T04:49:32.573Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 870,
+      "at": "2026-10-13T04:49:32.573Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1116,
+      "at": "2026-10-13T04:49:32.825Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2442,
+      "at": "2026-10-13T04:49:32.825Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2053,
+      "at": "2026-10-13T04:49:32.825Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2474,
+      "at": "2026-10-13T04:49:32.825Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1135,
+      "at": "2026-10-13T04:49:32.825Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1355,
+      "at": "2026-10-13T04:49:33.073Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2680,
+      "at": "2026-10-13T04:49:33.073Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2300,
+      "at": "2026-10-13T04:49:33.073Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2721,
+      "at": "2026-10-13T04:49:33.073Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1382,
+      "at": "2026-10-13T04:49:33.073Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 255,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1612,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 253,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "OTHER",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2938,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15309
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2549,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15309,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15309,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 2970,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 1632,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "tuple",
+      "transactionMs": 264,
+      "at": "2026-10-13T04:49:33.250Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 511,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1868,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 509,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 3193,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 2804,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1886,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 519,
+      "at": "2026-10-13T04:49:33.504Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 915,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2272,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 913,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 3597,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 3208,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2290,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 923,
+      "at": "2026-10-13T04:49:34.005Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1216,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2572,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1214,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 3898,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 3509,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2591,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1224,
+      "at": "2026-10-13T04:49:34.596Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1941,
+      "at": "2026-10-13T04:49:38.390Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15310
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 964,
+      "at": "2026-10-13T04:49:38.390Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15310,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 2249,
+      "at": "2026-10-13T04:49:38.607Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15310
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1272,
+      "at": "2026-10-13T04:49:38.607Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15310,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 2535,
+      "at": "2026-10-13T04:49:38.942Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15310
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1557,
+      "at": "2026-10-13T04:49:38.942Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15310,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 263,
+      "at": "2026-10-13T04:49:39.466Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 261,
+      "at": "2026-10-13T04:49:39.466Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 262,
+      "at": "2026-10-13T04:49:39.466Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1991,
+      "at": "2026-10-13T04:49:39.466Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 265,
+      "at": "2026-10-13T04:49:39.466Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 763,
+      "at": "2026-10-13T04:49:39.844Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 761,
+      "at": "2026-10-13T04:49:39.844Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 761,
+      "at": "2026-10-13T04:49:39.844Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2491,
+      "at": "2026-10-13T04:49:39.844Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 765,
+      "at": "2026-10-13T04:49:39.844Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1059,
+      "at": "2026-10-13T04:49:40.244Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1057,
+      "at": "2026-10-13T04:49:40.244Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1058,
+      "at": "2026-10-13T04:49:40.244Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2788,
+      "at": "2026-10-13T04:49:40.244Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1061,
+      "at": "2026-10-13T04:49:40.244Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1320,
+      "at": "2026-10-13T04:49:40.571Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1318,
+      "at": "2026-10-13T04:49:40.571Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1319,
+      "at": "2026-10-13T04:49:40.571Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 3048,
+      "at": "2026-10-13T04:49:40.571Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1322,
+      "at": "2026-10-13T04:49:40.571Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1824,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1822,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1822,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 3552,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1826,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 7,
+      "at": "2026-10-13T04:49:40.907Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 474,
+      "at": "2026-10-13T04:49:41.899Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 314,
+      "at": "2026-10-13T04:49:42.514Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1201,
+      "at": "2026-10-13T04:49:42.514Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1112,
+      "at": "2026-10-13T04:49:43.858Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1999,
+      "at": "2026-10-13T04:49:43.858Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1901,
+      "at": "2026-10-13T04:49:45.084Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "OTHER",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2788,
+      "at": "2026-10-13T04:49:45.084Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 695,
+      "at": "2026-10-13T04:49:46.006Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 698,
+      "at": "2026-10-13T04:49:46.006Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 700,
+      "at": "2026-10-13T04:49:46.006Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 4689,
+      "at": "2026-10-13T04:49:46.006Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 694,
+      "at": "2026-10-13T04:49:46.006Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1131,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1134,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1135,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 5125,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1130,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 60,
+      "at": "2026-10-13T04:49:46.657Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1486,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1490,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1491,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 5480,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1485,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 415,
+      "at": "2026-10-13T04:49:46.828Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15267
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 548,
+      "at": "2026-10-13T04:49:47.554Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15267,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 451,
+      "at": "2026-10-13T04:49:47.554Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15269,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 194,
+      "at": "2026-10-13T04:49:47.885Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15269
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 825,
+      "at": "2026-10-13T04:49:47.885Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15269,
+          "owner": "SignalingGateway"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15439
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1234,
+      "at": "2026-10-13T04:49:48.334Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15439,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15439,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 1982,
+      "at": "2026-10-13T04:49:48.334Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15439
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1499,
+      "at": "2026-10-13T04:49:48.518Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15439,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15439,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 2247,
+      "at": "2026-10-13T04:49:48.518Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15439
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1788,
+      "at": "2026-10-13T04:49:48.921Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15439,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15439,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 2536,
+      "at": "2026-10-13T04:49:48.921Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15439
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2476,
+      "at": "2026-10-13T04:49:49.928Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15439,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15439,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 3224,
+      "at": "2026-10-13T04:49:49.928Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15310,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 2200,
+      "at": "2026-10-13T04:49:50.116Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15310
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2999,
+      "at": "2026-10-13T04:49:50.116Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15310,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 78,
+      "at": "2026-10-13T04:49:50.689Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 3432,
+      "at": "2026-10-13T04:49:50.689Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 256,
+      "at": "2026-10-13T04:49:50.689Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 447,
+      "at": "2026-10-13T04:49:51.071Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2221,
+      "at": "2026-10-13T04:49:51.071Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 3801,
+      "at": "2026-10-13T04:49:51.071Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 624,
+      "at": "2026-10-13T04:49:51.071Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 286,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1022,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 558,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2796,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 4376,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1200,
+      "at": "2026-10-13T04:49:51.638Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1136,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1871,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1407,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 3645,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 5226,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2049,
+      "at": "2026-10-13T04:49:52.712Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2268,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15271,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 3004,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 2540,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 4778,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 6358,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 936,
+      "at": "2026-10-13T04:49:53.965Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15270,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 14,
+      "at": "2026-10-13T04:49:54.255Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 5692,
+      "at": "2026-10-13T04:49:54.255Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 7272,
+      "at": "2026-10-13T04:49:54.255Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1065,
+      "at": "2026-10-13T04:49:54.255Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15272,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1850,
+      "at": "2026-10-13T04:49:54.255Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 6266,
+      "at": "2026-10-13T04:49:54.815Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15311
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 196,
+      "at": "2026-10-13T04:49:54.815Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15311,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 702,
+      "at": "2026-10-13T04:49:55.557Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 348,
+      "at": "2026-10-13T04:49:55.557Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "LEASE_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 1227,
+      "at": "2026-10-13T04:49:55.855Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 873,
+      "at": "2026-10-13T04:49:55.855Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 326,
+      "at": "2026-10-13T04:49:55.855Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "PUBLISH_SLOT_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 1442,
+      "at": "2026-10-13T04:49:56.108Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1088,
+      "at": "2026-10-13T04:49:56.108Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 541,
+      "at": "2026-10-13T04:49:56.108Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "LWLock",
+      "waitEvent": "WALWrite",
+      "transactionMs": 1725,
+      "at": "2026-10-13T04:49:56.352Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 1371,
+      "at": "2026-10-13T04:49:56.352Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 824,
+      "at": "2026-10-13T04:49:56.352Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15362
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 352,
+      "at": "2026-10-13T04:49:56.637Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15362,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [],
+      "state": "idle in transaction",
+      "waitType": "Client",
+      "waitEvent": "ClientRead",
+      "transactionMs": 119,
+      "at": "2026-10-13T04:49:56.637Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15311,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 465,
+      "at": "2026-10-13T04:49:58.136Z",
+      "owner": "CallsService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15362,
+      "queryKind": "ROOM_QUERY",
+      "blockers": [
+        15311
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 164,
+      "at": "2026-10-13T04:49:58.136Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": [
+        {
+          "pid": 15311,
+          "owner": "CallsService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 90,
+      "at": "2026-10-13T04:50:00.637Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15456,
+      "queryKind": "MEMBER_QUERY",
+      "blockers": [],
+      "state": "active",
+      "waitType": null,
+      "waitEvent": "OTHER",
+      "transactionMs": 228,
+      "at": "2026-10-13T04:50:00.637Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 109,
+      "at": "2026-10-13T04:50:00.637Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 75,
+      "at": "2026-10-13T04:50:00.637Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15269,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 352,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15310,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 169,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15456,
+      "queryKind": "COMMIT",
+      "blockers": [],
+      "state": "active",
+      "waitType": "IO",
+      "waitEvent": "OTHER",
+      "transactionMs": 490,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "CallLifecycleService",
+      "blockerOwners": []
+    },
+    {
+      "pid": 15311,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 290,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "CallsService",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15268,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 370,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    },
+    {
+      "pid": 15267,
+      "queryKind": "GROUP_QUERY",
+      "blockers": [
+        15456
+      ],
+      "state": "active",
+      "waitType": "Lock",
+      "waitEvent": "transactionid",
+      "transactionMs": 337,
+      "at": "2026-10-13T04:50:00.903Z",
+      "owner": "SignalingGateway",
+      "blockerOwners": [
+        {
+          "pid": 15456,
+          "owner": "CallLifecycleService"
+        }
+      ]
+    }
+  ],
+  "slowMethods": [
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 909,
+      "ok": true,
+      "at": "2026-10-13T04:49:04.068Z",
+      "durationMs": 3464.96
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 908,
+      "ok": true,
+      "at": "2026-10-13T04:49:04.336Z",
+      "durationMs": 3734.65
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1127,
+      "ok": true,
+      "at": "2026-10-13T04:49:14.187Z",
+      "durationMs": 2295.6
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1284,
+      "ok": true,
+      "at": "2026-10-13T04:49:23.937Z",
+      "durationMs": 4253
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "controlsGroup",
+      "id": 1458,
+      "ok": true,
+      "at": "2026-10-13T04:49:30.162Z",
+      "durationMs": 2205.19
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1450,
+      "ok": true,
+      "at": "2026-10-13T04:49:30.274Z",
+      "durationMs": 2575.4
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1449,
+      "ok": true,
+      "at": "2026-10-13T04:49:30.283Z",
+      "durationMs": 2575.48
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1454,
+      "ok": true,
+      "at": "2026-10-13T04:49:30.600Z",
+      "durationMs": 2848.51
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1453,
+      "ok": true,
+      "at": "2026-10-13T04:49:30.601Z",
+      "durationMs": 2848.57
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "lock",
+      "id": 1499,
+      "ok": true,
+      "at": "2026-10-13T04:49:33.319Z",
+      "durationMs": 2444.51
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1487,
+      "ok": true,
+      "at": "2026-10-13T04:49:33.322Z",
+      "durationMs": 3056.35
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "claim",
+      "id": 1486,
+      "ok": true,
+      "at": "2026-10-13T04:49:33.322Z",
+      "durationMs": 3056.37
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "room",
+      "id": 1495,
+      "ok": true,
+      "at": "2026-10-13T04:49:33.451Z",
+      "durationMs": 3029.85
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1498,
+      "ok": true,
+      "at": "2026-10-13T04:49:34.606Z",
+      "durationMs": 4007.22
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1497,
+      "ok": true,
+      "at": "2026-10-13T04:49:34.606Z",
+      "durationMs": 4013.33
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "controlsGroup",
+      "id": 1494,
+      "ok": true,
+      "at": "2026-10-13T04:49:34.614Z",
+      "durationMs": 4260.91
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1508,
+      "ok": true,
+      "at": "2026-10-13T04:49:35.000Z",
+      "durationMs": 2284.31
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1507,
+      "ok": true,
+      "at": "2026-10-13T04:49:35.000Z",
+      "durationMs": 2284.33
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1490,
+      "ok": true,
+      "at": "2026-10-13T04:49:35.891Z",
+      "durationMs": 5595.26
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1489,
+      "ok": true,
+      "at": "2026-10-13T04:49:35.891Z",
+      "durationMs": 5595.28
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1552,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.515Z",
+      "durationMs": 2269.59
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1548,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.520Z",
+      "durationMs": 2443
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1550,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.529Z",
+      "durationMs": 2290.9
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1549,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.529Z",
+      "durationMs": 2446.38
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1546,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.532Z",
+      "durationMs": 2507.4
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1545,
+      "ok": true,
+      "at": "2026-10-13T04:49:37.532Z",
+      "durationMs": 2507.43
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1574,
+      "ok": true,
+      "at": "2026-10-13T04:49:39.153Z",
+      "durationMs": 2884.12
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 1573,
+      "ok": true,
+      "at": "2026-10-13T04:49:39.153Z",
+      "durationMs": 2885.89
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1572,
+      "ok": true,
+      "at": "2026-10-13T04:49:39.157Z",
+      "durationMs": 2892.4
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1571,
+      "ok": true,
+      "at": "2026-10-13T04:49:39.157Z",
+      "durationMs": 2892.48
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1567,
+      "ok": true,
+      "at": "2026-10-13T04:49:39.174Z",
+      "durationMs": 3278.52
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1541,
+      "ok": true,
+      "at": "2026-10-13T04:49:40.238Z",
+      "durationMs": 5355.12
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1556,
+      "ok": true,
+      "at": "2026-10-13T04:49:41.234Z",
+      "durationMs": 5802.36
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1581,
+      "ok": true,
+      "at": "2026-10-13T04:49:41.236Z",
+      "durationMs": 4011.02
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1580,
+      "ok": true,
+      "at": "2026-10-13T04:49:41.236Z",
+      "durationMs": 4011.12
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1589,
+      "ok": true,
+      "at": "2026-10-13T04:49:41.878Z",
+      "durationMs": 2202.59
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1588,
+      "ok": true,
+      "at": "2026-10-13T04:49:41.878Z",
+      "durationMs": 2202.61
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1620,
+      "ok": true,
+      "at": "2026-10-13T04:49:43.672Z",
+      "durationMs": 2067.24
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1602,
+      "ok": true,
+      "at": "2026-10-13T04:49:43.892Z",
+      "durationMs": 3326.83
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1601,
+      "ok": true,
+      "at": "2026-10-13T04:49:43.892Z",
+      "durationMs": 3326.87
+    },
+    {
+      "type": "finish",
+      "service": "AuthService",
+      "method": "isUserOnboarded",
+      "id": 1630,
+      "ok": true,
+      "at": "2026-10-13T04:49:45.842Z",
+      "durationMs": 2167.7
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1609,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.242Z",
+      "durationMs": 5318.2
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1607,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.272Z",
+      "durationMs": 5365.71
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1606,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.272Z",
+      "durationMs": 5365.72
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1632,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.346Z",
+      "durationMs": 2340.64
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "room",
+      "id": 1631,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.828Z",
+      "durationMs": 2906.5
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1614,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.918Z",
+      "durationMs": 5681.96
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1613,
+      "ok": true,
+      "at": "2026-10-13T04:49:46.918Z",
+      "durationMs": 5682.06
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1624,
+      "ok": true,
+      "at": "2026-10-13T04:49:47.124Z",
+      "durationMs": 5237.96
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1628,
+      "ok": true,
+      "at": "2026-10-13T04:49:47.625Z",
+      "durationMs": 5108.33
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "list",
+      "id": 1627,
+      "ok": true,
+      "at": "2026-10-13T04:49:47.625Z",
+      "durationMs": 5108.35
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1623,
+      "ok": true,
+      "at": "2026-10-13T04:49:47.725Z",
+      "durationMs": 5849.75
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 1622,
+      "ok": true,
+      "at": "2026-10-13T04:49:47.725Z",
+      "durationMs": 5849.82
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1645,
+      "ok": true,
+      "at": "2026-10-13T04:49:49.319Z",
+      "durationMs": 2508.38
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1644,
+      "ok": true,
+      "at": "2026-10-13T04:49:49.319Z",
+      "durationMs": 2508.42
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1656,
+      "ok": true,
+      "at": "2026-10-13T04:49:49.930Z",
+      "durationMs": 2489.18
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 1655,
+      "ok": true,
+      "at": "2026-10-13T04:49:49.930Z",
+      "durationMs": 2489.72
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1636,
+      "ok": true,
+      "at": "2026-10-13T04:49:50.114Z",
+      "durationMs": 4271.79
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1635,
+      "ok": true,
+      "at": "2026-10-13T04:49:50.114Z",
+      "durationMs": 4271.81
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1662,
+      "ok": true,
+      "at": "2026-10-13T04:49:50.124Z",
+      "durationMs": 2405.29
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1661,
+      "ok": true,
+      "at": "2026-10-13T04:49:50.124Z",
+      "durationMs": 2405.33
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "lock",
+      "id": 1654,
+      "ok": true,
+      "at": "2026-10-13T04:49:50.126Z",
+      "durationMs": 2823.09
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1678,
+      "ok": true,
+      "at": "2026-10-13T04:49:51.073Z",
+      "durationMs": 2532.62
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1674,
+      "ok": true,
+      "at": "2026-10-13T04:49:51.075Z",
+      "durationMs": 2689.61
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1698,
+      "ok": true,
+      "at": "2026-10-13T04:49:53.954Z",
+      "durationMs": 2305.3
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "reconcileWithin",
+      "id": 1696,
+      "ok": true,
+      "at": "2026-10-13T04:49:53.956Z",
+      "durationMs": 2831.84
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 1650,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.601Z",
+      "durationMs": 7682.61
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 1649,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.601Z",
+      "durationMs": 7682.81
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "controlsGroup",
+      "id": 1679,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.608Z",
+      "durationMs": 6032.8
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1688,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.957Z",
+      "durationMs": 4569.13
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 1687,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.957Z",
+      "durationMs": 4569.2
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "transaction",
+      "id": 1676,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.961Z",
+      "durationMs": 6457.69
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1675,
+      "ok": true,
+      "at": "2026-10-13T04:49:54.961Z",
+      "durationMs": 6457.72
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 1697,
+      "ok": true,
+      "at": "2026-10-13T04:49:55.634Z",
+      "durationMs": 4424.9
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1706,
+      "ok": true,
+      "at": "2026-10-13T04:49:56.989Z",
+      "durationMs": 3413.71
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1711,
+      "ok": true,
+      "at": "2026-10-13T04:49:57.136Z",
+      "durationMs": 2898.74
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1710,
+      "ok": true,
+      "at": "2026-10-13T04:49:57.456Z",
+      "durationMs": 3380.38
+    }
+  ],
+  "ownerPids": {
+    "15267": "SignalingGateway",
+    "15268": "SignalingGateway",
+    "15269": "SignalingGateway",
+    "15270": "SignalingGateway",
+    "15271": "SignalingGateway",
+    "15272": "SignalingGateway",
+    "15281": "RoomsService",
+    "15282": "RoomsService",
+    "15283": "RoomsService",
+    "15284": "RoomsService",
+    "15285": "AuthService",
+    "15286": "AuthService",
+    "15287": "AuthService",
+    "15288": "AuthService",
+    "15294": "ProfilesService",
+    "15295": "ProfilesService",
+    "15296": "ProfilesService",
+    "15297": "ProfilesService",
+    "15298": "TeamsService",
+    "15299": "TeamsService",
+    "15300": "TeamsService",
+    "15301": "TeamsService",
+    "15308": "CallsService",
+    "15309": "CallsService",
+    "15310": "CallsService",
+    "15311": "CallsService",
+    "15315": "CallLifecycleService",
+    "15339": "CallLifecycleService",
+    "15362": "CallLifecycleService",
+    "15405": "AuthService",
+    "15406": "AuthService",
+    "15431": "AuthService",
+    "15439": "CallsService",
+    "15456": "CallLifecycleService",
+    "15457": "AuthService",
+    "15458": "AuthService",
+    "15480": "AuthService",
+    "15481": "AuthService",
+    "15482": "AuthService"
+  }
+}
