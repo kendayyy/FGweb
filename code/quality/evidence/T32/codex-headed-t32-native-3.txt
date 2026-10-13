@@ -1,0 +1,27 @@
+
+Running 1 test using 1 worker
+
+(node:58092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle (1ms)
+
+
+  1) tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle 
+
+    Error: Owned fixture failed; see sanitized evidence
+
+      11 | test.beforeAll(async()=>{
+      12 |  fs.mkdirSync(evidence,{recursive:true});fixture=fork('quality/evidence/T32/fixture-server1.mjs',[],{env:{...process.env,FG_T32_EVIDENCE_DIR:evidence},windowsHide:true,stdio:['ignore','ignore','ignore','ipc']});fixtureExit=new Promise(resolve=>fixture.once('exit',resolve));
+    > 13 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture startup deadline')),110000);fixture.on('message',value=>{if(value.kind==='ready'){ready=value;clearTimeout(timer);resolve();}if(value.kind==='failed'){fixtureFailed=true;clearTimeout(timer);reject(Error('Owned fixture failed; see sanitized evidence'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(Error('Owned fixture exited before readiness'));});});
+         |                                                                                                                                                                                                                                                                                                         ^
+      14 | });
+      15 | test.afterAll(async()=>{for(const browser of browsers)await browser.close();if(!fixture)return;if(!fixtureFailed&&fixture.exitCode===null&&fixture.connected)fixture.send({kind:'stop'});let timer:ReturnType<typeof setTimeout>;try{const code=await Promise.race([fixtureExit,new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(Error('Owned fixture cleanup deadline')),55000);})]);expect(code).toBe(0);}finally{clearTimeout(timer!);}});
+      16 | async function actor(name:string,captureSource=false){
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\external-live.spec.ts:13:297)
+
+    Error Context: .cache\t32\playwright-results\external-live-real-FG-sour-1191d-reen-subscription-lifecycle\error-context.md
+
+    Error Context: .cache\t32\playwright-results\external-live-real-FG-sour-1191d-reen-subscription-lifecycle\error-context.md
+
+  1 failed
+    tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle 

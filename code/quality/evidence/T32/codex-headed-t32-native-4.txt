@@ -1,0 +1,29 @@
+
+Running 1 test using 1 worker
+
+(node:43224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle (29.0s)
+
+
+  1) tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle 
+
+    TypeError: SignalRequest.decode is not a function
+
+      28 | }
+      29 | async function join(target:Page){page=target;await target.bringToFront();await target.getByRole('button',{name:'Vào gọi',exact:true}).click();await expect(target.getByRole('button',{name:'Rời cuộc gọi',exact:true})).toBeVisible({timeout:25000});await expect(target.getByRole('region',{name:'Nhóm gọi',exact:true})).toContainText('Đã kết nối');}
+    > 30 | async function subscriptions(target:Page){return (await target.evaluate(()=>{const own=window as unknown as Observed;return own.t32Subscriptions.splice(0);})).map(bytes=>SignalRequest.decode(new Uint8Array(bytes)).message).filter(value=>value.case==='subscription').map(value=>value.value as {subscribe:boolean;trackSids:string[]});}
+         |                                                                                                                                                                                         ^
+      31 | async function receiving(target:Page){await expect.poll(()=>target.evaluate(()=>{const video=document.querySelector('.fg-live-stage video') as HTMLVideoElement|null;return Boolean(video&&video.readyState>=2&&video.videoWidth>0);}),{timeout:30000}).toBe(true);return target.evaluate(async()=>{const own=window as unknown as Observed,video=document.querySelector('.fg-live-stage video') as HTMLVideoElement;let bytes=0;for(const pc of own.t32Peers){const report=await pc.getStats();for(const row of report.values())if(row.type==='inbound-rtp'&&row.kind==='video')bytes+=row.bytesReceived??0;}return {id:video.id,width:video.videoWidth,bytes};});}
+      32 | test('real FG source API, isolated embed and native screen subscription lifecycle',async()=>{
+      33 |  const checks:string[]=[];
+        at map (E:\FGweb\code\tests\e2e\external-live.spec.ts:30:185)
+        at subscriptions (E:\FGweb\code\tests\e2e\external-live.spec.ts:30:160)
+        at E:\FGweb\code\tests\e2e\external-live.spec.ts:37:3
+
+    Error Context: .cache\t32\playwright-results\external-live-real-FG-sour-1191d-reen-subscription-lifecycle\error-context.md
+
+    Error Context: .cache\t32\playwright-results\external-live-real-FG-sour-1191d-reen-subscription-lifecycle\error-context.md
+
+  1 failed
+    tests\e2e\external-live.spec.ts:32:1 › real FG source API, isolated embed and native screen subscription lifecycle 

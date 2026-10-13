@@ -1,0 +1,32 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/external-player-security.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/external-player-security.test.ts [ test/external-player-security.test.ts ]
+Error: Failed to resolve import "../src/features/live/external-player-protocol.js" from "apps/web/test/external-player-security.test.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: E:/FGweb/code/apps/web/test/external-player-security.test.ts:2:67
+  1  |  import { describe, expect, it } from "vitest";
+  2  |  import { externalFrame, normalizeExternalInput, readPlayerEvent } from "../src/features/live/external-player-protocol.js";
+     |                                                                          ^
+  3  |  const source = { provider: "youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", videoId: "dQw4w9WgXcQ" };
+  4  |  describe("external embed boundaries", () => {
+ ❯ TransformPluginContext._formatLog ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42658:41
+ ❯ TransformPluginContext.error ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42655:16
+ ❯ normalizeUrl ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40634:23
+ ❯ ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40753:37
+ ❯ TransformPluginContext.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40680:7
+ ❯ EnvironmentPluginContainer.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42453:18
+ ❯ loadAndTransform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:35845:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  01:19:40
+   Duration  8.86s (environment 94%, setup 4%, transform 1%, worker 1%)
+

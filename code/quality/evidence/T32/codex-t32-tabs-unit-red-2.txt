@@ -1,0 +1,1142 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/external-player.test.tsx (6 tests | 6 failed) 633ms
+   ❯ T32 native screen/external tabs (6)
+     × offers both approved main views 297ms
+     × unsubscribes screen video while retaining call audio and capture 57ms
+     × does not resubscribe when publishers update during external view 52ms
+     × returns to the remembered screen 116ms
+     × returns to a remaining screen if the remembered publisher leaves 62ms
+     × supports keyboard switching between main views 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > offers both approved main views
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "Màn hình"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_0_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_0_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_0_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_0_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_0_-tab-screen-a"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_0_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_0_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_0_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_0_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_0_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_0_-tab-screen-a"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_0_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:18:68
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > unsubscribes screen video while retaining call audio and capture
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "YouTube–Twitch"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_1_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_1_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_1_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_1_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_1_-tab-screen-a"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_1_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_1_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_1_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_1_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_1_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_1_-tab-screen-a"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_1_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:19:126
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > does not resubscribe when publishers update during external view
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "YouTube–Twitch"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_2_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_2_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_2_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_2_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_2_-tab-screen-a"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_2_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_2_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_2_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_2_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_2_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_2_-tab-screen-a"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_2_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:20:144
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > returns to the remembered screen
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "YouTube–Twitch"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_3_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_3_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_3_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_3_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_3_-tab-screen-b"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_3_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_3_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_3_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_3_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_3_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_3_-tab-screen-b"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_3_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:21:177
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > returns to a remaining screen if the remembered publisher leaves
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "YouTube–Twitch"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_4_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_4_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_4_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_4_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_4_-tab-screen-b"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_4_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_4_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_4_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_4_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_4_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_4_-tab-screen-b"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_4_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:22:211
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/external-player.test.tsx > T32 native screen/external tabs > supports keyboard switching between main views
+TestingLibraryElementError: Unable to find an accessible element with the role "tab" and name "Màn hình"
+
+Here are the accessible roles:
+
+  tablist:
+
+  Name "Danh sách luồng phát":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+    [33mclass[39m=[32m"fg-live-selector"[39m
+    [33mrole[39m=[32m"tablist"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  tab:
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_5_-stage"[39m
+    [33maria-selected[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fg-live-tab selected"[39m
+    [33mid[39m=[32m"_r_5_-tab-screen-a"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "Người chơi":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"_r_5_-stage"[39m
+    [33maria-selected[39m=[32m"false"[39m
+    [33mclass[39m=[32m"fg-live-tab "[39m
+    [33mid[39m=[32m"_r_5_-tab-screen-b"[39m
+    [33mrole[39m=[32m"tab"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  region:
+
+  Name "Màn hình đang xem":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"_r_5_-tab-screen-a"[39m
+    [33maria-label[39m=[32m"Màn hình đang xem"[39m
+    [33mclass[39m=[32m"fg-live-stage"[39m
+    [33mid[39m=[32m"_r_5_-stage"[39m
+    [33mrole[39m=[32m"region"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"fg-live-guidance"[39m
+    [33mrole[39m=[32m"status"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-live-viewer"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Danh sách luồng phát"[39m
+        [33mclass[39m=[32m"fg-live-selector"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_5_-stage"[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-live-tab selected"[39m
+          [33mid[39m=[32m"_r_5_-tab-screen-a"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"0"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-controls[39m=[32m"_r_5_-stage"[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"fg-live-tab "[39m
+          [33mid[39m=[32m"_r_5_-tab-screen-b"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtabindex[39m=[32m"-1"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"lucide lucide-monitor"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"16"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"16"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<rect[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mrx[39m=[32m"2"[39m
+              [33mwidth[39m=[32m"20"[39m
+              [33mx[39m=[32m"2"[39m
+              [33my[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"8"[39m
+              [33mx2[39m=[32m"16"[39m
+              [33my1[39m=[32m"21"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+            [36m<line[39m
+              [33mx1[39m=[32m"12"[39m
+              [33mx2[39m=[32m"12"[39m
+              [33my1[39m=[32m"17"[39m
+              [33my2[39m=[32m"21"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<span>[39m
+            [0mNgười chơi[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-describedby[39m=[32m"_r_5_-tab-screen-a"[39m
+        [33maria-label[39m=[32m"Màn hình đang xem"[39m
+        [33mclass[39m=[32m"fg-live-stage"[39m
+        [33mid[39m=[32m"_r_5_-stage"[39m
+        [33mrole[39m=[32m"region"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"fg-live-guidance"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [0mTrình duyệt này chưa hỗ trợ phát màn hình trực tiếp.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/external-player.test.tsx:23:110
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  01:18:53
+   Duration  36.19s (environment 72%, setup 17%, import 7%, transform 2%, tests 2%)
+

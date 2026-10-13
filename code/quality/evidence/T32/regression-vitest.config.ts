@@ -1,0 +1,2 @@
+import {defineConfig} from 'vitest/config';import react from '@vitejs/plugin-react';import path from 'node:path';
+export default defineConfig({plugins:[react()],test:{environment:'jsdom',globals:true,setupFiles:[path.resolve('apps/web/test/setup.ts')],include:['quality/evidence/T32/regression-tests/call-controls.test.tsx','apps/web/test/external-player.test.tsx','apps/web/test/external-player-security.test.ts','apps/web/test/live-viewer.test.tsx']},resolve:{alias:{'@':path.resolve('apps/web/src')}}});

@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-13T18:58:39.921Z",
+  "reviewer": "Codex",
+  "source": {
+    "path": "apps/web/test/call-controls.test.tsx",
+    "sha256": "8ed0cc661402e076646d54b28d053582388d997f61de14feecd6f67a91565fbf"
+  },
+  "copy": {
+    "path": "quality/evidence/T32/regression-tests/call-controls.test.tsx",
+    "sha256": "8543f12d3a74107f31213b589ae1fe3c049559820226f6d7f5aedac523b8408b"
+  },
+  "pins": [
+    {
+      "path": "apps/web/src/features/calls/CallPanel.tsx",
+      "sha256": "df1d09ca42112125bb39660a78c5f21fde6e09fcfa1622853bb36cdf6db2c71a"
+    },
+    {
+      "path": "apps/web/src/features/calls/media-loader.ts",
+      "sha256": "4de941f3d94c18fbb07a6a16d9992b680e43ca5310fd9639a95eea2f3bf81447"
+    },
+    {
+      "path": "apps/web/test/call-controls.test.tsx",
+      "sha256": "8ed0cc661402e076646d54b28d053582388d997f61de14feecd6f67a91565fbf"
+    }
+  ],
+  "reversible": true,
+  "originalTestsUnchanged": true,
+  "originalFailurePreserved": [
+    "codex-t32-player-and-call-regressions-3.json",
+    "codex-t32-original-call-serialization-probe-1.json"
+  ],
+  "rootCause": "Frozen CallPanel already awaits async loadMediaSessionFactory before joinCall. Original T28 assertion requires synchronous fetch immediately after two clicks, before promise continuation. T32 LiveViewer is not mounted until the successful join grant. This copy waits for the actual async request, then retains the original exactly-one assertion and all24 cases/assertions; no production change or original PASS rewriting.",
+  "assertionsRemoved": 0,
+  "acceptancePending": true,
+  "unresolvedSourceFindings": []
+}

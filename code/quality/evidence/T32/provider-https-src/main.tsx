@@ -1,0 +1,6 @@
+import React,{useState} from 'react';import {createRoot} from 'react-dom/client';
+import {ExternalLivePlayer} from '../../../../apps/web/src/features/live/ExternalLivePlayer.js';
+import '../../../../apps/web/src/styles/global.css';import '../../../../apps/web/src/features/live/live.css';
+const sources={youtube:{provider:'youtube',url:'https://www.youtube.com/watch?v=M7lc1UVf-VE',videoId:'M7lc1UVf-VE'},twitch:{provider:'twitch',url:'https://www.twitch.tv/eslcs',channelName:'eslcs'},unavailable:{provider:'youtube',url:'https://www.youtube.com/watch?v=00000000000',videoId:'00000000000'}};
+function Probe(){const [selected,setSelected]=useState<keyof typeof sources>('youtube');return <main style={{maxWidth:960,margin:'24px auto',padding:16}}><h1>FG — kiểm tra player HTTPS</h1><p>Nguồn công khai thực tế; chưa xác nhận phát cho đến khi có sự kiện từ provider. Fixture kỹ thuật riêng, không phải UI phòng production.</p><div className="fg-live-controls">{Object.keys(sources).map(key=><button type="button" className="fg-live-tab" key={key} onClick={()=>setSelected(key as keyof typeof sources)}>{key==='youtube'?'YouTube thật':key==='twitch'?'Twitch thật':'Nguồn không tồn tại'}</button>)}</div><ExternalLivePlayer source={sources[selected]}/></main>;}
+createRoot(document.getElementById('root')!).render(<Probe/>);

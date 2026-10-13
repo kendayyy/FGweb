@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/Button.js';
 import { CallApiError } from '../calls/api.js';
 import type { MediaSession, ScreenPublisherInfo } from '../calls/media.js';
 import { claimScreenShare, releaseScreenShare } from './api.js';
+import {ExternalLivePanel} from './ExternalLivePanel.js';
 import './live.css';
 
 export interface LiveViewerProps {
@@ -33,7 +34,10 @@ interface ShareOperation {
   endedListener?: (() => void) | null;
 }
 
-export function LiveViewer({ callId, session, participants, controlsTarget }: LiveViewerProps) {
+export function LiveViewer({ callId, actorId, session, participants, controlsTarget }: LiveViewerProps) {
+  const [view, setView] = useState<'screen' | 'external'>('screen');
+  const viewRef = useRef<'screen' | 'external'>('screen');
+  const viewTabsRef = useRef<(HTMLButtonElement | null)[]>([]);
   const [publishers, setPublishers] = useState<ScreenPublisherInfo[]>([]);
   const [selectedSid, setSelectedSid] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
@@ -150,7 +154,7 @@ export function LiveViewer({ callId, session, participants, controlsTarget }: Li
       const firstSid = initialPubs[0].trackSid;
       selectedSidRef.current = firstSid;
       setSelectedSid(firstSid);
-      session.selectScreen(firstSid);
+      if (viewRef.current === 'screen') session.selectScreen(firstSid);
     }
 
     const unregPublishers = session.onScreenPublishers((pubs) => {
@@ -165,7 +169,7 @@ export function LiveViewer({ callId, session, participants, controlsTarget }: Li
 
       selectedSidRef.current = next;
       setSelectedSid(next);
-      session.selectScreen(next);
+      if (viewRef.current === 'screen') session.selectScreen(next);
     });
 
     const unregLocal = session.onLocalScreenUnpublished(() => {
@@ -204,7 +208,20 @@ export function LiveViewer({ callId, session, participants, controlsTarget }: Li
   const handleSelect = (sid: string) => {
     selectedSidRef.current = sid;
     setSelectedSid(sid);
-    session.selectScreen(sid);
+    if (viewRef.current === 'screen') session.selectScreen(sid);
+  };
+
+  const selectView = (next: 'screen' | 'external') => {
+    viewRef.current = next;
+    session.selectScreen(next === 'screen' ? selectedSidRef.current : null);
+    setView(next);
+  };
+  const handleViewKey = (event: React.KeyboardEvent, index: number) => {
+    const target = event.key === 'Home' ? 0 : event.key === 'End' ? 1 : ['ArrowRight', 'ArrowLeft'].includes(event.key) ? 1 - index : -1;
+    if (target < 0) return;
+    event.preventDefault();
+    selectView(target === 0 ? 'screen' : 'external');
+    viewTabsRef.current[target]?.focus();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
@@ -425,6 +442,10 @@ export function LiveViewer({ callId, session, participants, controlsTarget }: Li
 
   return (
     <div className="fg-live-viewer">
+      <div role="tablist" aria-label="Chế độ xem live" className="fg-live-selector">
+        {(['screen', 'external'] as const).map((mode, index) => <button type="button" key={mode} ref={el => { viewTabsRef.current[index] = el; }} id={idPrefix + '-view-' + mode} className="fg-live-tab" role="tab" aria-selected={view === mode} aria-controls={idPrefix + '-panel-' + mode} tabIndex={view === mode ? 0 : -1} onClick={() => selectView(mode)} onKeyDown={event => handleViewKey(event, index)}>{mode === 'screen' ? 'Màn hình' : 'YouTube–Twitch'}</button>)}
+      </div>
+      <div hidden={view !== 'screen'} role="tabpanel" id={idPrefix + '-panel-screen'} aria-labelledby={idPrefix + '-view-screen'}>
       {publishers.length > 0 && (
         <div
           role="tablist"
@@ -469,6 +490,11 @@ export function LiveViewer({ callId, session, participants, controlsTarget }: Li
         {publishers.length === 0 && (
           <p className="fg-live-empty">Chưa có luồng chia sẻ màn hình nào trong nhóm gọi.</p>
         )}
+      </div>
+
+      </div>
+      <div hidden={view !== 'external'} role="tabpanel" id={idPrefix + '-panel-external'} aria-labelledby={idPrefix + '-view-external'}>
+        <ExternalLivePanel callId={callId} actorId={actorId} active={view === 'external'} />
       </div>
 
       {controlsTarget ? (

@@ -5430,3 +5430,141 @@
 - Coding and build 2 — T31 — actual 2026-10-13T17:58:20.113Z–2026-10-13T17:58:30.044Z exit0: t31-git-push-1. Evidence code/quality/evidence/T31/codex-t31-git-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
 
 - Coding and build 2 — T31 — actual 2026-10-13T17:59:11.281Z–2026-10-13T17:59:12.443Z exit0: t31-github-primary-sync-1. Evidence code/quality/evidence/T31/codex-t31-github-primary-sync-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — backup hoàn tất 2026-10-13T18:00:53.614Z: bounded receipt commit/push actual2026-10-13T18:00:29.746Z–2026-10-13T18:00:42.857Z exit0/0, remote master SHA 6c469942d2f3a9a50dcdaeb7c9cfe6a4db4382ee verified, primary 63836155190d975f8352bf89f5feb30df35ea5db included. Final receipt/commands retained local to avoid recursive commits, source acceptance/frozen outputs unchanged. Evidence code/quality/evidence/T31/github-final-sync1.json. T32 may enter only through its reviewed stock gate.
+
+## Coding and build 2 — T32 — bắt đầu 2026-10-13T18:10:01.428Z
+
+- User yêu cầu tiếp tục toàn bộ task tuần tự; T31 actual PASS/primary63836155/verified final6c469942 backup complete. Đọc spec6/design7/task T32/rules04/08/09/11/12 và source LiveViewer; giữ UI đã duyệt. Plan code/quality/evidence/T32/implementation-plan1.md. Read-only entry inventory82priorPASS/current approved spec mismatch with old T32 baseline; no product source changed, reviewed gate entry required.
+
+- Coding and build 2 — T32 — 2026-10-13T18:18:21.010Z: reviewed approved baseline lineage/82frozen PASS, new scope/entry manifest passes stock check before any code change. First stock attempt exit1 oldspec hash preserved; current task now IN_PROGRESS with original file inventory and plan. Codex-only inline RED next; source transitions require exact review, main migration/UI/production not claimed. Evidence code/quality/evidence/T32/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 2 — T32 — exact review 2026-10-14 01:25:03 +07:00: Approved T32 main view tabs preserve mounted native capture/session and remembered valid SID; source updates cannot resubscribe hidden screen video. Provider scripts remain isolated, root CSP unchanged; semantic styles append only. Evidence code/quality/evidence/T32/live-integration1-adoption-review.json; actual task acceptance pending,82priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:27:57.083Z–2026-10-13T18:28:03.072Z exit0: node node_modules/eslint/bin/eslint.js apps/web/src/features/live apps/web/test/external-player.test.tsx apps/web/test/external-player-security.test.ts. Evidence code/quality/evidence/T32/codex-t32-lint-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:23:35.360Z–2026-10-13T18:25:04.003Z exit0: node quality/evidence/T32/adopt-exact.mjs live-integration1 quality/evidence/T32/live-integration-plan1.json. Evidence code/quality/evidence/T32/codex-t32-live-integration-adoption-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:23:29.555Z–2026-10-13T18:23:29.745Z exit0: node quality/evidence/T32/propose-live-integration1.mjs. Evidence code/quality/evidence/T32/codex-t32-live-integration-proposal-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:30:48.560Z–2026-10-13T18:30:48.704Z exit0: node quality/evidence/T32/prepare-native-helper1.mjs. Evidence code/quality/evidence/T32/codex-t32-native-helper-review-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:18:28.803Z–2026-10-13T18:18:29.330Z exit0: node quality/evidence/T32/inspect-protocol-details2.mjs. Evidence code/quality/evidence/T32/codex-t32-official-player-protocol-details-2.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:12:37.016Z–2026-10-13T18:12:37.826Z exit0: node quality/evidence/T32/inspect-official-player-protocol1.mjs. Evidence code/quality/evidence/T32/codex-t32-official-player-protocol-readonly-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:19:40.014Z–2026-10-13T18:19:49.938Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player-security.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-player-security-red-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:25:34.521Z–2026-10-13T18:25:48.097Z exit0: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx test/external-player-security.test.ts test/live-viewer.test.tsx --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-player-unit-green-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:29:31.902Z–2026-10-13T18:29:35.879Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx -t clears a private draft --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-private-draft-red-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:16:35.162Z–2026-10-13T18:18:21.205Z exit0: node quality/evidence/T32/start-reviewed-t32.mjs. Evidence code/quality/evidence/T32/codex-t32-reviewed-entry-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:10:03.404Z–2026-10-13T18:10:03.895Z exit1: node scripts/verify-task.mjs T32. Evidence code/quality/evidence/T32/codex-t32-stock-entry-gate-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:18:49.855Z–2026-10-13T18:19:29.413Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-tabs-unit-red-2.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:26:52.062Z–2026-10-13T18:27:13.309Z exit0: node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit. Evidence code/quality/evidence/T32/codex-t32-types-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:28:13.560Z–2026-10-13T18:28:34.496Z exit0: node node_modules/vite/bin/vite.js build apps/web --outDir E:/FGweb/code/quality/evidence/T32/web-build1. Evidence code/quality/evidence/T32/codex-t32-web-build-1.json; acceptance pending.
+
+- Coding and build 2 — T32 — 2026-10-13T18:43:18.521Z: correction: unit-green2 ran18:41:21–18:42:03 UTC while headed-native1 fixture setup began18:41:43 UTC. This overlapped serialized test policy; neither is final acceptance. Retain both actual records; next verification runs wait for each completed record before starting another. Headed1 failed before browser/app launch, Docker daemon absent; cleanup all true, no Telegram screenshot fabricated. Docker local startup recorded separately, no cockpit.
+
+- Coding and build 2 — T32 — 2026-10-13T19:08:42.419Z: native6 actual Playwright1/1 and9checks passed; parent recorder exit1 because HTTPS3 began19:07:14 UTC before native parent cleanup completed19:07:20 UTC. Parent safely retained the unrelated new HTTPS runtime, which HTTPS3 then independently removed. This violates serialized run policy, retain both and exclude from final acceptance; redo native and provider verification strictly after each command completes. HTTPS3 actually observed YouTube and Twitch PLAYING and unavailable150, not acceptance substitute. No assertion weakened or unexpected directory deleted.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:41:43.752Z–2026-10-13T18:42:37.177Z exit1: node node_modules/@playwright/test/cli.js test tests/e2e/external-live.spec.ts --config quality/evidence/T32/playwright.config.ts --headed --workers=1. Evidence code/quality/evidence/T32/codex-headed-t32-native-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:45:04.746Z–2026-10-13T18:46:03.943Z exit1: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:47:03.684Z–2026-10-13T18:47:33.746Z exit1: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-3.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:52:06.622Z–2026-10-13T18:53:12.353Z exit1: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-4.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:53:35.599Z–2026-10-13T18:54:43.147Z exit0: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-5.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:05:22.524Z–2026-10-13T19:07:20.255Z exit1: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-6.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:08:43.564Z–2026-10-13T19:10:12.766Z exit0: node quality/evidence/T32/run-headed-native2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-native-7.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:54:58.136Z–2026-10-13T18:55:20.639Z exit0: node quality/evidence/T32/manual-provider-https1.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-provider-https-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:00:03.691Z–2026-10-13T19:00:41.864Z exit0: node quality/evidence/T32/manual-provider-https2.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-provider-https-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:07:14.859Z–2026-10-13T19:07:41.351Z exit0: node quality/evidence/T32/manual-provider-https3.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-provider-https-3.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:10:22.614Z–2026-10-13T19:10:37.623Z exit0: node quality/evidence/T32/manual-provider-https3.mjs. Evidence code/quality/evidence/T32/codex-headed-t32-provider-https-4.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:58:39.390Z–2026-10-13T18:58:40.021Z exit0: node quality/evidence/T32/prepare-call-regression-copy1.mjs. Evidence code/quality/evidence/T32/codex-t32-async-call-regression-review-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:00:43.896Z–2026-10-13T19:00:45.190Z exit0: node quality/evidence/T32/propose-built-web2.mjs. Evidence code/quality/evidence/T32/codex-t32-built-web-proposal-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:10:17.142Z–2026-10-13T19:10:17.315Z exit0: node quality/evidence/T32/propose-coverage1.mjs. Evidence code/quality/evidence/T32/codex-t32-coverage-proposal-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:42:52.280Z–2026-10-13T18:42:52.929Z exit0: powershell.exe -NoProfile -Command Start-Process -FilePath 'C:/Program Files/Docker/Docker/Docker Desktop.exe' -WindowStyle Hidden. Evidence code/quality/evidence/T32/codex-t32-docker-local-start-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:02:24.782Z–2026-10-13T19:02:57.745Z exit0: node node_modules/vitest/vitest.mjs run --config quality/evidence/T32/regression-vitest2.config.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-final-unit-regressions-6.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:43:59.658Z–2026-10-13T18:44:03.739Z exit0: docker start fg-local-postgres-1 fg-local-redis-1. Evidence code/quality/evidence/T32/codex-t32-local-db-redis-start-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:44:57.824Z–2026-10-13T18:44:58.239Z exit0: docker inspect --format {{.Name}} {{.State.Status}} {{.State.Health.Status}} fg-local-postgres-1 fg-local-redis-1. Evidence code/quality/evidence/T32/codex-t32-local-service-health-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:57:27.470Z–2026-10-13T18:57:35.628Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/call-controls.test.tsx -t join is serialized --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-original-call-serialization-probe-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:56:20.937Z–2026-10-13T18:56:57.391Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx test/external-player-security.test.ts test/live-viewer.test.tsx test/call-controls.test.tsx --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-player-and-call-regressions-3.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:41:21.701Z–2026-10-13T18:42:03.494Z exit0: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx test/external-player-security.test.ts test/live-viewer.test.tsx --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-player-unit-green-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:46:21.953Z–2026-10-13T18:46:28.532Z exit0: node quality/evidence/T32/build-provider-https1.mjs. Evidence code/quality/evidence/T32/codex-t32-provider-https-build-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:58:41.686Z–2026-10-13T18:58:46.691Z exit0: node quality/evidence/T32/build-provider-https2.mjs. Evidence code/quality/evidence/T32/codex-t32-provider-https-build-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:05:08.059Z–2026-10-13T19:05:12.427Z exit0: node quality/evidence/T32/build-provider-https3.mjs. Evidence code/quality/evidence/T32/codex-t32-provider-https-build-3.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:01:27.761Z–2026-10-13T19:01:42.044Z exit1: node node_modules/vitest/vitest.mjs run --root apps/web test/external-player.test.tsx -t registers provider state --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-provider-ready-registration-red-1.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:58:52.283Z–2026-10-13T18:58:53.170Z exit1: node node_modules/vitest/vitest.mjs run --config quality/evidence/T32/regression-vitest.config.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-review-regressions-green-4.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:59:15.232Z–2026-10-13T18:59:49.159Z exit0: node node_modules/vitest/vitest.mjs run --config quality/evidence/T32/regression-vitest2.config.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T32/codex-t32-review-regressions-green-5.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T18:43:18.936Z–2026-10-13T18:44:12.910Z exit0: node node_modules/vite/bin/vite.js build apps/web --outDir E:/FGweb/code/quality/evidence/T32/web-build2. Evidence code/quality/evidence/T32/codex-t32-web-build-2.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:03:49.991Z–2026-10-13T19:04:10.144Z exit0: node node_modules/vite/bin/vite.js build apps/web --outDir E:/FGweb/code/quality/evidence/T32/web-build3. Evidence code/quality/evidence/T32/codex-t32-web-build-3.json; acceptance pending, failures retained.
+
+- Coding and build 2 — T32 — exact review 2026-10-14 02:15:46 +07:00: Fresh T32 web build3 compiles reviewed isolated provider/player/tab source. Exact built index/new assets only; preserve all historical dist assets and frozen outputs. Headed FG run6 exercised this same built index, no root CSP relaxation. Evidence code/quality/evidence/T32/built-web3-adoption-review.json; actual task acceptance pending,82priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T32 — 2026-10-13T19:16:26.273Z: coverage adoption1 rejected by unchanged checker because it began while reviewed build adoption was pending; no coverage/review/ledger mutation from rejected attempt. Build adoption1 completed19:15:46 UTC, exact3files. Coverage adoption2 now serialized after its completed record. Failure retained, no checker waiver.
+
+- Coding and build 2 — T32 — exact review 2026-10-14 02:19:27 +07:00: Append approved T32 coverage and exact evidence limitations; preserve all prior coverage and PASS evidence. Evidence code/quality/evidence/T32/coverage2-adoption-review.json; actual task acceptance pending,82priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T32 — 2026-10-13T19:22:58.142Z: final integrity 32425 original files/82 priorPASS/checker/env/baselines and exact transitions checked; current96unit/reviewed call cases,9native headed checks, genuine YouTube/Twitch PLAYING/nonembeddable error,51sent Telegram screenshots, owned PG/Redis/native runtime cleanup and historical schema preservation. No public staging deployment/main migration/physical-device/1000claim. Evidence code/quality/evidence/T32/final-local-integrity-review1.json; closure pending.
+
+- Coding and build 2 — T32 — 2026-10-13T19:23:38.272Z: final Codex acceptance review96cases/9native checks/actual2providers PLAYING/nonembeddable error/51sent images; final commands serial, original failures/diagnostic overlaps retained, checker/env/82PASS/exact transitions/owned cleanup/historical DB preserved. Local HTTPS self-signed fixture only, no public staging/production/physical/1000claim. Evidence code/quality/evidence/T32/acceptance-review.md; ledger closure and public backup pending.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:13:16.838Z–2026-10-13T19:15:46.741Z exit0: node quality/evidence/T32/adopt-exact.mjs built-web3 quality/evidence/T32/web-build3-adoption-plan.json. Evidence code/quality/evidence/T32/codex-t32-built-web-adoption-1.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:13:14.663Z–2026-10-13T19:13:15.402Z exit0: node quality/evidence/T32/propose-built-web3.mjs. Evidence code/quality/evidence/T32/codex-t32-built-web-proposal-2.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:15:11.923Z–2026-10-13T19:15:19.124Z exit1: node quality/evidence/T32/adopt-exact.mjs coverage1 quality/evidence/T32/coverage-adoption-plan1.json. Evidence code/quality/evidence/T32/codex-t32-coverage-adoption-1.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:16:15.786Z–2026-10-13T19:19:27.600Z exit0: node quality/evidence/T32/adopt-exact.mjs coverage2 quality/evidence/T32/coverage-adoption-plan1.json. Evidence code/quality/evidence/T32/codex-t32-coverage-adoption-2.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:23:38.128Z–2026-10-13T19:23:38.316Z exit0: node quality/evidence/T32/review-final-acceptance1.mjs. Evidence code/quality/evidence/T32/codex-t32-final-acceptance-review-1.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:12:50.311Z–2026-10-13T19:12:54.776Z exit0: node node_modules/eslint/bin/eslint.js apps/web/src/features/live apps/web/test/external-player.test.tsx apps/web/test/external-player-security.test.ts tests/e2e/external-live.spec.ts. Evidence code/quality/evidence/T32/codex-t32-final-lint-2.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:20:13.631Z–2026-10-13T19:22:58.203Z exit0: node quality/evidence/T32/audit-final-local1.mjs. Evidence code/quality/evidence/T32/codex-t32-final-local-integrity-review-1.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:11:34.626Z–2026-10-13T19:11:48.107Z exit0: node node_modules/typescript/bin/tsc -p apps/web/tsconfig.json --noEmit. Evidence code/quality/evidence/T32/codex-t32-final-types-2.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:13:12.940Z–2026-10-13T19:13:13.294Z exit0: node quality/evidence/T32/cleanup-owned-presence1.mjs. Evidence code/quality/evidence/T32/codex-t32-owned-presence-cleanup-1.json; outcome reviewed separately, failures retained.
+
+- Coding and build 2 — T32 — kết thúc acceptance 2026-10-13T19:25:20.708Z: Codex local PASS after96unit/reviewed call assertions,9actual headed native/audio/ACL/responsive checks, genuine YouTube/Twitch HTTPS PLAYING and nonembeddable150,51sent Telegram images, types/lint/build,82frozen PASS/checker/env/baseline/gate/original-file/owned PG+Redis+native+cert cleanup review. Retain14failed commands and explicit recorder gap/diagnostic overlap notes. Frozen1852outputs. Local self-signed HTTPS only; no public staging/main migration/production/physical-device/1000claim. Evidence code/quality/evidence/T32/closure.json. Automatic public staged privacy scan/normal master push pending; T33 not started.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:23:49.281Z–2026-10-13T19:25:25.749Z exit0: t32-reviewed-close-1. Evidence code/quality/evidence/T32/codex-t32-reviewed-close-1.json; source acceptance/frozen outputs unchanged.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:27:00.628Z–2026-10-13T19:28:45.468Z exit0: t32-postclosure-stock-gate-1. Evidence code/quality/evidence/T32/codex-t32-postclosure-stock-gate-1.json; source acceptance/frozen outputs unchanged.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:29:37.167Z–2026-10-13T19:29:50.930Z exit0: t32-public-stage-1. Evidence code/quality/evidence/T32/codex-t32-public-stage-1.json; source acceptance/frozen outputs unchanged.
+
+- Coding and build 2 — T32 — actual 2026-10-13T19:30:34.979Z–2026-10-13T19:30:36.868Z exit0: t32-public-staged-scan-1. Evidence code/quality/evidence/T32/codex-t32-public-staged-scan-1.json; source acceptance/frozen outputs unchanged.

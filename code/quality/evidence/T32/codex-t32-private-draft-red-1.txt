@@ -1,0 +1,59 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+stderr | test/external-player.test.tsx > member source panel > clears a private draft when the authenticated actor changes
+An update to ExternalLivePanel inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ExternalLivePanel inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ExternalLivePanel inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ❯ test/external-player.test.tsx (22 tests | 1 failed | 21 skipped) 115ms
+   ❯ member source panel (5)
+     × clears a private draft when the authenticated actor changes 110ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/external-player.test.tsx > member source panel > clears a private draft when the authenticated actor changes
+Error: expect(element).toHaveValue()
+
+Expected the element to have value:
+
+Received:
+  https://www.youtube.com/watch?v=dQw4w9WgXcQ
+ ❯ test/external-player.test.tsx:43:532
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 21 skipped (22)
+   Start at  01:29:32
+   Duration  2.86s (environment 50%, transform 18%, import 15%, setup 12%, tests 4%, worker 1%)
+
