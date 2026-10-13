@@ -5280,3 +5280,139 @@
 - Coding and build 2 — T30 — kết thúc acceptance 2026-10-13T16:14:26.526Z: Codex local review PASS after canonical96 full original native callback/strict cleanup,33component cases/scoped lint, verified retained web280/API66 and affected controls,17ROOT-viewed/17Telegramsent. Final audit actual16:07:57–16:09:08UTC exit0 compared14249files/80priorPASS/checker/env/baselines and zero owned schema/container remnants after private-backed exact cleanup. All 356 failed command attempts preserved, not relabelled; local scope only/no physical-device/production/1000 claim. Evidence code/quality/evidence/T30/closure4.json and acceptance-command-review.json; public staged review/commit/push pending, T31 not started.
 
 - Coding and build 2 — T30 — 2026-10-13T16:22:43.838Z: task PASS local closure4/post-closure stock checker exit0; public staged blobs/scope/privacy reviewed (3637add/modify,92private exclusions retained local,maxblob8672505bytes,0unclassifiedfindings), kendayy author verified. Commit actual2026-10-13T16:21:36.950Z–2026-10-13T16:21:50.839Z exit0 SHA 39e397cfd6de97c8496612ba172692efbcf447c7; push actual2026-10-13T16:21:58.820Z–2026-10-13T16:22:11.586Z exit0; remote origin/master SHA verified equal. Evidence code/quality/evidence/T30/github-primary-push-receipt1.json; bounded receipt/history followup backup pending, no production deploy.
+
+- Coding and build 2 — T30 — 2026-10-13T16:24:10.081Z: bounded receipt/history backup commit 60ed9c9acee1af4df6ee5970d34bcf9f85e9c0b9 pushed actual2026-10-13T16:23:43.257Z–2026-10-13T16:23:47.422Z exit0, origin/master SHA equal verified. Evidence code/quality/evidence/T30/github-final-sync1.json. T30 acceptance and GitHub backup complete; final local receipt kept without infinite commit loop. Next T31 entry gate/rebaseline, not started before this verification.
+
+- Coding and build 2 — T31 — bắt đầu phiên khảo sát/gate 2026-10-13T16:25:07.205Z sau T30 PASS và GitHub SHA verified. Đọc spec/task/rules hiện hành, schema external_lives và shared contracts; chưa sửa code nghiệp vụ. T31 yêu cầu PUT/GET/DELETE nhưng contract T03 đang POST, cần review compatibility/normalized IDs và scope registration trước RED. Evidence code/quality/evidence/T31/entry-inventory1.json; gate/rebaseline pending, no Antigravity/Anti2/cockpit.
+
+- Coding and build 2 — T31 — 2026-10-13T16:31:58.129Z: reviewed approved baseline lineage/81frozen PASS, new scope/entry manifest passes stock check before any code change. First stock attempt exit1 oldspec hash preserved; current task now IN_PROGRESS with original file inventory and plan. Codex-only inline RED next; source transitions require exact review, main migration/UI/production not claimed. Evidence code/quality/evidence/T31/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:33:30.958Z–2026-10-13T16:33:36.684Z exit1: t31-contract-red-1. Evidence code/quality/evidence/T31/codex-t31-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:38:20.371Z–2026-10-13T16:40:47.129Z exit1: t31-api-red-1. Evidence code/quality/evidence/T31/codex-t31-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:41:29.447Z–2026-10-13T16:41:44.802Z exit1: t31-database-red-1. Evidence code/quality/evidence/T31/codex-t31-database-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — exact review 2026-10-13 23:49:37 +07:00: Implement approved T31 source storage/strict shared contract/routes and production integration after real RED7contracts/38API/5DB; additive migration and transactional cleanup only, preserve81frozen PASS and all original files. Evidence code/quality/evidence/T31/shared-integration1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:47:50.319Z–2026-10-13T16:49:37.558Z exit0: t31-shared-integration-adoption-1. Evidence code/quality/evidence/T31/codex-t31-shared-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:51:35.836Z–2026-10-13T16:51:49.027Z exit0: t31-contract-green-1. Evidence code/quality/evidence/T31/codex-t31-contract-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:53:51.457Z–2026-10-13T16:54:09.514Z exit1: t31-database-green-1. Evidence code/quality/evidence/T31/codex-t31-database-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — 2026-10-13T16:57:06.814Z: database GREEN attempt1 actual16:53:51–16:54:09UTC exit1: new migration5/5 passed, original call-outbox suite transform failed before tests because proposal String.replace interpreted SQL regex dollar+quote as suffix interpolation. Preserve corrupted proposal/current snapshot; rebuild schema proposal from original snapshot with literal callback (same intended constraints). No assertions/checker/PASS weakening. Full contracts229passed/build26outputs4changed22same, compile source/output pins unchanged; combined exact correction adoption pending. Evidence code/quality/evidence/T31/schema-fix-contracts-build-adoption-plan1.json.
+
+- Coding and build 2 — T31 — exact review 2026-10-13 23:58:40 +07:00: Repair proven TypeScript schema proposal corruption caused by String.replace $-suffix interpolation using literal replacement callback from the exact original snapshot; SQL migration already5/5 but original regression never loaded. Adopt actual contracts build26outputs(4changed/22same) after full229contract GREEN, preserving all source/failed evidence/81PASS. Acceptance still pending. Evidence code/quality/evidence/T31/schema-fix-contracts-build1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:57:07.065Z–2026-10-13T16:58:40.456Z exit0: t31-schema-fix-contracts-build-adoption-1. Evidence code/quality/evidence/T31/codex-t31-schema-fix-contracts-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T16:58:51.942Z–2026-10-13T17:00:13.300Z exit0: t31-api-green-1. Evidence code/quality/evidence/T31/codex-t31-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:02:33.613Z–2026-10-13T17:03:14.896Z exit0: t31-database-green-2. Evidence code/quality/evidence/T31/codex-t31-database-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:04:49.556Z–2026-10-13T17:05:18.355Z exit1: t31-source-lint-1. Evidence code/quality/evidence/T31/codex-t31-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — exact review 2026-10-14 00:12:56 +07:00: Adopt actual sandbox database compile from exact current reviewed T31 source; before bytes preserved, unchanged outputs proven, source maps retain src/dist relative layout. Task acceptance pending. Evidence code/quality/evidence/T31/database-build1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:09:46.597Z–2026-10-13T17:12:56.411Z exit0: t31-database-build-adoption-1. Evidence code/quality/evidence/T31/codex-t31-database-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — exact review 2026-10-14 00:23:00 +07:00: Adopt actual sandbox api compile from exact current reviewed T31 source; before bytes preserved, unchanged outputs proven, source maps retain src/dist relative layout. Task acceptance pending. Evidence code/quality/evidence/T31/api-build1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:06:40.863Z–2026-10-13T17:06:46.638Z exit0: t31-source-lint-2. Evidence code/quality/evidence/T31/codex-t31-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:14:02.038Z–2026-10-13T17:14:22.016Z exit0: t31-api-build-1. Evidence code/quality/evidence/T31/codex-t31-api-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:16:32.912Z–2026-10-13T17:16:34.660Z exit0: t31-api-build-review-1. Evidence code/quality/evidence/T31/codex-t31-api-build-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:21:05.182Z–2026-10-13T17:23:00.724Z exit0: t31-api-build-adopt-1. Evidence code/quality/evidence/T31/codex-t31-api-build-adopt-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:23:15.318Z–2026-10-13T17:25:07.014Z exit1: t31-api-green-2. Evidence code/quality/evidence/T31/codex-t31-api-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:25:44.700Z–2026-10-13T17:25:45.330Z exit0: t31-url-validation-probe-1. Evidence code/quality/evidence/T31/codex-t31-url-validation-probe-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:26:06.051Z–2026-10-13T17:26:10.037Z exit1: t31-contract-raw-url-red-1. Evidence code/quality/evidence/T31/codex-t31-contract-raw-url-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:26:25.132Z–2026-10-13T17:26:25.313Z exit0: t31-raw-url-proposal-1. Evidence code/quality/evidence/T31/codex-t31-raw-url-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — exact review 2026-10-14 00:28:24 +07:00: Actual API39/40 plus raw contract RED proves installed Zod URL validator trims input before parser. Reject raw whitespace/control/backslash before piping to URL validator; preserve parser/ACL and all failed evidence. No weakened assertions or health claim. Evidence code/quality/evidence/T31/raw-url1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — 2026-10-13T17:29:56.827Z: reviewed runtime-only ownership for exact original admission/publishing regression helpers, bounded newly generated UUID fixtures and verified cleanup, no frozen source/test changes. Evidence code/quality/evidence/T31/original-regression-runtime-review1.json; task IN_PROGRESS.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:26:34.794Z–2026-10-13T17:28:24.974Z exit0: t31-raw-url-adopt-1. Evidence code/quality/evidence/T31/codex-t31-raw-url-adopt-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:28:43.584Z–2026-10-13T17:29:04.405Z exit0: t31-contract-green-2. Evidence code/quality/evidence/T31/codex-t31-contract-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:29:23.775Z–2026-10-13T17:29:34.942Z exit0: t31-contract-build-2. Evidence code/quality/evidence/T31/codex-t31-contract-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:30:22.978Z–2026-10-13T17:30:23.215Z exit0: t31-contract-build-review-2. Evidence code/quality/evidence/T31/codex-t31-contract-build-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:30:40.035Z–2026-10-13T17:30:46.244Z exit0: t31-source-lint-3. Evidence code/quality/evidence/T31/codex-t31-source-lint-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:29:02.282Z–2026-10-13T17:30:49.490Z exit0: t31-original-runtime-review-1. Evidence code/quality/evidence/T31/codex-t31-original-runtime-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — exact review 2026-10-14 00:32:40 +07:00: Adopt actual sandbox contracts compile from exact current reviewed T31 source; before bytes preserved, unchanged outputs proven, source maps retain src/dist relative layout. Task acceptance pending. Evidence code/quality/evidence/T31/contracts-build2-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — exact review 2026-10-14 00:36:56 +07:00: Append T31 coverage only; preserve prior coverage rows byte-for-byte and defer completion to actual acceptance review/closure. No spec or prior PASS changes. Evidence code/quality/evidence/T31/coverage1-adoption-review.json; actual task acceptance pending,81priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T31 — 2026-10-13T17:37:12.165Z: original regression actual17:34:15–17:36:08UTC exit1:13admission setup failures gateway readiness,11publishing passed; preserved original failure log and private diagnostics (gateway reports ready), exact fixture cleanup2dirs/no containers/network, frozen assertions unchanged. Review permits same-deadline warm retry, no PASS. Evidence code/quality/evidence/T31/original-regression-retry-review2.json.
+
+- Coding and build 2 — T31 — 2026-10-13T17:43:26.033Z: native regression retry2 actual17:37:13–17:38:43UTC exit1/14pass10fail (admission concurrent500/adminJWT denial), publishing11passed again. No T31 source change affects gateway/native authority. Prepare reverse-byte-exact owned original test copies and existing accepted read-only Linux dependency helper, same assertions/deadlines; original runs retained. Clock probe inconclusive at second resolution, no system-clock change. Compiled production smoke actual17:40:04–34UTC15checks/cleanup alltrue. Evidence code/quality/evidence/T31/native-regression-source-review3.json.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:31:03.411Z–2026-10-13T17:32:41.055Z exit0: t31-contract-build-adopt-2. Evidence code/quality/evidence/T31/codex-t31-contract-build-adopt-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:32:48.680Z–2026-10-13T17:34:05.778Z exit0: t31-api-green-3. Evidence code/quality/evidence/T31/codex-t31-api-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:33:06.568Z–2026-10-13T17:33:37.927Z exit0: t31-api-build-2. Evidence code/quality/evidence/T31/codex-t31-api-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:33:48.923Z–2026-10-13T17:33:50.869Z exit0: t31-api-build-review-2. Evidence code/quality/evidence/T31/codex-t31-api-build-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:33:33.652Z–2026-10-13T17:33:34.115Z exit0: t31-coverage-proposal-1. Evidence code/quality/evidence/T31/codex-t31-coverage-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:34:37.407Z–2026-10-13T17:36:56.578Z exit0: t31-coverage-adopt-1. Evidence code/quality/evidence/T31/codex-t31-coverage-adopt-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:34:15.015Z–2026-10-13T17:36:08.936Z exit1: t31-original-api-regressions-1. Evidence code/quality/evidence/T31/codex-t31-original-api-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:36:04.418Z–2026-10-13T17:36:04.892Z exit0: t31-native-failure-diagnostics-1. Evidence code/quality/evidence/T31/codex-t31-native-failure-diagnostics-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:37:12.042Z–2026-10-13T17:37:12.199Z exit0: t31-original-regression-retry-review-2. Evidence code/quality/evidence/T31/codex-t31-original-regression-retry-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:37:13.639Z–2026-10-13T17:38:43.555Z exit1: t31-original-api-regressions-2. Evidence code/quality/evidence/T31/codex-t31-original-api-regressions-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:40:04.415Z–2026-10-13T17:40:34.664Z exit0: t31-compiled-production-smoke-1. Evidence code/quality/evidence/T31/codex-t31-compiled-production-smoke-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:41:41.645Z–2026-10-13T17:41:43.164Z exit0: t31-clock-boundary-probe-1. Evidence code/quality/evidence/T31/codex-t31-clock-boundary-probe-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:43:25.895Z–2026-10-13T17:43:26.066Z exit0: t31-native-regression-source-review-3. Evidence code/quality/evidence/T31/codex-t31-native-regression-source-review-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:43:27.982Z–2026-10-13T17:45:27.713Z exit0: t31-native-regressions-3. Evidence code/quality/evidence/T31/codex-t31-native-regressions-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — 2026-10-13T17:51:39.786Z: audit1 exit1 included historical T26 schema, ownership attempt1 safely rejected correlation with current run2. Read-only inventory13synthetic users created07Oct/7historical migrations vs current24/zero rooms/calls proves preexisting historical fixture. Preserve exact namespace and content fingerprints, no drop/main migration; new audit excludes only this explicit reviewed historical namespace and still requires zero current T31 schemas/native fixture cleanup. Evidence code/quality/evidence/T31/historical-schema-preservation-review3.json; failed audit/ownership attempt retained.
+
+- Coding and build 2 — T31 — 2026-10-13T17:53:12.450Z: final integrity 31176 original files/81 frozen PASS/checker/env/baselines preserved; exact reviewed transitions only, real current API/contracts/DB/native control regression/compiled production smoke and cleanup reviewed. Evidence code/quality/evidence/T31/final-local-integrity-review1.json; acceptance closure pending.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:46:02.832Z–2026-10-13T17:47:49.314Z exit1: t31-final-local-integrity-review-1. Evidence code/quality/evidence/T31/codex-t31-final-local-integrity-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:49:07.452Z–2026-10-13T17:49:07.835Z exit1: t31-orphan-schema-ownership-1. Evidence code/quality/evidence/T31/codex-t31-orphan-schema-ownership-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:50:01.367Z–2026-10-13T17:50:04.257Z exit0: t31-orphan-schema-inventory-2. Evidence code/quality/evidence/T31/codex-t31-orphan-schema-inventory-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:51:38.314Z–2026-10-13T17:51:40.088Z exit0: t31-historical-schema-preservation-review-3. Evidence code/quality/evidence/T31/codex-t31-historical-schema-preservation-review-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — 2026-10-13T17:53:41.966Z: final Codex acceptance review: actual40API/230serialized contracts/18DB+original outbox/24unchanged admission+publishing/15compiled production smoke, lint0/fresh builds, original-file/checker/env/81PASS/gate/cleanup verified. Failed runs retained, no assertion/deadline weakening, no main/production/UI/media-capacity claim. Evidence code/quality/evidence/T31/acceptance-review.md and acceptance-command-review.json; ledger closure/public backup pending.
+
+- Coding and build 2 — T31 — kết thúc acceptance 2026-10-13T17:54:48.355Z: Codex local PASS after current40API/230serialized contracts/18DB+outbox/24original assertion native regressions/15compiled production checks, scoped lint/fresh builds, strict original-file/81frozen PASS/checker/env/baseline/gate/cleanup audit. All 13 failed commands preserved. Backend local scope only; no main migration/production/player/physical-media/1000claim. Evidence code/quality/evidence/T31/closure.json; public staged review/commit/push pending, T32 not started.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:51:47.807Z–2026-10-13T17:53:12.511Z exit0: t31-final-local-integrity-review-2. Evidence code/quality/evidence/T31/codex-t31-final-local-integrity-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:53:40.956Z–2026-10-13T17:53:42.013Z exit0: t31-final-acceptance-review-1. Evidence code/quality/evidence/T31/codex-t31-final-acceptance-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:53:48.126Z–2026-10-13T17:54:50.439Z exit0: t31-reviewed-close-1. Evidence code/quality/evidence/T31/codex-t31-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:55:04.809Z–2026-10-13T17:56:01.941Z exit0: t31-postclosure-stock-gate-1. Evidence code/quality/evidence/T31/codex-t31-postclosure-stock-gate-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:56:11.629Z–2026-10-13T17:56:18.190Z exit0: t31-public-stage-1. Evidence code/quality/evidence/T31/codex-t31-public-stage-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:56:24.404Z–2026-10-13T17:56:25.267Z exit0: t31-public-staged-scan-1. Evidence code/quality/evidence/T31/codex-t31-public-staged-scan-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.
+
+- Coding and build 2 — T31 — actual 2026-10-13T17:56:32.253Z–2026-10-13T17:56:36.656Z exit0: t31-public-commit-preflight-2. Evidence code/quality/evidence/T31/codex-t31-public-commit-preflight-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T32.

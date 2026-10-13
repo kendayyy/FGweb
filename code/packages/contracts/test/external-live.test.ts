@@ -1,0 +1,13 @@
+import {describe,it,expect} from 'vitest';
+import {ApiEndpointRegistry,ExternalLiveSchema,SetExternalLiveRequestSchema} from '../src/index.js';
+const base={id:'source',callId:'call',provider:'youtube',url:'https://www.youtube.com/watch?v=M7lc1UVf-VE',configuredBy:'member',createdAt:'2026-10-13T00:00:00Z'};
+describe('T31 external source contract and unverified availability',()=>{
+ it('rejects raw whitespace, controls and backslashes before URL canonicalization',()=>{for(const url of [' https://youtu.be/M7lc1UVf-VE','https://youtu.be/M7lc1UVf-VE\n','https://www.youtube.com\\watch?v=M7lc1UVf-VE','https://www.youtube.com/watch?v=M7lc1UVf-VE\u0000'])expect(SetExternalLiveRequestSchema.safeParse({provider:'youtube',url}).success).toBe(false);});
+ it('retains normalized YouTube ID and explicitly unknown availability',()=>{expect(ExternalLiveSchema.parse({...base,videoId:'M7lc1UVf-VE',availability:'unknown'})).toMatchObject({videoId:'M7lc1UVf-VE',availability:'unknown'});});
+ it('retains normalized Twitch channel',()=>{expect(ExternalLiveSchema.parse({...base,provider:'twitch',url:'https://www.twitch.tv/fg_fixture',channelName:'fg_fixture',availability:'unknown'})).toMatchObject({channelName:'fg_fixture',availability:'unknown'});});
+ it('preserves legacy DTOs without claiming availability',()=>{expect(ExternalLiveSchema.parse(base)).toMatchObject({provider:'youtube',availability:'unknown'});});
+ it('rejects malformed or inconsistent structured provider IDs',()=>{for(const value of [{...base,videoId:'short'},{...base,channelName:'other'},{...base,videoId:'M7lc1UVf-VE',channelName:'other'},{...base,provider:'twitch',url:'https://www.twitch.tv/fg_fixture',channelName:'BAD Name'}])expect(ExternalLiveSchema.safeParse(value).success).toBe(false);});
+ it('does not allow a syntactic URL to assert healthy availability',()=>{expect(ExternalLiveSchema.safeParse({...base,availability:'healthy'}).success).toBe(false);});
+ it('request rejects client-supplied source identity or authority',()=>{for(const extra of [{videoId:'M7lc1UVf-VE'},{channelName:'fg_fixture'},{configuredBy:'owner'},{availability:'healthy'},{callId:'other'}])expect(SetExternalLiveRequestSchema.safeParse({provider:'youtube',url:base.url,...extra}).success).toBe(false);});
+ it('registers member-only PUT/GET/DELETE and retains POST compatibility',()=>{for(const method of ['PUT','GET','DELETE','POST']){const entry=ApiEndpointRegistry.find(e=>e.path==='/api/v1/calls/:id/external-live'&&e.method===method);expect(entry?.auth).toBe('CallParticipant');if(method==='PUT'||method==='POST')expect(entry?.requestSchema?.safeParse({provider:'youtube',url:base.url}).success).toBe(true);if(method==='GET')expect(entry?.responseSchema.safeParse(null).success).toBe(true);}});
+});

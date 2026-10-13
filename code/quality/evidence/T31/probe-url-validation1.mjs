@@ -1,0 +1,3 @@
+import {SetExternalLiveRequestSchema} from '@fg/contracts';import fs from 'node:fs';
+const inputs=[' https://youtu.be/M7lc1UVf-VE','https://youtu.be/M7lc1UVf-VE\n','https://www.youtube.com\\watch?v=M7lc1UVf-VE','https://www.youtube.com/watch?v=M7lc1UVf-VE\u0000'];
+const result=inputs.map(input=>{const r=SetExternalLiveRequestSchema.safeParse({provider:'youtube',url:input});return{input:JSON.stringify(input),accepted:r.success,output:r.success?JSON.stringify(r.data.url):null,changed:r.success&&r.data.url!==input};});fs.writeFileSync('quality/evidence/T31/url-validation-probe1.json',JSON.stringify({at:new Date().toISOString(),result},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(result));

@@ -1,0 +1,206 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts test/publishing.integration.spec.ts
+
+(node:18776) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-admission.integration.spec.ts (46.011 s)
+  ● T26 native HTTP/PostgreSQL call admission › eleven simultaneous spectators allocate exactly ten real seats and zero playing slots
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+      78 |   const r=await room(),c=await call(r.id);
+      79 |   const results=await Promise.all(actors.filter(id=>id.startsWith('viewer-')).map(id=>post(`calls/${c.id}/join`,id)));
+    > 80 |   expect(results.filter(x=>x.status===201)).toHaveLength(10);expect(results.filter(x=>x.status===409)).toHaveLength(1);
+         |                                                                                                        ^
+      81 |   expect(results.find(x=>x.status===409)?.body.code).toBe('CAPACITY_FULL');
+      82 |   const seats=(await pool.query('SELECT seat_index,user_id FROM call_members WHERE call_group_id=$1 AND left_at IS NULL',[c.id])).rows;
+      83 |   expect(seats).toHaveLength(10);expect(new Set(seats.map(s=>s.seat_index)).size).toBe(10);
+
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:80:104)
+
+  ● T26 native HTTP/PostgreSQL call admission › same-user concurrent refresh is idempotent and cannot occupy two different calls
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   201,
+    -   201,
+    +   500,
+    +   500,
+      ]
+
+      88 |   const r=await room(),a=await call(r.id),b=await call(r.id);
+      89 |   const joins=await Promise.all([post(`calls/${a.id}/join`,'viewer-0'),post(`calls/${a.id}/join`,'viewer-0')]);
+    > 90 |   expect(joins.map(x=>x.status)).toEqual([201,201]);expect((await pool.query('SELECT id FROM call_members WHERE user_id=$1 AND left_at IS NULL',['viewer-0'])).rowCount).toBe(1);
+         |                                  ^
+      91 |   expect((await post(`calls/${b.id}/join`,'viewer-0')).status).toBe(409);
+      92 |  });
+      93 |  it('competing joins in different groups permit only one call per user',async()=>{
+
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:90:34)
+
+  ● T26 native HTTP/PostgreSQL call admission › competing joins in different groups permit only one call per user
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › guest and outsider cannot obtain tokens; an unaccepted ROOM invitation grants no access
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › logout and bans invalidate token issuance even for an already reserved user
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 500
+
+      109 |  });
+      110 |  it('logout and bans invalidate token issuance even for an already reserved user',async()=>{
+    > 111 |   const r=await room(),c=await call(r.id);expect((await post(`calls/${c.id}/join`,'viewer-0')).status).toBe(201);
+          |                                                                                                        ^
+      112 |   await pool.query('DELETE FROM session WHERE user_id=$1',['viewer-0']);expect((await post(`calls/${c.id}/join`,'viewer-0')).status).toBe(401);
+      113 |   await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer-1','BAN')",[randomUUID()]);
+      114 |   expect((await post(`calls/${c.id}/join`,'viewer-1')).status).toBe(403);
+
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:111:104)
+
+  ● T26 native HTTP/PostgreSQL call admission › tokens bind only the admitted identity/room, expire shortly and do not enable camera or screen publication
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › caller-supplied identity or capacity does not bypass authorization or the ten-person limit
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › explicit leave releases only a call seat, allowing a different group without deleting room membership
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › uses an opaque session-bound identity and gives a new identity after leaving
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › expires unconnected reservations before allocating the last available seat
+
+    Unauthorized: Media admission denied
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}}
+         |                                                                         ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.listRooms (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:164:18)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       10 failed, 14 passed, 24 total
+Snapshots:   0 total
+Time:        85.663 s, estimated 110 s
+Ran all test suites matching test/call-admission.integration.spec.ts|test/publishing.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts test/publishing.integration.spec.ts
+{"startedAt":"2026-10-13T17:37:13.922Z","completedAt":"2026-10-13T17:38:43.512Z","exitCode":1,"signal":null,"sourcePins":[{"path":"apps/api/test/call-admission.integration.spec.ts","sha256":"9689278e264bb846cac21ffcf749c659cbe23410719b2ccf12b356a75aac8c8c"},{"path":"apps/api/test/publishing.integration.spec.ts","sha256":"b22ec66b4b2de21a534eb2bcc53b9499717c2fba3438198bc37b243112994c9c"},{"path":"quality/evidence/T27/private-gateway-fixture.mjs","sha256":"211fcf39aa82549803bf9bf420a223cf12d490ac4551a0dedb6260d1877c7673"},{"path":"quality/evidence/T29/private-gateway-fixture.mjs","sha256":"45a30d37dfd7253b56ba37ca47de01ea8c3ec80e26bd0d3dc4a9c1868b145c79"}],"sourceUnchanged":true,"cleanup":[{"path":".runtime/t27/gateway-232bd533-bd5a-4e39-bc23-b33edf872ef5","containersAbsent":true,"networkAbsent":true,"privateInputsRemoved":true},{"path":".runtime/t29/gateway-3858e284-f7e2-4399-ae53-961dea5406bd","containersAbsent":true,"networkAbsent":true,"privateInputsRemoved":true}],"cleanupError":null,"uiRun":false,"originalAssertionsAndDeadlinesUnchanged":true}

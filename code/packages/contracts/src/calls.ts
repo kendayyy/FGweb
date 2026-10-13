@@ -14,11 +14,17 @@ export const ExternalLiveSchema = z
     callId: IdSchema,
     provider: ExternalLiveProviderSchema,
     url: z.string().url('Must be a valid URL'),
+    videoId: z.string().regex(/^[A-Za-z0-9_-]{11}$/).optional(),
+    channelName: z.string().regex(/^[a-z0-9_]{1,25}$/).optional(),
+    availability: z.literal('unknown').default('unknown'),
     title: z.string().max(100).optional(),
     configuredBy: IdSchema,
     createdAt: IsoDateTimeSchema,
   })
   .superRefine((data, ctx) => {
+    if ((data.provider === 'youtube' && data.channelName !== undefined) || (data.provider === 'twitch' && data.videoId !== undefined)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Structured identity must match provider', path: ['provider'] });
+    }
     try {
       const parsedUrl = new URL(data.url);
       if (parsedUrl.protocol !== 'https:') {
@@ -129,9 +135,10 @@ export type CallActionRequest = z.infer<typeof CallActionRequestSchema>;
 export const SetExternalLiveRequestSchema = z
   .object({
     provider: ExternalLiveProviderSchema,
-    url: z.string().url('Must be a valid YouTube or Twitch URL'),
+    url: z.string().refine(input => !Array.from(input).some(character => character.charCodeAt(0) <= 32 || character.charCodeAt(0) === 127 || character === '\\'), 'URL must not contain whitespace, controls or backslashes').pipe(z.string().url('Must be a valid YouTube or Twitch URL')),
     title: z.string().max(100).optional(),
   })
+  .strict()
   .superRefine((data, ctx) => {
     try {
       const parsed = new URL(data.url);

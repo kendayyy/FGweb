@@ -60,9 +60,10 @@ export class CallsService implements OnModuleInit,OnModuleDestroy {
  private async dto(db:Pool|PoolClient,id:string):Promise<CallGroupDTO>{
   const row=(await db.query(`SELECT c.*,to_char(c.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso,
    (SELECT count(*)::int FROM call_members m WHERE m.call_group_id=c.id AND m.left_at IS NULL) AS participants,
-   (SELECT count(*)::int FROM call_publish_slots p WHERE p.call_group_id=c.id) AS publishers FROM call_groups c WHERE c.id=$1`,[id])).rows[0];
+   (SELECT count(*)::int FROM call_publish_slots p WHERE p.call_group_id=c.id) AS publishers,
+   EXISTS(SELECT 1 FROM external_lives e WHERE e.call_group_id=c.id) AS has_external FROM call_groups c WHERE c.id=$1`,[id])).rows[0];
   if(!row)roomError(ErrorCode.NOT_FOUND,'Call not found');
-  return CallGroupSchema.parse({id:row.id,roomId:row.room_id,state:row.state,participantCount:row.participants,publisherCount:row.publishers,hasExternalLive:false,createdAt:row.created_iso});
+  return CallGroupSchema.parse({id:row.id,roomId:row.room_id,state:row.state,participantCount:row.participants,publisherCount:row.publishers,hasExternalLive:row.has_external,createdAt:row.created_iso});
  }
  async create(user:string,session:string,roomId:string){
   const id=randomUUID(),config=this.config();let nativeCreated=false;

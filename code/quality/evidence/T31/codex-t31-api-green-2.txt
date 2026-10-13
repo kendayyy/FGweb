@@ -1,0 +1,41 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/external-live.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:10208) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/external-live.integration.spec.ts (101.23 s)
+  ● T31 actual external-source API, current admission and PostgreSQL › rejects URL-parser whitespace and backslash canonicalization escapes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 200
+
+      31 |  it.each(['https://twitch.tv/directory','https://twitch.tv/videos/123','https://clips.twitch.tv/fixture','https://www.twitch.tv/bad-name','https://www.twitch.tv/a'.padEnd(55,'a')])('rejects non-channel Twitch URL %s',async url=>{expect((await api('put','member',{provider:'twitch',url})).status).toBe(422);});
+      32 |  it('rejects mismatched provider and injected authority',async()=>{expect((await put('https://twitch.tv/fg_fixture')).status).toBe(422);for(const extra of [{configuredBy:'owner'},{videoId:'M7lc1UVf-VE'},{callId:'other'},{availability:'healthy'}])expect((await put(undefined,'member',extra)).status).toBe(422);});
+    > 33 |  it('rejects URL-parser whitespace and backslash canonicalization escapes',async()=>{for(const url of [' https://youtu.be/M7lc1UVf-VE','https://youtu.be/M7lc1UVf-VE\n','https://www.youtube.com\\watch?v=M7lc1UVf-VE','https://www.youtube.com/watch?v=M7lc1UVf-VE\u0000'])expect((await put(url)).status).toBe(422);expect((await pool.query('SELECT id FROM external_lives')).rowCount).toBe(0);});
+         |                                                                                                                                                                                                                                                                                                             ^
+      34 |  it('returns null before configuration and DELETE is idempotent',async()=>{const r=await api('get');expect(r.status).toBe(200);expect(r.body).toBeNull();for(let i=0;i<2;i++){const removed=await api('delete');expect(removed.status).toBe(200);expect(removed.body).toEqual({success:true});}});
+      35 |  it('a current helper removes a configured source without deleting the call or its members',async()=>{expect((await put()).status).toBe(200);expect((await api('delete','helper',{userId:'owner'})).status).toBe(422);expect((await pool.query('SELECT id FROM external_lives')).rowCount).toBe(1);expect((await api('delete','helper')).status).toBe(200);expect((await api('get')).body).toBeNull();expect((await pool.query('SELECT id FROM call_members WHERE call_group_id=$1 AND left_at IS NULL',[callId])).rowCount).toBe(3);const list=await request(base).get('/api/v1/rooms/'+roomId+'/calls').set('Cookie',cookies.owner);expect(list.status).toBe(200);expect(list.body.find((x:{id:string})=>x.id===callId)?.hasExternalLive).toBe(false);});
+      36 |  it('keeps a syntactically valid nonexistent source unverified',async()=>{const r=await put('https://youtube.com/watch?v=00000000000');expect(r.status).toBe(200);expect(r.body.availability).toBe('unknown');expect(r.body.healthy).toBeUndefined();});
+
+      at Object.<anonymous> (test/external-live.integration.spec.ts:33:301)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 39 passed, 40 total
+Snapshots:   0 total
+Time:        103.174 s
+Ran all test suites matching test/external-live.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/external-live.integration.spec.ts

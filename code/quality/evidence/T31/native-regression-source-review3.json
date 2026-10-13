@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-13T17:43:26.033Z",
+  "reviewer": "Codex",
+  "helper": {
+    "original": "quality/evidence/T30/private-gateway-regression-linux-reviewed1.mjs",
+    "originalSha256": "3013c4e7e1526998b0cd55b477ba52dd0bcdaa122b21458c06f1af403cf4be43",
+    "copy": "quality/evidence/T31/private-gateway-regression-linux1.mjs",
+    "copySha256": "ea0ed88b129bf7025f2b8e4c72ea5236b67444e52d4114f2a8750cee0a72574c",
+    "reverseByteExact": true,
+    "onlyOwnedRuntimeNamesChanged": true
+  },
+  "tests": [
+    {
+      "original": "apps/api/test/call-admission.integration.spec.ts",
+      "originalSha256": "9689278e264bb846cac21ffcf749c659cbe23410719b2ccf12b356a75aac8c8c",
+      "copy": "quality/evidence/T31/regression-tests3/call-admission.integration.spec.ts",
+      "copySha256": "fd80e2e43c6413a1b2c12d56a3759c532395ea48d4ef9eb1e3d6bcd7810e53b7",
+      "reverseByteExact": true,
+      "allAssertionsAndDeadlinesUnchanged": true,
+      "changes": [
+        [
+          "from '../src/app.module.js'",
+          "from '../../../../apps/api/src/app.module.js'"
+        ],
+        [
+          "from './test-cookie-helper.js'",
+          "from '../../../../apps/api/test/test-cookie-helper.js'"
+        ],
+        [
+          "path.dirname(fileURLToPath(import.meta.url)),'../../..'",
+          "path.dirname(fileURLToPath(import.meta.url)),'../../../..'"
+        ],
+        [
+          "quality/evidence/T27/private-gateway-fixture.mjs",
+          "quality/evidence/T31/private-gateway-regression-linux1.mjs"
+        ],
+        [
+          "t26_admission_",
+          "t31_reg_admission_"
+        ]
+      ]
+    },
+    {
+      "original": "apps/api/test/publishing.integration.spec.ts",
+      "originalSha256": "b22ec66b4b2de21a534eb2bcc53b9499717c2fba3438198bc37b243112994c9c",
+      "copy": "quality/evidence/T31/regression-tests3/publishing.integration.spec.ts",
+      "copySha256": "8d43a02ef70f3ecc79664b994f8de9c350114c39d26e5737309483c81ce56099",
+      "reverseByteExact": true,
+      "allAssertionsAndDeadlinesUnchanged": true,
+      "changes": [
+        [
+          "from '../src/app.module.js'",
+          "from '../../../../apps/api/src/app.module.js'"
+        ],
+        [
+          "from './test-cookie-helper.js'",
+          "from '../../../../apps/api/test/test-cookie-helper.js'"
+        ],
+        [
+          "path.dirname(fileURLToPath(import.meta.url)),'../../..'",
+          "path.dirname(fileURLToPath(import.meta.url)),'../../../..'"
+        ],
+        [
+          "quality/evidence/T29/private-gateway-fixture.mjs",
+          "quality/evidence/T31/private-gateway-regression-linux1.mjs"
+        ],
+        [
+          "t29_publishing_",
+          "t31_reg_publishing_"
+        ]
+      ]
+    }
+  ],
+  "driverSha256": "c507a9b54327768ea0464ff7d30da2f2b189d6a1f3112109a190d0de09720227",
+  "publicDependencyVolumeReadOnly": true,
+  "originalApplicationUnchanged": true,
+  "reason": "Use previously accepted Codex-only Linux public dependency cache instead of slow Windows node_modules bind for the real original gateway tests. Same gateway source, pinned image/lock/dependency volume verified by helper, identical assertions and deadlines. Prior failing runs retained; clock probe does not establish clock skew.",
+  "unresolvedSourceFindings": []
+}

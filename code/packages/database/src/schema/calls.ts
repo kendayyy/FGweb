@@ -120,6 +120,8 @@ export const externalLives = pgTable(
     callGroupId: text('call_group_id').notNull(),
     provider: text('provider').notNull(),
     url: text('url').notNull(),
+    videoId: text('video_id'),
+    channelName: text('channel_name'),
     title: text('title'),
     configuredBy: text('configured_by')
       .notNull()
@@ -130,6 +132,7 @@ export const externalLives = pgTable(
   (table) => [
     unique('external_lives_call_group_unique').on(table.callGroupId),
     check('external_live_provider_check', sql`provider IN ('youtube', 'twitch')`),
+    check('external_lives_structured_source_check', sql`(video_id IS NULL AND channel_name IS NULL) OR (provider='youtube' AND video_id IS NOT NULL AND video_id ~ '^[A-Za-z0-9_-]{11}$' AND channel_name IS NULL) OR (provider='twitch' AND channel_name IS NOT NULL AND channel_name ~ '^[a-z0-9_]{1,25}$' AND video_id IS NULL)`),
     check('external_lives_active_check', sql`is_call_active = true`),
     foreignKey({
       name: 'external_lives_call_group_fk',

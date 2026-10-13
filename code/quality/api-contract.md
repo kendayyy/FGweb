@@ -456,3 +456,10 @@ Screen claims allocate exactly one of ordinals1–3 per user atomically and idem
 Moderator MIC_MUTED suppresses outgoing MICROPHONE and SCREEN_SHARE_AUDIO to prevent a microphone re-labeled as screen audio from bypassing mute. Screen video/quota and incoming subscriptions remain available. ALLOW_MIC restores allowed audio sources without automatically starting a device. User self-mic intent remains separate. STOP_SCREEN_SHARE frees quota and blocks reclaim until allow; KICK revokes admission/seat/slot/native peer without removing persistent room/chat/team membership.
 
 Verified signed native track_unpublished events and reconciliation return quota; unused reservations expire at30s, and admission disconnect grace remains30s. Late event identity/time/slot generation cannot restore stale grants. Evidence: quality/evidence/T29/; local tests only, closure.json controls completion. No main migration, production activation, physical/audible-quality or1,000-media claim.
+
+
+## T31 reviewed external-source backend
+
+PUT and legacy POST `/api/v1/calls/:id/external-live` accept the shared strict provider/url/title request and return200 ExternalLiveSchema. GET returns200 ExternalLiveSchema or JSON null when absent; DELETE returns200 `{success:true}` and is idempotent. Every verb requires the current session-bound, unbanned, onboarded call admission and room membership. A room/helper role alone is insufficient. One row/call is replaced atomically under existing call/room locks.
+
+Stored `videoId` or lowercase `channelName` accompanies canonical HTTPS URL; `availability` is always `unknown`, never a source-existence/health assertion. Server only parses whitelisted YouTube watch/youtu.be/live/embed/shorts and Twitch channel inputs, strips ancillary query/fragment data, never fetches arbitrary URLs. Legacy source rows remain; recognizable IDs backfill, unrecognized rows stay preserved without a health claim. Creator leave and call closure clean the source in the same DB transaction, retaining room/chat. Frontend playback/Twitch parent belongs to T32.

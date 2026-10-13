@@ -1,0 +1,151 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/external-live.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/external-live.test.ts (7 tests | 7 failed) 49ms
+   ❯ T31 external source contract and unverified availability (7)
+     × retains normalized YouTube ID and explicitly unknown availability 30ms
+     × retains normalized Twitch channel 4ms
+     × preserves legacy DTOs without claiming availability 3ms
+     × rejects malformed or inconsistent structured provider IDs 3ms
+     × does not allow a syntactic URL to assert healthy availability 2ms
+     × request rejects client-supplied source identity or authority 2ms
+     × registers member-only PUT/GET/DELETE and retains POST compatibility 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > retains normalized YouTube ID and explicitly unknown availability
+AssertionError: expected { id: 'source', callId: 'call', …(4) } to match object { videoId: 'M7lc1UVf-VE', …(1) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "availability": "unknown",
+-   "videoId": "M7lc1UVf-VE",
++   "callId": "call",
++   "configuredBy": "member",
++   "createdAt": "2026-10-13T00:00:00Z",
++   "id": "source",
++   "provider": "youtube",
++   "url": "https://www.youtube.com/watch?v=M7lc1UVf-VE",
+  }
+
+ ❯ test/external-live.test.ts:5:167
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > retains normalized Twitch channel
+AssertionError: expected { id: 'source', callId: 'call', …(4) } to match object { channelName: 'fg_fixture', …(1) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "availability": "unknown",
+-   "channelName": "fg_fixture",
++   "callId": "call",
++   "configuredBy": "member",
++   "createdAt": "2026-10-13T00:00:00Z",
++   "id": "source",
++   "provider": "twitch",
++   "url": "https://www.twitch.tv/fg_fixture",
+  }
+
+ ❯ test/external-live.test.ts:6:195
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > preserves legacy DTOs without claiming availability
+AssertionError: expected { id: 'source', callId: 'call', …(4) } to match object { provider: 'youtube', …(1) }
+(5 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "availability": "unknown",
+    "provider": "youtube",
+  }
+
+ ❯ test/external-live.test.ts:7:103
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > rejects malformed or inconsistent structured provider IDs
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/external-live.test.ts:8:341
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > does not allow a syntactic URL to assert healthy availability
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/external-live.test.ts:9:153
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > request rejects client-supplied source identity or authority
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/external-live.test.ts:10:309
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  test/external-live.test.ts > T31 external source contract and unverified availability > registers member-only PUT/GET/DELETE and retains POST compatibility
+AssertionError: expected undefined to be 'CallParticipant' // Object.is equality
+
+- Expected:
+"CallParticipant"
+
++ Received:
+undefined
+
+ ❯ test/external-live.test.ts:11:254
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  23:33:34
+   Duration  1.63s (transform 49%, import 44%, tests 4%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/external-live.test.ts

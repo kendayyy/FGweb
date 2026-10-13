@@ -1,0 +1,46 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/external-live.test.ts test/call-outbox.test.ts --maxWorkers=1 --no-file-parallelism
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/call-outbox.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-outbox.test.ts [ test/call-outbox.test.ts ]
+Error: Transform failed with 1 error:
+E:/FGweb/code/packages/database/src/schema/calls.ts:136:45: ERROR: Expected ")" but found "is_call_active"
+  Plugin: vite:esbuild
+  File: E:/FGweb/code/packages/database/src/schema/calls.ts:136:45
+  
+  Expected ")" but found "is_call_active"
+  134|      check('external_live_provider_check', sql`provider IN ('youtube', 'twitch')`),
+  135|      check('external_lives_structured_source_check', sql`(video_id IS NULL AND channel_name IS NULL) OR (provider='youtube' AND video_id IS NOT NULL AND video_id ~ '^[A-Za-z0-9_-]{11}
+  136|      check('external_lives_active_check', sql`is_call_active = true`),
+     |                                               ^
+  137|      foreignKey({
+  138|        name: 'external_lives_call_group_fk',
+  
+ ❯ failureErrorWithLog ../../node_modules/esbuild/lib/main.js:1752:15
+ ❯ ../../node_modules/esbuild/lib/main.js:1019:50
+ ❯ responseCallbacks.<computed> ../../node_modules/esbuild/lib/main.js:886:9
+ ❯ handleIncomingPacket ../../node_modules/esbuild/lib/main.js:941:12
+ ❯ Socket.readFromStdout ../../node_modules/esbuild/lib/main.js:864:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  5 passed (5)
+   Start at  23:53:53
+   Duration  16.26s (tests 86%, import 13%, transform 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/external-live.test.ts test/call-outbox.test.ts --maxWorkers=1 --no-file-parallelism

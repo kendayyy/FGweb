@@ -1,0 +1,70 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/external-live.test.ts
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/external-live.test.ts (5 tests | 5 failed) 11439ms
+   ❯ T31 additive source migration and transactional lifecycle constraints (5)
+     × migrates existing data without deleting legacy rows or changing room/chat ownership 90ms
+     × preserves one source/call and rejects invalid provider/id combinations 86ms
+     × active configuring-member leave removes the source before the FK check and preserves room/chat 48ms
+     × call closure removes its source and retains its persistent room 39ms
+     × transaction rollback restores both the source and membership after attempted leave 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/external-live.test.ts > T31 additive source migration and transactional lifecycle constraints > migrates existing data without deleting legacy rows or changing room/chat ownership
+error: column "video_id" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/external-live.test.ts:10:229
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/external-live.test.ts > T31 additive source migration and transactional lifecycle constraints > preserves one source/call and rejects invalid provider/id combinations
+error: column "video_id" of relation "external_lives" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/external-live.test.ts:11:113
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/external-live.test.ts > T31 additive source migration and transactional lifecycle constraints > active configuring-member leave removes the source before the FK check and preserves room/chat
+error: column "channel_name" of relation "external_lives" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/external-live.test.ts:12:137
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/external-live.test.ts > T31 additive source migration and transactional lifecycle constraints > call closure removes its source and retains its persistent room
+error: column "video_id" of relation "external_lives" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/external-live.test.ts:13:106
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/external-live.test.ts > T31 additive source migration and transactional lifecycle constraints > transaction rollback restores both the source and membership after attempted leave
+error: column "video_id" of relation "external_lives" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/external-live.test.ts:14:125
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  23:41:31
+   Duration  13.33s (tests 88%, import 11%, transform 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/external-live.test.ts

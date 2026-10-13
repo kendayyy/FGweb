@@ -201,6 +201,8 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/calls/:id/join', auth: 'RoomMember', requestSchema: CallActionRequestSchema, responseSchema: CallJoinSchema },
   { method: 'POST', path: '/api/v1/calls/:id/leave', auth: 'CallParticipant', requestSchema: CallActionRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'GET', path: '/api/v1/calls/:id/participants', auth: 'RoomMember', requestSchema: ListCallParticipantsQuerySchema, responseSchema: z.array(CallParticipantSchema) },
+  { method: 'PUT', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', requestSchema: SetExternalLiveRequestSchema, responseSchema: ExternalLiveSchema },
+  { method: 'GET', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', responseSchema: ExternalLiveSchema.nullable() },
   { method: 'POST', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', requestSchema: SetExternalLiveRequestSchema, responseSchema: ExternalLiveSchema },
   { method: 'DELETE', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', responseSchema: z.object({ success: z.boolean() }) },
   { method: 'PATCH', path: '/api/v1/calls/:id/participants/:userId/mute', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_CALLS', requestSchema: MuteParticipantRequestSchema, responseSchema: CallParticipantSchema },

@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-13T16:51:23.772Z",
+  "reviewer": "Codex",
+  "snapshots": [
+    {
+      "path": "apps/api/test/external-live.integration.spec.ts",
+      "snapshot": "quality/evidence/T31/red-test-before-valid-closure-0.ts",
+      "sha256": "a7d802726d117bb4c790480209791cf001a18017b76fbd9ad7a169699102f3af"
+    },
+    {
+      "path": "packages/database/test/external-live.test.ts",
+      "snapshot": "quality/evidence/T31/red-test-before-valid-closure-1.ts",
+      "sha256": "b57637ed499c57e64aac68cbcd2ecb4a8172d0c580259c975701079329e0778c"
+    }
+  ],
+  "reason": "Code inspection found closing an OPEN call with active members violates the existing call_members_open_call_fk (generated OPEN state). Preserve actual route/column REDs. Correct only closure setup to execute the legal explicit leave sequence before closing, retaining source-removed/room-preserved/closed-call-denied assertions and adding status checks on all actual leaves. No implementation mock, assertion/deadline weakening, gate/PASS change.",
+  "unresolvedSourceFindings": []
+}
