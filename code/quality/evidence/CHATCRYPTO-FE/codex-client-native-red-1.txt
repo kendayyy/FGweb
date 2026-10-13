@@ -1,0 +1,241 @@
+✖ native Megolm returns bound text as data, preserving markup without rendering it (115.87ms)
+✖ native authenticated ciphertext rejects decoded conversationId disagreement (6.9552ms)
+✖ native authenticated ciphertext rejects decoded clientMessageId disagreement (1.1708ms)
+✖ native authenticated ciphertext rejects decoded senderId disagreement (1.2443ms)
+✖ native authenticated ciphertext rejects decoded senderDeviceId disagreement (1.1937ms)
+✖ native authenticated ciphertext rejects decoded membershipRevision disagreement (1.5508ms)
+✖ rejects outer conversation substitution before displaying plaintext (1.9461ms)
+✖ native Megolm rejects modified ciphertext (2.2893ms)
+✖ rejects relay device substitution despite authentic room ciphertext (2.3764ms)
+✖ rejects relay attachment and mention additions absent from encrypted content (2.7106ms)
+✖ rejects wrong SDK device store without plaintext fallback (32.9476ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 0
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1603.9055
+
+✖ failing tests:
+
+test at apps\web\test\crypto-client.native.test.ts:1:1725
+✖ native Megolm returns bound text as data, preserving markup without rendering it (115.87ms)
+  Error [CryptoMessageError]: LOCKED
+      at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:30:26)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'LOCKED'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2070
+✖ native authenticated ciphertext rejects decoded conversationId disagreement (6.9552ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:26)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2070
+✖ native authenticated ciphertext rejects decoded clientMessageId disagreement (1.1708ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:26)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2070
+✖ native authenticated ciphertext rejects decoded senderId disagreement (1.2443ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:26)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2070
+✖ native authenticated ciphertext rejects decoded senderDeviceId disagreement (1.1937ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:26)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2070
+✖ native authenticated ciphertext rejects decoded membershipRevision disagreement (1.5508ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:34:26)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2292
+✖ rejects outer conversation substitution before displaying plaintext (1.9461ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:38:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:38:24)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2461
+✖ native Megolm rejects modified ciphertext (2.2893ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:45:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:45:24)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:2797
+✖ rejects relay device substitution despite authentic room ciphertext (2.3764ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:49:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:49:24)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:3020
+✖ rejects relay attachment and mention additions absent from encrypted content (2.7106ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:53:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:53:24)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps\web\test\crypto-client.native.test.ts:1:3302
+✖ rejects wrong SDK device store without plaintext fallback (32.9476ms)
+  AssertionError [ERR_ASSERTION]: The "invalid" validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  CryptoMessageError: LOCKED
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:57:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: CryptoMessageError: LOCKED
+        at decryptLiveMessage (E:\FGweb\code\apps\web\src\features\crypto\client.ts:20:9)
+        at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-client.native.test.ts:57:30)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -1,0 +1,237 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:37348) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-room-authority.integration.spec.ts (34.767 s)
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back kick when expiry occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back kick when ban-rc occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back kick when ban-rr occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back leave when expiry occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back leave when ban-rc occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back leave when ban-rr occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back sole-owner-leave when expiry occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back sole-owner-leave when ban-rc occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back sole-owner-leave when ban-rr occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back dissolve when expiry occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back dissolve when ban-rc occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+  ● Room crypto membership final authority with real authenticated actor and PostgreSQL › rolls back dissolve when ban-rr occurs during an actual epoch lock wait
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: HttpException
+
+    Received value has no prototype
+    Received value: undefined
+
+      63 |      if(fault==='expiry'){await new Promise(resolve=>setTimeout(resolve,800));expect((await pool.query('SELECT id FROM "session" WHERE id=$1 AND expires_at<=clock_timestamp()',[sessionId])).rowCount).toBe(1);}
+      64 |      else{await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,$2,$3,'BAN')`,[ban,owner,actorId]);expect((await pool.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 ORDER BY created_at DESC,id DESC LIMIT 1`,[actorId])).rows[0].action).toBe('BAN');}
+    > 65 |      await holder.query('ROLLBACK');const result=await pending;expect(result.error).toBeInstanceOf(HttpException);expect((result.error as HttpException).getStatus()).toBe(fault==='expiry'?401:403);expect(result.value).toBeUndefined();expect(await snapshot()).toEqual(before);
+         |                                                                                     ^
+      66 |     }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',[sessionId,session.expires_at]);}
+      67 |    });
+      68 |   }
+
+      at Object.<anonymous> (test/chat-crypto-room-authority.integration.spec.ts:65:85)
+
+Test Suites: 1 failed, 1 total
+Tests:       12 failed, 12 total
+Snapshots:   0 total
+Time:        35.199 s, estimated 42 s
+Ran all test suites matching apps/api/test/chat-crypto-room-authority.integration.spec.ts.

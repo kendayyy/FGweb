@@ -1,0 +1,56 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:28488) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (58.67 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › delivers real encrypted Web Push over trusted TLS with generic content and durable replay dedup
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Object {
+    -   "exitCode": 1,
+    -   "stderr": "Private PUSH worker unavailable; jobs retained for retry
+    +   "exitCode": 0,
+    +   "stderr": "",
+    +   "stdout": "{\"status\":\"READY\",\"processed\":1,\"delivered\":0}
+      ",
+    -   "stdout": "",
+      }
+
+      87 |    for(const [args,file] of [[['--unknown','--once'],configurationFile],[['--unknown','--once','--job',processJob.job.id],configurationFile],[['--once','--job',processJob.job.id],'']] as Array<[string[],string]>){const result=await runWorker(args,file);expect(result).toEqual({exitCode:1,stdout:'',stderr:'Private PUSH worker unavailable; jobs retained for retry\n'});expect(received).toHaveLength(2);}
+      88 |    const validConfiguration=fs.readFileSync(configurationFile);try{fs.writeFileSync(configurationFile,'{"privateKey":"owned-secret-invalid-json"');const result=await runWorker(['--once','--job',processJob.job.id]);expect(result).toEqual({exitCode:1,stdout:'',stderr:'Private PUSH worker unavailable; jobs retained for retry\n'});expect(received).toHaveLength(2);}finally{fs.writeFileSync(configurationFile,validConfiguration);validConfiguration.fill(0);}
+    > 89 |    const schemaJob=await queue('worker-process-incomplete-schema');await pool.query('ALTER TABLE chat_crypto_legacy_stage_objects RENAME TO private_worker_missing_stage');try{for(const args of [['--once','--job',schemaJob.job.id],['--once']]){const result=await runWorker(args);expect(result).toEqual({exitCode:1,stdout:'',stderr:'Private PUSH worker unavailable; jobs retained for retry\n'});expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[schemaJob.job.id])).rows[0].status).toBe('PENDING');expect(received).toHaveLength(2);}}finally{await pool.query('ALTER TABLE private_worker_missing_stage RENAME TO chat_crypto_legacy_stage_objects');}await pool.query("UPDATE notification_outbox SET status='FAILED',last_error='OWNED_TEST_CANCELLED' WHERE id=$1",[schemaJob.job.id]);
+         |                                                                                                                                                                                                                                                                                                      ^
+      90 |    const disabled=await queue('worker-pref-revoked');await pool.query('UPDATE notification_preferences SET push=false WHERE id=$1',[preferenceId]);expect(await dispatcher.dispatchOne(disabled.job.id)).toBe(false);expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[disabled.job.id])).rows[0].status).toBe('FAILED');expect(received).toHaveLength(2);await pool.query('UPDATE notification_preferences SET push=true WHERE id=$1',[preferenceId]);
+      91 |    const banned=await queue('worker-banned'),banId=randomUUID();try{await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'outsider','bob','BAN','owned worker ban')",[banId]);expect(await dispatcher.dispatchOne(banned.job.id)).toBe(false);expect(received).toHaveLength(2);}finally{await pool.query('DELETE FROM admin_actions WHERE id=$1',[banId]);}
+      92 |    const interval=await queue('worker-interval-revoked'),originalIntervals=(await pool.query("SELECT id,start_revision FROM chat_crypto_membership_intervals WHERE conversation_id='dm' AND user_id='bob'")).rows;try{await pool.query("UPDATE chat_crypto_membership_intervals SET start_revision=$1 WHERE conversation_id='dm' AND user_id='bob'",[Number(interval.revision)+1]);expect(await dispatcher.dispatchOne(interval.job.id)).toBe(false);expect(received).toHaveLength(2);}finally{for(const row of originalIntervals)await pool.query('UPDATE chat_crypto_membership_intervals SET start_revision=$2 WHERE id=$1',[row.id,row.start_revision]);}
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:89:294)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        59.219 s, estimated 65 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"9f676f0d826b4c95a03b3051e3e99dae","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

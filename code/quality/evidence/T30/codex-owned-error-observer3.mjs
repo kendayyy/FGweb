@@ -1,0 +1,2 @@
+import {createOwnedErrorObserver as createBase} from './codex-owned-error-observer2.mjs';import {installOwnedControllerObserver} from './codex-owned-controller-observer1.mjs';
+export function createOwnedErrorObserver(options){const controller=installOwnedControllerObserver(options),base=createBase(options);return {...base,controllerFilterCount:controller.filterCount,stop(){controller.stop();return base.stop();}};}

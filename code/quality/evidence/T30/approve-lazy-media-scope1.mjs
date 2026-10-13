@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {checkGate} from '../../../scripts/verify-task.mjs';
+const d='quality/evidence/T30',lp='quality/tasks.json',ledger=JSON.parse(fs.readFileSync(lp)),task=ledger.tasks.find(t=>t.id==='T30'),plan=JSON.parse(fs.readFileSync(d+'/lazy-media-adoption-plan1.json'));assert.equal(task.status,'IN_PROGRESS');
+checkGate({root:process.cwd(),tasks:ledger.tasks,id:'T30',specHash:task.specSha256});
+const before=JSON.parse(fs.readFileSync(d+'/before.json'));for(const row of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===row.id),row);
+const paths=plan.files.map(f=>f.path);assert.deepEqual(paths,['apps/web/src/features/calls/CallPanel.tsx','apps/web/src/features/calls/media-loader.ts']);
+for(const f of plan.files)assert.equal(fs.existsSync(f.path)?createHash('sha256').update(fs.readFileSync(f.path)).digest('hex'):null,f.beforeSha256);
+const rp=d+'/lazy-media-scope-review1.json';fs.writeFileSync(rp,JSON.stringify({at:new Date().toISOString(),reviewer:'Codex',paths,reason:plan.reason,original24TestsPassedInRed:true,noAcceptanceRelaxation:true},null,2)+'\n',{flag:'wx'});
+task.approvedScopeAmendments.push({source:rp,reason:plan.reason,paths});for(const p of paths)if(!task.writeAllowlist.includes(p))task.writeAllowlist.push(p);task.evidencePaths.push(rp);
+checkGate({root:process.cwd(),tasks:ledger.tasks,id:'T30',specHash:task.specSha256,requestedPaths:paths});fs.writeFileSync(lp,JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n- Coding and build 2 — T30 — ${new Date().toISOString()}: original adoption1 blocked before mutation by allowlist; reviewed exact2-source lazy-loader scope added, stockgate80 historical PASS preserved. Evidence code/${rp}; no source adoption/acceptance claimed yet.\n`);console.log('Exact2-source scope reviewed; gate passed.');

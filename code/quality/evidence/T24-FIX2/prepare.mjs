@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T24-FIX2',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),owner=ledger.tasks.find(t=>t.id==='T24-FIX2');
+checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:owner.id,specHash:baseline.hashes.specSha256});assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,owner.id);assert.equal(owner.status,'NOT_STARTED');
+const derived=['controller','service'].flatMap(name=>['js','js.map','d.ts'].map(ext=>`apps/api/dist/modules/play-sessions/play-sessions.${name}.${ext}`));
+owner.writeAllowlist.push('apps/api/dist/modules/play-sessions/play-sessions.controller.d.ts','apps/api/dist/modules/teams/teams.controller.d.ts');
+const allow=p=>owner.writeAllowlist.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.cache/')&&!p.startsWith('.runtime/'));
+const before={recordedAt:new Date().toISOString(),baselines:baseline.hashes,readonly:Object.fromEntries(files.filter(p=>!allow(p)).map(p=>[p,hash(p)])),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},scopeAddition:derived,reason:'Derived output ownership for the two changed backend sources plus ordinary traceability metadata; prior human permission to broaden write scope, no extra source/business change.'};
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify(before,null,2)+'\n',{flag:'wx'});
+owner.status='IN_PROGRESS';owner.startedAt=new Date().toISOString();owner.inputsHash=hash(`${dir}/before.json`);owner.evidencePaths.push(`${dir}/before.json`);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/GAME-LOGO-FE/record.mjs','utf8').replaceAll('GAME-LOGO-FE','T24-FIX2'),{flag:'wx'});
+fs.writeFileSync(`${dir}/test-types.json`,fs.readFileSync('quality/evidence/T24/test-types.json','utf8').replace('play-sessions.integration.spec.ts','play-session-capacity.integration.spec.ts'),{flag:'wx'});
+console.log(JSON.stringify({task:owner.id,status:owner.status,strictGate:'PASS',derivedFiles:derived.length,readonly:Object.keys(before.readonly).length}));

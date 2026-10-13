@@ -1,0 +1,30 @@
+{"realPostgreSQL":true,"nativeSdk":"18.6.0","nativeTransportEqualsFlow":false,"nativeAccepted":false,"flowAliasControlAccepted":true}
+✖ actual PostgreSQL protocol guard accepts unchanged native SAS transport and flow IDs (7829.8236ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10906.5307
+
+✖ failing tests:
+
+test at apps\web\test\crypto-sas-sql.native.ts:1:502
+✖ actual PostgreSQL protocol guard accepts unchanged native SAS transport and flow IDs (7829.8236ms)
+  AssertionError [ERR_ASSERTION]: database must accept distinct native transport/flow IDs without rewriting either
+  
+  false !== true
+  
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-sas-sql.native.ts:30:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

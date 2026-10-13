@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17524) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (112.983 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rolls back a private message when the authenticated session expires during an actual epoch lock wait
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 201
+
+      675 |    await holder.query('BEGIN');const identity=(await holder.query('SELECT current_schema() AS schema,pg_backend_pid() AS pid')).rows[0];expect(identity.schema).toBe(owned);await holder.query('SELECT conversation_id FROM chat_crypto_state WHERE conversation_id=$1 FOR UPDATE',[conversation]);await pool.query(`UPDATE "session" SET expires_at=clock_timestamp()+interval '700 milliseconds' WHERE id=$1`,[session.id]);
+      676 |    pending=post('conversations/'+conversation+'/messages',payload,otherCookie).then(response=>response);const deadline=Date.now()+3000;while(!(await pool.query('SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid))',[identity.pid])).rowCount){if(Date.now()>deadline)throw new Error('Expected native message epoch lock wait');await new Promise(resolve=>setTimeout(resolve,20));}
+    > 677 |    await new Promise(resolve=>setTimeout(resolve,800));await holder.query('ROLLBACK');const response=await pending;expect(response.status).toBe(401);expect(JSON.stringify(response.body)).not.toContain(event.ciphertext);expect((await pool.query('SELECT id FROM messages WHERE conversation_id=$1 AND client_message_id=$2',[conversation,tag])).rowCount).toBe(0);expect((await pool.query('SELECT session_id FROM chat_crypto_outbound_sessions WHERE session_id=$1',[String(event.session_id).replace(/=+$/,'')])).rowCount).toBe(0);expect((await pool.query(`SELECT count(*) AS count FROM notifications WHERE data::jsonb->>'conversationId'=$1`,[conversation])).rows[0].count).toBe(noticesBefore);
+          |                                                                                                                                            ^
+      678 |   }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(id) DO UPDATE SET user_id=EXCLUDED.user_id,token=EXCLUDED.token,expires_at=EXCLUDED.expires_at,created_at=EXCLUDED.created_at,updated_at=EXCLUDED.updated_at',[session.id,session.user_id,session.token,session.expires_at,session.created_at,session.updated_at]);}
+      679 |  });
+      680 |
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:677:140)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 46 passed, 47 total
+Snapshots:   0 total
+Time:        113.822 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

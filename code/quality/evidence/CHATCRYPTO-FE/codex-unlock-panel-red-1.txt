@@ -1,0 +1,168 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/crypto-unlock-panel.test.tsx (4 tests | 4 failed) 267ms
+   ❯ device unlock controls (DOM unit, no native/auth success claim) (4)
+     × requires saving a generated independent code, blocks duplicate unlock, then clears it 225ms
+     × existing device accepts only an exact code, offers no replacement code, and hides raw errors 10ms
+     × cancel clears the in-memory code while an unlock action is still pending 6ms
+     × announces the actual other-tab error with a recovery step 22ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/crypto-unlock-panel.test.tsx > device unlock controls (DOM unit, no native/auth success claim) > requires saving a generated independent code, blocks duplicate unlock, then clears it
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Tạo mã khôi phục"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Mở khóa thiết bị":
+  [36m<h2 />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section>[39m
+      [36m<h2>[39m
+        [0mMở khóa thiết bị[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mThiết bị đang khóa.[0m
+      [36m</p>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/crypto-unlock-panel.test.tsx:11:29
+      9|     const unlock = vi.fn(() => new Promise<void>(resolve => { finish =…
+     10|     render(<DeviceUnlockPanel existingDevice={false} onUnlock={unlock}…
+     11|     await user.click(screen.getByRole('button', { name: 'Tạo mã khôi p…
+       |                             ^
+     12|     const code = screen.getByLabelText('Mã khôi phục') as HTMLInputEle…
+     13|     expect(code.value).toMatch(/^[A-Za-z0-9_-]{43}$/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/crypto-unlock-panel.test.tsx > device unlock controls (DOM unit, no native/auth success claim) > existing device accepts only an exact code, offers no replacement code, and hides raw errors
+TestingLibraryElementError: Unable to find a label with the text of: Mã khôi phục
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section>[39m
+      [36m<h2>[39m
+        [0mMở khóa thiết bị[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mThiết bị đang khóa.[0m
+      [36m</p>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText ../../node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/crypto-unlock-panel.test.tsx:30:25
+     28|     render(<DeviceUnlockPanel existingDevice onUnlock={unlock} onCance…
+     29|     expect(screen.queryByRole('button', { name: 'Tạo mã khôi phục' }))…
+     30|     const code = screen.getByLabelText('Mã khôi phục');
+       |                         ^
+     31|     expect(code).toHaveAttribute('type', 'password');
+     32|     await user.type(code, 'AccountPassword!123');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/crypto-unlock-panel.test.tsx > device unlock controls (DOM unit, no native/auth success claim) > cancel clears the in-memory code while an unlock action is still pending
+TestingLibraryElementError: Unable to find a label with the text of: Mã khôi phục
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section>[39m
+      [36m<h2>[39m
+        [0mMở khóa thiết bị[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mThiết bị đang khóa.[0m
+      [36m</p>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText ../../node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/crypto-unlock-panel.test.tsx:43:25
+     41|     const cancel = vi.fn();
+     42|     render(<DeviceUnlockPanel existingDevice onUnlock={() => new Promi…
+     43|     const code = screen.getByLabelText('Mã khôi phục') as HTMLInputEle…
+       |                         ^
+     44|     await user.type(code, 'A'.repeat(43)); await user.click(screen.get…
+     45|     await user.click(screen.getByRole('button', { name: 'Hủy' }));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/crypto-unlock-panel.test.tsx > device unlock controls (DOM unit, no native/auth success claim) > announces the actual other-tab error with a recovery step
+TestingLibraryElementError: Unable to find an accessible element with the role "alert"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Mở khóa thiết bị":
+  [36m<h2 />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section>[39m
+      [36m<h2>[39m
+        [0mMở khóa thiết bị[0m
+      [36m</h2>[39m
+      [36m<p>[39m
+        [0mThiết bị đang khóa.[0m
+      [36m</p>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/crypto-unlock-panel.test.tsx:50:19
+     48|   it('announces the actual other-tab error with a recovery step', () =…
+     49|     render(<DeviceUnlockPanel existingDevice errorCode="OTHER_TAB" onU…
+     50|     expect(screen.getByRole('alert')).toHaveTextContent('tab khác');
+       |                   ^
+     51|     expect(screen.getByRole('alert')).toHaveTextContent('Đóng');
+     52|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  13:17:11
+   Duration  34.30s (environment 77%, setup 16%, import 6%, tests 1%, transform 1%)
+

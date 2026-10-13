@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "controlSuite": "cold-loader-boundary-diagnostic",
+  "version": 1,
+  "nativeAcceptance": false,
+  "controls": [
+    {
+      "id": "PREFLIGHT_IMAGE",
+      "description": "Local pinned Node image exists with exact digest without pulling from remote",
+      "assertion": "docker image inspect node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd succeeds"
+    },
+    {
+      "id": "PREFLIGHT_SERVICES",
+      "description": "Main services fg-local-postgres-1 and fg-local-redis-1 are running and healthy prior to execution",
+      "assertion": "inspect('fg-local-postgres-1').State.Health.Status === 'healthy' && inspect('fg-local-redis-1').State.Health.Status === 'healthy'"
+    },
+    {
+      "id": "PREFLIGHT_NETWORK",
+      "description": "Existing Docker network fg-local_default exists and contains PostgreSQL container",
+      "assertion": "network('fg-local_default').Name === 'fg-local_default' && pg.NetworkSettings.Networks['fg-local_default'] exists"
+    },
+    {
+      "id": "CYCLE_A_ISOLATION",
+      "description": "Cycle A container created with strict isolation parameters",
+      "assertion": "createdA.Config.User === 'node' && createdA.HostConfig.ReadonlyRootfs === true && createdA.HostConfig.NetworkMode === 'none' && createdA.Config.Labels['fg-owner'] === ownerTagA"
+    },
+    {
+      "id": "CYCLE_A_EXIT_CODE",
+      "description": "Cycle A execution finishes cleanly within timeout",
+      "assertion": "endedA.State.Running === false && endedA.State.ExitCode === 0"
+    },
+    {
+      "id": "CYCLE_A_RESULT_SCHEMA",
+      "description": "Cycle A output file result-raw.json conforms to schema",
+      "assertion": "raw.mode === 'without-preload' && raw.preloadInstalled === false && raw.allOk === true && raw.errorCode === null && raw.stages.length === 6 && raw.stages.every(s => s.ok === true)"
+    },
+    {
+      "id": "CYCLE_B_ISOLATION",
+      "description": "Cycle B container created with strict isolation parameters",
+      "assertion": "createdB.Config.User === 'node' && createdB.HostConfig.ReadonlyRootfs === true && createdB.HostConfig.NetworkMode === 'none' && createdB.Config.Labels['fg-owner'] === ownerTagB"
+    },
+    {
+      "id": "CYCLE_B_EXIT_CODE",
+      "description": "Cycle B execution finishes cleanly within timeout",
+      "assertion": "endedB.State.Running === false && endedB.State.ExitCode === 0"
+    },
+    {
+      "id": "CYCLE_B_RESULT_SCHEMA",
+      "description": "Cycle B output file result-preload.json conforms to schema",
+      "assertion": "preload.mode === 'with-preload' && preload.preloadInstalled === true && preload.allOk === true && preload.errorCode === null && preload.stages.length === 6 && preload.stages.every(s => s.ok === true)"
+    },
+    {
+      "id": "PAYLOAD_BOUNDS",
+      "description": "Both result payload files are bounded to under 64 KiB",
+      "assertion": "fs.statSync(rawOutputFile).size <= 65536 && fs.statSync(preloadOutputFile).size <= 65536"
+    },
+    {
+      "id": "CONTAINER_CLEANUP",
+      "description": "Both ephemeral diagnostic containers are stopped, removed, and verified absent",
+      "assertion": "docker ps -a filter by id returns empty string for both containerA and containerB"
+    },
+    {
+      "id": "SERVICE_PRESERVATION",
+      "description": "Main Postgres and Redis containers remain running, healthy, and untouched",
+      "assertion": "after.Id === before.Id && deepEqual(after.Config, before.Config) && after.State.Health.Status === 'healthy'"
+    },
+    {
+      "id": "NETWORK_PRESERVATION",
+      "description": "Network fg-local_default retains identical ID and container membership",
+      "assertion": "afterNet.Id === beforeNet.Id && deepEqual(afterNet.Containers, beforeNet.Containers)"
+    },
+    {
+      "id": "RUNTIME_SCRATCH_CLEANUP",
+      "description": "Ephemeral scratch directory in .runtime/t30 is completely unlinked",
+      "assertion": "!fs.existsSync(runDir)"
+    },
+    {
+      "id": "PROOF_COMPLETION",
+      "description": "Runner reports status COMPLETE with zero error codes and nativeAcceptance false",
+      "assertion": "proof.status === 'COMPLETE' && proof.errorCodes.length === 0 && proof.nativeAcceptance === false"
+    }
+  ]
+}

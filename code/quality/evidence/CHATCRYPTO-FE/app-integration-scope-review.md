@@ -1,0 +1,3 @@
+# FE application integration review
+
+Existing approved App.tsx scope: wrap the authenticated application in CryptoDeviceProvider, add protected /crypto device controls and authenticated navigation entry. Preserve existing routes/auth/theme/sidebar/session/call behavior. Ready requires native encrypted store and actual signed API registration with matching identity; no server trust flag or service-ready mock. Logout/account changes immediately clear published session and abort requests before native close. Headed actual browser/isolated API DB proof remains required. Capture original source before edit; ownership transition must pass stock gate before closure.

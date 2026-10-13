@@ -1,0 +1,15 @@
+{"run":"6fabfb728c3e46ed900db1280c633f56","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":false,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true}
+file:///E:/FGweb/code/quality/evidence/T02-FIX3/transit-smoke.mjs:24
+ });req.on('error',()=>reject(new Error('TLS or transport rejected (details redacted)')));req.setTimeout(5000,()=>req.destroy());if(payload)req.write(payload);req.end();
+                              ^
+
+Error: TLS or transport rejected (details redacted)
+    at ClientRequest.<anonymous> (file:///E:/FGweb/code/quality/evidence/T02-FIX3/transit-smoke.mjs:24:31)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at TLSSocket.socketCloseListener (node:_http_client:739:7)
+    at TLSSocket.emit (node:events:526:24)
+    at node:net:362:12
+    at TCP.done (node:internal/tls/wrap:770:7)
+
+Node.js v24.21.0

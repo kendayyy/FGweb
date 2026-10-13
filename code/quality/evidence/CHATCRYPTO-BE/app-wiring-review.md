@@ -1,0 +1,10 @@
+# Actual AppModule graph review
+
+Existing native realtime suite now instantiates actual AppModule, not a fixture module with an independently provided gateway. AppModule and RealtimeModule both import ChatCryptoModule; Nest shares the relay/device provider graph. No new endpoint/schema, main migration, source cleanup or production deployment. Actual configured custody uses CryptoCustodyModule separately; see custody-config-plan.md and its native tests.
+
+app-crypto-wiring-red-1 completed2026-10-09T09:08:05.131Z: missing /crypto/devices HTTP404,11setup failures, SHA256279666b3ace4bd5420bed1a24462a03eca1a9cd69735568756e80319ac675c8a. Green1 completed2026-10-09T09:09:38.126Z,exit0,11/11, SHA256d24627aa28e4a9b4bdffca0c78513d3a18fbaec429ac5ba2f14dff88cb0fd497. Actual signed sessions/PG/Redis/HTTP/Socket.IO/native SDK validate ciphertext broadcast, offline recovery/reconnect, quota, new membership denial, device revoke, ban/unban subscription, disconnect while locked, logout/kick and metadata-only wakeups. No fixture DI gateway override.
+
+Boundary custody-config-boundary-1 completed2026-10-09T09:24:58.917Z,14/14/2suites,exit0: explicit singleton and unconfigured custody503 with configured native custody3cases passed. Final source build/lint/integrated regression and immutable audit pending; last checkpoint24 predates these module/test changes. Full BE remains IN_PROGRESS and production custody/off-machine backup/restore/activation, notification/PUSH/preferences/mentions, future moderation producer and remaining perf/security acceptance are unfinished.
+
+
+Integrated custody-config-regression-1 completed2026-10-09T10:02:43.746Z, exit0,258/258/17suites (404.073s Jest), evidence SHA2562ca0ede19ac24499a2317b3830c530141098f3c3db25c35b2621f82202775e52. Actual module/config/schema readiness changes passed alongside existing crypto/social/rooms/auth-profile/call-controls regression; build2 and lint42 exit0. Native TLS/rotation/rewrap/restart/seal/outage/revocation flags passed; owned cleanup=true, productionReady=false. Immutable audit/checkpoint25 pending; task remains IN_PROGRESS.

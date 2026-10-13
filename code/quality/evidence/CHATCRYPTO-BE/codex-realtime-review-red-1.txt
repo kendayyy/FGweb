@@ -1,0 +1,68 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3312) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (42.655 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › filters a delayed old event for a new member while retaining their subscription for new ciphertext
+
+    Native realtime condition timed out
+
+      32 |  const machines=new Map<string,sdk.OlmMachine>(),cookies=new Map<string,string>(),sockets:Socket[]=[],published:string[]=[];
+      33 |  const received=new Map<string,unknown[]>(),legacy:unknown[]=[];
+    > 34 |  const wait=async(condition:()=>boolean|Promise<boolean>)=>{const end=Date.now()+5000;while(!await condition()){if(Date.now()>end)throw new Error('Native realtime condition timed out');await new Promise(resolve=>setTimeout(resolve,20));}};
+         |                                                                                                                                         ^
+      35 |  const post=(route:string,body:unknown,user='alice')=>request(base).post('/api/v1/crypto/'+route).set('Origin',origin).set('Cookie',cookies.get(user)!).send(body);
+      36 |  async function connect(user?:string){
+      37 |   const socket=io(base,{path:'/socket.io',transports:['websocket'],reconnection:false,extraHeaders:{Origin:origin,...(user?{Cookie:cookies.get(user)!}:{})}});sockets.push(socket);
+
+      at wait (test/chat-crypto-realtime.integration.spec.ts:34:137)
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:95:52)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › applies the same subscription quota across encrypted and legacy channels
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+       99 |   for(let i=0;i<32;i++){
+      100 |    await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`,['legacy-'+i]);await pool.query(`INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,'alice')`,['legacy-member-'+i,'legacy-'+i]);
+    > 101 |    expect(await ack(alice,SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId:'legacy-'+i})).toMatchObject({ok:i<31});
+          |                                                                                                  ^
+      102 |   }
+      103 |   expect(await ack(alice,SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId:'legacy-0'})).toMatchObject({ok:true});
+      104 |   for(let i=0;i<31;i++)expect(await ack(alice,SocketEventNames.CONVERSATION_UNSUBSCRIBE,{conversationId:'legacy-'+i})).toMatchObject({ok:true});
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:101:98)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rechecks membership and durable logout on an already connected socket
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "ok": true,
+    +   "ok": false,
+      }
+
+      120 |   const membership=async(join:boolean)=>{const db=await pool.connect();try{await db.query('BEGIN');if(join){await db.query(`INSERT INTO conversation_members(id,conversation_id,user_id) VALUES('alice-rejoin','group','alice')`);await cryptoMemberJoined(db,'group','alice');}else{await db.query(`DELETE FROM conversation_members WHERE user_id='alice'`);await cryptoMemberLeft(db,'group','alice');}await db.query('COMMIT');}finally{db.release();}};
+      121 |   await membership(false);const removed=await send('outsider','after-kick');await wait(()=>published.includes(removed.id));await new Promise(resolve=>setTimeout(resolve,200));expect(received.get('alice')).toHaveLength(before);expect(await subscribe(alice,'A')).toMatchObject({ok:false});
+    > 122 |   await membership(true);expect(await subscribe(alice,'A')).toMatchObject({ok:true});
+          |                                                             ^
+      123 |   await pool.query(`DELETE FROM "session" WHERE user_id='alice'`);const loggedOut=await send('outsider','after-logout');await wait(()=>published.includes(loggedOut.id));await new Promise(resolve=>setTimeout(resolve,200));expect(received.get('alice')).toHaveLength(before);expect(await subscribe(alice,'A')).toMatchObject({ok:false});
+      124 |  });
+      125 | });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:122:61)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 4 passed, 7 total
+Snapshots:   0 total
+Time:        43.173 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

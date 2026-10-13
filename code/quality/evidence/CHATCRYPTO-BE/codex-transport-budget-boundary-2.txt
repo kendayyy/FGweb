@@ -1,0 +1,234 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:41916) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-transport-budget.integration.spec.ts (36.828 s)
+  ● actual two-instance HTTP transport aggregate budget › serializes a sender budget across two API instances and different conversation locks
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces recipient budget across different senders
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › does not charge an identical retry or create another outbox row
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › ACK does not free retained dedup storage
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › expiry alone does not free retained storage, actual deletion does
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces PostgreSQL jsonb payload byte boundary without row/outbox residue
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › fails closed for new ingestion without explicit operator configuration
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › shares the retained budget across encrypted and public verification queues
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rolls back an entire opaque batch, then admits it at the exact row boundary
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RC default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RC default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RC default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RR default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RR default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RR default
+
+    error: column "banned" of relation "user" does not exist
+
+      36 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('budget-b')),new sdk.DeviceId('B2'));machines.push(machine);const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,payload=JSON.parse(upload.body);devices['budget-b2']={deviceId:'B2',deviceKeys:payload.device_keys,oneTimeKeys:payload.one_time_keys};expect((await request(bases[0]).post('/api/v1/crypto/devices').set('Cookie',cookies['budget-b']).set('Origin',origin).send(devices['budget-b2'])).status).toBe(201);
+      37 |  });
+    > 38 |  beforeEach(async()=>{process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='1';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER='1000000';await pool.query('DELETE FROM chat_crypto_protocol_events');await pool.query('DELETE FROM chat_crypto_to_device_events');await pool.query('UPDATE "user" SET banned=false');await pool.query('UPDATE "session" SET expires_at=now()+interval \'1 day\'');});
+         |                                                                                                                                                                                                                                                                           ^
+      39 |  afterAll(async()=>{for(const machine of machines)machine.close();try{for(const app of apps)await app.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      40 |  async function event(conversationId:string,sender='budget-a',recipient='budget-b',id=randomUUID()):Promise<Record<string,unknown>>{const revision=(await pool.query('SELECT membership_revision FROM chat_crypto_state WHERE conversation_id=$1',[conversationId])).rows[0].membership_revision,deviceId=devices[sender].deviceId;return {conversationId,membershipRevision:Number(revision),deviceId,transactionId:id,recipientUserId:recipient,recipientDeviceId:devices[recipient].deviceId,eventType:'m.key.verification.request',content:{transaction_id:id,from_device:deviceId,methods:['m.sas.v1'],timestamp:Date.now()}};}
+      41 |  const send=(body:Record<string,unknown>,instance=0,sender='budget-a')=>request(bases[instance]).post('/api/v1/crypto/verification').set('Cookie',cookies[sender]).set('Origin',origin).send(body);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:38:267)
+
+Test Suites: 1 failed, 1 total
+Tests:       15 failed, 15 total
+Snapshots:   0 total
+Time:        37.368 s
+Ran all test suites matching apps/api/test/chat-crypto-transport-budget.integration.spec.ts.

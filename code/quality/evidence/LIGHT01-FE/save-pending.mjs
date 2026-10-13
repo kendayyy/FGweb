@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='LIGHT01-FE');
+assert.equal(task.status,'IN_PROGRESS');
+const records=fs.readdirSync(dir).filter(file=>/^codex-.*\.json$/.test(file)).map(file=>JSON.parse(fs.readFileSync(`${dir}/${file}`))).sort((a,b)=>a.startedAt.localeCompare(b.startedAt));
+const expectPass=['codex-gate-1.json','codex-headed-e2e-5.json','codex-web-build-5.json','codex-final-test-types-1.json','codex-final-lint-1.json','codex-source-diff-1.json','codex-audit-1.json',...Array.from({length:13},(_,i)=>`codex-web-regression-${i+1}.json`)];
+for(const file of expectPass)assert.equal(JSON.parse(fs.readFileSync(`${dir}/${file}`)).exitCode,0,file);
+const walk=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(`${directory}/${entry.name}`):[`${directory}/${entry.name}`]);
+const files=[...walk('apps/web/src/features/theme'),'apps/web/index.html','apps/web/src/App.tsx','apps/web/src/features/auth/AuthFields.tsx','apps/web/src/styles/tokens.css','apps/web/src/features/lobby/responsive.css','apps/web/test/theme.test.tsx','tests/e2e/theme.spec.ts','apps/web/dist/index.html',`${dir}/review.md`,`${dir}/contrast.json`,...walk(`${dir}/screenshots`)];
+const hashes=Object.fromEntries(files.map(file=>[file,createHash('sha256').update(fs.readFileSync(file)).digest('hex')]));
+fs.writeFileSync(`${dir}/verification-pending.json`,JSON.stringify({taskId:task.id,status:'TECHNICAL_CHECKS_PASS_VISUAL_REVIEW_PENDING',recordedAt:new Date().toISOString(),specSha256:task.specSha256,webTests:166,themeTests:14,headedE2E:5,commands:records,files:hashes,limitations:['Human light appearance review required before task PASS','Isolated native DB test session, external OAuth not repeated','No media/load/future-feature acceptance claim']},null,2)+'\n');
+task.status='BLOCKED';task.commands=records;task.blockers=['Required user review of actual light app/screenshots per spec15/design12; technical checks passed.'];task.evidencePaths=[`${dir}/plan.md`,`${dir}/review.md`,`${dir}/verification-pending.json`,`${dir}/contrast.json`,...records.map(record=>record.evidencePath)];task.outputsHash=null;task.completedAt=null;
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','\n| Theme spec15/design12: three modes, prepaint, storage/system/tabs, auth/draft/socket, keyboard, contrast/mobile | LIGHT01-FE |14 theme unit tests;166 web regression;5 headed real API/PG/Redis E2E;20 screenshots;lint/types/build/audit | TECHNICAL CHECKS PASS;user light visual review pending (task BLOCKED) |\n');
+console.log('LIGHT01-FE technical evidence saved; task BLOCKED only for required human light visual review; no next task opened.');

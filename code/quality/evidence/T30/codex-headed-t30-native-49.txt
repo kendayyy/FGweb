@@ -1,0 +1,35 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/rtp-window-reviewed2/screen-share-diagnostic.spec.ts --config quality/evidence/T30/rtp-window-reviewed2/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:30016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.1m)
+
+
+  1) quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      58 | async function subscriptionMessages(page:Page){const frames=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;const frames=w.t30SubscriptionFrames;w.t30SubscriptionFrames=[];return frames;});const rows=frames.flatMap(frame=>{const request=SignalRequest.fromBinary(Uint8Array.from(frame.data));if(request.message.case!=='subscription')return [];const s=request.message.value;return [{at:frame.at,subscribe:s.subscribe,trackSids:[...s.trackSids,...s.participantTracks.flatMap(p=>p.trackSids)]}];});fs.appendFileSync(evidence+'/native-subscription-messages.jsonl',JSON.stringify(rows)+'\n');return rows;}
+      59 | function delta(before:Stats,after:Stats){return after.rows.map(row=>{const old=before.rows.find(x=>x.id===row.id);return {...row,bytesDelta:row.bytes-(old?.bytes??0),packetsDelta:row.packets-(old?.packets??0),lostDelta:row.lost-(old?.lost??0)};});}
+    > 60 | async function receiveOne(page:Page){const before=await stats(page);await page.waitForTimeout(3000);const after=await stats(page),rows=delta(before,after);fs.appendFileSync(evidence+'/measured-rtp-windows.jsonl',JSON.stringify({before,after,delta:rows})+'\n');expect(after.relay).toBe(true);expect(after.videoCount).toBe(1);const videos=rows.filter(r=>r.kind==='video'&&r.bytesDelta>1000);expect(videos).toHaveLength(1);expect(videos[0].packetsDelta).toBeGreaterThan(0);fs.appendFileSync(evidence+'/subscriptions.jsonl',JSON.stringify({before,after,delta:rows})+'\n');return after;}
+         |                                                                                                                                                                                                                                                                                                                             ^
+      61 | test('T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports',async()=>{
+      62 |  try{
+      63 |   const sender=await openActor('sender',true);activePage=sender;await checkpoint(sender,'Mở phòng thật','DB/API và giao diện FG đã tải; chưa phát màn hình');await sender.getByRole('button',{name:'Tạo nhóm gọi',exact:true}).click();await join(sender);await sender.getByRole('button',{name:'Bật mic',exact:true}).click();await expect(sender.getByRole('button',{name:'Tắt mic',exact:true})).toBeVisible();
+        at receiveOne (E:\FGweb\code\quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:60:317)
+        at E:\FGweb\code\quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:65:338
+
+    Error Context: .cache\t30\playwright-results-rtp-window2\screen-share-diagnostic-T3-29b57-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results-rtp-window2\screen-share-diagnostic-T3-29b57-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

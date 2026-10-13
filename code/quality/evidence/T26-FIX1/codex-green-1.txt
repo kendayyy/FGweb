@@ -1,0 +1,41 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-controls.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12728) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-controls.integration.spec.ts (47.447 s)
+  ● T26-FIX1 real private SFU/PG call controls producer › expired/revoked admission has no participant metadata and cannot change microphone state
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 409
+
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+      54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+    > 55 |  it('expired/revoked admission has no participant metadata and cannot change microphone state',async()=>{const {call}=await admitted();await pool.query("UPDATE call_admissions SET created_at=now()-interval '2 minutes',expires_at=now()-interval '1 minute'");const res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toEqual([]);expect((await mic(call.id,false)).status).toBe(403);});
+         |                                                                                                                                                                                                                                                                                                                                                                                                   ^
+      56 | });
+      57 |
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:55:387)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 10 passed, 11 total
+Snapshots:   0 total
+Time:        48.233 s
+Ran all test suites matching test/call-controls.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-controls.integration.spec.ts

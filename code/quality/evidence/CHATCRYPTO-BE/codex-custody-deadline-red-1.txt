@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:34252) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody-deadline.integration.spec.ts (61.224 s)
+  ● custody lookup absolute deadline over actual TLS › rejects a continuously active slow response before attempting Transit
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      45 |   expect(error).toBeInstanceOf(TransitFailure);expect((error as TransitFailure).reason).toBe('AUTHORIZATION');
+      46 |   // Transit.request intentionally maps a failed token provider to a fixed AUTHORIZATION error.
+    > 47 |   expect(transitRequests).toBe(0);expect(elapsed).toBeGreaterThanOrEqual(4500);expect(elapsed).toBeLessThan(6000);
+         |                           ^
+      48 |  },20000);
+      49 | });
+      50 |
+
+      at Object.<anonymous> (test/chat-crypto-custody-deadline.integration.spec.ts:47:27)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        64.313 s
+Ran all test suites matching apps/api/test/chat-crypto-custody-deadline.integration.spec.ts.

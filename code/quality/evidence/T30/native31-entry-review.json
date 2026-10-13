@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-11T03:25:41.142Z",
+  "reviewer": "Codex",
+  "diagnosticOnly": true,
+  "sampler": {
+    "path": "quality/evidence/T30/pg-wait-observation-reviewed2.mjs",
+    "sha256": "ede28371c103b7f9ec3996d35151cf56266ca0a9c9256bb827dc66d752c699a6"
+  },
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-shaped.mjs",
+    "sha256": "730ede75eb67a03835496b042eb4b03cf5a78dad4d8a1476b9d793de5a4858ba"
+  },
+  "realBlockerSmoke": "pg-wait-controlled-smoke-review-3.json",
+  "realIntegratedSmoke": "pg-wait-startup-smoke-review-2.json",
+  "realDiagnosticIoFaultCleanup": "pg-wait-cleanup-fault-smoke-review-1.json",
+  "sourceReviews": [
+    "pg-wait-final-source-review-1.json",
+    "pg-wait-relations-type-review-1.json"
+  ],
+  "adoption": {
+    "command": "node quality/evidence/T30/adopt-exact.mjs pg-wait quality/evidence/T30/pg-wait-adoption-plan2.json",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T03:24:34.487Z",
+    "completedAt": "2026-10-11T03:25:30.124Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-pg-wait-adoption-1.txt",
+    "evidenceSha256": "14f1b7b12d741c770bd3eb300dbf217a1075d638e08917daf2d036dd4323b4eb"
+  },
+  "actualServiceHealth": {
+    "command": "docker inspect --format {{.Name}} {{.State.Status}} {{.State.Health.Status}} fg-local-postgres-1 fg-local-redis-1",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T03:25:39.598Z",
+    "completedAt": "2026-10-11T03:25:39.835Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-native31-service-health-1.txt",
+    "evidenceSha256": "8dc58e0455a01859fa2de19c9ffca201a24deab1d804fd296faf3c5663e294ca"
+  },
+  "apiBuild": 8,
+  "builtFrontend": 1,
+  "canonicalPinsUnchanged": true,
+  "guardsDeadlinesNativeAssertionsUnchanged": true,
+  "headed": true,
+  "telegramProducer": true,
+  "nativeAcceptance": false
+}

@@ -1,0 +1,132 @@
+--- a/quality/evidence/T30/api55-observer-reviewed1.mjs
++++ b/quality/evidence/T30/api55-observer-reviewed1.mjs
+@@ -45,2 +45,10 @@
+ ]);
+ 
++const ALLOWED_SOCKET_READY_STATES = new Set(['opening', 'open', 'readOnly', 'writeOnly', 'closed', 'other']);
++const ALLOWED_CLOSE_REASONS = new Set(['pg-ready', 'socket-closed', 'sync-error', 'stopped']);
++const ALLOWED_FINAL_PHASES = new Set(['starting', 'tcp-connected', 'pg-ready', 'socket-closed']);
++
++const activeConnectionCleanups = new Set();
++let nextClientConnectionIndex = 0;
++
+ let spanSequence = 0;
+@@ -250,2 +258,95 @@
+   pg.Pool = PatchedPool;
+ 
++  const origClientConnect = pg.Client.prototype.connect;
++  pg.Client.prototype.connect = function (...args) {
++    const ctx = als.getStore();
++    const owner = ctx?.owner ?? 'unassociated';
++    const spanIndex = ctx?.spanIndex ?? null;
++    const parentSpanIndex = ctx?.parentSpanIndex ?? null;
++
++    const connectionIndex = ++nextClientConnectionIndex;
++    const startedAt = new Date().toISOString();
++    const startMonotonic = performance.now();
++
++    let tcpConnectedAt = null;
++    let tcpDurationMs = null;
++    let pgConnectedAt = null;
++    let pgDurationMs = null;
++    let socketClosedAt = null;
++    let socketCloseDurationMs = null;
++    let finalPhase = 'starting';
++    let emitted = false;
++
++    const socket = this.connection?.stream;
++    const client = this;
++
++    const emitRecord = (reason) => {
++      if (emitted || isStopped) return;
++      emitted = true;
++      cleanupListeners();
++      try {
++        const rawState = typeof socket?.readyState === 'string' ? socket.readyState : 'other';
++        const readyState = ALLOWED_SOCKET_READY_STATES.has(rawState) ? rawState : 'other';
++        const pid = Number.isSafeInteger(client.processID) && client.processID > 0 ? client.processID : null;
++        bufferRecord({
++          type: 'client-connection-phase',
++          clientConnectionIndex: connectionIndex,
++          spanIndex,
++          parentSpanIndex,
++          owner,
++          startedAt,
++          tcpConnectedAt,
++          tcpDurationMs,
++          pgConnectedAt,
++          pgDurationMs,
++          socketClosedAt,
++          socketCloseDurationMs,
++          finalPhase,
++          closeReason: ALLOWED_CLOSE_REASONS.has(reason) ? reason : 'stopped',
++          backendPid: pid,
++          socketReadyState: readyState,
++          socketDestroyed: Boolean(socket?.destroyed),
++          bytesRead: Number.isSafeInteger(socket?.bytesRead) ? socket.bytesRead : 0,
++          bytesWritten: Number.isSafeInteger(socket?.bytesWritten) ? socket.bytesWritten : 0,
++        });
++      } catch {
++        failureCount++;
++      }
++    };
++
++    const onTcpConnect = () => {
++      tcpConnectedAt = new Date().toISOString();
++      tcpDurationMs = Math.round((performance.now() - startMonotonic) * 100) / 100;
++      finalPhase = 'tcp-connected';
++    };
++    const onPgConnect = () => {
++      pgConnectedAt = new Date().toISOString();
++      pgDurationMs = Math.round((performance.now() - startMonotonic) * 100) / 100;
++      finalPhase = 'pg-ready';
++      emitRecord('pg-ready');
++    };
++    const onSocketClose = () => {
++      socketClosedAt = new Date().toISOString();
++      socketCloseDurationMs = Math.round((performance.now() - startMonotonic) * 100) / 100;
++      if (finalPhase !== 'pg-ready') finalPhase = 'socket-closed';
++      emitRecord('socket-closed');
++    };
++
++    function cleanupListeners() {
++      activeConnectionCleanups.delete(cleanupListeners);
++      if (socket && typeof socket.removeListener === 'function') {
++        socket.removeListener('connect', onTcpConnect);
++        socket.removeListener('close', onSocketClose);
++      }
++      if (typeof client.removeListener === 'function') {
++        client.removeListener('connect', onPgConnect);
++      }
++    }
++    activeConnectionCleanups.add(cleanupListeners);
++
++    if (socket && typeof socket.once === 'function') {
++      if (socket.readyState === 'open') onTcpConnect();
++      else socket.once('connect', onTcpConnect);
++      socket.once('close', onSocketClose);
++    }
++    if (typeof client.once === 'function') {
++      client.once('connect', onPgConnect);
++    }
++
++    let result;
++    try {
++      result = Reflect.apply(origClientConnect, this, args);
++    } catch (syncErr) {
++      emitRecord('sync-error');
++      throw syncErr;
++    }
++    return result;
++  };
++
+   const origQuery = pg.Client.prototype.query;
+@@ -719,2 +820,7 @@
+     }
+ 
++    for (const cleanup of activeConnectionCleanups) {
++      try { cleanup(); } catch {}
++    }
++    activeConnectionCleanups.clear();
++
+     if (histogram) {

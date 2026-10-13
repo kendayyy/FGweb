@@ -1,0 +1,54 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-lifecycle.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2328) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-lifecycle.integration.spec.ts (58.033 s)
+  ● T27 real PG/private native SFU call lifecycle › last native participant removed after membership cascade closes the empty group and keeps its room
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "CLOSED"
+    Received: "OPEN"
+
+      170 |   expect((await pool.query('SELECT id FROM call_members WHERE call_group_id=$1',[call.id])).rowCount).toBe(0);
+      171 |   await app.get(CallsService).reconcile();await lifecycle().sweep();
+    > 172 |   expect(await state(call.id)).toBe('CLOSED');expect((await sfu.listRooms([joined.roomName])).length).toBe(0);
+          |                                ^
+      173 |   expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await signal(joined.token)).accepted).toBe(false);
+      174 |  });
+      175 |  it('native room expiration closes its empty database group while fresh empty groups remain joinable',async()=>{
+
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:172:32)
+
+  ● T27 real PG/private native SFU call lifecycle › native room expiration closes its empty database group while fresh empty groups remain joinable
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "CLOSED"
+    Received: "OPEN"
+
+      175 |  it('native room expiration closes its empty database group while fresh empty groups remain joinable',async()=>{
+      176 |   const {call}=await roomCall();dropWebhooks=true;await lifecycle().sweep();expect(await state(call.id)).toBe('OPEN');
+    > 177 |   await sfu.deleteRoom(`fg-call_${call.id}`);await lifecycle().sweep();expect(await state(call.id)).toBe('CLOSED');
+          |                                                                                                     ^
+      178 |   expect((await post(`calls/${call.id}/join`)).status).toBe(409);
+      179 |  });
+      180 |  it('repeated reconciliation of a closed call is idempotent when its native room is already absent',async()=>{
+
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:177:101)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 12 passed, 14 total
+Snapshots:   0 total
+Time:        58.551 s
+Ran all test suites matching test/call-lifecycle.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-lifecycle.integration.spec.ts

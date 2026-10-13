@@ -1,0 +1,31 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (10 tests | 1 failed) 4447ms
+   ❯ T13 approved Lobby behavior (10)
+     × GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork 735ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork
+Error: expect(received).toHaveAttribute()
+
+received value must be an HTMLElement or an SVGElement.
+Received has type:  Null
+Received has value: null
+ ❯ test/lobby.test.tsx:76:50
+     74|             const control = screen.getByRole('button', { name: game.ti…
+     75|             expect(control).toHaveAttribute('title', game.title);
+     76|             expect(control.querySelector('img')).toHaveAttribute('src'…
+       |                                                  ^
+     77|         }
+     78|         expect(rail.querySelector('.fg-brand-mark')).toBeInTheDocument…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  01:24:32
+   Duration  10.40s (tests 44%, environment 23%, transform 19%, import 10%, setup 3%)
+

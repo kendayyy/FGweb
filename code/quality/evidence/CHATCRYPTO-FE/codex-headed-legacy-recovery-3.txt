@@ -1,0 +1,14 @@
+file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-FE/legacy-archive-custody-fixture.mjs:37
+      const deadline=setTimeout(()=>req.destroy(),10000);req.on('close',()=>clearTimeout(deadline));req.on('error',error=>reject(new Error(`Isolated custody TLS/transport failed on ${route}; code=${error.code ?? 'unknown'}; details redacted`)));if(payload)req.write(payload);req.end();
+                                                                                                                                 ^
+
+Error: Isolated custody TLS/transport failed on sys/init; code=ECONNRESET; details redacted
+    at ClientRequest.<anonymous> (file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-FE/legacy-archive-custody-fixture.mjs:37:130)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at TLSSocket.socketCloseListener (node:_http_client:739:7)
+    at TLSSocket.emit (node:events:526:24)
+    at node:net:362:12
+    at TCP.done (node:internal/tls/wrap:770:7)
+
+Node.js v24.21.0

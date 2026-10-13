@@ -1,0 +1,120 @@
+{
+  "recordedAt": "2026-10-11T09:52:05.665Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-native40-gateway-reviewed2.mjs",
+    "sha256": "72b92b32ce435c57dc1c14f5d82e85f115a79ae6f1a2025202a9868d82460ae7"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T09:51:22.721Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T09:51:28.888Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T09:51:28.909Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T09:51:39.287Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T09:51:43.994Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "2a1a4f5dfa6dbbde8e3b804fb33249ec085af1435e3b349fd092a4dd45228981"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-11T09:51:45.931Z",
+      "idleEndedAt": "2026-10-11T09:51:57.018Z",
+      "idleMs": 11087.872000000003,
+      "backendPid": 577,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 577,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-11T09:52:05.589Z",
+        "backendPid": 577,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    },
+    {
+      "kind": "actual gateway final-health evidence IO failure propagates after owned observer stop, all original resource cleanup intact",
+      "failed": true
+    }
+  ],
+  "closed": {
+    "code": 1,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-8e6bab7f-2436-497a-a2fe-6e77190b6d3d",
+    "temporary-built-smoke-7ee741d4-7c72-4eb6-ae2f-faccc00434a8"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

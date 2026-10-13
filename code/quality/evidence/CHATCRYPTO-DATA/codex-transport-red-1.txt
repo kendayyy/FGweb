@@ -1,0 +1,78 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/chat-crypto-transport.test.ts (5 tests | 5 failed) 44ms
+   ❯ crypto transport ownership and native SAS support (5)
+     × registers ciphertext routes with current-member auth and shared schemas 17ms
+     × never makes recovery, legacy plaintext batches or key routes public/admin-readable 2ms
+     × SAS handshake is public protocol metadata and cannot carry arbitrary chat/private key fields 2ms
+     × encrypted to-device batches reject duplicates and excessive total bytes 17ms
+     × native encrypted attachment secret material stays inside decrypted content, never upload DTO 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > registers ciphertext routes with current-member auth and shared schemas
+AssertionError: expected undefined to be 'ConversationMember' // Object.is equality
+
+- Expected:
+"ConversationMember"
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:6:22
+      4|  it('registers ciphertext routes with current-member auth and shared s…
+      5|   const send=c.ApiEndpointRegistry.find(e=>e.method==='POST'&&e.path==…
+      6|   expect(send?.auth).toBe('ConversationMember');expect(send?.requestSc…
+       |                      ^
+      7|   const state=c.ApiEndpointRegistry.find(e=>e.path==='/api/v1/crypto/c…
+      8|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > never makes recovery, legacy plaintext batches or key routes public/admin-readable
+AssertionError: expected 0 to be greater than 0
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:11:134
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > SAS handshake is public protocol metadata and cannot carry arbitrary chat/private key fields
+TypeError: Cannot read properties of undefined (reading 'safeParse')
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:16:41
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > encrypted to-device batches reject duplicates and excessive total bytes
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:24:121
+     22|   const event={conversationId:'room',membershipRevision:1,deviceId:'A'…
+     23|   expect(c.SendCryptoToDeviceSchema.safeParse(event).success).toBe(tru…
+     24|   expect(c.SendCryptoToDeviceSchema.safeParse({...event,recipients:[ev…
+       |                                                                                                                         ^
+     25|   expect(c.SendCryptoToDeviceSchema.safeParse({...event,recipients:Arr…
+     26|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > native encrypted attachment secret material stays inside decrypted content, never upload DTO
+TypeError: Cannot read properties of undefined (reading 'safeParse')
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:29:50
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  19:07:24
+   Duration  1.14s (import 48%, transform 46%, tests 5%, worker 1%)
+

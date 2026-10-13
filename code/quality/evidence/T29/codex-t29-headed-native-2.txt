@@ -1,0 +1,56 @@
+{"status":"FAILED","passedChecks":3,"schemaRemoved":true,"containersRemoved":true,"networkRemoved":true}
+file:///E:/FGweb/code/node_modules/livekit-server-sdk/node_modules/jose/dist/node/esm/lib/jwt_claims_set.js:90
+            throw new JWTExpired('"exp" claim timestamp check failed', payload, 'exp', 'check_failed');
+                  ^
+
+JWTExpired: "exp" claim timestamp check failed
+    at default (file:///E:/FGweb/code/node_modules/livekit-server-sdk/node_modules/jose/dist/node/esm/lib/jwt_claims_set.js:90:19)
+    at Module.jwtVerify (file:///E:/FGweb/code/node_modules/livekit-server-sdk/node_modules/jose/dist/node/esm/jwt/verify.js:9:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async TokenVerifier.verify (file:///E:/FGweb/code/node_modules/livekit-server-sdk/dist/AccessToken.js:138:25)
+    at async native (file:///E:/FGweb/code/quality/evidence/T29/headed-native-policy-2.mjs:12:77)
+    at async expect.poll.timeout (file:///E:/FGweb/code/quality/evidence/T29/headed-native-policy-2.mjs:26:137)
+    at async E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13391:19
+    at async raceAgainstDeadline (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:4602:10)
+    at async pollAgainstDeadline (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:4623:22)
+    at async invokePollMatcher (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13388:18) {
+  code: 'ERR_JWT_EXPIRED',
+  claim: 'exp',
+  reason: 'check_failed',
+  payload: {
+    video: {
+      roomJoin: true,
+      room: 'fg-call_975cec5b-41db-40ef-88cc-94447860b381',
+      canSubscribe: true,
+      canPublish: true,
+      canPublishSources: [ 'microphone' ],
+      canPublishData: false,
+      canUpdateOwnMetadata: false
+    },
+    iss: 'FG9bbaf2c5c5cf91aed978743a',
+    exp: 1791649388,
+    nbf: 1791649328,
+    sub: 'admission_df2b601e-df55-4e76-9163-43c7ce04b6ae'
+  },
+  [cause]: {
+    claim: 'exp',
+    reason: 'check_failed',
+    payload: {
+      video: {
+        roomJoin: true,
+        room: 'fg-call_975cec5b-41db-40ef-88cc-94447860b381',
+        canSubscribe: true,
+        canPublish: true,
+        canPublishSources: [ 'microphone' ],
+        canPublishData: false,
+        canUpdateOwnMetadata: false
+      },
+      iss: 'FG9bbaf2c5c5cf91aed978743a',
+      exp: 1791649388,
+      nbf: 1791649328,
+      sub: 'admission_df2b601e-df55-4e76-9163-43c7ce04b6ae'
+    }
+  }
+}
+
+Node.js v24.21.0

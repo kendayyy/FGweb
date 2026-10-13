@@ -1,0 +1,13 @@
+{
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Original Auth security regression exposed asynchronous config rejection replacing required synchronous missing-secret throw. Validate synchronously before returning readiness Promise; keep real four-client allSettled readiness/release/error propagation, min4/defaultmax10, setDb path and all security/domain bytes unchanged. Original tests/assertions/deadlines retained.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/auth/auth.service.ts",
+      "proposed": "quality/evidence/T30/auth-sync-init-reviewed1.ts",
+      "beforeSha256": "945c40853a3f8a6c80044a609d4efc29caed830bf4354043f57a5801fda7a6e3",
+      "afterSha256": "4f830cae7c33afa6766215bfad09bbc4d681c8f25f66dff1dec8028b26de7fbd"
+    }
+  ]
+}

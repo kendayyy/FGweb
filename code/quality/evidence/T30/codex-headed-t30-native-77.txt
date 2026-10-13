@@ -1,0 +1,54 @@
+
+> test:e2e
+> playwright test tests/e2e/screen-share.spec.ts --config quality/evidence/T30/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:17004) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (2ms)
+
+
+  1) tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: Fixture failed; inspect sanitized evidence
+
+      16 |  fixture=fork('quality/evidence/T30/fixture-server-shaped.mjs',[],options);
+      17 |  fixture.on('message',(m:Record<string,unknown>)=>{if(typeof m.id==='string'){pending.get(m.id)?.(m);pending.delete(m.id);}if(m.kind==='phase')fs.appendFileSync(evidence+'/phases.txt',new Date().toISOString()+' '+m.name+'\n');if(m.kind==='failed')fs.writeFileSync(evidence+'/setup-failure.json',JSON.stringify(m,null,2)+'\n');});
+    > 18 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture startup timeout')),110000);fixture.on('message',(m:Record<string,unknown>)=>{if(m.kind==='ready'){ready=m as unknown as Ready;clearTimeout(timer);resolve();}if(m.kind==='failed'){clearTimeout(timer);reject(Error('Fixture failed; inspect sanitized evidence'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(Error('Fixture exited before readiness'));});});
+         |                                                                                                                                                                                                                                                                                                                  ^
+      19 | });
+      20 | test.afterAll(async()=>{
+      21 |  for(const browser of browsers)await browser.close();
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\screen-share.spec.ts:18:306)
+
+    Error: write EPIPE
+
+      20 | test.afterAll(async()=>{
+      21 |  for(const browser of browsers)await browser.close();
+    > 22 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+         |                                                                                                                                                                                                                                                                                                                ^
+      23 | });
+      24 | async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+      25 | async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+        at E:\FGweb\code\tests\e2e\screen-share.spec.ts:22:304
+        at E:\FGweb\code\tests\e2e\screen-share.spec.ts:22:55
+
+    Error: Owned fixture cleanup failed
+
+      20 | test.afterAll(async()=>{
+      21 |  for(const browser of browsers)await browser.close();
+    > 22 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+         |                                                                                                                                                                                                                                                              ^
+      23 | });
+      24 | async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+      25 | async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\screen-share.spec.ts:22:254)
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

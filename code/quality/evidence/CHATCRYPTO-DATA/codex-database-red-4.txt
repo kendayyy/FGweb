@@ -1,0 +1,142 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |database| packages/database/test/chat-crypto.test.ts (8 tests | 8 failed) 11812ms
+   ❯ CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries (8)
+     × preserves original IDs/content/images/cursors/members and leaves history pending 57ms
+     × empty database and reapplication are safe, with UTC lifecycle markers 11ms
+     × encrypted private rows cannot keep plaintext or downgrade to legacy 13ms
+     × encrypted image metadata cannot retain a private filename/mime/thumbnail 9ms
+     × membership revisions and intervals reject invalid windows and two active joins 7ms
+     × recovery is ciphertext-only and has no private-key or password columns 7ms
+     × a migration receipt is unique per original ID and cannot erase its original message 10ms
+     × cohorts and receipts cannot point at another conversation 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > preserves original IDs/content/images/cursors/members and leaves history pending
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:33:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > empty database and reapplication are safe, with UTC lifecycle markers
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:39:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > encrypted private rows cannot keep plaintext or downgrade to legacy
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:44:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > encrypted image metadata cannot retain a private filename/mime/thumbnail
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:50:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > membership revisions and intervals reject invalid windows and two active joins
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:55:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > recovery is ciphertext-only and has no private-key or password columns
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:63:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > a migration receipt is unique per original ID and cannot erase its original message
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:70:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > cohorts and receipts cannot point at another conversation
+AssertionError: new crypto migration must exist: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists packages/database/test/chat-crypto.test.ts:30:194
+
+ ❯ packages/database/test/chat-crypto.test.ts:76:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  18:56:50
+   Duration  13.23s (tests 91%, import 8%, transform 1%)
+

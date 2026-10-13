@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const previous=JSON.parse(fs.readFileSync(d+'/native37-diagnostic-entry-baseline1.json'));
+const pins=previous.pins.filter(p=>p.path!==d+'/fixture-server-shaped.mjs');
+for(const p of pins)assert.equal(h(p.path),p.sha256,p.path);
+const paths=[d+'/fixture-server-shaped.mjs',d+'/api-room-owner-observation-reviewed.mjs',d+'/pg-wait-observation-reviewed2.mjs',d+'/private-gateway-shaped-fixture.mjs','apps/api/dist/modules/calls/lease-store.js','apps/api/dist/modules/calls/signaling-gateway.js'];
+for(const p of paths)if(!pins.some(v=>v.path===p))pins.push({path:p,sha256:h(p)});
+assert.equal(h(d+'/fixture-server-shaped.mjs'),h(d+'/fixture-server-native36-room-loading-reviewed.mjs'));
+const result={recordedAt:new Date().toISOString(),pins,currentFixtureDiagnostic:true,currentGatewayCanonical:true,applicationChangeApproved:false,nativeAcceptance:false};
+fs.writeFileSync(d+'/native38-metrics-before1.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log('Named source/runtime/assertion pins retained before isolated metrics proposal review.');

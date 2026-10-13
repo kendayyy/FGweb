@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "planId": "antigravity-api57-cold-loader-1",
+  "target": "T30",
+  "nativeAcceptance": false,
+  "rationale": "Investigate root API57 gateway readiness RED timeout (90s) under Windows bind-mounted volumes by measuring cold CJS dependency resolution and V8 compilation overhead in isolation from DB and network operations.",
+  "hypothesis": "Dynamic module resolution across Windows Docker Desktop bind-mounts (WSL2/9P VFS) for heavy dependencies (@livekit/protocol Protobuf definitions, livekit-server-sdk, pg, ws) and entry-point preload initialization incurs high disk traversal latency, delaying initial server listening and log emission beyond readiness polling timeouts.",
+  "sourceAnchors": {
+    "gatewayMain": {
+      "path": "apps/api/dist/modules/calls/gateway-main.js",
+      "sha256": "e0a44649044b3cfe3d040b3d74a409bbc3eb877e7adc96195e91637aa114a4ad"
+    },
+    "signalingGateway": {
+      "path": "apps/api/dist/modules/calls/signaling-gateway.js",
+      "sha256": "ffb898afe1826a1d79344e7a44df990ac55dfb7ed335e1b9253097add522548e"
+    },
+    "leaseStore": {
+      "path": "apps/api/dist/modules/calls/lease-store.js",
+      "sha256": "b459d3dd7e8241773f6c3f9f56ab4dfe06a43375a979583635810008221c64ae"
+    },
+    "observerPreload": {
+      "path": "quality/evidence/T30/gateway-observer-preload-reviewed2.cjs",
+      "sha256": "3dafab5f83009e77df88b7ae6dd4229e6bce657ca2a243cf7a3ae1ec23ab3729"
+    },
+    "loaderChild": {
+      "path": "quality/evidence/T30/antigravity-api57-cold-loader-1/loader-child.cjs",
+      "sha256": "0acf035b4a085cbe22f41b8a1e755b64bd084543c48b6c302f9ed7741a29e862"
+    },
+    "loaderRunner": {
+      "path": "quality/evidence/T30/antigravity-api57-cold-loader-1/loader-runner.mjs",
+      "sha256": "21b61de0d4e2109e2f552c75cb012964433b4355a1079000152551e7465285bf"
+    }
+  },
+  "cycles": {
+    "cycleA": {
+      "mode": "without-preload",
+      "description": "Baseline cold CJS module resolution directly from host bind mounts without preload observer",
+      "command": ["node", "/gateway/loader-child.cjs", "/gateway/output/result-raw.json", "without-preload"],
+      "expectedPreloadInstalled": false
+    },
+    "cycleB": {
+      "mode": "with-preload",
+      "description": "CJS module resolution with observer preload script active via node -r flag",
+      "command": ["node", "-r", "/gateway/preload.cjs", "/gateway/loader-child.cjs", "/gateway/output/result-preload.json", "with-preload"],
+      "expectedPreloadInstalled": true
+    }
+  },
+  "stages": [
+    "pg",
+    "livekit_sdk",
+    "livekit_protocol",
+    "ws",
+    "lease_store",
+    "signaling_gateway"
+  ],
+  "securityInvariants": {
+    "network": "none",
+    "image": "node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+    "pullPolicy": "never",
+    "readOnlyRoot": true,
+    "capDrop": "ALL",
+    "noNewPrivileges": true,
+    "user": "node",
+    "timeoutMs": 60000,
+    "maxPayloadBytes": 65536
+  },
+  "cleanupContract": {
+    "preflightInspection": ["fg-local-postgres-1", "fg-local-redis-1", "fg-local_default"],
+    "ephemeralRuntimeDirectory": ".runtime/t30/cold-loader-<id>",
+    "containerLabel": "fg-owner=t30-loader-<a|b>-<id>",
+    "containerCleanup": "docker stop --time 5 && docker rm",
+    "postflightVerification": "Verify main services running and healthy, network container set unchanged, scratch directory deleted"
+  }
+}

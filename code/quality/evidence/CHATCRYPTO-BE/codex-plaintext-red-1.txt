@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21172) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (44.475 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › closes legacy plaintext message, image and outbox hydration routes for an E2EE conversation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 500
+
+      295 |   await pool.query(`INSERT INTO game_interests(id,user_id,game_id) VALUES('bob-interest','bob','fixture-game') ON CONFLICT DO NOTHING`);
+      296 |   const plain=await request(base).post('/api/v1/conversations/dm/messages').set('Cookie',otherCookie).set('Origin',origin).send({content:'legacy-plaintext-must-not-be-stored',clientMessageId:'legacy-write-fixture'});
+    > 297 |   expect(plain.status).toBe(403);
+          |                        ^
+      298 |   expect((await pool.query(`SELECT id FROM messages WHERE client_message_id='legacy-write-fixture'`)).rowCount).toBe(0);
+      299 |   expect((await request(base).get('/api/v1/conversations/dm/messages').set('Cookie',otherCookie)).status).toBe(403);
+      300 |   const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aMZsAAAAASUVORK5CYII=','base64');
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:297:24)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        45.044 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

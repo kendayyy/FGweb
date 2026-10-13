@@ -1,0 +1,36 @@
+### FG T30 — CallsService Shared Read-Lock Final Proposal (`antigravity-call-read-lock-final-1`)
+
+All four reviewed patch files from [`quality/evidence/T30/call-read-lock-final-patch2/`](file:///E:/FGweb/code/quality/evidence/T30/call-read-lock-final-patch2/) have been copied via exact filesystem copy into [`quality/evidence/T30/antigravity-call-read-lock-final-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/), and their SHA-256 hashes verified.
+
+---
+
+### 1. Codex Review Cleanup & Lint Corrections Applied
+
+- **Early Environment Capture**: `const originalDbUrl = process.env.DATABASE_URL;` is captured immediately at module evaluation.
+- **Teardown Safety**: The database schema drop (`DROP SCHEMA ... CASCADE`) runs in an inner `finally` block within `afterAll`, guaranteeing schema teardown is always attempted even if `callsService.onModuleDestroy()` rejects. The outer `finally` block restores `process.env.DATABASE_URL`.
+- **Strict Typing & 0 ESLint Errors**:
+  - Eliminated loose `any` casts.
+  - Substituted typed doubles using `ConstructorParameters<typeof CallsService>`.
+  - Typed `readResult` and `originalApiPromise` using contract DTOs (`CallGroupDTO[] | CallParticipantDTO[]`).
+  - Error catching uses typed `unknown` narrowed with `instanceof HttpException` guards and `toMatchObject({code: expectedCode, message: expectedMessage})`.
+  - Cleaned all 13 ESLint issues (verified exit code 0 in [`codex-t30-call-read-lock-final-patch-lint-2.json`](file:///E:/FGweb/code/quality/evidence/T30/codex-t30-call-read-lock-final-patch-lint-2.json)).
+- **CallsService Lock Policy**: Only `list` and `participants` use `'FOR SHARE'`; all mutation paths (`create`, `join`, `leave`, `selfMic`, `withControlGroup`, `sessionDeleted`) strictly retain default exclusive `'FOR UPDATE'` locks.
+- **22 Executed Real-PG Integration Tests**:
+  - 15 original callbacks preserved verbatim.
+  - 2 concurrent reader callbacks with 1500ms `Promise.race` deadline, exact DTO assertions, and safe promise settlement.
+  - 5 negative principal authorization callbacks (`outsider`, `expired_session`, `deleted_session` with explicit DB delete, `banned`, `no_onboarding`).
+- **Native14 Status**: Both screen captures succeeded (10492ms / 15733ms), but 1 viewer tab vs expected 2 after ticker room-lock timeout; no native acceptance claimed.
+
+---
+
+### 2. Verified File SHA-256 Hashes
+
+| File | SHA-256 | Status |
+| :--- | :--- | :--- |
+| [`calls.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/calls.service.ts) | `eabe88b1597df4c85f9fc76e871f00213107e87b3a942ad546e0578846c410ea` | Verified exact byte copy |
+| [`t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/t30-signaling-throughput.integration.spec.ts) | `8ce8a76cbbf089857c4508f49fb6a3cd0046b5beb689d10e2e51549b365ba67b` | Verified exact byte copy |
+| [`fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/fixture-server-shaped.mjs) | `bfd4c5fe5131ea69b4240858e1249bdfe9663e7142b65ede609ee9951f06b3a2` | Verified exact byte copy |
+| [`private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/private-gateway-shaped-fixture.mjs) | `d891dbd9f976a5ea39de29dc842ae9826f782a57efa10a656bf1822d28d3696f` | Verified exact byte copy |
+| [`review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-final-1/review-notes.md) | `ebe1fb66c1e1a13c0c1c31bd818a0c8bb4d70c41e8896749e3af7cd3f8d4f09c` | Documentation |
+
+*No actual application code, tests, dist, git ledger, or history files were altered. No build or test runs were executed. Ready for Codex to run gates/RED/GREEN/build/native.*

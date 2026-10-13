@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-BE',scope=JSON.parse(fs.readFileSync(`${dir}/scope-legacy-candidate-db.json`));
+for(const [p,digest]of Object.entries(scope.priorHashes))if(!p.endsWith('_journal.json'))assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),digest,p);
+const previous=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0016_snapshot.json')),current=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0017_snapshot.json'));
+for(const [name,table]of Object.entries(previous.tables))assert.deepEqual(current.tables[name],table,name);
+assert.deepEqual(Object.keys(current.tables).filter(p=>!Object.hasOwn(previous.tables,p)).sort(),['public.chat_crypto_legacy_attestations','public.chat_crypto_legacy_candidate_images','public.chat_crypto_legacy_candidates']);
+const oldJournal=JSON.parse(fs.readFileSync('quality/evidence/CHATCRYPTO-BE/scope-protocol-outbox.json')).priorHashes['packages/database/migrations/meta/_journal.json'];
+assert(oldJournal);const journal=JSON.parse(fs.readFileSync('packages/database/migrations/meta/_journal.json'));assert.equal(journal.entries.length,18);
+const priorJournal={...journal,entries:journal.entries.slice(0,17)};assert.equal(createHash('sha256').update(JSON.stringify(priorJournal,null,2)).digest('hex'),scope.priorHashes['packages/database/migrations/meta/_journal.json']);
+const result={recordedAt:new Date().toISOString(),priorSqlAndSnapshotsUnchanged:true,priorJournalPrefixUnchanged:true,priorTableDefinitionsUnchanged:true,newTables:3,mainMigration:false};fs.writeFileSync(`${dir}/legacy-candidate-prerequisite-review.json`,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

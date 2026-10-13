@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-10T23:41:36.687Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual native19 both captures passed but viewer received one stream after signaling failure. Verified Teams owner pool and readonly snapshot/requests polling motivate shared room/play/user locks for these two reads only. All other methods, mutations, actor/session/ban/onboarding/member/manager/DTO predicates, lock order and deadlines retained; bounded private clauses default UPDATE. Source type/lint green; realPG old-source RED21 cases: two1500ms coexistence failures and19 writer/authority/freshness passes. Final realPG GREEN/frozen42/build/native still required; no PASS.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "proposed": "quality/evidence/T30/antigravity-team-read-lock-final-1/teams.service.ts",
+      "beforeSha256": "d4d322db44cd8559ee122a6548e0919036b263fed62b6602972bbdc93ad02a3b",
+      "afterSha256": "b16d6ba271d33e9531f25169c019a52f779a8ae615ae9f441b3270567965cf0a"
+    },
+    {
+      "path": "apps/api/src/modules/play-sessions/play-sessions.service.ts",
+      "proposed": "quality/evidence/T30/antigravity-team-read-lock-final-1/play-sessions.service.ts",
+      "beforeSha256": "01b8e3e73cd3fa678ef133d51ce1c0069024abb603f224d5aacc36a8afbbc65a",
+      "afterSha256": "ecf1fb8c51afe2d9b1d20f95a8b48aeb8ee71d865899314a45164e0311f96f93"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/team-read-lock-source-adoption-plan.json",
+    "sha256": "619e259d2653b5aa75b3ab98d91c024c9b3a4b200735a8e75a2e13ff532320ed"
+  },
+  "nativeAcceptancePending": true
+}

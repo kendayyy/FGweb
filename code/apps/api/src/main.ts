@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
+import {configureFgHttpBodyParsers} from './modules/chat-crypto/http-body-parsers.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{bodyParser:false});
+  configureFgHttpBodyParsers(app);
 
   app.enableCors({
     origin: process.env.PUBLIC_ORIGIN || 'http://localhost:5173',

@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17656) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (47.625 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 2
+    Received array:  [{"body": "Bạn có tin nhắn mới.", "createdAt": "2026-10-09T12:03:35.631990Z", "data": {"conversationId": "notice-dm", "messageId": "4ccb9481-12f3-42a3-8f0d-b4d12ea20448", "senderId": "alice"}, "id": "33e3fd75-7964-4192-b6ea-eccdf5bd3612", "isRead": false, "title": "Tin nhắn mới", "type": "DM", "userId": "outsider"}, {"body": "Bạn có tin nhắn mới.", "createdAt": "2026-10-09T12:03:36.907360Z", "data": {"conversationId": "notice-dm", "messageId": "6d37c683-d89f-4801-b8b5-89ecd52ac449", "senderId": "alice"}, "id": "14885d99-106b-4abc-a875-b931eadd72a4", "isRead": false, "title": "Tin nhắn mới", "type": "DM", "userId": "outsider"}]
+
+      149 |   const channel='fg:chat:'+createHash('sha256').update(process.env.DATABASE_URL!).digest('hex');const busChannel=channel.slice(0,'fg:chat:'.length+24);await bus.publish(busChannel,'N:'+page.items[0].id);await new Promise(resolve=>setTimeout(resolve,200));expect(items).toHaveLength(1);
+      150 |   target.disconnect();const offlineEvent=JSON.parse(await machine.encryptRoomEvent(room,'m.room.message',JSON.stringify({msgtype:'m.text',body:'private-in-app-offline-original'}))),offline=await post('conversations/notice-dm/messages',{...payload,clientMessageId:'notice-dm-offline',envelope:{version:1,protocol:'MATRIX_MEGOLM',event:offlineEvent}});expect(offline.status).toBe(201);const offlineNotice=(await pool.query('SELECT id FROM notifications WHERE dedup_key=$1',['crypto-dm:'+offline.body.id])).rows[0];await wait(async()=>(await pool.query("SELECT status FROM notification_outbox WHERE notification_id=$1 AND channel='IN_APP'",[offlineNotice.id])).rows[0].status==='SENT');expect(items).toHaveLength(1);
+    > 151 |   const offlineHistory=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(offlineHistory.status).toBe(200);expect(createPageSchema(NotificationSchema).parse(offlineHistory.body).items.map(item=>item.id)).toEqual([offlineNotice.id,page.items[0].id]);expect(JSON.stringify(offlineHistory.body)).not.toContain('private-in-app-offline-original');await new Promise<void>((resolve,reject)=>{target.once('connect',resolve);target.once('connect_error',reject);target.connect();});await new Promise(resolve=>setTimeout(resolve,200));expect(items).toHaveLength(1);
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      152 |   const quiet=async()=>{await bus.publish(busChannel,'N:'+offlineNotice.id);await new Promise(resolve=>setTimeout(resolve,200));expect(items).toHaveLength(1);};
+      153 |   const ban=randomUUID();try{await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'alice','outsider','BAN','owned notice ban')",[ban]);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).status).toBe(403);await quiet();}finally{await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);}
+      154 |   const expires=(await pool.query('SELECT expires_at FROM "session" WHERE id=$1',['outsider-session'])).rows[0].expires_at;try{await pool.query('UPDATE "session" SET expires_at=clock_timestamp()-$2::interval WHERE id=$1',['outsider-session','1 second']);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).status).toBe(401);await quiet();}finally{await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',['outsider-session',expires]);}
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:151:583)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 11 passed, 12 total
+Snapshots:   0 total
+Time:        48.016 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

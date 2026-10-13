@@ -1,0 +1,16 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const dir='quality/evidence/LOADING3D-FE';
+let source=fs.readFileSync(dir+'/headed-loading-round2.mjs','utf8');
+source=source.replace('headless: false, slowMo: 180','headless: false, slowMo: 180, ignoreDefaultArgs: [\'--disable-backgrounding-occluded-windows\']');
+source=source.replace('  let gamesDelay=2000;','  let gamesDelay=2000,holdGames=false,releaseGames;');
+source=source.replace('const delayedRequest=async route=>{await','const delayedRequest=async route=>{if(holdGames&&route.request().url().endsWith(\'/games\'))await new Promise(resolve=>{releaseGames=resolve;});await');
+const start=source.indexOf('  gamesDelay=10000;'),end=source.indexOf("  await a.emulateMedia({reducedMotion:'reduce'});",start);assert(start>0&&end>start);
+source=source.slice(0,start)+`  holdGames=true;await a.goto(origin+'/');await expect(a.getByRole('progressbar',{name:'Đang tải các game',exact:true})).toBeVisible();
+  const windowSession=await context.newCDPSession(a),targetInfo=await windowSession.send('Target.getTargetInfo');
+  const windowInfo=await windowSession.send('Browser.getWindowForTarget',{targetId:targetInfo.targetInfo.targetId});
+  await windowSession.send('Browser.setWindowBounds',{windowId:windowInfo.windowId,bounds:{windowState:'minimized'}});
+  await expect.poll(()=>a.evaluate(()=>document.hidden)).toBe(true);await expect(a.locator('.fg-initial-loading')).toHaveAttribute('data-hidden','true');assert.equal(await a.locator('.fg-loading-turn').evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
+  await windowSession.send('Browser.setWindowBounds',{windowId:windowInfo.windowId,bounds:{windowState:'normal'}});await a.bringToFront();await expect.poll(()=>a.evaluate(()=>document.hidden)).toBe(false);await expect(a.locator('.fg-initial-loading')).toHaveAttribute('data-hidden','false');assert.equal(await a.locator('.fg-loading-turn').evaluate(el=>getComputedStyle(el).animationPlayState),'running');
+  holdGames=false;releaseGames();await expect(a.getByRole('heading',{name:/Lobby/,level:1})).toBeVisible();await windowSession.detach();
+`+source.slice(end);
+source=source.replace('actualHiddenTabPauseResume:true','actualHiddenWindowVisibilityPauseResume:true');
+fs.writeFileSync(dir+'/headed-loading-round3.mjs',source,{flag:'wx'});console.log('Preserved RED2. Real Chromium window minimize/restore generates visibility; pending request is held then continued to actual API, no visibility override or success payload.');

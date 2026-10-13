@@ -1,0 +1,10 @@
+{
+  "command": "pwsh -NoProfile -Command $existing = @(Get-Process -Name cockpit-tools -ErrorAction SilentlyContinue); if ($existing.Count -gt 0) { $p=$existing[0]; if ($p.Path -ne 'C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe') { throw 'Unexpected cockpit identity' }; $launched=$false } else { $p=Start-Process -FilePath 'C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe' -WorkingDirectory 'C:\\Users\\PC\\AppData\\Local\\Cockpit Tools' -WindowStyle Hidden -PassThru; $launched=$true }; Start-Sleep -Seconds 8; $p.Refresh(); [ordered]@{ checkedAt=[DateTime]::UtcNow.ToString('o'); processId=$p.Id; launched=$launched; running=(-not $p.HasExited); executable='C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe'; userAuthorizedRestore=$true } | ConvertTo-Json | Set-Content -LiteralPath 'quality/evidence/T30/cockpit-restoration23.json' -Encoding utf8NoBOM; if ($p.HasExited) { throw 'Cockpit restoration exited within8seconds' }; Write-Output 'Cockpit actual running at eight-second check.'",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-12T03:14:28.315Z",
+  "completedAt": "2026-10-12T03:14:42.723Z",
+  "exitCode": 1,
+  "signal": null,
+  "evidencePath": "quality/evidence/T30/codex-t30-cockpit-restore-23.txt",
+  "evidenceSha256": "7ae2fbc3e42f2fad2a7fcef51bc0304f711655fd56fed4616feb344d5ecd0c05"
+}

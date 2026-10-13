@@ -1,0 +1,42 @@
+# FG T30 — Thực thi sao chép hiệu chỉnh Audio Rollback (`antigravity-audio-rollback-1`)
+
+Đã thực hiện duy nhất lệnh được ủy quyền tại thư mục làm việc `E:/FGweb/code`:
+
+```powershell
+node quality/evidence/T30/copy-audio-rollback-correction.mjs
+```
+
+### 1. Kết quả thực thi lệnh
+
+- **Exit code**: `0`
+- **Output**:
+  ```text
+  Exact audio rollback source proposal copied; tests still pending.
+  ```
+
+---
+
+### 2. Chi tiết xác thực băm và nội dung hiệu chỉnh
+
+Băm SHA-256 đã được kiểm chứng khớp tuyệt đối trước khi sao chép:
+- **Source (`apps/web/src/features/calls/media.ts`)**: `4bcfa566ce5d1407ebe42bfe5839e9491a3e30bb263f0e9394d6923b43e8fdf1`
+- **Proposed (`quality/evidence/T30/audio-rollback-proposed.ts`)**: `749005e993360e7b82ea9fd4331b1774a6588d3643872f2ca133ca765919b2ac`
+- **Target (`quality/evidence/T30/antigravity-audio-rollback-1/media.ts`)**: `749005e993360e7b82ea9fd4331b1774a6588d3643872f2ca133ca765919b2ac`
+
+**Nội dung hiệu chỉnh nguồn được Codex duyệt:**
+- Khi quá trình publish audio tùy chọn thất bại trong [`media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-audio-rollback-1/media.ts#L532), `media.ts` trực tiếp dừng cả hai track phần cứng đang sở hữu (`audioTrack.stop()` và `videoTrack.stop()`), sau đó thực hiện rollback video độc lập với việc audio đã kịp đăng ký lên SFU hay chưa trước khi xóa các handles nội bộ.
+- Toàn bộ 33 ca kiểm thử và assertions giữ nguyên 100%, không thay đổi.
+
+---
+
+### 3. Danh mục file tại `antigravity-audio-rollback-1`
+
+- Bằng chứng sao chép: [`quality/evidence/T30/antigravity-audio-rollback-1/exact-copy-proof.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-audio-rollback-1/exact-copy-proof.json)
+- File nguồn hiệu chỉnh: [`quality/evidence/T30/antigravity-audio-rollback-1/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-audio-rollback-1/media.ts)
+
+---
+
+### 4. Trạng thái nghiệm thu
+
+- **Mã nguồn thực tế**: Chưa áp dụng vào `code/apps/web/...`.
+- **Kiểm thử**: Đang chờ Codex áp dụng và chạy lại bộ test component/DOM cũng như headed E2E nghiệm thu. Không tuyên bố PASS trong lượt này.

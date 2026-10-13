@@ -184,7 +184,7 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
         data-testid="peer-social-controls-error"
         role="alert"
       >
-        <span style={{ fontSize: '12px', color: 'var(--color-danger)' }}>
+        <span style={{ fontSize: '12px', color: 'var(--text-danger)' }}>
           Không thể tải thông tin mối quan hệ.
         </span>
         <button
@@ -320,7 +320,7 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
           role="alert"
           style={{
             width: '100%',
-            color: 'var(--color-danger)',
+            color: 'var(--text-danger)',
             fontSize: '12px',
             marginBottom: '4px',
           }}
@@ -409,7 +409,7 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
               fontWeight: 600,
               minHeight: '44px',
               backgroundColor: 'var(--color-online)',
-              color: '#000000',
+              color: 'var(--on-online)',
               border: 'none',
               borderRadius: '8px',
               cursor: isLoading ? 'not-allowed' : 'pointer',
@@ -496,7 +496,7 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
             fontWeight: 500,
             minHeight: '44px',
             backgroundColor: 'transparent',
-            color: 'var(--color-danger)',
+            color: 'var(--text-danger)',
             border: '1px solid var(--border-color)',
             borderRadius: '8px',
             cursor: isLoading ? 'not-allowed' : 'pointer',

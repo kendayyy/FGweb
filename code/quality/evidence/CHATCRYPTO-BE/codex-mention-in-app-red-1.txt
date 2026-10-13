@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:29864) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (50.644 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › persists client-selected mention routing IDs atomically and binds duplicate retries without reading private text
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+      168 |   const notice=(await pool.query("SELECT * FROM notifications WHERE user_id='outsider' AND type='MENTION' AND dedup_key=$1",['crypto-mention:'+sent.body.id+':outsider'])).rows[0];expect(notice).toBeDefined();expect(JSON.parse(notice.data)).toEqual({conversationId:'group',messageId:sent.body.id,mentionerId:'alice'});expect(notice.title).toBe('Tin nhắn mới');expect(notice.body).toBe('Bạn có tin nhắn mới.');expect(JSON.stringify(notice)).not.toContain('private-mention-original');expect((await pool.query('SELECT channel FROM notification_outbox WHERE notification_id=$1',[notice.id])).rows).toEqual([{channel:'IN_APP'}]);
+      169 |   expect((await post('conversations/group/messages',selection)).body.id).toBe(sent.body.id);expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[sent.body.id])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM notifications WHERE dedup_key=$1',[notice.dedup_key])).rowCount).toBe(1);expect((await post('conversations/group/messages',{...selection,mentionedUserIds:['bob']})).status).toBe(409);
+    > 170 |   const inbox=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(inbox.status).toBe(200);const mentions=createPageSchema(NotificationSchema).parse(inbox.body).items.filter(item=>item.type==='MENTION');expect(mentions).toHaveLength(1);expect(mentions[0]).toEqual(expect.objectContaining({id:notice.id,userId:'outsider',type:'MENTION',data:{conversationId:'group',messageId:sent.body.id,mentionerId:'alice'}}));await wait(()=>notices.length===1);expect(notices[0]).toEqual(mentions[0]);expect(JSON.stringify(notices)).not.toContain('private-mention-original');recipient.disconnect();
+          |                                                                                                                                                                                                                                                                       ^
+      171 |   for(const [tag,targets] of [['mention-self',['alice']],['mention-outsider',['unjoined']],['mention-unknown',['unknown']]] as const){expect((await post('conversations/group/messages',await make(tag,[...targets]))).status).toBe(403);expect((await pool.query('SELECT id FROM messages WHERE client_message_id=$1',[tag])).rowCount).toBe(0);}
+      172 |  });
+      173 |  it('does not retain a disconnected socket whose subscription was waiting on a real epoch lock',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:170:263)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 12 passed, 13 total
+Snapshots:   0 total
+Time:        51.201 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

@@ -1,0 +1,41 @@
+
+Running 1 test using 1 worker
+
+(node:15936) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion
+  1) tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('html')
+    Expected: "dark"
+    Received: "light"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('html') with timeout 5000ms
+      - waiting for locator('html')
+        13 × locator resolved to <html lang="vi" data-theme="light">…</html>
+           - unexpected value "light"
+
+
+      18 | async function select(page:Page,label:string){const theme=label==='Sáng'?'light':'dark';if(await page.locator('html').getAttribute('data-theme')!==theme)await page.getByRole('button',{name:/Chuyển sang/}).click();await assertTheme(page,theme);}
+      19 | async function sockets(){const id=randomUUID();return await new Promise<string[]>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real socket inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message.socketIds as string[]);});fixture.send({id,kind:'sockets'});});}
+    > 20 | async function assertTheme(page:Page,theme:string){await expect(page.locator('html')).toHaveAttribute('data-theme',theme);expect(await page.locator('html').evaluate(node=>getComputedStyle(node).colorScheme)).toBe(theme);}
+         |                                                                                       ^
+      21 |
+      22 |
+      23 | test('Classic direct toggle is icon-only, stays mounted and honors reduced motion',async({page})=>{
+        at assertTheme (E:\FGweb\code\tests\e2e\theme.spec.ts:20:87)
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:24:116
+
+    Error Context: .cache\theme\results\theme-Classic-direct-toggl-74d6b-d-and-honors-reduced-motion\error-context.md
+
+    Error Context: .cache\theme\results\theme-Classic-direct-toggl-74d6b-d-and-honors-reduced-motion\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion 

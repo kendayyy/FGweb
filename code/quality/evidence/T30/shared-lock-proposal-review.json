@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-10T21:01:19.282Z",
+  "reviewer": "Codex",
+  "reason": "Current prepared-source native11 measured room lock57014 and queued signals. Runtime read-only live/batch use canonical room then group FOR SHARE, conflict with all room/group policy writers; default authorize/connected admission locks remain FOR UPDATE. Fresh per-frame auth/policy and source/quota/CID guards, timeouts and bounds unchanged. Prior12 cases preserved and two real PG shared-reader/exclusive-writer regressions added. Proposal source review/type/lint/RED/GREEN/native still required; no task PASS.",
+  "priorCallbackCount": 8,
+  "addedTests": [
+    "concurrent runtime read locks (FOR SHARE) allow other admissions in same call to progress while blocking FOR UPDATE writers",
+    "external writer holding room FOR UPDATE blocks runtime forwarding, then committed policy change is immediately enforced"
+  ],
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+      "proposed": "quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts",
+      "beforeSha256": "b9d4afc9cae93e897cd8846e06f295ec7ec1ebac325f861c1d12fe8cd7cc8330",
+      "afterSha256": "dc7469277194c2f2fae3b6dd8b35f75d454f61c59f263daab8975e3cec95de67"
+    },
+    {
+      "path": "apps/api/test/t30-signaling-throughput.integration.spec.ts",
+      "proposed": "quality/evidence/T30/antigravity-shared-read-lock-1/t30-signaling-throughput.integration.spec.ts",
+      "beforeSha256": "d752f75d281be9c9221fbbd4814bd002cc6a2c077318b38c0a596ced10570939",
+      "afterSha256": "db2c87a22e5d64750c79f1c91f1456f5deaeb583ac5e39d7aa34a2ff32cde275"
+    }
+  ],
+  "officialLockReference": "https://www.postgresql.org/docs/17/explicit-locking.html#LOCKING-ROWS"
+}

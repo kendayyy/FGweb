@@ -1,0 +1,56 @@
+[Nest] 24016  - 10/09/2026, 1:45:13 AM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24016) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL apps/api/test/chat-crypto-object-store.spec.ts (36.469 s)
+  ● Opaque object storage filesystem boundaries › keeps the private 5MiB budget while permitting explicitly scoped 8MiB Transit representation
+
+    thrown: "Exceeded timeout of 15000 ms for a test.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      at _getError (../../node_modules/jest-circus/build/jestAdapterInit.js:1985:12)
+          at Array.map (<anonymous>)
+
+    Cause:
+        thrown: "Exceeded timeout of 15000 ms for a test.
+        Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+          35 |   try{await expect(store.read(key)).rejects.toThrow('Invalid crypto object');}finally{await fs.unlink(link);}
+          36 |  });
+        > 37 |  it('keeps the private 5MiB budget while permitting explicitly scoped 8MiB Transit representation',async()=>{
+             |  ^
+          38 |   const key=randomUUID()+'.bin',bytes=Buffer.alloc(5*1024*1024+1,29),report=new CryptoObjectStore(8*1024*1024);await report.initialize();
+          39 |   await expect(store.put(key,bytes)).rejects.toThrow('Invalid crypto object size');await report.put(key,bytes);expect(await report.read(key)).toEqual(bytes);await expect(store.read(key)).rejects.toThrow('Invalid crypto object');
+          40 |   await fs.writeFile(path.join(directory,key),Buffer.alloc(8*1024*1024+1));await expect(report.read(key)).rejects.toThrow('Invalid crypto object');expect(()=>new CryptoObjectStore(9*1024*1024)).toThrow('Invalid crypto object budget');
+
+          at test/chat-crypto-object-store.spec.ts:37:2
+          at test/chat-crypto-object-store.spec.ts:8:1
+
+Test Suites: 1 failed, 10 passed, 11 total
+Tests:       1 failed, 169 passed, 170 total
+Snapshots:   0 total
+Time:        222.63 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts|apps/api/test/chat-crypto-devices.integration.spec.ts|apps/api/test/chat-crypto-realtime.integration.spec.ts|apps/api/test/chat-crypto-signatures.spec.ts|apps/api/test/chat-crypto-body-parsers.spec.ts|apps/api/test/chat-crypto-object-store.spec.ts|apps/api/test/chat-rich.integration.spec.ts|apps/api/test/social.integration.spec.ts|apps/api/test/rooms.integration.spec.ts|apps/api/test/team-approval.integration.spec.ts|apps/api/test/invitations.integration.spec.ts.
+{"run":"7c192ae2bde8432eae1e14fbf143b6a1","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

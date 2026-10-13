@@ -1,0 +1,34 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:1844) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (51.202 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).rejects.toMatchObject(expected)
+
+    - Expected  - 3
+    + Received  + 1
+
+    - Object {
+    -   "code": "P0001",
+    - }
+    + [TypeError: stageService.stageReconciliation is not a function]
+
+      237 |      const stageService=reviewService as unknown as {stageReconciliation:(actor:unknown,id:string,input:unknown)=>Promise<{operationId:string;phase:string;manifestSha256:string;nextLiveRevision:number}>},stage=()=>stageService.stageReconciliation(actor,'legacy',gateInput);
+      238 |      await pool.query("CREATE FUNCTION native_stage_insert_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'owned stage insertion fault'; END $$");await pool.query('CREATE TRIGGER native_stage_insert_fault BEFORE INSERT ON chat_crypto_legacy_stage_objects FOR EACH ROW EXECUTE FUNCTION native_stage_insert_fault()');
+    > 239 |      try{await expect(Promise.resolve().then(stage)).rejects.toMatchObject({code:'P0001'});for(const table of ['chat_crypto_legacy_stages','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stage_objects'])expect(Number((await pool.query(`SELECT count(*) FROM ${table}`)).rows[0].count)).toBe(0);}finally{await pool.query('DROP TRIGGER native_stage_insert_fault ON chat_crypto_legacy_stage_objects');await pool.query('DROP FUNCTION native_stage_insert_fault()');}
+          |                                                              ^
+      240 |      const staged=await stage();expect(staged).toMatchObject({conversationId:'legacy',phase:'STAGED',membershipRevision:revision,nextLiveRevision:revision+1,sourceCount:3,attachmentCount:1,requiredDeviceClaims:6});expect(staged.operationId).toMatch(/^[a-f0-9-]{36}$/);expect(Buffer.from(staged.manifestSha256,'base64')).toHaveLength(32);expect(await stage()).toEqual(staged);
+      241 |      expect((await pool.query('SELECT message_id,cohort_id FROM chat_crypto_legacy_stage_sources ORDER BY message_id')).rows).toEqual([{message_id:'msg-a',cohort_id:'available'},{message_id:'msg-b',cohort_id:'available'},{message_id:'msg-c',cohort_id:'available-second'}]);expect((await pool.query('SELECT attachment_id,draft_id,cleanup_state FROM chat_crypto_legacy_stage_objects')).rows).toEqual([{attachment_id:imageId,draft_id:imageDraft!.id,cleanup_state:'PENDING'}]);
+      242 |      const restart=new CryptoLegacyService(app.get(ChatService));try{await restart.onModuleInit();expect(await (restart as unknown as typeof stageService).stageReconciliation(actor,'legacy',gateInput)).toEqual(staged);}finally{await restart.onModuleDestroy();}
+
+      at Object.toMatchObject (../../node_modules/expect/build/index.js:2155:20)
+      at test/chat-crypto-legacy.integration.spec.ts:239:62
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        51.646 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

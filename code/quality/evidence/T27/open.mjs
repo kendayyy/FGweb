@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T27',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex'),ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T27'),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,'T27');assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.followups.find(t=>t.id==='T01-FIX3').status,'PASS');checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:'T27',specHash:baseline.hashes.specSha256});
+const scope=['apps/api/src/modules/calls/**','apps/api/test/call-lifecycle.integration.spec.ts','apps/api/src/main.ts','apps/api/test/call-gateway.integration.spec.ts','apps/api/dist/modules/calls/**','apps/api/dist/main.js','apps/api/dist/main.d.ts','apps/api/dist/main.js.map','quality/spec-coverage.md',`${dir}/**`,'.runtime/t27/**','.cache/t27/**'];
+task.writeAllowlist=scope;task.approvedScopeAmendments=[{source:'Persisted human Permission to broaden Write Scope or touch locked files',reason:'Necessary lifecycle registration/callback, signed raw-body webhook endpoint and compiled runtime; adapt exact native gateway rejoin fixture to last-leave closing under T27; no DB/contracts redesign',paths:scope}];
+const allowed=p=>scope.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x),files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.runtime/')&&!p.startsWith('.cache/'));
+const frozen=new Map(files.filter(p=>!allowed(p)).map(p=>[p,hash(p)]));
+for(const old of ledger.tasks.filter(t=>t.status==='PASS'))for(const p of Object.keys(old.outputsHash?.files??{}))if(!allowed(p))frozen.set(p,hash(p));
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.specSha256=baseline.hashes.specSha256;task.commands=[];task.evidencePaths=[`${dir}/before.json`,`${dir}/plan.md`];
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify({recordedAt:task.startedAt,readonly:Object.fromEntries(frozen),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},scope},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date(task.startedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T27 lifecycle\n- Codex; actual strict T27 gate và prerequisites PASS trước mở. Pin exact lifecycle/callback/raw-body main/native fixture/compiled scope theo broad permission có sẵn. DB webhook_events unique và admission timestamps đã có, không migration/contracts mới. Plan/test RED trước production logic; signed webhook/nativeSFU/reconnect30s/lost event/concurrent join/last leave/closed no revival; giữ room/chat/team. Evidence code/quality/evidence/T27/.\n`);
+console.log(JSON.stringify({task:'T27',status:'IN_PROGRESS',gate:'PASS',scopePinned:true,readonlyFiles:frozen.size}));

@@ -9,6 +9,7 @@ import {
 import { TeamsService } from '../teams/teams.service.js';
 import { roomError } from '../rooms/rooms.service.js';
 import { lockSocialPair } from '../chat/chat.service.js';
+import {cryptoMemberJoined} from '../chat-crypto/crypto-membership.js';
 
 type Room = { id: string; owner_id: string; conversation_id: string; visibility: string; invite_policy: string };
 type Invite = {
@@ -68,7 +69,8 @@ export class InvitationsService {
   }
 
   private async lockUsers(db: PoolClient, ids: string[]) {
-    await db.query('SELECT id FROM "user" WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE', [[...new Set(ids)].sort()]);
+    // Same admission mutex as TeamsService; user IDs are never changed here.
+    await db.query('SELECT id FROM "user" WHERE id=ANY($1::text[]) ORDER BY id FOR NO KEY UPDATE', [[...new Set(ids)].sort()]);
   }
 
   private async invite(db: PoolClient, id: string, lock = false): Promise<Invite> {
@@ -98,9 +100,11 @@ export class InvitationsService {
     if (i.target_type === 'PLAY_SESSION') {
       await this.teams.admit(db, room, i.play_session_id!, i.receiver_id);
     } else {
-      await db.query("INSERT INTO room_members(id,room_id,user_id,role) VALUES($1,$2,$3,'MEMBER') ON CONFLICT(room_id,user_id) DO NOTHING", [randomUUID(), room.id, i.receiver_id]);
+      const added=await db.query("INSERT INTO room_members(id,room_id,user_id,role) VALUES($1,$2,$3,'MEMBER') ON CONFLICT(room_id,user_id) DO NOTHING", [randomUUID(), room.id, i.receiver_id]);
       await db.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,$3) ON CONFLICT(conversation_id,user_id) DO NOTHING', [randomUUID(), room.conversation_id, i.receiver_id]);
+      if(added.rowCount)await cryptoMemberJoined(db,room.conversation_id,i.receiver_id);
     }
+    await this.eligible(db, i.sender_id); await this.eligible(db, i.receiver_id);
   }
 
   private async finalize(db: PoolClient, i: Invite, final: 'ACCEPTED' | 'REJECTED') {
@@ -148,7 +152,9 @@ export class InvitationsService {
           for (const manager of managers) await this.notify(db, i, manager.user_id, 'consented');
         }
       }
-      await this.actor(db, actor, session); return this.dto(await this.invite(db, id));
+      await this.actor(db, actor, session);
+      if(action==='ACCEPT')await this.eligible(db, i.sender_id);
+      return this.dto(await this.invite(db, id));
     });
   }
 
@@ -167,6 +173,7 @@ export class InvitationsService {
         await this.admit(db, room, i);
       }
       await this.finalize(db, i, final); await this.actor(db, actor, session);
+      if(action==='ACCEPT'){await this.eligible(db, i.sender_id);await this.eligible(db, i.receiver_id);}
       return this.dto(await this.invite(db, id));
     });
   }

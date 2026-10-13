@@ -1,0 +1,3 @@
+# CHAT-CRYPTO-01 metadata migration
+
+T28 has reviewed PASS at its original voice baseline. Its exact eight original source snapshots pass unchanged baseline validation, and actual latest outputs/commands pass original T29 gate. Adopt only the two approved live source hashes; retain six other sources, entire application and checker byte-identical. Preserve historical PASS/outputs/commands/evidence/timestamps; only active spec provenance gets explicit baselineAdoptions. Add sequential DATA/BE/FE/QA, then T29. Protocol/library/dependency setup and client-assisted migration remain decisions to resolve in DATA, not implemented here. Stock gate must validate candidate owner PASS and reject skipping new checkpoints.

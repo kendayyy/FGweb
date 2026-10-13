@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:10312) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (33.599 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › stores native public cross-signing identity and only merges authenticated unchanged-key signatures
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      213 |   const keys=JSON.parse(bootstrap.uploadSigningKeysRequest!.body),identity={masterKey:keys.master_key,selfSigningKey:keys.self_signing_key,userSigningKey:keys.user_signing_key};
+      214 |   const putIdentity=(body:unknown,auth=otherCookie)=>request(base).put('/api/v1/crypto/identity').set('Cookie',auth).set('Origin',origin).send(body);
+    > 215 |   expect((await putIdentity(identity,cookie)).status).toBe(422);
+          |                                                       ^
+      216 |   expect((await putIdentity(identity)).status).toBe(200);
+      217 |   const additions={signedKeys:JSON.parse(bootstrap.uploadSignaturesRequest!.body)};
+      218 |   expect((await post('signatures',additions,otherCookie)).status).toBe(201);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:215:55)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 15 passed, 16 total
+Snapshots:   0 total
+Time:        34.11 s, estimated 38 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

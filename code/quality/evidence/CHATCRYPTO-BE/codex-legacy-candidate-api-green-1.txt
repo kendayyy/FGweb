@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:26804) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (32.804 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › prepares native ciphertext idempotently and preserves source text/times without claiming reconciliation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      87 |   await pool.query("INSERT INTO chat_crypto_history_cohorts(id,conversation_id,verified_at,verification_basis) SELECT 'available','legacy',verified_at,'EXPLICIT_RECONCILIATION' FROM chat_crypto_history_cohorts WHERE id='verified'");for(const user of ['alice','bob'])await pool.query("INSERT INTO chat_crypto_cohort_members(cohort_id,conversation_id,user_id) VALUES('available','legacy',$1)",[user]);await pool.query("UPDATE chat_crypto_legacy_migrations SET cohort_id='available' WHERE message_id='msg-a'");
+      88 |   try{
+    > 89 |    const input=await preparedInput('available','native-candidate');const result=await write('conversations/legacy/legacy/commit',input);expect(result.status).toBe(201);expect(result.body).toMatchObject({candidateId:input.candidateId,messageId:'msg-a',conversationId:'legacy',cohortId:'available',membershipRevision:1,originalSha256:digests.get('msg-a'),importerUserId:'alice',importerDeviceId:'A',envelope:input.envelope,attachmentIds:[],state:'PREPARED'});expect(result.body.envelopeSha256).toBe(sha(canonical(input.envelope)));expect(JSON.stringify(result.body)).not.toContain('legacy-source-private');
+         |                                                                                                                                                               ^
+      90 |    const retry=await write('conversations/legacy/legacy/commit',input);expect(retry.status).toBe(201);expect(retry.body).toEqual(result.body);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(1);
+      91 |    expect((await write('conversations/legacy/legacy/commit',{...input,candidateId:'conflicting-candidate'})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',{...input,originalSha256:sha('changed')})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',{...input,membershipRevision:2})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',input,'outsider')).status).toBe(403);
+      92 |    const state=(await pool.query("SELECT lm.state,m.content,to_char(m.created_at,'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') AS created FROM chat_crypto_legacy_migrations lm JOIN messages m ON m.id=lm.message_id WHERE m.id='msg-a'")).rows[0];expect(state).toEqual({state:'PREPARED',content:'legacy-source-private',created:'2026-01-01T00:00:00.123456Z'});expect((await pool.query("SELECT migration_state FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].migration_state).not.toBe('RECONCILED');expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:89:159)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 7 passed, 8 total
+Snapshots:   0 total
+Time:        33.334 s, estimated 37 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

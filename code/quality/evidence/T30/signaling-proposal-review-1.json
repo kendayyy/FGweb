@@ -1,0 +1,48 @@
+{
+  "recordedAt": "2026-10-10T19:42:08.289Z",
+  "reviewer": "Codex",
+  "status": "CHANGES_REQUIRED",
+  "files": [
+    {
+      "path": "quality/evidence/T30/antigravity-signaling-batch-1/apps/api/src/modules/calls/signaling-gateway.ts",
+      "sha256": "72f6f0d6f86fb01f717983eb0fe58530a3d0e071d1899a9dbd273056d1519aa7"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-signaling-batch-1/apps/api/test/t30-signaling-throughput.integration.spec.ts",
+      "sha256": "eadfd500c164cd400020a9281e441473400458e5b185cc13df0d12b6faa1eb41"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-signaling-batch-1/implementation-notes.md",
+      "sha256": "aa3a91deef00f715dc35978766fa6843f8fd753c0a48bf30e883073d878af3e5"
+    }
+  ],
+  "findings": [
+    {
+      "id": "AUTH",
+      "finding": "Current lease and permission reused across entire batch; revokeSession/admin_actions/session expiry can change independently of room lock.",
+      "required": "Fresh liveLease AND publicationPermission for every frame under shared canonical room/group transaction; reject/close on invalid current lease or binding, update native permission/pending-source cleanup from current result. Batch only transaction/locks, never cache authorization facts. Bound batches8frames; keep canonical timeouts."
+    },
+    {
+      "id": "FIXTURE",
+      "finding": "game_interests INSERT VALUES($1,$1,$2) receives3params and wrong user mapping.",
+      "required": "Use actual migration schema with VALUES($1,$2,$3). Check all SQL/types/constraints; preserve proper cleanup."
+    },
+    {
+      "id": "THROUGHPUT",
+      "finding": "Test depends GatewayOptions testObserver/onTransaction unavailable old source; count-based assertion mirrors implementation and does not measure bidirectional latency.",
+      "required": "Remove production testObserver hooks. Black-box32 genuine WebSocket PINGs with fake SFU immediate PONGs, real PG guards. Assert all32 responses in exact order within8s and record duration (matches actual native SDK negotiation needs), both directions. Runs on unchanged old source to establish meaningful RED."
+    },
+    {
+      "id": "RACE",
+      "finding": "Ban test commits before enqueue, not while batch processes.",
+      "required": "Deterministic queued batch race with real PG row lock and fake native GetParticipant barrier. No production observer needed. Start connected gateway; external PG transaction locks room; enqueue warmupPING; wait gateway blocked using pg_blocking_pids(locker PID); enqueue [screen addTrack, protected laterPING(s)] while first drain is blocked; commit locker. Stall fake Native GetParticipant on screen request, commit revokeSession/expired session/admin BAN in separate PG connection, then release fake RPC before3s canonical timeout. Assert later queued PING never forwarded and actual WebSockets close. This catches stale v1 within-batch facts while old canonical per-frame guard should pass. Barrier always released/PG rollback in finally."
+    },
+    {
+      "id": "FAKE_NATIVE",
+      "finding": "Replacing sfu.participantTracks array leaves fake HTTP closure using original const array; secondary codec cannot be verified. Unguarded r.message.value?.cid accesses invalid discriminated unions.",
+      "required": "Mutate shared array in place or callbackgetter; narrow message.case before fields; keep source/quota/pending CID/native secondary track checks."
+    }
+  ],
+  "notExecuted": true,
+  "actualBackendUnchanged": true
+}

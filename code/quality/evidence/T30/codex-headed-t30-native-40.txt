@@ -1,0 +1,43 @@
+
+> test:e2e
+> playwright test tests/e2e/screen-share.spec.ts --config quality/evidence/T30/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:27356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.3m)
+
+
+  1) tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('tablist', { name: 'Danh sách luồng phát' }).getByRole('tab')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('tablist', { name: 'Danh sách luồng phát' }).getByRole('tab') with timeout 5000ms
+      - waiting for getByRole('tablist', { name: 'Danh sách luồng phát' }).getByRole('tab')
+        13 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      61 |  try{
+      62 |   const sender=await openActor('sender',true);activePage=sender;await checkpoint(sender,'Mở phòng thật','DB/API và giao diện FG đã tải; chưa phát màn hình');await sender.getByRole('button',{name:'Tạo nhóm gọi',exact:true}).click();await join(sender);await sender.getByRole('button',{name:'Bật mic',exact:true}).click();await expect(sender.getByRole('button',{name:'Tắt mic',exact:true})).toBeVisible();
+    > 63 |   const linh=await openActor('receiver',true);await join(linh);const viewer=await openActor('viewer');await join(viewer);await share(linh);await share(sender);await expect(viewer.getByRole('tablist',{name:'Danh sách luồng phát'}).getByRole('tab')).toHaveCount(2);await receiveOne(viewer);expect(await viewer.locator('.fg-live-viewer').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('.fg-call-people')!)&Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);await expect(viewer.locator('.fg-call-actions')).toContainText('Chia sẻ màn hình');await checkpoint(viewer,'Hai nguồn capture thật','Một video chính đang nhận RTP, các lựa chọn không chứa video preview');expect(await viewer.getByRole('tablist',{name:'Danh sách luồng phát'}).locator('video').count()).toBe(0);
+         |                                                                                                                                                                                                                                                         ^
+      64 |   const old=await stats(viewer),native=(await ask('inspect')).nativeTracks as Array<{sid:string;source:number}>;const oldSid=native.find(t=>t.source===3&&old.selectedId.endsWith(t.sid))?.sid;expect(oldSid).toBeTruthy();await subscriptionMessages(viewer);await viewer.getByRole('tab',{name:'Hoàng Nam',exact:true}).click();const switched=await receiveOne(viewer);expect(switched.selectedId).not.toBe(old.selectedId);expect(switched.videoTrackId).not.toBe(old.videoTrackId);const newSid=native.find(t=>t.source===3&&switched.selectedId.endsWith(t.sid))?.sid;expect(newSid).toBeTruthy();const messages=await subscriptionMessages(viewer),unsub=messages.findIndex(m=>!m.subscribe&&m.trackSids.includes(oldSid!)),sub=messages.findIndex(m=>m.subscribe&&m.trackSids.includes(newSid!));expect(unsub).toBeGreaterThanOrEqual(0);expect(sub).toBeGreaterThan(unsub);await checkpoint(viewer,'Chọn luồng Hoàng Nam','Native signaling unsubscribe cũ trước subscribe mới; chỉ một video nhận RTP sau chuyển');
+      65 |   const third=await openActor('third',true);await join(third);await share(third);await expect.poll(async()=>Number((await ask('inspect')).publisherSlots)).toBe(3);
+      66 |   const fourth=await openActor('fourth',true);await join(fourth);await fourth.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(fourth.getByRole('alert')).toContainText('3');await expect.poll(()=>fourth.evaluate(()=>{const w=window as unknown as CaptureWindow;return w.t30Captures.flatMap(s=>s.getTracks()).every(t=>t.readyState==='ended');})).toBe(true);expect((await ask('inspect')).publisherSlots).toBe(3);await checkpoint(fourth,'Người thứ tư thử chia sẻ','Server trả lỗi quota; capture thật đã dừng, vẫn chỉ ba suất phát');
+        at E:\FGweb\code\tests\e2e\screen-share.spec.ts:63:249
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

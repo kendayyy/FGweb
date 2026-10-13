@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30',read=n=>fs.readFileSync(d+'/'+n,'utf8'),write=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'});
+write('snapshot-api-build16.mjs',read('snapshot-api-build15.mjs').replaceAll('before-15','before-16'));
+let s=read('adopt-api-build-14-reviewed2.mjs').replaceAll('build-14','build-16').replaceAll('before-14','before-16').replaceAll('review2.json','review1.json').replaceAll('manifest2.json','manifest1.json');
+s=s.replaceAll('webhook-dedupe-source-review1.json','lifecycle-lease-batch-source-review1.json').replaceAll('webhook-dedupe-lock-control1-red/review.json','lifecycle-lease-batch-test-review1.json');
+s=s.replaceAll('after one reviewed independent webhook receipt-lock removal','after reviewed canonical lifecycle eligibility batching').replaceAll('canonical reconciliation/coalescing/authorities','canonical lock order/per-peer fresh permissions/coalescing/authorities');
+assert(s.includes('api-build-before-16.json'));assert(s.includes('codex-t30-api-build-16.json'));assert(!s.includes('api-build-before-13.json'));write('adopt-api-build-16-reviewed1.mjs',s);
+let driver=read('run-lifecycle-batch-red-resource1.mjs').replaceAll('resource63','resource64').replaceAll('stop-63','stop-64').replaceAll('restore-63','restore-64');
+driver=driver.replace("if(result===0)result=run('t30-lifecycle-lease-batch-red-1',['node',d+'/run-lifecycle-lease-batch1.mjs']);",`if(result===0)result=run('t30-lifecycle-lease-batch-green-1',['node',d+'/run-lifecycle-lease-batch1.mjs']);
+if(result===0)result=run('t30-api-build16-snapshot-1',['node',d+'/snapshot-api-build16.mjs']);
+if(result===0)result=run('t30-api-build-16',['node','node_modules/typescript/bin/tsc','-p','apps/api/tsconfig.build.json','--incremental','false']);
+if(result===0)result=run('t30-api-build-adoption-16-1',['node',d+'/adopt-api-build-16-reviewed1.mjs']);`);
+assert(driver.includes('t30-lifecycle-lease-batch-green-1'));write('run-lifecycle-batch-green-build16-resource1.mjs',driver);

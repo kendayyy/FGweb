@@ -7,6 +7,8 @@ import {
   index,
   check,
   foreignKey,
+  jsonb,
+  bigint,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { user } from './auth.js';
@@ -24,6 +26,9 @@ export const messages = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     type: text('type').notNull().default('TEXT'),
     content: text('content').notNull().default(''),
+    encryptionMode: text('encryption_mode').notNull().default('LEGACY_PENDING'),
+    cryptoEnvelope: jsonb('crypto_envelope'),
+    cryptoRevision: bigint('crypto_revision', {mode:'number'}),
     clientMessageId: text('client_message_id').notNull(),
     replyToId: text('reply_to_id'),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
@@ -42,6 +47,7 @@ export const messages = pgTable(
       table.id
     ),
     check('message_type_check', sql`type IN ('TEXT', 'IMAGE')`),
+    check('message_encryption_shape_check',sql`(${table.encryptionMode}='LEGACY_PENDING' AND ${table.cryptoEnvelope} IS NULL AND ${table.cryptoRevision} IS NULL) OR (${table.content}='' AND ${table.cryptoRevision} IS NOT NULL AND ${table.cryptoRevision} BETWEEN 1 AND 9007199254740991 AND chat_crypto_valid_envelope(${table.cryptoEnvelope},${table.encryptionMode},'fg-lobby'))`),
     // Note: Drizzle DSL onDelete('set null') specifies SET NULL on composite FK.
     // In PostgreSQL 17, the migration SQL specifies ON DELETE SET NULL ("reply_to_id")
     // to clear only reply_to_id while preserving non-null conversation_id upon parent deletion.
@@ -67,9 +73,12 @@ export const attachments = pgTable(
     fileName: text('file_name').notNull(),
     fileSize: integer('file_size').notNull(),
     mimeType: text('mime_type').notNull(),
+    encryptionMode: text('encryption_mode').notNull().default('LEGACY_PENDING'),
+    cryptoEnvelope: jsonb('crypto_envelope'),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
   },
   (table) => [
+    check('attachment_encryption_shape_check',sql`(${table.encryptionMode}='LEGACY_PENDING' AND ${table.cryptoEnvelope} IS NULL) OR (${table.encryptionMode}='E2EE' AND ${table.fileName}='' AND ${table.mimeType}='application/octet-stream' AND ${table.cryptoEnvelope} IS NULL AND ${table.fileSize} BETWEEN 1 AND 5242880) OR (${table.encryptionMode}='LOBBY_AEAD' AND chat_crypto_valid_envelope(${table.cryptoEnvelope},'LOBBY_AEAD','fg-lobby'))`),
     foreignKey({
       columns: [table.messageId, table.conversationId],
       foreignColumns: [messages.id, messages.conversationId],

@@ -1,0 +1,40 @@
+✔ native Matrix attachment roundtrip with v2 secret; ciphertext has no source bytes (94.4146ms)
+✔ same bytes have independent native encryption keys and IVs (2.1683ms)
+✔ native integrity rejects changed or truncated encrypted bytes (4.1617ms)
+✔ attachment limits and strict descriptor reject empty, oversized, plaintext and unknown fields (2.743ms)
+✔ native Megolm returns bound text as data, preserving markup without rendering it (206.0829ms)
+✔ native authenticated ciphertext rejects decoded conversationId disagreement (6.0345ms)
+✔ native authenticated ciphertext rejects decoded clientMessageId disagreement (6.0121ms)
+✔ native authenticated ciphertext rejects decoded senderId disagreement (5.2101ms)
+✔ native authenticated ciphertext rejects decoded senderDeviceId disagreement (4.0415ms)
+✔ native authenticated ciphertext rejects decoded membershipRevision disagreement (5.8482ms)
+✔ rejects outer conversation substitution before displaying plaintext (2.1544ms)
+✔ native Megolm rejects modified ciphertext (7.1852ms)
+✔ rejects relay device substitution despite authentic room ciphertext (4.5294ms)
+✔ rejects relay attachment and mention additions absent from encrypted content (6.9589ms)
+✔ rejects wrong SDK device store without plaintext fallback (13.5853ms)
+✔ logout aborts transport and suppresses a pending native key result before releasing ownership (125.5426ms)
+✔ native operations run serially; a rejected action does not poison later retries (17.8533ms)
+{"phase":"compiled-api-bootstrap","realAppModuleStarted":true,"twoRealSignedSessions":true,"twoNativeDevicesRegistered":true,"realStateRevision":3,"isolatedPostgreSQL":true,"mainMutation":false}
+{"realAppModule":true,"realSignedAuth":true,"isolatedPostgreSQL":true,"nativeSdk":"18.6.0","nativeSasCompleted":true,"plaintextAbsentInMessageRow":true,"dedup":true,"mainMutation":false,"headedUi":false}
+✔ frontend adapter carries native SAS and Megolm through actual AppModule/auth/isolated PostgreSQL (28295.8084ms)
+✔ new device without recovery keys cannot decrypt history (342.9012ms)
+✔ backup contains native encrypted export, no private text, keys or recovery code (1.135ms)
+✔ wrong independent code and account-password-shaped input fail without granting history (205.7992ms)
+✔ correct native recovery restores historical room key but not device identity or trust (195.5827ms)
+{"realPostgreSQL":true,"oldProtocolRowRetained":true,"userAndDeviceRowsRetained":true,"oldMigrationHistoryRetained":true,"functionReapplyIdempotent":true,"nativeDistinctIdsAccepted":true,"mainApplied":false}
+✔ additive native SAS validator migration preserves existing protocol rows and journal history (7898.6465ms)
+{"realPostgreSQL":true,"nativeSdk":"18.6.0","nativeTransportEqualsFlow":false,"nativeAccepted":true,"flowAliasControlAccepted":true}
+✔ actual PostgreSQL protocol guard accepts unchanged native SAS transport and flow IDs (7559.8134ms)
+✔ native SAS requires both confirmations and authenticates remote Megolm sender keys (672.3631ms)
+{"stage":"request","nativeTransportEqualsFlow":false,"contractAccepted":true}
+{"stage":"ready","nativeTransportEqualsFlow":false,"sameFlowAsRequest":true,"contractAccepted":true}
+✔ locked relay contract accepts native SAS transport IDs without changing flow IDs (199.7351ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58467.0259

@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='LIGHT01-FE');
+const records=fs.readdirSync(dir).filter(file=>/^codex-.*\.json$/.test(file)).map(file=>JSON.parse(fs.readFileSync(`${dir}/${file}`))).sort((a,b)=>a.startedAt.localeCompare(b.startedAt));
+const owned=file=>task.writeAllowlist.some(pattern=>pattern.endsWith('/**')?file.startsWith(pattern.slice(0,-2)):file===pattern);
+const source=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(file=>file&&owned(file)&&(/^(apps\/web\/(src|index.html)|tests\/e2e\/theme.spec.ts|apps\/web\/test\/theme.test.tsx)/.test(file)));
+const photos=fs.readdirSync(`${dir}/screenshots`).map(file=>`${dir}/screenshots/${file}`);
+const files=[...source,...photos,'apps/web/dist/index.html',`${dir}/review.md`,`${dir}/baseline-change-review.md`,`${dir}/contrast.json`,`${dir}/late-baseline-delta.json`];
+const report={taskId:task.id,status:'BLOCKED',technicalChecks:'166 web tests,14 theme tests,5 final headed real API/PG/Redis E2E,types/lint/build passed',baselineAligned:false,requiredBeforePass:task.blockers,commands:records,currentFiles:Object.fromEntries(files.map(file=>[file,createHash('sha256').update(fs.readFileSync(file)).digest('hex')])),recordedAt:new Date().toISOString(),previousSnapshot:`${dir}/verification-pending.json`};
+fs.writeFileSync(`${dir}/verification-current.json`,JSON.stringify(report,null,2)+'\n');
+task.commands=records;task.evidencePaths=[...new Set([...task.evidencePaths,`${dir}/verification-current.json`,...records.map(record=>record.evidencePath)])];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('Current BLOCKED report and exact source/screenshot hashes saved; historical checks/failures retained.');

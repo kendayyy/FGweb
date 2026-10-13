@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-10T17:30:02.106Z",
+  "approval": "Persistent human continue until completion and approved task T30/spec6, sequential after actual T29 PASS; reviewed source transitions before any locked-file write.",
+  "scope": [
+    "apps/web/src/features/live/**",
+    "apps/web/src/features/calls/media.ts",
+    "apps/web/src/features/calls/CallPanel.tsx",
+    "apps/web/test/live-viewer.test.tsx",
+    "apps/web/dist/**",
+    "tests/e2e/screen-share.spec.ts",
+    "quality/spec-coverage.md",
+    "quality/evidence/T30/**",
+    ".runtime/t30/**",
+    ".cache/t30/**",
+    "quality/evidence/TELEGRAM-BRIDGE-01/demo-stream/**",
+    "quality/evidence/TELEGRAM-BRIDGE-01/demo-latest.json"
+  ],
+  "interfaces": [
+    "Consume existing T29 screen-share claim/release DTOs",
+    "Integrate LiveViewer with existing active MediaSession; one SFU room/admission/mic per user"
+  ],
+  "data": "No backend/schema/contract changes; preserve T29 server enforcement. Existing voice media and CallPanel are prior-owned: exact proposed source transitions reviewed before application.",
+  "preserve": [
+    "all80 prior PASS rows/evidence/checker/env",
+    "auth/crypto/room/game/FG tokens/sidebar/theme/call lifecycle behavior",
+    "mic viewer independent of screen slot",
+    "private SFU gateway, lifecycle/grace/lease semantics"
+  ],
+  "tests": "DOM RED tests for stream selection/fallback/cancel/release/mobile; actual FG app/API/PG/native SFU real capture/switch/measured subscription and shaped audio via owned fixture. All UI/E2E headed with authorized masked Telegram capture, no mock media acceptance."
+}

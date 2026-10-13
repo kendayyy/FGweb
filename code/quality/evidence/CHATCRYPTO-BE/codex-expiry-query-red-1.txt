@@ -1,0 +1,43 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:33628) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (78.658 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › relays real Olm room keys and Megolm messages without plaintext persistence, with tamper/replay rejection
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Tin nháº¯n má»›i"
+    Received: "Tin nhắn mới"
+
+      212 |   const retry=await post('conversations/dm/messages',payload);expect(retry.status).toBe(201);expect(retry.body.id).toBe(sent.body.id);
+      213 |   const notices=(await pool.query(`SELECT * FROM notifications WHERE type='DM' ORDER BY id`)).rows;expect(notices).toHaveLength(1);
+    > 214 |   expect(notices[0].user_id).toBe('bob');expect(notices[0].title).toBe('Tin nháº¯n má»›i');expect(notices[0].body).toBe('Báº¡n cÃ³ tin nháº¯n má»›i.');
+          |                                                                   ^
+      215 |   expect(JSON.parse(notices[0].data)).toEqual({conversationId:'dm',messageId:sent.body.id,senderId:'alice'});
+      216 |   const jobs=(await pool.query(`SELECT user_id,channel FROM notification_outbox WHERE notification_id=$1`,[notices[0].id])).rows;expect(jobs).toEqual([{user_id:'bob',channel:'IN_APP'}]);
+      217 |   expect(JSON.stringify(notices)).not.toContain('native-private-message-fixture');expect(JSON.stringify(notices)).not.toContain(content.ciphertext);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:214:67)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › uses an expiry access path without scanning twenty thousand retained live queue rows
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      664 |    const destination=path.resolve('quality/evidence/CHATCRYPTO-BE',process.env.FG_EXPIRY_PLAN_LABEL??'expiry-query-plan-unlabeled.json');expect(path.dirname(destination)).toBe(path.resolve('quality/evidence/CHATCRYPTO-BE'));expect(fs.existsSync(destination)).toBe(false);
+      665 |    fs.writeFileSync(destination,JSON.stringify({recordedAt:new Date().toISOString(),ownedSchema:owned,livePerQueue:20000,expiredPerQueue:7,plannerForced:false,plans},null,2)+'\n',{flag:'wx'});
+    > 666 |    for(const table of queueTables){const plan=plans[table] as {Plan:Record<string,unknown>},nodes=flatten(plan.Plan);expect(Number(plan.Plan['Actual Rows'])).toBe(7);expect(nodes.some(node=>node['Node Type']==='Seq Scan')).toBe(false);expect(nodes.some(node=>typeof node['Index Name']==='string'&&String(node['Index Name']).includes('expiry'))).toBe(true);}
+          |                                                                                                                                                                                                                                ^
+      667 |   }finally{client.release();for(const table of queueTables)await pool.query(`DELETE FROM ${table} WHERE id LIKE $1`,[tag+'-%']);}
+      668 |  });
+      669 |
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:666:224)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 44 passed, 46 total
+Snapshots:   0 total
+Time:        79.105 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

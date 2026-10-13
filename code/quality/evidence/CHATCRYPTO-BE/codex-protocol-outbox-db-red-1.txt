@@ -1,0 +1,33 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-protocol-outbox.test.ts (6 tests | 6 failed) 6690ms
+   ❯ Durable protocol wakeup metadata on actual PostgreSQL (6)
+     × contains only event references and delivery timestamps, with no copied payload or recipient routing 193ms
+     × requires exactly one existing authoritative event 19ms
+     × deduplicates each encrypted or verification source independently 19ms
+     × cascades expired source deletion while keeping other live events and jobs 17ms
+     × rejects a delivery timestamp before creation and permits an actual committed delivery timestamp 16ms
+     × indexes the pending dispatch access path without indexing ciphertext or payload 18ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > contains only event references and delivery timestamps, with no copied payload or recipient routing
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > requires exactly one existing authoritative event
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > deduplicates each encrypted or verification source independently
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > cascades expired source deletion while keeping other live events and jobs
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > rejects a delivery timestamp before creation and permits an actual committed delivery timestamp
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > indexes the pending dispatch access path without indexing ciphertext or payload
+error: duplicate key value violates unique constraint "chat_crypto_device_curve_unique"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-protocol-outbox.test.ts:15:47
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  03:57:17
+   Duration  8.33s (tests 83%, import 15%, transform 2%)
+

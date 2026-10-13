@@ -1,0 +1,106 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:43600) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts (45.641 s)
+  ● T30 Call Participant Lease Batching Integration & Contract Suite › 1. Single Guarded Lease Query Batch Consolidation during CallsService.participants (Counter RED/GREEN Case) › executes exactly 1 guarded lease query during CallsService.participants with 3 valid callers (Counter RED on unbatched source)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      479 |       // On unbatched original source: participantDtos runs serial per-row await liveLease -> 3 queries (true SQL counter RED).
+      480 |       // On proposed batched source: candidate admissions fetched once via batched liveLeases -> exactly 1 query (GREEN).
+    > 481 |       expect(leaseQueryCount).toBe(1);
+          |                               ^
+      482 |
+      483 |       expect(participants).toHaveLength(3);
+      484 |
+
+      at Object.<anonymous> (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:481:31)
+
+  ● T30 Call Participant Lease Batching Integration & Contract Suite › 2. Standalone Bulk Helper liveLeases Contract & Equivalence › bulk helper liveLeases is exported and returns empty array with 0 SQL queries for empty input
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      541 |     it('bulk helper liveLeases is exported and returns empty array with 0 SQL queries for empty input', async () => {
+      542 |       // Unbatched current source does not yet export liveLeases; this fails assertion intentionally (RED).
+    > 543 |       expect(typeof liveLeasesFn).toBe('function');
+          |                                   ^
+      544 |       const { result, count, totalCount } = await countLeaseQueriesDuring(() => liveLeasesFn!(pool, []));
+      545 |       expect(count).toBe(0);
+      546 |       expect(result).toEqual([]);
+
+      at Object.<anonymous> (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:543:35)
+
+  ● T30 Call Participant Lease Batching Integration & Contract Suite › 2. Standalone Bulk Helper liveLeases Contract & Equivalence › bulk helper liveLeases fetches matching leases with 1 SQL query and handles absent IDs and duplicates
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      549 |
+      550 |     it('bulk helper liveLeases fetches matching leases with 1 SQL query and handles absent IDs and duplicates', async () => {
+    > 551 |       expect(typeof liveLeasesFn).toBe('function');
+          |                                   ^
+      552 |       const fixture = await seedFixture();
+      553 |       const absentId = `admission_absent_${randomUUID()}`;
+      554 |       const inputIds = [
+
+      at Object.<anonymous> (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:551:35)
+
+  ● T30 Call Participant Lease Batching Integration & Contract Suite › 2. Standalone Bulk Helper liveLeases Contract & Equivalence › bulk helper liveLeases returns results structurally equivalent to individual liveLease calls
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      573 |
+      574 |     it('bulk helper liveLeases returns results structurally equivalent to individual liveLease calls', async () => {
+    > 575 |       expect(typeof liveLeasesFn).toBe('function');
+          |                                   ^
+      576 |       const fixture = await seedFixture();
+      577 |       const candidateIds = [
+      578 |         fixture.owner.admissionId,
+
+      at Object.<anonymous> (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:575:35)
+
+  ● T30 Call Participant Lease Batching Integration & Contract Suite › 6. Late Lease Revocation Before Query Execution (Fresh Database Guard State) › omits participant expired right before lease query executes, rejecting stale pre-query states
+
+    ReferenceError: minutes is not defined
+
+      1081 |           return (async () => {
+      1082 |             await pool.query(
+    > 1083 |               'UPDATE call_admissions SET created_at=clock_timestamp()-interval '2 minutes',expires_at=clock_timestamp()-interval '1 minute' WHERE id = $1',
+           |                                                                                    ^
+      1084 |               [fixture.member3.admissionId]
+      1085 |             );
+      1086 |             return (originalClientQuery as unknown as (...a: unknown[]) => unknown).apply(
+
+      at quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:1083:84
+      at Client.wrappedQuery (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:1090:13)
+      at liveLease (apps/api/src/modules/calls/lease-store.ts:6:19)
+      at CallsService.participantDtos (apps/api/src/modules/calls/calls.service.ts:83:54)
+      at CallsService.transaction (apps/api/src/modules/calls/calls.service.ts:32:123)
+      at Object.<anonymous> (quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts:1098:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 18 passed, 23 total
+Snapshots:   0 total
+Time:        48.182 s
+Ran all test suites within paths "quality/evidence/T30/call-participant-lease-batch-tests/t30-call-participant-lease-batch.integration.spec.ts".

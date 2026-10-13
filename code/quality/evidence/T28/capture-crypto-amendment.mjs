@@ -1,0 +1,37 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T28',sha=data=>createHash('sha256').update(data).digest('hex');
+const baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+const mapping={specSha256:'01-product-spec.md',designSha256:'02-frontend-design.md',taskSha256:'task.md',mockupLobbySha256:'mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'mockups/02-group-call-live.png',mockupFeedSha256:'mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'mockups/04-login-desktop-mobile.png',mockupAdminSha256:'mockups/05-admin-support-desktop.png'};
+const task=fs.readFileSync('../.doc/task.md','utf8'),start=task.indexOf('### CHAT-CRYPTO-01'),end=task.indexOf('### FG-BRAND-LOGO-01',start);
+assert(start>=0&&end>start);
+const oldTask=Buffer.from(task.slice(0,start)+task.slice(end));
+assert.equal(sha(oldTask),baseline.hashes.taskSha256,'Exact original task bytes required');
+fs.writeFileSync(`${dir}/approved-taskSha256.md`,oldTask,{flag:'wx'});
+const oldSpec=fs.readFileSync(`${dir}/approved-specSha256.md`),liveSpec=fs.readFileSync('../.doc/01-product-spec.md','utf8');
+assert.equal(sha(oldSpec),baseline.hashes.specSha256);
+const prefix=liveSpec.slice(0,liveSpec.indexOf('## 17. Mã hóa tin nhắn'));
+const newSentence='Ngoại lệ nội dung chat/attachment theo CHAT-CRYPTO-01 mục17: DM/nhóm E2EE và Lobby mã hóa nội dung với khóa server; các trường user khác không tự mã hóa riêng trong DB.';
+const original=oldSpec.toString('utf8');
+const oldLine=original.split(/\r?\n/).find(line=>line.startsWith('- Thông tin cần đọc lại không hash một chiều:'));
+const newLine=prefix.split(/\r?\n/).find(line=>line.startsWith('- Thông tin cần đọc lại không hash một chiều:'));
+assert(newLine.includes(newSentence));
+assert.equal(prefix.replace(newLine,oldLine).trimEnd(),original.trimEnd(),'Only reviewed section14 exception and additive section17 permitted');
+assert(liveSpec.includes('E2EE không bao gồm media gọi thoại/screen share'));
+const frozen=`${dir}/approved-baseline`,manifest={recordedAt:new Date().toISOString(),currentCheckpoint:'T28',checkpointBaseline:baseline.hashes.specSha256,frozenRoot:path.resolve(`${frozen}/code`),sources:{},pendingApprovedAmendments:['CHAT-CRYPTO-01'],authorization:{threadId:'01a114a3-ab20-70e2-b020-db31d489bffd',title:'Idea',source:'Direct human messages verified with read_thread; no peer-agent delegation',instruction:'đúng ghi thêm task mới vào tài liệu spec lẫn task',scope:'Finish current T28 review at its original voice scope, then metadata rebaseline and CHATCRYPTO-DATA→BE→FE→QA before T29.'},precedent:'quality/evidence/AUTH02-FE/capture-approved-amendment.mjs'};
+fs.mkdirSync(`${frozen}/code`,{recursive:true});
+for(const [key,relative]of Object.entries(mapping)){
+ const live=fs.readFileSync(`../.doc/${relative}`),approved=key==='specSha256'?oldSpec:key==='taskSha256'?oldTask:live;
+ assert.equal(sha(approved),baseline.hashes[key],key);
+ const file=`${frozen}/.doc/${relative}`;fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,approved,{flag:'wx'});
+ manifest.sources[key]={livePath:`../.doc/${relative}`,liveSha256:sha(live),frozenPath:file,frozenSha256:sha(approved),pendingAmendment:sha(live)!==sha(approved)};
+}
+assert.equal(checkBaselines({root:manifest.frozenRoot,baseline}),8);
+fs.writeFileSync(`${dir}/pending-amendment.json`,JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
+fs.copyFileSync(`${dir}/final-audit.json`,`${dir}/pre-amendment-final-audit.json`);
+fs.writeFileSync(`${dir}/baseline-change-review.md`,'# CHAT-CRYPTO-01 during T28 final closure\n\nDirect human authorization in Idea verified read-only. Live spec/task additions are preserved. Original spec bytes were recovered from the matching historical snapshot; removing only the new CHAT-CRYPTO handoff in an owned copy reconstructs the exact approved task SHA. Eight original approved sources are independently verified through unchanged checkBaselines against an owned snapshot, as at AUTH02-FE. Live amended source hashes are separately frozen and checked. No live document rollback, checker modification, old PASS/output rewrite, or claim that the live baseline is aligned.\n\nExact change: spec14 encryption exception and new spec17; task adds only CHAT-CRYPTO handoff. Voice/screenshare explicitly excluded; T28 controls, media limits, approved design and eight screenshots remain applicable. Existing plaintext DM/group chat is not E2EE and no crypto feature is implemented here. T28 closure covers its original approved voice scope only. After closure, immediate metadata rebaseline must precede any new feature; pin CHATCRYPTO-DATA/BE/FE/QA ahead of T29. Protocol/library/version and client-assisted legacy migration require a reviewed proposal in DATA; do not silently choose a new stack or destructive backfill.\n\nRetained failures: close-1 correctly rejected changed live docs; baseline-restore-1 rejected the multiple-source change before any mutation. No doc or ledger was restored by that helper. Original technical results and pre-amendment-final-audit.json remain evidence of their actual times.\n');
+fs.appendFileSync('../.doc/history.md',`\n- T28 review cập nhật ${new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00: CHAT-CRYPTO-01 được human duyệt trong Idea và đổi2 nguồn sau audit. close1 fail đúng; restore guard fail trước mutation. Giữ live docs, reconstruct exact task hash bằng bỏ duy nhất handoff trong owned snapshot, spec từ historical exact SHA; stock checkBaselines kiểm8 nguồn cũ, hash docs mới kiểm riêng như precedent AUTH02-FE. Voice/screen explicitly excluded; chỉ chốt phạm vi T28 cũ, metadata rebaseline rồi4 crypto tasks trước T29, chưa triển khai E2EE. Evidence code/quality/evidence/T28/pending-amendment.json và baseline-change-review.md.\n`);
+console.log(JSON.stringify({originalSourcesVerified:8,liveAmendmentsPreserved:true,cryptoImplemented:false,nextRequiresRebaseline:true}));

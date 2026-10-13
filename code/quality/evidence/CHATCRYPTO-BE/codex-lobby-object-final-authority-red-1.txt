@@ -1,0 +1,63 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:38352) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (58.453 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies Lobby upload after native object put and committed ban with caller default read committed
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      458 |   const service=app.get(UploadsService) as unknown as {pool:pg.Pool;lobbyCipher:LobbyCipher},actualConnect=service.pool.connect.bind(service.pool),observed=service.pool as unknown as {connect:()=>Promise<pg.PoolClient>},previous=new Map<pg.PoolClient,string>(),tag='lobby-object-authority-'+randomUUID(),ban=tag+'-ban',files=fs.readdirSync(objectRoot).sort(),drafts=(await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count,keys:string[]=[],buffers:Buffer[]=[],actualPut=service.lobbyCipher.objects.put.bind(service.lobbyCipher.objects),actualEncode=service.lobbyCipher.encodeImage.bind(service.lobbyCipher);let inserted=false,uploadId:string|undefined;
+      459 |   const observer=jest.spyOn(observed,'connect').mockImplementation(async()=>{const client=await actualConnect();if(!previous.has(client)){previous.set(client,(await client.query('SHOW default_transaction_isolation')).rows[0].default_transaction_isolation);await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[isolation]);expect((await client.query('SHOW default_transaction_isolation')).rows[0].default_transaction_isolation).toBe(isolation);}return client;}),encodeObserver=jest.spyOn(service.lobbyCipher,'encodeImage').mockImplementation(async(...args:Parameters<LobbyCipher['encodeImage']>)=>{buffers.push(args[0]);return actualEncode(...args);}),putObserver=jest.spyOn(service.lobbyCipher.objects,'put').mockImplementation(async(key,bytes)=>{await actualPut(key,bytes);keys.push(key);expect(key).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.bin$/);const root=fs.realpathSync(objectRoot),target=path.resolve(root,key);expect(root).toBe(path.resolve('.runtime/chatcrypto-be',owned));expect(path.dirname(target)).toBe(root);expect(files).not.toContain(key);expect(fs.statSync(target).isFile()).toBe(true);expect(fs.readFileSync(target)).toEqual(bytes);await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES($1,'outsider','alice','BAN','owned Lobby native file boundary',clock_timestamp())",[ban]);inserted=true;expect((await pool.query("SELECT action FROM admin_actions WHERE target_user_id='alice' AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1")).rows[0].action).toBe('BAN');});
+    > 460 |   try{const response=await uploadLobby();if(response.status===201)uploadId=response.body.id;expect(inserted).toBe(true);expect(keys).toHaveLength(1);expect(response.status).toBe(403);expect(buffers.length).toBeGreaterThan(0);expect(buffers.every(bytes=>bytes.every(byte=>byte===0))).toBe(true);expect((await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count).toBe(drafts);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);}
+          |                                                                                                                                                                              ^
+      461 |   finally{
+      462 |    putObserver.mockRestore();encodeObserver.mockRestore();observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);
+      463 |    if(uploadId){expect(keys).toEqual([uploadId+'.bin']);const draft=(await pool.query("SELECT * FROM chat_crypto_upload_drafts WHERE id=$1 AND uploader_id='alice' AND conversation_id=$2 AND encryption_mode='LOBBY_AEAD' AND message_id IS NULL AND report_evidence_id IS NULL AND cohort_id IS NULL AND consumed_at IS NULL",[uploadId,lobby])).rows[0];expect(draft).toBeDefined();expect(draft.object_key).toBe(uploadId+'.bin');const root=fs.realpathSync(objectRoot),target=path.resolve(root,draft.object_key);expect(root).toBe(path.resolve('.runtime/chatcrypto-be',owned));expect(path.dirname(target)).toBe(root);expect(files).not.toContain(draft.object_key);await pool.query("DELETE FROM chat_crypto_upload_drafts WHERE id=$1 AND uploader_id='alice' AND conversation_id=$2 AND message_id IS NULL AND report_evidence_id IS NULL AND cohort_id IS NULL AND consumed_at IS NULL",[uploadId,lobby]);fs.unlinkSync(target);}
+
+      at test/chat-crypto-reports.integration.spec.ts:460:174
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies Lobby upload after native object put and committed ban with caller default repeatable read
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      458 |   const service=app.get(UploadsService) as unknown as {pool:pg.Pool;lobbyCipher:LobbyCipher},actualConnect=service.pool.connect.bind(service.pool),observed=service.pool as unknown as {connect:()=>Promise<pg.PoolClient>},previous=new Map<pg.PoolClient,string>(),tag='lobby-object-authority-'+randomUUID(),ban=tag+'-ban',files=fs.readdirSync(objectRoot).sort(),drafts=(await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count,keys:string[]=[],buffers:Buffer[]=[],actualPut=service.lobbyCipher.objects.put.bind(service.lobbyCipher.objects),actualEncode=service.lobbyCipher.encodeImage.bind(service.lobbyCipher);let inserted=false,uploadId:string|undefined;
+      459 |   const observer=jest.spyOn(observed,'connect').mockImplementation(async()=>{const client=await actualConnect();if(!previous.has(client)){previous.set(client,(await client.query('SHOW default_transaction_isolation')).rows[0].default_transaction_isolation);await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[isolation]);expect((await client.query('SHOW default_transaction_isolation')).rows[0].default_transaction_isolation).toBe(isolation);}return client;}),encodeObserver=jest.spyOn(service.lobbyCipher,'encodeImage').mockImplementation(async(...args:Parameters<LobbyCipher['encodeImage']>)=>{buffers.push(args[0]);return actualEncode(...args);}),putObserver=jest.spyOn(service.lobbyCipher.objects,'put').mockImplementation(async(key,bytes)=>{await actualPut(key,bytes);keys.push(key);expect(key).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.bin$/);const root=fs.realpathSync(objectRoot),target=path.resolve(root,key);expect(root).toBe(path.resolve('.runtime/chatcrypto-be',owned));expect(path.dirname(target)).toBe(root);expect(files).not.toContain(key);expect(fs.statSync(target).isFile()).toBe(true);expect(fs.readFileSync(target)).toEqual(bytes);await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES($1,'outsider','alice','BAN','owned Lobby native file boundary',clock_timestamp())",[ban]);inserted=true;expect((await pool.query("SELECT action FROM admin_actions WHERE target_user_id='alice' AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1")).rows[0].action).toBe('BAN');});
+    > 460 |   try{const response=await uploadLobby();if(response.status===201)uploadId=response.body.id;expect(inserted).toBe(true);expect(keys).toHaveLength(1);expect(response.status).toBe(403);expect(buffers.length).toBeGreaterThan(0);expect(buffers.every(bytes=>bytes.every(byte=>byte===0))).toBe(true);expect((await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count).toBe(drafts);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);}
+          |                                                                                                                                                                              ^
+      461 |   finally{
+      462 |    putObserver.mockRestore();encodeObserver.mockRestore();observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);
+      463 |    if(uploadId){expect(keys).toEqual([uploadId+'.bin']);const draft=(await pool.query("SELECT * FROM chat_crypto_upload_drafts WHERE id=$1 AND uploader_id='alice' AND conversation_id=$2 AND encryption_mode='LOBBY_AEAD' AND message_id IS NULL AND report_evidence_id IS NULL AND cohort_id IS NULL AND consumed_at IS NULL",[uploadId,lobby])).rows[0];expect(draft).toBeDefined();expect(draft.object_key).toBe(uploadId+'.bin');const root=fs.realpathSync(objectRoot),target=path.resolve(root,draft.object_key);expect(root).toBe(path.resolve('.runtime/chatcrypto-be',owned));expect(path.dirname(target)).toBe(root);expect(files).not.toContain(draft.object_key);await pool.query("DELETE FROM chat_crypto_upload_drafts WHERE id=$1 AND uploader_id='alice' AND conversation_id=$2 AND message_id IS NULL AND report_evidence_id IS NULL AND cohort_id IS NULL AND consumed_at IS NULL",[uploadId,lobby]);fs.unlinkSync(target);}
+
+      at test/chat-crypto-reports.integration.spec.ts:460:174
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 48 passed, 50 total
+Snapshots:   0 total
+Time:        60.275 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"9abe3d42150a4f77b9fbe89322d77492","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:85:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

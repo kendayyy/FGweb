@@ -1,0 +1,52 @@
+{
+  "taskId": "T30",
+  "proposalId": "antigravity-native49-dual-transport-1",
+  "targetFile": "apps/web/src/features/calls/media.ts",
+  "proposalFile": "quality/evidence/T30/antigravity-native49-dual-transport-1/media.ts",
+  "changeSummary": "Set singlePeerConnection: false in Room constructor options literal",
+  "diff": {
+    "targetLine": 60,
+    "before": "const room = new Room({ webAudioMix: false, adaptiveStream: true, dynacast: true });",
+    "after": "const room = new Room({ webAudioMix: false, adaptiveStream: true, dynacast: true, singlePeerConnection: false });"
+  },
+  "sdkSemantics": {
+    "optionsFile": "node_modules/livekit-client/src/options.ts",
+    "defaultsFile": "node_modules/livekit-client/src/room/defaults.ts",
+    "roomFile": "node_modules/livekit-client/src/room/Room.ts",
+    "engineFile": "node_modules/livekit-client/src/room/RTCEngine.ts",
+    "defaultSinglePeerConnection": true,
+    "evaluatedUseV0Path": true,
+    "transportTopology": "subscriber-primary dual peer connection"
+  },
+  "scopeBoundaries": {
+    "adaptiveStreamRetained": true,
+    "dynacastRetained": true,
+    "autoSubscribeRemainsFalse": true,
+    "preDownloadThreeStreams": false,
+    "deadlineOrAssertionChanged": false,
+    "cameraOrE2EEChanged": false,
+    "backendOrGatewayChanged": false,
+    "priorBatchCachingRejected": true
+  },
+  "tradeoffs": {
+    "negotiation": "Subscriber PC is server-offered; eliminates client-side SDP offer generation and queuing delay during track selection switch",
+    "cpu": "Slight reduction in transient client CPU during track selection switches",
+    "memory": "Approximately 1-2 MB additional browser heap per tab for the second RTCPeerConnection instance"
+  },
+  "stockGateValidationCommands": [
+    "npx eslint apps/web/src/features/calls/media.ts",
+    "npm run typecheck --workspace @fg/web",
+    "npm run test --workspace @fg/web",
+    "npm run build --workspace @fg/web"
+  ],
+  "headedValidation": {
+    "targetSpec": "tests/e2e/screen-share.spec.ts",
+    "command": "node quality/evidence/T30/rtp-window-reviewed2/run-parent.mjs",
+    "requiresCodexExecution": true
+  },
+  "disclaimers": {
+    "executedInThisTurn": false,
+    "passClaimed": false,
+    "unitTestLimitation": "livekit-client is mocked in DOM tests; headed run required to verify dual PC network behavior"
+  }
+}

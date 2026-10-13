@@ -1,0 +1,33 @@
+{
+  "reviewedAt": "2026-10-11T08:05:11.681Z",
+  "completion": {
+    "completedAt": "2026-10-11T08:00:14.933Z",
+    "exitCode": 0,
+    "signal": null,
+    "implementationAcceptance": false
+  },
+  "analysis": {
+    "path": "quality/evidence/T30/antigravity-native37-room-load-analysis-1/analysis.md",
+    "sha256": "272f2e5fc804c25851302869b63dbcacacf32ada73c4aa1c0236d9f8c83f13b8"
+  },
+  "factsAccepted": [
+    "HTTP completed rooms-detail5553/rooms-own5767/games3422; unfinished member close not completed response",
+    "PG/API owner evidence shows actual room SHARE/UPDATE contention, not sole latency cause proven",
+    "Public games route no SessionGuard and uses Profiles pool max5",
+    "Existing other-successful SQL timing and pool wait/Node CPU/eventloop metrics unmeasured"
+  ],
+  "corrections": [
+    "Nest interceptor runs after guards in installed primary router source; interceptor alone cannot record guardStart or directly isolate guard duration",
+    "Matching HTTP completion and owner commit times is correlation, no request sequence/PID trace proves exact subtraction as guard latency",
+    "Public games SQL takes no room row lock, but indirect contention through shared pools/runtime cannot be ruled out; not proven entirely unrelated to room-lock activity",
+    "Three browser actors opened before viewer failure; only two joined RTC, do not label total host topology as two browsers",
+    "Additional diagnostic measurements cannot promise conclusive unique bottleneck or prove full host/browser CPU pressure"
+  ],
+  "nestEvidence": {
+    "path": "node_modules/@nestjs/core/router/router-execution-context.js",
+    "sha256": "12b9fad6771c9f39a85b1ce6ba07832c41a72ba12f45ff0f91f1ce34415f726c"
+  },
+  "selectedNext": "Diagnostic-only successful other-query client observed duration>=100ms, safe AuthService pool owner label, actual own pool waiting/total/idle/max snapshots and API-child Node eventloop/CPU metrics once/second; reuse exact existing wrappers/HTTP/PG/helpers. No interceptor/guard wrapper or pool.connect override in initial minimal collection; args/result/errors unchanged. Actual smoke/IOfailure/health/cleanup before headed38. No business change.",
+  "sourceImplementationApproved": false,
+  "nativeAcceptance": false
+}

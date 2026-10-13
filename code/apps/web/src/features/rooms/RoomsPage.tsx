@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import {InitialLoading} from '../../components/ui/InitialLoading.js';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { RoomDTO, MessageDTO, UserSummary, MeDTO, CreateRoomRequest, UpdateRoomSettingsRequest, HelperPermissionType } from '@fg/contracts';
-import { Plus, Settings, Volume2, LogOut, ArrowLeft } from 'lucide-react';
+import { RoomDTO, MeDTO, CreateRoomRequest, UpdateRoomSettingsRequest, HelperPermissionType } from '@fg/contracts';
+import { Plus, Settings, LogOut, ArrowLeft } from 'lucide-react';
 import { useAuth, LoginForm } from '../auth/index.js';
 import { OnboardingPage } from '../onboarding/index.js';
-import { RichComposer } from '../chat/RichComposer.js';
-import { RichMessage } from '../chat/RichMessage.js';
+import { PrivateChatPane } from '../crypto/PrivateChatPane';
 import { Button } from '../../components/ui/Button.js';
 import { Alert } from '../../components/ui/Alert.js';
 import { Spinner } from '../../components/ui/Spinner.js';
@@ -22,19 +22,21 @@ import {
   dissolveRoom,
   ApiError,
 } from './api.js';
-import { useRoomChat } from './useRoomChat.js';
 import { CreateRoomModal } from './CreateRoomModal.js';
 import { RoomSettingsModal } from './RoomSettingsModal.js';
 import { ConfirmationModal } from './ConfirmationModal.js';
 import { registerAuthCleanup } from '../auth/lifecycle.js';
 import './rooms.css';
+import {TeamRosterPanel} from '../team-roster/TeamRosterPanel.js';
+import {CallPanel} from '../calls/CallPanel.js';
 
 // Guarded outer component enforcing strict hook order
 export const RoomsPage: React.FC = () => {
   const { user, isLoading, isError, isSigningOut } = useAuth();
   const { roomId: routeRoomId } = useParams<{ roomId?: string }>();
 
-  if (isLoading || isSigningOut) {
+  if (isLoading && !user) return <InitialLoading pending layout="bootstrap" label="Đang kiểm tra phiên làm việc"/>;
+  if (isSigningOut) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
         <Spinner size={48} />
@@ -140,23 +142,26 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
     retry: false,
     staleTime: 0,
   });
+  const refreshCryptoMembers = useCallback(async () => {
+    if (selectedRoomId) await queryClient.invalidateQueries({ queryKey: ['roomMembers', actorUserId, selectedRoomId], exact: true }, { throwOnError: true });
+  }, [queryClient, actorUserId, selectedRoomId]);
+  const denyCryptoRoom = useCallback(() => setCryptoDenied({ actor: actorUserId, room: selectedRoomId }), [actorUserId, selectedRoomId]);
+  const resolveCryptoMembers = useCallback(async (signal: AbortSignal) => {
+    if (!selectedRoomId) throw new Error('Chưa chọn phòng.');
+    return (await fetchRoomMembers(selectedRoomId, signal)).map(member => member.userId);
+  }, [selectedRoomId]);
 
   // Fail-closed rule: If detail or chat query errors with 401/403/404, mark revoked/forbidden!
   const conversationId = roomDetailQuery.isError || !roomDetailQuery.isFetchedAfterMount ? null : roomDetailQuery.data?.conversationId ?? null;
-  const chat = useRoomChat(conversationId, actorUserId);
-  const isRoomRevokedOrNotFound = roomDetailQuery.isError || roomMembersQuery.isError || chat.isRevokedOrForbidden;
+  const [cryptoDenied,setCryptoDenied]=useState<{actor:string;room:string|null}|null>(null);
+  const privateAccessDenied=cryptoDenied?.actor===actorUserId&&cryptoDenied?.room===selectedRoomId;
+  const isRoomRevokedOrNotFound = roomDetailQuery.isError || roomMembersQuery.isError || privateAccessDenied;
   const roomError = roomDetailQuery.error || roomMembersQuery.error;
-  const accessDenied = chat.isRevokedOrForbidden || (roomError instanceof ApiError && [401, 403, 404].includes(roomError.status));
+  const accessDenied = privateAccessDenied || (roomError instanceof ApiError && [401, 403, 404].includes(roomError.status));
   const activeRoom = !isRoomRevokedOrNotFound
     ? (roomDetailQuery.isFetchedAfterMount ? roomDetailQuery.data ?? null : null)
     : null;
   const membersList = !isRoomRevokedOrNotFound ? (roomMembersQuery.data ?? []) : [];
-
-  useEffect(() => {
-    if (isRoomRevokedOrNotFound) {
-      setReplyMessage(null);
-    }
-  }, [isRoomRevokedOrNotFound, conversationId]);
 
   // Permissions & Roles
   const actorMemberRecord = useMemo(
@@ -168,18 +173,8 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
   const helperPermissions = actorMemberRecord?.permissions || [];
   const hasManageMembersPermission = isOwner || (isHelper && helperPermissions.includes('MANAGE_MEMBERS'));
 
-  // Chat hook
-
-  const mentionCandidates: UserSummary[] = useMemo(() => {
-    return membersList
-      .map(m => m.user)
-      .filter((u): u is UserSummary => Boolean(u && u.id !== actorUserId));
-  }, [membersList, actorUserId]);
-
-  const [replyMessage, setReplyMessage] = useState<MessageDTO | null>(null);
-
   // UI Tabs & Modals
-  const [mobileTab, setMobileTab] = useState<'chat' | 'members' | 'settings'>('chat');
+  const [mobileTab, setMobileTab] = useState<'chat' | 'members' | 'settings' | 'calls'>('chat');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
@@ -207,7 +202,6 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
     setIsActionLoading(false);
     setModalError(null);
     setActionError(null);
-    setReplyMessage(null);
     setMobileTab('chat');
   }, [roomScope]);
 
@@ -388,9 +382,9 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
         </div>
 
         <div className="fg-rooms-list">
-          {ownRoomsQuery.isLoading && (
+          {ownRoomsQuery.isLoading && roomsList.length===0 && (
             <div style={{ padding: '24px', textAlign: 'center' }}>
-              <Spinner size={24} />
+              <InitialLoading pending layout="list" label="Đang tải danh sách phòng"/>
             </div>
           )}
 
@@ -458,6 +452,7 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
         >
           Thành viên ({membersList.length})
         </button>
+        <button type="button" data-testid="mobile-tab-calls" className={`fg-mobile-tab-button ${mobileTab === 'calls' ? 'active' : ''}`} onClick={() => setMobileTab('calls')}>Cuộc gọi</button>
         {isOwner && (
           <button
             type="button"
@@ -537,16 +532,9 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
           {/* Body: Stage + Chat Panel */}
           <div className="fg-rooms-body">
             {/* Stage / Mobile Tab content */}
-            <div className={`fg-rooms-stage ${mobileTab !== 'chat' ? 'fg-mobile-visible' : ''}`}>
-              <div className="fg-stage-card">
-                <Volume2 size={48} color="var(--color-focus)" />
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-main)' }}>
-                  Khu vực cuộc gọi & Thẻ tuyển đội
-                </h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-sub)', maxWidth: '420px', margin: 0 }}>
-                  Phòng nhóm lâu dài của {activeRoom.name}.
-                </p>
-              </div>
+            <div data-mobile-tab={mobileTab} className={`fg-rooms-stage ${mobileTab !== 'chat' ? 'fg-mobile-visible' : ''}`}>
+              <CallPanel key={`call:${actorUserId}:${activeRoom.id}`} roomId={activeRoom.id} actorId={actorUserId}/>
+              <TeamRosterPanel key={`team:${actorUserId}:${activeRoom.id}`} room={activeRoom} actorId={actorUserId} members={membersList} onOpenSettings={isOwner?()=>setIsSettingsModalOpen(true):undefined}/>
 
               {/* Members Panel (for Mobile Tab & Desktop info) */}
               {(mobileTab === 'members' || mobileTab === 'chat') && (
@@ -576,77 +564,16 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
               )}
             </div>
 
-            {/* Chat Panel - 320px (Desktop or Mobile Chat tab) */}
             <section className={`fg-rooms-chat-panel ${mobileTab === 'chat' ? 'fg-mobile-visible' : ''}`}>
-              <div className="fg-rooms-chat-header">
-                <span>Trò chuyện nhóm</span>
-                <span style={{ fontSize: '12px', color: 'var(--text-quiet)' }}>
-                  {chat.connectionStatus === 'connected' ? '● Trực tuyến' : '○ Ngoại tuyến'}
-                </span>
-              </div>
-
-              <div className="fg-rooms-chat-messages">
-                {chat.isLoading && (
-                  <div style={{ padding: '24px', textAlign: 'center' }}>
-                    <Spinner size={24} />
-                  </div>
-                )}
-
-                {chat.syncError && <Alert type="warning" message={chat.syncError} action={<Button type="button" variant="outline" onClick={() => void chat.retrySync()}>Thử lại</Button>} />}
-                {chat.isError && !chat.isRevokedOrForbidden && <Alert type="error" message={chat.error?.message || 'Không tải được tin nhắn.'} action={<Button type="button" variant="outline" onClick={() => void chat.retrySync()}>Thử lại</Button>} />}
-
-                {chat.hasOlder && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => void chat.loadOlderMessages()}
-                    isLoading={chat.isLoadingOlder}
-                  >
-                    Tải tin nhắn cũ hơn
-                  </Button>
-                )}
-
-                {!chat.isLoading && !chat.isError && chat.messages.length === 0 && (
-                  <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--text-sub)', fontSize: '13px' }}>
-                    Chưa có tin nhắn nào trong phòng này. Hãy gửi tin nhắn đầu tiên!
-                  </div>
-                )}
-
-                {chat.messages.map(msg => (
-                  <div key={msg.id} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-sub)' }}>
-                      <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{msg.sender.displayName}</span>
-                      <span style={{ color: 'var(--text-quiet)' }}>
-                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                    <RichMessage message={msg} onReply={m => setReplyMessage(m)} />
-                  </div>
-                ))}
-              </div>
-
-              {/* Rich Composer */}
-              <div className="fg-rooms-chat-composer">
-                <RichComposer
-                  key={`${actorUserId}_${conversationId}`}
-                  conversationId={conversationId || ''}
-                  candidates={mentionCandidates}
-                  reply={replyMessage?.conversationId === conversationId ? replyMessage : null}
-                  onCancelReply={() => setReplyMessage(null)}
-                  onSend={async req => {
-                    await chat.sendMessage(req);
-                  }}
-                  disabled={!conversationId || roomDetailQuery.isError || chat.isRevokedOrForbidden}
-                  label="Tin nhắn phòng"
-                  placeholder="Nhắn vào phòng..."
-                />
-              </div>
+              <div className="fg-rooms-chat-header"><span>Trò chuyện nhóm</span></div>
+              {conversationId && <PrivateChatPane key={actorUserId + ':' + conversationId} conversationId={conversationId} actorId={actorUserId}
+                participants={membersList.map(member=>({id:member.userId,displayName:member.user?.displayName??'Thành viên'}))}
+                onAccessDenied={denyCryptoRoom} onParticipantsChanged={refreshCryptoMembers} resolveParticipants={resolveCryptoMembers}/>}
             </section>
           </div>
         </main>
       ) : selectedRoomId && !roomDetailQuery.isFetchedAfterMount ? (
-        <main className="fg-rooms-main" aria-label="Đang tải phòng"><Spinner size={32} /></main>
+        <main className="fg-rooms-main" aria-label="Đang tải phòng"><InitialLoading pending layout="chat" label="Đang tải phòng"/></main>
       ) : (
         <main className="fg-rooms-main" style={{ alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', padding: '32px' }}>

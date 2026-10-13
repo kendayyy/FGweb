@@ -1,0 +1,77 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25668) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (35.603 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      48 |  afterAll(async()=>{for(const machine of machines)machine.close();try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(root)){expect(fs.realpathSync(root)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),owned));fs.rmSync(root,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      49 |  it('requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed',async()=>{
+    > 50 |   expect((await request(base).get('/api/v1/crypto/conversations/legacy/legacy/batch').query({deviceId:'A',cohortId:'verified'})).status).toBe(401);expect((await batch('outsider')).status).toBe(403);expect((await batch('leaver')).status).toBe(403);expect((await batch('bob',{deviceId:'A'})).status).toBe(403);expect((await batch('alice',{cohortId:'missing'})).status).toBe(403);
+         |                                                                                                                                          ^
+      51 |   expect((await request(base).get('/api/v1/conversations/legacy/messages').set('Cookie',cookies.get('alice')!)).status).toBe(403);expect((await request(base).get('/api/v1/images/'+imageId).set('Cookie',cookies.get('alice')!)).status).toBe(403);
+      52 |  });
+      53 |  it('reads only explicitly mapped sources, with exact text/image digest and sub-millisecond cursor parity',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:50:138)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › reads only explicitly mapped sources, with exact text/image digest and sub-millisecond cursor parity
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      52 |  });
+      53 |  it('reads only explicitly mapped sources, with exact text/image digest and sub-millisecond cursor parity',async()=>{
+    > 54 |   const first=await batch('alice',{limit:1});expect(first.status).toBe(200);expect(first.body.items).toHaveLength(1);expect(first.body.items[0].sourceManifest).toEqual(manifests.get('msg-a'));expect(first.body.items[0].originalSha256).toBe(digests.get('msg-a'));expect(first.body.hasMore).toBe(true);expect(first.body.nextCursor).toBe('msg-a');
+         |                                                                   ^
+      55 |   const next=await batch('bob',{after:first.body.nextCursor,limit:1});expect(next.status).toBe(200);expect(next.body.items[0].sourceManifest).toEqual(manifests.get('msg-b'));expect(next.body.items[0].originalSha256).toBe(digests.get('msg-b'));expect(next.body.hasMore).toBe(false);expect(next.body.nextCursor).toBeNull();expect(JSON.stringify(next.body)).not.toContain('unmapped-source-private');expect((await batch('alice',{after:'msg-c'})).status).toBe(422);
+      56 |   const bytes=await content();expect(bytes.status).toBe(200);expect(Buffer.from(bytes.body)).toEqual(image);expect(bytes.headers['cache-control']).toBe('no-store');expect(bytes.headers['x-content-type-options']).toBe('nosniff');expect((await content('outsider',{deviceId:'C'})).status).toBe(403);expect((await content('alice',{messageId:'msg-a'})).status).toBe(404);
+      57 |  });
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:54:67)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rejects unknown history and newly registered devices after cohort verification
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      57 |  });
+      58 |  it('rejects unknown history and newly registered devices after cohort verification',async()=>{
+    > 59 |   await pool.query("UPDATE chat_crypto_state SET history_status='UNKNOWN' WHERE conversation_id='legacy'");try{expect((await batch()).status).toBe(403);expect((await content()).status).toBe(403);}finally{await pool.query("UPDATE chat_crypto_state SET history_status='KNOWN' WHERE conversation_id='legacy'");}
+         |                                                                                                                                               ^
+      60 |   await register('alice','AFTER_COHORT');expect((await batch('alice',{deviceId:'AFTER_COHORT'})).status).toBe(403);
+      61 |  });
+      62 |  it('detects changed original text and image bytes rather than returning mismatched source material',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:59:143)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › detects changed original text and image bytes rather than returning mismatched source material
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 404
+
+      61 |  });
+      62 |  it('detects changed original text and image bytes rather than returning mismatched source material',async()=>{
+    > 63 |   await pool.query("UPDATE messages SET content='modified-private' WHERE id='msg-a'");try{expect((await batch()).status).toBe(409);}finally{await pool.query("UPDATE messages SET content='legacy-source-private' WHERE id='msg-a'");}
+         |                                                                                                                          ^
+      64 |   const changed=Buffer.from(image);changed[changed.length-1]^=1;fs.writeFileSync(path.join(images,imageId+'.webp'),changed);try{expect((await content()).status).toBe(409);expect((await batch('alice',{after:'msg-a'})).status).toBe(409);}finally{fs.writeFileSync(path.join(images,imageId+'.webp'),image);}
+      65 |   expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations ORDER BY message_id")).rows.map(row=>row.state)).toEqual(['PREPARED','PREPARED']);expect((await pool.query("SELECT content FROM messages WHERE id='msg-a'")).rows[0].content).toBe('legacy-source-private');
+      66 |  });
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:63:122)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 4 total
+Snapshots:   0 total
+Time:        36.169 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

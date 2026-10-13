@@ -1,0 +1,4 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30';let s=fs.readFileSync(d+'/review-native86-codex1.mjs','utf8');
+const a="assert(delivery.every(r=>r.status==='sent'));";assert(s.includes(a));s=s.replace(a,"assert.equal(delivery.filter(r=>r.status==='sent').length,4);assert.equal(delivery.filter(r=>r.status==='uncertain').length,1);assert(delivery.find(r=>r.name.includes('step-00001')).status==='uncertain');");
+s=s.replace('native86-codex-result-review1.json','native86-codex-result-review2.json').replace('supabaseRestored:true','telegramComplete:false,telegramGap:"Step1 delivery uncertain; no automatic replay and no claim delivered",supabaseRestored:true').replace('ROOT5actualfreshphotos/5Telegramsent verified','ROOT5actualfreshphotos inspected; Telegram4sent/step1uncertain, delivery incomplete');
+fs.writeFileSync(d+'/review-native86-codex2.mjs',s,{flag:'wx'});

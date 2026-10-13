@@ -1,0 +1,99 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:37120) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-cache.integration.spec.ts (31.428 s)
+  ● actual AppModule private crypto cache policy › prevents caching an authenticated JSON response at /api/v1/crypto/devices
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+  ● actual AppModule private crypto cache policy › prevents caching an authenticated JSON response at /api/v1/crypto/conversations/cache-dm/state
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+  ● actual AppModule private crypto cache policy › prevents caching session denial at /api/v1/crypto/devices
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+  ● actual AppModule private crypto cache policy › prevents caching session denial at /api/v1/crypto/recovery
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+  ● actual AppModule private crypto cache policy › prevents caching a CSRF denial before any private write
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+  ● actual AppModule private crypto cache policy › prevents caching a parser rejection that occurs before Nest guards
+
+    error: new row for relation "conversations" violates check constraint "conversation_kind_shape_check"
+
+      26 |   for(const user of ['cache-user','cache-peer'])await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);
+      27 |   await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES('cache-session','cache-user','cache-session',clock_timestamp()+interval '1 day',now(),now())`);cookie=await createSignedSessionCookie(secret,'cache-session');
+    > 28 |   await pool.query(`INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES('cache-dm','DM','cache-user','cache-peer')`);
+         |   ^
+      29 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('cache-dm','E2EE','RECONCILED','KNOWN')`);
+      30 |   for(const user of ['cache-user','cache-peer'])await pool.query(`INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'cache-dm',$2,1,clock_timestamp())`,[randomUUID(),user]);
+      31 |   Object.assign(process.env,env,{DATABASE_URL:url.href,FG_UPLOADS_DIR:path.join(storage,'legacy-images'),FG_CRYPTO_OBJECTS_DIR:path.join(storage,'encrypted'),PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:28:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 6 total
+Snapshots:   0 total
+Time:        33.824 s
+Ran all test suites matching apps/api/test/chat-crypto-cache.integration.spec.ts.

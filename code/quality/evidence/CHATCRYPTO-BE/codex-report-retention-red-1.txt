@@ -1,0 +1,107 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:8504) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (40.484 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › removes expired consented evidence and image bytes/bindings while preserving live evidence, moderation roots and private source
+
+    TypeError: app.get(...).cleanup is not a function
+
+      188 |   const retry=await uploadImage('image-retry-integrity');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      189 |  });
+    > 190 |  const sweep=()=> (app.get(CryptoReportsService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                             ^
+      191 |  const retainedReport=async(tag:string,image=true)=>{
+      192 |   const uploaded=image?await uploadImage(tag):undefined;if(uploaded)expect(uploaded.status).toBe(201);
+      193 |   const sent=await post({...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],...(uploaded?{reportAttachmentIds:[uploaded.body.id]}:{})}]});expect(sent.status).toBe(201);
+
+      at sweep (test/chat-crypto-reports.integration.spec.ts:190:93)
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:202:74)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › skips locked evidence and attachment claims, then retries deletion after lock release
+
+    TypeError: app.get(...).cleanup is not a function
+
+      188 |   const retry=await uploadImage('image-retry-integrity');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      189 |  });
+    > 190 |  const sweep=()=> (app.get(CryptoReportsService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                             ^
+      191 |  const retainedReport=async(tag:string,image=true)=>{
+      192 |   const uploaded=image?await uploadImage(tag):undefined;if(uploaded)expect(uploaded.status).toBe(201);
+      193 |   const sent=await post({...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],...(uploaded?{reportAttachmentIds:[uploaded.body.id]}:{})}]});expect(sent.status).toBe(201);
+
+      at sweep (test/chat-crypto-reports.integration.spec.ts:190:93)
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:213:224)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › retains metadata on filesystem refusal and resumes after the owned object is restored
+
+    TypeError: app.get(...).cleanup is not a function
+
+      188 |   const retry=await uploadImage('image-retry-integrity');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      189 |  });
+    > 190 |  const sweep=()=> (app.get(CryptoReportsService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                             ^
+      191 |  const retainedReport=async(tag:string,image=true)=>{
+      192 |   const uploaded=image?await uploadImage(tag):undefined;if(uploaded)expect(uploaded.status).toBe(201);
+      193 |   const sent=await post({...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],...(uploaded?{reportAttachmentIds:[uploaded.body.id]}:{})}]});expect(sent.status).toBe(201);
+
+      at sweep (test/chat-crypto-reports.integration.spec.ts:190:93)
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:221:20)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rolls back report metadata on PostgreSQL delete faults and safely retries already removed bytes
+
+    TypeError: app.get(...).cleanup is not a function
+
+      188 |   const retry=await uploadImage('image-retry-integrity');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      189 |  });
+    > 190 |  const sweep=()=> (app.get(CryptoReportsService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                             ^
+      191 |  const retainedReport=async(tag:string,image=true)=>{
+      192 |   const uploaded=image?await uploadImage(tag):undefined;if(uploaded)expect(uploaded.status).toBe(201);
+      193 |   const sent=await post({...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],...(uploaded?{reportAttachmentIds:[uploaded.body.id]}:{})}]});expect(sent.status).toBe(201);
+
+      at sweep (test/chat-crypto-reports.integration.spec.ts:190:93)
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:228:20)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › bounds evidence deletion to 100 rows per sweep and preserves root report metadata
+
+    TypeError: app.get(...).cleanup is not a function
+
+      188 |   const retry=await uploadImage('image-retry-integrity');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      189 |  });
+    > 190 |  const sweep=()=> (app.get(CryptoReportsService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                             ^
+      191 |  const retainedReport=async(tag:string,image=true)=>{
+      192 |   const uploaded=image?await uploadImage(tag):undefined;if(uploaded)expect(uploaded.status).toBe(201);
+      193 |   const sent=await post({...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],...(uploaded?{reportAttachmentIds:[uploaded.body.id]}:{})}]});expect(sent.status).toBe(201);
+
+      at sweep (test/chat-crypto-reports.integration.spec.ts:190:93)
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:237:41)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 14 passed, 19 total
+Snapshots:   0 total
+Time:        41.01 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"19ea3a907b854529809a29c412954358","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,456 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Entire gateway fixture outside exact preload mount/launch/stop/return hooks preserved
++ actual - expected
+... Skipped lines
+
+  "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+    "import {randomUUID} from 'node:crypto';\n" +
+    "import {execFileSync,spawnSync} from 'node:child_process';\n" +
+...
+    "  fs.writeFileSync(`${dir}/state.json`,JSON.stringify({recordedAt:new Date().toISOString(),containers,network,port,privateSignaling:true,nodeImage,sfuImage},null,2)+'\\n');\n" +
+-   '  return {server,ws,turnPort,shaperControl,close,result,diagnostics};\n' +
+-   ' }catch(error){\n' +
+-   '  const {text:diagnosticsText,statuses:logStatuses}=collectDiagnostics();\n' +
+-   "  const logReadFailures=logStatuses.filter(s=>s.logCaptureStatus!=='success').length;\n" +
+-   '  const logSuccess=Boolean(logReadFailures===0&&logStatuses.length===containers.length);\n' +
+    '\n' +
++   '  async function stopGatewayObservation(){\n' +
++   "   docker(['kill','--signal','SIGUSR2',gateway]);\n" +
++   '   const startTime=Date.now();\n' +
++   '   let health=null;\n' +
++   '   while(Date.now()-startTime<3000){\n' +
++   '    await new Promise(r=>setTimeout(r,100));\n' +
++   "    const logResult=spawnSync('docker',['logs',gateway],{cwd:root,encoding:'utf8',windowsHide:true,timeout:1000,maxBuffer:4*1024*1024});\n" +
++   "    if(logResult.status!==0||logResult.error)throw new Error('Gateway observer log capture failed');\n" +
++   "    const stdout=logResult.stdout??'';\n" +
++   "    const lines=stdout.split(/\\r?\\n/).filter(l=>l.startsWith('[FG_GATEWAY_HEALTH] '));\n" +
++   '    if(lines.length===0)continue;\n' +
++   '    if(lines.length!==1){\n' +
++   "     throw new Error('Gateway observer marker count invalid');\n" +
++   '    }\n' +
++   "    const rawJson=lines[0].slice('[FG_GATEWAY_HEALTH] '.length).trim();\n" +
++   '    let parsed;\n' +
++   '    try{\n' +
++   '     parsed=JSON.parse(rawJson);\n' +
++   '    }catch{\n' +
++   "     throw new Error('Malformed JSON in gateway health marker line');\n" +
++   '    }\n' +
++   '    const keys=Object.keys(parsed).sort();\n' +
++   "    const expectedKeys=['droppedCount','failureCount','histogramDisabled','observationComplete','sampleCou"... 4623 more characters
+-   '  const safeContainerStates=[];\n' +
+-   '  let inspectFailures=0;\n' +
+-   '  for(let i=0;i<containers.length;i++){\n' +
+-   '   try{\n' +
+-   "    const inspectOutput=docker(['inspect',containers[i]]);\n" +
+-   '    const inspectObj=JSON.parse(inspectOutput)[0];\n' +
+-   '    const state=inspectObj?.State;\n' +
+-   '    safeContainerStates.push({\n' +
+-   '     index:i,\n' +
+-   "     running:typeof state?.Running==='boolean'?state.Running:null,\n" +
+-   '     exitCode:Number.isInteger(state?.ExitCode)?state.ExitCode:null,\n' +
+-   "     oomKilled:typeof state?.OOMKilled==='boolean'?state.OOMKilled:null,\n" +
+-   '     startedAt:parseIsoString(state?.StartedAt),\n' +
+-   '     finishedAt:parseIsoString(state?.FinishedAt),\n' +
+-   '     healthStatus:parseHealthStatus(state?.Health?.Status),\n' +
+-   "     inspectStatus:'inspected'\n" +
+-   '    });\n' +
+-   '   }catch{\n' +
+-   '    inspectFailures++;\n' +
+-   '    safeContai'... 2596 more characters
+
+    at file:///E:/FGweb/code/quality/evidence/T30/review-native40-corrected-preload2.mjs:14:471
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+    "import {randomUUID} from 'node:crypto';\n" +
+    "import {execFileSync,spawnSync} from 'node:child_process';\n" +
+    "import {fileURLToPath} from 'node:url';\n" +
+    "const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');\n" +
+    "const nodeImage='node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd';\n" +
+    "const sfuImage=JSON.parse(fs.readFileSync(path.join(root,'infra/media/livekit-image.json'),'utf8')).image;\n" +
+    "const docker=args=>execFileSync('docker',args,{cwd:root,encoding:'utf8',windowsHide:true,stdio:['ignore','pipe','pipe'],timeout:30000});\n" +
+    '\n' +
+    'function getValidatedEvidenceDir(){\n' +
+    ' const envDir=process.env.FG_T30_EVIDENCE_DIR;\n' +
+    " if(!envDir||typeof envDir!=='string')return null;\n" +
+    " const evidenceRoot=path.resolve(root,'quality/evidence/T30');\n" +
+    ' const resolved=path.resolve(root,envDir);\n' +
+    ' if(path.dirname(resolved)!==evidenceRoot)return null;\n' +
+    ' const base=path.basename(resolved);\n' +
+    ' if(!/^[a-z0-9][a-z0-9_-]{0,100}$/i.test(base))return null;\n' +
+    ' return resolved;\n' +
+    '}\n' +
+    '\n' +
+    'function parseIsoString(str){\n' +
+    " if(typeof str==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$/.test(str)){\n" +
+    '  const ms=Date.parse(str);\n' +
+    '  if(Number.isFinite(ms))return str;\n' +
+    ' }\n' +
+    ' return null;\n' +
+    '}\n' +
+    '\n' +
+    "const HEALTH_ENUMS=new Set(['none','starting','healthy','unhealthy']);\n" +
+    'function parseHealthStatus(raw){\n' +
+    " if(typeof raw==='undefined'||raw===null||raw==='')return 'none';\n" +
+    " if(typeof raw==='string'){\n" +
+    '  if(HEALTH_ENUMS.has(raw))return raw;\n' +
+    "  return 'unknown';\n" +
+    ' }\n' +
+    " return 'unknown';\n" +
+    '}\n' +
+    '\n' +
+    "const ALLOWED_SIGNALS=new Set(['SIGTERM','SIGKILL','SIGINT']);\n" +
+    'function parseSignal(raw){\n' +
+    " if(raw===null||typeof raw==='undefined')return null;\n" +
+    " if(typeof raw==='string'&&ALLOWED_SIGNALS.has(raw))return raw;\n" +
+    " return 'UNKNOWN';\n" +
+    '}\n' +
+    '\n' +
+    'function createRedactor({key,secret,databaseURL,connection}){\n' +
+    ' const sensitiveStrings=new Set();\n' +
+    ' const add=val=>{\n' +
+    "  if(typeof val==='string'&&val.length>0){\n" +
+    '   sensitiveStrings.add(val);\n' +
+    '   try{\n' +
+    '    const decoded=decodeURIComponent(val);\n' +
+    '    if(decoded.length>0)sensitiveStrings.add(decoded);\n' +
+    '   }catch{}\n' +
+    '  }\n' +
+    ' };\n' +
+    ' add(key);\n' +
+    ' add(secret);\n' +
+    ' add(databaseURL);\n' +
+    ' add(connection.href);\n' +
+    ' if(connection.password)add(connection.password);\n' +
+    ' if(connection.username)add(connection.username);\n' +
+    ' try{\n' +
+    '  const orig=new URL(databaseURL);\n' +
+    '  if(orig.password)add(orig.password);\n' +
+    '  if(orig.username)add(orig.username);\n' +
+    ' }catch{}\n' +
+    ' const schemaMatch=connection.href.match(/t30_screen_[a-f0-9]+/);\n' +
+    ' if(schemaMatch)add(schemaMatch[0]);\n' +
+    ' const sorted=[...sensitiveStrings].sort((a,b)=>b.length-a.length);\n' +
+    '\n' +
+    ' return function redact(rawText){\n' +
+    "  let text=String(rawText??'');\n" +
+    '  for(const val of sorted){\n' +
+    "   text=text.replaceAll(val,'[REDACTED]');\n" +
+    '  }\n' +
+    '  return text\n' +
+    `   .replace(/access_token=[^\\s"&]+/g,'access_token=[REDACTED]')\n` +
+    "   .replace(/\\beyJ[A-Za-z0-9_.-]+\\b/g,'[JWT REDACTED]')\n" +
+    `   .replace(/(?:role|user)\\s+"[^"]+"/gi,'user "[REDACTED]"')\n` +
+    `   .replace(/(?:SELECT|INSERT\\s+INTO|UPDATE|DELETE\\s+FROM)\\s+[^;\\n\\r"]+/gi,'[SQL REDACTED]')\n` +
+    `   .replace(/"(?:query|sql)":\\s*"[^"]+"/g,'"query":"[SQL REDACTED]"')\n` +
+    `   .replace(/"(?:parameters|values)":\\s*\\[[^\\]]*\\]/g,'"parameters":["[REDACTED]"]');\n` +
+    ' };\n' +
+    '}\n' +
+    '\n' +
+    'export async function startGatewayFixture({databaseURL,key,secret,origin,turnTcp=false,webhookUrl}){\n' +
+    ' const id=randomUUID(),network=`fg-t30-screen-gateway-${id}`,dir=path.resolve(root,`.runtime/t30/gateway-${id}`);\n' +
+    ' const containers=[];let networkCreated=false;\n' +
+    " const connection=new URL(databaseURL);connection.hostname='host.docker.internal';\n" +
+    ' const redactor=createRedactor({key,secret,databaseURL,connection});\n' +
+    '\n' +
+    ' function collectDiagnostics(){\n' +
+    '  const statuses=[];\n' +
+    '  const parts=containers.map((container,i)=>{\n' +
+    '   let logStatus=null;\n' +
+    '   let logSignal=null;\n' +
+    '   let safeError=null;\n' +
+    "   let text='';\n" +
+    '   try{\n' +
+    "    const log=spawnSync('docker',['logs',container],{cwd:root,encoding:'utf8',windowsHide:true,timeout:10000});\n" +
+    '    logStatus=Number.isInteger(log.status)?log.status:null;\n' +
+    '    logSignal=parseSignal(log.signal);\n' +
+    '    if(log.error){\n' +
+    '     const code=log.error.code;\n' +
+    "     safeError=(code==='EIO'||code==='ETIMEDOUT'||code==='ENOENT')?code:'UNKNOWN';\n" +
+    '    }\n' +
+    "    text=`Container ${i}\\n${log.stdout??''}${log.stderr??''}`;\n" +
+    '   }catch{\n' +
+    "    safeError='UNKNOWN';\n" +
+    '   }\n' +
+    '   const isSuccess=logStatus===0&&!safeError;\n' +
+    '   statuses.push({\n' +
+    '    index:i,\n' +
+    '    status:logStatus,\n' +
+    '    signal:logSignal,\n' +
+    '    error:safeError,\n' +
+    "    logCaptureStatus:isSuccess?'success':'failed'\n" +
+    '   });\n' +
+    '   return redactor(text);\n' +
+    '  });\n' +
+    "  return {text:parts.join('\\n'),statuses};\n" +
+    ' }\n' +
+    '\n' +
+    ' function diagnostics(){\n' +
+    '  return collectDiagnostics().text;\n' +
+    ' }\n' +
+    '\n' +
+    ' const result={recordedAt:new Date().toISOString(),privateSignaling:true,containersRemoved:false,networkRemoved:false,webRTCVerified:false};\n' +
+    ' fs.mkdirSync(dir,{recursive:true});\n' +
+    ' fs.writeFileSync(`${dir}/sfu.yaml`,`port: 7880\\nbind_addresses: ["0.0.0.0"]\\nrtc:\\n  tcp_port: 7881\\n  udp_port: 7882\\n  use_external_ip: false\\nroom:\\n  auto_create: false\\n  max_participants: 10\\n${turnTcp?\'turn:\\n  enabled: true\\n  domain: local-turn.invalid\\n  tls_port: 5349\\n  external_tls: true\\n\':\'\'}${webhookUrl?`webhook:\\n  api_key: ${JSON.stringify(key)}\\n  urls: [${JSON.stringify(webhookUrl)}]\\n`:\'\'}keys:\\n  ${JSON.stringify(key)}: ${JSON.stringify(secret)}\\n`);\n' +
+    " fs.writeFileSync(`${dir}/gateway.json`,JSON.stringify({databaseURL:connection.href,key,secret,origin,upstreamURL:'http://fg-sfu:7880',port:7883}));\n" +
+    '\n' +
+    ' async function close(){\n' +
+    "  for(const container of [...containers].reverse())docker(['rm','-f',container]);\n" +
+    "  if(networkCreated)docker(['network','rm',network]);\n" +
+    "  result.containersRemoved=containers.every(c=>!docker(['ps','-a','--filter',`id=${c}`,'--format','{{.ID}}']).trim());\n" +
+    "  result.networkRemoved=!docker(['network','ls','--filter',`name=^${network}$`,'--format','{{.Name}}']).trim();\n" +
+    "  fs.writeFileSync(`${dir}/cleanup.json`,JSON.stringify(result,null,2)+'\\n');return result;\n" +
+    ' }\n' +
+    '\n' +
+    ' try{\n' +
+    "  docker(['network','create',network]);networkCreated=true;\n" +
+    "  const sfu=docker(['run','-d','--name',`fg-sfu-${id}`,'--network',network,'--network-alias','fg-sfu',...(turnTcp?['-p','127.0.0.1::5349/tcp']:[]),'--mount',`type=bind,source=${path.resolve(dir,'sfu.yaml')},target=/etc/livekit.yaml,readonly`,sfuImage,'--config','/etc/livekit.yaml']).trim();containers.push(sfu);\n" +
+    "  const inspect=JSON.parse(docker(['inspect',sfu]))[0];\n" +
+    "  assert.equal(inspect.HostConfig.PortBindings?.['7880/tcp']?.length??0,0);assert.equal(inspect.NetworkSettings.Ports?.['7880/tcp']?.length??0,0);\n" +
+    "  assert.deepEqual(Object.keys(inspect.HostConfig.PortBindings??{}),turnTcp?['5349/tcp']:[]);\n" +
+    "  let turnPort=turnTcp?Number(inspect.NetworkSettings.Ports['5349/tcp'][0].HostPort):undefined;\n" +
+    '  let shaperControl;\n' +
+    '  if(turnTcp){\n' +
+    "   const shaper=docker(['run','-d','--name',`fg-turn-shaper-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7884/tcp','-p','127.0.0.1::7885/tcp','--mount',`type=bind,source=${path.resolve(root,'quality/evidence/T30/turn-tcp-shaper.mjs')},target=/shaper.mjs,readonly`,nodeImage,'node','/shaper.mjs']).trim();containers.push(shaper);\n" +
+    "   const shaperInfo=JSON.parse(docker(['inspect',shaper]))[0];assert.equal(shaperInfo.State.Running,true);\n" +
+    "   turnPort=Number(shaperInfo.NetworkSettings.Ports['7884/tcp'][0].HostPort);\n" +
+    "   shaperControl=`http://127.0.0.1:${shaperInfo.NetworkSettings.Ports['7885/tcp'][0].HostPort}`;\n" +
+    '  }\n' +
+    "  const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);\n" +
+    "  const info=JSON.parse(docker(['inspect',gateway]))[0];assert.equal(info.State.Running,true,'Gateway process exited');\n" +
+    "  const port=Number(info.NetworkSettings.Ports['7883/tcp']?.[0]?.HostPort);assert(port>0);\n" +
+    '  const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;\n' +
+    "  for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{/* Readiness retries until the bounded deadline; final failure remains an assertion. */}await new Promise(r=>setTimeout(r,250));}\n" +
+    '  // Do not print container logs: failed startup can contain private DB URLs.\n' +
+    "  assert(ready,'Private gateway failed to become ready; inspect sanitized diagnostics only');\n" +
+    "  fs.writeFileSync(`${dir}/state.json`,JSON.stringify({recordedAt:new Date().toISOString(),containers,network,port,privateSignaling:true,nodeImage,sfuImage},null,2)+'\\n');\n" +
+    '\n' +
+    '  async function stopGatewayObservation(){\n' +
+    "   docker(['kill','--signal','SIGUSR2',gateway]);\n" +
+    '   const startTime=Date.now();\n' +
+    '   let health=null;\n' +
+    '   while(Date.now()-startTime<3000){\n' +
+    '    await new Promise(r=>setTimeout(r,100));\n' +
+    "    const logResult=spawnSync('docker',['logs',gateway],{cwd:root,encoding:'utf8',windowsHide:true,timeout:1000,maxBuffer:4*1024*1024});\n" +
+    "    if(logResult.status!==0||logResult.error)throw new Error('Gateway observer log capture failed');\n" +
+    "    const stdout=logResult.stdout??'';\n" +
+    "    const lines=stdout.split(/\\r?\\n/).filter(l=>l.startsWith('[FG_GATEWAY_HEALTH] '));\n" +
+    '    if(lines.length===0)continue;\n' +
+    '    if(lines.length!==1){\n' +
+    "     throw new Error('Gateway observer marker count invalid');\n" +
+    '    }\n' +
+    "    const rawJson=lines[0].slice('[FG_GATEWAY_HEALTH] '.length).trim();\n" +
+    '    let parsed;\n' +
+    '    try{\n' +
+    '     parsed=JSON.parse(rawJson);\n' +
+    '    }catch{\n' +
+    "     throw new Error('Malformed JSON in gateway health marker line');\n" +
+    '    }\n' +
+    '    const keys=Object.keys(parsed).sort();\n' +
+    "    const expectedKeys=['droppedCount','failureCount','histogramDisabled','observationComplete','sampleCou"... 4623 more characters,
+  expected: "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+    "import {randomUUID} from 'node:crypto';\n" +
+    "import {execFileSync,spawnSync} from 'node:child_process';\n" +
+    "import {fileURLToPath} from 'node:url';\n" +
+    "const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');\n" +
+    "const nodeImage='node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd';\n" +
+    "const sfuImage=JSON.parse(fs.readFileSync(path.join(root,'infra/media/livekit-image.json'),'utf8')).image;\n" +
+    "const docker=args=>execFileSync('docker',args,{cwd:root,encoding:'utf8',windowsHide:true,stdio:['ignore','pipe','pipe'],timeout:30000});\n" +
+    '\n' +
+    'function getValidatedEvidenceDir(){\n' +
+    ' const envDir=process.env.FG_T30_EVIDENCE_DIR;\n' +
+    " if(!envDir||typeof envDir!=='string')return null;\n" +
+    " const evidenceRoot=path.resolve(root,'quality/evidence/T30');\n" +
+    ' const resolved=path.resolve(root,envDir);\n' +
+    ' if(path.dirname(resolved)!==evidenceRoot)return null;\n' +
+    ' const base=path.basename(resolved);\n' +
+    ' if(!/^[a-z0-9][a-z0-9_-]{0,100}$/i.test(base))return null;\n' +
+    ' return resolved;\n' +
+    '}\n' +
+    '\n' +
+    'function parseIsoString(str){\n' +
+    " if(typeof str==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$/.test(str)){\n" +
+    '  const ms=Date.parse(str);\n' +
+    '  if(Number.isFinite(ms))return str;\n' +
+    ' }\n' +
+    ' return null;\n' +
+    '}\n' +
+    '\n' +
+    "const HEALTH_ENUMS=new Set(['none','starting','healthy','unhealthy']);\n" +
+    'function parseHealthStatus(raw){\n' +
+    " if(typeof raw==='undefined'||raw===null||raw==='')return 'none';\n" +
+    " if(typeof raw==='string'){\n" +
+    '  if(HEALTH_ENUMS.has(raw))return raw;\n' +
+    "  return 'unknown';\n" +
+    ' }\n' +
+    " return 'unknown';\n" +
+    '}\n' +
+    '\n' +
+    "const ALLOWED_SIGNALS=new Set(['SIGTERM','SIGKILL','SIGINT']);\n" +
+    'function parseSignal(raw){\n' +
+    " if(raw===null||typeof raw==='undefined')return null;\n" +
+    " if(typeof raw==='string'&&ALLOWED_SIGNALS.has(raw))return raw;\n" +
+    " return 'UNKNOWN';\n" +
+    '}\n' +
+    '\n' +
+    'function createRedactor({key,secret,databaseURL,connection}){\n' +
+    ' const sensitiveStrings=new Set();\n' +
+    ' const add=val=>{\n' +
+    "  if(typeof val==='string'&&val.length>0){\n" +
+    '   sensitiveStrings.add(val);\n' +
+    '   try{\n' +
+    '    const decoded=decodeURIComponent(val);\n' +
+    '    if(decoded.length>0)sensitiveStrings.add(decoded);\n' +
+    '   }catch{}\n' +
+    '  }\n' +
+    ' };\n' +
+    ' add(key);\n' +
+    ' add(secret);\n' +
+    ' add(databaseURL);\n' +
+    ' add(connection.href);\n' +
+    ' if(connection.password)add(connection.password);\n' +
+    ' if(connection.username)add(connection.username);\n' +
+    ' try{\n' +
+    '  const orig=new URL(databaseURL);\n' +
+    '  if(orig.password)add(orig.password);\n' +
+    '  if(orig.username)add(orig.username);\n' +
+    ' }catch{}\n' +
+    ' const schemaMatch=connection.href.match(/t30_screen_[a-f0-9]+/);\n' +
+    ' if(schemaMatch)add(schemaMatch[0]);\n' +
+    ' const sorted=[...sensitiveStrings].sort((a,b)=>b.length-a.length);\n' +
+    '\n' +
+    ' return function redact(rawText){\n' +
+    "  let text=String(rawText??'');\n" +
+    '  for(const val of sorted){\n' +
+    "   text=text.replaceAll(val,'[REDACTED]');\n" +
+    '  }\n' +
+    '  return text\n' +
+    `   .replace(/access_token=[^\\s"&]+/g,'access_token=[REDACTED]')\n` +
+    "   .replace(/\\beyJ[A-Za-z0-9_.-]+\\b/g,'[JWT REDACTED]')\n" +
+    `   .replace(/(?:role|user)\\s+"[^"]+"/gi,'user "[REDACTED]"')\n` +
+    `   .replace(/(?:SELECT|INSERT\\s+INTO|UPDATE|DELETE\\s+FROM)\\s+[^;\\n\\r"]+/gi,'[SQL REDACTED]')\n` +
+    `   .replace(/"(?:query|sql)":\\s*"[^"]+"/g,'"query":"[SQL REDACTED]"')\n` +
+    `   .replace(/"(?:parameters|values)":\\s*\\[[^\\]]*\\]/g,'"parameters":["[REDACTED]"]');\n` +
+    ' };\n' +
+    '}\n' +
+    '\n' +
+    'export async function startGatewayFixture({databaseURL,key,secret,origin,turnTcp=false,webhookUrl}){\n' +
+    ' const id=randomUUID(),network=`fg-t30-screen-gateway-${id}`,dir=path.resolve(root,`.runtime/t30/gateway-${id}`);\n' +
+    ' const containers=[];let networkCreated=false;\n' +
+    " const connection=new URL(databaseURL);connection.hostname='host.docker.internal';\n" +
+    ' const redactor=createRedactor({key,secret,databaseURL,connection});\n' +
+    '\n' +
+    ' function collectDiagnostics(){\n' +
+    '  const statuses=[];\n' +
+    '  const parts=containers.map((container,i)=>{\n' +
+    '   let logStatus=null;\n' +
+    '   let logSignal=null;\n' +
+    '   let safeError=null;\n' +
+    "   let text='';\n" +
+    '   try{\n' +
+    "    const log=spawnSync('docker',['logs',container],{cwd:root,encoding:'utf8',windowsHide:true,timeout:10000});\n" +
+    '    logStatus=Number.isInteger(log.status)?log.status:null;\n' +
+    '    logSignal=parseSignal(log.signal);\n' +
+    '    if(log.error){\n' +
+    '     const code=log.error.code;\n' +
+    "     safeError=(code==='EIO'||code==='ETIMEDOUT'||code==='ENOENT')?code:'UNKNOWN';\n" +
+    '    }\n' +
+    "    text=`Container ${i}\\n${log.stdout??''}${log.stderr??''}`;\n" +
+    '   }catch{\n' +
+    "    safeError='UNKNOWN';\n" +
+    '   }\n' +
+    '   const isSuccess=logStatus===0&&!safeError;\n' +
+    '   statuses.push({\n' +
+    '    index:i,\n' +
+    '    status:logStatus,\n' +
+    '    signal:logSignal,\n' +
+    '    error:safeError,\n' +
+    "    logCaptureStatus:isSuccess?'success':'failed'\n" +
+    '   });\n' +
+    '   return redactor(text);\n' +
+    '  });\n' +
+    "  return {text:parts.join('\\n'),statuses};\n" +
+    ' }\n' +
+    '\n' +
+    ' function diagnostics(){\n' +
+    '  return collectDiagnostics().text;\n' +
+    ' }\n' +
+    '\n' +
+    ' const result={recordedAt:new Date().toISOString(),privateSignaling:true,containersRemoved:false,networkRemoved:false,webRTCVerified:false};\n' +
+    ' fs.mkdirSync(dir,{recursive:true});\n' +
+    ' fs.writeFileSync(`${dir}/sfu.yaml`,`port: 7880\\nbind_addresses: ["0.0.0.0"]\\nrtc:\\n  tcp_port: 7881\\n  udp_port: 7882\\n  use_external_ip: false\\nroom:\\n  auto_create: false\\n  max_participants: 10\\n${turnTcp?\'turn:\\n  enabled: true\\n  domain: local-turn.invalid\\n  tls_port: 5349\\n  external_tls: true\\n\':\'\'}${webhookUrl?`webhook:\\n  api_key: ${JSON.stringify(key)}\\n  urls: [${JSON.stringify(webhookUrl)}]\\n`:\'\'}keys:\\n  ${JSON.stringify(key)}: ${JSON.stringify(secret)}\\n`);\n' +
+    " fs.writeFileSync(`${dir}/gateway.json`,JSON.stringify({databaseURL:connection.href,key,secret,origin,upstreamURL:'http://fg-sfu:7880',port:7883}));\n" +
+    '\n' +
+    ' async function close(){\n' +
+    "  for(const container of [...containers].reverse())docker(['rm','-f',container]);\n" +
+    "  if(networkCreated)docker(['network','rm',network]);\n" +
+    "  result.containersRemoved=containers.every(c=>!docker(['ps','-a','--filter',`id=${c}`,'--format','{{.ID}}']).trim());\n" +
+    "  result.networkRemoved=!docker(['network','ls','--filter',`name=^${network}$`,'--format','{{.Name}}']).trim();\n" +
+    "  fs.writeFileSync(`${dir}/cleanup.json`,JSON.stringify(result,null,2)+'\\n');return result;\n" +
+    ' }\n' +
+    '\n' +
+    ' try{\n' +
+    "  docker(['network','create',network]);networkCreated=true;\n" +
+    "  const sfu=docker(['run','-d','--name',`fg-sfu-${id}`,'--network',network,'--network-alias','fg-sfu',...(turnTcp?['-p','127.0.0.1::5349/tcp']:[]),'--mount',`type=bind,source=${path.resolve(dir,'sfu.yaml')},target=/etc/livekit.yaml,readonly`,sfuImage,'--config','/etc/livekit.yaml']).trim();containers.push(sfu);\n" +
+    "  const inspect=JSON.parse(docker(['inspect',sfu]))[0];\n" +
+    "  assert.equal(inspect.HostConfig.PortBindings?.['7880/tcp']?.length??0,0);assert.equal(inspect.NetworkSettings.Ports?.['7880/tcp']?.length??0,0);\n" +
+    "  assert.deepEqual(Object.keys(inspect.HostConfig.PortBindings??{}),turnTcp?['5349/tcp']:[]);\n" +
+    "  let turnPort=turnTcp?Number(inspect.NetworkSettings.Ports['5349/tcp'][0].HostPort):undefined;\n" +
+    '  let shaperControl;\n' +
+    '  if(turnTcp){\n' +
+    "   const shaper=docker(['run','-d','--name',`fg-turn-shaper-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7884/tcp','-p','127.0.0.1::7885/tcp','--mount',`type=bind,source=${path.resolve(root,'quality/evidence/T30/turn-tcp-shaper.mjs')},target=/shaper.mjs,readonly`,nodeImage,'node','/shaper.mjs']).trim();containers.push(shaper);\n" +
+    "   const shaperInfo=JSON.parse(docker(['inspect',shaper]))[0];assert.equal(shaperInfo.State.Running,true);\n" +
+    "   turnPort=Number(shaperInfo.NetworkSettings.Ports['7884/tcp'][0].HostPort);\n" +
+    "   shaperControl=`http://127.0.0.1:${shaperInfo.NetworkSettings.Ports['7885/tcp'][0].HostPort}`;\n" +
+    '  }\n' +
+    "  const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);\n" +
+    "  const info=JSON.parse(docker(['inspect',gateway]))[0];assert.equal(info.State.Running,true,'Gateway process exited');\n" +
+    "  const port=Number(info.NetworkSettings.Ports['7883/tcp']?.[0]?.HostPort);assert(port>0);\n" +
+    '  const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;\n' +
+    "  for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{/* Readiness retries until the bounded deadline; final failure remains an assertion. */}await new Promise(r=>setTimeout(r,250));}\n" +
+    '  // Do not print container logs: failed startup can contain private DB URLs.\n' +
+    "  assert(ready,'Private gateway failed to become ready; inspect sanitized diagnostics only');\n" +
+    "  fs.writeFileSync(`${dir}/state.json`,JSON.stringify({recordedAt:new Date().toISOString(),containers,network,port,privateSignaling:true,nodeImage,sfuImage},null,2)+'\\n');\n" +
+    '  return {server,ws,turnPort,shaperControl,close,result,diagnostics};\n' +
+    ' }catch(error){\n' +
+    '  const {text:diagnosticsText,statuses:logStatuses}=collectDiagnostics();\n' +
+    "  const logReadFailures=logStatuses.filter(s=>s.logCaptureStatus!=='success').length;\n" +
+    '  const logSuccess=Boolean(logReadFailures===0&&logStatuses.length===containers.length);\n' +
+    '\n' +
+    '  const safeContainerStates=[];\n' +
+    '  let inspectFailures=0;\n' +
+    '  for(let i=0;i<containers.length;i++){\n' +
+    '   try{\n' +
+    "    const inspectOutput=docker(['inspect',containers[i]]);\n" +
+    '    const inspectObj=JSON.parse(inspectOutput)[0];\n' +
+    '    const state=inspectObj?.State;\n' +
+    '    safeContainerStates.push({\n' +
+    '     index:i,\n' +
+    "     running:typeof state?.Running==='boolean'?state.Running:null,\n" +
+    '     exitCode:Number.isInteger(state?.ExitCode)?state.ExitCode:null,\n' +
+    "     oomKilled:typeof state?.OOMKilled==='boolean'?state.OOMKilled:null,\n" +
+    '     startedAt:parseIsoString(state?.StartedAt),\n' +
+    '     finishedAt:parseIsoString(state?.FinishedAt),\n' +
+    '     healthStatus:parseHealthStatus(state?.Health?.Status),\n' +
+    "     inspectStatus:'inspected'\n" +
+    '    });\n' +
+    '   }catch{\n' +
+    '    inspectFailures++;\n' +
+    '    safeContai'... 2596 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

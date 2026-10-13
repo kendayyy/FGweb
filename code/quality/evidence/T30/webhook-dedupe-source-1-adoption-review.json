@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-12T05:46:58.871Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual current compiled signed receive control on owned PG proves dedupe insert waits behind room lock before reconciliation. Remove only redundant room/group lock from independent durable dedupe transaction; preserve BEGIN/UTC/INSERT uniqueness/COMMIT, signature and unsigned401, awaited canonical reconciliation with all existing room/group/member locks/native reads/lease freshness/grace/ended-slot guards/coalescing/shutdown exact. Actual schema webhook_events has no room/group FK. Minimal focused schema/synthetic canonical completion barrier explicitly diagnostic; original realPG/SFU17controls and frozen safety/native acceptance remain required, no unique500cause/PASS claim.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-webhook-dedupe-reviewed1.ts",
+      "beforeSha256": "1b8c9a5eef15b061f7eebe95fe9e73f3ffd7446e76136615ff5fbf35d04e05ad",
+      "afterSha256": "b200de86e3fd46d6f404a7a4671a220e5c12b8bd6c0a19bc0ebaff066f682dc8"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/webhook-dedupe-adoption-plan1.json",
+    "sha256": "9de2de853d1b553ade175276a5e4056ad8e71395be405d4e6632a54bd0bef0bd"
+  },
+  "nativeAcceptancePending": true
+}

@@ -1,0 +1,114 @@
+.fg-live-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+}
+
+.fg-live-stage {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+  background: var(--bg-raised, #11141c);
+  border: 1px solid var(--border-color, #232733);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+}
+
+.fg-live-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.fg-live-empty {
+  color: var(--text-sub, #8b92a5);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px;
+  margin: 0;
+}
+
+.fg-live-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.fg-live-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-panel, #181c26);
+  border: 1px solid var(--border-color, #232733);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--text-sub, #8b92a5);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fg-live-tab:hover {
+  color: var(--text-main, #f0f2f5);
+  border-color: var(--border-hover, #3a4155);
+}
+
+.fg-live-tab.selected,
+.fg-live-tab[aria-selected="true"] {
+  background: var(--bg-selected, #1f2738);
+  border-color: var(--color-action, #0ea5e9);
+  color: var(--text-main, #f0f2f5);
+  font-weight: 500;
+}
+
+.fg-live-tab:focus-visible {
+  outline: 2px solid var(--color-focus, #38bdf8);
+  outline-offset: 2px;
+}
+
+.fg-live-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fg-live-guidance {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-sub, #8b92a5);
+  background: var(--bg-alert-info, #142032);
+  border: 1px solid var(--border-alert-info, #1e3a5f);
+  border-radius: var(--radius-sm, 6px);
+  padding: 10px 14px;
+  margin: 0;
+  width: 100%;
+}
+
+.fg-live-error {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-danger, #f87171);
+  background: var(--bg-alert-error, #2d1519);
+  border: 1px solid var(--border-alert-error, #5c2229);
+  border-radius: var(--radius-sm, 6px);
+  padding: 10px 14px;
+  margin: 0;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .fg-live-stage {
+    min-height: 180px;
+  }
+}

@@ -1,0 +1,46 @@
+The proposal for the narrowly typed runtime read-lock mode and corresponding integration regressions has been prepared exclusively under [`quality/evidence/T30/antigravity-shared-read-lock-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1):
+
+### 1. Proposed Files & SHA-256 Hashes
+
+| Proposal Path | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts) | `dc7469277194c2f2fae3b6dd8b35f75d454f61c59f263daab8975e3cec95de67` | Introduces `type LeaseLockMode = 'FOR UPDATE' \| 'FOR SHARE';`. Retains canonical room then group `'FOR UPDATE'` by default for mutations/authorizations, while using `'FOR SHARE'` exclusively for read-only runtime [`live()`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L163) and [`processBatch()`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L322). |
+| [`quality/evidence/T30/antigravity-shared-read-lock-1/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/t30-signaling-throughput.integration.spec.ts) | `db2c87a22e5d64750c79f1c91f1456f5deaeb583ac5e39d7aa34a2ff32cde275` | Preserves all 12 existing test cases verbatim. Adds [`seedSecondMemberInCall`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/t30-signaling-throughput.integration.spec.ts#L273-L325) helper and 2 regression tests validating concurrent reader throughput and writer blocking. |
+| [`quality/evidence/T30/antigravity-shared-read-lock-1/review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/review-notes.md) | `cac3b496ac424307a37162303586dee7b88402e3608f907ebabcbef6574a8a96` | Details diagnostic analysis, PostgreSQL lock compatibility, exact changed helper call sites, and test verification mechanics. |
+
+---
+
+### 2. Exact Changed Helper Call Sites in `signaling-gateway.ts`
+
+[`lockedLease`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L106-L127) is invoked at exactly 4 call sites:
+
+1. **[`authorize(req, url)`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L129-L161) (line 136)**:
+   - `lockedLease(c.sub, async (db, lease) => { ... })`
+   - Uses default **`mode = 'FOR UPDATE'`** (exclusive canonical lock for token issuance / upgrade check).
+2. **WebSocket Upgrade Connected Handshake (line 537)**:
+   - `lockedLease(lease.id, async (db, current) => { ... })`
+   - Uses default **`mode = 'FOR UPDATE'`** (mutates `connected_at`, `disconnected_at`, and `expires_at` in `call_admissions`).
+3. **[`live(binding)`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L163-L185) (line 165)**:
+   - `lockedLease(binding.lease.id, async (db, lease) => { ... }, 'FOR SHARE')`
+   - Passes **`'FOR SHARE'`** (read-only verification of admission validity and publication policy sync).
+4. **[`processBatch(binding, batch)`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L322-L357) (line 325)**:
+   - `lockedLease(binding.lease.id, async (db) => { ... }, 'FOR SHARE')`
+   - Passes **`'FOR SHARE'`** (read-only frame forwarding; re-evaluates fresh [`liveLease`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L330) and [`publicationPermission`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-1/signaling-gateway.ts#L337) before every frame without serializing behind concurrent readers in the same room).
+
+---
+
+### 3. Integration Regression Tests Added
+
+1. **Concurrent Shared Readers & Exclusive Writer Isolation (Test 13)**:
+   - Seeds 2 distinct members in the same call room.
+   - Client 1 sends screen `addTrack`, acquiring `FOR SHARE` and stalling on a controlled fake SFU `GetParticipant` barrier.
+   - Client 2 sends a `ping` in the same room; its `processBatch` acquires `FOR SHARE` concurrently and completes ping/PONG **before** Client 1's barrier is released.
+   - Concurrently, an external writer attempts `SELECT id FROM rooms WHERE id=$1 FOR UPDATE` and is proven blocked via `pg_blocking_pids`.
+   - Releasing the barrier lets Client 1 commit, which unblocks the external writer to complete.
+2. **Writer `FOR UPDATE` Blocks Runtime Forwarding & Enforces Committed Mutation (Test 14)**:
+   - External writer acquires `SELECT id FROM rooms WHERE id=$1 FOR UPDATE`.
+   - Client sends screen `addTrack`; runtime `processBatch` is proven blocked on the writer via `pg_blocking_pids`.
+   - Under lock, the external writer deletes `call_publish_slots` and commits.
+   - Gateway unblocks, freshly checks permissions, and denies `addTrack` with `RequestResponse_Reason.NOT_ALLOWED` (`'Current screen quota required'`), never forwarding to upstream SFU.
+
+*No production source, dist, tests, git ledger, or history files were altered. No build or test commands were executed. Ready for Codex review and adoption.*

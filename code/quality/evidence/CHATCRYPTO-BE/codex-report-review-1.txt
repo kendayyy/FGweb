@@ -1,0 +1,63 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17588) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (29.417 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rejects stale sessions, banned reporters and an admin who cannot read the private source
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 401
+
+      111 |   try{expect((await post(disclosure())).status).toBe(401);}finally{await pool.query(`UPDATE "session" SET expires_at=now()+interval '1 day' WHERE id='alice-session'`);}
+      112 |   await pool.query(`INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES('report-ban','bob','alice','BAN','fixture')`);
+    > 113 |   try{expect((await post(disclosure())).status).toBe(403);}finally{await pool.query(`DELETE FROM admin_actions WHERE id='report-ban'`);}
+          |                                                 ^
+      114 |   const previous=process.env.ADMIN_USER_IDS;process.env.ADMIN_USER_IDS='outsider';
+      115 |   try{expect((await post(disclosure(),cookies.outsider)).status).toBe(403);}finally{if(previous===undefined)delete process.env.ADMIN_USER_IDS;else process.env.ADMIN_USER_IDS=previous;}
+      116 |  });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:113:49)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › commits no partial report when a later real Transit encryption is denied
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 401
+
+      118 |   const before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count,evidenceBefore=(await pool.query('SELECT count(*) FROM chat_crypto_report_evidence')).rows[0].count;
+      119 |   tokenCalls=0;denyAfter=2;
+    > 120 |   try{expect((await post(disclosure())).status).toBe(503);expect(tokenCalls).toBe(2);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);expect((await pool.query('SELECT count(*) FROM chat_crypto_report_evidence')).rows[0].count).toBe(evidenceBefore);}
+          |                                                 ^
+      121 |   finally{denyAfter=undefined;}
+      122 |  });
+      123 | });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:120:49)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 6 passed, 8 total
+Snapshots:   0 total
+Time:        30.094 s, estimated 33 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"ede6ed48dc6b4675b9eeebc10f200440","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:76:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

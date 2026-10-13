@@ -1,0 +1,46 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+### FG T30 — Signaling Gateway Startup DB Readiness & Pool Retention Proposal (`antigravity-gateway-db-ready-1`)
+
+The proposal files have been prepared strictly within [`quality/evidence/T30/antigravity-gateway-db-ready-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/). No application code, compiled files, ledger, history, or actual tests were modified, and no test or build runs were executed.
+
+---
+
+### 1. Proposal Implementation Details
+
+1. **Fixed Pool Retention & Startup Warming (`signaling-gateway.ts`)**:
+   - Pool options configured with `min: 16, max: 16, connectionTimeoutMillis: 2000, statement_timeout: 3000`.
+   - Internal `readyPromise`: At startup, parallel acquire of exactly 16 connections (`Promise.allSettled(acquirePromises)`) warms the pool. In `finally`, every successfully acquired client is released back to the pool.
+   - Because `min: 16` is retained, `pg-pool` keeps all 16 idle connections indefinitely, preventing idle eviction after the default 10s `idleTimeoutMillis`.
+   - If any acquire fails, `readyPromise` rejects with `firstError`. An immediate rejection handler (`void readyPromise.catch(() => {})`) prevents unhandled rejections, while awaited callers observe the rejection.
+2. **HTTP & WebSocket Upgrade Gating**:
+   - `checkOrigin(req)` is enforced first.
+   - `OPTIONS` requests respond immediately without awaiting database readiness.
+   - All active paths (`/health`, `/rtc/.../validate`, `/twirp/...`, and WebSocket upgrades `/rtc`) await `readyPromise` before executing active database authorization.
+   - `/health` only returns 200 after `await readyPromise` and `await pool.query('SELECT 1 FROM call_admissions LIMIT 1')`.
+   - Startup failures fail closed with HTTP 503 (`Media admission denied`), never exposing raw errors, connection details, or database DSNs.
+3. **Teardown & Clean Bounded Close**:
+   - `close()` marks `closing = true`, clears timers, closes sockets and servers, and awaits `readyPromise.catch(() => {})` so any in-flight startup acquires settle and release before `pool.end()`.
+   - No public API or exported declaration type changes; `createSignalingGateway` return signature `{ server, close }` remains identical.
+4. **Canonical Native Fixture Restorations**:
+   - [`private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/private-gateway-shaped-fixture.mjs) mounts canonical `apps/api/dist/modules/calls`.
+   - [`fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/fixture-server-shaped.mjs) has all observer imports and invocations removed.
+5. **Integration Test Suite Structure (24 Total Real-PG Callbacks)**:
+   - Preserves all 22 existing callbacks and helpers AST-verbatim.
+   - **Test 23 (Warmed retention & fresh lease)**: Verifies `/health` 200, checks `pg_stat_activity` has 16 idle backends for the unique `application_name`, sleeps 11s (> 10s idle eviction) to prove retention of all 16, then sends valid principal PING to verify fresh lease and clean socket lifecycle.
+   - **Test 24 (Fail-closed & clean bounded teardown)**: Configures an invalid DB password for the local fixture, verifies `/health` 503 without leaking secrets, verifies invalid socket connection rejected (503) without upstream SFU requests, verifies bounded `close()` teardown (< 5s), and confirms scoped backends are terminated.
+   - Verified clean under ESLint (0 errors, 0 warnings).
+
+---
+
+### 2. Verified File SHA-256 Hashes
+
+| File | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/signaling-gateway.ts) | `c4052b41ee1a254fdaadabf1b5376449595be66adf281929ef971d97d44e8c55` | Startup pool warming (`min: 16`, `max: 16`), internal readyPromise, fail-closed 503 |
+| [`t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/t30-signaling-throughput.integration.spec.ts) | `e03812aa6b9cb707d9654ad499058c675a79a1bf47147345a95b7caed5446415` | 24 executed integration test callbacks (22 preserved + 2 real-PG startup/retention) |
+| [`fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/fixture-server-shaped.mjs) | `bfd4c5fe5131ea69b4240858e1249bdfe9663e7142b65ede609ee9951f06b3a2` | Restored canonical fixture server |
+| [`private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/private-gateway-shaped-fixture.mjs) | `d891dbd9f976a5ea39de29dc842ae9826f782a57efa10a656bf1822d28d3696f` | Restored canonical gateway mount fixture |
+| [`review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-gateway-db-ready-1/review-notes.md) | `e4e1b0b12bb2b97386d140e21a34ad8794811585125d72db8d3d1d3b2c382e1e` | Review documentation |
+
+*No production source, dist, tests, git ledger, or history files were altered. No build or test runs were executed. Ready for Codex to review and run gates/RED/GREEN/build/native.*
+terminating 1 background task(s) on exit

@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const dir='quality/evidence/CHATCRYPTO-QA';
+const write=(name,body)=>fs.writeFileSync(dir+'/'+name,body,{flag:'wx'});
+write('vite-csp-applied.config.mjs',`import base from '../../../apps/web/vite.config.ts';
+import {fileURLToPath} from 'node:url';
+export default async environment=>{const config=typeof base==='function'?await base(environment):base;return {...config,cacheDir:fileURLToPath(new URL('../../../.cache/chatcrypto-qa/vite',import.meta.url))};};
+`);
+write('probe-vite-csp-applied.mjs',fs.readFileSync(dir+'/probe-vite-csp-prototype.mjs','utf8').replaceAll('vite-csp-prototype.config.mjs','vite-csp-applied.config.mjs').replaceAll('vite-csp-prototype-proof.json','vite-csp-applied-proof.json').replaceAll('Prototype Vite failed','Applied Vite failed').replaceAll('applicationConfigUnmodified:true','appliedConfigUnmodifiedDuringProbe:true'));
+write('probe-preview-csp-applied.mjs',fs.readFileSync(dir+'/probe-preview-csp.mjs','utf8').replaceAll('preview-csp-proof.json','preview-csp-applied-proof.json'));
+write('headed-csp-applied.mjs',fs.readFileSync(dir+'/headed-csp-prototype.mjs','utf8').replace('../../../tests/security/chat-crypto/security-headers-proposed.mjs','../../../apps/web/security-headers.mjs').replaceAll('headed-csp-proof-','headed-csp-applied-proof-').replace('proposedCspEnforced:true','appliedAppHelperCspEnforced:true'));
+const ts=JSON.parse(fs.readFileSync(dir+'/csp-proposal-tsconfig.json','utf8'));ts.include=['../../../apps/web/vite.config.ts','../../../apps/web/security-headers.d.mts'];write('csp-applied-tsconfig.json',JSON.stringify(ts,null,2)+'\n');
+console.log('Prepared sequential actual-config probes, actual-app helper headed fixture and workspace-context typecheck; existing assertions retained.');

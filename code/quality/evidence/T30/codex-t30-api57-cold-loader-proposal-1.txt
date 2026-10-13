@@ -1,0 +1,54 @@
+# FG T30 — Isolated Cold Loader Boundary Diagnostic Proposal Delivery
+
+An isolated, non-intrusive diagnostic proposal has been delivered under [`quality/evidence/T30/antigravity-api57-cold-loader-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/) to investigate the gateway readiness RED timeout (90s) observed during root's API57 verification runs (`normal 1` and `normal 2`), where the gateway container (`fg-gateway-${id}`) remained running without OOM or abnormal exit, but produced no initial logs or health response while the SFU container was ready.
+
+---
+
+### Delivered Artifacts
+
+1. [`loader-child.cjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/loader-child.cjs)  
+   **SHA256**: `0acf035b4a085cbe22f41b8a1e755b64bd084543c48b6c302f9ed7741a29e862`  
+   - Diagnostic child script executing `createRequire('/gateway/app/gateway-main.js')` to benchmark cold module resolution and V8 parsing directly from Windows bind-mounted directories without instantiating `Pool`, calling `createSignalingGateway()`, or binding network listeners.
+   - Measures monotonic stage durations for:
+     1. `pg`
+     2. `livekit_sdk` (`livekit-server-sdk`)
+     3. `livekit_protocol` (`@livekit/protocol`)
+     4. `ws`
+     5. `lease_store` (`./lease-store.js`)
+     6. `signaling_gateway` (`./signaling-gateway.js`)
+   - Captures `entryMonotonicMs` and verifies `preloadInstalled` status (`globalThis.__FG_GATEWAY_OBSERVER_PRELOAD__`).
+   - Sanitizes errors against allowlisted enums and enforces a bounded payload limit ($\le 64\text{ KiB}$).
+
+2. [`loader-runner.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/loader-runner.mjs)  
+   **SHA256**: `21b61de0d4e2109e2f552c75cb012964433b4355a1079000152551e7465285bf`  
+   - Diagnostic runner coordinating two sequential unprivileged container runs:
+     - **Cycle A (`without-preload`)**: Baseline cold CJS dependency loading.
+     - **Cycle B (`with-preload`)**: CJS dependency loading with the entry-point preload observer script (`gateway-observer-preload-reviewed2.cjs`).
+   - Uses pinned local image `node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd` with `--pull=never`, `--network none`, `--read-only`, `--cap-drop ALL`, `--security-opt no-new-privileges`, and `--user node`.
+   - Mounts read-only application and dependency volumes plus an ephemeral scratch directory in `.runtime/t30/cold-loader-<id>/output`.
+   - Enforces preflight and postflight assertions verifying that `fg-local-postgres-1` and `fg-local-redis-1` remain healthy and untouched, and that the `fg-local_default` network is unchanged.
+   - Fail-closed container stop, removal, and scratch runtime directory unlinking in `finally`.
+
+3. [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/shortplan.md)  
+   **SHA256**: `d36c35ddfed3aa2746edd8cc012eafe3ac941914037c069e0d4f0fff3153d0fe`  
+   - Detailed specification documenting the problem context, bind-mount VFS resolution hypothesis, container mounts, source hashes, and recovery contract.
+
+4. [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/plan.json)  
+   **SHA256**: `ca71d5ace54a98fdbe0defd2375b4b102181ef4fc222f20019c8afda652b936c`  
+   - Machine-readable definition of the two measurement cycles, source anchors, security invariants, and stages.
+
+5. [`controls-plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-cold-loader-1/controls-plan.json)  
+   **SHA256**: `5d1e2b7a364693695c32a6e8607c7fad851ba850985a6032161222c0e2d95023`  
+   - 15 validation assertions verifying preflight health, container isolation flags, clean exits, payload size limits, schema adherence, container cleanup, and service preservation.
+
+6. [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2482)  
+   - Appended delivery entry recording delivered files, exact sha256 hashes, zero execution notice, and status.
+
+---
+
+### Invariant & Scope Verification
+
+- **Zero Test / Docker / UI Execution**: No container runs, browser commands, or tests were executed during this step.
+- **Zero Outside Scope Writes**: No premature completion or invocation artifacts were created outside `quality/evidence/T30/antigravity-api57-cold-loader-1/**`.
+- **Application & Ledger Integrity**: No application sources, test suites, builds, environments, mutable fixtures, or ledger statuses were modified.
+- **Status**: `nativeAcceptance: false`; `80 prior PASS` unchanged; `T30 IN_PROGRESS`.

@@ -4,7 +4,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { toNodeHandler } from 'better-auth/node';
 import { Pool } from 'pg';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { eq, desc, and, inArray } from 'drizzle-orm';
+import { eq, desc, and, inArray, sql } from 'drizzle-orm';
 import * as schema from '@fg/database';
 import { MeDTO, MeDTOSchema } from '@fg/contracts';
 import type {Transporter} from 'nodemailer';
@@ -22,6 +22,8 @@ export interface FgAuthOptions {
   discordClientSecret: string;
   mailTransport?:Transporter;
   mailFrom?:string;
+  onSessionDeleting?:(sessionId:string)=>Promise<void>;
+  onSessionDeleted?:(userId:string)=>Promise<void>;
 }
 
 export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthOptions) {
@@ -45,7 +47,7 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
     plugins:[security.plugin],
     hooks:{before:security.before},
     rateLimit:{enabled:true,window:60,max:100,customRules:{'/fg/sign-in/admin':{window:60,max:5},'/sign-in/email':{window:60,max:5},'/sign-up/email':{window:60,max:5},'/send-verification-email':{window:60,max:3},'/request-password-reset':{window:60,max:3},'/fg/password-challenge':{window:60,max:3}}},
-    databaseHooks:{user:{create:{before:async user=>{if(isReservedAdminName(user.name))throw new APIError('BAD_REQUEST',{code:'RESERVED_USERNAME',message:'Tên này được dành riêng cho quản trị.'});}}},session:{create:{before:async session=>{if(await security.banned(session.userId))throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});}}}},
+    databaseHooks:{user:{create:{before:async user=>{if(isReservedAdminName(user.name))throw new APIError('BAD_REQUEST',{code:'RESERVED_USERNAME',message:'Tên này được dành riêng cho quản trị.'});}}},session:{create:{before:async session=>{if(await security.banned(session.userId))throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});}},delete:{before:async session=>{await options.onSessionDeleting?.(session.id);},after:async session=>{await options.onSessionDeleted?.(session.userId);}}}},
     emailAndPassword: {
       enabled: true,requireEmailVerification:true,autoSignIn:false,minPasswordLength:8,maxPasswordLength:256,resetPasswordTokenExpiresIn:3600,revokeSessionsOnPasswordReset:true,
       password:{hash:hashFgPassword,verify:verifyFgPassword},
@@ -85,9 +87,19 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
   private db!: NodePgDatabase<typeof schema>;
   private pool?: Pool;
   private authInstance!: FgAuthInstance;
+  private callHooks?:{before:(sessionId:string)=>Promise<void>;after:(userId:string)=>Promise<void>};
+
+  public setCallHooks(hooks:typeof this.callHooks){this.callHooks=hooks;}
 
   onModuleInit() {
     this.initDatabaseAndAuth();
+    if (!this.pool) return;
+    return (async () => {
+      const ready = await Promise.allSettled(Array.from({ length: 4 }, () => this.pool!.connect()));
+      for (const result of ready) if (result.status === 'fulfilled') result.value.release();
+      const failed = ready.find(result => result.status === 'rejected');
+      if (failed?.status === 'rejected') throw failed.reason;
+    })();
   }
 
   async onModuleDestroy() {
@@ -109,8 +121,11 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       throw new Error('DATABASE_URL environment variable is required');
     }
 
-    this.pool = new Pool({ connectionString });
-    this.db = drizzle(this.pool, { schema });
+    this.pool = new Pool({ connectionString, min: 4 });
+    // Exclude TypeScript's synthetic require(ESM) default namespace alias.
+    const databaseSchema = { ...schema };
+    Reflect.deleteProperty(databaseSchema, 'default');
+    this.db = drizzle(this.pool, { schema: databaseSchema });
     this.initAuth();
   }
 
@@ -136,6 +151,8 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       secret,
       discordClientId,
       discordClientSecret,
+      onSessionDeleting:async sessionId=>{await this.callHooks?.before(sessionId);},
+      onSessionDeleted:async userId=>{await this.callHooks?.after(userId);},
     });
   }
 
@@ -197,36 +214,24 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
   }
 
   public async getUserMe(userId: string): Promise<MeDTO> {
-    const [dbUser] = await this.db
-      .select()
-      .from(schema.user)
+    // One statement returns one coherent persisted profile snapshot. Session and
+    // live ban checks remain in SessionGuard for every request.
+    const [row] = await this.db.select({
+      user: schema.user,
+      profile: schema.profiles,
+      discordAccountId: sql<string | null>`(SELECT ${schema.account.accountId} FROM ${schema.account}
+        WHERE ${schema.account.userId}=${schema.user.id} AND ${schema.account.providerId}='discord' LIMIT 1)`,
+      interests: sql<string[]>`COALESCE((SELECT jsonb_agg(${schema.games.title} ORDER BY ${schema.games.title})
+        FROM ${schema.gameInterests} INNER JOIN ${schema.games} ON ${schema.gameInterests.gameId}=${schema.games.id}
+        WHERE ${schema.gameInterests.userId}=${schema.user.id}), '[]'::jsonb)`,
+    }).from(schema.user)
+      .leftJoin(schema.profiles, eq(schema.profiles.userId, schema.user.id))
       .where(eq(schema.user.id, userId));
 
-    if (!dbUser) {
+    if (!row) {
       throw new Error(`User not found: ${userId}`);
     }
-
-    const [discordAccount] = await this.db
-      .select()
-      .from(schema.account)
-      .where(
-        and(
-          eq(schema.account.userId, userId),
-          eq(schema.account.providerId, 'discord')
-        )
-      );
-
-    const [profile] = await this.db
-      .select()
-      .from(schema.profiles)
-      .where(eq(schema.profiles.userId, userId));
-
-    const interests = await this.db
-      .select({ title: schema.games.title })
-      .from(schema.gameInterests)
-      .innerJoin(schema.games, eq(schema.gameInterests.gameId, schema.games.id))
-      .where(eq(schema.gameInterests.userId, userId))
-      .orderBy(schema.games.title);
+    const {user: dbUser, profile, interests, discordAccountId} = row;
 
     const meData = {
       id: dbUser.id,
@@ -234,12 +239,12 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       avatarUrl: profile ? profile.avatarUrl : (dbUser.image ?? null),
       email: dbUser.email,
       emailVerified: dbUser.emailVerified,
-      discordId: discordAccount?.accountId??null,
+      discordId: discordAccountId??null,
       customStatus: profile?.customStatus || 'JUST_CHATTING',
       createdAt: dbUser.createdAt.toISOString(),
       updatedAt: dbUser.updatedAt.toISOString(),
       onboardingComplete: Boolean(profile) && interests.length > 0,
-      interestedGames: interests.map(interest => interest.title),
+      interestedGames: interests,
     };
 
     return MeDTOSchema.parse(meData);

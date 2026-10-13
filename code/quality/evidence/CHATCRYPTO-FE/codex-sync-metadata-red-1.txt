@@ -1,0 +1,34 @@
+{"phase":"compiled-api-bootstrap","realAppModuleStarted":true,"twoRealSignedSessions":true,"twoNativeDevicesRegistered":true,"realStateRevision":3,"isolatedPostgreSQL":true,"mainMutation":false}
+✖ frontend adapter carries native SAS and Megolm through actual AppModule/auth/isolated PostgreSQL (15006.1931ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19506.9841
+
+✖ failing tests:
+
+test at apps\web\test\crypto-http.native.ts:1:899
+✖ frontend adapter carries native SAS and Megolm through actual AppModule/auth/isolated PostgreSQL (15006.1931ms)
+  AssertionError [ERR_ASSERTION]: native client must receive actual self-device prekey count, never guess it
+  + actual - expected
+  
+  + undefined
+  - {
+  -   signed_curve25519: 50
+  - }
+  
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-http.native.ts:71:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { signed_curve25519: 50 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

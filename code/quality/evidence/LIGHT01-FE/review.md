@@ -1,0 +1,17 @@
+# LIGHT01-FE technical review — pending human light appearance review
+
+Direct Codex implementation and separate source/evidence review. Required original strict prewrite gate passed. All eight baselines preserved,5033 readonly files and4489 frozen historical outputs outside this exact owner verified. No backend/contracts/database/auth business changes, secret values or account mutation. Existing native Discord user session retained.
+
+Implemented safe whitelisted fg.theme preferences, synchronous head initialization before styles/React, html data-theme/color-scheme, live system and cross-tab storage handling (remove/clear/invalid/denied), one accessible Vietnamese global menu including auth routes, arrow/Home/End/Escape/focus/45px targets. AuthProvider and QueryClient remain outside ThemeProvider; no changed route keys, cleanup calls, queries or socket lifecycle.
+
+Semantic light colors match design12; primitive dark palette remains. Foreground destructive text uses brighter existing dark semantic override to provide readable small errors; danger borders retain original primitive. Fixed undefined legacy semantic aliases and preserved white action-button foreground, separate online-button foreground, overlays/status/shadows.
+
+Actual headed evidence found and fixed mobile header overlap, menu offscreen positioning, three-row header pushing bottom navigation below viewport, and floating coordinate44px rounding. Existing assertions retained and strengthened;45px theme targets, two-row grid within108px,360/390 authenticated controls and footer within viewport. All genuine failing runs preserved. Initial bootstrap unit harness file URL was corrected to actual workspace path; first RED behavior was missing global control, not the harness error.
+
+Validation:166 web tests across13 fresh sequential processes including14 theme tests; five final headed E2E scenarios with compiled production Nest/Vite/real migrated isolated PostgreSQL/Redis and native test-only DB session, real Socket.IO IDs/draft node/auth retained. Fixture session is not another external Discord OAuth login; actual main OAuth proof belongs to T02-OAUTH-FIX1. No SMTP send, purchase or external message. Owned fixture schema/session/Redis keys cleaned; main user data untouched. Lint/types/build/source diff/audit passed with raw immutable execution metadata.
+
+Twenty actual screenshots:light/dark login+guest Lobby at1440x900,1280x800,390x844,360x800 plus authenticated system Lobby at four sizes.392 rendered text checks, no measured failures; focus against five surfaces minimum4.749:1, light border minimum3.844:1. Existing dark decorative separators intentionally retain original palette; accessible inputs/text/focus and theme control are tested. These checks do not prove unimplemented media/call/load, feed/support/PWA or all future screens. No invert/filter applied to assets.
+
+Main compiled app opened at http://localhost:18080/ with actual main API/DB and visible Sáng selection, tab kept for user review. Required design12/spec15 human review remains pending; NOT task PASS. Do not start T24-FIX1 before that acceptance and final owner freeze/strict next gate.
+
+Late amendment: final14:45Z baseline audit FAILED after additive GAME-LOGO-01 documents from user-authorized Idea work. See baseline-change-review.md/late-baseline-delta.json. Earlier technical checks retain real PASS; current overall gate is BLOCKED for light visual review and metadata migration. No next task, checker/baseline modification or document revert.

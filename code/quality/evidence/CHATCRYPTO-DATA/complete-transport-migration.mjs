@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const file='packages/database/migrations/0010_boring_epoch.sql',hash=s=>createHash('sha256').update(s).digest('hex');
+const generated=fs.readFileSync(file,'utf8');assert(!generated.includes('CREATE FUNCTION'));
+const source=fs.readFileSync('packages/database/src/crypto-protocol-validation.sql','utf8');
+const reviewed=source+'\n--> statement-breakpoint\n'+generated.replaceAll('REFERENCES "public".','REFERENCES ');
+fs.writeFileSync(file,reviewed);
+fs.writeFileSync('quality/evidence/CHATCRYPTO-DATA/transport-migration-provenance.json',JSON.stringify({recordedAt:new Date().toISOString(),file,generatedSha256:hash(generated),reviewedSha256:hash(reviewed),validationSourceSha256:hash(source),changes:['Strict native SDK public protocol event storage validation','Schema-local FK normalization'],mainDatabaseMigrated:false},null,2)+'\n');
+console.log('Reviewed additive transport migration, no main database changes.');

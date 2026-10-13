@@ -1,0 +1,10 @@
+# T27 — implementation and verification plan
+
+1. Read spec/task/rules and execute unchanged T27 gate; freeze previous outputs and pin exact required scopes using persisted human broad-scope authorization. One active task; keep main local DB and credentials unchanged.
+2. Use existing `webhook_events` unique event IDs and `call_admissions` timestamps. No database change needed. Tests first, real isolated PostgreSQL/API/native privateSFU. Cover signature/body integrity/dedup/out-of-order events, last explicit leave, grace30s rejoin preserving lease and seat, lost webhook repair, cleanup/join races, restart reconciliation and no closed-call revival. Keep fake clock injectable for deadlines; native gateway/signatures/media remain real.
+3. Implement raw-body signed webhook controller and lifecycle service with serialized per-room/group transactions, authoritative native participant reconciliation, reservation cleanup, graceful disconnect expiry and durable CLOSED state. Store only minimal event metadata; never raw payload/tokens. Native failures cannot erase valid seats. Scheduled sweeps reattempt unavailable native operations.
+4. Wire lifecycle into CallsModule and explicit-leave callback. Enforce thirty-second reconnect deadline in gateway live-lease authorization; previously revoked identity remains revoked. Preserve room/chat/team and historical member rows when closing.
+5. Update one T26 gateway fixture that expected rejoin into an empty OPEN call: T27 now closes it, so create a fresh group and keep old-token replay assertion. Preserve original evidence; this is a spec evolution, not a reduced assertion. Other old tests remain frozen.
+6. Run native lifecycle RED→GREEN, T26 admission/gateway regression, headed two-browser transport/reconnect scenario, types/build/lint/diff/scope/secrets audit and unchanged T28 gate. Save real logs/exit codes/hashes and close only after all acceptance passes.
+
+Presence updates use persisted call/admission state and the existing member-only room-call query. T28 consumes this state; no new uncontracted realtime channel is introduced.

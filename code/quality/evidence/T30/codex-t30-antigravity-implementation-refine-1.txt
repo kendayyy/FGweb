@@ -1,0 +1,53 @@
+# FG T30 — Hoàn thành đề xuất triển khai vòng 3 (`antigravity-implementation-refine-1`)
+
+Đã hoàn thành toàn bộ các file đề xuất triển khai vòng 3 (Proposal 3 / Refinement 1) tại thư mục cô lập [`quality/evidence/T30/antigravity-implementation-refine-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1) nhằm khắc phục toàn diện 6 điểm cốt lõi A–F được Codex chỉ ra sau vòng Review 1.
+
+Tuân thủ nghiêm ngặt quy trình:
+- **Không ghi đè hoặc can thiệp**: Không chạm vào mã nguồn thực tế tại `code/apps/web/...`, không sửa `.doc/history.md`, `tasks.json`, `.env`, script kiểm tra, hay git.
+- **Không tự ý thực thi lệnh**: Không chạy build/test/lint hay mở trình duyệt trong lượt này; bảo toàn nguyên vẹn mọi file evidence cũ ở các vòng trước (`antigravity-red-1/`, `antigravity-red-review-1/`, `antigravity-red-refine-1/`, `antigravity-implementation-1/`, `antigravity-implementation-review-1/`).
+- **Không tuyên bố PASS sớm**: Đợi Codex đối chiếu, áp dụng và thực thi kiểm thử.
+
+---
+
+### Danh mục file đề xuất hoàn chỉnh trong `antigravity-implementation-refine-1`
+
+1. [`apps/web/src/features/live/api.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/api.ts):
+   - [`claimScreenShare`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/api.ts#L8): Gọi `POST /api/v1/calls/:id/screen-share/claim` với body `{}` và validate qua [`CallJoinSchema`](file:///E:/FGweb/code/packages/contracts/src/calls.ts).
+   - [`releaseScreenShare`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/api.ts#L22): Gọi `POST /api/v1/calls/:id/screen-share/release` với `keepalive: true` và validate chặt chẽ qua [`CallControlSuccessSchema`](file:///E:/FGweb/code/packages/contracts/src/calls.ts).
+
+2. [`apps/web/src/features/live/live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/live.css):
+   - Khung xem đạt chuẩn `aspect-ratio: 16 / 9` không bị xung đột min-height.
+   - Thanh chọn nguồn cuộn ngang hàng đơn (`overflow-x: auto`), kích thước chạm tối thiểu 44px, hỗ trợ `@media (prefers-reduced-motion: reduce)`.
+   - Sử dụng hoàn toàn design tokens chuẩn FG (`--bg-surface`, `--bg-raised`, `--bg-selected`, `--color-action`, `--text-danger`).
+
+3. [`apps/web/src/features/live/LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/LiveViewer.tsx):
+   - **Finding A**: Khử hoàn toàn side-effects trong updater của React; duy trì `selectedSidRef.current` làm nguồn chân thực đồng bộ. Khi [`onScreenPublishers`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/media.ts#L615) phát sự kiện, tính toán giá trị tiếp theo ngay lập tức, ghi vào ref, dispatch plain state và gọi [`selectScreen`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/media.ts#L559) đúng 1 lần.
+   - **Finding B**: Hợp nhất toàn bộ vòng đời tác vụ chia sẻ vào một đối tượng duy nhất `ShareOperation`:
+     - Chặn double-click khi đang in-flight.
+     - Gọi `getDisplayMedia` đồng bộ trong tick click trước mọi `await` với bọc `try/catch` an toàn.
+     - Luồng claim HTTP không bị hủy giữa chừng gây orphan slot; nếu hủy trước khi claim trả về, sau khi claim nhận kết quả sẽ giải phóng đúng 1 lần.
+     - Sự kiện kết thúc track phần cứng khi claim đang pending sẽ dọn dẹp và nhả quota, không publish track đã dừng.
+     - `startSettledPromise` đảm bảo `stopSharing` hay unmount phải đợi luồng start kết thúc trước khi dọn dẹp, không cho phép capture đè lên dọn dẹp cũ.
+   - **Finding F**: Áp dụng `useId()` sinh ID tiền tố duy nhất cho stage và tablist; nhận diện chính xác iPadOS Safari (`platform === 'MacIntel' && maxTouchPoints > 1`) để bật hướng dẫn chỉ xem trên thiết bị di động.
+
+4. [`apps/web/src/features/live/index.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/index.ts):
+   - Barrel export đầy đủ [`LiveViewer`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/LiveViewer.tsx), `LiveViewerProps`, [`claimScreenShare`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/api.ts#L8), [`releaseScreenShare`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/live/api.ts#L22).
+
+5. [`apps/web/src/features/calls/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/media.ts):
+   - **Finding C**: Kiểm tra quyền Native chuẩn LiveKit protobuf thông qua [`Track.sourceToProto`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/media.ts#L96). Hàm [`awaitScreenPublishPermission`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/media.ts#L100) đăng ký listener trước rồi kiểm tra lại snapshot để tránh race condition, tự dọn dẹp khi timeout/abort/disconnect.
+   - **Finding D**: Rollback nguyên tử khi publish thất bại; nếu audio hệ thống tùy chọn bị lỗi, tự động unpublish video track đã đẩy lên, dừng capture và ném lỗi để giải phóng quota.
+   - **Finding E**: Quản lý gắn thẻ video bằng `AttachedVideoRecord` đảm bảo idempotent, không bao giờ tạo thẻ video trùng lặp khi render lại hoặc click lại cùng một tab; lọc nghiêm ngặt track video screen share từ xa; bảo toàn kênh mic độc lập.
+
+6. [`apps/web/src/features/calls/CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/CallPanel.tsx):
+   - Giữ nguyên cấu trúc gốc, chỉ đúng 2 dòng thay đổi: import [`LiveViewer`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/CallPanel.tsx#L8) và mount `<LiveViewer callId={active} actorId={actorId} session={media.current} participants={participants}/>` tại stage cuộc gọi đang hoạt động ([`L98`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/src/features/calls/CallPanel.tsx#L98)).
+
+7. [`apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/apps/web/test/live-viewer.test.tsx):
+   - Xử lý triệt để 5 tham số mock không sử dụng từng bị cảnh báo linter ([`codex-t30-proposal-lint-1.txt`](file:///E:/FGweb/code/quality/evidence/T30/codex-t30-proposal-lint-1.txt)).
+   - Giữ nguyên vẹn 100% 19 ca kiểm thử RED cơ sở ban đầu, bổ sung đầy đủ các ca kiểm tra giải quyết dứt điểm các lỗi A–F (tổng cộng 27 ca kiểm thử hành vi bao phủ toàn diện).
+
+8. [`REVIEW.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-refine-1/REVIEW.md):
+   - Tài liệu giải trình chi tiết cơ chế xử lý các điểm A–F, bảng transition checklist đối chiếu cho Codex trước khi áp dụng.
+
+---
+
+Bàn giao lại phiên cho Codex tiến hành review proposal, áp dụng các file vào codebase thực tế và chạy kiểm thử nghiệm thu.

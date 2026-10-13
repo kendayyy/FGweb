@@ -1,24 +1,12 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { io, Socket } from 'socket.io-client';
-import { reconcileMessages } from '../lobby/reconcile.js';
-import {
-  MessageDTO,
-  CreateMessageRequest,
-  SocketEventNames,
-  SocketConversationRequest,
-  SocketConversationAckSchema,
-} from '@fg/contracts';
-import { useAuth } from '../auth/index.js';
-import { registerAuthCleanup } from '../auth/lifecycle.js';
-import {
-  fetchDirectConversations,
-  fetchConversationMessages,
-  sendDirectMessage,
-  createDirectConversation,
-  DirectConversationSummary,
-} from './api.js';
-import { unreadSync } from './sync.js';
+import { io } from 'socket.io-client';
+import { type MessageDTO, type CreateMessageRequest, SocketEventNames, SocketCryptoConversationAckSchema } from '@fg/contracts';
+import { useAuth } from '../auth';
+import { useOptionalCryptoDevice } from '../crypto/CryptoDeviceProvider';
+import { registerAuthCleanup } from '../auth/lifecycle';
+import { fetchDirectConversations, createDirectConversation, type DirectConversationSummary } from './api';
+import { unreadSync } from './sync';
 
 export interface DMState {
   conversations: DirectConversationSummary[];
@@ -46,454 +34,68 @@ export interface DMState {
 }
 
 export function useDirectMessages(): DMState {
-  const { user } = useAuth();
-  const actorId = user?.id || null;
-
-  const [stateActorId, setStateActorId] = useState<string | null>(actorId);
-  const [activeConversationId, setActiveConversationIdState] = useState<string | null>(null);
-  const [messages, setMessages] = useState<MessageDTO[]>([]);
-  const [messagesConvId, setMessagesConvId] = useState<string | null>(null);
-  const [messagesError, setMessagesError] = useState<Error | null>(null);
-  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
-  const [isSending, setIsSending] = useState(false);
-  const [sendError, setSendError] = useState<Error | null>(null);
-  const [nextCursor, setNextCursor] = useState<string | null | undefined>(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [isLoadingOlderMessages, setIsLoadingOlderMessages] = useState(false);
-  const [olderMessagesError, setOlderMessagesError] = useState<Error | null>(null);
-
-  const socketRef = useRef<Socket | null>(null);
-  const subscribedConvsRef = useRef<Set<string>>(new Set());
-  const seenMessageIdsRef = useRef<Set<string>>(new Set());
-  const cacheRef = useRef<Map<string, { messages: MessageDTO[]; nextCursor: string | null | undefined; hasMore: boolean }>>(new Map());
-  const epochRef = useRef<number>(0);
-  const activeConvIdRef = useRef<string | null>(null);
-
-  // Synchronous render guard for actor transition
-  const isActorMismatch = actorId !== stateActorId;
-  if (isActorMismatch) {
-    setStateActorId(actorId);
-    activeConvIdRef.current = null;
-    setActiveConversationIdState(null);
-    setMessages([]);
-    setMessagesConvId(null);
-    setMessagesError(null);
-    setUnreadCounts({});
-    setSendError(null);
-    setIsSending(false);
-    setIsLoadingMessages(false);
-    setIsLoadingOlderMessages(false);
-    setOlderMessagesError(null);
-    setNextCursor(null);
-    setHasMore(false);
-    cacheRef.current.clear();
-    unreadSync.setActor(actorId);
-  }
-
-  const effectiveActiveConversationId = isActorMismatch ? null : activeConversationId;
-  const effectiveMessages = isActorMismatch || effectiveActiveConversationId !== messagesConvId ? [] : messages;
-  const effectiveUnreadCounts = isActorMismatch ? {} : unreadCounts;
-  const effectiveIsSending = isActorMismatch ? false : isSending;
-  const effectiveSendError = isActorMismatch ? null : sendError;
-  const effectiveIsLoadingMessages = isActorMismatch ? false : isLoadingMessages;
-  const effectiveMessagesError = isActorMismatch ? null : messagesError;
-  const effectiveHasMore = isActorMismatch ? false : hasMore;
-
+  const { user } = useAuth(), actorId = user?.id ?? null;
+  const device = useOptionalCryptoDevice();
+  const [selection, setSelection] = useState<{ actor: string | null; id: string | null }>({ actor: actorId, id: null });
+  const [counts, setCounts] = useState<{ actor: string | null; values: Record<string, number> }>({ actor: actorId, values: {} });
+  const current = useRef({ actor: actorId, id: null as string | null });
+  const query = useQuery({ queryKey: ['directConversations', actorId], enabled: Boolean(actorId), queryFn: ({ signal }) => fetchDirectConversations(undefined, signal), retry: false });
+  const conversations = query.data?.items ?? [];
+  const activeConversationId = selection.actor === actorId ? selection.id : null;
+  current.current = { actor: actorId, id: activeConversationId };
+  const unreadCounts = counts.actor === actorId ? counts.values : {};
   useEffect(() => {
-    activeConvIdRef.current = effectiveActiveConversationId;
-  }, [effectiveActiveConversationId]);
-
-  // Sync actorId to unreadSync manager and increment epoch on actor change
-  useEffect(() => {
-    epochRef.current += 1;
-    unreadSync.setActor(actorId);
+    unreadSync.setActor(actorId); setSelection({ actor: actorId, id: null }); setCounts({ actor: actorId, values: {} });
+    const clear = () => { current.current = { actor: null, id: null }; setSelection({ actor: null, id: null }); setCounts({ actor: null, values: {} }); };
+    const unregister = registerAuthCleanup(clear); return () => { unregister(); };
   }, [actorId]);
-
-  // Listen to cross-tab unread sync events
-  useEffect(() => {
-    return unreadSync.subscribe((ev) => {
-      if (ev.type === 'READ') {
-        setUnreadCounts((prev) => ({
-          ...prev,
-          [ev.conversationId]: 0,
-        }));
-      } else if (ev.type === 'UNREAD_INCREMENT') {
-        if (ev.conversationId !== activeConvIdRef.current) {
-          setUnreadCounts((prev) => ({
-            ...prev,
-            [ev.conversationId]: (prev[ev.conversationId] || 0) + 1,
-          }));
-        }
-      }
+  useEffect(() => unreadSync.subscribe(event => {
+    if (event.actorId !== current.current.actor) return;
+    setCounts(previous => {
+      const values = previous.actor === event.actorId ? { ...previous.values } : {};
+      values[event.conversationId] = event.type === 'READ' || event.conversationId === current.current.id ? 0 : (values[event.conversationId] ?? 0) + 1;
+      return { actor: event.actorId, values };
     });
-  }, []);
-
-  // Fetch list of conversations across all cursor pages
-  const conversationsQuery = useQuery({
-    queryKey: ['direct-conversations', actorId],
-    queryFn: async ({ signal }) => {
-      const allItems: DirectConversationSummary[] = [];
-      let cursor: string | undefined = undefined;
-      const visitedCursors = new Set<string>();
-
-      while (true) {
-        if (signal?.aborted) break;
-        const page = await fetchDirectConversations(cursor ? { cursor } : undefined, signal);
-        for (const item of page.items) {
-          if (!allItems.some((c) => c.conversationId === item.conversationId)) {
-            allItems.push(item);
-          }
-        }
-
-        if (!page.hasMore) {
-          break;
-        }
-        if (!page.nextCursor) {
-          throw new Error('Dữ liệu phân trang cuộc trò chuyện không hợp lệ: thiếu con trỏ tiếp theo.');
-        }
-        if (visitedCursors.has(page.nextCursor)) {
-          throw new Error('Dữ liệu phân trang cuộc trò chuyện bị lặp con trỏ.');
-        }
-
-        visitedCursors.add(page.nextCursor);
-        cursor = page.nextCursor;
-      }
-      return { items: allItems };
-    },
-    enabled: Boolean(actorId),
-    staleTime: 1000 * 30,
-  });
-
-  const conversations = useMemo(
-    () => conversationsQuery.data?.items || [],
-    [conversationsQuery.data?.items]
-  );
-  const activeConvSummary = conversations.find((c) => c.conversationId === effectiveActiveConversationId) || null;
-  const activePeer = activeConvSummary?.peer || null;
-
-  // Set active conversation with per-conversation caching
+  }), []);
+  const conversationKey = JSON.stringify(conversations.map(item => item.conversationId));
+  useEffect(() => {
+    if (!actorId || device?.status !== 'READY' || !device.deviceId || !device.session) return;
+    const socket = io('/', { transports: ['websocket', 'polling'], withCredentials: true });
+    const actor = actorId, session = device.session;
+    const subscribe = () => {
+      const ids = [...new Set([...(activeConversationId ? [activeConversationId] : []), ...JSON.parse(conversationKey)])].slice(0, 32);
+      for (const conversationId of ids) socket.emit(SocketEventNames.CRYPTO_SUBSCRIBE, { conversationId, deviceId: device.deviceId }, (raw: unknown) => {
+        const ack = SocketCryptoConversationAckSchema.safeParse(raw);
+        if (ack.success && !ack.data.ok && current.current.actor === actor) setCounts(previous => ({ actor, values: { ...previous.values, [conversationId]: 0 } }));
+      });
+    };
+    socket.on('connect', subscribe);
+    socket.on(SocketEventNames.CRYPTO_MESSAGE_CREATED, (raw: unknown) => {
+      if (current.current.actor !== actor || session.signal.aborted) return;
+      unreadSync.ingestEncryptedMessage(raw, current.current.id);
+    });
+    const close = () => socket.disconnect(); session.signal.addEventListener('abort', close, { once: true });
+    return () => { session.signal.removeEventListener('abort', close); socket.disconnect(); };
+  }, [actorId, device?.status, device?.deviceId, device?.session, conversationKey, activeConversationId]);
   const setActiveConversationId = useCallback((id: string | null) => {
-    if (id === activeConvIdRef.current) return;
-    activeConvIdRef.current = id;
-    setActiveConversationIdState(id);
-    setSendError(null);
-    setMessagesError(null);
-    setOlderMessagesError(null);
-    setIsLoadingOlderMessages(false);
-    setIsSending(false);
-
-    if (id && actorId) {
-      const cacheKey = `${actorId}:${id}`;
-      const cached = cacheRef.current.get(cacheKey);
-      if (cached) {
-        setMessages(cached.messages);
-        setMessagesConvId(id);
-        setNextCursor(cached.nextCursor);
-        setHasMore(cached.hasMore);
-        setIsLoadingMessages(false);
-      } else {
-        setMessages([]);
-        setMessagesConvId(id);
-        setNextCursor(null);
-        setHasMore(false);
-        setIsLoadingMessages(false);
-      }
-      setUnreadCounts((prev) => ({
-        ...prev,
-        [id]: 0,
-      }));
-      unreadSync.notifyRead(id);
-    } else {
-      setMessages([]);
-      setMessagesConvId(null);
-      setNextCursor(null);
-      setHasMore(false);
-      setIsLoadingMessages(false);
-    }
+    if (!actorId) return; current.current = { actor: actorId, id }; setSelection({ actor: actorId, id });
+    if (id) { unreadSync.notifyRead(id); setCounts(previous => ({ actor: actorId, values: { ...(previous.actor === actorId ? previous.values : {}), [id]: 0 } })); }
   }, [actorId]);
-
-  // Fetch messages helper
-  const fetchMessagesForConv = useCallback(async (targetConvId: string, signal?: AbortSignal) => {
-    const currentEpoch = epochRef.current;
-    setIsLoadingMessages(true);
-    setMessagesError(null);
-
-    try {
-      const res = await fetchConversationMessages(targetConvId, undefined, signal);
-      if (signal?.aborted || epochRef.current !== currentEpoch || activeConvIdRef.current !== targetConvId) return;
-
-      res.items.forEach((m) => seenMessageIdsRef.current.add(m.id));
-      setMessages((prev) => {
-        const updated = reconcileMessages(targetConvId, prev, res.items);
-        if (actorId) {
-          cacheRef.current.set(`${actorId}:${targetConvId}`, {
-            messages: updated,
-            nextCursor: res.nextCursor,
-            hasMore: res.hasMore,
-          });
-        }
-        return updated;
-      });
-      setMessagesConvId(targetConvId);
-      setNextCursor(res.nextCursor);
-      setHasMore(res.hasMore);
-      setIsLoadingMessages(false);
-    } catch (err: unknown) {
-      if (signal?.aborted || epochRef.current !== currentEpoch || activeConvIdRef.current !== targetConvId) return;
-      setMessagesError(err instanceof Error ? err : new Error(String(err)));
-      setIsLoadingMessages(false);
-    }
-  }, [actorId]);
-
-  // Fetch messages when active conversation changes
-  useEffect(() => {
-    if (!effectiveActiveConversationId || !actorId) {
-      return;
-    }
-
-    const abortController = new AbortController();
-    fetchMessagesForConv(effectiveActiveConversationId, abortController.signal);
-
-    return () => {
-      abortController.abort();
-    };
-  }, [effectiveActiveConversationId, actorId, fetchMessagesForConv]);
-
-  // Socket connection & subscription lifecycle for all actor conversations
-  useEffect(() => {
-    if (!actorId) {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-      return;
-    }
-
-    const socket = io('/', {
-      transports: ['websocket', 'polling'],
-      withCredentials: true,
-    });
-    socketRef.current = socket;
-
-    const subscribeAllConversations = () => {
-      for (const conv of conversations) {
-        const convId = conv.conversationId;
-        const subReq: SocketConversationRequest = { conversationId: convId };
-
-        const ackPromise = socket.emitWithAck(SocketEventNames.CONVERSATION_SUBSCRIBE, subReq);
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('ACK timeout')), 5000));
-
-        Promise.race([ackPromise, timeoutPromise])
-          .then((res: unknown) => {
-            const parsedAck = SocketConversationAckSchema.safeParse(res);
-            if (parsedAck.success && parsedAck.data.ok) {
-              subscribedConvsRef.current.add(convId);
-            }
-          })
-          .catch(() => {
-            // Failed ACK subscription or timeout
-          });
-      }
-    };
-
-    socket.on('connect', () => {
-      subscribeAllConversations();
-      if (activeConvIdRef.current) {
-        fetchMessagesForConv(activeConvIdRef.current);
-      }
-    });
-
-    socket.on(SocketEventNames.MESSAGE_CREATED, (rawPayload: unknown) => {
-      const res = unreadSync.ingestMessage(rawPayload, activeConvIdRef.current);
-      if (!res.message) return;
-
-      const currentActiveId = activeConvIdRef.current;
-      const msg = res.message;
-      if (currentActiveId && msg.conversationId === currentActiveId) {
-        setMessages((prev) => {
-          const updated = reconcileMessages(currentActiveId, prev, [msg]);
-          if (actorId) {
-            const cached = cacheRef.current.get(`${actorId}:${currentActiveId}`);
-            cacheRef.current.set(`${actorId}:${currentActiveId}`, {
-              messages: updated,
-              nextCursor: cached?.nextCursor,
-              hasMore: Boolean(cached?.hasMore),
-            });
-          }
-          return updated;
-        });
-        setMessagesConvId(currentActiveId);
-        unreadSync.notifyRead(currentActiveId);
-      }
-    });
-
-    subscribeAllConversations();
-
-    const unregisterCleanup = registerAuthCleanup(() => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-      setMessages([]);
-      setMessagesConvId(null);
-      setMessagesError(null);
-      setActiveConversationIdState(null);
-      setUnreadCounts({});
-      cacheRef.current.clear();
-      seenMessageIdsRef.current.clear();
-      subscribedConvsRef.current.clear();
-    });
-
-    return () => {
-      unregisterCleanup();
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-    };
-  }, [actorId, conversations, fetchMessagesForConv]);
-
-  const loadOlderMessages = useCallback(async () => {
-    if (!activeConvIdRef.current || !nextCursor || isLoadingOlderMessages) return;
-    const currentEpoch = epochRef.current;
-    const targetConvId = activeConvIdRef.current;
-
-    setIsLoadingOlderMessages(true);
-    setOlderMessagesError(null);
-
-    try {
-      const res = await fetchConversationMessages(targetConvId, { cursor: nextCursor });
-      if (epochRef.current !== currentEpoch || activeConvIdRef.current !== targetConvId) return;
-      res.items.forEach((m) => seenMessageIdsRef.current.add(m.id));
-      setMessages((prev) => {
-        const updated = reconcileMessages(targetConvId, prev, res.items);
-        if (actorId) {
-          cacheRef.current.set(`${actorId}:${targetConvId}`, {
-            messages: updated,
-            nextCursor: res.nextCursor,
-            hasMore: res.hasMore,
-          });
-        }
-        return updated;
-      });
-      setMessagesConvId(targetConvId);
-      setNextCursor(res.nextCursor);
-      setHasMore(res.hasMore);
-      setIsLoadingOlderMessages(false);
-    } catch (err: unknown) {
-      if (epochRef.current !== currentEpoch || activeConvIdRef.current !== targetConvId) return;
-      const error = err instanceof Error ? err : new Error(String(err));
-      setOlderMessagesError(error);
-      setIsLoadingOlderMessages(false);
-    }
-  }, [actorId, nextCursor, isLoadingOlderMessages]);
-
-  const sendMessage = useCallback(
-    async (request: CreateMessageRequest): Promise<MessageDTO> => {
-      if (!activeConvIdRef.current) {
-        throw new Error('No active conversation');
-      }
-      const currentEpoch = epochRef.current;
-      const targetConvId = activeConvIdRef.current;
-      setIsSending(true);
-      setSendError(null);
-
-      try {
-        const sent = await sendDirectMessage(targetConvId, request);
-        if (epochRef.current !== currentEpoch || activeConvIdRef.current !== targetConvId) {
-          // Stale actor/conversation: DO NOT mutate hook state!
-          return sent;
-        }
-        seenMessageIdsRef.current.add(sent.id);
-        setMessages((prev) => {
-          const updated = reconcileMessages(targetConvId, prev, [sent]);
-          if (actorId) {
-            const cached = cacheRef.current.get(`${actorId}:${targetConvId}`);
-            cacheRef.current.set(`${actorId}:${targetConvId}`, {
-              messages: updated,
-              nextCursor: cached?.nextCursor,
-              hasMore: Boolean(cached?.hasMore),
-            });
-          }
-          return updated;
-        });
-        setMessagesConvId(targetConvId);
-        setIsSending(false);
-        return sent;
-      } catch (err) {
-        if (epochRef.current === currentEpoch && activeConvIdRef.current === targetConvId) {
-          const error = err instanceof Error ? err : new Error(String(err));
-          setSendError(error);
-          setIsSending(false);
-          throw error;
-        } else {
-          // Stale actor/conversation: DO NOT mutate hook state!
-          throw err;
-        }
-      }
-    },
-    [actorId]
-  );
-
-  const startOrOpenDM = useCallback(
-    async (recipientUserId: string): Promise<string> => {
-      const currentEpoch = epochRef.current;
-      const existing = conversations.find((c) => c.peer.id === recipientUserId);
-      if (existing) {
-        setActiveConversationId(existing.conversationId);
-        return existing.conversationId;
-      }
-
-      const res = await createDirectConversation(recipientUserId);
-      if (epochRef.current !== currentEpoch) {
-        return res.conversationId;
-      }
-      await conversationsQuery.refetch();
-      if (epochRef.current !== currentEpoch) {
-        return res.conversationId;
-      }
-      setActiveConversationId(res.conversationId);
-      return res.conversationId;
-    },
-    [conversations, conversationsQuery, setActiveConversationId]
-  );
-
-  const clearSendError = useCallback(() => {
-    setSendError(null);
-  }, []);
-
-  const refetchMessages = useCallback(async () => {
-    if (activeConvIdRef.current) {
-      await fetchMessagesForConv(activeConvIdRef.current);
-    }
-  }, [fetchMessagesForConv]);
-
+  const startOrOpenDM = useCallback(async (recipientUserId: string) => {
+    const actor = actorId; if (!actor) throw new Error('LOGIN_REQUIRED');
+    const existing = conversations.find(item => item.peer.id === recipientUserId);
+    const id = existing?.conversationId ?? (await createDirectConversation(recipientUserId)).conversationId;
+    if (current.current.actor !== actor) throw new Error('SESSION_CHANGED');
+    await query.refetch(); if (current.current.actor !== actor) throw new Error('SESSION_CHANGED'); setActiveConversationId(id); return id;
+  }, [actorId, conversations, query, setActiveConversationId]);
   return {
-    conversations,
-    activeConversationId: effectiveActiveConversationId,
-    activePeer,
-    messages: effectiveMessages,
-    unreadCounts: effectiveUnreadCounts,
-    totalUnread: Object.values(effectiveUnreadCounts).reduce((acc, count) => acc + count, 0),
-    isLoadingConversations: conversationsQuery.isLoading,
-    conversationsError: isActorMismatch ? null : (conversationsQuery.error as Error | null),
-    isLoadingMessages: effectiveIsLoadingMessages,
-    messagesError: effectiveMessagesError,
-    isLoadingOlderMessages: isActorMismatch ? false : isLoadingOlderMessages,
-    olderMessagesError: isActorMismatch ? null : olderMessagesError,
-    isSending: effectiveIsSending,
-    sendError: effectiveSendError,
-    setActiveConversationId,
-    startOrOpenDM,
-    sendMessage,
-    loadOlderMessages,
-    hasOlderMessages: effectiveHasMore,
-    clearSendError,
-    refetchConversations: async () => {
-      await conversationsQuery.refetch();
-    },
-    refetchMessages,
+    conversations, activeConversationId, activePeer: conversations.find(item => item.conversationId === activeConversationId)?.peer ?? null,
+    messages: [], unreadCounts, totalUnread: Object.values(unreadCounts).reduce((total, value) => total + value, 0),
+    isLoadingConversations: query.isLoading, conversationsError: query.error instanceof Error ? query.error : null,
+    isLoadingMessages: false, messagesError: null, isLoadingOlderMessages: false, olderMessagesError: null, isSending: false, sendError: null,
+    setActiveConversationId, startOrOpenDM,
+    sendMessage: async () => { throw new Error('Use the encrypted private composer'); },
+    loadOlderMessages: async () => { throw new Error('Use encrypted history'); }, hasOlderMessages: false, clearSendError: () => undefined,
+    refetchConversations: async () => { await query.refetch(); }, refetchMessages: async () => undefined,
   };
 }
-

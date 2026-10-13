@@ -1,0 +1,5 @@
+import fs from 'node:fs';
+const dir='quality/evidence/T03-FIX15';
+let source=fs.readFileSync('quality/evidence/T03-FIX14/close.mjs','utf8').replaceAll('T03-FIX14','T03-FIX15').replaceAll("id:'T26'","id:'T26-FIX1'").replaceAll("next:'T26'","next:'T26-FIX1'").replace('/7 failed/','/9 failed/').replace('/120 passed/','/130 passed/').replaceAll('newTests:9','newTests:10').replaceAll('contractsTests:120','contractsTests:130');
+source+="\nfs.appendFileSync('../.doc/history.md',`\\n- T03-FIX15 kết thúc ${new Date(task.completedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00:9 RED failures/1 compatibility pass→130/130 contracts,10 ca mới. Build/test+API+web types/lint/diff/audit và unchanged strict T26-FIX1 gate đạt; readonly/historical PASS/env/8 baseline giữ nguyên. DTO thêm optional mediaIdentity/micRestricted, self-mic body strict; không tokens/session/email hoặc logic tính năng FE/BE trong checkpoint. Evidence code/quality/evidence/T03-FIX15/closure.json; tiếp theo backend producer T26-FIX1.\\n`);\n";
+fs.writeFileSync(`${dir}/close.mjs`,source,{flag:'wx'});

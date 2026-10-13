@@ -1,0 +1,41 @@
+### T30 Isolated Direct Gateway Placement Diagnostic Proposal
+
+Delivered isolated proposal files under [`code/quality/evidence/T30/antigravity-native58-direct-gateway-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-direct-gateway-1) and appended the truthful delivery record to [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2439).
+
+---
+
+### Delivered Artifacts
+
+1. [`private-gateway-observer-direct1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-direct-gateway-1/private-gateway-observer-direct1.mjs) & [`private-gateway-observer-reviewed2.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-direct-gateway-1/private-gateway-observer-reviewed2.mjs) (matching compatibility copy):
+   - **Byte-Exact Observer Preservation**: Retains regex redactor for credentials/tokens/SQL, diagnostic log collectors, `[FG_GATEWAY_HEALTH]` parser on `SIGUSR2`, strict health marker validation (positive sample count, 0 failures, 0 drops), 3,000ms observer stop deadline, and startup failure diagnostic aggregation (`gateway-startup-diagnostics.txt`, `gateway-startup-state.json`, `sanitized-${i}.txt`, `AggregateError`).
+   - **Safe URL Pre-flight**: Validates supplied original `DATABASE_URL` protocol (`postgres:` / `postgresql:`) and host (`localhost` / `127.0.0.1`) against healthy `fg-local-postgres-1` port binding (`5432/tcp`), network alias (`fg-local-postgres-1`), and `fg-local_default` network ID. Zero dumping of inspect Config, environment variables, raw errors, URLs, or credentials.
+   - **Byte-Equivalent URL Copy**: Preserves credentials, database name, `search_path`, SSL configuration, and query parameters byte-equivalent, altering only `hostname` to `fg-local-postgres-1` and `port` to `5432`.
+   - **Container Lifecycle Hooks**:
+     1. Replaces `docker run -d` with `docker create --pull=never` on private SFU network `fg-t30-screen-gateway-<uuid>` with pinned `nodeImage`, `--read-only`, `--cap-drop ALL`, `--security-opt no-new-privileges`, `--user node`, and label `fg-owner=t30-gateway-<uuid>`.
+     2. Validates returned 64-character hex ID immediately and registers it in `containers`.
+     3. Executes `docker network connect fg-local_default <gatewayId>` before start, establishing dual attachment to both the private SFU network (for `fg-sfu:7880`) and `fg-local_default` (for `fg-local-postgres-1:5432`).
+     4. Executes `docker start <gatewayId>` using exact 64-character container ID.
+     5. Zero `--add-host` overrides, software downloads, or public SFU port openings; existing PostgreSQL container network attachments left completely untouched.
+   - **Fail-Closed Cleanup & Recovery**:
+     - Interrupted create recovery inspects `/fg-gateway-<uuid>` with matching owner tag only; never sweeps unrelated containers.
+     - `close()` removes owned containers and private network, then asserts `fg-local-postgres-1`, `fg-local-redis-1`, and `fg-local_default` remain byte-unchanged; throws immediately (`assert.equal(mainUnchanged, true)`) on verification failure rather than faking `mainServicesUnchanged`.
+
+2. [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-direct-gateway-1/plan.json):
+   - Machine-readable specification detailing pre-flight validation rules, container configuration, network topology, fail-closed cleanup guarantees, and the 4-phase verification control plan for root execution.
+   - Preserves `nativeAcceptance: false`, `executedInThisTurn: false`, and `readyForRootExecution: true`.
+
+3. [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-direct-gateway-1/shortplan.md):
+   - Comprehensive plan framing the direct placement hypothesis in light of root's idle benchmark findings ([`db-route-results-review1.json`](file:///E:/FGweb/code/quality/evidence/T30/db-route-results-review1.json): host-published p50 3.763ms vs direct bridge 0.702ms).
+   - **Candid Evaluation**: Explains why idle synthetic SELECT 1 overhead does **NOT** prove the full 158-query switching cost, does **NOT** prove an unassociated SCRAM connection stall, and does **NOT** establish root causality for RTP media delay.
+   - Details dual-network architecture, privacy controls, lifecycle sequence, fail-closed verification, and planned root verification controls.
+
+4. [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2439):
+   - Appended truthful actual-time delivery entry (`2026-10-11T17:08:31.000Z`) recording delivered components, hypothesis scope, and verification boundaries.
+
+---
+
+### Invariants Maintained
+- **Zero Process / Test Execution**: No test suites, Docker containers, or background processes were executed by the assistant.
+- **File Scope Boundaries**: Writes strictly confined to `quality/evidence/T30/antigravity-native58-direct-gateway-1/**` and `.doc/history.md`.
+- **Integrity**: Zero modifications to application source, tests, mutable fixtures, ledger, environment variables, or checker rules.
+- **Acceptance Status**: `nativeAcceptance: false` preserved; T30 remains `IN_PROGRESS`.

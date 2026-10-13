@@ -1,0 +1,37 @@
+(node:20864) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-admin.integration.spec.ts (37.364 s)
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › provisions only one pending owner, retries without resetting the hash and activates only after real verification
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      at _getError (../../node_modules/jest-circus/build/jestAdapterInit.js:1985:12)
+          at Array.map (<anonymous>)
+
+    Cause:
+        thrown: "Exceeded timeout of 5000 ms for a test.
+        Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+          142 |   expect((await post('/fg/sign-in/admin',{username:'kingame',password})).status).toBe(403);expect(await service.isUserAdmin(owner.id)).toBe(false);
+          143 |  },30000);
+        > 144 |  it('provisions only one pending owner, retries without resetting the hash and activates only after real verification',async()=>{
+              |  ^
+          145 |   const module=await import('../src/modules/auth/auth-provision.js');
+          146 |   // Retire earlier fixture identities in this owned schema. Production data
+          147 |   // is never renamed; this test starts with no occupied reserved name.
+
+          at test/auth-admin.integration.spec.ts:144:2
+          at test/auth-admin.integration.spec.ts:76:1
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+[Nest] 20864  - 10/08/2026, 2:38:46 PM    WARN [LegacyRouteConverter] Unsupported route path: "/api/auth/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/{*path}. The braces keep the wildcard optional, so it covers the same paths as /users/* did, while /users/*path is narrower and requires at least one extra segment. For more details, refer to the migration guide. Attempting to auto-convert to "/api/auth/{*path}"...
+
+Test Suites: 1 failed, 4 passed, 5 total
+Tests:       1 failed, 73 passed, 74 total
+Snapshots:   0 total
+Time:        93.416 s, estimated 116 s
+Ran all test suites matching apps/api/test/auth.integration.spec.ts|apps/api/test/auth-email.integration.spec.ts|apps/api/test/auth-admin.integration.spec.ts|apps/api/test/auth-profile-read.integration.spec.ts|apps/api/test/rooms.integration.spec.ts.

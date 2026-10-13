@@ -1,0 +1,62 @@
+### Báo cáo điều chỉnh Native58: Pending Frames Observer & Gateway Causal Review
+
+Tuân thủ nghiêm ngặt các nguyên tắc tại [AGENTS.md](file:///E:/FGweb/AGENTS.md), [.agents/rules/08-testing-and-evidence.md](file:///E:/FGweb/.agents/rules/08-testing-and-evidence.md), [.agents/rules/09-voice-and-live.md](file:///E:/FGweb/.agents/rules/09-voice-and-live.md) và [.agents/rules/11-session-history.md](file:///E:/FGweb/.agents/rules/11-session-history.md). Không thực thi test/Docker/quá trình nền; không sửa đổi source ứng dụng, mutable fixture, ledger, hay test đóng băng; giữ `nativeAcceptance: false`.
+
+Tất cả các tệp bàn giao mới được tạo độc lập tại thư mục:
+- [failure-observer.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-pending-frames-1/failure-observer.mjs) (Bản sao hoàn chỉnh của observer r3, giữ nguyên các hàm gốc byte-exact và bổ sung trích xuất an toàn `pendingFramesSnapshot` cùng bộ giải mã `decodePendingFrames`)
+- [control-plan.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-pending-frames-1/control-plan.mjs) (Mã kiểm soát chi tiết bao quát tuần tự hóa/giải mã `SignalRequest`, lọc ranh giới, quyền riêng tư, và bảo toàn định danh lỗi gốc; chưa thực thi)
+- [revised-review.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-pending-frames-1/revised-review.json) (Dữ liệu đánh giá có cấu trúc kết hợp mốc thời gian gateway thực tế và hiệu chỉnh thực tế)
+- [shortplan.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-pending-frames-1/shortplan.md) (Tài liệu tóm tắt chuỗi nguyên nhân và thiết kế observer)
+- Mục nhật ký hiệu chỉnh trung thực đã được nối vào [.doc/history.md](file:///E:/FGweb/.doc/history.md#L2428).
+
+---
+
+### 1. Hiệu chỉnh các khẳng định thực tế theo Root Evidence
+
+1. **Mốc `16:13:35.930Z` là `before-sample`, không phải thời điểm click**:
+   Mốc `35.930Z` là thời điểm hàm `stats()` lấy mẫu `before` trong `receiveOne`. Dữ liệu gateway socketpair 4/5 ([native58-gateway-switch-timeline-root1.json](file:///E:/FGweb/code/quality/evidence/T30/native58-gateway-switch-timeline-root1.json)) chứng minh trình duyệt đã click và gửi tín hiệu từ trước:
+   - `16:13:35.652Z`: Gateway nhận frame `subscription` (seq 95, 59 bytes, unsubscribe track cũ).
+   - `16:13:35.653Z`: Gateway nhận frame `subscription` (seq 97, 61 bytes, subscribe track mới).
+   Cả hai frame đã tới gateway ~278ms trước khi test lấy mẫu `before`.
+2. **Thời điểm gói tin đến tại snapshot `16:13:39.545Z`**:
+   Snapshot post-failure tại `39.545Z` chứng minh media đã tới **trước hoặc tại** thời điểm lấy mẫu này (11.459 bytes, 12 packets, 4 decoded frames). Nó không chứng minh mốc đến chính xác của gói tin hay khung hình giải mã đầu tiên đúng ở 486ms sau khi đóng cửa sổ.
+3. **Đếm byte socket `bytesRead: 117` / `bytesWritten: 318`**:
+   Đây là các biến đếm byte tích lũy trên socket trong suốt vòng đời kết nối. Chúng chứng minh tiến trình kết nối TCP và trao đổi SCRAM đã diễn ra, nhưng không thể xác định ranh giới gói tin chi tiết hoặc định vị chính xác vị trí nghẽn của server nếu thiếu telemetry sự kiện trực tiếp từ server.
+4. **Độ trễ Webhook và Keyframe**:
+   Độ trễ webhook 3.319s phản ánh tải hệ thống nhưng không thể khẳng định là nguyên nhân trực tiếp làm trễ keyframe vì chưa có baseline đối chứng được xác minh từ Native54/55 (<100ms chưa kiểm chứng).
+5. **Khoảng cách thời gian với sự cố PostgreSQL**:
+   Sự cố timeout checkout PG kết thúc lúc `16:13:25.064Z`, cách thời điểm bắt đầu cửa sổ chuyển mạch ~10.866s. Không ghi nhận sự chồng lấn đồng thời hay liên kết trực tiếp, nhưng khoảng cách thời gian này cũng không loại trừ hoàn toàn các ảnh hưởng gián tiếp do cạnh tranh tài nguyên máy chủ.
+6. **Trạng thái Working Tree**:
+   Working tree hiện đang dirty (chứa các artifact chẩn đoán và tệp bằng chứng sinh ra trong quá trình kiểm thử).
+
+---
+
+### 2. Dữ liệu Gateway thực tế và Chi phí Truy vấn Switching
+
+- **Dòng sự kiện Gateway (Socketpair 4/5)**:
+  - `16:13:35.652Z`: Client gửi unsubscribe (seq 95, 59B).
+  - `16:13:35.653Z`: Client gửi subscribe (seq 97, 61B).
+  - `16:13:36.851Z`: Gateway chuyển Offer 1 (seq 99, 6.485B) -> Client answer lúc `16:13:36.971Z` (5.619B).
+  - `16:13:37.974Z`: Gateway chuyển Offer 2 (seq 104, 8.980B) -> Client answer lúc `16:13:38.111Z` (7.663B).
+  - `16:13:38.707Z`: Answer của client được gửi lên SFU upstream — chỉ cách thời điểm đóng cửa sổ đo (`16:13:39.059Z`) đúng **352ms**.
+  - `16:13:39.203Z`: Bản tin `trackSetting` (27B) được gửi lên upstream **144ms sau** khi cửa sổ đo đã kết thúc.
+  - *Lưu ý*: Telemetry gateway chỉ lưu trữ metadata thứ tự/lớp/kích thước byte; thiếu sự liên kết định danh SID chính xác với từng frame trên gateway.
+- **Tải truy vấn ([native58-gateway-switch-cost-root1.json](file:///E:/FGweb/code/quality/evidence/T30/native58-gateway-switch-cost-root1.json))**:
+  158 truy vấn trong cửa sổ chuyển mạch (p50: 41.64ms, p95: 140.1ms, max: 287.46ms, 0 lỗi truy vấn, 0 RPC, gateway loop max: 33.85ms). Dữ liệu này phản ánh chi phí tải tổng hợp, không phải bằng chứng nhân quả riêng lẻ cho từng frame.
+
+---
+
+### 3. Thiết kế Observer Duy nhất: Thu thập Pending Frames sau Thất bại
+
+- **Điểm mù giải quyết**:
+  Tại dòng 65 của [screen-share-diagnostic.spec.ts](file:///E:/FGweb/code/quality/evidence/T30/rtp-window-reviewed3/screen-share-diagnostic.spec.ts#L65), `subscriptionMessages(viewer)` nằm *sau* `receiveOne(viewer)`. Khi `receiveOne` ném lỗi assertion ở dòng 60, các frame WebSocket trong `window.t30SubscriptionFrames` bị kẹt lại trong bộ nhớ browser và không bao giờ được ghi ra file, gây hiểu lầm rằng client không gửi tín hiệu.
+- **Cơ chế triển khai trong [failure-observer.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-pending-frames-1/failure-observer.mjs)**:
+  1. **Đọc không phá hủy (`pendingFramesSnapshot`)**: Trích xuất tối đa 256 frame từ `w.t30SubscriptionFrames` mà không xóa mảng, không thay đổi DOM, không đổi focus/visibility.
+  2. **Giải mã trong bộ nhớ (`decodePendingFrames`)**: Sử dụng thư viện đã cài đặt `@livekit/protocol` (`SignalRequest.fromBinary()`) để phân tích cú pháp frame subscription (tag 50, độ dài <= 8192 bytes).
+  3. **Lọc chặt chẽ & Bảo mật tuyệt đối**:
+     - Kiểm tra regex khắt khe `^TR_[A-Za-z0-9]+$` cho từng track SID (độ dài 5–64 ký tự, tối đa 16 SID/frame).
+     - Loại bỏ hoàn toàn `participantSid`, tokens, raw payloads, SDP, query strings.
+     - Cố định trường `actor` theo enum (`'sender' | 'receiver' | 'viewer' | 'third' | 'fourth' | 'denied'`).
+  4. **Kê khai số lượng trung thực**: Ghi nhận `sampleCount`, `decodedCount`, `droppedCount`, `errorCount`. Bất kỳ lỗi giải mã hay vi phạm định dạng nào đều đánh dấu `observationComplete: false`.
+  5. **Lưu trữ tách biệt**: Ghi ra tệp riêng `pending-subscription-frames.json` với cờ `{ flag: 'wx' }`; không can thiệp vào `sanitized-failure-record.json`.
+  6. **Bảo toàn thời gian & Định danh lỗi**: Nằm trọn vẹn trong ngân sách 5.000ms của `observeFailure`; bảo toàn 100% định danh lỗi gốc (`originalError`) khi observer gặp sự cố.

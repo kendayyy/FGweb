@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-10T22:02:19.617Z",
+  "reviewer": "Codex",
+  "commands": [
+    {
+      "label": "antigravity-call-read-lock-final-1",
+      "command": "node quality/evidence/T30/run-antigravity.mjs call-read-lock-final",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:55:44.660Z",
+      "completedAt": "2026-10-10T21:57:20.221Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-antigravity-call-read-lock-final-1.txt",
+      "evidenceSha256": "6790f4de14e0ebac8f05f07d381613eb895ace458a267614a35e7ae27f23016d"
+    },
+    {
+      "label": "t30-call-read-lock-final-review-1",
+      "command": "node quality/evidence/T30/validate-call-read-lock-final.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:57:27.973Z",
+      "completedAt": "2026-10-10T21:57:28.790Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-final-review-1.txt",
+      "evidenceSha256": "f9375ce2c3303405a37c67633c43a8069644c71098fcf801f0d0320fb787f6ad"
+    },
+    {
+      "label": "t30-call-read-lock-test-adoption-1",
+      "command": "node quality/evidence/T30/adopt-exact.mjs call-read-lock-test quality/evidence/T30/call-read-lock-test-adoption-plan.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:57:30.226Z",
+      "completedAt": "2026-10-10T21:58:13.842Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-test-adoption-1.txt",
+      "evidenceSha256": "a1df75ebaf79593552a1ac28e52cc2e5caebba51b30e3bfcd16024a9444589ff"
+    },
+    {
+      "label": "t30-call-read-lock-red-1",
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand --no-cache --cacheDirectory .cache/t30/call-read-lock-red-1 --runTestsByPath apps/api/test/t30-signaling-throughput.integration.spec.ts --testNamePattern CallsService",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:58:19.756Z",
+      "completedAt": "2026-10-10T21:59:00.911Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-red-1.txt",
+      "evidenceSha256": "648a87261003ba2f66b4d2de415ce5e413407732da7c9ad6617a6cca95206a37"
+    },
+    {
+      "label": "t30-call-read-lock-source-adoption-1",
+      "command": "node quality/evidence/T30/adopt-exact.mjs call-read-lock-source-canonical quality/evidence/T30/call-read-lock-source-canonical-adoption-plan.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:59:09.862Z",
+      "completedAt": "2026-10-10T21:59:48.885Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-source-adoption-1.txt",
+      "evidenceSha256": "e6441f6e62387b0df998f325655e3ed82267eef809c7063cd1f9bf4275c2a361"
+    },
+    {
+      "label": "t30-call-read-lock-green-1",
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand --no-cache --cacheDirectory .cache/t30/call-read-lock-green-1 --runTestsByPath apps/api/test/t30-signaling-throughput.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T21:59:56.880Z",
+      "completedAt": "2026-10-10T22:00:46.206Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-green-1.txt",
+      "evidenceSha256": "81ac58bba70b8b2abfbbb0d9895d835a7e5bbf33b4b70df4d25810ae0bf916ce"
+    },
+    {
+      "label": "t30-api-build-4",
+      "command": "node node_modules/typescript/bin/tsc --project apps/api/tsconfig.json --incremental false",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:01:35.425Z",
+      "completedAt": "2026-10-10T22:01:52.858Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-4.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "red": {
+    "concurrentDeadlineFailures": 2,
+    "authorityNegativesPassed": 5,
+    "prior15Skipped": true
+  },
+  "firstGreen": {
+    "passed": 21,
+    "failed": 1,
+    "total": 22,
+    "fixtureDefect": "New CallsService DTO concurrency seed used bare UUID admission, contract requires admission_UUID. Keep validation and old15 callbacks/helpers; normalize actual seeded IDs only for new case before clients connect."
+  },
+  "sourceReview": "Only four private/read methods changed; default mutations and authority/DTO predicates preserved",
+  "status": "IN_PROGRESS",
+  "nativeAcceptance": false
+}

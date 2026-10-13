@@ -1,0 +1,15 @@
+# GAME-LOGO-FE — Codex closing review08/10/2026
+
+The supplied4000×4000 Dota PNG resolves the previous missing-asset blocker. Native headed browser composition confirms genuine transparency and the complete Dota symbol/caption. Local lossless PNG compression preserves every original RGBA pixel; CSS display framing removes only transparent margins. The seven-game contract mapping is complete without external image hotlinks.
+
+Current required checks:17/17 DOM tests and7/7 headed tests using actual API/PostgreSQL/Redis. They verify all seven decoded images in both themes, fixed72px rail/24px logos/46px rows, keyboard/hover accessible names, mobile360/390 drawer and reload, broken-image fallback, native session/draft composer identity and unchanged socket IDs/event sequence. App/test typechecks, scoped lint, actual frontend Vite8 build, icon size/MIME/maskable checks and diff check pass.
+
+Actual main app18080 previews reviewed in dota-main-light.png and dota-main-dark.png. Chromium parsed the real manifest with no errors and four icons. This confirms browser asset/manifest integration, not phone installation or push permission; those device requirements remain in later PWA tasks.
+
+The first resumed build mistakenly invoked the older root Vite6 instead of the locked frontend Vite8; the corrected frontend command succeeds without configuration changes. The first headed fixture exceeded startup time; native startup probe and the unchanged30s test gate subsequently pass. Fixture Redis connections now fail promptly rather than retry indefinitely. Cleanup removes only the isolated fixture actor/schema matching that failed run's exact timestamp window; zero temporary theme schemas remain. Original failed commands/assertions and earlier BLOCKED reports are retained.
+
+Ownership audit preserves5549 read-only files,59 historic PASS records, all eight baseline source hashes, checker and private local configuration. New scoped output snapshots supersede earlier source ownership only through this task; historic outputs are not rewritten. Final PASS is permitted only after dota-close.mjs validates the unchanged strict T24-FIX1 gate against the proposed snapshot before persisting the ledger.
+
+First closing dry-run rejected missing predecessor hashed JS/CSS paths after Vite cleaned dist. Within the approved dist scope, the current owner explicitly replaces these two paths with compatibility copies of current built entries and records both old/new digests in dota-build-paths.json. Active index still references only the current build. Historical ledger hashes remain intact; the new owner snapshot records replacement hashes. Future local builds must use --emptyOutDir false to preserve those tracked paths. This is a build artifact ownership repair, not restoration of original bytes or a checker exception.
+
+Evidence: codex-dota-*.json/txt, dota-asset-provenance.json, dota-audit.json, dota-browser-manifest.json, headed-9/screenshots and socket-lifecycle.json. Latest successful closing records and the preserved unsuccessful attempts are separated in the active owner's lifecycle metadata.

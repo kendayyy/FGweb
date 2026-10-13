@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T00-REBASE-CHATCRYPTO01',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),previous=JSON.parse(fs.readFileSync(`${dir}/previous-baseline.json`)),pending=JSON.parse(fs.readFileSync('quality/evidence/T28/pending-amendment.json'));
+assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,'T00-REBASE-CHATCRYPTO01');assert.deepEqual(baseline,previous);
+for(const s of Object.values(pending.sources))assert.equal(hash(s.livePath),s.liveSha256);
+for(const [key,s]of Object.entries(pending.sources))baseline.hashes[key]=s.liveSha256;
+const adoption={amendment:'CHAT-CRYPTO-01',evidence:`${dir}/review.md`,authorization:`${dir}/authorization.json`,adoptedAt:new Date().toISOString()};
+baseline.amendments.push({...adoption,previousHashes:previous.hashes,hashes:{...baseline.hashes},implementation:'NOT_STARTED',scope:'DM/group E2EE text/images/replies, Lobby AEAD at rest; excludes call/live/support/feed'});
+baseline.additionalRequirements??={};baseline.additionalRequirements['CHAT-CRYPTO-01']={specSection:17,executionStatus:'NOT_STARTED',checkpointOrder:['CHATCRYPTO-DATA','CHATCRYPTO-BE','CHATCRYPTO-FE','CHATCRYPTO-QA'],protocol:'PENDING_REVIEW_AND_SELECTION',legacyMigration:'PENDING_CLIENT_ASSISTED_PLAN'};
+fs.writeFileSync('quality/spec-baseline.json',JSON.stringify(baseline,null,2)+'\n');
+for(const t of ledger.tasks){t.baselineAdoptions??=[];t.baselineAdoptions.push({...adoption,previousSpecSha256:t.specSha256,currentSpecSha256:baseline.hashes.specSha256});t.specSha256=baseline.hashes.specSha256;}
+const scopes={
+ 'CHATCRYPTO-DATA':['packages/contracts/src/**','packages/contracts/test/**','packages/contracts/dist/**','packages/database/src/**','packages/database/drizzle/**','packages/database/dist/**','packages/database/test/**','quality/api-contract.md','quality/crypto/**','quality/spec-coverage.md','quality/evidence/CHATCRYPTO-DATA/**','.runtime/chatcrypto-data/**','.cache/chatcrypto-data/**'],
+ 'CHATCRYPTO-BE':['apps/api/src/modules/messages/**','apps/api/src/modules/uploads/**','apps/api/src/modules/notifications/**','apps/api/src/modules/moderation/**','apps/api/src/modules/rooms/**','apps/api/src/modules/chat-crypto/**','apps/api/src/app.module.ts','apps/api/test/**','apps/api/dist/**','apps/worker/src/**','apps/worker/test/**','apps/worker/dist/**','infra/chat-crypto/**','scripts/chat-crypto/**','quality/spec-coverage.md','quality/evidence/CHATCRYPTO-BE/**','.runtime/chatcrypto-be/**','.cache/chatcrypto-be/**'],
+ 'CHATCRYPTO-FE':['apps/web/src/features/crypto/**','apps/web/src/features/messages/**','apps/web/src/features/chat/**','apps/web/src/features/rooms/**','apps/web/src/features/friends/**','apps/web/src/features/notifications/**','apps/web/src/features/profile/**','apps/web/src/App.tsx','apps/web/test/**','apps/web/dist/**','tests/e2e/chat-crypto.spec.ts','quality/spec-coverage.md','quality/evidence/CHATCRYPTO-FE/**','.runtime/chatcrypto-fe/**','.cache/chatcrypto-fe/**'],
+ 'CHATCRYPTO-QA':['tests/security/chat-crypto/**','tests/e2e/chat-crypto-regression.spec.ts','quality/crypto/**','quality/spec-coverage.md','quality/evidence/CHATCRYPTO-QA/**','.runtime/chatcrypto-qa/**','.cache/chatcrypto-qa/**']
+};
+const order=Object.keys(scopes);const tasks=order.map((id,index)=>({id,title:id.replace('CHATCRYPTO-','Chat encryption '),area:['CONTRACTS_DATABASE','BACKEND','FRONTEND','QA'][index],status:'NOT_STARTED',dependencies:[index?order[index-1]:'T00-REBASE-CHATCRYPTO01'],specSha256:baseline.hashes.specSha256,writeAllowlist:scopes[id],approvedScopeAmendments:[{...adoption,source:'Human CHAT-CRYPTO-01 approval plus persisted broad write scope',paths:scopes[id],reason:'Future checkpoint owner scope only; no feature implemented or tests claimed by rebaseline'}],commands:[],evidencePaths:[],outputsHash:null,startedAt:null,completedAt:null,blockers:[]}));
+const at=ledger.tasks.findIndex(t=>t.id==='T29');ledger.tasks.splice(at,0,...tasks);ledger.tasks.find(t=>t.id==='T29').dependencies=['CHATCRYPTO-QA'];fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({adopted:adoption.amendment,changedSources:2,next:order,featuresImplemented:false,historicalOutputHashesUnchanged:true}));

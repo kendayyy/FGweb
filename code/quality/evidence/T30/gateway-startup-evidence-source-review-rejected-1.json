@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-11T05:36:17.636Z",
+  "reviewer": "Codex",
+  "files": [
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-startup-evidence-1/private-gateway-shaped-fixture.mjs",
+      "sha256": "991710272ecda1467c8dad55216f5efd0415d7ec6e46eafd7e5cfbbda7e39dec"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-startup-evidence-1/review-notes.md",
+      "sha256": "1a179dfc4189bd7baf7ea9b469b888f23162c64542589d9476fc3f3a2918cc0c"
+    }
+  ],
+  "findings": [
+    "diagnosticsCaptured relies on nonempty Container header even if spawnSync docker logs fails; must track actual exit/error/capture completion, never complete true for failed log read.",
+    "Failed inspect fabricates running=false and oomKilled=false although unknown; use null/unknown and finite health enums.",
+    "Diagnostic write errors silently swallowed with no safe count/status or aggregate after close; preserve original failure and flag missing evidence truthfully.",
+    "Containment accepts task root and unrestricted relative child names, tighten exact owned run child; redaction should include decoded password/DB role/scoped schema and avoid raw SQL fields."
+  ],
+  "executed": false,
+  "adopted": false,
+  "sourcePinsUnchanged": true,
+  "nativeAcceptance": false
+}

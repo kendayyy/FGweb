@@ -1,0 +1,5 @@
+# Native queue expiry access path (partial)
+
+Only CHATCRYPTO-BE. Native RED default planner20,000 live+7 expired per queue: sequential scans exclude20003/20040 live rows; shared hit blocks1130/1121 and execution21.700/6.860ms. Native GREEN same storage fixture default planner: two new btree expiry/id indexes,11/12 shared hit blocks and0.079/0.082ms; no forced planner. These local plans are not production/cold-cache or1000 media load proof.
+
+Migration0021 review exactly two indexes, prior0000–0020 SQL/snapshot and journal prefix unchanged/all other table definitions unchanged; main migration false. Owned native empty/populated prior21→22 and repeat migrate2/2 retain exact row_to_json text of acknowledged retry payload/date/id. Native device suite46/46 exit0; source generation/review/database build exit0. APIbuild/lint57 exit0; custody-expiry-index-regression-1 ended2026-10-09 22:28:26.830 +07 exit0,278/278/17 suites SHA90562f4e32e5f314abb0f2b5a7e644138247a0d0d9fef5acb6051be3b8d03552,463.498s Jest. Fresh diff/audit/save next; no overall backend PASS.

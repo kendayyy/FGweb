@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-12T08:20:13.691Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Native72 actual RoomsService269 and CallsService55 acquire timeouts after cold handshake, belowmax16/waiting0; real PG RED each startupReady0 and idle4→0/newfourPIDs. Retain/await four real PG connections in each service via min4 and allSettled readiness; release fulfilled clients before propagating init errors. Preserve all existing authorization, SQL/transaction/lock/grace/quota/native/hooks/teardown bytes and max16/connect5s/statements10s Rooms15s Calls; no timeout increase or unique app-loading/native acceptance claim. Original backend/room/crypto/lifecycle guards and fresh headed acceptance required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/rooms/rooms.service.ts",
+      "proposed": "quality/evidence/T30/rooms-pool-reuse-reviewed1.ts",
+      "beforeSha256": "5324f1437362ffb6cf9a13d24715800360eb9d041c360c9c99c893b26f119383",
+      "afterSha256": "ede814416634fb6b9e4a7f31cbbb2929d134d7119bcb6f04278651e897d7d18f"
+    },
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "proposed": "quality/evidence/T30/calls-pool-reuse-reviewed1.ts",
+      "beforeSha256": "863872d0893ed30a65c3348b0877a618e46f1941010d3927126dc4761f5a3a94",
+      "afterSha256": "2117aaf01e0aff1afe5191f03551748d3908d0de904ccbea684847be357668a2"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/rooms-calls-pool-adoption-plan1.json",
+    "sha256": "9bb8073a53b3bea9ed618479039aa6d5db75225c04e550dc73b306a7820390a0"
+  },
+  "nativeAcceptancePending": true
+}

@@ -1,0 +1,11 @@
+import {describe,it,expect} from 'vitest';
+import {CallParticipantSchema,ToggleSelfMicRequestSchema,ApiEndpointRegistry} from '../src/index.js';
+const participant={callId:'call',userId:'viewer',isPublishing:false,isMuted:true,joinedAt:'2026-10-08T00:00:00Z'},identity='admission_12eb826a-420f-49c1-8272-4d7ee3c02fd8';
+describe('T03-FIX15 real call controls transport',()=>{
+ it('preserves the opaque SFU identity for authorized per-user audio controls',()=>{expect(CallParticipantSchema.parse({...participant,mediaIdentity:identity}).mediaIdentity).toBe(identity);});
+ it('preserves an explicit moderator restriction independently of self-muted state',()=>{expect(CallParticipantSchema.parse({...participant,isMuted:false,micRestricted:true}).micRestricted).toBe(true);expect(CallParticipantSchema.parse({...participant,micRestricted:false}).micRestricted).toBe(false);});
+ it.each(['','viewer','session_private','eyJ.invalid.jwt','admission_invalid'])('rejects malformed SFU identity %s',mediaIdentity=>{expect(CallParticipantSchema.safeParse({...participant,mediaIdentity}).success).toBe(false);});
+ it('retains old participant compatibility without inventing a media identity',()=>{const old=CallParticipantSchema.parse(participant);expect(old).toEqual(participant);expect(old.mediaIdentity).toBeUndefined();expect(old.micRestricted).toBeUndefined();});
+ it('registered participant list carries both fields and exposes no credential or session fields',()=>{const endpoint=ApiEndpointRegistry.find(e=>e.method==='GET'&&e.path==='/api/v1/calls/:id/participants');expect(endpoint?.auth).toBe('RoomMember');const dto={...participant,mediaIdentity:identity,micRestricted:true};expect(endpoint?.responseSchema.parse([dto])).toEqual([dto]);expect(CallParticipantSchema.parse({...dto,token:'private',sessionId:'private',email:'private'})).toEqual(dto);});
+ it('strict self-mic accepts only a boolean muted action, never client authority overrides',()=>{expect(ToggleSelfMicRequestSchema.parse({muted:false})).toEqual({muted:false});for(const input of [{muted:false,userId:'other'},{muted:false,micRestricted:false},{muted:false,role:'OWNER'},{muted:'false'},{}])expect(ToggleSelfMicRequestSchema.safeParse(input).success).toBe(false);expect(ApiEndpointRegistry.find(e=>e.path==='/api/v1/calls/:id/self-mic')?.requestSchema).toBe(ToggleSelfMicRequestSchema);});
+});

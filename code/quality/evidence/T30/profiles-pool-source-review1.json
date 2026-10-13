@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-12T09:08:32.459Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual headed roomtiming1 observes Profiles pool cold handshake belowmax5/waiting0 and owner profile3114ms of room detail3288ms. ActualPG RED idle4 to0 after11s and four new backendPIDs. Await/release four real startup connections and retain min4/max5; retain injected setDb path, every query/DTO/authority body, existing unspecified PG deadlines, and teardown unchanged. No cache or fresh room/member guard bypass, no native acceptance claim.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/profiles/profiles.service.ts",
+      "proposed": "quality/evidence/T30/profiles-pool-reuse-reviewed1.ts",
+      "beforeSha256": "e0b7f0c7efcaf209613da8cdb468c94c2840302223a57650e26f21e6e5cc33eb",
+      "afterSha256": "01f712adde4fbad1cf9646d32cb27e25b89cc828b0b831251d960839e9c9cae1"
+    }
+  ],
+  "red": {
+    "command": "node quality/evidence/T30/profiles-pool-reuse-control1.mjs red",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-12T09:06:06.561Z",
+    "completedAt": "2026-10-12T09:06:20.219Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-profiles-pool-reuse-red-2.txt",
+    "evidenceSha256": "13b32cfb0c92277ec2ea5b9555045b8d78c86c9910ea41aac92e7c5601e9dc37"
+  },
+  "observation": {
+    "at": "2026-10-12T09:06:20.172Z",
+    "mode": "red",
+    "actualPg": true,
+    "startupReady": 0,
+    "before": 4,
+    "after": 0,
+    "pids": [
+      20186,
+      20187,
+      20188,
+      20189
+    ],
+    "afterPids": [
+      20219,
+      20220,
+      20221,
+      20222
+    ],
+    "max": 5
+  },
+  "cleanup": {
+    "at": "2026-10-12T09:06:20.176Z",
+    "poolEnded": true,
+    "total": 0
+  },
+  "onlyTwoAnchorsChanged": true,
+  "allDomainBodiesExact": true,
+  "acceptance": false
+}

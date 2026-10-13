@@ -1,0 +1,162 @@
+{
+  "recordedAt": "2026-10-11T03:21:40.109Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-pg-wait-reviewed.mjs",
+    "sha256": "8099caa9b1d508fe995f41cf736335de609676d9df40b8183b1a25db6cdae1dd"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T03:21:01.833Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T03:21:09.022Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T03:21:09.043Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T03:21:19.303Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T03:21:27.417Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "actual observed gateway HTTP unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "actual observed gateway upgrade unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "actual current session gateway authorization after owned room row-lock contention",
+      "status": 200,
+      "ownedLockHeldMs": 500
+    },
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "029c67e8b6704000ae72b7c44ac5cfb7aaf9abd19ce209adb13f52ce21fc09dd"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "actual scoped PG observer shutdown health",
+      "health": {
+        "recordedAt": "2026-10-11T03:21:31.296Z",
+        "inFlightSettled": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "readFailures": 0,
+        "writeFailures": 0,
+        "idleErrors": 0,
+        "truncated": false,
+        "sampleCount": 13,
+        "observationComplete": true
+      }
+    },
+    {
+      "kind": "actual numeric API pool owner/PID/lock observations and final failure health",
+      "ownerCount": 18,
+      "lockRecordCount": 28,
+      "ownerHealth": {
+        "recordedAt": "2026-10-11T03:21:40.003Z",
+        "failureCount": 0,
+        "observationComplete": true
+      }
+    },
+    {
+      "kind": "actual slow owned room lock forwarded and measured",
+      "rows": [
+        {
+          "type": "sqlOperation",
+          "label": "liveLeaseInitial",
+          "at": "2026-10-11T03:21:30.128Z",
+          "durationMs": 159.652,
+          "backendPid": 9127
+        },
+        {
+          "type": "sqlOperation",
+          "label": "lockRoomsUpdate",
+          "at": "2026-10-11T03:21:30.784Z",
+          "durationMs": 655.714,
+          "backendPid": 9127
+        }
+      ]
+    },
+    {
+      "kind": "actual guarded HTTP/upgrade error telemetry and real perf samples",
+      "errors": [
+        {
+          "type": "error",
+          "site": "httpHandler",
+          "at": "2026-10-11T03:21:29.147Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "headersSent": false
+        },
+        {
+          "type": "error",
+          "site": "upgrade",
+          "phase": "authorize",
+          "durationMs": 1,
+          "at": "2026-10-11T03:21:29.196Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "socketDestroyed": false
+        }
+      ],
+      "sampleCount": 13
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-d963ef22-7c2d-4899-b6a5-f50cf805d5ad",
+    "temporary-built-smoke-0137abd4-8ccd-4d2c-be8a-41887a0240dd"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

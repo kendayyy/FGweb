@@ -1,0 +1,61 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12412) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (51.272 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › prunes expired protocol queues and retains live acknowledged events for transaction dedup
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 2
+
+      546 |   await seedQueue('queue-live',1,false);await seedQueue('queue-live-ack',1,false,true);
+      547 |   const sweep=()=>app.get(CryptoRelayService).cleanup();await sweep();await sweep();
+    > 548 |   for(const table of queueTables){expect(await queueCount(table,'queue-expired')).toBe(0);expect(await queueCount(table,'queue-live')).toBe(2);}
+          |                                                                                   ^
+      549 |  });
+      550 |  it('bounds expired queue batches and skips actual locked event rows until a later sweep',async()=>{
+      551 |   await seedQueue('queue-batch',102,true);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:548:83)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › bounds expired queue batches and skips actual locked event rows until a later sweep
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 102
+
+      554 |    await lock.query('BEGIN');for(const table of queueTables)await lock.query(`SELECT id FROM ${table} WHERE id='queue-batch-1' FOR UPDATE`);
+      555 |    await app.get(CryptoRelayService).cleanup();
+    > 556 |    for(const table of queueTables){expect(await queueCount(table,'queue-batch')).toBe(2);expect((await pool.query(`SELECT id FROM ${table} WHERE id='queue-batch-1'`)).rowCount).toBe(1);}
+          |                                                                                  ^
+      557 |   }finally{await lock.query('ROLLBACK');lock.release();}
+      558 |   await app.get(CryptoRelayService).cleanup();for(const table of queueTables)expect(await queueCount(table,'queue-batch')).toBe(0);
+      559 |  });
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:556:82)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rolls back both queue deletions on a real PostgreSQL fault and succeeds on retry
+
+    expect(received).rejects.toBeDefined()
+
+    Received promise resolved instead of rejected
+    Resolved to value: undefined
+
+      563 |   await pool.query(`CREATE TRIGGER queue_cleanup_fault BEFORE DELETE ON chat_crypto_protocol_events FOR EACH ROW EXECUTE FUNCTION queue_cleanup_fault()`);
+      564 |   try{
+    > 565 |    await expect(app.get(CryptoRelayService).cleanup()).rejects.toBeDefined();
+          |          ^
+      566 |    for(const table of queueTables)expect(await queueCount(table,'queue-fault')).toBe(1);
+      567 |   }finally{await pool.query('DROP TRIGGER queue_cleanup_fault ON chat_crypto_protocol_events');await pool.query('DROP FUNCTION queue_cleanup_fault()');}
+      568 |   await app.get(CryptoRelayService).cleanup();for(const table of queueTables)expect(await queueCount(table,'queue-fault')).toBe(0);
+
+      at expect (../../node_modules/expect/build/index.js:2116:15)
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:565:10)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 31 passed, 34 total
+Snapshots:   0 total
+Time:        52.267 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

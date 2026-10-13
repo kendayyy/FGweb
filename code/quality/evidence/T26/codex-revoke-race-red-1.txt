@@ -1,0 +1,66 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2972) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    {"nativeRevocationError":true,"code":"not_found","status":404}
+
+      at CallsService.calls.reconcile (test/call-gateway.integration.spec.ts:42:124)
+          at async Promise.all (index 0)
+
+  console.log
+    {"nativeRevocationError":true,"code":"not_found","status":404}
+
+      at CallsService.calls.reconcile (test/call-gateway.integration.spec.ts:42:124)
+
+FAIL test/call-gateway.integration.spec.ts (48.757 s)
+  ● T26 private native SFU gateway authorization › two independent revokers race safely without reporting a failed room operation
+
+    expect(received).resolves.toEqual()
+
+    Received promise rejected instead of resolved
+    Rejected to value: [Not Found: participant not found]
+
+      121 |   await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);
+      122 |   const calls=app.get(CallsService);
+    > 123 |   await expect(Promise.all([calls.reconcile(),calls.reconcile()])).resolves.toEqual([undefined,undefined]);
+          |         ^
+      124 |   expect((await sfu.listParticipants(join.roomName)).length).toBe(0);
+      125 |  });
+      126 |  it('the bound native session must belong to the admitted member',async()=>{
+
+      at expect (../../node_modules/expect/build/index.js:2116:15)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:123:9)
+
+  ● T26 private native SFU gateway authorization › self-leave and owner dissolve remove active SFU participants before returning
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      135 |  it('self-leave and owner dissolve remove active SFU participants before returning',async()=>{
+      136 |   const first=await admitted();expect((await signal(first.join.token)).accepted).toBe(true);
+    > 137 |   const left=await request(base).delete(`/api/v1/rooms/${first.room.id}/members/viewer`).set('Cookie',cookies.viewer).set('Origin',origin);expect(left.status).toBe(200);expect((await sfu.listParticipants(first.join.roomName)).length).toBe(0);
+          |                                                                                                                                                                ^
+      138 |   const second=await admitted();expect((await signal(second.join.token)).accepted).toBe(true);
+      139 |   const dissolved=await request(base).delete(`/api/v1/rooms/${second.room.id}`).set('Cookie',cookies.owner).set('Origin',origin);expect(dissolved.status).toBe(200);expect((await sfu.listParticipants(second.join.roomName)).length).toBe(0);
+      140 |   expect((await signal(second.join.token)).status).toBe(403);
+
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:137:160)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 11 passed, 13 total
+Snapshots:   0 total
+Time:        49.253 s
+Ran all test suites matching test/call-gateway.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts

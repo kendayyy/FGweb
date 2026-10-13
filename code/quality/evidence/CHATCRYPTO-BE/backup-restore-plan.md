@@ -1,0 +1,7 @@
+# Owned native backup/restore acceptance
+
+CHATCRYPTO-BE checkpoint25 verified258/258; this next subset stays IN_PROGRESS. No main DB/environment migration, provisioning or production/off-machine backup claim.
+
+Close actual fixture app before pg_dump to obtain a quiescent isolated source. Only crypto_be_<UUID> schemas and canonical own .runtime/chatcrypto-be/<UUID>/encrypted roots are allowed. Native pg_dump/psql in pinned local PostgreSQL container; raw SQL held in memory and never printed or saved plaintext. Dump and bounded UUID.bin encrypted objects form one authenticated Transit payload under separate fg-backup key; CA/token/Raft/private client keys are excluded. Native operator can only rotate/rewrap; application Lobby/report credentials cannot decrypt backup. Expected operation identity and manifest hashes verified before target mutation. Restore only fresh owned namespace via controlled fixture schema rebase; not a generic production/public-schema rewriting tool. Real AppModule restored sessions/ACL/history, SDK message/image decryption, public Lobby and selected-only admin report reads; corrupted object denial. Client keys stay outside archive in memory, so backup alone never claims lost-client-key recovery.
+
+RED missing helper before implementation. Preserve every failure, then implement bounded helper/role fixture and run targeted native custody suite. Combined regression only after meaningful integration changes.

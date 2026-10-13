@@ -1,0 +1,1031 @@
+import { z } from 'zod';
+import type { ApiEndpointDefinition } from './index.js';
+export declare const CHAT_CRYPTO_PROTOCOL_VERSION = 1;
+export declare const MATRIX_CRYPTO_SDK_VERSION = "18.6.0";
+export declare const MAX_CRYPTO_EVENT_BASE64_CHARS = 131072;
+export declare const MAX_PRIVATE_CIPHERTEXT_IMAGE_BYTES: number;
+export declare const MAX_RECOVERY_EXPORT_CHARS: number;
+export declare const CryptoRevisionSchema: z.ZodNumber;
+export declare const MatrixUserIdSchema: z.ZodString;
+export declare const MatrixRoomIdSchema: z.ZodString;
+export declare const MatrixDeviceIdSchema: z.ZodString;
+export declare const CryptoPublicKeySchema: z.ZodString;
+export declare const MatrixSignedOneTimeKeySchema: z.ZodObject<{
+    key: z.ZodString;
+    signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const MatrixDeviceKeysSchema: z.ZodObject<{
+    user_id: z.ZodString;
+    device_id: z.ZodString;
+    algorithms: z.ZodArray<z.ZodEnum<{
+        "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+        "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+    }>>;
+    keys: z.ZodRecord<z.ZodString, z.ZodString>;
+    signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const RegisterCryptoDeviceSchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    deviceKeys: z.ZodObject<{
+        user_id: z.ZodString;
+        device_id: z.ZodString;
+        algorithms: z.ZodArray<z.ZodEnum<{
+            "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+            "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>;
+    oneTimeKeys: z.ZodRecord<z.ZodString, z.ZodObject<{
+        key: z.ZodString;
+        signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const UploadOneTimeKeysSchema: z.ZodObject<{
+    oneTimeKeys: z.ZodRecord<z.ZodString, z.ZodObject<{
+        key: z.ZodString;
+        signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const MatrixCrossSigningKeySchema: z.ZodObject<{
+    user_id: z.ZodString;
+    usage: z.ZodArray<z.ZodEnum<{
+        master: "master";
+        self_signing: "self_signing";
+        user_signing: "user_signing";
+    }>>;
+    keys: z.ZodRecord<z.ZodString, z.ZodString>;
+    signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+}, z.core.$strict>;
+export declare const UploadCrossSigningKeysSchema: z.ZodObject<{
+    masterKey: z.ZodObject<{
+        user_id: z.ZodString;
+        usage: z.ZodArray<z.ZodEnum<{
+            master: "master";
+            self_signing: "self_signing";
+            user_signing: "user_signing";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+    }, z.core.$strict>;
+    selfSigningKey: z.ZodObject<{
+        user_id: z.ZodString;
+        usage: z.ZodArray<z.ZodEnum<{
+            master: "master";
+            self_signing: "self_signing";
+            user_signing: "user_signing";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+    }, z.core.$strict>;
+    userSigningKey: z.ZodObject<{
+        user_id: z.ZodString;
+        usage: z.ZodArray<z.ZodEnum<{
+            master: "master";
+            self_signing: "self_signing";
+            user_signing: "user_signing";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+    }, z.core.$strict>;
+}, z.core.$strict>;
+export declare const MegolmEncryptedEventSchema: z.ZodObject<{
+    algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+    ciphertext: z.ZodString;
+    session_id: z.ZodString;
+    sender_key: z.ZodOptional<z.ZodString>;
+    device_id: z.ZodOptional<z.ZodString>;
+}, z.core.$strict>;
+export declare const PrivateMessageEnvelopeSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+    event: z.ZodObject<{
+        algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+        ciphertext: z.ZodString;
+        session_id: z.ZodString;
+        sender_key: z.ZodOptional<z.ZodString>;
+        device_id: z.ZodOptional<z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>;
+export declare const LobbyStorageEnvelopeSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    protocol: z.ZodLiteral<"OPENBAO_TRANSIT_AES256GCM">;
+    keyId: z.ZodEnum<{
+        "fg-lobby": "fg-lobby";
+        "fg-report": "fg-report";
+    }>;
+    keyVersion: z.ZodNumber;
+    ciphertext: z.ZodString;
+}, z.core.$strict>;
+export declare const SendEncryptedMessageSchema: z.ZodObject<{
+    clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    envelope: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+        event: z.ZodObject<{
+            algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+            ciphertext: z.ZodString;
+            session_id: z.ZodString;
+            sender_key: z.ZodOptional<z.ZodString>;
+            device_id: z.ZodOptional<z.ZodString>;
+        }, z.core.$strict>;
+    }, z.core.$strict>;
+    attachmentIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+    mentionedUserIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+}, z.core.$strict>;
+export declare const LegacyImportProvenanceSchema: z.ZodObject<{
+    candidateId: z.ZodPipe<z.ZodString, z.ZodString>;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    originalSha256: z.ZodString;
+    importerUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+    importerDeviceId: z.ZodString;
+}, z.core.$strict>;
+export declare const EncryptedMessageSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
+    origin: z.ZodLiteral<"LIVE">;
+    mentionedUserIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+    clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    envelope: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+        event: z.ZodObject<{
+            algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+            ciphertext: z.ZodString;
+            session_id: z.ZodString;
+            sender_key: z.ZodOptional<z.ZodString>;
+            device_id: z.ZodOptional<z.ZodString>;
+        }, z.core.$strict>;
+    }, z.core.$strict>;
+    createdAt: z.ZodString;
+    attachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+}, z.core.$strict>, z.ZodObject<{
+    origin: z.ZodLiteral<"LEGACY_IMPORT">;
+    importProvenance: z.ZodObject<{
+        candidateId: z.ZodPipe<z.ZodString, z.ZodString>;
+        cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+        originalSha256: z.ZodString;
+        importerUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+        importerDeviceId: z.ZodString;
+    }, z.core.$strict>;
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+    clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    envelope: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+        event: z.ZodObject<{
+            algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+            ciphertext: z.ZodString;
+            session_id: z.ZodString;
+            sender_key: z.ZodOptional<z.ZodString>;
+            device_id: z.ZodOptional<z.ZodString>;
+        }, z.core.$strict>;
+    }, z.core.$strict>;
+    createdAt: z.ZodString;
+    attachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+}, z.core.$strict>], "origin">;
+export declare const SocketCryptoConversationRequestSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const SocketCryptoConversationAckSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
+    ok: z.ZodLiteral<true>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+}, z.core.$strict>, z.ZodObject<{
+    ok: z.ZodLiteral<false>;
+    error: z.ZodObject<{
+        code: z.ZodEnum<typeof import("./common.js").ErrorCode>;
+        message: z.ZodString;
+        requestId: z.ZodString;
+        details: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    }, z.core.$strict>;
+}, z.core.$strict>], "ok">;
+export type SocketCryptoConversationAck = z.infer<typeof SocketCryptoConversationAckSchema>;
+export declare const SocketCryptoSyncAvailableSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+}, z.core.$strict>;
+export declare const CryptoProtocolWakeSignalSchema: z.ZodObject<{
+    kind: z.ZodLiteral<"PROTOCOL_WAKE">;
+    queue: z.ZodEnum<{
+        ENCRYPTED: "ENCRYPTED";
+        VERIFICATION: "VERIFICATION";
+    }>;
+    eventId: z.ZodPipe<z.ZodString, z.ZodString>;
+}, z.core.$strict>;
+export type CryptoProtocolWakeSignal = z.infer<typeof CryptoProtocolWakeSignalSchema>;
+export declare const EncryptedUploadRequestSchema: z.ZodObject<{
+    clientUploadId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    ciphertextSize: z.ZodNumber;
+    ciphertextSha256: z.ZodString;
+}, z.core.$strict>;
+export declare const LegacyEncryptedUploadRequestSchema: z.ZodObject<{
+    clientUploadId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    ciphertextSize: z.ZodNumber;
+    ciphertextSha256: z.ZodString;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+}, z.core.$strict>;
+export declare const EncryptedAttachmentSchema: z.ZodObject<{
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    ciphertextSize: z.ZodNumber;
+    ciphertextSha256: z.ZodString;
+    expiresAt: z.ZodOptional<z.ZodString>;
+}, z.core.$strict>;
+export declare const PutRecoveryBackupSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    format: z.ZodLiteral<"MATRIX_ENCRYPTED_EXPORT">;
+    ciphertext: z.ZodString;
+    expectedVersion: z.ZodNumber;
+}, z.core.$strict>;
+export declare const RecoveryBackupSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    format: z.ZodLiteral<"MATRIX_ENCRYPTED_EXPORT">;
+    ciphertext: z.ZodString;
+    backupVersion: z.ZodNumber;
+    updatedAt: z.ZodString;
+}, z.core.$strict>;
+export declare const CryptoDeviceSchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    deviceKeys: z.ZodObject<{
+        user_id: z.ZodString;
+        device_id: z.ZodString;
+        algorithms: z.ZodArray<z.ZodEnum<{
+            "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+            "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>;
+    createdAt: z.ZodString;
+    revokedAt: z.ZodNullable<z.ZodString>;
+}, z.core.$strict>;
+export declare const CryptoLegacyCohortContextSchema: z.ZodObject<{
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    sourceCount: z.ZodNumber;
+    members: z.ZodArray<z.ZodObject<{
+        userId: z.ZodPipe<z.ZodString, z.ZodString>;
+        deviceIds: z.ZodArray<z.ZodString>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const CryptoConversationStateSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    matrixRoomId: z.ZodString;
+    matrixUserId: z.ZodString;
+    mode: z.ZodEnum<{
+        E2EE: "E2EE";
+        LOBBY_AEAD: "LOBBY_AEAD";
+    }>;
+    membershipRevision: z.ZodNumber;
+    migrationState: z.ZodEnum<{
+        LEGACY_PENDING: "LEGACY_PENDING";
+        MIGRATING: "MIGRATING";
+        RECONCILED: "RECONCILED";
+    }>;
+    historyStatus: z.ZodEnum<{
+        KNOWN: "KNOWN";
+        UNKNOWN: "UNKNOWN";
+    }>;
+    eligibleDeviceIds: z.ZodArray<z.ZodString>;
+    legacyCohorts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+        sourceCount: z.ZodNumber;
+        members: z.ZodArray<z.ZodObject<{
+            userId: z.ZodPipe<z.ZodString, z.ZodString>;
+            deviceIds: z.ZodArray<z.ZodString>;
+        }, z.core.$strict>>;
+    }, z.core.$strict>>>;
+}, z.core.$strict>;
+export declare const QueryCryptoKeysSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    userIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const ClaimCryptoKeysSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    deviceId: z.ZodString;
+    targets: z.ZodArray<z.ZodObject<{
+        userId: z.ZodPipe<z.ZodString, z.ZodString>;
+        deviceId: z.ZodString;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const SendCryptoToDeviceSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    deviceId: z.ZodString;
+    transactionId: z.ZodPipe<z.ZodString, z.ZodString>;
+    eventType: z.ZodLiteral<"m.room.encrypted">;
+    recipients: z.ZodArray<z.ZodObject<{
+        userId: z.ZodPipe<z.ZodString, z.ZodString>;
+        deviceId: z.ZodString;
+        content: z.ZodObject<{
+            'org.matrix.msgid': z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+            algorithm: z.ZodLiteral<"m.olm.v1.curve25519-aes-sha2">;
+            sender_key: z.ZodString;
+            ciphertext: z.ZodRecord<z.ZodString, z.ZodObject<{
+                type: z.ZodUnion<readonly [z.ZodLiteral<0>, z.ZodLiteral<1>]>;
+                body: z.ZodString;
+            }, z.core.$strict>>;
+        }, z.core.$strict>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const CryptoToDeviceEventSchema: z.ZodObject<{
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    senderUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+    senderDeviceId: z.ZodString;
+    content: z.ZodObject<{
+        'org.matrix.msgid': z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+        algorithm: z.ZodLiteral<"m.olm.v1.curve25519-aes-sha2">;
+        sender_key: z.ZodString;
+        ciphertext: z.ZodRecord<z.ZodString, z.ZodObject<{
+            type: z.ZodUnion<readonly [z.ZodLiteral<0>, z.ZodLiteral<1>]>;
+            body: z.ZodString;
+        }, z.core.$strict>>;
+    }, z.core.$strict>;
+    createdAt: z.ZodString;
+}, z.core.$strict>;
+export declare const CryptoSyncQuerySchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    after: z.ZodOptional<z.ZodString>;
+    verificationAfter: z.ZodOptional<z.ZodString>;
+    limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strict>;
+export declare const AckCryptoEventsSchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    eventIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const CommitLegacyCiphertextSchema: z.ZodObject<{
+    candidateId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    originalSha256: z.ZodString;
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    envelope: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+        event: z.ZodObject<{
+            algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+            ciphertext: z.ZodString;
+            session_id: z.ZodString;
+            sender_key: z.ZodOptional<z.ZodString>;
+            device_id: z.ZodOptional<z.ZodString>;
+        }, z.core.$strict>;
+    }, z.core.$strict>;
+    attachmentMappings: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        attachmentId: z.ZodPipe<z.ZodString, z.ZodString>;
+        draftId: z.ZodPipe<z.ZodString, z.ZodString>;
+        plaintextSha256: z.ZodString;
+        ciphertextSha256: z.ZodString;
+    }, z.core.$strict>>>;
+}, z.core.$strict>;
+export declare const LegacyCandidateQuerySchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+}, z.core.$strict>;
+export declare const LegacyCandidateSchema: z.ZodObject<{
+    candidateId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    originalSha256: z.ZodString;
+    envelopeSha256: z.ZodString;
+    importerUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+    importerDeviceId: z.ZodString;
+    envelope: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        protocol: z.ZodLiteral<"MATRIX_MEGOLM">;
+        event: z.ZodObject<{
+            algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+            ciphertext: z.ZodString;
+            session_id: z.ZodString;
+            sender_key: z.ZodOptional<z.ZodString>;
+            device_id: z.ZodOptional<z.ZodString>;
+        }, z.core.$strict>;
+    }, z.core.$strict>;
+    attachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+    preparedAt: z.ZodString;
+    state: z.ZodLiteral<"PREPARED">;
+}, z.core.$strict>;
+export declare const LegacyRoundtripAttestationSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    type: z.ZodLiteral<"org.fg.legacy_roundtrip.v1">;
+    candidateId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    originalSha256: z.ZodString;
+    envelopeSha256: z.ZodString;
+    userId: z.ZodPipe<z.ZodString, z.ZodString>;
+    deviceId: z.ZodString;
+    attachmentDigests: z.ZodArray<z.ZodObject<{
+        attachmentId: z.ZodPipe<z.ZodString, z.ZodString>;
+        plaintextSha256: z.ZodString;
+        ciphertextSha256: z.ZodString;
+    }, z.core.$strict>>;
+    signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const LegacyReconcileRequestSchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    expectedSourceCount: z.ZodNumber;
+}, z.core.$strict>;
+export declare const LegacyBatchQuerySchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    after: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+}, z.core.$strict>;
+export declare const LegacySourceManifestSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+    clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    type: z.ZodEnum<{
+        TEXT: "TEXT";
+        IMAGE: "IMAGE";
+    }>;
+    content: z.ZodString;
+    replyToId: z.ZodNullable<z.ZodPipe<z.ZodString, z.ZodString>>;
+    mentionedUserIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+    createdAt: z.ZodString;
+    updatedAt: z.ZodString;
+    attachments: z.ZodArray<z.ZodObject<{
+        id: z.ZodPipe<z.ZodString, z.ZodString>;
+        fileName: z.ZodString;
+        fileSize: z.ZodNumber;
+        mimeType: z.ZodEnum<{
+            "image/jpeg": "image/jpeg";
+            "image/png": "image/png";
+            "image/webp": "image/webp";
+        }>;
+        plaintextSha256: z.ZodString;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const LegacyMigrationItemSchema: z.ZodObject<{
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    originalSha256: z.ZodString;
+    createdAt: z.ZodString;
+    senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+    content: z.ZodString;
+    attachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+    sourceManifest: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+        clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        type: z.ZodEnum<{
+            TEXT: "TEXT";
+            IMAGE: "IMAGE";
+        }>;
+        content: z.ZodString;
+        replyToId: z.ZodNullable<z.ZodPipe<z.ZodString, z.ZodString>>;
+        mentionedUserIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+        createdAt: z.ZodString;
+        updatedAt: z.ZodString;
+        attachments: z.ZodArray<z.ZodObject<{
+            id: z.ZodPipe<z.ZodString, z.ZodString>;
+            fileName: z.ZodString;
+            fileSize: z.ZodNumber;
+            mimeType: z.ZodEnum<{
+                "image/jpeg": "image/jpeg";
+                "image/png": "image/png";
+                "image/webp": "image/webp";
+            }>;
+            plaintextSha256: z.ZodString;
+        }, z.core.$strict>>;
+    }, z.core.$strict>;
+}, z.core.$strict>;
+export declare const DiscloseChatReportSchema: z.ZodObject<{
+    consent: z.ZodLiteral<true>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    reason: z.ZodString;
+    selectedMessages: z.ZodArray<z.ZodObject<{
+        messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        text: z.ZodString;
+        source: z.ZodEnum<{
+            LEGACY_IMPORT: "LEGACY_IMPORT";
+            USER_DISCLOSED: "USER_DISCLOSED";
+        }>;
+        reportAttachmentIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const ReportImageDisclosureSchema: z.ZodObject<{
+    consent: z.ZodLiteral<true>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    clientUploadId: z.ZodPipe<z.ZodString, z.ZodString>;
+    plaintextSize: z.ZodNumber;
+}, z.core.$strict>;
+export declare const ReportAttachmentReceiptSchema: z.ZodObject<{
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    expiresAt: z.ZodString;
+}, z.core.$strict>;
+export declare const ReadChatReportSchema: z.ZodObject<{}, z.core.$strict>;
+export declare const ReportDisclosedTextPayloadSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    reportId: z.ZodPipe<z.ZodString, z.ZodString>;
+    reporterId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    reason: z.ZodString;
+    text: z.ZodString;
+    reportAttachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+    source: z.ZodLiteral<"USER_DISCLOSED">;
+    authenticity: z.ZodLiteral<"USER_SUPPLIED_UNVERIFIED">;
+}, z.core.$strict>;
+export declare const DisclosedReportSchema: z.ZodObject<{
+    id: z.ZodPipe<z.ZodString, z.ZodString>;
+    selectedMessages: z.ZodArray<z.ZodObject<{
+        evidenceId: z.ZodPipe<z.ZodString, z.ZodString>;
+        messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        text: z.ZodString;
+        reason: z.ZodString;
+        source: z.ZodLiteral<"USER_DISCLOSED">;
+        authenticity: z.ZodLiteral<"USER_SUPPLIED_UNVERIFIED">;
+        reportAttachmentIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const LobbyStoredMessageSchema: z.ZodObject<{
+    version: z.ZodLiteral<1>;
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+    content: z.ZodString;
+    attachments: z.ZodArray<z.ZodObject<{
+        id: z.ZodPipe<z.ZodString, z.ZodString>;
+        fileName: z.ZodLiteral<"image.webp">;
+        fileSize: z.ZodNumber;
+        mimeType: z.ZodLiteral<"image/webp">;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const LegacyImageQuerySchema: z.ZodObject<{
+    deviceId: z.ZodString;
+    cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+    messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+}, z.core.$strict>;
+export declare const MatrixEncryptedAttachmentSecretSchema: z.ZodObject<{
+    v: z.ZodLiteral<"v2">;
+    key: z.ZodObject<{
+        kty: z.ZodLiteral<"oct">;
+        key_ops: z.ZodArray<z.ZodEnum<{
+            encrypt: "encrypt";
+            decrypt: "decrypt";
+        }>>;
+        alg: z.ZodLiteral<"A256CTR">;
+        k: z.ZodString;
+        ext: z.ZodLiteral<true>;
+    }, z.core.$strict>;
+    iv: z.ZodString;
+    hashes: z.ZodObject<{
+        sha256: z.ZodString;
+    }, z.core.$strict>;
+}, z.core.$strict>;
+export declare const LegacyImportedContentSchema: z.ZodObject<{
+    msgtype: z.ZodLiteral<"org.fg.legacy_import.v1">;
+    fg: z.ZodObject<{
+        candidateId: z.ZodPipe<z.ZodString, z.ZodString>;
+        cohortId: z.ZodPipe<z.ZodString, z.ZodString>;
+        originalSha256: z.ZodString;
+        importerUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+        importerDeviceId: z.ZodString;
+        version: z.ZodLiteral<1>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        membershipRevision: z.ZodNumber;
+    }, z.core.$strict>;
+    source: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+        clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        type: z.ZodEnum<{
+            TEXT: "TEXT";
+            IMAGE: "IMAGE";
+        }>;
+        content: z.ZodString;
+        replyToId: z.ZodNullable<z.ZodPipe<z.ZodString, z.ZodString>>;
+        mentionedUserIds: z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>;
+        createdAt: z.ZodString;
+        updatedAt: z.ZodString;
+        attachments: z.ZodArray<z.ZodObject<{
+            id: z.ZodPipe<z.ZodString, z.ZodString>;
+            fileName: z.ZodString;
+            fileSize: z.ZodNumber;
+            mimeType: z.ZodEnum<{
+                "image/jpeg": "image/jpeg";
+                "image/png": "image/png";
+                "image/webp": "image/webp";
+            }>;
+            plaintextSha256: z.ZodString;
+        }, z.core.$strict>>;
+    }, z.core.$strict>;
+    images: z.ZodArray<z.ZodObject<{
+        attachmentId: z.ZodPipe<z.ZodString, z.ZodString>;
+        secret: z.ZodObject<{
+            v: z.ZodLiteral<"v2">;
+            key: z.ZodObject<{
+                kty: z.ZodLiteral<"oct">;
+                key_ops: z.ZodArray<z.ZodEnum<{
+                    encrypt: "encrypt";
+                    decrypt: "decrypt";
+                }>>;
+                alg: z.ZodLiteral<"A256CTR">;
+                k: z.ZodString;
+                ext: z.ZodLiteral<true>;
+            }, z.core.$strict>;
+            iv: z.ZodString;
+            hashes: z.ZodObject<{
+                sha256: z.ZodString;
+            }, z.core.$strict>;
+        }, z.core.$strict>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const CryptoDecryptedMessageSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
+    msgtype: z.ZodLiteral<"m.text">;
+    body: z.ZodString;
+    fg: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderDeviceId: z.ZodString;
+        membershipRevision: z.ZodNumber;
+        mentionedUserIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+        reply: z.ZodOptional<z.ZodObject<{
+            messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+            previewText: z.ZodString;
+        }, z.core.$strict>>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    msgtype: z.ZodLiteral<"m.image">;
+    body: z.ZodString;
+    fg: z.ZodObject<{
+        version: z.ZodLiteral<1>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        clientMessageId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderDeviceId: z.ZodString;
+        membershipRevision: z.ZodNumber;
+        mentionedUserIds: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodString, z.ZodString>>>;
+        reply: z.ZodOptional<z.ZodObject<{
+            messageId: z.ZodPipe<z.ZodString, z.ZodString>;
+            previewText: z.ZodString;
+        }, z.core.$strict>>;
+    }, z.core.$strict>;
+    images: z.ZodArray<z.ZodObject<{
+        attachmentId: z.ZodPipe<z.ZodString, z.ZodString>;
+        secret: z.ZodObject<{
+            v: z.ZodLiteral<"v2">;
+            key: z.ZodObject<{
+                kty: z.ZodLiteral<"oct">;
+                key_ops: z.ZodArray<z.ZodEnum<{
+                    encrypt: "encrypt";
+                    decrypt: "decrypt";
+                }>>;
+                alg: z.ZodLiteral<"A256CTR">;
+                k: z.ZodString;
+                ext: z.ZodLiteral<true>;
+            }, z.core.$strict>;
+            iv: z.ZodString;
+            hashes: z.ZodObject<{
+                sha256: z.ZodString;
+            }, z.core.$strict>;
+        }, z.core.$strict>;
+        fileName: z.ZodString;
+        mimeType: z.ZodEnum<{
+            "image/jpeg": "image/jpeg";
+            "image/png": "image/png";
+            "image/webp": "image/webp";
+        }>;
+        plaintextSize: z.ZodNumber;
+        width: z.ZodNumber;
+        height: z.ZodNumber;
+    }, z.core.$strict>>;
+}, z.core.$strict>], "msgtype">;
+export declare const CryptoVerificationContentSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
+    eventType: z.ZodLiteral<"m.room_key.withheld">;
+    content: z.ZodObject<{
+        algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+        code: z.ZodEnum<{
+            "m.blacklisted": "m.blacklisted";
+            "m.unverified": "m.unverified";
+            "m.unauthorised": "m.unauthorised";
+            "m.unavailable": "m.unavailable";
+            "m.no_olm": "m.no_olm";
+        }>;
+        from_device: z.ZodOptional<z.ZodString>;
+        reason: z.ZodOptional<z.ZodString>;
+        room_id: z.ZodOptional<z.ZodString>;
+        sender_key: z.ZodString;
+        session_id: z.ZodOptional<z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.request">;
+    content: z.ZodObject<{
+        from_device: z.ZodString;
+        methods: z.ZodArray<z.ZodLiteral<"m.sas.v1">>;
+        timestamp: z.ZodNumber;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.ready">;
+    content: z.ZodObject<{
+        from_device: z.ZodString;
+        methods: z.ZodArray<z.ZodLiteral<"m.sas.v1">>;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.start">;
+    content: z.ZodObject<{
+        from_device: z.ZodString;
+        method: z.ZodLiteral<"m.sas.v1">;
+        key_agreement_protocols: z.ZodArray<z.ZodString>;
+        hashes: z.ZodArray<z.ZodString>;
+        message_authentication_codes: z.ZodArray<z.ZodString>;
+        short_authentication_string: z.ZodArray<z.ZodString>;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.accept">;
+    content: z.ZodObject<{
+        method: z.ZodOptional<z.ZodLiteral<"m.sas.v1">>;
+        key_agreement_protocol: z.ZodString;
+        hash: z.ZodString;
+        message_authentication_code: z.ZodString;
+        short_authentication_string: z.ZodArray<z.ZodString>;
+        commitment: z.ZodString;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.key">;
+    content: z.ZodObject<{
+        key: z.ZodString;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.mac">;
+    content: z.ZodObject<{
+        mac: z.ZodRecord<z.ZodString, z.ZodString>;
+        keys: z.ZodString;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.done">;
+    content: z.ZodObject<{
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>, z.ZodObject<{
+    eventType: z.ZodLiteral<"m.key.verification.cancel">;
+    content: z.ZodObject<{
+        code: z.ZodString;
+        reason: z.ZodString;
+        transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+    }, z.core.$strict>;
+}, z.core.$strict>], "eventType">;
+export declare const SendCryptoVerificationSchema: z.ZodObject<{
+    conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+    membershipRevision: z.ZodNumber;
+    cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+    deviceId: z.ZodString;
+    transactionId: z.ZodPipe<z.ZodString, z.ZodString>;
+    recipientUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+    recipientDeviceId: z.ZodString;
+    eventType: z.ZodString;
+    content: z.ZodUnknown;
+}, z.core.$strict>;
+export declare const CryptoKeysResponseSchema: z.ZodObject<{
+    membershipRevision: z.ZodNumber;
+    users: z.ZodArray<z.ZodObject<{
+        userId: z.ZodPipe<z.ZodString, z.ZodString>;
+        matrixUserId: z.ZodString;
+        devices: z.ZodArray<z.ZodObject<{
+            deviceId: z.ZodString;
+            deviceKeys: z.ZodObject<{
+                user_id: z.ZodString;
+                device_id: z.ZodString;
+                algorithms: z.ZodArray<z.ZodEnum<{
+                    "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+                    "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+                }>>;
+                keys: z.ZodRecord<z.ZodString, z.ZodString>;
+                signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+            }, z.core.$strict>;
+            createdAt: z.ZodString;
+            revokedAt: z.ZodNullable<z.ZodString>;
+        }, z.core.$strict>>;
+        identityKeys: z.ZodNullable<z.ZodObject<{
+            masterKey: z.ZodObject<{
+                user_id: z.ZodString;
+                usage: z.ZodArray<z.ZodEnum<{
+                    master: "master";
+                    self_signing: "self_signing";
+                    user_signing: "user_signing";
+                }>>;
+                keys: z.ZodRecord<z.ZodString, z.ZodString>;
+                signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+            }, z.core.$strict>;
+            selfSigningKey: z.ZodObject<{
+                user_id: z.ZodString;
+                usage: z.ZodArray<z.ZodEnum<{
+                    master: "master";
+                    self_signing: "self_signing";
+                    user_signing: "user_signing";
+                }>>;
+                keys: z.ZodRecord<z.ZodString, z.ZodString>;
+                signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+            }, z.core.$strict>;
+            userSigningKey: z.ZodObject<{
+                user_id: z.ZodString;
+                usage: z.ZodArray<z.ZodEnum<{
+                    master: "master";
+                    self_signing: "self_signing";
+                    user_signing: "user_signing";
+                }>>;
+                keys: z.ZodRecord<z.ZodString, z.ZodString>;
+                signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+            }, z.core.$strict>;
+        }, z.core.$strict>>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const CryptoClaimResponseSchema: z.ZodObject<{
+    membershipRevision: z.ZodNumber;
+    keys: z.ZodArray<z.ZodObject<{
+        userId: z.ZodPipe<z.ZodString, z.ZodString>;
+        deviceId: z.ZodString;
+        keyId: z.ZodString;
+        signedKey: z.ZodObject<{
+            key: z.ZodString;
+            signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+        }, z.core.$strict>;
+    }, z.core.$strict>>;
+}, z.core.$strict>;
+export declare const SignedCryptoDeviceKeysSchema: z.ZodObject<{
+    user_id: z.ZodString;
+    device_id: z.ZodString;
+    algorithms: z.ZodArray<z.ZodEnum<{
+        "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+        "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+    }>>;
+    keys: z.ZodRecord<z.ZodString, z.ZodString>;
+    signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+}, z.core.$strict>;
+export declare const UploadCryptoSignaturesSchema: z.ZodObject<{
+    signedKeys: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodPipe<z.ZodString, z.ZodString>, z.ZodUnion<readonly [z.ZodObject<{
+        user_id: z.ZodString;
+        device_id: z.ZodString;
+        algorithms: z.ZodArray<z.ZodEnum<{
+            "m.megolm.v1.aes-sha2": "m.megolm.v1.aes-sha2";
+            "m.olm.v1.curve25519-aes-sha2": "m.olm.v1.curve25519-aes-sha2";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, z.core.$strict>, z.ZodObject<{
+        user_id: z.ZodString;
+        usage: z.ZodArray<z.ZodEnum<{
+            master: "master";
+            self_signing: "self_signing";
+            user_signing: "user_signing";
+        }>>;
+        keys: z.ZodRecord<z.ZodString, z.ZodString>;
+        signatures: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodString>>>;
+    }, z.core.$strict>]>>>;
+}, z.core.$strict>;
+export declare const CryptoSyncResponseSchema: z.ZodObject<{
+    oneTimeKeyCounts: z.ZodObject<{
+        signed_curve25519: z.ZodNumber;
+    }, z.core.$strict>;
+    encrypted: z.ZodObject<{
+        items: z.ZodArray<z.ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>>;
+        nextCursor: z.ZodNullable<z.ZodString>;
+        hasMore: z.ZodBoolean;
+    }, z.core.$strict>;
+    verification: z.ZodArray<z.ZodObject<{
+        id: z.ZodPipe<z.ZodString, z.ZodString>;
+        conversationId: z.ZodPipe<z.ZodString, z.ZodString>;
+        membershipRevision: z.ZodNumber;
+        cohortId: z.ZodOptional<z.ZodPipe<z.ZodString, z.ZodString>>;
+        senderUserId: z.ZodPipe<z.ZodString, z.ZodString>;
+        senderDeviceId: z.ZodString;
+        event: z.ZodDiscriminatedUnion<[z.ZodObject<{
+            eventType: z.ZodLiteral<"m.room_key.withheld">;
+            content: z.ZodObject<{
+                algorithm: z.ZodLiteral<"m.megolm.v1.aes-sha2">;
+                code: z.ZodEnum<{
+                    "m.blacklisted": "m.blacklisted";
+                    "m.unverified": "m.unverified";
+                    "m.unauthorised": "m.unauthorised";
+                    "m.unavailable": "m.unavailable";
+                    "m.no_olm": "m.no_olm";
+                }>;
+                from_device: z.ZodOptional<z.ZodString>;
+                reason: z.ZodOptional<z.ZodString>;
+                room_id: z.ZodOptional<z.ZodString>;
+                sender_key: z.ZodString;
+                session_id: z.ZodOptional<z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.request">;
+            content: z.ZodObject<{
+                from_device: z.ZodString;
+                methods: z.ZodArray<z.ZodLiteral<"m.sas.v1">>;
+                timestamp: z.ZodNumber;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.ready">;
+            content: z.ZodObject<{
+                from_device: z.ZodString;
+                methods: z.ZodArray<z.ZodLiteral<"m.sas.v1">>;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.start">;
+            content: z.ZodObject<{
+                from_device: z.ZodString;
+                method: z.ZodLiteral<"m.sas.v1">;
+                key_agreement_protocols: z.ZodArray<z.ZodString>;
+                hashes: z.ZodArray<z.ZodString>;
+                message_authentication_codes: z.ZodArray<z.ZodString>;
+                short_authentication_string: z.ZodArray<z.ZodString>;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.accept">;
+            content: z.ZodObject<{
+                method: z.ZodOptional<z.ZodLiteral<"m.sas.v1">>;
+                key_agreement_protocol: z.ZodString;
+                hash: z.ZodString;
+                message_authentication_code: z.ZodString;
+                short_authentication_string: z.ZodArray<z.ZodString>;
+                commitment: z.ZodString;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.key">;
+            content: z.ZodObject<{
+                key: z.ZodString;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.mac">;
+            content: z.ZodObject<{
+                mac: z.ZodRecord<z.ZodString, z.ZodString>;
+                keys: z.ZodString;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.done">;
+            content: z.ZodObject<{
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>, z.ZodObject<{
+            eventType: z.ZodLiteral<"m.key.verification.cancel">;
+            content: z.ZodObject<{
+                code: z.ZodString;
+                reason: z.ZodString;
+                transaction_id: z.ZodPipe<z.ZodString, z.ZodString>;
+            }, z.core.$strict>;
+        }, z.core.$strict>], "eventType">;
+        createdAt: z.ZodString;
+    }, z.core.$strict>>;
+    verificationCursor: z.ZodNullable<z.ZodString>;
+}, z.core.$strict>;
+export declare const CryptoApiEndpointRegistry: ApiEndpointDefinition[];
+export type SendEncryptedMessage = z.infer<typeof SendEncryptedMessageSchema>;
+export type PrivateMessageEnvelope = z.infer<typeof PrivateMessageEnvelopeSchema>;
+export type LobbyStorageEnvelope = z.infer<typeof LobbyStorageEnvelopeSchema>;
+export type RegisterCryptoDevice = z.infer<typeof RegisterCryptoDeviceSchema>;
+export type EncryptedMessageDTO = z.infer<typeof EncryptedMessageSchema>;
+export type CryptoConversationStateDTO = z.infer<typeof CryptoConversationStateSchema>;
+export type SendCryptoToDevice = z.infer<typeof SendCryptoToDeviceSchema>;

@@ -1,7 +1,7 @@
+import {InitialLoading} from '../../components/ui/InitialLoading.js';
 import React, { useCallback } from 'react';
 import {Link,useInRouterContext} from 'react-router-dom';
 import { useAuth } from './AuthProvider.js';
-import { Spinner } from '../../components/ui/Spinner.js';
 import { Button } from '../../components/ui/Button.js';
 import { Card } from '../../components/ui/Card.js';
 
@@ -19,23 +19,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     });
   }, [refetchUser]);
 
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
-          gap: '16px',
-        }}
-      >
-        <Spinner size={40} testId="auth-loading-spinner" />
-        <span style={{ color: 'var(--text-sub)' }}>Đang kiểm tra phiên làm việc...</span>
-      </div>
-    );
-  }
+  if (isLoading) return <InitialLoading pending layout="bootstrap" label="Đang kiểm tra phiên làm việc" testId="auth-loading-spinner"/>;
 
   if (isError || !user) {
     const isForbidden = error?.message?.includes('403');

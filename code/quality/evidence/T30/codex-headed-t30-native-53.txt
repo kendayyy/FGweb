@@ -1,0 +1,33 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/rtp-window-reviewed2/screen-share-diagnostic.spec.ts --config quality/evidence/T30/rtp-window-reviewed2/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:45192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.6m)
+
+
+  1) quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: Post-failure media observation incomplete; inspect sanitized evidence
+
+       at failure-observer.mjs:43
+
+      41 |  }catch{failed=true;record.failure='POST_FAILURE_OBSERVATION_FAILED';}
+      42 |  finally{clearTimeout(timer);record.completedAt=new Date().toISOString();fs.writeFileSync(path.join(target,'post-failure-media-state.json'),JSON.stringify(record,null,2)+'\n',{flag:'wx'});}
+    > 43 |  if(failed)throw Error('Post-failure media observation incomplete; inspect sanitized evidence');
+         |                  ^
+      44 | }
+      45 |
+        at observeFailure (E:\FGweb\code\quality\evidence\T30\rtp-window-reviewed2\failure-observer.mjs:43:18)
+        at E:\FGweb\code\quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:75:20
+
+    Error Context: .cache\t30\playwright-results-rtp-window2\screen-share-diagnostic-T3-29b57-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results-rtp-window2\screen-share-diagnostic-T3-29b57-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\rtp-window-reviewed2\screen-share-diagnostic.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

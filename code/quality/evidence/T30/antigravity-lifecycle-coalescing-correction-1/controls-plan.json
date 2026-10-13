@@ -1,0 +1,112 @@
+{
+  "version": "1.0.0",
+  "task": "T30",
+  "proposalScope": "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1",
+  "supportHarness": "lifecycle-coalescing-support-reviewed1.mjs",
+  "nativeAcceptanceClaim": false,
+  "preflight": {
+    "sourcePinVerification": {
+      "originalTsSha256": "425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865",
+      "compiledJsSha256": "7440b21cf469f64fbc188525d6deda2401b74e7a3f5942e082a3971b69972260"
+    },
+    "bodyEquivalence": {
+      "reconcilePassMatchesReconcileGroupOriginalLines74To104": true,
+      "countedInsertionAnchors": 3
+    },
+    "interfaceVisibility": {
+      "reconcileGroupRetainsPrivate": true
+    }
+  },
+  "syntheticParameters": {
+    "sdkLatencyMs": 40,
+    "sdkLatencyDisclaimer": "Controlled test-only SDK delay for deterministic scheduling; no native capacity or real-world performance claim",
+    "syntheticFaultMessage": "NATIVE_SFU_SYNTHETIC_FAULT_INSTANCE"
+  },
+  "controls": [
+    {
+      "id": "CTL1",
+      "name": "ordinaryBurstBounded",
+      "description": "Fixed 4 burst callers for the same callGroupId bounded to at most 2 native reads via coalescing",
+      "synchronization": "Deterministic barrier gate held on listRooms pass 1 until callers 2, 3, 4 are queued in pendingOrdinary",
+      "burstSize": 4,
+      "maxExpectedReads": 2,
+      "assertions": [
+        "ctl1Reads <= 2",
+        "Promise.all([t1, t2, t3, t4]) resolves successfully"
+      ]
+    },
+    {
+      "id": "CTL2",
+      "name": "differentGroupsIndependent",
+      "description": "Concurrent reconcileGroup requests for distinct callGroupId1 and callGroupId2 execute independent passes",
+      "synchronization": "Unbounded parallel dispatch across distinct group IDs",
+      "minExpectedReads": 2,
+      "assertions": [
+        "ctl2Reads >= 2",
+        "Promise.all([g1, g2]) resolves successfully"
+      ]
+    },
+    {
+      "id": "CTL3",
+      "name": "triggerWhileTrailingNoLostWakeup",
+      "description": "A trigger arriving while a trailing pass is already executing initiates a third pass without lost wakeup",
+      "synchronization": "Two-phase deterministic barrier (pass 1 gate followed by trailing pass 2 gate)",
+      "minExpectedReads": 3,
+      "assertions": [
+        "ctl3Reads >= 3",
+        "Promise.all([p1, p2, p3]) resolves successfully"
+      ]
+    },
+    {
+      "id": "CTL4",
+      "name": "distinctEndedProcessedIndividually",
+      "description": "Distinct ended events with specific {identity, at} payloads each execute an individual canonical reconcilePass",
+      "synchronization": "Concurrent dispatch of distinct ended payloads",
+      "minExpectedReads": 2,
+      "assertions": [
+        "ctl4Reads >= 2",
+        "Promise.all([endedA, endedB]) resolves successfully"
+      ]
+    },
+    {
+      "id": "CTL5",
+      "name": "exactErrorObjectPreservedAndRecovery",
+      "description": "Injected synthetic error instance is propagated unchanged to all concurrent callers and clears for subsequent recovery",
+      "synchronization": "Concurrent dispatch during faulted native client state",
+      "assertions": [
+        "err1 === syntheticFault (strict object identity)",
+        "err2 === syntheticFault (strict object identity)",
+        "subsequent non-faulted call resolves cleanly"
+      ]
+    },
+    {
+      "id": "CTL6",
+      "name": "shutdownDrainsAcceptedAndRejectsNew",
+      "description": "onModuleDestroy drains all previously accepted ordinary and ended jobs to completion before closing database pool, while rejecting new incoming calls with 503",
+      "synchronization": "Deterministic barrier holding pass 1 while job 2 and ended job queue, then triggering onModuleDestroy",
+      "assertions": [
+        "new call rejected with status 503 or message containing 'shutting down'",
+        "all accepted jobs (drainJob1, drainJob2, drainJobEnded) resolve to completion",
+        "pool.end is invoked strictly after all accepted jobs finish",
+        "onModuleDestroy promise resolves"
+      ]
+    },
+    {
+      "id": "CTL7",
+      "name": "signedDuplicateWebhookReconciles",
+      "description": "Duplicate signed webhook payloads are recognized and processed idempotently",
+      "synchronization": "Sequential webhook dispatch with identical payload ID",
+      "assertions": [
+        "res1.success === true",
+        "res2.success === true && res2.duplicate === true"
+      ]
+    }
+  ],
+  "teardown": {
+    "releaseGates": true,
+    "restoreNativeMethod": true,
+    "restoreClosingFlag": true,
+    "restorePoolEnd": true,
+    "disableAsyncLocalStorage": true
+  }
+}

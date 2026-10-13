@@ -1,0 +1,106 @@
+### T30 Proposal Delivery: Lifecycle RED Probe & Coalescing Design Specification
+
+**Proposal Scope**: `quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/**`  
+**Execution Context**: Sequential proposal-only, Gemini 3.6 Flash (High), No Anti2.  
+**TDD Discipline**: Failing test/probe delivered **BEFORE** any product code modification; zero product code written.  
+**Acceptance Status**: `nativeAcceptance: false` (T30 remains in progress; all 80 prior checkpoints preserved).  
+**Host & Runtime Safety**: Zero commands executed (`run_command` unused); zero modifications to application source, builds, environments, ledger, mutable fixtures, or frozen tests.
+
+---
+
+### 1. Evidence Context & Mechanism Summary
+
+1. **Native60 Telemetry (`native60-boundary-inspection2.json`)**:
+   - 5 gateway room-lock statement timeouts (`57014`) on backend PIDs 6228, 6229, 6230, 6231.
+   - 15 matching PostgreSQL wait samples showed gateway queries waiting on row locks for `rooms`, blocked by API backend PIDs (6254, 6295, etc.) executing `CallLifecycleService.reconcileGroup` with holds lasting ~1.0s to ~2.2s.
+2. **Native61 Execution (`native61-photo-timing-review1.json`)**:
+   - Exit code 1: Two actors joined; third actor (Hà) remained in initial room-loading; original 5s Nhóm gọi region visibility failed.
+   - Removing observer instrumentation did **not** remedy the underlying lock contention.
+3. **Contention Mechanism in Compiled Source (`CallLifecycleService`)**:
+   - `reconcileGroup` executes `SELECT id FROM rooms WHERE id=$1 FOR UPDATE` within a transaction.
+   - While holding the exclusive lock, it performs remote LiveKit SFU RPCs (`listRooms`, `listParticipants`) and runs queries on `call_members` and `call_admissions`.
+   - Webhook arrivals and the 1000ms periodic sweep invoke `reconcileGroup` unconditionally without in-flight checks or coalescing.
+   - Multiple concurrent triggers queue behind `rooms FOR UPDATE`, executing serially and multiplying exclusive lock hold time ($N \times T$), exhausting connection pools and causing `57014` statement timeouts.
+
+---
+
+### 2. Candidate Internal Design: Per-Group Coalescing
+
+- **Concept**: Coalescing of ordinary reconciliation triggers scoped strictly per call group ID (`Map<string, GroupCoalescer>`).
+- **Mechanism**:
+  - While an in-flight pass runs for group $G$, subsequent triggers set a `needsTrailingPass` flag and accumulate screen-share `ended` events.
+  - When the in-flight pass completes, if `needsTrailingPass` is set, exactly **one trailing pass** executes.
+- **Bounded Work**: For $N$ concurrent triggers on group $G$, work is bounded to at most **2 passes** ($O(1)$) instead of $N$ serialized passes ($O(N)$).
+- **Fresh Read Guarantee**: The trailing pass executes after all burst triggers have arrived, performing fresh LiveKit SFU and PostgreSQL reads to ensure eventual consistency.
+- **Screen Share Safety**: Screen-ended `{identity, at}` event payloads are accumulated so no track unpublish event is dropped.
+- **Strict Invariants**:
+  - `rooms FOR UPDATE` and `call_groups FOR UPDATE` lock modes remain strictly exclusive (no `SHARE` relaxation).
+  - Transaction boundaries and remote RPC placement remain strictly preserved.
+  - Actor and `liveLease` validations remain intact.
+  - Deadlines (45000ms deadline, 5s assertion) and 1000ms sweep interval remain immutable.
+  - No event processing is skipped.
+
+---
+
+### 3. Delivered Artifacts Summary
+
+All artifacts have been created strictly in `quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/`:
+
+1. [probe-harness.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/probe-harness.mjs):
+   - Executable probe executing actual compiled `CallLifecycleService` from Build 12.
+   - Boots full ephemeral PostgreSQL migrated schema via Drizzle migrations and seeds 6 genuine actors.
+   - Creates recruitment, active play session, call group, and admissions through canonical API flow.
+   - **Counted Insertion 1**: Clears `lifecycleService.timer` to isolate background sweeps.
+   - **Counted Insertion 2**: Test-only local adapter wrapping `lifecycleService.native` with a measured 40ms delay representing realistic SFU round-trip latency (clearly marked as synthetic, preserving SDK return types).
+   - **Counted Insertion 3**: Instruments `reconcileGroup` to count executions and measure cumulative lock durations.
+   - **Intended RED Assertion**: Fires 4 concurrent triggers and asserts `actualPasses <= 2`. Under the current un-coalesced source, all 4 triggers execute sequentially (`actualPasses === 4`), failing with exit code 1.
+   - **Control Assertions**: Proves call group remains `OPEN`, room and member rows intact, genuine actor/lock SQL executed.
+   - **Cleanup**: Ephemeral schema dropped CASCADE, app closed, pool ended, reporting saved to `probe-report.json`.
+
+2. [plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/plan.json):
+   - Structured JSON specification with telemetry analysis, candidate design, invariants, and probe parameters.
+
+3. [shortplan.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/shortplan.md):
+   - Comprehensive human-readable specification detailing the problem mechanism, per-group coalescing design, in-depth uncertainty analysis (error handling, drain, stale snapshots, ended event ordering, multi-group isolation, webhook dedup), and root run instructions.
+
+4. [controls-plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/controls-plan.json):
+   - Nine validation controls covering schema migration, actor seeding, compiled service resolution, timer isolation, synthetic delay transparency, concurrent burst execution, RED assertion signature, actor/lock controls, and cleanup settlement.
+
+---
+
+### 4. Exact Source Pins & Reversal
+
+- **Source Pins**:
+  - `apps/api/dist/modules/calls/call-lifecycle.service.js`:
+    - Lines 42–44: Background sweep timer setup (`this.timer = setInterval(...)`).
+    - Lines 64–70: `lock()` acquiring exclusive `SELECT id FROM rooms WHERE id=$1 FOR UPDATE`.
+    - Lines 126–177: `reconcileGroup(id, ended)` executing un-coalesced transaction and remote SFU RPCs.
+  - `packages/database/migrations/`: Canonical Drizzle database migration files.
+- **Reversal Outside Insertion Anchors**:
+  - Zero files modified outside `quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/**`.
+  - Reversal is 100% clean by ignoring or deleting this directory.
+
+---
+
+### 5. Root Execution & Expected RED Verification Instructions
+
+Root can run the test probe with:
+```powershell
+node quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/probe-harness.mjs
+```
+
+- **Expected Exit Code**: `1` (AssertionError).
+- **Expected Error Signature**:
+  ```
+  ======================================================================
+  PROBE HARNESS RESULT: EXPECTED RED REPRODUCTION CONFIRMED
+  ======================================================================
+  [RED REPRODUCTION CONFIRMED] Redundant overlapping reconciliation executed 4 full passes for 4 concurrent triggers (expected at most 2 under per-group coalescing). Native RPCs: 4 listRooms, 4 listParticipants. Cumulative lock duration: ...ms across 4 sequential acquisitions.
+  ======================================================================
+  ```
+- **Verification of Probe Cleanliness**:
+  - Inspect `probe-report.json`:
+    - `schemaRemoved: true`, `appClosed: true`, `poolClosed: true`
+    - `controlVerification.callGroupState: "OPEN"`, `controlVerification.roomExists: true`
+    - `testResult: "EXPECTED_RED_CONFIRMED"`
+- **Distinction from Errors**: Exit code `1` indicates expected test assertion RED reproduction. Exit code `2` would indicate an unexpected setup/runtime error.

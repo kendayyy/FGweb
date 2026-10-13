@@ -1,0 +1,4 @@
+import fs from 'node:fs';const dir='quality/evidence/LOADING3D-FE';let source=fs.readFileSync(dir+'/recover-aborted-fixture.mjs','utf8');
+source=source.replace("browser=await chromium.connectOverCDP('http://127.0.0.1:'+port,{noDefaults:true});try{", "try{browser=await chromium.connectOverCDP('http://127.0.0.1:'+port,{noDefaults:true});}catch(problem){if(!String(problem).includes('ECONNREFUSED'))throw problem;}if(browser)try{");
+source=source.replace('cleanupObservationNotReplay:true','cleanupObservationNotReplay:true,photoUnavailableIfBrowserAlreadyExited:!event');
+fs.writeFileSync(dir+'/recover-aborted-fixture-round2.mjs',source,{flag:'wx'});console.log('Preserved RED cleanup1; stale port ECONNREFUSED only means no live browser to capture, explicitly no photo. Still require profile/schema/runtime removal and main absence.');

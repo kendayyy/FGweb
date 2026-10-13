@@ -1,0 +1,83 @@
+{
+  "task": "T30",
+  "agent": "Antigravity",
+  "model": "Gemini 3.6 Flash (High)",
+  "reviewStatus": "correction-proposal-only",
+  "nativeAcceptance": false,
+  "scopeDirectory": "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1",
+  "sourcePins": {
+    "originalTypeScript": {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "sha256": "425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865"
+    },
+    "compiledJavaScript": {
+      "path": "apps/api/dist/modules/calls/call-lifecycle.service.js",
+      "sha256": "7440b21cf469f64fbc188525d6deda2401b74e7a3f5942e082a3971b69972260"
+    }
+  },
+  "reviewCorrections": [
+    {
+      "id": "C1_SHUTDOWN_DRAIN",
+      "issue": "runGroup worker while(!this.closing && ...) was cancelling accepted ordinary/ended jobs on shutdown",
+      "correction": "Removed !this.closing from the runGroup worker loop. All already accepted ordinary and ended jobs drain completely to completion. New incoming reconcileGroup calls are rejected with 503 Service Unavailable when closing is true. onModuleDestroy awaits both this.running sweep and all inFlight worker promises before pool.end(). Distinct ended events each execute a canonical pass without lost ack."
+    },
+    {
+      "id": "C2_SETTLED_PROMISE_CLEANUP",
+      "issue": "job.finally(() => cleanup) created an unhandled rejection derivative when the caller handled their deferred promise separately",
+      "correction": "Tracking in-flight promises uses settled handlers job.then(() => inFlight.delete(job), () => inFlight.delete(job)). Callers awaiting the deferred promise receive the exact error, while the service tracking set cleans up without generating unhandled rejection events."
+    },
+    {
+      "id": "C3_PRIVATE_VISIBILITY",
+      "issue": "reconcileGroup visibility was previously widened",
+      "correction": "reconcileGroup strictly retains its original private visibility. No public widening."
+    },
+    {
+      "id": "C4_BYTE_EXACT_BODY",
+      "issue": "reconcilePass must match original reconcileGroup body lines 74-104 byte-for-byte with minimal anchors",
+      "correction": "The body of reconcilePass is byte-for-byte identical to the original lines 74-104 of reconcileGroup. Only 3 counted insertion points are used. prepare-coalescing-proposal.mjs proves byte-exact equality across both CRLF and LF environments."
+    },
+    {
+      "id": "C5_COMMENTS_AND_CRLF",
+      "issue": "Comments must be preserved and CRLF line endings respected",
+      "correction": "All existing comments are preserved. The preparation and verification script handles CRLF and LF transparently."
+    },
+    {
+      "id": "C6_DETERMINISTIC_GATES",
+      "issue": "Heuristic sleeps in test harness cannot reliably assert burst boundaries or trailing transitions",
+      "correction": "The test-only support harness (lifecycle-coalescing-support-reviewed1.mjs) uses deterministic barrier gates (promise-based barriers) on listRooms for both pass 1 and trailing passes. Triggers 2-4 and pass 3 are deterministically enqueued while the preceding pass is held at the barrier."
+    },
+    {
+      "id": "C7_ISOLATION_FAULT_AND_DRAIN_PROBES",
+      "issue": "Synthetic probes lacked ALS isolation, error identity matching, and safe pool.end interception",
+      "correction": "AsyncLocalStorage isolates test triggers from background sweeps/webhooks. Synthetic faults assert caller rejection with the exact same error object instance. Shutdown drain intercepts pool.end temporarily without terminating the connection pool, preserving client connectivity for inspection and test cleanup."
+    }
+  ],
+  "regressionControls": [
+    "CTL1: Fixed ordinary burst (4 callers) bounded to <= 2 native reads via coalescing",
+    "CTL2: Distinct callGroupId calls run independently without suppressing each other",
+    "CTL3: Trigger arriving during trailing pass starts a fresh third pass (no lost wakeup)",
+    "CTL4: Distinct ended events ({identity, at}) each execute a canonical reconcilePass individually",
+    "CTL5: Exact injected native SFU error instance is propagated to all callers and clears for fresh recovery",
+    "CTL6: Shutdown while pass 1 is gated drains all accepted jobs and rejects new incoming calls with 503",
+    "CTL7: Signed duplicate webhook triggers idempotent durable resolution"
+  ],
+  "deliveredFiles": [
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/call-lifecycle.service.ts",
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/prepare-coalescing-proposal.mjs",
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/lifecycle-coalescing-support-reviewed1.mjs",
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/plan.json",
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/shortplan.md",
+    "quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/controls-plan.json"
+  ],
+  "prohibitionsHonored": {
+    "runCommandExecuted": false,
+    "dockerExecuted": false,
+    "browserExecuted": false,
+    "appSourceMutated": false,
+    "buildMutated": false,
+    "testsMutated": false,
+    "historyMutated": false,
+    "ledgerMutated": false,
+    "envMutated": false
+  }
+}

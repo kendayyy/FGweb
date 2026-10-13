@@ -1,0 +1,71 @@
+### Báo cáo điều tra Native58 Causal Timeline & Protocol Deconstruction
+
+Đã hoàn thành phân tích theo hướng dẫn tại [AGENTS.md](file:///E:/FGweb/AGENTS.md), [.agents/rules/08-testing-and-evidence.md](file:///E:/FGweb/.agents/rules/08-testing-and-evidence.md), [.agents/rules/09-voice-and-live.md](file:///E:/FGweb/.agents/rules/09-voice-and-live.md) và [.agents/rules/11-session-history.md](file:///E:/FGweb/.agents/rules/11-session-history.md).
+
+Tất cả các tài liệu bàn giao được lưu cô lập tại thư mục:
+- [timeline-review.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-timeline-1/timeline-review.json)
+- [plan.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-timeline-1/plan.md) (943 từ, cấu trúc chặt chẽ và không suy diễn)
+- Nhật ký phiên đã được cập nhật trung thực tại [.doc/history.md](file:///E:/FGweb/.doc/history.md#L2424).
+
+---
+
+### 1. Tái dựng chuỗi nguyên nhân thời gian cho luồng chuyển mạch mới (`TR_VSciSJqs4supYX`)
+
+1. **16:13:19.530Z**: Nguồn phát 1 (Linh, `TR_VS8RdZTwPGz5m9`) hoàn tất xuất bản (`publication-times.jsonl`, 7.535s).
+2. **16:13:20.041Z – 16:13:25.064Z**: Một checkout PostgreSQL độc lập bị `CONNECTION_TIMEOUT` 5.022s (`bytesRead: 117`, `bytesWritten: 318`).
+3. **16:13:27.735Z**: LiveKit SFU nhận bản tin xuất bản video `TR_VSciSJqs4supYX` của Hoàng Nam (VP8 simulcast 1280×698 / 640×349).
+4. **16:13:28.894Z**: LiveKit SFU nhận bản tin xuất bản audio `TR_AsXuag57ydWvJV`.
+5. **16:13:29.978Z**: Thao tác `share(sender)` hoàn tất trong test runner (`publication-times.jsonl`, 10.332s).
+6. **16:13:31.055Z**: SFU gửi webhook `track_published` tới API với độ trễ **3.319s** (event `EV_xFgPLkQesdG7`).
+7. **16:13:35.930Z (1791735215930)**: Viewer click tab Hoàng Nam. [`LiveViewer.tsx`](file:///E:/FGweb/code/apps/web/src/features/live/LiveViewer.tsx#L204-L208) gọi [`selectScreen(trackSid)`](file:///E:/FGweb/code/apps/web/src/features/calls/media.ts#L645-L675), tháo gỡ phần tử video cũ, đặt `selectedId: "_r_1_-tab-TR_VSciSJqs4supYX"`, và kích hoạt `info.publication.setSubscribed(true)`. Test ghi nhận mẫu `before`: `videoTrackId: ""` và `videoCount: 0`.
+8. **16:13:35.930Z – 16:13:39.059Z (3.129s)**: Cửa sổ đo cố định 3.0s (`waitForTimeout(3000)`). Client gửi `SignalRequest` cập nhật subscription; SFU và subscriber tái thương lượng SDP qua subscriber peer connection. Gần cuối cửa sổ, track được gắn lại vào DOM (`videoTrackId: "TR_VSciSJqs4supYX"`, `videoCount: 1`).
+9. **16:13:39.059Z (1791735219059)**: Test lấy mẫu `after`. Delta video rows có `bytesDelta > 1000` trả về 0 dòng.
+10. **16:13:39.114Z**: [screen-share-diagnostic.spec.ts:60](file:///E:/FGweb/code/quality/evidence/T30/rtp-window-reviewed3/screen-share-diagnostic.spec.ts#L60) ném lỗi `AssertionError` (`toHaveLength(1)` nhận 0).
+11. **16:13:39.545Z (1791735219545, +486ms sau khi đóng cửa sổ)**: [post-failure-media-state.json](file:///E:/FGweb/code/quality/evidence/T30/t30-native-cd237f0bce5440debaf19009b5475494/post-failure-media-state.json#L600-L645) xác nhận video đã tới: **11.459 bytes**, **12 packets**, giải mã **4 frames** ở 640×349 (21 fps). Thẻ video đạt `readyState: 4` (`HAVE_ENOUGH_DATA`).
+12. **16:13:40.000Z**: Ảnh chụp bước 4 ghi nhận luồng live của Hoàng Nam đã hiển thị đầy đủ trong DOM.
+
+#### So sánh với Native54 và Native55:
+- **Native54**: Khoảng cách từ lúc kết thúc xuất bản (14:53:23.522Z) đến lúc click tab (14:53:30.944Z) là **7.422s**. Webhook SFU tức thời (<100ms). Nhận 101.567 bytes trong 3.246s.
+- **Native55**: Khoảng cách từ xuất bản (15:22:26.343Z) đến click tab (15:22:33.491Z) là **7.148s**. Nhận 15.520 bytes trong 3.130s.
+- **Native58**: Khoảng cách từ xuất bản (16:13:29.978Z) đến click tab (16:13:35.930Z) bị rút ngắn xuống **5.952s** (~1.2–1.5s ngắn hơn). Webhook SFU bị nghẽn 3.319s. Quá trình thiết lập media từ lúc click đến khung hình đầu tiên mất 3.615s, vượt cửa sổ 3.0s đúng **486ms**.
+
+---
+
+### 2. Giải mã giao thức PostgreSQL SCRAM (`bytesRead: 117` / `bytesWritten: 318`)
+
+Đối chiếu trực tiếp mã nguồn [`node_modules/pg/lib/client.js`](file:///E:/FGweb/code/node_modules/pg/lib/client.js), [`connection.js`](file:///E:/FGweb/code/node_modules/pg/lib/connection.js), [`sasl.js`](file:///E:/FGweb/code/node_modules/pg/lib/crypto/sasl.js) và [`serializer.js`](file:///E:/FGweb/code/node_modules/pg-protocol/dist/serializer.js):
+
+1. **TCP Handshake**: Kết nối TCP hoàn tất sau 4.29ms.
+2. **`bytesWritten: 318`**:
+   - `StartupMessage` (~125 bytes, protocol 3.0, user, database, client_encoding UTF8).
+   - `SASLInitialResponseMessage` (mã `'p'`, ~57 bytes, cơ chế `'SCRAM-SHA-256'`, client nonce 24 ký tự).
+   - `SCRAMClientFinalMessage` (mã `'p'`, ~136 bytes, chứa client proof SHA-256).
+   - Tổng cộng: ~125 + 57 + 136 = **318 bytes**.
+3. **`bytesRead: 117`**:
+   - `AuthenticationSASL` (mã `'R'`, 23 bytes, authType: 10, danh sách cơ chế).
+   - `AuthenticationSASLContinue` (mã `'R'`, 94 bytes, authType: 11, salt và challenge từ server).
+   - Tổng cộng: 23 + 94 = **117 bytes**.
+4. **Ý nghĩa chứng minh**:
+   - **Chứng minh được**: Socket TCP mở bình thường; server tiếp nhận và gửi salt; client đã tính toán và gửi xong proof vào kernel buffer. Điểm nghẽn nằm ở quá trình backend PostgreSQL xử lý xác thực proof trước khi trả về `AuthenticationSASLFinal` / `AuthenticationOk` / `ReadyForQuery`.
+   - **Không thể chứng minh**: Không chứng minh server bị crash (inspector xác nhận pool lành mạnh, 0 lỗi, 86 mẫu sau đó); không chứng minh lỗi phần cứng duy nhất.
+   - **Mối liên hệ nhân quả với RTP**: Timeout này kết thúc lúc `16:13:25.064Z`, cách thời điểm bắt đầu Cửa sổ 2 (`16:13:35.930Z`) hơn **10.8 giây**. Trong suốt Cửa sổ 2, PostgreSQL hoàn toàn nhàn rỗi và các gói audio RTP vẫn về liên tục (22.4KB, 36.8KB, 20.6KB). Do đó, sự cố PG này chỉ là tương quan tải hệ thống, không phải nguyên nhân trực tiếp làm trễ gói tin WebRTC.
+
+---
+
+### 3. Đề xuất Một Quan Sát Đo lường Tối thiểu
+
+#### Điểm mù hiện tại:
+Tại dòng 65 của [screen-share-diagnostic.spec.ts](file:///E:/FGweb/code/quality/evidence/T30/rtp-window-reviewed3/screen-share-diagnostic.spec.ts#L65):
+```typescript
+await viewer.getByRole('tab', { name: 'Hoàng Nam', exact: true }).click();
+const switched = await receiveOne(viewer); // <-- Ném lỗi ở dòng 60 khi bytesDelta == 0
+const messages = await subscriptionMessages(viewer); // <-- KHÔNG BAO GIỜ CHẠY KHI TEST FAIL
+```
+Vì bộ đệm `w.t30SubscriptionFrames` bị xóa ngay trước click, khi `receiveOne` thất bại, các bản tin WebSocket `subscribe: false` và `subscribe: true` bị kẹt trong bộ nhớ browser và không được ghi vào file `native-subscription-messages.jsonl`, tạo ra cảm giác client không gửi tín hiệu.
+
+#### Đề xuất:
+- **Vị trí neo**: [failure-observer.mjs](file:///E:/FGweb/code/quality/evidence/T30/rtp-window-reviewed3/failure-observer.mjs).
+- **Thực hiện**: Bổ sung cơ chế trong hàm `observeFailure` trích xuất `w.t30SubscriptionFrames` còn tồn đọng và thời điểm kích hoạt `RTCPeerConnection.ontrack` lưu vào [sanitized-failure-record.json](file:///E:/FGweb/code/quality/evidence/T30/t30-native-cd237f0bce5440debaf19009b5475494/sanitized-failure-record.json).
+- **Kế hoạch kiểm soát lỗi**:
+  1. Giả lập một assertion thất bại trong `receiveOne` và xác nhận khung bản tin subscription vẫn được trích xuất an toàn mà không cần chạy tới dòng 65.
+  2. Tuyệt đối không can thiệp mã nguồn ứng dụng hay spec: giữ nguyên `adaptiveStream: true`, `dynacast: true`, và chính sách một luồng video duy nhất theo đúng yêu cầu tại [task.md](file:///E:/FGweb/.doc/task.md#L706).

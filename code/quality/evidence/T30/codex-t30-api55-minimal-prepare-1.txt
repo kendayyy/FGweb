@@ -1,0 +1,589 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  "import fs from 'node:fs';\n" +
+    "import { AsyncLocalStorage } from 'node:async_hooks';\n" +
+    "import { performance, monitorEventLoopDelay } from 'node:perf_hooks';\n" +
+    '\n' +
+    '/**\n' +
+...
+    '  class PatchedPool extends OrigPool {\n' +
++   '    connect(...args){\n' +
++   "      if(typeof args.at(-1)==='function')return Reflect.apply(originalPoolConnect,this,args);\n" +
++   '      const ctx=als.getStore(),poolIndex=poolMetadata.get(this)??null,startedAt=new Date().toISOString(),startMonotonic=performance.now();\n' +
++   "      const complete=(ok,error,client)=>{try{const pid=ok&&Number.isSafeInteger(client?.processID)&&client.processID>0?client.processID:null;if(ctx&&pid)ctx.pids.add(pid);bufferRecord({type:'pool-connect',poolIndex,backendPid:pid,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,sqlState:typeof error?.code==='string'&&error.code!=='EPIPE'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}};\n" +
++   '      let result;try{result=Reflect.apply(originalPoolConnect,this,args);}catch(error){complete(false,error,null);throw error;}\n' +
++   "      try{const then=result?.then;if(typeof then==='function')Reflect.apply(then,result,[client=>{complete(true,null,client);},error=>{complete(false,error,null);}]);else failureCount++;}catch{failureCount++;}return result;\n" +
++   '    }\n' +
++   '\n' +
+    '    query(...args){\n' +
+    "      if(typeof args.at(-1)==='function'||typeof args[0]?.callback==='function'||typeof args[0]?.submit==='function')return Reflect.apply(originalPoolQuery,this,args);\n" +
+    '      const ctx=als.getStore(),poolIndex=poolMetadata.get(this)??null;\n' +
+    '      const startedAt=new Date().toISOString(),startMonotonic=performance.now();\n' +
+    '      const complete=(ok,error)=>{\n' +
++   "        try{bufferRecord({type:'pool-query',poolIndex,backendPid:null,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,errorCode:ok?null:sanitizeConnectErrorCode(error),sqlState:typeof error?.code==='string'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}\n" +
+-   "        try{bufferRecord({type:'pool-query',poolIndex,backendPid:null,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,sqlState:typeof error?.code==='string'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}\n" +
+    '      };\n' +
+    '      let result;try{result=Reflect.apply(originalPoolQuery,this,args);}catch(error){complete(false,error);throw error;}\n' +
+    '      observeResult(result,complete,false);return result;\n' +
+    '    }\n' +
+    '    constructor(...args) {\n' +
+...
+    '        } catch {\n' +
++   '        '... 17415 more characters
+-   '          failureCount++;\n' +
+-   '        }\n' +
+-   '      });\n' +
+-   '    }\n' +
+-   '  }\n' +
+-   '\n' +
+-   '  for (const prop of Object.getOwnPropertyNames(OrigPool)) {\n' +
+-   '    if (!Object.prototype.hasOwnProperty.call(PatchedPool, prop)) {\n' +
+-   '      try {\n' +
+-   '        const desc = Object.getOwnPropertyDescriptor(OrigPool, prop);\n' +
+-   '        if (desc) Object.defineProperty(PatchedPool, prop, desc);\n' +
+-   '      } catch {}\n' +
+-   '    }\n' +
+-   '  }\n' +
+-   '\n' +
+-   '  pg.Pool = PatchedPool;\n' +
+-   '\n' +
+-   '  const origQuery = pg.Client.prototype.query;\n' +
+-   '  pg.Client.prototype.query = function (...args) {\n' +
+-   '    const lastArg = args[args.length - 1];\n' +
+-   "    if (typeof lastArg === 'function' || typeof args[0]?.callback==='function' || typeof args[0]?.submit==='function') {\n" +
+-   '      return origQuery.apply(this, args);\n' +
+-   '    }\n' +
+-   '\n' +
+-   '    const ctx = als.getStore();\n' +
+-   "    const backendPid = typeof this.processID === 'number' ? this.processID : Number(this.processID) || null;\n" +
+-   '    if (ctx && backendPid) {\n' +
+-   '      ctx.pids.add(backendPid);\n' +
+-   '    }\n' +
+-   '\n' +
+-   "    let kind = 'other';\n" +
+-   "    let lockMode = 'none';\n" +
+-   '    try {\n' +
+-   "      let queryText = '';\n" +
+-   "      if (typeof args[0] === 'string') {\n" +
+-   '        queryText = args[0];\n' +
+-   "      } else if (args[0] && typeof args[0] === 'object') {\n" +
+-   "        queryText = String(args[0].name || args[0].text || '');\n" +
+-   '      }\n' +
+-   '\n' +
+-   '      if (/^\\s*BEGIN\\b/i.test(queryText)) {\n' +
+-   "        kind = 'begin';"... 16159 more characters
+
+    at file:///E:/FGweb/code/quality/evidence/T30/prepare-api55-minimal1.mjs:32:174
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: "import fs from 'node:fs';\n" +
+    "import { AsyncLocalStorage } from 'node:async_hooks';\n" +
+    "import { performance, monitorEventLoopDelay } from 'node:perf_hooks';\n" +
+    '\n' +
+    '/**\n' +
+    ' * FG T30 — Corrected Minimal API-Child Owned Observation via AsyncLocalStorage\n' +
+    ' * \n' +
+    ' * Correlates initial HTTP request timing, service execution contexts,\n' +
+    ' * PostgreSQL backend PIDs, in-transaction lock holds, and native LiveKit SDK awaited spans.\n' +
+    ' * \n' +
+    ' * Strict Invariants:\n' +
+    ' * 1. Duplicate install or start throws an error immediately before mutating prototypes.\n' +
+    ' * 2. HTTP middleware runs BEFORE Nest guards, establishing outer ALS request spans.\n' +
+    ' * 3. Service wrappers emit service-start and service-end result spans.\n' +
+    ' * 4. All wrappers preserve exact arguments, this context, and returned promise/value/sync throw.\n' +
+    ' * 5. Side handlers return undefined and never throw.\n' +
+    ' * 6. Lock tracking resets on BEGIN and only derives hold durations upon successful COMMIT/ROLLBACK.\n' +
+    ' * 7. Bounded buffer (5,000 records / 1 MiB); flush handles short-writes; IO errors increment failureCount.\n' +
+    ' * 8. Zero raw SQL, query parameters, row values, or secrets in telemetry.\n' +
+    ' */\n' +
+    '\n' +
+    'if (globalThis.__FG_API_LOCK_SPANS_INSTALLED__) {\n' +
+    "  throw new Error('Duplicate API lock spans observer installation detected');\n" +
+    '}\n' +
+    'globalThis.__FG_API_LOCK_SPANS_INSTALLED__ = true;\n' +
+    '\n' +
+    'export const als = new AsyncLocalStorage();\n' +
+    '\n' +
+    'const SAFE_SERVICE_OWNERS = new Set([\n' +
+    "  'http-me',\n" +
+    "  'http-games',\n" +
+    "  'http-rooms-own',\n" +
+    "  'http-rooms-detail',\n" +
+    "  'http-rooms-members',\n" +
+    "  'http-rooms-calls',\n" +
+    "  'http-room-play-sessions',\n" +
+    "  'http-call-participants',\n" +
+    "  'CallsService.list',\n" +
+    "  'CallsService.participants',\n" +
+    "  'CallsService.withControlGroup',\n" +
+    "  'CallLifecycleService.reconcileGroup',\n" +
+    "  'unassociated',\n" +
+    ']);\n' +
+    '\n' +
+    'let spanSequence = 0;\n' +
+    'export function createSpanContext(owner, parentSpanIndex = null) {\n' +
+    "  const safeOwner = SAFE_SERVICE_OWNERS.has(owner) ? owner : 'unassociated';\n" +
+    '  const parent = als.getStore();\n' +
+    '  const spanIndex = ++spanSequence;\n' +
+    '  return {\n' +
+    '    spanIndex,\n' +
+    '    parentSpanIndex: parentSpanIndex !== null ? parentSpanIndex : (parent ? parent.spanIndex : null),\n' +
+    '    owner: safeOwner,\n' +
+    '    pids: new Set(),\n' +
+    '    activeTransactions: new Map(),\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'let sampleCount = 0;\n' +
+    'let failureCount = 0;\n' +
+    'let droppedCount = 0;\n' +
+    'let isStopped = false;\n' +
+    'let timerStopped = false;\n' +
+    'let histogramDisabled = false;\n' +
+    "let evidenceDir = '';\n" +
+    '\n' +
+    'const MAX_BUFFERED_RECORDS = 5000;\n' +
+    'const MAX_BUFFERED_BYTES = 1024 * 1024;\n' +
+    'const recordBuffer = [];\n' +
+    'let currentBufferBytes = 0;\n' +
+    '\n' +
+    'function bufferRecord(rec) {\n' +
+    '  if (isStopped) return;\n' +
+    '  try {\n' +
+    '    const line = JSON.stringify(rec);\n' +
+    "    const lineBytes = Buffer.byteLength(line, 'utf8') + 1;\n" +
+    '    if (recordBuffer.length >= MAX_BUFFERED_RECORDS || currentBufferBytes + lineBytes > MAX_BUFFERED_BYTES) {\n' +
+    '      droppedCount++;\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    recordBuffer.push(line);\n' +
+    '    currentBufferBytes += lineBytes;\n' +
+    '  } catch {\n' +
+    '    failureCount++;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'export function flushSpansSync() {\n' +
+    '  if (recordBuffer.length === 0 || !evidenceDir) return;\n' +
+    '  let fd = null;\n' +
+    '  try {\n' +
+    "    const payload = recordBuffer.join('\\n') + '\\n';\n" +
+    "    const buf = Buffer.from(payload, 'utf8');\n" +
+    "    fd = fs.openSync(`${evidenceDir}/api-lock-spans.jsonl`, 'a');\n" +
+    '    let written = 0,attempts=0;\n' +
+    '    while (written < buf.length && attempts++<4) {\n' +
+    '      const bytes = fs.writeSync(fd, buf, written, buf.length - written);\n' +
+    '      if (!Number.isInteger(bytes) || bytes <= 0 || bytes > buf.length - written) {\n' +
+    '        failureCount++;\n' +
+    '        break;\n' +
+    '      }\n' +
+    '      written += bytes;\n' +
+    '    }\n' +
+    '    if(written!==buf.length)failureCount++;\n' +
+    '  } catch {\n' +
+    '    failureCount++;\n' +
+    '  } finally {\n' +
+    '    if (fd !== null) {\n' +
+    '      try { fs.closeSync(fd); } catch { failureCount++; }\n' +
+    '    }\n' +
+    '    recordBuffer.length = 0;\n' +
+    '    currentBufferBytes = 0;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'function observeResult(result,complete,recordSync=true){\n' +
+    '  try{\n' +
+    '    const then=result?.then;\n' +
+    "    if(typeof then==='function')Reflect.apply(then,result,[()=>{try{complete(true,null);}catch{failureCount++;}},error=>{try{complete(false,error);}catch{failureCount++;}}]);\n" +
+    '    else if(recordSync)complete(true,null);\n' +
+    '  }catch{failureCount++;}\n' +
+    '}\n' +
+    '\n' +
+    '// 1. HTTP Before-Guard Context Middleware\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'export function instrumentHttpTimingMiddleware(app) {\n' +
+    '  app.use((req, res, next) => {\n' +
+    '    let continueInContext=null;\n' +
+    '    try {\n' +
+    "      if (req.method === 'GET') {\n" +
+    "        const rawPath = typeof req.path === 'string' ? req.path : String(req.url ?? '').split('?')[0];\n" +
+    '        let route = null;\n' +
+    "        if (rawPath === '/api/v1/me') route = 'http-me';\n" +
+    "        else if (rawPath === '/api/v1/games') route = 'http-games';\n" +
+    "        else if (rawPath === '/api/v1/rooms/own' || rawPath === '/api/v1/rooms') route = 'http-rooms-own';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/members$/.test(rawPath)) route = 'http-rooms-members';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/calls$/.test(rawPath)) route = 'http-rooms-calls';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/play-sessions$/.test(rawPath)) route = 'http-room-play-sessions';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+$/.test(rawPath)) route = 'http-rooms-detail';\n" +
+    "        else if (/^\\/api\\/v1\\/calls\\/[^/]+\\/participants$/.test(rawPath)) route = 'http-call-participants';\n" +
+    '\n' +
+    '        if (route !== null) {\n' +
+    '          const ctx = createSpanContext(route);\n' +
+    '          const startedAt = new Date().toISOString();\n' +
+    '          const startMonotonic = performance.now();\n' +
+    '          let emitted = false;\n' +
+    '\n' +
+    '          const recordHttp = (finishVsClose) => {\n' +
+    '            if (emitted) return;\n' +
+    '            emitted = true;\n' +
+    '            try {\n' +
+    '              const completedAt = new Date().toISOString();\n' +
+    '              const durationMs = Math.round((performance.now() - startMonotonic) * 100) / 100;\n' +
+    "              const status = typeof res.statusCode === 'number' ? res.statusCode : 0;\n" +
+    '              bufferRecord({\n' +
+    "                type: 'http',\n" +
+    '                route,\n' +
+    '                spanIndex: ctx.spanIndex,\n' +
+    '                startedAt,\n' +
+    '                completedAt,\n' +
+    '                durationMs,\n' +
+    '                status,\n' +
+    '                finished: finishVsClose,\n' +
+    '                pids: Array.from(ctx.pids),\n' +
+    '              });\n' +
+    '            } catch {\n' +
+    '              failureCount++;\n' +
+    '            }\n' +
+    '          };\n' +
+    '\n' +
+    "          res.once('finish', () => recordHttp(true));\n" +
+    "          res.once('close', () => recordHttp(false));\n" +
+    '\n' +
+    '          continueInContext=ctx;\n' +
+    '        }\n' +
+    '      }\n' +
+    '    } catch {\n' +
+    '      failureCount++;\n' +
+    '    }\n' +
+    '    return continueInContext ? als.run(continueInContext,()=>next()) : next();\n' +
+    '  });\n' +
+    '}\n' +
+    '\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    '// 2. PostgreSQL Pool & Client Instrumentation\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'const registeredPools = new Set();\n' +
+    'const poolMetadata=new WeakMap();\n' +
+    'let poolsInstalled=false,sdkInstalled=false,servicesInstalled=false,transactionSequence=0;\n' +
+    'const clientPoolMap = new WeakMap();\n' +
+    'const clientActiveLocks = new WeakMap();\n' +
+    'let nextPoolIndex = 0;\n' +
+    '\n' +
+    'export function instrumentOwnedApiPools(pg, evidence) {\n' +
+    "  if(poolsInstalled)throw new Error('Owned pool observation already installed');\n" +
+    '  poolsInstalled=true;\n' +
+    '  evidenceDir = evidence;\n' +
+    '  const OrigPool = pg.Pool;\n' +
+    '\n' +
+    '  const originalPoolQuery=OrigPool.prototype.query;\n' +
+    '  class PatchedPool extends OrigPool {\n' +
+    '    connect(...args){\n' +
+    "      if(typeof args.at(-1)==='function')return Reflect.apply(originalPoolConnect,this,args);\n" +
+    '      const ctx=als.getStore(),poolIndex=poolMetadata.get(this)??null,startedAt=new Date().toISOString(),startMonotonic=performance.now();\n' +
+    "      const complete=(ok,error,client)=>{try{const pid=ok&&Number.isSafeInteger(client?.processID)&&client.processID>0?client.processID:null;if(ctx&&pid)ctx.pids.add(pid);bufferRecord({type:'pool-connect',poolIndex,backendPid:pid,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,sqlState:typeof error?.code==='string'&&error.code!=='EPIPE'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}};\n" +
+    '      let result;try{result=Reflect.apply(originalPoolConnect,this,args);}catch(error){complete(false,error,null);throw error;}\n' +
+    "      try{const then=result?.then;if(typeof then==='function')Reflect.apply(then,result,[client=>{complete(true,null,client);},error=>{complete(false,error,null);}]);else failureCount++;}catch{failureCount++;}return result;\n" +
+    '    }\n' +
+    '\n' +
+    '    query(...args){\n' +
+    "      if(typeof args.at(-1)==='function'||typeof args[0]?.callback==='function'||typeof args[0]?.submit==='function')return Reflect.apply(originalPoolQuery,this,args);\n" +
+    '      const ctx=als.getStore(),poolIndex=poolMetadata.get(this)??null;\n' +
+    '      const startedAt=new Date().toISOString(),startMonotonic=performance.now();\n' +
+    '      const complete=(ok,error)=>{\n' +
+    "        try{bufferRecord({type:'pool-query',poolIndex,backendPid:null,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,errorCode:ok?null:sanitizeConnectErrorCode(error),sqlState:typeof error?.code==='string'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}\n" +
+    '      };\n' +
+    '      let result;try{result=Reflect.apply(originalPoolQuery,this,args);}catch(error){complete(false,error);throw error;}\n' +
+    '      observeResult(result,complete,false);return result;\n' +
+    '    }\n' +
+    '    constructor(...args) {\n' +
+    '      super(...args);\n' +
+    '      const poolIndex = ++nextPoolIndex;\n' +
+    '      poolMetadata.set(this,poolIndex);\n' +
+    '      registeredPools.add(this);\n' +
+    '\n' +
+    "      this.on('connect', (client) => {\n" +
+    '        try {\n' +
+    '          clientPoolMap.set(client, poolIndex);\n' +
+    '          clientActiveLocks.set(client, { roomAcquired: null, groupAcquired: null,transactionIndex:null,ownerContext:null });\n' +
+    '        } catch {\n' +
+    '        '... 17415 more characters,
+  expected: "import fs from 'node:fs';\n" +
+    "import { AsyncLocalStorage } from 'node:async_hooks';\n" +
+    "import { performance, monitorEventLoopDelay } from 'node:perf_hooks';\n" +
+    '\n' +
+    '/**\n' +
+    ' * FG T30 — Corrected Minimal API-Child Owned Observation via AsyncLocalStorage\n' +
+    ' * \n' +
+    ' * Correlates initial HTTP request timing, service execution contexts,\n' +
+    ' * PostgreSQL backend PIDs, in-transaction lock holds, and native LiveKit SDK awaited spans.\n' +
+    ' * \n' +
+    ' * Strict Invariants:\n' +
+    ' * 1. Duplicate install or start throws an error immediately before mutating prototypes.\n' +
+    ' * 2. HTTP middleware runs BEFORE Nest guards, establishing outer ALS request spans.\n' +
+    ' * 3. Service wrappers emit service-start and service-end result spans.\n' +
+    ' * 4. All wrappers preserve exact arguments, this context, and returned promise/value/sync throw.\n' +
+    ' * 5. Side handlers return undefined and never throw.\n' +
+    ' * 6. Lock tracking resets on BEGIN and only derives hold durations upon successful COMMIT/ROLLBACK.\n' +
+    ' * 7. Bounded buffer (5,000 records / 1 MiB); flush handles short-writes; IO errors increment failureCount.\n' +
+    ' * 8. Zero raw SQL, query parameters, row values, or secrets in telemetry.\n' +
+    ' */\n' +
+    '\n' +
+    'if (globalThis.__FG_API_LOCK_SPANS_INSTALLED__) {\n' +
+    "  throw new Error('Duplicate API lock spans observer installation detected');\n" +
+    '}\n' +
+    'globalThis.__FG_API_LOCK_SPANS_INSTALLED__ = true;\n' +
+    '\n' +
+    'export const als = new AsyncLocalStorage();\n' +
+    '\n' +
+    'const SAFE_SERVICE_OWNERS = new Set([\n' +
+    "  'http-me',\n" +
+    "  'http-games',\n" +
+    "  'http-rooms-own',\n" +
+    "  'http-rooms-detail',\n" +
+    "  'http-rooms-members',\n" +
+    "  'http-rooms-calls',\n" +
+    "  'http-room-play-sessions',\n" +
+    "  'http-call-participants',\n" +
+    "  'CallsService.list',\n" +
+    "  'CallsService.participants',\n" +
+    "  'CallsService.withControlGroup',\n" +
+    "  'CallLifecycleService.reconcileGroup',\n" +
+    "  'unassociated',\n" +
+    ']);\n' +
+    '\n' +
+    'let spanSequence = 0;\n' +
+    'export function createSpanContext(owner, parentSpanIndex = null) {\n' +
+    "  const safeOwner = SAFE_SERVICE_OWNERS.has(owner) ? owner : 'unassociated';\n" +
+    '  const parent = als.getStore();\n' +
+    '  const spanIndex = ++spanSequence;\n' +
+    '  return {\n' +
+    '    spanIndex,\n' +
+    '    parentSpanIndex: parentSpanIndex !== null ? parentSpanIndex : (parent ? parent.spanIndex : null),\n' +
+    '    owner: safeOwner,\n' +
+    '    pids: new Set(),\n' +
+    '    activeTransactions: new Map(),\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'let sampleCount = 0;\n' +
+    'let failureCount = 0;\n' +
+    'let droppedCount = 0;\n' +
+    'let isStopped = false;\n' +
+    'let timerStopped = false;\n' +
+    'let histogramDisabled = false;\n' +
+    "let evidenceDir = '';\n" +
+    '\n' +
+    'const MAX_BUFFERED_RECORDS = 5000;\n' +
+    'const MAX_BUFFERED_BYTES = 1024 * 1024;\n' +
+    'const recordBuffer = [];\n' +
+    'let currentBufferBytes = 0;\n' +
+    '\n' +
+    'function bufferRecord(rec) {\n' +
+    '  if (isStopped) return;\n' +
+    '  try {\n' +
+    '    const line = JSON.stringify(rec);\n' +
+    "    const lineBytes = Buffer.byteLength(line, 'utf8') + 1;\n" +
+    '    if (recordBuffer.length >= MAX_BUFFERED_RECORDS || currentBufferBytes + lineBytes > MAX_BUFFERED_BYTES) {\n' +
+    '      droppedCount++;\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    recordBuffer.push(line);\n' +
+    '    currentBufferBytes += lineBytes;\n' +
+    '  } catch {\n' +
+    '    failureCount++;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'export function flushSpansSync() {\n' +
+    '  if (recordBuffer.length === 0 || !evidenceDir) return;\n' +
+    '  let fd = null;\n' +
+    '  try {\n' +
+    "    const payload = recordBuffer.join('\\n') + '\\n';\n" +
+    "    const buf = Buffer.from(payload, 'utf8');\n" +
+    "    fd = fs.openSync(`${evidenceDir}/api-lock-spans.jsonl`, 'a');\n" +
+    '    let written = 0,attempts=0;\n' +
+    '    while (written < buf.length && attempts++<4) {\n' +
+    '      const bytes = fs.writeSync(fd, buf, written, buf.length - written);\n' +
+    '      if (!Number.isInteger(bytes) || bytes <= 0 || bytes > buf.length - written) {\n' +
+    '        failureCount++;\n' +
+    '        break;\n' +
+    '      }\n' +
+    '      written += bytes;\n' +
+    '    }\n' +
+    '    if(written!==buf.length)failureCount++;\n' +
+    '  } catch {\n' +
+    '    failureCount++;\n' +
+    '  } finally {\n' +
+    '    if (fd !== null) {\n' +
+    '      try { fs.closeSync(fd); } catch { failureCount++; }\n' +
+    '    }\n' +
+    '    recordBuffer.length = 0;\n' +
+    '    currentBufferBytes = 0;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'function observeResult(result,complete,recordSync=true){\n' +
+    '  try{\n' +
+    '    const then=result?.then;\n' +
+    "    if(typeof then==='function')Reflect.apply(then,result,[()=>{try{complete(true,null);}catch{failureCount++;}},error=>{try{complete(false,error);}catch{failureCount++;}}]);\n" +
+    '    else if(recordSync)complete(true,null);\n' +
+    '  }catch{failureCount++;}\n' +
+    '}\n' +
+    '\n' +
+    '// 1. HTTP Before-Guard Context Middleware\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'export function instrumentHttpTimingMiddleware(app) {\n' +
+    '  app.use((req, res, next) => {\n' +
+    '    let continueInContext=null;\n' +
+    '    try {\n' +
+    "      if (req.method === 'GET') {\n" +
+    "        const rawPath = typeof req.path === 'string' ? req.path : String(req.url ?? '').split('?')[0];\n" +
+    '        let route = null;\n' +
+    "        if (rawPath === '/api/v1/me') route = 'http-me';\n" +
+    "        else if (rawPath === '/api/v1/games') route = 'http-games';\n" +
+    "        else if (rawPath === '/api/v1/rooms/own' || rawPath === '/api/v1/rooms') route = 'http-rooms-own';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/members$/.test(rawPath)) route = 'http-rooms-members';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/calls$/.test(rawPath)) route = 'http-rooms-calls';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+\\/play-sessions$/.test(rawPath)) route = 'http-room-play-sessions';\n" +
+    "        else if (/^\\/api\\/v1\\/rooms\\/[^/]+$/.test(rawPath)) route = 'http-rooms-detail';\n" +
+    "        else if (/^\\/api\\/v1\\/calls\\/[^/]+\\/participants$/.test(rawPath)) route = 'http-call-participants';\n" +
+    '\n' +
+    '        if (route !== null) {\n' +
+    '          const ctx = createSpanContext(route);\n' +
+    '          const startedAt = new Date().toISOString();\n' +
+    '          const startMonotonic = performance.now();\n' +
+    '          let emitted = false;\n' +
+    '\n' +
+    '          const recordHttp = (finishVsClose) => {\n' +
+    '            if (emitted) return;\n' +
+    '            emitted = true;\n' +
+    '            try {\n' +
+    '              const completedAt = new Date().toISOString();\n' +
+    '              const durationMs = Math.round((performance.now() - startMonotonic) * 100) / 100;\n' +
+    "              const status = typeof res.statusCode === 'number' ? res.statusCode : 0;\n" +
+    '              bufferRecord({\n' +
+    "                type: 'http',\n" +
+    '                route,\n' +
+    '                spanIndex: ctx.spanIndex,\n' +
+    '                startedAt,\n' +
+    '                completedAt,\n' +
+    '                durationMs,\n' +
+    '                status,\n' +
+    '                finished: finishVsClose,\n' +
+    '                pids: Array.from(ctx.pids),\n' +
+    '              });\n' +
+    '            } catch {\n' +
+    '              failureCount++;\n' +
+    '            }\n' +
+    '          };\n' +
+    '\n' +
+    "          res.once('finish', () => recordHttp(true));\n" +
+    "          res.once('close', () => recordHttp(false));\n" +
+    '\n' +
+    '          continueInContext=ctx;\n' +
+    '        }\n' +
+    '      }\n' +
+    '    } catch {\n' +
+    '      failureCount++;\n' +
+    '    }\n' +
+    '    return continueInContext ? als.run(continueInContext,()=>next()) : next();\n' +
+    '  });\n' +
+    '}\n' +
+    '\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    '// 2. PostgreSQL Pool & Client Instrumentation\n' +
+    '// -----------------------------------------------------------------------------\n' +
+    'const registeredPools = new Set();\n' +
+    'const poolMetadata=new WeakMap();\n' +
+    'let poolsInstalled=false,sdkInstalled=false,servicesInstalled=false,transactionSequence=0;\n' +
+    'const clientPoolMap = new WeakMap();\n' +
+    'const clientActiveLocks = new WeakMap();\n' +
+    'let nextPoolIndex = 0;\n' +
+    '\n' +
+    'export function instrumentOwnedApiPools(pg, evidence) {\n' +
+    "  if(poolsInstalled)throw new Error('Owned pool observation already installed');\n" +
+    '  poolsInstalled=true;\n' +
+    '  evidenceDir = evidence;\n' +
+    '  const OrigPool = pg.Pool;\n' +
+    '\n' +
+    '  const originalPoolQuery=OrigPool.prototype.query;\n' +
+    '  class PatchedPool extends OrigPool {\n' +
+    '    query(...args){\n' +
+    "      if(typeof args.at(-1)==='function'||typeof args[0]?.callback==='function'||typeof args[0]?.submit==='function')return Reflect.apply(originalPoolQuery,this,args);\n" +
+    '      const ctx=als.getStore(),poolIndex=poolMetadata.get(this)??null;\n' +
+    '      const startedAt=new Date().toISOString(),startMonotonic=performance.now();\n' +
+    '      const complete=(ok,error)=>{\n' +
+    "        try{bufferRecord({type:'pool-query',poolIndex,backendPid:null,spanIndex:ctx?.spanIndex??null,parentSpanIndex:ctx?.parentSpanIndex??null,owner:ctx?.owner??'unassociated',startedAt,completedAt:new Date().toISOString(),durationMs:Math.round((performance.now()-startMonotonic)*100)/100,ok,sqlState:typeof error?.code==='string'&&/^[0-9A-Z]{5}$/.test(error.code)?error.code:null});}catch{failureCount++;}\n" +
+    '      };\n' +
+    '      let result;try{result=Reflect.apply(originalPoolQuery,this,args);}catch(error){complete(false,error);throw error;}\n' +
+    '      observeResult(result,complete,false);return result;\n' +
+    '    }\n' +
+    '    constructor(...args) {\n' +
+    '      super(...args);\n' +
+    '      const poolIndex = ++nextPoolIndex;\n' +
+    '      poolMetadata.set(this,poolIndex);\n' +
+    '      registeredPools.add(this);\n' +
+    '\n' +
+    "      this.on('connect', (client) => {\n" +
+    '        try {\n' +
+    '          clientPoolMap.set(client, poolIndex);\n' +
+    '          clientActiveLocks.set(client, { roomAcquired: null, groupAcquired: null,transactionIndex:null,ownerContext:null });\n' +
+    '        } catch {\n' +
+    '          failureCount++;\n' +
+    '        }\n' +
+    '      });\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  for (const prop of Object.getOwnPropertyNames(OrigPool)) {\n' +
+    '    if (!Object.prototype.hasOwnProperty.call(PatchedPool, prop)) {\n' +
+    '      try {\n' +
+    '        const desc = Object.getOwnPropertyDescriptor(OrigPool, prop);\n' +
+    '        if (desc) Object.defineProperty(PatchedPool, prop, desc);\n' +
+    '      } catch {}\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  pg.Pool = PatchedPool;\n' +
+    '\n' +
+    '  const origQuery = pg.Client.prototype.query;\n' +
+    '  pg.Client.prototype.query = function (...args) {\n' +
+    '    const lastArg = args[args.length - 1];\n' +
+    "    if (typeof lastArg === 'function' || typeof args[0]?.callback==='function' || typeof args[0]?.submit==='function') {\n" +
+    '      return origQuery.apply(this, args);\n' +
+    '    }\n' +
+    '\n' +
+    '    const ctx = als.getStore();\n' +
+    "    const backendPid = typeof this.processID === 'number' ? this.processID : Number(this.processID) || null;\n" +
+    '    if (ctx && backendPid) {\n' +
+    '      ctx.pids.add(backendPid);\n' +
+    '    }\n' +
+    '\n' +
+    "    let kind = 'other';\n" +
+    "    let lockMode = 'none';\n" +
+    '    try {\n' +
+    "      let queryText = '';\n" +
+    "      if (typeof args[0] === 'string') {\n" +
+    '        queryText = args[0];\n' +
+    "      } else if (args[0] && typeof args[0] === 'object') {\n" +
+    "        queryText = String(args[0].name || args[0].text || '');\n" +
+    '      }\n' +
+    '\n' +
+    '      if (/^\\s*BEGIN\\b/i.test(queryText)) {\n' +
+    "        kind = 'begin';"... 16159 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

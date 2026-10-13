@@ -1,0 +1,11 @@
+# Private notification producer review
+
+Preferences RED1 completed2026-10-09T10:50:56.158Z,5/6: both-off still produced IN_APP notice. GREEN1 completed2026-10-09T10:53:48.257Z exit0,6/6 SHA2569501e950309a9b26653ce8b9453c123ef38f08d0134e7d324b5f0a6b6323809a. Actual AppModule/signed sessions/SDK cipher posts honor current DM channels, require subscription for PUSH, skip notice when no available channel, maintain same transaction/dedup/no EMAIL/banned-recipient and fixed generic body/ID-only data. This verifies producer, not delivery rechecks or live transport.
+
+Next native worker RED uses HTTPS local receiver, installed web-push/http_ece, ephemeral standard ECDH/VAPID and trusted CA outside archive/commands. New dispatcher initially fails closed, no source key/log/body decryption or actual external user message. No main/subscriptions/outbox change, production provisioning, other task or PASS. Combined integration only after transport/delivery milestone.
+
+
+Native PUSH GREEN1 completed2026-10-09T11:04:32.222Z exit0,7/7 SHA256c274c41f4d87d951f3bddd839f625ec6090d62c008de9f06d8f7c11fc7c610f2: real TLS/Web Push AES128GCM receiver decrypts fixed generic NotificationDTO, native SDK private original absent; SENT/replay dedup verified. Boundary adds actual VAPID signature/audience/expiry verification, latest preference/ban/interval and malformed-data/origin rejection, untrusted TLS and HTTP503 retries with real5second waits, concurrent PG job claims and410 exact subscription retirement. Worker only crypto-dm namespace, not unrelated future notification ownership. Startup/in-app/mention/native browser delivery and full source build/integration/audit remain pending.
+
+
+PUSH boundary2 completed2026-10-09T11:12:58.499Z exit0,7/7 SHA256eb5590d54369b03ff40e2dec333dc4f7e06a152615b62a7a634abee4fdd80f5f. Native VAPID ECDSA/audience/expiry, actual TLS/ECE, fresh preference/BAN/interval/invalid metadata/origin denial, wrong TLS no receiver request,503 delayed retry with stable notification ID, two actual concurrent PG claimers one HTTPdelivery,410 exact key-bound retirement all verified. Scope crypto-dm jobs only; generic payload and no external traffic. Add incomplete-schema worker immutability RED before stricter readiness; runtime loader/finite worker invocation next.

@@ -16,6 +16,7 @@ import {
   UserSummary,
 } from '@fg/contracts';
 import { ProfilesService } from '../profiles/profiles.service.js';
+import {cryptoMemberLeft,retirePrivateCryptoConversation} from '../chat-crypto/crypto-membership.js';
 
 export function roomError(code: ErrorCode, message: string): never {
   throw new HttpException(
@@ -49,10 +50,12 @@ function decodeCursor(cursor: string): { createdAt: string; id: string } {
 @Injectable()
 export class RoomsService implements OnModuleInit, OnModuleDestroy {
   private pool!: Pool;
+  private callRevoker?:()=>Promise<void>;
+  public setCallRevoker(revoke:(()=>Promise<void>)|undefined){this.callRevoker=revoke;}
 
   constructor(private readonly profilesService: ProfilesService) {}
 
-  onModuleInit() {
+  async onModuleInit() {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) {
       throw new Error('DATABASE_URL environment variable is required');
@@ -60,9 +63,13 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
     this.pool = new Pool({
       connectionString,
       max: 16,
+      min: 4,
       connectionTimeoutMillis: 5000,
       statement_timeout: 10000,
     });
+    const ready=await Promise.allSettled(Array.from({length:4},()=>this.pool.connect()));
+    for(const result of ready)if(result.status==='fulfilled')result.value.release();
+    const failed=ready.find(result=>result.status==='rejected');if(failed?.status==='rejected')throw failed.reason;
   }
 
   async onModuleDestroy() {
@@ -362,26 +369,27 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
         [roomId]
       );
 
-      const result = await Promise.all(
-        membersRes.rows.map(async (row) => {
-          const userProfile = await this.profilesService.getPublicProfile(row.user_id);
-          const userSummary: UserSummary = {
-            id: userProfile.id,
-            displayName: userProfile.displayName,
-            avatarUrl: userProfile.avatarUrl,
-            customStatus: userProfile.customStatus,
-          };
-          const perms = Array.isArray(row.permissions) ? row.permissions : [];
-          return {
-            roomId: row.room_id,
-            userId: row.user_id,
-            user: userSummary,
-            role: row.role as 'OWNER' | 'HELPER' | 'MEMBER',
-            permissions: perms,
-            joinedAt: row.joined_at_iso,
-          };
-        })
-      );
+      const userIds = membersRes.rows.map((row) => row.user_id);
+      const userProfiles = await this.profilesService.getPublicProfiles(userIds);
+
+      const result = membersRes.rows.map((row, index) => {
+        const userProfile = userProfiles[index];
+        const userSummary: UserSummary = {
+          id: userProfile.id,
+          displayName: userProfile.displayName,
+          avatarUrl: userProfile.avatarUrl,
+          customStatus: userProfile.customStatus,
+        };
+        const perms = Array.isArray(row.permissions) ? row.permissions : [];
+        return {
+          roomId: row.room_id,
+          userId: row.user_id,
+          user: userSummary,
+          role: row.role as 'OWNER' | 'HELPER' | 'MEMBER',
+          permissions: perms,
+          joinedAt: row.joined_at_iso,
+        };
+      });
 
       await client.query('COMMIT');
       return result;
@@ -621,7 +629,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
   ): Promise<{ success: boolean }> {
     const client = await this.pool.connect();
     try {
-      await client.query('BEGIN');
+      await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');
       const roomRes = await client.query(`SELECT conversation_id, owner_id FROM rooms WHERE id = $1 FOR UPDATE`, [roomId]);
       if ((roomRes.rowCount ?? 0) === 0) {
         roomError(ErrorCode.NOT_FOUND, 'Room not found');
@@ -649,15 +657,20 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
           }
           // Sole member owner leaving -> close/dissolve room
           await client.query(`DELETE FROM rooms WHERE id = $1`, [roomId]);
-          await client.query(`DELETE FROM conversations WHERE id = $1`, [room.conversation_id]);
+          if(!await retirePrivateCryptoConversation(client,room.conversation_id))await client.query(`DELETE FROM conversations WHERE id = $1`, [room.conversation_id]);
+          await this.checkActorSessionAndBan(client, actorId, sessionId);
           await client.query('COMMIT');
+          await this.callRevoker?.();
           return { success: true };
         }
 
         await client.query(`DELETE FROM permission_grants WHERE room_id = $1 AND user_id = $2`, [roomId, targetUserId]);
         await client.query(`DELETE FROM room_members WHERE room_id = $1 AND user_id = $2`, [roomId, targetUserId]);
         await client.query(`DELETE FROM conversation_members WHERE conversation_id = $1 AND user_id = $2`, [room.conversation_id, targetUserId]);
+        await cryptoMemberLeft(client,room.conversation_id,targetUserId);
+        await this.checkActorSessionAndBan(client, actorId, sessionId);
         await client.query('COMMIT');
+        await this.callRevoker?.();
         return { success: true };
       }
 
@@ -698,8 +711,11 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
       await client.query(`DELETE FROM permission_grants WHERE room_id = $1 AND user_id = $2`, [roomId, targetUserId]);
       await client.query(`DELETE FROM room_members WHERE room_id = $1 AND user_id = $2`, [roomId, targetUserId]);
       await client.query(`DELETE FROM conversation_members WHERE conversation_id = $1 AND user_id = $2`, [room.conversation_id, targetUserId]);
+      await cryptoMemberLeft(client,room.conversation_id,targetUserId);
 
+      await this.checkActorSessionAndBan(client, actorId, sessionId);
       await client.query('COMMIT');
+      await this.callRevoker?.();
       return { success: true };
     } catch (err) {
       await client.query('ROLLBACK');
@@ -712,7 +728,7 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
   async dissolveRoom(actorId: string, sessionId: string, roomId: string): Promise<{ success: boolean }> {
     const client = await this.pool.connect();
     try {
-      await client.query('BEGIN');
+      await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');
       const roomRes = await client.query(`SELECT conversation_id, owner_id FROM rooms WHERE id = $1 FOR UPDATE`, [roomId]);
       if ((roomRes.rowCount ?? 0) === 0) {
         roomError(ErrorCode.NOT_FOUND, 'Room not found');
@@ -726,9 +742,11 @@ export class RoomsService implements OnModuleInit, OnModuleDestroy {
       }
 
       await client.query(`DELETE FROM rooms WHERE id = $1`, [roomId]);
-      await client.query(`DELETE FROM conversations WHERE id = $1`, [room.conversation_id]);
+      if(!await retirePrivateCryptoConversation(client,room.conversation_id))await client.query(`DELETE FROM conversations WHERE id = $1`, [room.conversation_id]);
 
+      await this.checkActorSessionAndBan(client, actorId, sessionId);
       await client.query('COMMIT');
+      await this.callRevoker?.();
       return { success: true };
     } catch (err) {
       await client.query('ROLLBACK');

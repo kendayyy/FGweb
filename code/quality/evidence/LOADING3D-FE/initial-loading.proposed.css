@@ -1,0 +1,24 @@
+.fg-initial-loading{position:relative;min-height:280px;width:100%;max-width:100%;overflow:hidden;isolation:isolate;display:grid;place-items:center}
+.fg-initial-loading--bootstrap,.fg-initial-loading--lobby{min-height:60vh}
+.fg-initial-loading--list{min-height:260px}
+.fg-initial-loading-body{width:100%;display:grid;justify-items:center;gap:22px;padding:32px 16px;position:relative}
+.fg-loading-stage{width:176px;height:176px;perspective:700px;position:relative;display:grid;place-items:center}
+.fg-loading-float{width:144px;height:144px;transform-style:preserve-3d;animation:fg-loader-float 3s ease-in-out infinite}
+.fg-loading-turn{position:relative;width:144px;height:144px;transform-style:preserve-3d;animation:fg-loader-turn 6s linear infinite}
+.fg-loading-turn>span{position:absolute;inset:0;display:block;backface-visibility:visible}
+.fg-loading-depth .fg-brand-f{fill:#8e9caf}.fg-loading-depth .fg-brand-g{fill:#2358b7}
+.fg-loading-face .fg-brand-f{fill:#e9edf4}.fg-loading-face .fg-brand-g{fill:#3b7cfa}
+html[data-theme=light] .fg-loading-face .fg-brand-f{fill:#edf1f7;stroke:#8295af;stroke-width:1}
+.fg-loading-shadow{position:absolute;bottom:-4px;width:100px;height:12px;background:var(--text-main);opacity:.12;border-radius:50%;filter:blur(6px)}
+.fg-loading-progress{width:min(200px,100%);height:6px;background:var(--border-color);border-radius:6px;overflow:hidden}
+.fg-loading-progress>span{display:block;width:45%;height:100%;background:#3b7cfa;border-radius:inherit;animation:fg-loader-progress 2s ease-in-out infinite}
+.fg-loading-skeleton{position:absolute;inset:12px;display:grid;grid-template-columns:1fr;gap:12px;z-index:-1;opacity:.35;pointer-events:none}
+.fg-loading-skeleton i{display:block;border-radius:var(--radius-sm);background:var(--border-color);height:30px}
+.fg-initial-loading--lobby .fg-loading-skeleton{grid-template-columns:minmax(36px,72px) minmax(0,1fr) minmax(80px,220px)}
+.fg-initial-loading--chat .fg-loading-skeleton i:nth-child(even){width:70%;justify-self:end}
+.fg-initial-loading[data-hidden=true] *{animation-play-state:paused!important}
+@keyframes fg-loader-turn{to{transform:rotateY(360deg)}}
+@keyframes fg-loader-float{50%{transform:translateY(-8px)}}
+@keyframes fg-loader-progress{from{transform:translateX(-105%)}to{transform:translateX(330%)}}
+@media(prefers-reduced-motion:reduce){.fg-initial-loading *{animation:none!important}.fg-loading-progress>span{transform:translateX(60%)}}
+@media(max-width:767px){.fg-initial-loading--lobby .fg-loading-skeleton{grid-template-columns:minmax(0,1fr)}.fg-loading-stage{width:160px;height:166px}}

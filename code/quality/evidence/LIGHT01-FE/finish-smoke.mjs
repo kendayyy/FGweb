@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/LIGHT01-FE';
+for(const label of ['smoke-review-3','smoke-final-lint-2','smoke-final-test-types-1','smoke-final-diff-1'])assert.equal(JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`)).exitCode,0);
+const file='../.doc/history.md';
+const current=fs.readFileSync(file,'utf8');
+const index=current.indexOf('### 2026-10-07 23:44:52 — LIGHT01-FE: Classic');
+assert(index>=0);
+const stamp=new Date(Date.now()+7*3600000).toISOString().slice(0,19).replace('T',' ');
+const entry=current.slice(index).replace('Kết thúc: đang mở.',`Kết thúc: ${stamp} (UTC+07:00).`);
+const completed=entry+'\n- Chốt phiên: review3 exit0;167 web tests xác minh theo logs; kiểm private scan cuối đạt sau khi loại email riêng khỏi bản sao baseline mới (nguồn config không đổi). Review2 exit1 và copy-redaction evidence giữ nguyên. Lệnh đếm nhanh trước đó có lỗi cú pháp exit1; kết quả167 lấy từ verifier chạy thật. Lint helper vòng2 và test typecheck cuối exit0; diff cuối exit0.\n- Lệnh đã chạy: `node node_modules/vitest/vitest.mjs run --root apps/web test/theme.test.tsx --maxWorkers 1`;13 file web tương tự tuần tự qua `smoke-regression.mjs`; `node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed`; `node node_modules/typescript/bin/tsc --noEmit -p apps/web/tsconfig.json`;test types qua `test-types.json`; `node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts`; ESLint paths thay đổi; `git diff --check`.\n- Kết quả phiên: build hai theme và Classic đã xong, bản thật đã hiển thị trong IAB, tab giữ để người dùng xem. Task vẫn BLOCKED do review hình thức thực tế và strict gate lịch sử; không có task sau hoặc deploy/push.\n- Evidence chốt: [verification](../code/quality/evidence/LIGHT01-FE/smoke/verification.json), [review](../code/quality/evidence/LIGHT01-FE/smoke/review.md), [audit3](../code/quality/evidence/LIGHT01-FE/codex-smoke-review-3.json), [redaction](../code/quality/evidence/LIGHT01-FE/smoke/copy-redaction.json).\n';
+fs.writeFileSync(file,current.slice(0,index)+completed);
+console.log(JSON.stringify({historyClosed:true,taskStatus:'BLOCKED',buildAvailable:true,closedAt:stamp+' +07:00'}));

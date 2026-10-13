@@ -1,0 +1,38 @@
+
+Running 7 tests using 1 worker
+
+(node:2628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/7] tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion
+[2/7] tests\e2e\theme.spec.ts:31:1 › native Enter/Space, reload and cross-tab choices never follow OS or open a menu
+[3/7] tests\e2e\theme.spec.ts:35:1 › legacy system resolves and persists once before paint without following later device changes
+[4/7] tests\e2e\theme.spec.ts:38:1 › stored preference is applied in the head before React and styles paint
+[5/7] tests\e2e\theme.spec.ts:41:1 › blocked storage still toggles and invalid values default dark
+[6/7] tests\e2e\theme.spec.ts:44:1 › native authenticated session, Socket.IO connection and unsent composer survive theme changes
+[7/7] tests\e2e\theme.spec.ts:64:1 › actual light/dark login and Lobby screenshots, contrast and compact button at all four sizes
+  1) tests\e2e\theme.spec.ts:64:1 › actual light/dark login and Lobby screenshots, contrast and compact button at all four sizes 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 44
+    Received: 44.00000190734863
+
+      63 |
+      64 | test('actual light/dark login and Lobby screenshots, contrast and compact button at all four sizes',async({page})=>{
+    > 65 |  const measurements=[];for(const mode of ['light','dark'])for(const route of ['login','']){await page.goto(base+'/'+route);await select(page,mode==='light'?'Sáng':'Tối');if(!route)await expect(page.getByRole('heading',{name:/Lobby ·/})).toBeVisible();for(const [width,height] of [[1440,900],[1280,800],[390,844],[360,800]]){await page.setViewportSize({width,height});await page.evaluate(()=>document.fonts.ready);await assertTheme(page,mode);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);const trigger=page.getByRole('button',{name:/Chuyển sang/});const bounds=await trigger.boundingBox();expect(bounds!.height).toBe(44);expect(bounds!.width).toBe(44);await expect(trigger).toHaveText('');await trigger.hover();const result=await contrast(page);expect(result.measured).toBeGreaterThan(5);expect(result.failures).toEqual([]);for(const control of result.controls){expect(control.focus).toBeGreaterThanOrEqual(3);if(mode==='light')expect(control.border).toBeGreaterThanOrEqual(3);}measurements.push({mode,route:route||'lobby',width,...result});await page.screenshot({path:evidenceDir+'/screenshots/'+mode+'-'+(route||'lobby')+'-'+width+'x'+height+'.png',fullPage:true});}}
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^
+      66 |  fs.writeFileSync(evidenceDir+'/contrast.json',JSON.stringify(measurements,null,2)+'\n');
+      67 | });
+      68 |
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:65:686
+
+    Error Context: .cache\theme\results\theme-actual-light-dark-lo-91fa9-ct-button-at-all-four-sizes\error-context.md
+
+    Error Context: .cache\theme\results\theme-actual-light-dark-lo-91fa9-ct-button-at-all-four-sizes\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:64:1 › actual light/dark login and Lobby screenshots, contrast and compact button at all four sizes 
+  6 passed (32.9s)

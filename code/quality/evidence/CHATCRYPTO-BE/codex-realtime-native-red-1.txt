@@ -1,0 +1,53 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21936) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (36.619 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › requires member session and owned active device, rejects plaintext legacy subscriptions for E2EE
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › broadcasts committed native ciphertext via opaque Redis IDs and recovers the same DTO through REST
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      76 |  });
+      77 |  it('broadcasts committed native ciphertext via opaque Redis IDs and recovers the same DTO through REST',async()=>{
+    > 78 |   const dto=await send('alice','first');await wait(()=>received.get('alice')!.length===1&&received.get('bob')!.length===1&&published.includes(dto.id));
+         |                                                                              ^
+      79 |   expect(received.get('alice')![0]).toEqual(dto);expect(received.get('bob')![0]).toEqual(dto);expect(legacy).toEqual([]);
+      80 |   expect(published.every(id=>/^[a-f0-9-]{36}$/.test(id))).toBe(true);expect(JSON.stringify(received)).not.toContain('private-realtime-first');
+      81 |   const row=(await pool.query(`SELECT content FROM messages WHERE id=$1`,[dto.id])).rows[0];expect(row.content).toBe('');
+
+      at test/chat-crypto-realtime.integration.spec.ts:78:78
+      at wait (test/chat-crypto-realtime.integration.spec.ts:33:100)
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:78:47)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › stops delivery and rejects resubscription after device revocation
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      85 |  it('stops delivery and rejects resubscription after device revocation',async()=>{
+      86 |   const bob=sockets[3];expect((await request(base).delete('/api/v1/crypto/devices/B').set('Origin',origin).set('Cookie',cookies.get('bob')!)).status).toBe(200);
+    > 87 |   const dto=await send('alice','after-revoke');await wait(()=>received.get('alice')!.length===2&&published.includes(dto.id));await new Promise(resolve=>setTimeout(resolve,200));
+         |                                                                                     ^
+      88 |   expect(received.get('bob')).toHaveLength(1);expect(await subscribe(bob,'B')).toMatchObject({ok:false});
+      89 |  });
+      90 |  it('rechecks membership and durable logout on an already connected socket',async()=>{
+
+      at test/chat-crypto-realtime.integration.spec.ts:87:85
+      at wait (test/chat-crypto-realtime.integration.spec.ts:33:100)
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:87:54)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rechecks membership and durable logout on an already connected socket
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 4 total
+Snapshots:   0 total
+Time:        37.176 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

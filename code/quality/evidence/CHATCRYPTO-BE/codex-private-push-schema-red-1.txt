@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25404) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (58.908 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › boots with an incomplete owned crypto schema but keeps crypto APIs unavailable
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "PENDING"
+    Received: "FAILED"
+
+      132 |  it('boots with an incomplete owned crypto schema but keeps crypto APIs unavailable',async()=>{
+      133 |   await app.close();app=undefined!;await pool.query('DROP TABLE chat_crypto_legacy_stage_objects');app=await NestFactory.create(AppModule,{logger:false,bodyParser:false,abortOnError:false});configureFgHttpBodyParsers(app);await app.listen(0,'127.0.0.1');base=await app.getUrl();
+    > 134 |   const pending=(await pool.query("SELECT id FROM notification_outbox WHERE channel='PUSH' AND status='PENDING' ORDER BY id LIMIT 1")).rows[0];expect(pending).toBeDefined();const schemaDispatcher=new PrivatePushDispatcher(pool,{allowedOrigins:[previous.FG_REPORT_TEST_ADDRESS!],vapid:{...webpush.generateVAPIDKeys(),subject:'https://fg.invalid/push'},ca:fs.readFileSync(previous.FG_REPORT_TEST_CA!)});expect(await schemaDispatcher.dispatchOne(pending.id)).toBe(false);expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[pending.id])).rows[0].status).toBe('PENDING');
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^
+      135 |   const relay=app.get(CryptoRelayService),reports=app.get(CryptoReportsService),relayQuery=jest.spyOn((relay as unknown as {pool:pg.Pool}).pool,'query'),reportQuery=jest.spyOn((reports as unknown as {pool:pg.Pool}).pool,'query'),publish=jest.fn(async()=>{});try{await relay.cleanup();await reports.cleanup();await relay.dispatchProtocol(publish);expect(await relay.committedCiphertext(messageId)).toBeNull();expect(relayQuery).not.toHaveBeenCalled();expect(reportQuery).not.toHaveBeenCalled();expect(publish).not.toHaveBeenCalled();}finally{relayQuery.mockRestore();reportQuery.mockRestore();}
+      136 |   expect((await request(base).get('/api/v1/crypto/devices').set('Cookie',cookies.alice)).status).toBe(503);expect((await request(base).get('/api/v1/crypto/conversations/dm/state').set('Cookie',cookies.alice)).status).toBe(503);expect((await pool.query("SELECT to_regclass('chat_crypto_legacy_stage_objects') IS NULL AS absent")).rows[0].absent).toBe(true);expect((await pool.query('SELECT content FROM messages WHERE id=$1',[messageId])).rows[0].content).toBe('');
+      137 |  });
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:134:578)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        59.365 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"a59f0326e5ac40d38f4659e5ad252b4c","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

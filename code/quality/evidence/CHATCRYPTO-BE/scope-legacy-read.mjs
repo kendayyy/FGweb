@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/CHATCRYPTO-BE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),before=JSON.parse(fs.readFileSync(`${dir}/before.json`)),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);for(const old of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===old.id),old);
+const paths=['packages/contracts/test/chat-crypto-legacy-read.test.ts'];for(const p of paths){assert(!fs.existsSync(p));assert(!Object.hasOwn(before.readonly,p));assert(!task.writeAllowlist.includes(p));}
+const amendment={adoptedAt:new Date().toISOString(),source:'Persisted human Permission to broaden Write Scope or touch locked files',paths,beforeSha256:{},evidence:`${dir}/scope-legacy-read.json`,reason:'Current BE legacy read prerequisite: explicit canonical source manifest and image digest/metadata for verified-cohort migration. Shared contract sources/dist and API/test paths already owned. No commit/reconciliation claim, no old migration/PASS/checker/main mutation.',plan:`${dir}/legacy-implementation-review.md`};
+fs.writeFileSync(amendment.evidence,JSON.stringify(amendment,null,2)+'\n',{flag:'wx'});task.writeAllowlist.push(...paths);task.approvedScopeAmendments.push(amendment);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify({task:task.id,status:task.status,pinned:paths.length,historicalPASS:before.historical.length}));

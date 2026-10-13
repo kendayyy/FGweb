@@ -1,0 +1,53 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts
+
+(node:4996) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-gateway.integration.spec.ts (37.907 s)
+  ● T26 private native SFU gateway authorization › native logout revokes the original unexpired token and removes the connected participant
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      71 |   const {join}=await admitted();expect((await signal(join.token)).accepted).toBe(true);
+      72 |   const logout=await request(base).post('/api/auth/sign-out').set('Cookie',cookies.viewer).set('Origin',origin).send({});expect(logout.status).toBe(200);
+    > 73 |   expect((await sfu.listParticipants(join.roomName)).length).toBe(0);
+         |                                                              ^
+      74 |   expect((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).exp!>Date.now()/1000).toBe(true);
+      75 |   expect((await signal(join.token)).status).toBe(403);await eventually(async()=>!(await sfu.listParticipants(join.roomName)).length);
+      76 |   expect((await pool.query("SELECT id FROM session WHERE user_id='viewer'")).rowCount).toBe(0);
+
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:73:62)
+
+  ● T26 private native SFU gateway authorization › native room removal revokes an existing participant and replay without deleting the room
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      79 |   const {room,join}=await admitted();expect((await signal(join.token)).accepted).toBe(true);
+      80 |   const removed=await request(base).delete(`/api/v1/rooms/${room.id}/members/viewer`).set('Cookie',cookies.owner).set('Origin',origin);expect(removed.status).toBe(200);
+    > 81 |   expect((await sfu.listParticipants(join.roomName)).length).toBe(0);
+         |                                                              ^
+      82 |   expect((await signal(join.token)).status).toBe(403);await eventually(async()=>!(await sfu.listParticipants(join.roomName)).length);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);
+      83 |  });
+      84 |  it('bans deny before SFU handshake and permanently invalidate the old lease even after unban',async()=>{
+
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:81:62)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        38.392 s
+Ran all test suites matching test/call-gateway.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts

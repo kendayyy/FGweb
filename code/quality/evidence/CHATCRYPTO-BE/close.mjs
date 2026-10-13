@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import {audit,dir,hash} from './final-audit.mjs';
+
+const report=await audit(),ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8')),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+const labels=['transport-budget-regression-2','transport-budget-scoped-regression-1','transport-budget-api-build-1','lint-84','diff-61','progress-audit-67','progress-save-55','closure-stage-3','final-lint-3','final-diff-1','final-audit-3'];
+const commands=labels.map(label=>{const record=JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`,'utf8'));assert.equal(record.exitCode,0,label);assert.equal(hash(record.evidencePath),record.evidenceSha256);return record;});
+assert.equal(report.nativeCoreTests,301);assert.equal(report.scopedTests,28);assert.equal(report.historicalPassUnchanged,75);assert.equal(report.otherTaskRowsUnchanged,95);
+const records=fs.readdirSync(dir).filter(p=>/^codex-.*\.json$/.test(p)).map(p=>JSON.parse(fs.readFileSync(`${dir}/${p}`,'utf8')));
+const walk=root=>{if(!fs.existsSync(root))return [];return fs.readdirSync(root,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(`${root}/${entry.name}`):entry.isFile()?[`${root}/${entry.name}`]:[]);};
+const files=[...new Set(task.writeAllowlist.flatMap(p=>p.endsWith('/**')?walk(p.slice(0,-3)):fs.existsSync(p)&&fs.statSync(p).isFile()?[p]:[]))].filter(p=>!p.startsWith('.runtime/')&&!p.startsWith('.cache/')&&!p.startsWith(`${dir}/codex-close-`)&&p!==`${dir}/closure.json`);
+for(const p of files)assert(path.resolve(p).startsWith(process.cwd()+path.sep));
+task.commands=[...new Map([...task.commands,...commands].map(record=>[record.evidencePath,record])).values()];
+for(const record of records.filter(r=>r.exitCode!==0))if(!task.failedAttempts.some(item=>item.record?.evidencePath===record.evidencePath))task.failedAttempts.push({record,resolution:`${dir}/backend-acceptance-review.md`,resolvedBy:[`${dir}/codex-closure-stage-3.json`,`${dir}/codex-final-audit-3.json`]});
+task.evidencePaths=[...new Set([...task.evidencePaths,...records.flatMap(r=>[r.evidencePath,r.evidencePath.replace(/\.txt$/,'.json')]),`${dir}/final-audit.json`,`${dir}/backend-acceptance-review.md`,`${dir}/closure.json`])];
+task.status='PASS';task.blockers=[];task.completedAt=new Date().toISOString();task.review=`${dir}/backend-acceptance-review.md`;
+task.closureScope={localBackendCapabilities:true,productionActivation:false,frontendAcceptance:false,independentQaAcceptance:false,banProducerTask:'T37',banProducerImplemented:false,productionQuotaCeilingsSelected:false,mediaCapacityClaim:false};
+const closure={...report,status:'PASS',completedAt:task.completedAt,review:task.review,scope:task.closureScope,commands:labels,failedAttemptsRetained:task.failedAttempts.length,next:'CHATCRYPTO-FE',nextTaskStarted:false};
+fs.writeFileSync(`${dir}/closure.json`,JSON.stringify(closure,null,2)+'\n',{flag:'wx'});
+task.outputsHash={specSha256:task.specSha256,files:Object.fromEntries([...files,`${dir}/closure.json`].map(p=>[p,hash(p)]))};
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const actual=JSON.parse(fs.readFileSync('quality/tasks.json','utf8')).tasks.find(t=>t.id===task.id);assert.deepEqual(actual,task);
+fs.appendFileSync('../.doc/history.md',`\n- Coding and build 2 — CHATCRYPTO-BE — ${new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00: kết thúc BE local acceptance sau Codex review và final integrity audit. Ledger PASS/spec snapshot thực,75historicalPASS/95otherrows/checker theo rebaseline và8docs giữ nguyên. Fresh native301/17, scoped28/4, build/lint/diff/current gate/final audit đạt; ${task.failedAttempts.length}failed runs được giữ. Maincryptoabsent/ownPG-Docker-runtime0, không production/FE/QA/T37producer/1,000media claim; quota production chưa chọn. Evidence code/quality/evidence/CHATCRYPTO-BE/closure.json và backend-acceptance-review.md. FE chưa bắt đầu, phải stockgate/review scope riêng trước coding.\n`);
+console.log(JSON.stringify(closure));

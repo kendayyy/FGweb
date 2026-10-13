@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "label": "email-only incomplete onboarding and provider avatar",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "Discord identity persisted",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "other account cannot leak into current DTO",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "explicit null profile avatar does not fall back to provider; empty interests incomplete",
+      "queries": 4,
+      "persistedDtoExact": true
+    }
+  ],
+  "cleanup": {
+    "schemaRemoved": true,
+    "clientEnded": true
+  },
+  "failure": {
+    "name": "Error",
+    "message": "Failed query: insert into \"game_interests\" (\"id\", \"user_id\", \"game_id\", \"created_at\") values (default, $1, $2, default), (default, $3, $4, default), (default, $5, $6, default)\nparams: 0eb55ac5-9f70-4202-83af-17a3fa21d8e9,5baca788-cf3e-423f-9aea-b12b0fea3798,0eb55ac5-9f70-4202-83af-17a3fa21d8e9,7a982248-145e-416f-8644-284020589717,0eb55ac5-9f70-4202-83af-17a3fa21d8e9,381a1fe9-ccef-4066-b54f-ac6f43ae1f25"
+  }
+}

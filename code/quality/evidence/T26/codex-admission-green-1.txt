@@ -1,0 +1,40 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12476) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-admission.integration.spec.ts (39.644 s)
+  ● T26 native HTTP/PostgreSQL call admission › logout and bans invalidate token issuance even for an already reserved user
+
+    error: column "admin_id" of relation "admin_actions" does not exist
+
+      108 |   const r=await room(),c=await call(r.id);expect((await post(`calls/${c.id}/join`,'viewer-0')).status).toBe(201);
+      109 |   await pool.query('DELETE FROM session WHERE user_id=$1',['viewer-0']);expect((await post(`calls/${c.id}/join`,'viewer-0')).status).toBe(401);
+    > 110 |   await pool.query("INSERT INTO admin_actions(id,admin_id,target_user_id,action) VALUES($1,'owner','viewer-1','BAN')",[randomUUID()]);
+          |   ^
+      111 |   expect((await post(`calls/${c.id}/join`,'viewer-1')).status).toBe(403);
+      112 |  });
+      113 |  it('tokens bind only the admitted identity/room, expire shortly and do not enable camera or screen publication',async()=>{
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:110:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 12 passed, 13 total
+Snapshots:   0 total
+Time:        40.222 s, estimated 55 s
+Ran all test suites matching test/call-admission.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts

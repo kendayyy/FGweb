@@ -1,0 +1,9 @@
+file:///E:/FGweb/code/scripts/verify-task.mjs:23
+ for(const [file,{digest,task}] of latest){const location=inside(root,file);if(task.writeAllowlist&&!allow(file,task.writeAllowlist))throw new Error('output outside task allowlist');if(hash(location).toLowerCase()!==digest.toLowerCase())throw new Error('output hash changed');}
+                                                                                                                                                                                                                                                   ^
+
+Error: output hash changed
+    at checkGate (file:///E:/FGweb/code/scripts/verify-task.mjs:23:244)
+    at file:///E:/FGweb/code/quality/evidence/T24-FIX2/close.mjs:25:1
+
+Node.js v24.21.0

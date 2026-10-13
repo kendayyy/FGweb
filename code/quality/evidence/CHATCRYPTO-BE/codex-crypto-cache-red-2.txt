@@ -1,0 +1,111 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:37780) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-cache.integration.spec.ts (28.774 s)
+  ● actual AppModule private crypto cache policy › prevents caching an authenticated JSON response at /api/v1/crypto/devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      35 |  afterAll(async()=>{try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=previous;}}});
+      36 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/conversations/cache-dm/state'])('prevents caching an authenticated JSON response at %s',async route=>{
+    > 37 |   const response=await request(base).get(route).set('Cookie',cookie);expect(response.status).toBe(200);expect(response.headers['cache-control']).toBe('no-store');
+         |                                                                                                                                                  ^
+      38 |  });
+      39 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/recovery'])('prevents caching session denial at %s',async route=>{
+      40 |   const response=await request(base).get(route);expect(response.status).toBe(401);expect(response.headers['cache-control']).toBe('no-store');
+
+      at test/chat-crypto-cache.integration.spec.ts:37:146
+
+  ● actual AppModule private crypto cache policy › prevents caching an authenticated JSON response at /api/v1/crypto/conversations/cache-dm/state
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      35 |  afterAll(async()=>{try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync(parent),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=previous;}}});
+      36 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/conversations/cache-dm/state'])('prevents caching an authenticated JSON response at %s',async route=>{
+    > 37 |   const response=await request(base).get(route).set('Cookie',cookie);expect(response.status).toBe(200);expect(response.headers['cache-control']).toBe('no-store');
+         |                                                                                                                                                  ^
+      38 |  });
+      39 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/recovery'])('prevents caching session denial at %s',async route=>{
+      40 |   const response=await request(base).get(route);expect(response.status).toBe(401);expect(response.headers['cache-control']).toBe('no-store');
+
+      at test/chat-crypto-cache.integration.spec.ts:37:146
+
+  ● actual AppModule private crypto cache policy › prevents caching session denial at /api/v1/crypto/devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      38 |  });
+      39 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/recovery'])('prevents caching session denial at %s',async route=>{
+    > 40 |   const response=await request(base).get(route);expect(response.status).toBe(401);expect(response.headers['cache-control']).toBe('no-store');
+         |                                                                                                                             ^
+      41 |  });
+      42 |  it('prevents caching a CSRF denial before any private write',async()=>{
+      43 |   const before=(await pool.query('SELECT count(*) FROM chat_crypto_devices')).rows[0].count;
+
+      at test/chat-crypto-cache.integration.spec.ts:40:125
+
+  ● actual AppModule private crypto cache policy › prevents caching session denial at /api/v1/crypto/recovery
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      38 |  });
+      39 |  it.each(['/api/v1/crypto/devices','/api/v1/crypto/recovery'])('prevents caching session denial at %s',async route=>{
+    > 40 |   const response=await request(base).get(route);expect(response.status).toBe(401);expect(response.headers['cache-control']).toBe('no-store');
+         |                                                                                                                             ^
+      41 |  });
+      42 |  it('prevents caching a CSRF denial before any private write',async()=>{
+      43 |   const before=(await pool.query('SELECT count(*) FROM chat_crypto_devices')).rows[0].count;
+
+      at test/chat-crypto-cache.integration.spec.ts:40:125
+
+  ● actual AppModule private crypto cache policy › prevents caching a CSRF denial before any private write
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      42 |  it('prevents caching a CSRF denial before any private write',async()=>{
+      43 |   const before=(await pool.query('SELECT count(*) FROM chat_crypto_devices')).rows[0].count;
+    > 44 |   const response=await request(base).post('/api/v1/crypto/devices').set('Cookie',cookie).set('Origin','https://foreign.example.invalid').send({});expect(response.status).toBe(403);expect(response.headers['cache-control']).toBe('no-store');expect((await pool.query('SELECT count(*) FROM chat_crypto_devices')).rows[0].count).toBe(before);
+         |                                                                                                                                                                                                                               ^
+      45 |  });
+      46 |  it('prevents caching a parser rejection that occurs before Nest guards',async()=>{
+      47 |   const response=await request(base).post('/api/v1/crypto/keys/query').set('Cookie',cookie).set('Origin',origin).send({padding:'a'.repeat(257*1024)});expect(response.status).toBe(413);expect(response.headers['cache-control']).toBe('no-store');
+
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:44:223)
+
+  ● actual AppModule private crypto cache policy › prevents caching a parser rejection that occurs before Nest guards
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "no-store"
+    Received: undefined
+
+      45 |  });
+      46 |  it('prevents caching a parser rejection that occurs before Nest guards',async()=>{
+    > 47 |   const response=await request(base).post('/api/v1/crypto/keys/query').set('Cookie',cookie).set('Origin',origin).send({padding:'a'.repeat(257*1024)});expect(response.status).toBe(413);expect(response.headers['cache-control']).toBe('no-store');
+         |                                                                                                                                                                                                                                   ^
+      48 |  });
+      49 | });
+      50 |
+
+      at Object.<anonymous> (test/chat-crypto-cache.integration.spec.ts:47:227)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 6 total
+Snapshots:   0 total
+Time:        29.329 s, estimated 32 s
+Ran all test suites matching apps/api/test/chat-crypto-cache.integration.spec.ts.

@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-10-09T12:37:35.735949+00:00",
+  "task": "CHATCRYPTO-BE",
+  "reviewer": "Codex",
+  "status": "READY_FOR_CONTRACT_RED",
+  "existingScopeOnly": true,
+  "paths": [
+    "packages/contracts/src/chat-crypto.ts",
+    "packages/contracts/test/chat-crypto-realtime.test.ts",
+    "packages/contracts/dist/chat-crypto.js",
+    "packages/contracts/dist/chat-crypto.d.ts",
+    "quality/api-contract.md"
+  ],
+  "beforeSha256": {
+    "packages/contracts/src/chat-crypto.ts": "9958e18de0caa1746ff1e8951c490586fcb8494852384fbce03f2bf77032cfbb",
+    "packages/contracts/test/chat-crypto-realtime.test.ts": "38ff57a68a4351ff054b23a8c4cdf23bcca1d5c1c688b4fe7ce6d53946fa404f",
+    "packages/contracts/dist/chat-crypto.js": "6334a1373d950ca5e78bf40fb83d042e27a3ee6ceff3461bc26d444bf088a05c",
+    "packages/contracts/dist/chat-crypto.d.ts": "7fd25b751936cad78783014dbe30bbe86fa50f32a6077eb57391c8ebb1fe420a",
+    "quality/api-contract.md": "71921c26b40f9fd12373e438425a160d5a348bccb2b3b0dc53ecc7137455e754"
+  },
+  "approvedProtocolSha256": "d2a7eb2e950d7aa98872e260643f2b6f11843a182853ca615508392166527610",
+  "source": "Spec17/approved protocol: client-side mention semantics, valid ID routing only",
+  "decision": [
+    "Optional bounded distinct mentionedUserIds(max1000,each opaque128) in live encrypted send and LIVE DTO only; omitted remains backward compatible",
+    "Reuse existing mentions table, no migration/frozen database source change",
+    "Persist routing claim for exact retry binding; server does not verify or parse decrypted mention semantics",
+    "Use existing MENTION NotificationDTO with mentionerId; no EMAIL/private content/preview",
+    "Targets must be current eligible DM peer/group member, no sender/self/unknown/outsider/banned target; invalid selection rejected atomically",
+    "Legacy import DTO unchanged and rejects live routing field; client encrypted legacy binding remains authoritative",
+    "No Matrix protocol/library/version/cipher changes or transport quota increase"
+  ],
+  "checkerUnchanged": true,
+  "historicalPassUnchanged": true,
+  "backendComplete": false,
+  "evidence": "private-mention-plan.md"
+}

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-12T07:09:12.883Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Native70 actual owned controller500 PG_CONNECT_TIMEOUT at compiled TeamsService.transaction line24, pooltotal3-5/pids2/waiting0 during new handshake, max16 not exhausted. Installed pg-pool defaults idle eviction10s/min0; a four-client startup ready set retained at min4 removes recurring cold handshakes for roster reads. Keeps max16/connect5s/statement10s and every transaction/authorization/query/lock unchanged. Does not establish unique cause of fifth actor loading or native acceptance. Real PG idle reuse RED/GREEN and original team/play/invitation guards required before application. Actual PG red1 four idle backend PIDs all evicted after11s then four different PIDs reauthenticated; pool cleanup verified. min4 retains small ready set only, startup awaits allSettled and releases every fulfilled client before propagating failure, no false readiness. Fresh original team/play/invitation/backend guards and headed native remain required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "proposed": "quality/evidence/T30/teams-pool-reuse-reviewed1.ts",
+      "beforeSha256": "b16d6ba271d33e9531f25169c019a52f779a8ae615ae9f441b3270567965cf0a",
+      "afterSha256": "ab22b8dd31026fbb7b4be3dc4295a868138ca069918ca02149f9ff31ced2e592"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/teams-pool-reuse-adoption-plan1.json",
+    "sha256": "ede7e81ccfeacb8722ef564b7714296e68d55027e4617e68a9154d4b7df72c21"
+  },
+  "nativeAcceptancePending": true
+}

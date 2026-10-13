@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-10-11T12:23:50.948Z",
+  "command": {
+    "command": "node quality/evidence/T30/run-noop-write3.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T12:23:00.595Z",
+    "completedAt": "2026-10-11T12:23:50.899Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-noop-write-green-1.txt",
+    "evidenceSha256": "7e7b45414bc5e5d474ebe1f98ee43d5ba767bc2eeeeb1b2ede48e7d03ca7e4e7"
+  },
+  "cleanup": {
+    "path": "quality/evidence/T30/noop-write-cleanup-2fc5e05c05424278832730ad6fbc617c.json",
+    "proof": {
+      "recordedAt": "2026-10-11T12:23:50.373Z",
+      "schemaRemoved": true,
+      "poolEnded": true,
+      "prototypesRestored": true,
+      "envRestored": true,
+      "appClosed": true,
+      "observations": [
+        {
+          "kind": "first",
+          "count": 1,
+          "rowCount": 1,
+          "timestampExact": true,
+          "disconnectNull": true
+        },
+        {
+          "kind": "repeated",
+          "count": 1,
+          "rowCount": 0,
+          "ctidUnchanged": true,
+          "xminUnchanged": true,
+          "timestampUnchanged": true
+        },
+        {
+          "kind": "reconnect",
+          "count": 1,
+          "rowCount": 1,
+          "disconnectCleared": true,
+          "firstTimestampRetained": true
+        },
+        {
+          "kind": "revoked",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "expired",
+          "count": 0,
+          "rowCount": null,
+          "released": true,
+          "revoked": true
+        },
+        {
+          "kind": "absentGrace",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        },
+        {
+          "kind": "unconnected",
+          "retainedBeforeBoundary": true,
+          "releasedAtBoundary": true
+        }
+      ],
+      "errorCount": 0
+    }
+  },
+  "testsPassed": 7,
+  "reviewer": "Codex",
+  "plan": {
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "Actual source/Nest/own PostgreSQL RED7: six firstpresence/reconnect/revoked/expired/absent exact30s/unconnected expiration controls pass; only alreadyconnected behavior fails, actual affectedrow1 and changedctid/xmin. Surgical SQL predicate skips unchanged connected row inside original awaitedquery, room/grouplocks and fresh liveLease; original timestamps/grace/native permission/authority remain. Scoped test query observer returns original promise and cleanup actual appclose/schemaabsence/poolend/prototype/env true. No WAL amount/performance/fullnative acceptance claim; native acceptance still pending.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+        "proposed": "quality/evidence/T30/lifecycle-noop-reviewed1.ts",
+        "beforeSha256": "831a86a7efa2e226f1011e978fe8631391e9e5563681ee3c312e6ad4e2f0df7e",
+        "afterSha256": "425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865"
+      }
+    ]
+  },
+  "performanceClaim": false,
+  "nativeAcceptance": false
+}

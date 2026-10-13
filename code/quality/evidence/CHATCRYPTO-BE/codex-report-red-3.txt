@@ -1,0 +1,131 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25180) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (29.359 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › requires session and same-origin consented writes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      64 |  });
+      65 |  it('requires session and same-origin consented writes',async()=>{
+    > 66 |   expect((await request(base).post('/api/v1/crypto/reports').set('Origin',origin).send(disclosure())).status).toBe(401);
+         |                                                                                                               ^
+      67 |   expect((await request(base).post('/api/v1/crypto/reports').set('Cookie',cookies.alice).set('Origin','https://evil.invalid').send(disclosure())).status).toBe(403);
+      68 |  });
+      69 |  it('stores only selected disclosure encrypted with an independent report role and binding',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:66:111)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › stores only selected disclosure encrypted with an independent report role and binding
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      68 |  });
+      69 |  it('stores only selected disclosure encrypted with an independent report role and binding',async()=>{
+    > 70 |   const sent=await post(disclosure());expect(sent.status).toBe(201);expect(Object.keys(sent.body)).toEqual(['id']);
+         |                                                           ^
+      71 |   const report=(await pool.query('SELECT * FROM reports WHERE id=$1',[sent.body.id])).rows[0];expect(report.reason).toBe('CHAT_CRYPTO_DISCLOSURE');expect(report.details).toBeNull();
+      72 |   const evidence=(await pool.query('SELECT * FROM chat_crypto_report_evidence WHERE report_id=$1 ORDER BY id',[sent.body.id])).rows;expect(evidence).toHaveLength(2);
+      73 |   const decoded=[];
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:70:59)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rejects absent consent, duplicate selections, foreign conversation, outsiders and unsupported image/source claims
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      83 |  });
+      84 |  it('rejects absent consent, duplicate selections, foreign conversation, outsiders and unsupported image/source claims',async()=>{
+    > 85 |   expect((await post({...disclosure(),consent:false})).status).toBe(422);
+         |                                                                ^
+      86 |   const item=disclosure().selectedMessages[0];expect((await post({...disclosure(),selectedMessages:[item,item]})).status).toBe(422);
+      87 |   expect((await post({...disclosure(),selectedMessages:[{...item,messageId:ids[3]}]})).status).toBe(403);
+      88 |   expect((await post(disclosure(),cookies.outsider)).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:85:64)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › enforces historical intervals instead of granting old messages to a current participant
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      92 |  it('enforces historical intervals instead of granting old messages to a current participant',async()=>{
+      93 |   await pool.query(`UPDATE chat_crypto_membership_intervals SET end_revision=2,left_at=now() WHERE id='dm-bob'`);
+    > 94 |   try{expect((await post(disclosure(),cookies.bob)).status).toBe(403);}finally{await pool.query(`UPDATE chat_crypto_membership_intervals SET end_revision=NULL,left_at=NULL WHERE id='dm-bob'`);}
+         |                                                             ^
+      95 |  });
+      96 |  it('fails closed without writer permissions or valid explicit retention and writes no report',async()=>{
+      97 |   const before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count;
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:94:61)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › fails closed without writer permissions or valid explicit retention and writes no report
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 404
+
+       96 |  it('fails closed without writer permissions or valid explicit retention and writes no report',async()=>{
+       97 |   const before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count;
+    >  98 |   writerToken=process.env.FG_REPORT_TEST_DENIED!;try{expect((await post(disclosure())).status).toBe(503);}finally{writerToken=process.env.FG_REPORT_TEST_WRITER!;}
+          |                                                                                                ^
+       99 |   options.retentionSeconds=0;try{expect((await post(disclosure())).status).toBe(503);}finally{options.retentionSeconds=3600;}
+      100 |   expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);
+      101 |  });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:98:96)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rolls back report metadata and evidence on a real PostgreSQL evidence-write fault
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 404
+
+      103 |   const before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count,evidenceBefore=(await pool.query('SELECT count(*) FROM chat_crypto_report_evidence')).rows[0].count;
+      104 |   await pool.query(`CREATE FUNCTION report_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'fixture report fault'; END $$`);await pool.query('CREATE TRIGGER report_fault BEFORE INSERT ON chat_crypto_report_evidence FOR EACH ROW EXECUTE FUNCTION report_fault()');
+    > 105 |   try{expect((await post(disclosure())).status).toBe(500);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);expect((await pool.query('SELECT count(*) FROM chat_crypto_report_evidence')).rows[0].count).toBe(evidenceBefore);}
+          |                                                 ^
+      106 |   finally{await pool.query('DROP TRIGGER report_fault ON chat_crypto_report_evidence');await pool.query('DROP FUNCTION report_fault()');}
+      107 |  });
+      108 | });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:105:49)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 6 total
+Snapshots:   0 total
+Time:        29.847 s, estimated 30 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"36c20d7d6c284f9d8245578ff6518531","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:76:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

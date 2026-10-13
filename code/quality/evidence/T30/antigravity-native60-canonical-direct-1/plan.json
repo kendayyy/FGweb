@@ -1,0 +1,140 @@
+{
+  "planId": "antigravity-native60-canonical-direct-1",
+  "targetTask": "T30",
+  "createdAt": "2026-10-12T02:36:00.000Z",
+  "purpose": "Provide strictly controlled canonical observer-free fixture server and direct gateway helper required for eventual original frozen test acceptance prior to any application fix, retaining all original assertions, deadlines, private LiveKit SDK authority, quota, shaped RTP, capture, mobile, and layout assertions, without claiming causality or remedy from removing instrumentation.",
+  "nativeAcceptance": false,
+  "backgroundInspection": {
+    "runId": "t30-native-593b5b067ea6420b92904ba12cd24810",
+    "exitCode": 1,
+    "duration": "19:21:47.747Z-19:25:05.874Z",
+    "milestones": {
+      "joins": 3,
+      "liveCaptures": 2,
+      "failedAssertion": "expected 2 stream tabs, got 1 (line 52/66)",
+      "completedRtpWindows": 0
+    },
+    "observations": {
+      "gatewayRoomLockTimeouts": 5,
+      "errorCode": "57014",
+      "gatewayPids": [6228, 6229, 6230, 6231],
+      "pgWaitSamples": 15,
+      "blockerPids": [6254, 6295, 6349, 6355, 6429],
+      "blockerMethods": [
+        "CallsService.participants",
+        "CallsService.list",
+        "CallsService.withControlGroup",
+        "CallLifecycleService.reconcileGroup",
+        "TeamsService.transaction"
+      ],
+      "apiPoolTimeouts": true,
+      "apiHttp500": true
+    },
+    "causalityDisclaimer": "Removing instrumentation, diagnostic wrappers, or switching gateway DB route to direct docker bridge does NOT cure transaction locking contention or prove unique root cause. Instrumentation-free canonical environment is strictly prerequisite for baseline comparison and eventual acceptance."
+  },
+  "invariants": {
+    "applicationSourceChanges": 0,
+    "testSourceChanges": 0,
+    "testDeadlinesChanged": false,
+    "originalAssertionsPreserved": [
+      "45000ms deadline",
+      "5s third-actor share tab assertion",
+      "private LiveKit SDK authority",
+      "quota enforcement",
+      "shaped RTP network latency",
+      "screen capture",
+      "mobile drawer layout",
+      "viewport inspection"
+    ],
+    "zeroInstrumentation": {
+      "preloadRemoved": true,
+      "startupWrapperRemoved": true,
+      "runtimeArgv": ["node", "/gateway/app/gateway-main.js", "/gateway/input.json"],
+      "apiObserverRemoved": true
+    },
+    "directRouteSafety": {
+      "targetNetwork": "fg-local_default",
+      "alias": "fg-local-postgres-1",
+      "port": 5432,
+      "attachedBeforeStart": true,
+      "preflightVerified": true,
+      "cleanupVerificationEnforced": true
+    }
+  },
+  "countedExactAnchors": {
+    "helper": [
+      {
+        "index": 1,
+        "name": "DirectSupportImport",
+        "type": "import_addition",
+        "target": "quality/evidence/T30/private-gateway-shaped-fixture.mjs",
+        "original": "import {fileURLToPath} from 'node:url';\nconst root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');",
+        "canonical": "import {fileURLToPath} from 'node:url';\nimport {prepareDirectDatabase,createDirectGateway,inspectDirectCleanup} from './gateway-direct-support-reviewed1.mjs';\nconst root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');"
+      },
+      {
+        "index": 2,
+        "name": "DirectDatabasePreflight",
+        "type": "database_url_preflight",
+        "target": "quality/evidence/T30/private-gateway-shaped-fixture.mjs",
+        "original": " const connection=new URL(databaseURL);connection.hostname='host.docker.internal';",
+        "canonical": " const directDatabase=prepareDirectDatabase(docker,databaseURL),connection=directDatabase.connection;"
+      },
+      {
+        "index": 3,
+        "name": "DirectCleanupVerification",
+        "type": "cleanup_assertion",
+        "target": "quality/evidence/T30/private-gateway-shaped-fixture.mjs",
+        "original": "  result.networkRemoved=!docker(['network','ls','--filter',`name=^${network}$`,'--format','{{.Name}}']).trim();\n  fs.writeFileSync(`${dir}/cleanup.json`,JSON.stringify(result,null,2)+'\n');return result;",
+        "canonical": "  result.networkRemoved=!docker(['network','ls','--filter',`name=^${network}$`,'--format','{{.Name}}']).trim();\n  Object.assign(result,inspectDirectCleanup(docker,directDatabase));\n  fs.writeFileSync(`${dir}/cleanup.json`,JSON.stringify(result,null,2)+'\n');\n  assert(result.mainServicesUnchanged&&result.existingNetworkUnchanged,'Direct route cleanup verification incomplete');return result;"
+      },
+      {
+        "index": 4,
+        "name": "DirectGatewayCreationAndNetworkAttachment",
+        "type": "container_creation_and_attachment",
+        "target": "quality/evidence/T30/private-gateway-shaped-fixture.mjs",
+        "original": "  const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);",
+        "canonical": "  const gateway=createDirectGateway({docker,containers,id,network,args:['create','--pull=never','--label',`fg-owner=t30-gateway-${id}`,'--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']});"
+      }
+    ],
+    "fixture": [
+      {
+        "index": 1,
+        "name": "CanonicalDirectGatewayFixtureImport",
+        "type": "fixture_import",
+        "target": "quality/evidence/T30/fixture-server-build2-inspector-reserved-reviewed1.mjs",
+        "original": "import {startGatewayFixture} from './private-gateway-shaped-fixture.mjs';",
+        "canonical": "import {startGatewayFixture} from './private-gateway-canonical-direct-reviewed1.mjs';"
+      }
+    ]
+  },
+  "deliveredArtifacts": [
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/private-gateway-canonical-direct-reviewed1.mjs",
+      "description": "Observer-free gateway helper with direct database preflight, fg-local_default network attachment, and strict cleanup verification."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/fixture-server-canonical-direct-reviewed1.mjs",
+      "description": "Observer-free fixture server importing canonical direct gateway helper with single counted anchor."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/gateway-direct-support-reviewed1.mjs",
+      "description": "Preflight database inspection, createDirectGateway helper connecting fg-local_default, and inspectDirectCleanup."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/prepare-canonical-direct.mjs",
+      "description": "Verification script asserting exact anchors, reverse byte equality, and sha256 checksums."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/plan.json",
+      "description": "Structured proposal plan."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/shortplan.md",
+      "description": "Human-readable summary and rationale."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native60-canonical-direct-1/controls-plan.json",
+      "description": "Validation criteria and assertions for canonical smoke testing."
+    }
+  ]
+}

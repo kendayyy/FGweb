@@ -1,0 +1,80 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:13112) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (31.789 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › uses configured Lobby role without a fixture DI override and stores only server AEAD
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 503
+
+      38 |  afterAll(async()=>{machine?.close();try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=previous;}}});
+      39 |  it('uses configured Lobby role without a fixture DI override and stores only server AEAD',async()=>{
+    > 40 |   const sent=await lobbyPost('actual-configured');expect(sent.status).toBe(201);expect(sent.body.content).toBe('public-configured-actual-configured');const row=(await pool.query('SELECT content,crypto_envelope FROM messages WHERE id=$1',[sent.body.id])).rows[0];expect(row.content).toBe('');expect(row.crypto_envelope.keyId).toBe('fg-lobby');expect(JSON.stringify(row)).not.toContain('public-configured-actual-configured');const read=await request(base).get(`/api/v1/conversations/${lobby}/messages`);expect(read.status).toBe(200);expect(read.body.items).toContainEqual(expect.objectContaining({id:sent.body.id,content:'public-configured-actual-configured'}));
+         |                                                                       ^
+      41 |  });
+      42 |  it('uses distinct configured report writer/reader and restricts disclosure to sole admin',async()=>{
+      43 |   const sent=await report('configured-report');expect(sent.status).toBe(201);const row=(await pool.query('SELECT * FROM chat_crypto_report_evidence WHERE report_id=$1',[sent.body.id])).rows[0];expect(row.envelope.keyId).toBe('fg-report');expect(JSON.stringify(row)).not.toContain('explicitly-selected');const read=(cookie:string)=>request(base).post(`/api/v1/crypto/reports/${sent.body.id}/read`).set('Cookie',cookie).set('Origin',origin).send({});expect((await read(cookies.alice)).status).toBe(403);const disclosed=await read(cookies.outsider);expect(disclosed.status).toBe(201);expect(disclosed.body.selectedMessages[0].text).toBe('explicitly-selected-configured-report');expect((await request(base).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.outsider)).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:40:71)
+
+  ● Actual AppModule custody configuration over native TLS and isolated PG › uses distinct configured report writer/reader and restricts disclosure to sole admin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 503
+
+      41 |  });
+      42 |  it('uses distinct configured report writer/reader and restricts disclosure to sole admin',async()=>{
+    > 43 |   const sent=await report('configured-report');expect(sent.status).toBe(201);const row=(await pool.query('SELECT * FROM chat_crypto_report_evidence WHERE report_id=$1',[sent.body.id])).rows[0];expect(row.envelope.keyId).toBe('fg-report');expect(JSON.stringify(row)).not.toContain('explicitly-selected');const read=(cookie:string)=>request(base).post(`/api/v1/crypto/reports/${sent.body.id}/read`).set('Cookie',cookie).set('Origin',origin).send({});expect((await read(cookies.alice)).status).toBe(403);const disclosed=await read(cookies.outsider);expect(disclosed.status).toBe(201);expect(disclosed.body.selectedMessages[0].text).toBe('explicitly-selected-configured-report');expect((await request(base).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.outsider)).status).toBe(403);
+         |                                                                    ^
+      44 |  });
+      45 |  it('reloads credential files and rejects wrong-role/root/missing credentials without DB writes',async()=>{
+      46 |   const file=process.env.FG_BAO_REPORT_WRITER_TOKEN_FILE!,original=fs.readFileSync(file),before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count;try{for(const wrong of [process.env.FG_REPORT_TEST_LOBBY_FILE!,process.env.FG_REPORT_TEST_ROOT_FILE!]){fs.writeFileSync(file,fs.readFileSync(wrong));expect((await report('wrong-role')).status).toBe(503);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);}fs.unlinkSync(file);expect((await report('missing-role')).status).toBe(503);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);}finally{fs.writeFileSync(file,original);}expect((await report('restored-role')).status).toBe(201);
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:43:68)
+
+  ● Actual AppModule custody configuration over native TLS and isolated PG › reloads credential files and rejects wrong-role/root/missing credentials without DB writes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 503
+
+      44 |  });
+      45 |  it('reloads credential files and rejects wrong-role/root/missing credentials without DB writes',async()=>{
+    > 46 |   const file=process.env.FG_BAO_REPORT_WRITER_TOKEN_FILE!,original=fs.readFileSync(file),before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count;try{for(const wrong of [process.env.FG_REPORT_TEST_LOBBY_FILE!,process.env.FG_REPORT_TEST_ROOT_FILE!]){fs.writeFileSync(file,fs.readFileSync(wrong));expect((await report('wrong-role')).status).toBe(503);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);}fs.unlinkSync(file);expect((await report('missing-role')).status).toBe(503);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);}finally{fs.writeFileSync(file,original);}expect((await report('restored-role')).status).toBe(201);
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      47 |  });
+      48 | });
+      49 |
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:46:703)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        32.188 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"c21a9794e42048ccb57d88563911f698","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:78:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

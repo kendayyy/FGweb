@@ -1,0 +1,10 @@
+{
+  "command": "node --input-type=module -e import fs from \"node:fs\";import {createHash} from \"node:crypto\";import assert from \"node:assert/strict\";import {checkBaselines,checkGate} from \"./scripts/verify-task.mjs\";const dir=\"quality/evidence/CHATCRYPTO-BE\",ledger=JSON.parse(fs.readFileSync(\"quality/tasks.json\")),baseline=JSON.parse(fs.readFileSync(\"quality/spec-baseline.json\")),before=JSON.parse(fs.readFileSync(dir+\"/before.json\")),task=ledger.tasks.find(t=>t.id===\"CHATCRYPTO-BE\"),hash=p=>createHash(\"sha256\").update(fs.readFileSync(p)).digest(\"hex\");assert.equal(hash(\"scripts/verify-task.mjs\"),before.readonly[\"scripts/verify-task.mjs\"]);const count=checkBaselines({root:process.cwd(),baseline});let reason=\"\",accepted=false;try{checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:hash(\"../.doc/01-product-spec.md\")});accepted=true;}catch(error){reason=error.message;}assert.equal(accepted,false);assert.equal(reason,\"spec baseline changed\");assert.equal(task.status,\"IN_PROGRESS\");for(const old of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===old.id),old);const result={recordedAt:new Date().toISOString(),task:task.id,documentHashesVerified:count,stockCheckerUnchanged:true,stockGateAccepted:accepted,reason,backendSpecSha256:task.specSha256,currentSpecSha256:hash(\"../.doc/01-product-spec.md\"),historicalPassRowsUnchanged:before.historical.length,banProducerTask:task.banProducerDecision.implementationTask,banProducerAcceptanceSatisfied:task.banProducerDecision.acceptanceSatisfied,backendComplete:false};const file=dir+\"/stock-spec-snapshot-review.json\";assert(!fs.existsSync(file));fs.writeFileSync(file,JSON.stringify(result,null,2)+\"\\n\");console.log(JSON.stringify(result));",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-10T02:13:28.224Z",
+  "completedAt": "2026-10-10T02:13:28.466Z",
+  "exitCode": 0,
+  "signal": null,
+  "evidencePath": "quality/evidence/CHATCRYPTO-BE/codex-stock-spec-snapshot-review-1.txt",
+  "evidenceSha256": "83c5f7b163d97061d8739985cb67f7c142c7a9137f5b79460bf94ebf1419074d"
+}

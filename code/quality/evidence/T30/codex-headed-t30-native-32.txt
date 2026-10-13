@@ -1,0 +1,32 @@
+
+> test:e2e
+> playwright test tests/e2e/screen-share.spec.ts --config quality/evidence/T30/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:28476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.6m)
+
+
+  1) tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: Native observation failed
+
+      22 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+      23 | });
+    > 24 | async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+         |                                                                                                                                                                                                                                                                                                                           ^
+      25 | async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+      26 |  activePage=page;await page.bringToFront();await captureUiStep(page,{task:'T30',runId,step:++step,title:'T30 — chia sẻ màn hình thật',action,result,startedAt,headed:true,privacySafe:true,status,maskSelectors:['.fg-private-chat','.fg-crypto-sas','[data-demo-private]']});
+      27 | }
+        at _pending$get (E:\FGweb\code\tests\e2e\screen-share.spec.ts:24:315)
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\screen-share.spec.ts:17:79)
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

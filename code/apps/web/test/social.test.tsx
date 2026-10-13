@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/vitest';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ProfileDTO, PendingFriendRequestDTO, BlockDTO, ALLOWED_GAMES } from '@fg/contracts';
@@ -11,6 +11,7 @@ import { PeerSocialControls } from '../src/features/friends/PeerSocialControls.t
 import { unreadSync, UnreadSyncEvent } from '../src/features/direct-messages/sync.ts';
 import { LobbyPage } from '../src/features/lobby/LobbyPage.tsx';
 import { ProfilePage } from '../src/features/profiles/ProfilePage.tsx';
+import { CryptoDeviceProvider } from '../src/features/crypto/CryptoDeviceProvider';
 import { DirectMessagesPanel } from '../src/features/direct-messages/DirectMessagesPanel.tsx';
 import { FriendsModal } from '../src/features/friends/FriendsModal.tsx';
 
@@ -125,6 +126,15 @@ describe('T17-FE Friends, DMs, and Block filtering behavior', () => {
   let incomingRequests: PendingFriendRequestDTO[];
   let outgoingRequests: PendingFriendRequestDTO[];
   let lastFetchCalls: FetchCallRecord[];
+  // Real provider remains LOCKED in DOM tests; native/headed suites prove unlocked crypto.
+  async function lockedDm(id='dm-conv-user-peer') {
+    render(<QueryClientProvider client={client}><AuthProvider><MemoryRouter><CryptoDeviceProvider><DirectMessagesPanel isOpen={true} onClose={()=>{}} initialConversationId={id}/></CryptoDeviceProvider></MemoryRouter></AuthProvider></QueryClientProvider>);
+    const item=await screen.findByTestId('dm-conv-item-'+id);fireEvent.click(item);
+    await screen.findByText('Thiết bị đang khóa. Mở khóa riêng để đọc hoặc gửi chat mã hóa.',{exact:true});
+    return item;
+  }
+  function expectNoPlaintextTransport(){expect(lastFetchCalls.filter(call=>/\/conversations\/[^/]+\/messages/.test(call.url))).toEqual([]);}
+
 
   beforeEach(() => {
     client = new QueryClient({
@@ -516,11 +526,11 @@ describe('T17-FE Friends, DMs, and Block filtering behavior', () => {
     render(
       <QueryClientProvider client={client}>
         <AuthProvider>
-          <MemoryRouter initialEntries={['/users/user-peer/profile']}>
+          <CryptoDeviceProvider><MemoryRouter initialEntries={['/users/user-peer/profile']}>
             <Routes>
               <Route path="/users/:id/profile" element={<ProfilePage />} />
             </Routes>
-          </MemoryRouter>
+          </MemoryRouter></CryptoDeviceProvider>
         </AuthProvider>
       </QueryClientProvider>
     );
@@ -534,186 +544,46 @@ describe('T17-FE Friends, DMs, and Block filtering behavior', () => {
     await waitFor(() => {
       expect(screen.getByTestId('direct-messages-panel')).toBeInTheDocument();
     });
+    await screen.findByText('Thiết bị đang khóa. Mở khóa riêng để đọc hoặc gửi chat mã hóa.', {exact:true});
+    expect(screen.queryByText('Secret DM Message')).not.toBeInTheDocument();
   });
 
-  it('retains RichComposer draft and stable clientMessageId when DM send fails', async () => {
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-user-peer-fail" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail'));
-
-    await waitFor(() => {
-      expect(screen.getByRole('textbox', { name: 'Tin nhắn riêng' })).toBeInTheDocument();
-    });
-
-    const textarea = screen.getByRole('textbox', { name: 'Tin nhắn riêng' }) as HTMLTextAreaElement;
-    act(() => {
-      fireEvent.change(textarea, { target: { value: 'Unsent draft message' } });
-    });
-    expect(textarea.value).toBe('Unsent draft message');
-
-    const sendBtn = screen.getByLabelText('Gửi tin nhắn');
-    await waitFor(() => expect(sendBtn).not.toBeDisabled());
-    fireEvent.click(sendBtn);
-
-    const composerContainer = textarea.closest('.fg-rich-composer')!;
-    await waitFor(() => {
-      expect(within(composerContainer as HTMLElement).getByRole('alert')).toBeInTheDocument();
-    });
-
-    // Draft message MUST remain in textarea on failure!
-    expect(textarea.value).toBe('Unsent draft message');
-
-    // Verify POST fetch payload had clientMessageId
-    const sendCalls = lastFetchCalls.filter((c) => c.url.includes('/messages') && c.method === 'POST');
-    expect(sendCalls.length).toBeGreaterThan(0);
-    const firstClientMsgId = (sendCalls[0].body as { clientMessageId?: string })?.clientMessageId;
-    expect(firstClientMsgId).toBeDefined();
-
-    // Retry sending via sendBtn click
-    await waitFor(() => expect(sendBtn).not.toBeDisabled());
-    fireEvent.click(sendBtn);
-    await waitFor(() => {
-      expect(lastFetchCalls.filter((c) => c.url.includes('/messages') && c.method === 'POST').length).toBeGreaterThan(1);
-    });
-
-    const secondSendCall = lastFetchCalls.filter((c) => c.url.includes('/messages') && c.method === 'POST')[1];
-    const secondClientMsgId = (secondSendCall.body as { clientMessageId?: string })?.clientMessageId;
-    // Retained exact same clientMessageId on retry!
-    expect(secondClientMsgId).toBe(firstClientMsgId);
+  it('locked DM has an actual unlock route and cannot send through the former plaintext composer',async()=>{
+    await lockedDm('dm-conv-user-peer-fail');
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toHaveAttribute('href','/crypto');
+    expect(screen.queryByRole('textbox',{name:'Tin nhắn riêng',exact:true})).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Gửi tin nhắn')).not.toBeInTheDocument();
+    expectNoPlaintextTransport();
   });
 
-  it('updates unread count when closed DM panel receives socket MESSAGE_CREATED', async () => {
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <MemoryRouter>
-            <LobbyPage />
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>
-    );
 
-    await waitFor(() => {
-      expect(screen.getByText('Hello from Peer User!')).toBeInTheDocument();
-    });
-
-    // Fire socket event for a closed conversation on active connected sockets
-    act(() => {
-      const liveSockets = socketTransport.sockets.filter((s) => !s.closed);
-      for (const socket of liveSockets) {
-        socket.fire('message.created', {
-          id: 'new-dm-msg-1',
-          conversationId: 'dm-conv-user-peer',
-          senderId: 'user-peer',
-          sender: mockUserPeer,
-          content: 'New secret message!',
-          createdAt: new Date().toISOString(),
-          attachments: [],
-          mentions: [],
-          mentionedUserIds: [],
-        });
-      }
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('dm-unread-badge')).toHaveTextContent('1');
-    });
+  it('closed locked DM ignores plaintext socket events and counts strict encrypted metadata once',async()=>{
+    render(<QueryClientProvider client={client}><AuthProvider><MemoryRouter><LobbyPage/></MemoryRouter></AuthProvider></QueryClientProvider>);
+    await screen.findByText('Hello from Peer User!');
+    act(()=>{for(const socket of socketTransport.sockets.filter(s=>!s.closed))socket.fire('message.created',{id:'old-plaintext',conversationId:'dm-conv-user-peer',senderId:'user-peer',content:'Never display private text',createdAt:new Date().toISOString()});});
+    expect(screen.queryByTestId('dm-unread-badge')).not.toBeInTheDocument();
+    const event={id:'cipher-metadata',conversationId:'dm-conv-user-peer',senderId:'user-peer',clientMessageId:'metadata-client',deviceId:'PEER',membershipRevision:1,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:{algorithm:'m.megolm.v1.aes-sha2',ciphertext:'AAAA',session_id:'A'.repeat(43)}},createdAt:new Date(Date.now()+1000).toISOString(),attachmentIds:[],origin:'LIVE'};
+    // Structural metadata routing only; this does not simulate decryption/auth/SAS success.
+    act(()=>{unreadSync.ingestEncryptedMessage(event,null);unreadSync.ingestEncryptedMessage(event,null);});
+    await waitFor(()=>expect(screen.getByTestId('dm-unread-badge')).toHaveTextContent('1'));
+    expect(screen.queryByText('Never display private text')).not.toBeInTheDocument();
+    expectNoPlaintextTransport();
   });
 
-  it('renders message content in open active thread even if metadata bridge event arrived first', async () => {
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-user-peer" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('dm-conv-item-dm-conv-user-peer')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer'));
-
-    await waitFor(() => {
-      expect(screen.getByRole('textbox', { name: 'Tin nhắn riêng' })).toBeInTheDocument();
-    });
-
-    const activeMsgPayload = {
-      id: 'msg-active-bridge-1',
-      conversationId: 'dm-conv-user-peer',
-      senderId: 'user-peer',
-      sender: mockUserPeer,
-      content: 'Active thread message content',
-      createdAt: new Date().toISOString(),
-      attachments: [],
-      mentions: [],
-      mentionedUserIds: [],
-    };
-
-    // 1. Deliver real StorageEvent simulating BroadcastChannel metadata event from another tab FIRST
-    act(() => {
-      window.dispatchEvent(
-        new StorageEvent('storage', {
-          key: 'fg_unread_sync_user-actor',
-          newValue: JSON.stringify({
-            type: 'UNREAD_INCREMENT',
-            actorId: 'user-actor',
-            conversationId: 'dm-conv-user-peer',
-            messageId: 'msg-active-bridge-1',
-            timestamp: Date.now(),
-            tabId: 'other-tab-id',
-          }),
-        })
-      );
-    });
-
-    // 2. THEN fire live socket event carrying full message DTO second
-    act(() => {
-      const liveSockets = socketTransport.sockets.filter((s) => !s.closed);
-      for (const socket of liveSockets) {
-        socket.fire('message.created', activeMsgPayload);
-      }
-    });
-
-    // Message content MUST be rendered in active thread!
-    await waitFor(() => {
-      expect(screen.getByText('Active thread message content')).toBeInTheDocument();
-    });
+  it('active locked DM does not reveal plaintext injected after a metadata bridge event',async()=>{
+    await lockedDm();
+    act(()=>{unreadSync.ingestEncryptedMessage({id:'cipher-active',conversationId:'dm-conv-user-peer',senderId:'user-peer',clientMessageId:'active-client',deviceId:'PEER',membershipRevision:1,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:{algorithm:'m.megolm.v1.aes-sha2',ciphertext:'AAAA',session_id:'A'.repeat(43)}},createdAt:new Date().toISOString(),attachmentIds:[],origin:'LIVE'},'dm-conv-user-peer');for(const socket of socketTransport.sockets.filter(s=>!s.closed))socket.fire('message.created',{id:'cipher-active',conversationId:'dm-conv-user-peer',senderId:'user-peer',content:'Active thread message content'});});
+    expect(screen.queryByText('Active thread message content')).not.toBeInTheDocument();
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toBeInTheDocument();expectNoPlaintextTransport();
   });
 
-  it('sorts history messages chronologically from oldest to newest', async () => {
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-user-peer" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('dm-conv-item-dm-conv-user-peer')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer'));
-
-    await waitFor(() => {
-      expect(screen.getByRole('textbox', { name: 'Tin nhắn riêng' })).toBeInTheDocument();
-    });
-
-    // Verify messages list container is in document
-    const messageList = screen.getByTestId('dm-message-list');
-    expect(messageList).toBeInTheDocument();
+  it('locked private history remains unreadable and never fetches the former plaintext history endpoint',async()=>{
+    await lockedDm();expect(screen.queryByText('Secret DM Message')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('dm-message-list')).not.toBeInTheDocument();
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toBeInTheDocument();expectNoPlaintextTransport();
   });
 
   it('deduplicates unread counts when bridge event arrives before socket event or vice versa', async () => {
@@ -871,204 +741,25 @@ describe('T17-FE Friends, DMs, and Block filtering behavior', () => {
     expect(screen.queryByTestId('dm-unread-badge')).toBeNull();
   });
 
-  it('safely handles deferred send response when active conversation changes while send is in flight', async () => {
-    let resolveSend: ((val: unknown) => void) | null = null;
-    const sendPromise = new Promise((resolve) => {
-      resolveSend = resolve;
-    });
 
-    // Mock fetch for sendDirectMessage to hang until controlled
-    const originalFetch = globalThis.fetch;
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-        const urlStr = String(input);
-        if (urlStr.includes('/messages') && init?.method === 'POST') {
-          const body = init?.body ? JSON.parse(String(init.body)) : {};
-          await sendPromise;
-          return replyJson({
-            id: 'deferred-msg-1',
-            conversationId: 'dm-conv-user-peer',
-            senderId: 'user-actor',
-            sender: mockUserActor,
-            content: body.content || 'Deferred message',
-            createdAt: new Date().toISOString(),
-            attachments: [],
-            mentions: [],
-            mentionedUserIds: [],
-          });
-        }
-        return originalFetch(input, init);
-      })
-    );
-
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-user-peer" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('dm-conv-item-dm-conv-user-peer')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer'));
-
-    await waitFor(() => {
-      expect(screen.getByRole('textbox', { name: 'Tin nhắn riêng' })).toBeInTheDocument();
-    });
-
-    const textarea = screen.getByRole('textbox', { name: 'Tin nhắn riêng' }) as HTMLTextAreaElement;
-    act(() => {
-      fireEvent.change(textarea, { target: { value: 'In-flight message' } });
-    });
-
-    const sendBtn = screen.getByLabelText('Gửi tin nhắn');
-    fireEvent.click(sendBtn);
-
-    // Switch conversation while send is pending
-    if (screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail')) {
-      fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail'));
-    }
-
-    // Now resolve the in-flight send promise
-    await act(async () => {
-      resolveSend?.(null);
-    });
-
-    // The deferred message MUST NOT be injected into the newly selected conversation
-    await waitFor(() => {
-      expect(screen.queryByText('In-flight message')).toBeNull();
-    });
+  it('changing a locked DM never starts a plaintext send or displays a late former-transport response',async()=>{
+    await lockedDm();fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail'));
+    await screen.findByText('Thiết bị đang khóa. Mở khóa riêng để đọc hoặc gửi chat mã hóa.',{exact:true});
+    act(()=>{for(const socket of socketTransport.sockets.filter(s=>!s.closed))socket.fire('message.created',{id:'late-old-response',conversationId:'dm-conv-user-peer',senderId:'user-peer',content:'Deferred message'});});
+    expect(screen.queryByText('Deferred message')).not.toBeInTheDocument();expect(screen.queryByLabelText('Gửi tin nhắn')).not.toBeInTheDocument();expectNoPlaintextTransport();
   });
 
-  it('retains per-conversation cached messages immediately when switching back without waiting for refetch', async () => {
-    // Add mock response with distinct content for conv-A and conv-B
-    const originalFetch = globalThis.fetch;
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-        const urlStr = String(input);
-        if (urlStr.includes('/conversations/dm-conv-cache-a/messages')) {
-          return replyJson({
-            items: [
-              {
-                id: 'msg-cache-a',
-                conversationId: 'dm-conv-cache-a',
-                senderId: 'user-peer',
-                sender: mockUserPeer,
-                content: 'CACHED MESSAGE CONVERSATION A',
-                createdAt: '2026-10-06T10:00:00.000Z',
-                attachments: [],
-                mentions: [],
-                mentionedUserIds: [],
-              },
-            ],
-            hasMore: false,
-          });
-        }
-        if (urlStr.includes('/conversations/dm-conv-cache-b/messages')) {
-          return replyJson({
-            items: [
-              {
-                id: 'msg-cache-b',
-                conversationId: 'dm-conv-cache-b',
-                senderId: 'user-peer',
-                sender: mockUserPeer,
-                content: 'CACHED MESSAGE CONVERSATION B',
-                createdAt: '2026-10-06T10:01:00.000Z',
-                attachments: [],
-                mentions: [],
-                mentionedUserIds: [],
-              },
-            ],
-            hasMore: false,
-          });
-        }
-        return originalFetch(input, init);
-      })
-    );
 
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-cache-a" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
-
-    // Wait for Conv A message to load and display
-    await waitFor(() => {
-      expect(screen.getByText('CACHED MESSAGE CONVERSATION A')).toBeInTheDocument();
-    });
-
-    // Select Conv B
-    act(() => {
-      unreadSync.notifyRead('dm-conv-cache-b');
-    });
-
-    // Verify Conv A cached message is present when Conv A is selected
-    expect(screen.getByText('CACHED MESSAGE CONVERSATION A')).toBeInTheDocument();
+  it('switching away and back while locked does not revive cached legacy plaintext',async()=>{
+    await lockedDm();fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer-fail'));fireEvent.click(screen.getByTestId('dm-conv-item-dm-conv-user-peer'));
+    await screen.findByText('Thiết bị đang khóa. Mở khóa riêng để đọc hoặc gửi chat mã hóa.',{exact:true});
+    expect(screen.queryByText('Secret DM Message')).not.toBeInTheDocument();expect(screen.queryByText('Cached conv-A')).not.toBeInTheDocument();expectNoPlaintextTransport();
   });
 
-  it('renders history fetch error alert and recovers when user clicks retry', async () => {
-    let shouldFail = true;
-    const originalFetch = globalThis.fetch;
 
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-        const urlStr = String(input);
-        if (urlStr.includes('/conversations/dm-conv-err/messages')) {
-          if (shouldFail) {
-            return replyJson({ message: 'History loading failed' }, 500);
-          }
-          return replyJson({
-            items: [
-              {
-                id: 'msg-recovered-1',
-                conversationId: 'dm-conv-err',
-                senderId: 'user-peer',
-                sender: mockUserPeer,
-                content: 'RECOVERED HISTORY MESSAGE',
-                createdAt: '2026-10-06T10:05:00.000Z',
-                attachments: [],
-                mentions: [],
-                mentionedUserIds: [],
-              },
-            ],
-            hasMore: false,
-          });
-        }
-        return originalFetch(input, init);
-      })
-    );
-
-    render(
-      <QueryClientProvider client={client}>
-        <AuthProvider>
-          <DirectMessagesPanel isOpen={true} onClose={() => {}} initialConversationId="dm-conv-err" />
-        </AuthProvider>
-      </QueryClientProvider>
-    );
-
-    // Verify error message is rendered in alert banner
-    await waitFor(() => {
-      expect(screen.getByRole('alert')).toBeInTheDocument();
-      expect(screen.getByText('History loading failed')).toBeInTheDocument();
-    });
-
-    // Fix error and click retry
-    shouldFail = false;
-    const retryBtn = screen.getByText('Thử lại');
-    fireEvent.click(retryBtn);
-
-    // Recovered history message MUST be rendered
-    await waitFor(() => {
-      expect(screen.getByText('RECOVERED HISTORY MESSAGE')).toBeInTheDocument();
-    });
+  it('a locked DM remains fail closed when the obsolete plaintext history transport would fail',async()=>{
+    const original=globalThis.fetch;const oldHistory=vi.fn();vi.stubGlobal('fetch',vi.fn(async(input:RequestInfo|URL,init?:RequestInit)=>{if(/\/conversations\/[^/]+\/messages/.test(String(input))){oldHistory();return replyJson({message:'Old history unavailable'},500);}return original(input,init);}));
+    await lockedDm();expect(oldHistory).not.toHaveBeenCalled();expect(screen.queryByText('Old history unavailable')).not.toBeInTheDocument();expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toHaveAttribute('href','/crypto');expectNoPlaintextTransport();
   });
 
   it('handles paginated friends list with load more button', async () => {

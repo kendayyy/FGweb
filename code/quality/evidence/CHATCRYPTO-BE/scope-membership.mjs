@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/CHATCRYPTO-BE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),before=JSON.parse(fs.readFileSync(`${dir}/before.json`)),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);
+checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json'))});
+for(const old of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===old.id),old);
+const paths=['apps/api/src/modules/teams/teams.service.ts','apps/api/src/modules/invitations/invitations.service.ts'];
+const hashes=Object.fromEntries(paths.map(p=>{const digest=createHash('sha256').update(fs.readFileSync(p)).digest('hex');assert.equal(digest,before.readonly[p]);assert(!task.writeAllowlist.includes(p));return [p,digest];}));
+const change={adoptedAt:new Date().toISOString(),source:'Persisted human Permission to broaden Write Scope or touch locked files',paths,reason:'Wire membership epochs in the actual shared team-admission and room-invitation transactions. No contracts, schema, business admission rules or prior PASS record changes.',beforeSha256:hashes,evidence:`${dir}/scope-membership.json`};
+fs.writeFileSync(change.evidence,JSON.stringify(change,null,2)+'\n',{flag:'wx'});task.writeAllowlist.push(...paths);task.approvedScopeAmendments.push(change);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify({task:task.id,status:task.status,exactAdditionalSourceFiles:paths,priorPassRecordsUnchanged:before.historical.length}));

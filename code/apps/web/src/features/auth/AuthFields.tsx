@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuth,AUTH_QUERY_KEY} from './AuthProvider.js';
 import {runAuthCleanups} from './lifecycle.js';
+import {FGLogo} from '../../components/ui/FGLogo.js';
 import './auth.css';
 export const PASSWORD_POLICY_HELP='Mật khẩu 8–128 ký tự Unicode, có ít nhất một chữ hoa và một ký tự đặc biệt. Khoảng trắng được giữ nguyên.';
 export function PasswordField({label='Mật khẩu',value,onChange,autoComplete='new-password',disabled=false}:{label?:string;value:string;onChange:(value:string)=>void;autoComplete?:string;disabled?:boolean}){
@@ -13,7 +14,7 @@ export function PasswordField({label='Mật khẩu',value,onChange,autoComplete=
 export function LoginIdentifierField({value,onChange,disabled=false}:{value:string;onChange:(value:string)=>void;disabled?:boolean}){const id=useId();return <div className="fg-auth-field"><label htmlFor={id}>Email hoặc tên đăng nhập</label><input id={id} type="text" autoComplete="username" placeholder="Email hoặc tên đăng nhập" maxLength={254} value={value} onChange={event=>onChange(event.target.value)} required disabled={disabled}/></div>;}
 export function EmailField({value,onChange,disabled=false}:{value:string;onChange:(value:string)=>void;disabled?:boolean}){const id=useId();return <div className="fg-auth-field"><label htmlFor={id}>Email</label><input id={id} type="email" autoComplete="email" placeholder="ban@example.com" maxLength={254} value={value} onChange={event=>onChange(event.target.value)} required disabled={disabled}/></div>;}
 export function AuthCard({title,children}:{title:string;children:React.ReactNode}){return <div className="fg-auth-page"><section className="fg-auth-card" aria-labelledby="fg-auth-title"><h1 id="fg-auth-title">{title}</h1><p className="fg-auth-intro">Kết nối cùng cộng đồng game thủ</p>{children}</section></div>;}
-export function AuthHeader(){return <header className="fg-auth-header"><Link to="/" className="fg-auth-logo">FG</Link><Link to="/">← Về Lobby</Link></header>;}
+export function AuthHeader({children}:{children?:React.ReactNode}){return <header className="fg-auth-header"><Link to="/" className="fg-auth-logo fg-brand-link" aria-label="FG"><FGLogo size={40} decorative/></Link><div className="fg-auth-header-actions">{children}<Link to="/">← Về Lobby</Link></div></header>;}
 export function useAuthAction(){
  const [pending,setPending]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),alive=useRef(true),busy=useRef(false);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);

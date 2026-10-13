@@ -1,0 +1,7 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const file='quality/evidence/CHATCRYPTO-FE/headed-group-regression.mjs',source=fs.readFileSync(file,'utf8');
+fs.writeFileSync('quality/evidence/CHATCRYPTO-FE/group-regression-red1-source.mjs',source,{flag:'wx'});
+const old="  await b.getByTestId('mobile-tab-settings').click();const settings=b.getByRole('dialog',{name:/Cài đặt phòng & Thành viên/i});await expect(settings).toBeVisible();await settings.press('Escape');await b.getByTestId('mobile-tab-chat').click();await expect(area).toHaveValue('Actual native group draft survives call/settings tabs');";
+assert(source.includes(old));
+const next="  await expect(b.getByTestId('mobile-tab-settings')).toHaveCount(0);\n  await a.bringToFront();await a.setViewportSize({width:360,height:900});await a.getByTestId('mobile-tab-chat').click();const ownerArea=a.getByLabel('Tin nhắn riêng mã hóa',{exact:true});await ownerArea.fill('Actual native owner draft survives settings');await a.getByTestId('mobile-tab-settings').click();const settings=a.getByRole('dialog',{name:/Cài đặt phòng & Thành viên/i});await expect(settings).toBeVisible();await settings.press('Escape');await a.getByTestId('mobile-tab-chat').click();await expect(ownerArea).toHaveValue('Actual native owner draft survives settings');await b.bringToFront();await expect(area).toHaveValue('Actual native group draft survives call/settings tabs');";
+fs.writeFileSync(file,source.replace(old,next));

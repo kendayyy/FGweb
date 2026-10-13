@@ -1,0 +1,3150 @@
+{
+  "startedAt": "2026-10-12T05:25:01.409Z",
+  "completedAt": "2026-10-12T05:25:59.671Z",
+  "scope": "Read-only actual PG relation locks restricted to owned fixture schema and direct blocking owners. No raw SQL, credentials, identities or app modification.",
+  "failureCount": 0,
+  "ownedSchemaEnded": true,
+  "poolEnded": true,
+  "samples": [
+    {
+      "at": "2026-10-12T05:25:03.358Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:03.962Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:03.876Z",
+          "xact_start": "2026-10-12T05:25:03.856Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:03.858Z",
+          "xact_start": "2026-10-12T05:25:03.843Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:03.819Z",
+          "xact_start": "2026-10-12T05:25:03.763Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:03.889Z",
+          "xact_start": "2026-10-12T05:25:03.723Z",
+          "blockers": [],
+          "kind": "group-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:04.527Z",
+      "rows": [
+        {
+          "pid": 86811,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.472Z",
+          "xact_start": "2026-10-12T05:25:04.450Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86812,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.471Z",
+          "xact_start": "2026-10-12T05:25:04.452Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.462Z",
+          "xact_start": "2026-10-12T05:25:04.415Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:04.467Z",
+          "xact_start": "2026-10-12T05:25:04.395Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.468Z",
+          "xact_start": "2026-10-12T05:25:04.213Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:05.405Z",
+      "rows": [
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:04.907Z",
+          "xact_start": "2026-10-12T05:25:04.901Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.929Z",
+          "xact_start": "2026-10-12T05:25:04.826Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:05.273Z",
+          "xact_start": "2026-10-12T05:25:05.273Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:06.046Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:05.343Z",
+          "xact_start": "2026-10-12T05:25:05.339Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:04.907Z",
+          "xact_start": "2026-10-12T05:25:04.901Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:05.836Z",
+          "xact_start": "2026-10-12T05:25:05.830Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:04.929Z",
+          "xact_start": "2026-10-12T05:25:04.826Z",
+          "blockers": [],
+          "kind": "group-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:06.634Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:06.550Z",
+          "xact_start": "2026-10-12T05:25:05.339Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:06.550Z",
+          "xact_start": "2026-10-12T05:25:04.901Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:06.564Z",
+          "xact_start": "2026-10-12T05:25:05.830Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:06.581Z",
+          "xact_start": "2026-10-12T05:25:06.294Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86837,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:06.592Z",
+          "xact_start": "2026-10-12T05:25:06.106Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86880,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:06.593Z",
+          "xact_start": "2026-10-12T05:25:06.312Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:06.580Z",
+          "xact_start": "2026-10-12T05:25:06.275Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:07.217Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:07.152Z",
+          "xact_start": "2026-10-12T05:25:07.129Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:07.177Z",
+          "xact_start": "2026-10-12T05:25:06.294Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86837,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:07.115Z",
+          "xact_start": "2026-10-12T05:25:06.106Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:07.177Z",
+          "xact_start": "2026-10-12T05:25:07.118Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:07.142Z",
+          "xact_start": "2026-10-12T05:25:06.275Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:07.793Z",
+      "rows": [
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:07.740Z",
+          "xact_start": "2026-10-12T05:25:07.433Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:08.360Z",
+      "rows": [
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:08.336Z",
+          "xact_start": "2026-10-12T05:25:08.139Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:08.978Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:08.909Z",
+          "xact_start": "2026-10-12T05:25:08.892Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:09.577Z",
+      "rows": [
+        {
+          "pid": 86837,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:09.527Z",
+          "xact_start": "2026-10-12T05:25:09.389Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:09.440Z",
+          "xact_start": "2026-10-12T05:25:09.140Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86861,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:09.478Z",
+          "xact_start": "2026-10-12T05:25:09.445Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:09.337Z",
+          "xact_start": "2026-10-12T05:25:09.307Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:10.160Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:10.106Z",
+          "xact_start": "2026-10-12T05:25:10.057Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86812,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:10.107Z",
+          "xact_start": "2026-10-12T05:25:10.078Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86837,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:10.070Z",
+          "xact_start": "2026-10-12T05:25:09.389Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:10.106Z",
+          "xact_start": "2026-10-12T05:25:10.008Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86925,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:10.108Z",
+          "xact_start": "2026-10-12T05:25:09.822Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:10.723Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:10.674Z",
+          "xact_start": "2026-10-12T05:25:10.629Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:10.671Z",
+          "xact_start": "2026-10-12T05:25:10.628Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:10.495Z",
+          "xact_start": "2026-10-12T05:25:10.457Z",
+          "blockers": [
+            86812
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:11.306Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "query_start": "2026-10-12T05:25:11.250Z",
+          "xact_start": "2026-10-12T05:25:11.237Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:10.973Z",
+          "xact_start": "2026-10-12T05:25:10.928Z",
+          "blockers": [
+            86809
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:11.844Z",
+      "rows": [
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:11.835Z",
+          "xact_start": "2026-10-12T05:25:11.784Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:12.391Z",
+      "rows": [
+        {
+          "pid": 86837,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:12.307Z",
+          "xact_start": "2026-10-12T05:25:12.290Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:12.374Z",
+          "xact_start": "2026-10-12T05:25:12.077Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:12.998Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:12.913Z",
+          "xact_start": "2026-10-12T05:25:12.894Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86837,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:12.966Z",
+          "xact_start": "2026-10-12T05:25:12.901Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:13.724Z",
+      "rows": [
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:13.566Z",
+          "xact_start": "2026-10-12T05:25:13.378Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:13.279Z",
+          "xact_start": "2026-10-12T05:25:13.174Z",
+          "blockers": [
+            86926
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:13.448Z",
+          "xact_start": "2026-10-12T05:25:12.943Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:14.304Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:14.211Z",
+          "xact_start": "2026-10-12T05:25:14.191Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:13.279Z",
+          "xact_start": "2026-10-12T05:25:13.174Z",
+          "blockers": [
+            86926
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:14.269Z",
+          "xact_start": "2026-10-12T05:25:12.943Z",
+          "blockers": [],
+          "kind": "group-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:14.895Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:13.279Z",
+          "xact_start": "2026-10-12T05:25:13.174Z",
+          "blockers": [
+            86926
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:14.344Z",
+          "xact_start": "2026-10-12T05:25:14.295Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:14.313Z",
+          "xact_start": "2026-10-12T05:25:12.943Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:15.558Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:15.314Z",
+          "xact_start": "2026-10-12T05:25:15.308Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:15.511Z",
+          "xact_start": "2026-10-12T05:25:13.174Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:14.344Z",
+          "xact_start": "2026-10-12T05:25:14.295Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:16.144Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:15.799Z",
+          "xact_start": "2026-10-12T05:25:15.793Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:15.314Z",
+          "xact_start": "2026-10-12T05:25:15.308Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:15.903Z",
+          "xact_start": "2026-10-12T05:25:15.896Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86837,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:16.061Z",
+          "xact_start": "2026-10-12T05:25:16.028Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:16.096Z",
+          "xact_start": "2026-10-12T05:25:14.295Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:15.908Z",
+          "xact_start": "2026-10-12T05:25:15.762Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:16.779Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:16.743Z",
+          "xact_start": "2026-10-12T05:25:16.722Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:16.751Z",
+          "xact_start": "2026-10-12T05:25:16.711Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86811,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:16.750Z",
+          "xact_start": "2026-10-12T05:25:16.729Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86837,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:16.695Z",
+          "xact_start": "2026-10-12T05:25:16.028Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:16.691Z",
+          "xact_start": "2026-10-12T05:25:15.762Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:17.363Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:17.340Z",
+          "xact_start": "2026-10-12T05:25:17.325Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86811,
+          "state": "idle in transaction",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:17.339Z",
+          "xact_start": "2026-10-12T05:25:17.326Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:17.311Z",
+          "xact_start": "2026-10-12T05:25:17.273Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:17.317Z",
+          "xact_start": "2026-10-12T05:25:17.188Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:18.111Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:17.917Z",
+          "xact_start": "2026-10-12T05:25:17.899Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86811,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:18.046Z",
+          "xact_start": "2026-10-12T05:25:18.043Z",
+          "blockers": [],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:17.806Z",
+          "xact_start": "2026-10-12T05:25:17.763Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86837,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:17.862Z",
+          "xact_start": "2026-10-12T05:25:17.304Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:17.405Z",
+          "xact_start": "2026-10-12T05:25:17.304Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:17.376Z",
+          "xact_start": "2026-10-12T05:25:17.273Z",
+          "blockers": [
+            86837
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:18.042Z",
+          "xact_start": "2026-10-12T05:25:17.444Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:18.690Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:18.528Z",
+          "xact_start": "2026-10-12T05:25:18.523Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:18.454Z",
+          "xact_start": "2026-10-12T05:25:18.447Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:17.405Z",
+          "xact_start": "2026-10-12T05:25:17.304Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:18.644Z",
+          "xact_start": "2026-10-12T05:25:17.273Z",
+          "blockers": [],
+          "kind": "admission-update"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:18.621Z",
+          "xact_start": "2026-10-12T05:25:18.561Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:19.237Z",
+      "rows": [
+        {
+          "pid": 86852,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:19.164Z",
+          "xact_start": "2026-10-12T05:25:19.094Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:19.226Z",
+          "xact_start": "2026-10-12T05:25:18.561Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:19.813Z",
+      "rows": [
+        {
+          "pid": 86852,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:19.743Z",
+          "xact_start": "2026-10-12T05:25:19.563Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:19.659Z",
+          "xact_start": "2026-10-12T05:25:19.623Z",
+          "blockers": [
+            86852
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:20.480Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:20.372Z",
+          "xact_start": "2026-10-12T05:25:20.355Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86810,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:20.434Z",
+          "xact_start": "2026-10-12T05:25:20.431Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:20.379Z",
+          "xact_start": "2026-10-12T05:25:20.262Z",
+          "blockers": [],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:20.379Z",
+          "xact_start": "2026-10-12T05:25:20.226Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:21.078Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:21.046Z",
+          "xact_start": "2026-10-12T05:25:21.023Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:20.576Z",
+          "xact_start": "2026-10-12T05:25:20.379Z",
+          "blockers": [
+            86926
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:21.019Z",
+          "xact_start": "2026-10-12T05:25:20.578Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:21.711Z",
+      "rows": [
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:21.577Z",
+          "xact_start": "2026-10-12T05:25:21.070Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:20.576Z",
+          "xact_start": "2026-10-12T05:25:20.379Z",
+          "blockers": [
+            86828
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:22.411Z",
+      "rows": [
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:22.329Z",
+          "xact_start": "2026-10-12T05:25:21.070Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:20.576Z",
+          "xact_start": "2026-10-12T05:25:20.379Z",
+          "blockers": [
+            86828
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:22.279Z",
+          "xact_start": "2026-10-12T05:25:21.827Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:23.024Z",
+      "rows": [
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:22.947Z",
+          "xact_start": "2026-10-12T05:25:22.936Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86880,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:22.945Z",
+          "xact_start": "2026-10-12T05:25:22.519Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:20.576Z",
+          "xact_start": "2026-10-12T05:25:20.379Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:22.945Z",
+          "xact_start": "2026-10-12T05:25:22.340Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:23.586Z",
+      "rows": [
+        {
+          "pid": 86761,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:23.455Z",
+          "xact_start": "2026-10-12T05:25:23.439Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:23.168Z",
+          "xact_start": "2026-10-12T05:25:23.156Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:23.555Z",
+          "xact_start": "2026-10-12T05:25:20.379Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:24.174Z",
+      "rows": [
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:23.906Z",
+          "xact_start": "2026-10-12T05:25:23.900Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:24.129Z",
+          "xact_start": "2026-10-12T05:25:23.776Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:24.808Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:24.283Z",
+          "xact_start": "2026-10-12T05:25:24.277Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:23.906Z",
+          "xact_start": "2026-10-12T05:25:23.900Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:24.749Z",
+          "xact_start": "2026-10-12T05:25:23.776Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86941,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:24.601Z",
+          "xact_start": "2026-10-12T05:25:24.241Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:25.471Z",
+      "rows": [
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:25.351Z",
+          "xact_start": "2026-10-12T05:25:25.327Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86828,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:25.328Z",
+          "xact_start": "2026-10-12T05:25:24.909Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86880,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:25.327Z",
+          "xact_start": "2026-10-12T05:25:25.040Z",
+          "blockers": [],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86941,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:25.387Z",
+          "xact_start": "2026-10-12T05:25:24.241Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86948,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:25.384Z",
+          "xact_start": "2026-10-12T05:25:25.376Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:26.121Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:26.068Z",
+          "xact_start": "2026-10-12T05:25:26.039Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:26.059Z",
+          "xact_start": "2026-10-12T05:25:26.038Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:26.065Z",
+          "xact_start": "2026-10-12T05:25:26.040Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:26.076Z",
+          "xact_start": "2026-10-12T05:25:25.830Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:26.076Z",
+          "xact_start": "2026-10-12T05:25:25.908Z",
+          "blockers": [],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86950,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:25.909Z",
+          "xact_start": "2026-10-12T05:25:25.386Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:26.688Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:26.464Z",
+          "xact_start": "2026-10-12T05:25:26.347Z",
+          "blockers": [
+            86950
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86950,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:26.676Z",
+          "xact_start": "2026-10-12T05:25:25.386Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:27.261Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "query_start": "2026-10-12T05:25:27.198Z",
+          "xact_start": "2026-10-12T05:25:27.177Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:26.464Z",
+          "xact_start": "2026-10-12T05:25:26.347Z",
+          "blockers": [
+            86951
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:27.213Z",
+          "xact_start": "2026-10-12T05:25:26.688Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:27.963Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:27.844Z",
+          "xact_start": "2026-10-12T05:25:26.347Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86952,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:27.724Z",
+          "xact_start": "2026-10-12T05:25:27.722Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:28.597Z",
+      "rows": [
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:28.542Z",
+          "xact_start": "2026-10-12T05:25:28.374Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:28.514Z",
+          "xact_start": "2026-10-12T05:25:28.514Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:29.164Z",
+      "rows": [
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:29.142Z",
+          "xact_start": "2026-10-12T05:25:28.959Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:29.772Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:29.430Z",
+          "xact_start": "2026-10-12T05:25:29.377Z",
+          "blockers": [
+            86907
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:29.610Z",
+          "xact_start": "2026-10-12T05:25:29.377Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:29.610Z",
+          "xact_start": "2026-10-12T05:25:29.392Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:30.740Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.151Z",
+          "xact_start": "2026-10-12T05:25:30.146Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.313Z",
+          "xact_start": "2026-10-12T05:25:30.307Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.177Z",
+          "xact_start": "2026-10-12T05:25:30.173Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86880,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.281Z",
+          "xact_start": "2026-10-12T05:25:30.145Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:30.512Z",
+          "xact_start": "2026-10-12T05:25:29.377Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:31.503Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.151Z",
+          "xact_start": "2026-10-12T05:25:30.146Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.313Z",
+          "xact_start": "2026-10-12T05:25:30.307Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.177Z",
+          "xact_start": "2026-10-12T05:25:30.173Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86880,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.281Z",
+          "xact_start": "2026-10-12T05:25:30.145Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:31.316Z",
+          "xact_start": "2026-10-12T05:25:29.377Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.856Z",
+          "xact_start": "2026-10-12T05:25:30.758Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:30.781Z",
+          "xact_start": "2026-10-12T05:25:30.379Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:32.139Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:32.044Z",
+          "xact_start": "2026-10-12T05:25:31.991Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:32.056Z",
+          "xact_start": "2026-10-12T05:25:31.990Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86880,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:32.011Z",
+          "xact_start": "2026-10-12T05:25:30.145Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:32.042Z",
+          "xact_start": "2026-10-12T05:25:30.758Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86926,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:32.038Z",
+          "xact_start": "2026-10-12T05:25:30.379Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86951,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:32.048Z",
+          "xact_start": "2026-10-12T05:25:31.698Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:32.909Z",
+      "rows": [
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:32.812Z",
+          "xact_start": "2026-10-12T05:25:30.758Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86926,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:32.812Z",
+          "xact_start": "2026-10-12T05:25:30.379Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:32.814Z",
+          "xact_start": "2026-10-12T05:25:31.698Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:33.640Z",
+      "rows": [
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:32.919Z",
+          "xact_start": "2026-10-12T05:25:32.906Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "query_start": "2026-10-12T05:25:33.130Z",
+          "xact_start": "2026-10-12T05:25:30.758Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:33.319Z",
+          "xact_start": "2026-10-12T05:25:31.698Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:34.398Z",
+      "rows": [
+        {
+          "pid": 86951,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:34.331Z",
+          "xact_start": "2026-10-12T05:25:33.943Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:34.980Z",
+      "rows": [
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:34.924Z",
+          "xact_start": "2026-10-12T05:25:34.906Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:34.883Z",
+          "xact_start": "2026-10-12T05:25:33.943Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:35.688Z",
+      "rows": [
+        {
+          "pid": 86951,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:35.604Z",
+          "xact_start": "2026-10-12T05:25:33.943Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86952,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:35.604Z",
+          "xact_start": "2026-10-12T05:25:35.603Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:36.275Z",
+      "rows": [
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalWrite",
+          "query_start": "2026-10-12T05:25:36.151Z",
+          "xact_start": "2026-10-12T05:25:36.136Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86952,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:35.992Z",
+          "xact_start": "2026-10-12T05:25:35.991Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86960,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.068Z",
+          "xact_start": "2026-10-12T05:25:36.012Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86963,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.177Z",
+          "xact_start": "2026-10-12T05:25:35.603Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:36.890Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:36.760Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [
+            86963
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86951,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:36.845Z",
+          "xact_start": "2026-10-12T05:25:36.451Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86960,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.846Z",
+          "xact_start": "2026-10-12T05:25:36.012Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86962,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.844Z",
+          "xact_start": "2026-10-12T05:25:36.175Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86963,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.843Z",
+          "xact_start": "2026-10-12T05:25:35.603Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:37.990Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:36.760Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [
+            86963
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86960,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:36.846Z",
+          "xact_start": "2026-10-12T05:25:36.012Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86962,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:37.027Z",
+          "xact_start": "2026-10-12T05:25:36.175Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86963,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:37.666Z",
+          "xact_start": "2026-10-12T05:25:35.603Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:38.607Z",
+      "rows": [
+        {
+          "pid": 86880,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:38.525Z",
+          "xact_start": "2026-10-12T05:25:38.308Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:36.760Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [
+            86963
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86960,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:38.371Z",
+          "xact_start": "2026-10-12T05:25:36.012Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86962,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:38.526Z",
+          "xact_start": "2026-10-12T05:25:36.175Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86963,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:38.506Z",
+          "xact_start": "2026-10-12T05:25:35.603Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:39.185Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:36.760Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [
+            86963
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86952,
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:39.141Z",
+          "xact_start": null,
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86963,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:39.142Z",
+          "xact_start": "2026-10-12T05:25:38.975Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:39.906Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:36.760Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [
+            86962
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86962,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:39.665Z",
+          "xact_start": "2026-10-12T05:25:39.219Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:40.874Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:40.547Z",
+          "xact_start": "2026-10-12T05:25:40.542Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:39.958Z",
+          "xact_start": "2026-10-12T05:25:39.952Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:40.122Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [],
+          "kind": "group-lock"
+        },
+        {
+          "pid": 86975,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:40.572Z",
+          "xact_start": "2026-10-12T05:25:40.261Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:41.410Z",
+      "rows": [
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:40.547Z",
+          "xact_start": "2026-10-12T05:25:40.542Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.083Z",
+          "xact_start": "2026-10-12T05:25:41.078Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:39.958Z",
+          "xact_start": "2026-10-12T05:25:39.952Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:41.358Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86975,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:41.359Z",
+          "xact_start": "2026-10-12T05:25:40.261Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:42.062Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.943Z",
+          "xact_start": "2026-10-12T05:25:41.938Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:40.547Z",
+          "xact_start": "2026-10-12T05:25:40.542Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.083Z",
+          "xact_start": "2026-10-12T05:25:41.078Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:39.958Z",
+          "xact_start": "2026-10-12T05:25:39.952Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:42.040Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [],
+          "kind": "admission-update"
+        },
+        {
+          "pid": 86971,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:41.875Z",
+          "xact_start": "2026-10-12T05:25:41.873Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86972,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:41.875Z",
+          "xact_start": "2026-10-12T05:25:41.873Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86975,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.473Z",
+          "xact_start": "2026-10-12T05:25:40.261Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:42.770Z",
+      "rows": [
+        {
+          "pid": 86809,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.943Z",
+          "xact_start": "2026-10-12T05:25:41.938Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:40.547Z",
+          "xact_start": "2026-10-12T05:25:40.542Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.083Z",
+          "xact_start": "2026-10-12T05:25:41.078Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86812,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:39.958Z",
+          "xact_start": "2026-10-12T05:25:39.952Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86880,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:42.726Z",
+          "xact_start": "2026-10-12T05:25:42.363Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:42.727Z",
+          "xact_start": "2026-10-12T05:25:36.640Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:42.509Z",
+          "xact_start": "2026-10-12T05:25:42.154Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86962,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:42.726Z",
+          "xact_start": "2026-10-12T05:25:42.365Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86971,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:42.551Z",
+          "xact_start": "2026-10-12T05:25:42.544Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86972,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:42.533Z",
+          "xact_start": "2026-10-12T05:25:42.527Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86975,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:41.473Z",
+          "xact_start": "2026-10-12T05:25:40.261Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:43.712Z",
+      "rows": [
+        {
+          "pid": 86807,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:43.222Z",
+          "xact_start": "2026-10-12T05:25:43.107Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86808,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:43.215Z",
+          "xact_start": "2026-10-12T05:25:42.990Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86810,
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "WALWrite",
+          "query_start": "2026-10-12T05:25:43.322Z",
+          "xact_start": "2026-10-12T05:25:43.245Z",
+          "blockers": [],
+          "kind": "commit"
+        },
+        {
+          "pid": 86811,
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "query_start": "2026-10-12T05:25:43.404Z",
+          "xact_start": "2026-10-12T05:25:43.404Z",
+          "blockers": [],
+          "kind": "admission-update"
+        },
+        {
+          "pid": 86880,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:43.386Z",
+          "xact_start": "2026-10-12T05:25:42.363Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86951,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:43.378Z",
+          "xact_start": "2026-10-12T05:25:42.154Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86962,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:43.386Z",
+          "xact_start": "2026-10-12T05:25:42.365Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86963,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:43.386Z",
+          "xact_start": "2026-10-12T05:25:43.051Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86971,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:43.378Z",
+          "xact_start": "2026-10-12T05:25:43.378Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86972,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:43.378Z",
+          "xact_start": "2026-10-12T05:25:43.378Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86975,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:43.387Z",
+          "xact_start": "2026-10-12T05:25:40.261Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:44.272Z",
+      "rows": [
+        {
+          "pid": 86807,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:44.051Z",
+          "xact_start": "2026-10-12T05:25:43.107Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:43.927Z",
+          "xact_start": "2026-10-12T05:25:43.736Z",
+          "blockers": [
+            86974
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:44.255Z",
+          "xact_start": "2026-10-12T05:25:44.209Z",
+          "blockers": [],
+          "kind": "other"
+        },
+        {
+          "pid": 86974,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:44.209Z",
+          "xact_start": "2026-10-12T05:25:43.386Z",
+          "blockers": [],
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:44.806Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:44.791Z",
+          "xact_start": "2026-10-12T05:25:44.557Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86951,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:44.657Z",
+          "xact_start": "2026-10-12T05:25:44.644Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86983,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:44.773Z",
+          "xact_start": "2026-10-12T05:25:44.756Z",
+          "blockers": [],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:45.357Z",
+      "rows": [
+        {
+          "pid": 86807,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:45.291Z",
+          "xact_start": "2026-10-12T05:25:45.287Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86985,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:45.299Z",
+          "xact_start": "2026-10-12T05:25:45.127Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:45.892Z",
+      "rows": [
+        {
+          "pid": 86807,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:45.878Z",
+          "xact_start": "2026-10-12T05:25:45.287Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86963,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:45.863Z",
+          "xact_start": "2026-10-12T05:25:45.861Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86985,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:45.845Z",
+          "xact_start": "2026-10-12T05:25:45.824Z",
+          "blockers": [
+            86807
+          ],
+          "kind": "room-lock"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:46.411Z",
+      "rows": [
+        {
+          "pid": 86985,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:46.388Z",
+          "xact_start": "2026-10-12T05:25:45.824Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:46.964Z",
+      "rows": [
+        {
+          "pid": 86890,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "query_start": "2026-10-12T05:25:46.526Z",
+          "xact_start": "2026-10-12T05:25:46.496Z",
+          "blockers": [
+            86963
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86907,
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "query_start": "2026-10-12T05:25:46.641Z",
+          "xact_start": "2026-10-12T05:25:46.609Z",
+          "blockers": [
+            86890
+          ],
+          "kind": "room-lock"
+        },
+        {
+          "pid": 86962,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:46.924Z",
+          "xact_start": "2026-10-12T05:25:46.923Z",
+          "blockers": [],
+          "kind": "member-read"
+        },
+        {
+          "pid": 86963,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:46.954Z",
+          "xact_start": "2026-10-12T05:25:46.476Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:47.491Z",
+      "rows": [
+        {
+          "pid": 86985,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:47.484Z",
+          "xact_start": "2026-10-12T05:25:47.475Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:48.010Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:48.593Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:49.121Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:49.740Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:50.266Z",
+      "rows": [
+        {
+          "pid": 86985,
+          "state": "idle in transaction",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "query_start": "2026-10-12T05:25:50.257Z",
+          "xact_start": "2026-10-12T05:25:50.165Z",
+          "blockers": [],
+          "kind": "member-read"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:50.804Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:51.320Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:51.852Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:52.373Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:52.887Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:53.412Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:53.936Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:54.465Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:54.995Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:55.520Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:56.030Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:56.543Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:57.059Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:57.574Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:58.090Z",
+      "rows": []
+    },
+    {
+      "at": "2026-10-12T05:25:58.620Z",
+      "rows": [
+        {
+          "pid": 87015,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:58.466Z",
+          "xact_start": "2026-10-12T05:25:58.466Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "at": "2026-10-12T05:25:59.140Z",
+      "rows": [
+        {
+          "pid": 87015,
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "query_start": "2026-10-12T05:25:58.466Z",
+          "xact_start": "2026-10-12T05:25:58.466Z",
+          "blockers": [],
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

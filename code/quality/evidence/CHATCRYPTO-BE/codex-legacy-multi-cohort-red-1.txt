@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18688) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (53.236 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    ConflictException: Historical source coverage incomplete
+
+      159 |    const rows:{id:string;cohort_id:string|null;state:string|null;candidate_id:string|null}[]=(await db.query(`SELECT m.id,lm.cohort_id,lm.state,c.id AS candidate_id FROM messages m LEFT JOIN chat_crypto_legacy_migrations lm ON lm.message_id=m.id AND lm.conversation_id=m.conversation_id LEFT JOIN chat_crypto_legacy_candidates c ON c.message_id=m.id AND c.conversation_id=m.conversation_id AND c.membership_revision=$2 WHERE m.conversation_id=$1 AND m.encryption_mode='LEGACY_PENDING' AND ($3::text IS NULL OR m.id COLLATE "C">$3::text COLLATE "C") ORDER BY m.id COLLATE "C" LIMIT 25 FOR SHARE OF m`,[id,parsed.membershipRevision,after])).rows;if(!rows.length)break;
+      160 |    for(const source of rows){
+    > 161 |     if(source.cohort_id!==parsed.cohortId||source.state!=='PREPARED'||!source.candidate_id)throw new ConflictException('Historical source coverage incomplete');const bound=await this.boundCandidate(db,id,parsed.cohortId,source.candidate_id);
+          |                                                                                                  ^
+      162 |     const receipts=(await db.query('SELECT user_id,device_id,attestation FROM chat_crypto_legacy_attestations WHERE candidate_id=$1 AND cohort_id=$2 FOR SHARE',[source.candidate_id,parsed.cohortId])).rows,claims=new Map(receipts.map(row=>[JSON.stringify([row.user_id,row.device_id]),row.attestation]));
+      163 |     for(const device of devices){const claim=claims.get(JSON.stringify([device.user_id,device.device_id]));if(!claim)throw new ConflictException('Historical device receipt missing');try{const receipt=LegacyRoundtripAttestationSchema.parse(claim);canonicalSignedPayload(receipt.signatures);verifyLegacyRoundtripAttestation(receipt,{userId:device.user_id,deviceId:device.device_id,ed25519Key:device.ed25519_key},bound.expected);}catch{throw new ConflictException('Historical device receipt changed');}}
+      164 |     candidateIds.push(source.candidate_id);attachmentCount+=bound.images.length;
+
+      at CryptoLegacyService.cutoffReadiness (src/modules/chat-crypto/crypto-legacy.service.ts:161:98)
+      at CryptoLegacyService.transaction (src/modules/chat-crypto/crypto-legacy.service.ts:40:17)
+      at test/chat-crypto-legacy.integration.spec.ts:235:13
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        53.721 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const id='T02-FIX3',dir=`quality/evidence/${id}`,hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+assert(!ledger.activeCheckpoint);assert(!ledger.followups.some(t=>t.id===id));
+const deps=ledger.followups.find(t=>t.id==='T01-FIX4');assert.equal(deps.status,'PASS');
+for(const [p,h]of Object.entries(deps.outputsHash.files))assert.equal(hash(p),h,p);
+for(const r of deps.commands){assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);}
+assert.equal(checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json'))}),8);
+const parent=ledger.tasks.find(t=>t.id==='CHATCRYPTO-DATA');assert.equal(parent.status,'BLOCKED');
+const scope=['infra/chat-crypto/**',`${dir}/**`,'.runtime/chatcrypto-setup/**','.cache/chatcrypto-setup/**'];
+const owned=p=>scope.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x);
+const paths=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.runtime/')&&!p.startsWith('.cache/'));
+const readonly=new Map(paths.filter(p=>!owned(p)).map(p=>[p,hash(p)]));
+for(const t of [...ledger.tasks,...ledger.followups].filter(t=>t.status==='PASS'))for(const p of Object.keys(t.outputsHash?.files??{}))if(!owned(p))readonly.set(p,hash(p));
+const startedAt=new Date().toISOString();
+const task={id,title:'OpenBao TLS Transit and native Matrix compatibility setup',parent:parent.id,dependencies:['T01-FIX4'],status:'IN_PROGRESS',area:'SETUP',specSha256:parent.specSha256,writeAllowlist:scope,startedAt,commands:[],evidencePaths:[`${dir}/before.json`],outputsHash:null,ruling:'Approved protocol/service proposal; manual T02 followup with parent WIP frozen. No production or main DB mutation. Native crypto and TLS service probes must pass before feature logic.'};
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify({recordedAt:startedAt,scope,parentSnapshot:parent,historical:ledger.tasks.filter(t=>t.status==='PASS'),followups:ledger.followups,readonly:Object.fromEntries(readonly),environmentSha256:hash('.env.local')},null,2)+'\n',{flag:'wx'});
+ledger.followups.push(task);ledger.activeCheckpoint=id;
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date(startedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T02-FIX3\n- Codex; T01-FIX4 reviewed PASS và exact outputs/commands/8 baselines xác minh trước mở. DATA còn BLOCKED, parent WIP/source/env/old PASS frozen. OpenBao2.7.1 image/digest/TLS/ACL + native Matrix probes trong fixture riêng; không production keys/main DB migration/logic BE/FE.\n`);
+console.log(JSON.stringify({checkpoint:id,status:'IN_PROGRESS',readonlyFiles:readonly.size}));

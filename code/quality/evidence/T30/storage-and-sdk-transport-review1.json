@@ -1,0 +1,75 @@
+{
+  "reviewedAt": "2026-10-11T13:49:50.966Z",
+  "measurements": [
+    {
+      "command": {
+        "command": "docker exec --user postgres fg-local-postgres-1 pg_test_fsync -s 1 -f /var/lib/postgresql/data/fg_t30_fsync_2c2b6ae7df6b4939a0d4954fc0c5507a",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-11T13:46:29.640Z",
+        "completedAt": "2026-10-11T13:46:46.809Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-storage-fsync-windows-bind-1.txt",
+        "evidenceSha256": "52e757a4c5a02f058c1e4223c1d898ff930a3f20505b53a3c9455e58111ddaa6"
+      },
+      "fdatasyncOne8k": {
+        "opsPerSecond": 270.735,
+        "microsecondsPerOperation": 3694
+      }
+    },
+    {
+      "command": {
+        "command": "docker exec --user postgres fg-local-postgres-1 pg_test_fsync -s 1 -f /tmp/fg_t30_fsync_2c2b6ae7df6b4939a0d4954fc0c5507a",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-11T13:46:47.638Z",
+        "completedAt": "2026-10-11T13:47:04.612Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-storage-fsync-linux-overlay-1.txt",
+        "evidenceSha256": "89ac4472f8ee5136ccf0cdff89719bb97915506a8cddd97f4465d44a36994434"
+      },
+      "fdatasyncOne8k": {
+        "opsPerSecond": 256.517,
+        "microsecondsPerOperation": 3898
+      }
+    }
+  ],
+  "cleanup": {
+    "completedAt": "2026-10-11T13:47:05.262Z",
+    "results": [
+      {
+        "label": "windows-bind",
+        "file": "/var/lib/postgresql/data/fg_t30_fsync_2c2b6ae7df6b4939a0d4954fc0c5507a",
+        "testExitCode": 0,
+        "removeExitCode": 0,
+        "actualAbsent": true
+      },
+      {
+        "label": "linux-overlay",
+        "file": "/tmp/fg_t30_fsync_2c2b6ae7df6b4939a0d4954fc0c5507a",
+        "testExitCode": 0,
+        "removeExitCode": 0,
+        "actualAbsent": true
+      }
+    ],
+    "onlyOwnedSyntheticFilesRemoved": true,
+    "databaseConfigurationChanged": false,
+    "mainDataChanged": false
+  },
+  "storageUniqueCauseUnproven": true,
+  "idleSyntheticFileNotActualWalLatency": true,
+  "noDatabaseOrDurabilityChanges": true,
+  "localSdk": {
+    "singlePeerConnectionDefault": true,
+    "supportedExplicitFalse": true,
+    "sourceHashes": {
+      "node_modules/livekit-client/src/room/defaults.ts": "05a2e227e2645b9dd832286e4bc3f0949bc3351b90a7b943c14a9b445918affc",
+      "node_modules/livekit-client/src/options.ts": "f8c14768b78df2c13f62aeedc1802f42644132417f84b633507555d1812cc95e",
+      "node_modules/livekit-client/src/room/Room.ts": "7596499692e859ad7e02b9ee30f3fe0cea45c6eacd1522f005809b4c81c63213",
+      "node_modules/livekit-client/src/room/RTCEngine.ts": "23b415be2141215d5617eb02ff44754acd60539cd9760615a2f4c742ec5fc536",
+      "apps/web/src/features/calls/media.ts": "749005e993360e7b82ea9fd4331b1774a6588d3643872f2ca133ca765919b2ac"
+    }
+  },
+  "hypothesis": "Supported dual publisher/subscriber transport may avoid client-originated renegotiation latency observed in diagnostic49; actual original headed test required to prove improvement",
+  "nativeAcceptance": false
+}

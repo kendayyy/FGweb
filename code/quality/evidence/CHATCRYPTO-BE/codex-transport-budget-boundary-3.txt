@@ -1,0 +1,95 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:15772) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-transport-budget.integration.spec.ts (99.23 s)
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RC default
+
+    ReferenceError: budget is not defined
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:886)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RC default
+
+    ReferenceError: budget is not defined
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:886)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RC default
+
+    error: canceling statement due to user request
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:455)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RR default
+
+    ReferenceError: budget is not defined
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:886)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RR default
+
+    ReferenceError: budget is not defined
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:886)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RR default
+
+    error: canceling statement due to user request
+
+      59 |  for(const instance of [0,1])for(const who of ['sender','recipient','expired session'] as const)it(`rechecks ${who} after budget lock under instance ${instance===1?'RR default':'RC default'}`,async()=>{
+      60 |   const body=await event('budget-ab'),blocker=await pool.connect();let pending:Promise<request.Response>|undefined;
+    > 61 |   try{await blocker.query('BEGIN');await blocker.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_transport',current_schema(),'RECIPIENT','budget-b')::text,0::bigint))");if(who==='expired session')await pool.query('UPDATE "session" SET expires_at=clock_timestamp()+interval \'2 seconds\' WHERE user_id=\'budget-a\'');pending=send(body,instance).then(response=>response);await awaitBudgetWait();if(who==='expired session'){await blocker.query('SELECT pg_sleep(GREATEST(0,EXTRACT(EPOCH FROM (expires_at-clock_timestamp()))+0.1)) FROM "session" WHERE user_id=\'budget-a\'');expect((await pool.query('SELECT expires_at<=clock_timestamp() AS expired FROM "session" WHERE user_id=\'budget-a\'')).rows[0].expired).toBe(true);}else await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES(gen_random_uuid()::text,'budget-c',$1,'BAN','owned quota authority fixture',clock_timestamp())',[who==='sender'?'budget-a':'budget-b']);await blocker.query('COMMIT');expect((await pending).status).toBe(who==='expired session'?401:403);expect(await counts()).toEqual({events:0,outbox:0});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      62 |   }finally{await blocker.query('ROLLBACK');blocker.release();await pending;}
+      63 |  });
+      64 | });
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:61:455)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 9 passed, 15 total
+Snapshots:   0 total
+Time:        99.641 s
+Ran all test suites matching apps/api/test/chat-crypto-transport-budget.integration.spec.ts.

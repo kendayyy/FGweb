@@ -1,0 +1,80 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:27240) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-sweep-loop.spec.ts (25.549 s)
+  ● Real timer encrypted sweep lifecycle › starts one unref-able loop and never overlaps an unfinished sweep
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      1 | import {CryptoSweepLoop} from '../src/modules/chat-crypto/crypto-sweep-loop.js';
+      2 | const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
+    > 3 | const waitFor=async(check:()=>boolean)=>{const deadline=Date.now()+1500;while(!check()&&Date.now()<deadline)await sleep(5);expect(check()).toBe(true);};
+        |                                                                                                                                            ^
+      4 | const deferred=()=>{let release!:()=>void;const done=new Promise<void>(resolve=>{release=resolve;});return {done,release};};
+      5 | describe('Real timer encrypted sweep lifecycle',()=>{
+      6 |  it('starts one unref-able loop and never overlaps an unfinished sweep',async()=>{
+
+      at waitFor (test/chat-crypto-sweep-loop.spec.ts:3:140)
+      at Object.<anonymous> (test/chat-crypto-sweep-loop.spec.ts:8:33)
+
+  ● Real timer encrypted sweep lifecycle › recovers from a rejected sweep without forwarding private error details to its failure callback
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      1 | import {CryptoSweepLoop} from '../src/modules/chat-crypto/crypto-sweep-loop.js';
+      2 | const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
+    > 3 | const waitFor=async(check:()=>boolean)=>{const deadline=Date.now()+1500;while(!check()&&Date.now()<deadline)await sleep(5);expect(check()).toBe(true);};
+        |                                                                                                                                            ^
+      4 | const deferred=()=>{let release!:()=>void;const done=new Promise<void>(resolve=>{release=resolve;});return {done,release};};
+      5 | describe('Real timer encrypted sweep lifecycle',()=>{
+      6 |  it('starts one unref-able loop and never overlaps an unfinished sweep',async()=>{
+
+      at waitFor (test/chat-crypto-sweep-loop.spec.ts:3:140)
+      at Object.<anonymous> (test/chat-crypto-sweep-loop.spec.ts:12:20)
+
+  ● Real timer encrypted sweep lifecycle › clears future ticks and waits for the active sweep before shutdown completes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      1 | import {CryptoSweepLoop} from '../src/modules/chat-crypto/crypto-sweep-loop.js';
+      2 | const sleep=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
+    > 3 | const waitFor=async(check:()=>boolean)=>{const deadline=Date.now()+1500;while(!check()&&Date.now()<deadline)await sleep(5);expect(check()).toBe(true);};
+        |                                                                                                                                            ^
+      4 | const deferred=()=>{let release!:()=>void;const done=new Promise<void>(resolve=>{release=resolve;});return {done,release};};
+      5 | describe('Real timer encrypted sweep lifecycle',()=>{
+      6 |  it('starts one unref-able loop and never overlaps an unfinished sweep',async()=>{
+
+      at waitFor (test/chat-crypto-sweep-loop.spec.ts:3:140)
+      at Object.<anonymous> (test/chat-crypto-sweep-loop.spec.ts:16:20)
+
+  ● Real timer encrypted sweep lifecycle › stops safely before start and refuses invalid timer intervals
+
+    expect(received).toThrow()
+
+    Received function did not throw
+
+      18 |  it('stops safely before start and refuses invalid timer intervals',async()=>{
+      19 |   let calls=0;const loop=new CryptoSweepLoop(async()=>{calls++;},()=>{},5);await loop.stop();loop.start();await sleep(20);expect(calls).toBe(0);
+    > 20 |   for(const interval of [0,-1,0.5,Infinity])expect(()=>new CryptoSweepLoop(async()=>{},()=>{},interval)).toThrow();
+         |                                                                                                          ^
+      21 |  });
+      22 | });
+      23 |
+
+      at Object.<anonymous> (test/chat-crypto-sweep-loop.spec.ts:20:106)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 4 total
+Snapshots:   0 total
+Time:        25.957 s
+Ran all test suites matching apps/api/test/chat-crypto-sweep-loop.spec.ts.

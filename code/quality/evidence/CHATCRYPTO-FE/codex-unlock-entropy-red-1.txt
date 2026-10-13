@@ -1,0 +1,32 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/crypto-unlock-panel.test.tsx (5 tests | 1 failed) 3874ms
+   ❯ device unlock controls (DOM unit, no native/auth success claim) (5)
+     × does not permit a manually chosen low-entropy code for a new device 186ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/crypto-unlock-panel.test.tsx > device unlock controls (DOM unit, no native/auth success claim) > does not permit a manually chosen low-entropy code for a new device
+Error: expect(element).toHaveAttribute("readonly") // element.hasAttribute("readonly")
+
+Expected the element to have attribute:
+  readonly
+Received:
+  null
+ ❯ test/crypto-unlock-panel.test.tsx:11:18
+      9|     render(<DeviceUnlockPanel existingDevice={false} onUnlock={unlock}…
+     10|     const code = screen.getByLabelText('Mã khôi phục') as HTMLInputEle…
+     11|     expect(code).toHaveAttribute('readonly');
+       |                  ^
+     12|     await user.type(code, 'A'.repeat(43));
+     13|     await user.click(screen.getByRole('checkbox', { name: 'Tôi đã lưu …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  13:37:59
+   Duration  9.23s (tests 45%, environment 32%, import 10%, transform 7%, setup 6%)
+

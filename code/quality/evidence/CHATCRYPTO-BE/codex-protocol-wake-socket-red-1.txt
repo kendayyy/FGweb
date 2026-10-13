@@ -1,0 +1,25 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3024) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (52.92 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › wakes only the addressed device through durable Redis metadata and keeps REST sync authoritative
+
+    Native realtime condition timed out
+
+      32 |  const machines=new Map<string,sdk.OlmMachine>(),cookies=new Map<string,string>(),sockets:Socket[]=[],published:string[]=[];
+      33 |  const received=new Map<string,unknown[]>(),legacy:unknown[]=[];
+    > 34 |  const wait=async(condition:()=>boolean|Promise<boolean>)=>{const end=Date.now()+5000;while(!await condition()){if(Date.now()>end)throw new Error('Native realtime condition timed out');await new Promise(resolve=>setTimeout(resolve,20));}};
+         |                                                                                                                                         ^
+      35 |  const post=(route:string,body:unknown,user='alice')=>request(base).post('/api/v1/crypto/'+route).set('Origin',origin).set('Cookie',cookies.get(user)!).send(body);
+      36 |  async function connect(user?:string){
+      37 |   const socket=io(base,{path:'/socket.io',transports:['websocket'],reconnection:false,extraHeaders:{Origin:origin,...(user?{Cookie:cookies.get(user)!}:{})}});sockets.push(socket);
+
+      at wait (test/chat-crypto-realtime.integration.spec.ts:34:137)
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:91:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 8 passed, 9 total
+Snapshots:   0 total
+Time:        53.311 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

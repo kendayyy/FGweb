@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18660) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (53.765 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › persists client-selected mention routing IDs atomically and binds duplicate retries without reading private text
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: ["outsider"]
+    Received: undefined
+
+      145 |   const state=(await request(base).get('/api/v1/crypto/conversations/group/state').set('Cookie',cookies.get('alice')!)).body,room=new sdk.RoomId(matrixRoomId('group')),machine=machines.get('alice')!,settings=new sdk.EncryptionSettings();settings.historyVisibility=sdk.HistoryVisibility.Joined;settings.sharingStrategy=sdk.CollectStrategy.onlyTrustedDevices();await machine.invalidateGroupSession(room);await machine.shareRoomKey(room,[],settings);
+      146 |   const make=async(tag:string,mentionedUserIds:string[])=>({clientMessageId:tag,deviceId:'A',membershipRevision:state.membershipRevision,mentionedUserIds,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:JSON.parse(await machine.encryptRoomEvent(room,'m.room.message',JSON.stringify({msgtype:'m.text',body:'private-mention-original',binding:{version:1,conversationId:'group',clientMessageId:tag,senderId:'alice',senderDeviceId:'A',membershipRevision:state.membershipRevision,mentionedUserIds}})))}});
+    > 147 |   const selection=await make('mention-selected',['outsider']),sent=await post('conversations/group/messages',selection);expect(sent.status).toBe(201);expect(EncryptedMessageSchema.parse(sent.body).mentionedUserIds).toEqual(['outsider']);expect((await pool.query('SELECT mentioned_user_id FROM mentions WHERE message_id=$1',[sent.body.id])).rows).toEqual([{mentioned_user_id:'outsider'}]);
+          |                                                                                                                                                                                                                        ^
+      148 |   const notice=(await pool.query("SELECT * FROM notifications WHERE user_id='outsider' AND type='MENTION' AND dedup_key=$1",['crypto-mention:'+sent.body.id+':outsider'])).rows[0];expect(notice).toBeDefined();expect(JSON.parse(notice.data)).toEqual({conversationId:'group',messageId:sent.body.id,mentionerId:'alice'});expect(notice.title).toBe('Tin nhắn mới');expect(notice.body).toBe('Bạn có tin nhắn mới.');expect(JSON.stringify(notice)).not.toContain('private-mention-original');expect((await pool.query('SELECT channel FROM notification_outbox WHERE notification_id=$1',[notice.id])).rows).toEqual([{channel:'IN_APP'}]);
+      149 |   expect((await post('conversations/group/messages',selection)).body.id).toBe(sent.body.id);expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[sent.body.id])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM notifications WHERE dedup_key=$1',[notice.dedup_key])).rowCount).toBe(1);expect((await post('conversations/group/messages',{...selection,mentionedUserIds:['bob']})).status).toBe(409);
+      150 |   for(const [tag,targets] of [['mention-self',['alice']],['mention-outsider',['unjoined']],['mention-unknown',['unknown']]] as const){expect((await post('conversations/group/messages',await make(tag,[...targets]))).status).toBe(403);expect((await pool.query('SELECT id FROM messages WHERE client_message_id=$1',[tag])).rowCount).toBe(0);}
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:147:216)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 12 passed, 13 total
+Snapshots:   0 total
+Time:        54.216 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

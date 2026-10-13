@@ -1,0 +1,54 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-auth-bootstrap1.spec.ts --config quality/evidence/T30/playwright-auth-bootstrap1.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:8100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-auth-bootstrap1.spec.ts:63:1 › T30 focused second actor bootstrap; original5s room deadline; not acceptance (6.0m)
+
+
+  1) quality\evidence\T30\native-auth-bootstrap1.spec.ts:63:1 › T30 focused second actor bootstrap; original5s room deadline; not acceptance 
+
+    Test timeout of 360000ms exceeded.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('button', { name: 'Bật mic', exact: true })
+        - locator resolved to <button disabled aria-pressed="false" class="fg-btn fg-btn-secondary ">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        67 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+      63 | test('T30 focused second actor bootstrap; original5s room deadline; not acceptance',async()=>{
+      64 |  try{
+    > 65 |   const sender=await openActor('sender',true);activePage=sender;await checkpoint(sender,'Mở phòng thật','DB/API và giao diện FG đã tải; chưa phát màn hình');await sender.getByRole('button',{name:'Tạo nhóm gọi',exact:true}).click();await join(sender);await sender.getByRole('button',{name:'Bật mic',exact:true}).click();await expect(sender.getByRole('button',{name:'Tắt mic',exact:true})).toBeVisible();
+         |                                                                                                                                                                                                                                                                                                                        ^
+      66 |   const linh=await openActor('receiver',true);await checkpoint(linh,'Đo tải phòng người thứ hai','Vùng gọi hiện trong deadline gốc; chẩn đoán bootstrap riêng','SUCCEEDED');
+      67 |  }catch(error){if(activePage&&!activePage.isClosed())await checkpoint(activePage,'Kiểm thử dừng tại assertion lỗi','Giữ bằng chứng thật; chưa nghiệm thu T30','FAILED');throw error;}
+      68 | });
+        at E:\FGweb\code\quality\evidence\T30\native-auth-bootstrap1.spec.ts:65:312
+
+    Error Context: .cache\t30\playwright-results\native-auth-bootstrap1-T30-b4b87-oom-deadline-not-acceptance\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-auth-bootstrap1-T30-b4b87-oom-deadline-not-acceptance\error-context.md
+
+  Slow test file: quality\evidence\T30\native-auth-bootstrap1.spec.ts (6.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    quality\evidence\T30\native-auth-bootstrap1.spec.ts:63:1 › T30 focused second actor bootstrap; original5s room deadline; not acceptance 

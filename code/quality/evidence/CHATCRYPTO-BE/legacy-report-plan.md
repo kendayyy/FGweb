@@ -1,0 +1,7 @@
+# Imported-history selected reports
+
+Same CHATCRYPTO-BE task; implement after native cleanup boundary (19/19,2026-10-09T08:41:15.083Z). Reuse the relay imported-binding validator with the caller PoolClient. No nested pool transaction while the report holds epoch/conversation locks. Reports must authorize current session/member/ban, original cohort, exact candidate/session/stage/source/image bindings and RECONCILED cleanup before and after external KMS/object I/O.
+
+Report evidence remains USER_DISCLOSED, USER_SUPPLIED_UNVERIFIED and independently encrypted with fg-report; provenance never grants admin full private chat access. Imported source authorship and public archived metadata stay unchanged. Existing LIVE interval ACL remains. Missing DI/custody fails closed; no new REST path, schema change, main environment change or production activation.
+
+Native owned report fixture will use SDK-generated Megolm and native Attachment bytes plus explicit public imported-state rows. This verifies report ACL/disclosure over actual HTTP/PG/OpenBao TLS, not migration provenance/cleanup itself; those have separate native evidence. Same-current-DM member outside original cohort is denied even with broad LIVE interval. Selected owner text/image succeeds; incomplete stage/source hashes fail; late authority changes must roll back report/draft claims. Test new behavior RED before source implementation. Final combined regression/audit only at integrated checkpoint.

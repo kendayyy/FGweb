@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:8560) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (45.733 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).rejects.toMatchObject()
+
+    Received promise resolved instead of rejected
+    Resolved to value: {"attachmentCount": 1, "candidateIds": ["native-original-roundtrip", "native-image-roundtrip", "native-all-source-last"], "cohortId": "available", "conversationId": "legacy", "membershipRevision": 6, "requiredDeviceClaims": 6, "sourceCount": 3}
+
+      214 |     const before=(await pool.query('SELECT id,content,encryption_mode,created_at,updated_at FROM messages ORDER BY id')).rows,ready=await review();expect(ready).toEqual({conversationId:'legacy',cohortId:'available',membershipRevision:revision,sourceCount:3,attachmentCount:1,requiredDeviceClaims:6,candidateIds:[prepared.body.candidateId,imageCandidate.body.candidateId,last.body.candidateId]});expect((await pool.query('SELECT id,content,encryption_mode,created_at,updated_at FROM messages ORDER BY id')).rows).toEqual(before);expect((await pool.query("SELECT migration_state FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].migration_state).toBe('LEGACY_PENDING');expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);
+      215 |     await expect(review({...gateInput,membershipRevision:revision+1})).rejects.toMatchObject({status:409});await expect(review({...gateInput,force:true})).rejects.toMatchObject({status:422});await expect(reviewService.reviewReconciliation(await app.get(ChatService).actor({cookie:cookies.get('outsider')!}),'legacy',{...gateInput,deviceId:'C'})).rejects.toMatchObject({status:403});
+    > 216 |     const gateService=app.get(CryptoLegacyService) as unknown as {boundCandidate:(...args:unknown[])=>Promise<unknown>},actualBound=gateService.boundCandidate.bind(gateService);let gateTampered=false;const finalSourceSpy=jest.spyOn(gateService,'boundCandidate').mockImplementation(async(...args)=>{const result=await actualBound(...args);if(args[3]===last.body.candidateId&&!gateTampered){gateTampered=true;const changed=Buffer.from(imageBytes);changed[0]^=1;fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),changed);}return result;});try{await expect(review()).rejects.toMatchObject({status:409});expect(gateTampered).toBe(true);}finally{finalSourceSpy.mockRestore();fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),imageBytes);}
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+      217 |     const savedClaim=(await pool.query("SELECT attestation FROM chat_crypto_legacy_attestations WHERE candidate_id=$1 AND user_id='bob'",[imageCandidate.body.candidateId])).rows[0].attestation;await pool.query("UPDATE chat_crypto_legacy_attestations SET attestation=jsonb_set(attestation,'{envelopeSha256}',to_jsonb($2::text)) WHERE candidate_id=$1 AND user_id='bob'",[imageCandidate.body.candidateId,sha('wrong')]);try{await expect(review()).rejects.toMatchObject({status:409});}finally{await pool.query("UPDATE chat_crypto_legacy_attestations SET attestation=$2 WHERE candidate_id=$1 AND user_id='bob'",[imageCandidate.body.candidateId,savedClaim]);}
+      218 |    }finally{await pool.query("DELETE FROM chat_crypto_legacy_candidates WHERE message_id='msg-c'");await pool.query("DELETE FROM chat_crypto_legacy_migrations WHERE message_id='msg-c'");}
+      219 |    const changed=Buffer.from(imageBytes);changed[0]^=1;fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),changed);try{expect((await file()).status).toBe(409);}finally{fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),imageBytes);}expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations WHERE message_id='msg-b'")).rows[0].state).toBe('PREPARED');
+
+      at expect (../../node_modules/expect/build/index.js:2116:15)
+      at test/chat-crypto-legacy.integration.spec.ts:216:573
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        46.27 s, estimated 58 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

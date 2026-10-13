@@ -1,0 +1,174 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-lifecycle.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18012) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-lifecycle.integration.spec.ts (55.076 s)
+  ● T27 real PG/private native SFU call lifecycle › rejects missing signature and altered raw payload without persisting an event
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      75 |  it('rejects missing signature and altered raw payload without persisting an event',async()=>{
+      76 |   const event={id:randomUUID(),event:'room_started',createdAt:String(Math.floor(Date.now()/1000)),room:{name:'fg-call_invalid'}},body=await signed(event);
+    > 77 |   expect((await request(base).post('/api/media/webhook').set('Content-Type','application/webhook+json').send(body.raw)).status).toBe(401);
+         |                                                                                                                                 ^
+      78 |   expect((await request(base).post('/api/media/webhook').set('Content-Type','application/webhook+json').set('Authorization',body.authorization).send(body.raw+' ')).status).toBe(401);
+      79 |   expect((await pool.query('SELECT id FROM webhook_events WHERE event_id=$1',[event.id])).rowCount).toBe(0);
+      80 |  });
+
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:77:129)
+
+  ● T27 real PG/private native SFU call lifecycle › receives genuine signed native participant events and deduplicates parallel deliveries durably
+
+    Expected actual lifecycle state was not reached
+
+      68 |   ws.once('unexpected-response',(_r,res)=>{finish(false,res.statusCode);res.resume();});ws.once('error',()=>finish(false));ws.on('message',bytes=>{const msg=SignalResponse.fromBinary(new Uint8Array(bytes as Buffer));if(msg.message.case==='join')finish(true);if(msg.message.case==='leave')finish(false);});
+      69 |  });}
+    > 70 |  async function eventually(run:()=>Promise<boolean>,timeout=10000){const end=Date.now()+timeout;while(Date.now()<end){if(await run())return;await new Promise(r=>setTimeout(r,100));}throw Error('Expected actual lifecycle state was not reached');}
+         |                                                                                                                                                                                            ^
+      71 |  const identity=async(token:string)=>(await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(token)).sub!;
+      72 |  async function state(id:string){return (await pool.query('SELECT state FROM call_groups WHERE id=$1',[id])).rows[0]?.state;}
+      73 |  async function signed(event:object){const raw=JSON.stringify(event),token=new AccessToken(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!,{ttl:60});token.sha256=createHash('sha256').update(raw).digest('base64');return {raw,authorization:await token.toJwt()};}
+
+      at eventually (test/call-lifecycle.integration.spec.ts:70:188)
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:83:3)
+
+  ● T27 real PG/private native SFU call lifecycle › last explicit leave closes only the call, preserves room/chat/team and denies closed-call revival
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "CLOSED"
+    Received: "OPEN"
+
+      88 |  it('last explicit leave closes only the call, preserves room/chat/team and denies closed-call revival',async()=>{
+      89 |   const {room,call}=await roomCall(),joined=await join(call.id);expect((await signal(joined.token)).accepted).toBe(true);
+    > 90 |   expect((await post(`calls/${call.id}/leave`,'viewer')).status).toBe(201);expect(await state(call.id)).toBe('CLOSED');
+         |                                                                                                         ^
+      91 |   expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM conversations WHERE id=$1',[room.conversationId])).rowCount).toBe(1);expect((await pool.query("SELECT id FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id])).rowCount).toBe(1);
+      92 |   expect((await pool.query('SELECT left_at FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].left_at).not.toBeNull();expect((await post(`calls/${call.id}/join`,'viewer')).status).toBe(409);expect((await signal(joined.token)).accepted).toBe(false);
+      93 |  });
+
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:90:105)
+
+  ● T27 real PG/private native SFU call lifecycle › reconnects before thirty seconds with the same identity and single reserved seat
+
+    Nest could not find FG_CALL_LIFECYCLE element (this provider does not exist in the current context)
+
+      25 |  let app:INestApplication,pool:pg.Pool,base:string,fixture:Fixture,sfu:RoomServiceClient,game:{id:string;title:string},created=false,dropWebhooks=false;
+      26 |  const owned=`t27_lifecycle_${randomUUID().replaceAll('-','')}`,saved={...process.env},cookies:Record<string,string>={},sockets:WebSocket[]=[];
+    > 27 |  const lifecycle=()=>app.get<Lifecycle>('FG_CALL_LIFECYCLE');
+         |                          ^
+      28 |  beforeAll(async()=>{
+      29 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),db=new URL(env.DATABASE_URL!);db.searchParams.set('options',`-c search_path=${owned}`);
+      30 |   pool=new pg.Pool({connectionString:db.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);created=true;
+
+      at InstanceLinksHost.get (../../node_modules/@nestjs/core/injector/instance-links-host.js:13:19)
+      at NestApplication.find (../../node_modules/@nestjs/core/injector/abstract-instance-resolver.js:5:60)
+      at NestApplication.get (../../node_modules/@nestjs/core/nest-application-context.js:83:20)
+      at ../../node_modules/@nestjs/core/nest-factory.js:144:40
+      at ExceptionsZone.run (../../node_modules/@nestjs/core/errors/exceptions-zone.js:8:13)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:143:28)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:198:54)
+      at lifecycle (test/call-lifecycle.integration.spec.ts:27:26)
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:101:9)
+
+  ● T27 real PG/private native SFU call lifecycle › lost leave webhook is reconciled, grace expiry closes and old tokens cannot resurrect the group
+
+    Nest could not find FG_CALL_LIFECYCLE element (this provider does not exist in the current context)
+
+      25 |  let app:INestApplication,pool:pg.Pool,base:string,fixture:Fixture,sfu:RoomServiceClient,game:{id:string;title:string},created=false,dropWebhooks=false;
+      26 |  const owned=`t27_lifecycle_${randomUUID().replaceAll('-','')}`,saved={...process.env},cookies:Record<string,string>={},sockets:WebSocket[]=[];
+    > 27 |  const lifecycle=()=>app.get<Lifecycle>('FG_CALL_LIFECYCLE');
+         |                          ^
+      28 |  beforeAll(async()=>{
+      29 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),db=new URL(env.DATABASE_URL!);db.searchParams.set('options',`-c search_path=${owned}`);
+      30 |   pool=new pg.Pool({connectionString:db.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);created=true;
+
+      at InstanceLinksHost.get (../../node_modules/@nestjs/core/injector/instance-links-host.js:13:19)
+      at NestApplication.find (../../node_modules/@nestjs/core/injector/abstract-instance-resolver.js:5:60)
+      at NestApplication.get (../../node_modules/@nestjs/core/nest-application-context.js:83:20)
+      at ../../node_modules/@nestjs/core/nest-factory.js:144:40
+      at ExceptionsZone.run (../../node_modules/@nestjs/core/errors/exceptions-zone.js:8:13)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:143:28)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:198:54)
+      at lifecycle (test/call-lifecycle.integration.spec.ts:27:26)
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:107:90)
+
+  ● T27 real PG/private native SFU call lifecycle › late participant-left or room-finished events do not close a currently reconnected native participant
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      112 |  it('late participant-left or room-finished events do not close a currently reconnected native participant',async()=>{
+      113 |   const {call}=await roomCall(),joined=await join(call.id);expect((await signal(joined.token)).accepted).toBe(true);
+    > 114 |   for(const event of ['participant_left','room_finished'])expect((await sendWebhook({id:randomUUID(),event,createdAt:String(Math.floor(Date.now()/1000)-20),room:{name:joined.roomName},participant:{identity:await identity(joined.token)}})).status).toBe(200);
+          |                                                                                                                                                                                                                                                        ^
+      115 |   expect(await state(call.id)).toBe('OPEN');expect((await pool.query('SELECT disconnected_at FROM call_admissions WHERE id=$1',[await identity(joined.token)])).rows[0].disconnected_at).toBeNull();
+      116 |  });
+      117 |  it('cleanup racing a new participant never closes a group containing a valid new seat',async()=>{
+
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:114:248)
+
+  ● T27 real PG/private native SFU call lifecycle › cleanup racing a new participant never closes a group containing a valid new seat
+
+    Nest could not find FG_CALL_LIFECYCLE element (this provider does not exist in the current context)
+
+      25 |  let app:INestApplication,pool:pg.Pool,base:string,fixture:Fixture,sfu:RoomServiceClient,game:{id:string;title:string},created=false,dropWebhooks=false;
+      26 |  const owned=`t27_lifecycle_${randomUUID().replaceAll('-','')}`,saved={...process.env},cookies:Record<string,string>={},sockets:WebSocket[]=[];
+    > 27 |  const lifecycle=()=>app.get<Lifecycle>('FG_CALL_LIFECYCLE');
+         |                          ^
+      28 |  beforeAll(async()=>{
+      29 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),db=new URL(env.DATABASE_URL!);db.searchParams.set('options',`-c search_path=${owned}`);
+      30 |   pool=new pg.Pool({connectionString:db.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);created=true;
+
+      at InstanceLinksHost.get (../../node_modules/@nestjs/core/injector/instance-links-host.js:13:19)
+      at NestApplication.find (../../node_modules/@nestjs/core/injector/abstract-instance-resolver.js:5:60)
+      at NestApplication.get (../../node_modules/@nestjs/core/nest-application-context.js:83:20)
+      at ../../node_modules/@nestjs/core/nest-factory.js:144:40
+      at ExceptionsZone.run (../../node_modules/@nestjs/core/errors/exceptions-zone.js:8:13)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:143:28)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:198:54)
+      at lifecycle (test/call-lifecycle.integration.spec.ts:27:26)
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:119:47)
+
+  ● T27 real PG/private native SFU call lifecycle › releases expired unconnected reservations and never reopens from a late signed join event
+
+    Nest could not find FG_CALL_LIFECYCLE element (this provider does not exist in the current context)
+
+      25 |  let app:INestApplication,pool:pg.Pool,base:string,fixture:Fixture,sfu:RoomServiceClient,game:{id:string;title:string},created=false,dropWebhooks=false;
+      26 |  const owned=`t27_lifecycle_${randomUUID().replaceAll('-','')}`,saved={...process.env},cookies:Record<string,string>={},sockets:WebSocket[]=[];
+    > 27 |  const lifecycle=()=>app.get<Lifecycle>('FG_CALL_LIFECYCLE');
+         |                          ^
+      28 |  beforeAll(async()=>{
+      29 |   const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),db=new URL(env.DATABASE_URL!);db.searchParams.set('options',`-c search_path=${owned}`);
+      30 |   pool=new pg.Pool({connectionString:db.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);created=true;
+
+      at InstanceLinksHost.get (../../node_modules/@nestjs/core/injector/instance-links-host.js:13:19)
+      at NestApplication.find (../../node_modules/@nestjs/core/injector/abstract-instance-resolver.js:5:60)
+      at NestApplication.get (../../node_modules/@nestjs/core/nest-application-context.js:83:20)
+      at ../../node_modules/@nestjs/core/nest-factory.js:144:40
+      at ExceptionsZone.run (../../node_modules/@nestjs/core/errors/exceptions-zone.js:8:13)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:143:28)
+      at Proxy.<anonymous> (../../node_modules/@nestjs/core/nest-factory.js:198:54)
+      at lifecycle (test/call-lifecycle.integration.spec.ts:27:26)
+      at Object.<anonymous> (test/call-lifecycle.integration.spec.ts:126:148)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 1 passed, 9 total
+Snapshots:   0 total
+Time:        55.698 s
+Ran all test suites matching test/call-lifecycle.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-lifecycle.integration.spec.ts

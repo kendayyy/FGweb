@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/CHATCRYPTO-FE', digest = value => createHash('sha256').update(value).digest('hex');
+const ledger = JSON.parse(fs.readFileSync('quality/tasks.json', 'utf8')), task = ledger.tasks.find(row => row.id === 'CHATCRYPTO-FE');
+const before = JSON.parse(fs.readFileSync(`${dir}/sync-before.json`, 'utf8'));
+assert.deepEqual(task.gateRebaseline, before.gate); assert.equal(task.status, 'IN_PROGRESS');
+for (const row of ledger.tasks.filter(row => row.id !== task.id)) assert.equal(digest(JSON.stringify(row)), before.rows[row.id]);
+const old = JSON.parse(fs.readFileSync(before.gate.manifestPath, 'utf8'));
+const paths = old.outputTransitions.filter(entry => !Object.hasOwn(before.files, entry.path) && digest(fs.readFileSync(entry.path)) !== entry.afterSha256).map(entry => entry.path);
+assert.equal(paths.length, 12); assert(paths.every(path => path.startsWith('apps/api/dist/') && (path.endsWith('.d.ts') || path.endsWith('/tsconfig.tsbuildinfo'))));
+const observed = paths.map(path => ({ path, previousPinnedSha256: old.outputTransitions.find(entry => entry.path === path).afterSha256, actualSha256: digest(fs.readFileSync(path)) }));
+const review = `# Sync generated declaration propagation review\n\nRecorded ${new Date().toISOString()} after sync-adoption-1 failed stock gate; do not describe this review as preceding the build. Contracts/API builds ran sequentially and exited0. New required sync fields propagate TypeScript inferred public return types through12 existing generated declaration/build-info outputs. These paths were already within the reviewed API compiler scope apps/api/dist/**. No additional source code, checker, old PASS row or historical evidence is edited. Extend explicit sync ownership metadata to this generated closure, preserving original pinned hashes and prior-stage proof. Runtime HTTP/SAS/depletion/denial regression3 ran serially and succeeded. The earlier depletion2 and entropy-RED executions overlapped for approximately7seconds due orchestration error; retain both records, do not count them as serial acceptance, use depletion3 and subsequent entropy-GREEN serial executions.\n\n${JSON.stringify(observed, null, 2)}\n`;
+fs.writeFileSync(`${dir}/sync-generated-review.md`, review, { flag: 'wx' });
+task.approvedScopeAmendments.push({ source: `${dir}/sync-generated-review.md`, reason: 'Generated declaration closure from reviewed sync metadata types; post-build review retained explicitly, no new business scope', paths });
+task.evidencePaths.push(`${dir}/sync-generated-review.md`); fs.writeFileSync('quality/tasks.json', JSON.stringify(ledger, null, 2) + '\n'); console.log(JSON.stringify({ generatedPaths: paths, historicalRowsUnchanged: true }));

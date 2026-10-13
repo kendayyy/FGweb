@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "generatedAt": "2026-10-11T13:42:00.000Z",
+  "diagnosticRun": {
+    "runId": "t30-native-883c3aabc8c44d228c8c290d16050bb8",
+    "status": "FAILED",
+    "exitCode": 1,
+    "failureAssertion": "expect(after.videoCount).toBe(1) => Expected: 1, Received: 0",
+    "failureLocation": "screen-share-diagnostic.spec.ts:60 (receiveOne after switch)",
+    "canonical": false,
+    "note": "Isolated diagnostic run preserving original assertions, timeouts, and measurement windows. Canonical restore required before PASS."
+  },
+  "switchWindow": {
+    "windowIndex": 1,
+    "startEpochMs": 1791725214578,
+    "endEpochMs": 1791725218396,
+    "durationMs": 3818,
+    "before": {
+      "at": 1791725214578,
+      "videoCount": 0,
+      "videoTrackId": "",
+      "selectedId": "_r_1_-tab-TR_VSXCz9gNonkGAP",
+      "relay": true
+    },
+    "after": {
+      "at": 1791725218396,
+      "videoCount": 0,
+      "videoTrackId": "",
+      "selectedId": "_r_1_-tab-TR_VSXCz9gNonkGAP",
+      "relay": true
+    },
+    "delta": {
+      "audioBytesDelta": 83554,
+      "audioPacketsDelta": 469,
+      "videoBytesDelta": 2259,
+      "videoPacketsDelta": 12,
+      "videoTrackReport": "8x8 filler track (old RTP report residual, not new capture stream)"
+    }
+  },
+  "signalingTimeline": [
+    {
+      "step": 1,
+      "epochMs": 1791725214155,
+      "relativeToSwitchStartMs": -423,
+      "socketIndex": 5,
+      "role": "server-peer",
+      "direction": "receive",
+      "case": "subscription",
+      "byteCount": 59,
+      "seq": 81,
+      "description": "Viewer client sends UpdateSubscription(subscribe=false) to unsubscribe prior screen track (TR_VSrzKShmnkBXFk)"
+    },
+    {
+      "step": 2,
+      "epochMs": 1791725214160,
+      "relativeToSwitchStartMs": -418,
+      "socketIndex": 5,
+      "role": "server-peer",
+      "direction": "receive",
+      "case": "subscription",
+      "byteCount": 61,
+      "seq": 83,
+      "description": "Viewer client sends UpdateSubscription(subscribe=true) to subscribe new screen track (TR_VSXCz9gNonkGAP)"
+    },
+    {
+      "step": 3,
+      "epochMs": 1791725214578,
+      "relativeToSwitchStartMs": 0,
+      "role": "test-runner",
+      "direction": "observation",
+      "case": "window-start",
+      "description": "Playwright begins 3000ms waitForTimeout in receiveOne(); before-stats recorded with videoCount=0"
+    },
+    {
+      "step": 4,
+      "epochMs": 1791725214758,
+      "relativeToSwitchStartMs": 180,
+      "socketIndex": 4,
+      "role": "native-upstream",
+      "direction": "send",
+      "case": "subscription",
+      "byteCount": 59,
+      "seq": 81,
+      "forwardingLatencyMs": 603,
+      "description": "Gateway finishes lockedLease transaction and forwards unsubscribe frame to upstream SFU (603ms queue/process delay)"
+    },
+    {
+      "step": 5,
+      "epochMs": 1791725215641,
+      "relativeToSwitchStartMs": 1063,
+      "socketIndex": 4,
+      "role": "native-upstream",
+      "direction": "send",
+      "case": "subscription",
+      "byteCount": 61,
+      "seq": 84,
+      "forwardingLatencyMs": 1481,
+      "description": "Gateway finishes second lockedLease transaction and forwards subscribe frame to upstream SFU (1481ms cumulative delay)"
+    },
+    {
+      "step": 6,
+      "epochMs": 1791725216744,
+      "relativeToSwitchStartMs": 2166,
+      "socketIndex": 5,
+      "role": "server-peer",
+      "direction": "receive",
+      "case": "offer",
+      "description": "Viewer client generates SDP Offer for renegotiation and sends SignalRequest(offer) to gateway"
+    },
+    {
+      "step": 7,
+      "epochMs": 1791725218230,
+      "relativeToSwitchStartMs": 3652,
+      "socketIndex": 4,
+      "role": "native-upstream",
+      "direction": "send",
+      "case": "offer",
+      "forwardingLatencyMs": 1486,
+      "description": "Gateway forwards SDP Offer to upstream SFU (1486ms gateway queue/lockedLease delay)"
+    },
+    {
+      "step": 8,
+      "epochMs": 1791725218396,
+      "relativeToSwitchStartMs": 3818,
+      "role": "test-runner",
+      "direction": "observation",
+      "case": "window-end",
+      "description": "Playwright 3000ms waitForTimeout expires; after-stats recorded; expect(videoCount).toBe(1) FAILS"
+    },
+    {
+      "step": 9,
+      "epochMs": 1791725218824,
+      "relativeToSwitchStartMs": 4246,
+      "socketIndex": 4,
+      "role": "native-upstream",
+      "direction": "receive",
+      "case": "answer",
+      "description": "Upstream SFU responds with SDP Answer (SFU processing took 594ms from offer forward)"
+    },
+    {
+      "step": 10,
+      "epochMs": 1791725219092,
+      "relativeToSwitchStartMs": 4514,
+      "socketIndex": 5,
+      "role": "server-peer",
+      "direction": "send",
+      "case": "answer",
+      "forwardingLatencyMs": 268,
+      "postWindowDelayMs": 696,
+      "description": "Gateway forwards SDP Answer to viewer client; arrives 696ms after measurement window closed"
+    }
+  ],
+  "latencyDecomposition": {
+    "totalSignalingElapsedMs": 4937,
+    "measurementWindowDurationMs": 3818,
+    "components": {
+      "gatewayQueueAndTransactionDelayMs": 2967,
+      "gatewayQueuePercentage": 60.1,
+      "sfuRoundTripAndProcessingMs": 594,
+      "sfuPercentage": 12.0,
+      "clientOfferGenerationMs": 1103,
+      "clientPercentage": 22.3,
+      "networkAndTransportMs": 273,
+      "networkPercentage": 5.6
+    },
+    "criticalDelayAttribution": "Gateway queue drain serialization (2967ms) pushed SDP answer completion 696ms past the 3818ms measurement window."
+  },
+  "rootCauseAnalysis": {
+    "provenFactors": [
+      {
+        "factor": "Serial lockedLease transactions per batch",
+        "evidence": "Frame 81 and 83 arrived 5ms apart but were drained in separate serial batches (603ms and 883ms), each executing BEGIN, liveLease, rooms FOR SHARE, call_groups FOR SHARE, liveLease, liveLeaseWithPolicy, and COMMIT.",
+        "impact": "1481ms delay before subscription frame reached upstream SFU."
+      },
+      {
+        "factor": "Offer forwarding head-of-line delay",
+        "evidence": "Client SDP offer received at 1791725216744 was delayed 1486ms before forwarding at 1791725218230.",
+        "impact": "SFU could not begin generating SDP answer until 3652ms into the 3818ms window."
+      },
+      {
+        "factor": "Uninterrupted gateway health and zero error counts",
+        "evidence": "0 query errors, 0 RPC errors, 0 dropped records, pool idle settled. Failure was pure signaling latency, not database crash or timeout 57014.",
+        "impact": "Rules out unhandled exception, crash, or gateway closure as the failure mode."
+      }
+    ],
+    "unprovenOrGaps": [
+      {
+        "factor": "subscriptionPermissionUpdate boolean payload",
+        "status": "UNOBSERVED",
+        "gap": "Gateway observer logged case 'subscriptionPermissionUpdate' and byte count, but did not decode whether allowed was true/false or whether client renegotiation waited on this signal."
+      },
+      {
+        "factor": "Sub-millisecond per-query lock duration",
+        "status": "AGGREGATE_ONLY",
+        "gap": "Slow query logging only catches queries > 1000ms. Aggregate query execution time across the 8 queries per batch is inferred from batch duration, not individual span traces."
+      },
+      {
+        "factor": "Host hardware load correlation",
+        "status": "CORRELATION_ONLY",
+        "gap": "Mean CPU 85.20% and min RAM 1.88 GB correlate with high load, but cannot be claimed as unique root cause."
+      }
+    ]
+  }
+}

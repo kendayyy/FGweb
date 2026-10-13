@@ -40,7 +40,7 @@ export const HeaderAuthWidget: React.FC = () => {
               height: '32px',
               borderRadius: '50%',
               backgroundColor: 'var(--color-action)',
-              color: '#ffffff',
+              color: 'var(--btn-primary-text)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -93,7 +93,7 @@ export const HeaderAuthWidget: React.FC = () => {
         <div
           role="alert"
           style={{
-            backgroundColor: 'rgba(229, 72, 77, 0.15)',
+            backgroundColor: 'var(--bg-error-inline)',
             border: '1px solid var(--color-danger)',
             borderRadius: 'var(--radius-sm)',
             padding: '6px 12px',

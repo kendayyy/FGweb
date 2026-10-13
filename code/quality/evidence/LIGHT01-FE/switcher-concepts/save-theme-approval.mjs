@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE/switcher-concepts';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const out=`${dir}/theme-approval.json`;assert(!fs.existsSync(out));
+const old=JSON.parse(fs.readFileSync('quality/evidence/LIGHT01-FE/warm-verification.json'));
+let count=0;for(const [file,sha] of Object.entries(old.currentFiles))if(file.startsWith('apps/web/src/')||file==='apps/web/index.html'||file==='apps/web/test/theme.test.tsx'||file==='tests/e2e/theme.spec.ts'){assert.equal(hash(file),sha,file);count++;}
+const dark='../.doc/mockups/fg-dark-smoke-approved.png';assert(!fs.existsSync(dark));fs.copyFileSync('quality/evidence/LIGHT01-FE/mockups-v2/04-dark-smoke.png',dark);
+const docs=['../.doc/01-product-spec.md','../.doc/02-frontend-design.md','../.doc/task.md','../.agents/rules/04-frontend-design.md'];
+const before=Object.fromEntries(docs.map(file=>[file,hash(file)]));
+const replace=(file,old,value)=>{const s=fs.readFileSync(file,'utf8');assert(s.includes(old),`Missing metadata anchor ${file}`);fs.writeFileSync(file,s.replace(old,value));};
+replace(docs[0],'[Dark Xám khói](./mockups/fg-dark-smoke-proposal.png) được tạo theo yêu cầu để xem trước, chưa duyệt; dark runtime hiện có giữ baseline đến khi chốt đề xuất.','Người dùng cũng chốt [Dark Xám khói](./mockups/fg-dark-smoke-approved.png) ngày07/10/2026; cả hai theme trở thành hướng hình thức đã duyệt. Bộ chọn giao diện đang được thiết kế thêm theo yêu cầu mới, phải giữ đủ Sáng/Tối/Hệ thống. Runtime chỉ cập nhật qua checkpoint/migration có review và kiểm thử thật.');
+replace(docs[1],'## 12. Theme Xám khói — light đã chốt, dark đề xuất chờ duyệt','## 12. Theme Xám khói — cả light/dark đã chốt, bộ chọn mới đang đề xuất');
+replace(docs[1],'[Dark Xám khói đề xuất](./mockups/fg-dark-smoke-proposal.png), mã DARK-SMOKE-PROPOSAL','[Dark Xám khói đã chốt](./mockups/fg-dark-smoke-approved.png), mã DARK-SMOKE-APPROVED');
+replace(docs[1],'Giữ cùng bố cục light; đây là preview người dùng yêu cầu, chưa được duyệt và chưa đổi dark runtime.','Giữ cùng bố cục light; người dùng xác nhận “tôi chốt bản dark và bản light mới nãy” ngày07/10/2026. Phê duyệt hình thức chưa thay implementation/app review/tests.');
+replace(docs[1],'Dùng data-theme trên html và color-scheme; giữ dark tokens hiện có.','Dùng data-theme trên html và color-scheme; triển khai cả hai palette đã chốt qua checkpoint/migration, giữ hành vi hiện có.');
+replace(docs[2],'DARK-SMOKE-PROPOSAL mới tạo để xem, chưa duyệt; không đổi dark runtime trước chốt.','DARK-SMOKE-APPROVED đã được người dùng chốt cùng light ngày07/10/2026. Bộ chọn giao diện mới đang ở bước mockup theo yêu cầu, giữ Sáng/Tối/Hệ thống; chưa có implementation/tests/PASS mới.');
+replace(docs[3],'DARK-SMOKE-PROPOSAL chỉ preview đang chờ duyệt; dark runtime giữ baseline hiện có đến khi được chốt và migration review.','DARK-SMOKE-APPROVED cũng được người dùng chốt07/10/2026. Cả light/dark mới triển khai qua checkpoint/migration review; bộ chọn cải tiến đang đề xuất, giữ đủ Sáng/Tối/Hệ thống.');
+fs.appendFileSync('../.doc/mockups/README.md','\n## Xác nhận cả hai theme Xám khói07/10/2026\n\n- Người dùng “tôi chốt bản dark và bản light mới nãy”: LIGHT-SMOKE-APPROVED và [DARK-SMOKE-APPROVED](./fg-dark-smoke-approved.png) đều đã chốt. Giữ ảnh dark proposal cũ làm lịch sử.\n- Bộ chọn Sáng/Tối/Hệ thống cải tiến đang đề xuất tại code/quality/evidence/LIGHT01-FE/switcher-concepts/. Chưa chọn mẫu nút hoặc triển khai runtime trong lần lưu này.\n');
+const record={recordedAt:new Date().toISOString(),request:'tôi chốt bản dark và bản light mới nãy',light:{file:'../.doc/mockups/fg-light-smoke-approved.png',sha256:hash('../.doc/mockups/fg-light-smoke-approved.png'),status:'APPROVED_MOCKUP'},dark:{file:dark,sha256:hash(dark),status:'APPROVED_MOCKUP'},selectorApproval:'PENDING',runtimeAndTestFilesPreserved:count,metadata:docs.map(file=>({file,beforeSha256:before[file],afterSha256:hash(file)})),baselineAdopted:false,taskPassClaimed:false};
+fs.writeFileSync(out,JSON.stringify(record,null,2)+'\n');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const task=ledger.tasks.find(task=>task.id==='LIGHT01-FE');assert.equal(task.status,'BLOCKED');task.blockers[0]='Both smoke themes approved; user requests selector mockups before choosing. Actual implementation/review/tests remain required after selector choice and baseline migration.';task.evidencePaths=[...new Set([...task.evidencePaths,out,`${dir}/brief.md`])];fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({bothThemeMockupsApproved:true,selectorPending:true,runtimeAndTestFilesPreserved:count,taskStatus:task.status}));

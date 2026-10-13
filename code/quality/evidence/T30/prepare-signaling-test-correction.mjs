@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',source='apps/api/test/t30-signaling-throughput.integration.spec.ts';
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const old=fs.readFileSync(source,'utf8'),needle="expect(denyResponse.message.value.message).toBe('Current screen quota required');";
+assert.equal(old.split(needle).length,2);
+const proposed=d+'/signaling-test-corrected-proposed.ts';
+fs.writeFileSync(proposed,old.replace(needle,"expect(denyResponse.message.value.message).toBe('Current publication source denied');"),{flag:'wx'});
+const review={recordedAt:new Date().toISOString(),reviewer:'Codex',source,proposed,beforeSha256:hash(source),afterSha256:hash(proposed),reason:'Actual old gateway RED1 is7/9: bounded queue overflow is genuine RED; no-slot request correctly denied by current publication permission before deeper slot query. Correct exact message expectation to canonical Current publication source denied, keeping NOT_ALLOWED and never-forwarded assertions and all other8cases.32PING/PONG passed2695ms: no throughput-RED claim.',redEvidence:d+'/codex-t30-signaling-throughput-red-1.json'};
+fs.writeFileSync(d+'/signaling-test-correction-review.json',JSON.stringify(review,null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(d+'/copy-signaling-test-correction.mjs',`import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';const r=JSON.parse(fs.readFileSync('${d}/signaling-test-correction-review.json','utf8')),h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');assert.equal(h(r.source),r.beforeSha256);assert.equal(h(r.proposed),r.afterSha256);fs.mkdirSync('${d}/antigravity-signaling-test-correction-1');fs.copyFileSync(r.proposed,'${d}/antigravity-signaling-test-correction-1/t30-signaling-throughput.integration.spec.ts');console.log('Copied exact reviewed canonical-message correction; no actual adoption.');\n`,{flag:'wx'});
+fs.writeFileSync(d+'/antigravity-signaling-test-correction-prompt.txt','[REFACTOR_PROMPT] T30 only. Do not use Anti2. Fixed Gemini3.6 Flash (High). Read quality/evidence/T30/signaling-test-correction-review.json; then run only node quality/evidence/T30/copy-signaling-test-correction.mjs to copy exact hash-reviewed canonical error-message correction. Do not alter actual app/test/ledger/history, proposals or run tests. Return copied hash. No new task.',{flag:'wx'});
+fs.appendFileSync('../.doc/history.md',`\n- Coding and build 2 — T30 — actual gateway RED1 ${new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00: PG/WebSocket RED1 19:56:16.595–19:57:17.598Z exit1,7/9.32PING/PONG2695ms passed (not throughput RED); bounded overflow missing old behavior is real RED; incorrect exact no-slot message assertion corrected to canonical permission denial without removing reason/no-forward assertions. Actual gateway unchanged. Evidence code/${d}/signaling-test-correction-review.json; IN_PROGRESS, native pending.\n`);
+console.log('Pinned genuine overflow RED and canonical-message test correction.');

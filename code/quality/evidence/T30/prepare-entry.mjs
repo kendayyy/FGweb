@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+const dir='quality/evidence/T30';
+const scope=['apps/web/src/features/live/**','apps/web/src/features/calls/media.ts','apps/web/src/features/calls/CallPanel.tsx','apps/web/test/live-viewer.test.tsx','apps/web/dist/**','tests/e2e/screen-share.spec.ts','quality/spec-coverage.md',dir+'/**','.runtime/t30/**','.cache/t30/**','quality/evidence/TELEGRAM-BRIDGE-01/demo-stream/**','quality/evidence/TELEGRAM-BRIDGE-01/demo-latest.json'];
+let source=fs.readFileSync('quality/evidence/T29/start-reviewed-t29.mjs','utf8').replaceAll('T29','T30').replaceAll('t29','t30').replaceAll('LOADING3D-FE','T29').replaceAll('79','80');
+const begin=source.indexOf('const scope='),end=source.indexOf('\nconst review=',begin);
+source=source.slice(0,begin)+'const scope='+JSON.stringify(scope)+';'+source.slice(end);
+source=source.replace('mục tiêu quota screen3 atomic, owner/helper MANAGE_CALLS stop/mute/allow/kick, chống stale grant/SDK bypass trên SFU thật và giữ mic viewer.','mục tiêu share720p30 sau click, cancel/denied release, selected main video và fallback, mobile view-only, real capture/switch/subscription/audio network shaping; Antigravity Gemini3.6 Flash High triển khai proposals, Anti2 theo dõi, Codex review/apply/test/close.')
+ .replace("interfaces:['POST /calls/:id/screen-share/claim','POST /calls/:id/screen-share/release','POST /calls/:id/moderation']","interfaces:['Consume existing T29 screen-share claim/release DTOs','Integrate LiveViewer with existing active MediaSession; one SFU room/admission/mic per user']")
+ .replace("data:'Use existing call_publish_slots ordinal1..3 and restrictions/admissions/membership schema; no DB migration planned. Any additional schema scope requires its own reviewed evidence.'","data:'No backend/schema/contract changes; preserve T29 server enforcement. Existing voice media and CallPanel are prior-owned: exact proposed source transitions reviewed before application.'")
+ .replace("'auth/crypto/room/game behavior and frontend'","'auth/crypto/room/game/FG tokens/sidebar/theme/call lifecycle behavior'")
+ .replace("tests:'Contracts RED; owned actual PostgreSQL/Nest API races/retry/ACL/quota/reconcile; native private SFU via actual SDK bypass/replay/mute/kick. Any UI/E2E headed and mask/stream actual viewport via existing human-authorized Telegram helper; no mocked media acceptance.'","tests:'DOM RED tests for stream selection/fallback/cancel/release/mobile; actual FG app/API/PG/native SFU real capture/switch/measured subscription and shaped audio via owned fixture. All UI/E2E headed with authorized masked Telegram capture, no mock media acceptance.'")
+ .replaceAll('Server publishing/moderation quota, ACL and actual SFU enforcement with owned tests/build/contract evidence only','Frontend selected live/capture controls, owned tests/build/native fixture evidence; preserve current backend/contracts/crypto and prior outputs')
+ .replaceAll('publishing/moderation service boundary, actual gateway/lifecycle enforcement and shared transport contract integration','frontend live integration into existing media session and CallPanel, owned tests/build/native fixture')
+ .replace('chưa code/PASS/T30','chưa code/PASS/T31');
+fs.writeFileSync(dir+'/start-reviewed-t30.mjs',source,{flag:'wx'});
+fs.writeFileSync(dir+'/record.mjs',fs.readFileSync('quality/evidence/T29/record.mjs','utf8').replaceAll('T29','T30'),{flag:'wx'});
+console.log(JSON.stringify({prepared:true,scope}));

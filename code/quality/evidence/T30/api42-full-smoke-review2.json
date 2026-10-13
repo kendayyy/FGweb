@@ -1,0 +1,582 @@
+{
+  "recordedAt": "2026-10-11T11:23:49.536Z",
+  "smokes": [
+    {
+      "mode": "normal",
+      "command": {
+        "command": "node quality/evidence/T30/probe-api42-fixture2-normal.mjs diagnostic",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-11T11:20:58.681Z",
+        "completedAt": "2026-10-11T11:22:01.396Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-api42-fixture-smoke-normal-2.txt",
+        "evidenceSha256": "995428a5c7ce162ac8cdcde550db2342e51a468ba115e75f0bfdcffa9bfbc970"
+      },
+      "review": {
+        "recordedAt": "2026-10-11T11:22:01.348Z",
+        "reviewer": "Codex",
+        "fixture": {
+          "path": "quality/evidence/T30/fixture-server-api42-reviewed2.mjs",
+          "sha256": "f2af8e7c82b6db43296814839a69e96e08572e7c44b424c164171c9a59664e99"
+        },
+        "phases": [
+          {
+            "at": "2026-10-11T11:21:03.199Z",
+            "phase": "database"
+          },
+          {
+            "at": "2026-10-11T11:21:12.982Z",
+            "phase": "redis"
+          },
+          {
+            "at": "2026-10-11T11:21:13.013Z",
+            "phase": "media"
+          },
+          {
+            "at": "2026-10-11T11:21:25.205Z",
+            "phase": "api"
+          },
+          {
+            "at": "2026-10-11T11:21:33.191Z",
+            "phase": "web"
+          }
+        ],
+        "checks": [
+          {
+            "kind": "built SPA HTML and CSP",
+            "status": 200,
+            "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+            "noDevRuntime": true,
+            "cspSha256": "3393f02c0c6ddf555217d2b7ca3a491b56a75f1b08c14686fb370252825ce216"
+          },
+          {
+            "kind": "built asset actual HTTP",
+            "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+            "status": 200,
+            "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+          },
+          {
+            "kind": "built asset actual HTTP",
+            "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+            "status": 200,
+            "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+          },
+          {
+            "kind": "real authenticated owned API proxy",
+            "status": 200
+          },
+          {
+            "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+            "opened": true,
+            "namespaceAclNotClaimed": true
+          },
+          {
+            "kind": "real retained inspector after >driver idle 10000ms",
+            "idleStartedAt": "2026-10-11T11:21:35.026Z",
+            "idleEndedAt": "2026-10-11T11:21:46.134Z",
+            "idleMs": 11108.135599999994,
+            "backendPid": 12863,
+            "callers": 0,
+            "rooms": 1,
+            "publisherSlots": 0
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-me",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-games",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-own",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-detail",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-members",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-calls",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-room-play-sessions",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-call-participants",
+            "status": 200
+          },
+          {
+            "kind": "actual guard rejection observed before guard",
+            "status": 401
+          },
+          {
+            "kind": "same real inspector reads newly committed real API admission",
+            "backendPid": 12863,
+            "beforeCallers": 0,
+            "afterCallers": 1,
+            "currentUserMatched": true,
+            "openCalls": 1,
+            "publisherSlots": 0,
+            "nativeTracksRead": true
+          },
+          {
+            "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+            "inspector": {
+              "recordedAt": "2026-10-11T11:22:01.257Z",
+              "backendPid": 12863,
+              "reserved": true,
+              "released": true,
+              "actualSocketEnded": true,
+              "poolEnded": true,
+              "failureCount": 0,
+              "writeFailureCount": 0,
+              "healthy": true,
+              "poolTotalCount": 0,
+              "poolIdleCount": 0,
+              "poolWaitingCount": 0
+            }
+          },
+          {
+            "kind": "actual before-guard HTTP and Nest service parent spans/PG/SDK observation shutdown",
+            "pgHealth": {
+              "recordedAt": "2026-10-11T11:21:49.239Z",
+              "inFlightSettled": true,
+              "poolEnded": true,
+              "failureCount": 0,
+              "readFailures": 0,
+              "writeFailures": 0,
+              "idleErrors": 0,
+              "truncated": false,
+              "sampleCount": 20,
+              "observationComplete": true
+            },
+            "health": {
+              "recordedAt": "2026-10-11T11:21:49.285Z",
+              "sampleCount": 36,
+              "failureCount": 0,
+              "droppedCount": 0,
+              "timerStopped": true,
+              "histogramDisabled": true,
+              "observationComplete": true
+            },
+            "spanCount": 776,
+            "privacyReviewed": true
+          }
+        ],
+        "closed": {
+          "code": 0,
+          "signal": null
+        },
+        "cleanup": {
+          "schemaRemoved": true,
+          "mediaRemoved": true,
+          "presenceRemoved": true,
+          "appClosed": true,
+          "webClosed": true
+        },
+        "removed": [
+          "gateway-f1459eb7-9dfc-44c5-81ea-adab942f271d",
+          "temporary-built-smoke-0845e753-5859-4262-90bf-43167319af0a"
+        ],
+        "retained": [],
+        "errors": [],
+        "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+        "nativeAcceptance": false
+      }
+    },
+    {
+      "mode": "health-io",
+      "command": {
+        "command": "node quality/evidence/T30/probe-api42-fixture2-health-io.mjs diagnostic",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-11T11:22:10.004Z",
+        "completedAt": "2026-10-11T11:23:25.678Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-api42-fixture-smoke-health-io-2.txt",
+        "evidenceSha256": "bb3f362a5203d5a89d563629fd5cd8a788a333a2883582dba8c621ec7b329d26"
+      },
+      "review": {
+        "recordedAt": "2026-10-11T11:23:25.641Z",
+        "reviewer": "Codex",
+        "fixture": {
+          "path": "quality/evidence/T30/fixture-server-api42-reviewed2.mjs",
+          "sha256": "f2af8e7c82b6db43296814839a69e96e08572e7c44b424c164171c9a59664e99"
+        },
+        "phases": [
+          {
+            "at": "2026-10-11T11:22:15.341Z",
+            "phase": "database"
+          },
+          {
+            "at": "2026-10-11T11:22:35.200Z",
+            "phase": "redis"
+          },
+          {
+            "at": "2026-10-11T11:22:35.239Z",
+            "phase": "media"
+          },
+          {
+            "at": "2026-10-11T11:22:53.179Z",
+            "phase": "api"
+          },
+          {
+            "at": "2026-10-11T11:23:02.214Z",
+            "phase": "web"
+          }
+        ],
+        "checks": [
+          {
+            "kind": "built SPA HTML and CSP",
+            "status": 200,
+            "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+            "noDevRuntime": true,
+            "cspSha256": "a8988effd6a9b9809d2785fc0a1e7c77b8c5b38c4a04e34a675e2b805c335234"
+          },
+          {
+            "kind": "built asset actual HTTP",
+            "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+            "status": 200,
+            "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+          },
+          {
+            "kind": "built asset actual HTTP",
+            "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+            "status": 200,
+            "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+          },
+          {
+            "kind": "real authenticated owned API proxy",
+            "status": 200
+          },
+          {
+            "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+            "opened": true,
+            "namespaceAclNotClaimed": true
+          },
+          {
+            "kind": "real retained inspector after >driver idle 10000ms",
+            "idleStartedAt": "2026-10-11T11:23:03.971Z",
+            "idleEndedAt": "2026-10-11T11:23:15.088Z",
+            "idleMs": 11116.686000000002,
+            "backendPid": 13056,
+            "callers": 0,
+            "rooms": 1,
+            "publisherSlots": 0
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-me",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-games",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-own",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-detail",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-members",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-rooms-calls",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-room-play-sessions",
+            "status": 200
+          },
+          {
+            "kind": "actual authenticated diagnostic HTTP",
+            "route": "http-call-participants",
+            "status": 200
+          },
+          {
+            "kind": "actual guard rejection observed before guard",
+            "status": 401
+          },
+          {
+            "kind": "same real inspector reads newly committed real API admission",
+            "backendPid": 13056,
+            "beforeCallers": 0,
+            "afterCallers": 1,
+            "currentUserMatched": true,
+            "openCalls": 1,
+            "publisherSlots": 0,
+            "nativeTracksRead": true
+          },
+          {
+            "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+            "inspector": {
+              "recordedAt": "2026-10-11T11:23:25.569Z",
+              "backendPid": 13056,
+              "reserved": true,
+              "released": true,
+              "actualSocketEnded": true,
+              "poolEnded": true,
+              "failureCount": 0,
+              "writeFailureCount": 0,
+              "healthy": true,
+              "poolTotalCount": 0,
+              "poolIdleCount": 0,
+              "poolWaitingCount": 0
+            }
+          },
+          {
+            "kind": "actual before-guard HTTP and Nest service parent spans/PG/SDK observation shutdown",
+            "pgHealth": {
+              "recordedAt": "2026-10-11T11:23:17.576Z",
+              "inFlightSettled": true,
+              "poolEnded": true,
+              "failureCount": 0,
+              "readFailures": 0,
+              "writeFailures": 0,
+              "idleErrors": 0,
+              "truncated": false,
+              "sampleCount": 19,
+              "observationComplete": true
+            },
+            "health": {
+              "recordedAt": "2026-10-11T11:23:17.604Z",
+              "sampleCount": 50,
+              "failureCount": 1,
+              "droppedCount": 0,
+              "timerStopped": true,
+              "histogramDisabled": true,
+              "observationComplete": false
+            },
+            "spanCount": 775,
+            "privacyReviewed": true
+          }
+        ],
+        "closed": {
+          "code": 1,
+          "signal": null
+        },
+        "cleanup": {
+          "schemaRemoved": true,
+          "mediaRemoved": true,
+          "presenceRemoved": true,
+          "appClosed": true,
+          "webClosed": true
+        },
+        "removed": [
+          "gateway-8a152ccc-206b-43c1-bac5-2581afab20aa",
+          "temporary-built-smoke-1deaa68e-8aee-4adc-b71e-d929b5b62409"
+        ],
+        "retained": [],
+        "errors": [],
+        "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+        "nativeAcceptance": false
+      }
+    }
+  ],
+  "core": {
+    "recordedAt": "2026-10-11T11:19:02.864Z",
+    "checks": {
+      "httpOriginalErrorIdentity": true,
+      "httpNextCalledExactlyOnce": true,
+      "serviceOriginalPromiseArgsThis": true,
+      "serviceSyncErrorIdentity": true,
+      "serviceRejectedPromiseIdentity": true,
+      "serviceRejectedErrorIdentity": true,
+      "observerThenGetterCannotReplaceReturn": true,
+      "poolOriginalPromiseArgsThis": true,
+      "nestedInnerContextParent": true,
+      "poolPromiseDurationObserved": true,
+      "rpcWithinTransactionActualPid": true,
+      "rpcAfterCommitDoesNotUseStalePid": true,
+      "duplicatePoolInstallRejectedBeforeMutation": true,
+      "observerAttachmentFailureReported": true
+    },
+    "failedChecks": [],
+    "cleanup": {
+      "schemaRemoved": true,
+      "poolEnded": true,
+      "httpClosed": true
+    },
+    "fatalControlFailure": false,
+    "nativeAcceptance": false
+  },
+  "controls": {
+    "recordedAt": "2026-10-11T11:19:58.348Z",
+    "modes": [
+      {
+        "mode": "normal",
+        "exitCode": 0,
+        "health": {
+          "recordedAt": "2026-10-11T11:19:41.209Z",
+          "sampleCount": 1,
+          "failureCount": 0,
+          "droppedCount": 0,
+          "timerStopped": true,
+          "histogramDisabled": true,
+          "observationComplete": true
+        },
+        "checks": [
+          "real PG exact original promise/config/this/value identity",
+          "real PG error and original rejected promise identity",
+          "real callback query exact args and undefined return",
+          "real SDK HTTP outcomes original promise/args/this/error across all 6 RPC methods",
+          "wrapped CallLifecycleService.reconcileGroup returns original outcome",
+          "wrapped CallsService.list returns original outcome",
+          "wrapped CallsService.participants async rejection preserved",
+          "nested ALS context propagates backendPid set and span indices without metadata leakage",
+          "concurrent distinct real PG service contexts and nested inner parent/promise/args/this identities",
+          "actual PG SDK service after stop leave spans and sampler unchanged",
+          "observer stopped and returned health record"
+        ],
+        "poolEnded": true,
+        "privacyReviewed": true
+      },
+      {
+        "mode": "write-io",
+        "exitCode": 0,
+        "health": {
+          "recordedAt": "2026-10-11T11:19:44.811Z",
+          "sampleCount": 1,
+          "failureCount": 1,
+          "droppedCount": 0,
+          "timerStopped": true,
+          "histogramDisabled": true,
+          "observationComplete": false
+        },
+        "checks": [
+          "real PG exact original promise/config/this/value identity",
+          "real PG error and original rejected promise identity",
+          "real callback query exact args and undefined return",
+          "real SDK HTTP outcomes original promise/args/this/error across all 6 RPC methods",
+          "wrapped CallLifecycleService.reconcileGroup returns original outcome",
+          "wrapped CallsService.list returns original outcome",
+          "wrapped CallsService.participants async rejection preserved",
+          "nested ALS context propagates backendPid set and span indices without metadata leakage",
+          "concurrent distinct real PG service contexts and nested inner parent/promise/args/this identities",
+          "actual PG SDK service after stop leave spans and sampler unchanged",
+          "observer stopped and returned health record"
+        ],
+        "poolEnded": true,
+        "privacyReviewed": true
+      },
+      {
+        "mode": "short-write",
+        "exitCode": 0,
+        "health": {
+          "recordedAt": "2026-10-11T11:19:49.076Z",
+          "sampleCount": 2,
+          "failureCount": 2,
+          "droppedCount": 0,
+          "timerStopped": true,
+          "histogramDisabled": true,
+          "observationComplete": false
+        },
+        "checks": [
+          "real PG exact original promise/config/this/value identity",
+          "real PG error and original rejected promise identity",
+          "real callback query exact args and undefined return",
+          "real SDK HTTP outcomes original promise/args/this/error across all 6 RPC methods",
+          "wrapped CallLifecycleService.reconcileGroup returns original outcome",
+          "wrapped CallsService.list returns original outcome",
+          "wrapped CallsService.participants async rejection preserved",
+          "nested ALS context propagates backendPid set and span indices without metadata leakage",
+          "concurrent distinct real PG service contexts and nested inner parent/promise/args/this identities",
+          "actual PG SDK service after stop leave spans and sampler unchanged",
+          "observer stopped and returned health record"
+        ],
+        "poolEnded": true,
+        "privacyReviewed": true
+      },
+      {
+        "mode": "buffer-drop",
+        "exitCode": 0,
+        "health": {
+          "recordedAt": "2026-10-11T11:19:53.184Z",
+          "sampleCount": 1,
+          "failureCount": 0,
+          "droppedCount": 1029,
+          "timerStopped": true,
+          "histogramDisabled": true,
+          "observationComplete": false
+        },
+        "checks": [
+          "real PG exact original promise/config/this/value identity",
+          "real PG error and original rejected promise identity",
+          "real callback query exact args and undefined return",
+          "real SDK HTTP outcomes original promise/args/this/error across all 6 RPC methods",
+          "wrapped CallLifecycleService.reconcileGroup returns original outcome",
+          "wrapped CallsService.list returns original outcome",
+          "wrapped CallsService.participants async rejection preserved",
+          "nested ALS context propagates backendPid set and span indices without metadata leakage",
+          "concurrent distinct real PG service contexts and nested inner parent/promise/args/this identities",
+          "actual PG SDK service after stop leave spans and sampler unchanged",
+          "observer stopped and returned health record"
+        ],
+        "poolEnded": true,
+        "privacyReviewed": true
+      },
+      {
+        "mode": "final-health-io",
+        "exitCode": 0,
+        "health": {
+          "recordedAt": "2026-10-11T11:19:56.988Z",
+          "sampleCount": 1,
+          "failureCount": 1,
+          "droppedCount": 0,
+          "timerStopped": true,
+          "histogramDisabled": true,
+          "observationComplete": false
+        },
+        "checks": [
+          "real PG exact original promise/config/this/value identity",
+          "real PG error and original rejected promise identity",
+          "real callback query exact args and undefined return",
+          "real SDK HTTP outcomes original promise/args/this/error across all 6 RPC methods",
+          "wrapped CallLifecycleService.reconcileGroup returns original outcome",
+          "wrapped CallsService.list returns original outcome",
+          "wrapped CallsService.participants async rejection preserved",
+          "nested ALS context propagates backendPid set and span indices without metadata leakage",
+          "concurrent distinct real PG service contexts and nested inner parent/promise/args/this identities",
+          "actual PG SDK service after stop leave spans and sampler unchanged",
+          "observer stopped and returned health record"
+        ],
+        "poolEnded": true,
+        "privacyReviewed": true
+      }
+    ],
+    "helperSha256": "5209b51bd4bc819f4d3dbfabe2edb14a108eeea711928bb8678abd2924f70284",
+    "nativeAcceptance": false
+  },
+  "fixtureOutsideHooksExact": true,
+  "applicationSourceChanged": false,
+  "actualSourceGuards": 121,
+  "apiBuild": 11,
+  "nativeAcceptance": false
+}

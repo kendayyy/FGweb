@@ -1,0 +1,27 @@
+# Run from code/ with --project-directory .; generate local inputs first.
+# The old compose.local.yml media ports are only the original isolated setup.
+# App media admission uses this private SFU topology, through the gateway.
+services:
+  fg-sfu:
+    image: livekit/livekit-server:v1.9.12@sha256:2c13cbf2edcbf13ea7b20d05c10b394d04d8fb3fe358269cff845a90b4de9576
+    command: ["--config", "/etc/livekit.yaml"]
+    volumes: ["./.runtime/media/livekit.yaml:/etc/livekit.yaml:ro"]
+    ports: ["127.0.0.1:57881:7881", "127.0.0.1:57882:7882/udp"]
+    networks: [media]
+  fg-gateway:
+    image: node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd
+    user: node
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    command: ["node", "/gateway/app/gateway-main.js", "/gateway/input.json"]
+    volumes:
+      - ./apps/api/dist/modules/calls:/gateway/app:ro
+      - ./node_modules:/gateway/node_modules:ro
+      - ./.runtime/media/gateway.json:/gateway/input.json:ro
+    ports: ["127.0.0.1:57880:7883"]
+    depends_on: [fg-sfu]
+    networks: [media]
+networks:
+  media:
+    driver: bridge

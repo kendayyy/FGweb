@@ -1,0 +1,25 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+let s=fs.readFileSync('quality/evidence/T30/probe-built-runtime-startup3.mjs','utf8');
+s=s.replace("const d='quality/evidence/T30',folder=d+'/built-runtime-startup-smoke-3'","const variant=process.argv[2];assert(['diagnostic','canonical'].includes(variant));const fixturePath='quality/evidence/T30/fixture-server-'+(variant==='diagnostic'?'inspector-reserved-reviewed':'built-inspector-reserved-reviewed')+'.mjs';const d='quality/evidence/T30',folder=d+'/inspector-idle-'+variant+'-smoke-1'");
+s=s.replace("fork(d+'/fixture-server-built-runtime-reviewed.mjs'","fork(fixturePath");
+s=s.replace("let ready,closed,ws;","let ready,closed,ws;let requestId=100;const pending=new Map();const ask=async kind=>{const id=++requestId;const reply=new Promise((resolve,reject)=>pending.set(id,{resolve,reject}));child.send({id,kind});try{return await bounded(reply,15000,'owned inspection');}finally{pending.delete(id);}};");
+s=s.replace("child.on('message',message=>{","child.on('message',message=>{const request=pending.get(message.id);if(request){if(message.failed)request.reject(new Error('Owned inspection failed'));else request.resolve(message);}");
+const anchor="}),10000,'actual websocket handshake');}";
+assert(s.includes(anchor));
+s=s.replace(anchor,`}),10000,'actual websocket handshake');
+assert(Number.isInteger(ready.inspectorPid)&&ready.inspectorPid>0);
+const idleStartedAt=new Date().toISOString(),idleStart=performance.now();await new Promise(resolve=>setTimeout(resolve,11000));
+const initial=await ask('inspect');assert.equal(initial.inspectorPid,ready.inspectorPid);assert.equal(initial.callers,0);assert.equal(initial.publisherSlots,0);assert.equal(initial.rooms,1);assert.equal(initial.play_state,'ACTIVE');
+checks.push({kind:'real retained inspector after >driver idle 10000ms',idleStartedAt,idleEndedAt:new Date().toISOString(),idleMs:performance.now()-idleStart,backendPid:initial.inspectorPid,callers:initial.callers,rooms:initial.rooms,publisherSlots:initial.publisherSlots});
+const post=async route=>{const response=await fetch(ready.origin+'/api/v1/'+route,{method:'POST',headers:{Cookie:'better-auth.session_token='+ready.actors.sender.cookie,Origin:ready.origin,'Content-Type':'application/json'},body:'{}',signal:AbortSignal.timeout(10000)});assert([200,201].includes(response.status));return response.json();};
+const call=await post('rooms/'+ready.roomId+'/calls'),joined=await post('calls/'+call.id+'/join');assert(typeof joined.token==='string');privateValues.push(joined.token);
+const current=await ask('inspect');assert.equal(current.inspectorPid,ready.inspectorPid);assert.equal(current.callers,1);assert.equal(current.people.length,1);assert.equal(current.people[0].user_id,ready.actors.sender.id);assert.equal(current.open_calls,1);assert.equal(current.publisherSlots,0);
+checks.push({kind:'same real inspector reads newly committed real API admission',backendPid:current.inspectorPid,beforeCallers:initial.callers,afterCallers:current.callers,currentUserMatched:true,openCalls:current.open_calls,publisherSlots:current.publisherSlots,nativeTracksRead:true});
+}`);
+s=s.replace("const result={recordedAt:",`const inspector=fs.existsSync(folder+'/inspector-lifecycle.json')?JSON.parse(fs.readFileSync(folder+'/inspector-lifecycle.json','utf8')):null;
+try{assert(inspector);assert.equal(inspector.backendPid,ready.inspectorPid);assert.equal(inspector.reserved,true);assert.equal(inspector.released,true);assert.equal(inspector.actualSocketEnded,true);assert.equal(inspector.poolEnded,true);assert.equal(inspector.failureCount,0);assert.equal(inspector.writeFailureCount,0);assert.equal(inspector.healthy,true);checks.push({kind:'actual owned inspector release/socket-end/pool-end lifecycle',inspector});}catch{errors.push({phase:'inspector lifecycle',message:'Actual clean own-client settlement not proven'});}
+const result={recordedAt:`);
+s=s.replace("path:d+'/fixture-server-built-runtime-reviewed.mjs',sha256:h(d+'/fixture-server-built-runtime-reviewed.mjs')","path:fixturePath,sha256:h(fixturePath)");
+s=s.replace("d+'/built-runtime-startup-smoke-review-3.json'","d+'/inspector-idle-'+variant+'-smoke-review-1.json'");
+fs.writeFileSync('quality/evidence/T30/probe-inspector-idle1.mjs',s,{flag:'wx'});
+console.log('Prepared API-only actual held-client idle/state/cleanup probe; not executed.');

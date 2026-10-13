@@ -1,0 +1,53 @@
+
+Running 2 tests using 1 worker
+
+(node:18844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/2] quality\evidence\T25\roster.spec.ts:25:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room
+  1) quality\evidence\T25\roster.spec.ts:25:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room 
+
+    Error: Native fixture failed; secrets omitted
+
+      13 |  fixture=spawn(process.execPath,['quality/evidence/T25/fixture-server.mjs'],{cwd:process.cwd(),env:{...process.env,FG_T25_PORT:String(port)},stdio:['ignore','ignore','ignore','ipc'],windowsHide:true});
+      14 |  fixture.on('message',(message:Record<string,unknown>)=>{if(typeof message.id==='string'){pending.get(message.id)?.(message);pending.delete(message.id);}});
+    > 15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Native API/PG/Redis fixture startup timeout')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){actors=message.actors as typeof actors;games=message.games as typeof games;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Native fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Native fixture exited'));});});
+         |                                                                                                                                                                                                                                                                                                                                                                                                    ^
+      16 | });
+      17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+      18 | async function inspect(){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Fixture inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message);});fixture.send({kind:'inspect',id,roomId,playId});});}
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T25\roster.spec.ts:15:388)
+
+    Error: Channel closed
+
+      15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Native API/PG/Redis fixture startup timeout')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){actors=message.actors as typeof actors;games=message.games as typeof games;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Native fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Native fixture exited'));});});
+      16 | });
+    > 17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+         |                                                                                                                                                                                                                                                                                                                                                       ^
+      18 | async function inspect(){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Fixture inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message);});fixture.send({kind:'inspect',id,roomId,playId});});}
+      19 | async function identity(context:BrowserContext,key:string){await context.addCookies([{name:'better-auth.session_token',value:actors[key].cookie,url:base,httpOnly:true,sameSite:'Lax'}]);}
+      20 | async function api(request:APIRequestContext,path:string,method='GET',body?:unknown){const result=await request.fetch(base+'/api/v1/'+path,{method,headers:{Origin:base},...(body===undefined?{}:{data:body})});expect(result.status(),`${method} ${path}`).toBeLessThan(300);return result.json();}
+        at E:\FGweb\code\quality\evidence\T25\roster.spec.ts:17:343
+        at E:\FGweb\code\quality\evidence\T25\roster.spec.ts:17:67
+
+    Error: Owned fixture cleanup failed
+
+      15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Native API/PG/Redis fixture startup timeout')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){actors=message.actors as typeof actors;games=message.games as typeof games;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Native fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Native fixture exited'));});});
+      16 | });
+    > 17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+         |                                                                                                                                                                                                                                                                                                 ^
+      18 | async function inspect(){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Fixture inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message);});fixture.send({kind:'inspect',id,roomId,playId});});}
+      19 | async function identity(context:BrowserContext,key:string){await context.addCookies([{name:'better-auth.session_token',value:actors[key].cookie,url:base,httpOnly:true,sameSite:'Lax'}]);}
+      20 | async function api(request:APIRequestContext,path:string,method='GET',body?:unknown){const result=await request.fetch(base+'/api/v1/'+path,{method,headers:{Origin:base},...(body===undefined?{}:{data:body})});expect(result.status(),`${method} ${path}`).toBeLessThan(300);return result.json();}
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T25\roster.spec.ts:17:289)
+
+    Error Context: .cache\t25\results\roster-native-public-apply-4b16c-ve-end-with-persistent-room\error-context.md
+
+    Error Context: .cache\t25\results\roster-native-public-apply-4b16c-ve-end-with-persistent-room\error-context.md
+
+
+[2/2] quality\evidence\T25\roster.spec.ts:76:1 › headed light/dark desktop/mobile preserve actual chat draft and exact native session
+  1 failed
+    quality\evidence\T25\roster.spec.ts:25:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room 
+  1 did not run

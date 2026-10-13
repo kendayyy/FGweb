@@ -1,0 +1,71 @@
+{
+  "recordedAt": "2026-10-10T20:06:50.213Z",
+  "reviewer": "Codex",
+  "sourceReviewed": true,
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+      "sha256": "b9d4afc9cae93e897cd8846e06f295ec7ec1ebac325f861c1d12fe8cd7cc8330"
+    },
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "sha256": "bfc98b8f0e310180a8f89efd6bac0b23d7df96dd7eaa8a6584a41e95fe01c315"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/signaling-gateway.js",
+      "sha256": "39a603b1df60fc557fa049b11e1902f474dfb21b06f1b73ae3d9fe40790e8495"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/signaling-gateway.js.map",
+      "sha256": "4a74ce0485d87243ee329c903397f11eb00e84aa63d93d668fad776a5598c1c1"
+    },
+    {
+      "path": "apps/api/test/t30-signaling-throughput.integration.spec.ts",
+      "sha256": "5b92d7ab5a8eec4f442ffa1f4d82908ca0892bec75feff83a583a9106396148c"
+    }
+  ],
+  "commands": [
+    {
+      "path": "quality/evidence/T30/codex-t30-signaling-sandbox-type-2.json",
+      "sha256": "5f8585b58c468c08e8e68a9e57b00e3728e1e3367006a46626b6d3c480087d87",
+      "exitCode": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-t30-signaling-type-correction-lint-1.json",
+      "sha256": "f37816e8d642dbf39ab9e6e1500e4be013f5758227ea64e7cb7273f19b2930f8",
+      "exitCode": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-t30-signaling-throughput-green-1.json",
+      "sha256": "3004883ba5f519cbd8215accc2fe8b9e14b0b87f994f0621fba3de5b0ae48817",
+      "exitCode": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-t30-api-build-1.json",
+      "sha256": "4b18f67537bce9930ecc6b9fcc2c293460b6b9393d6313c0f7d513541e721ada",
+      "exitCode": 0
+    },
+    {
+      "path": "quality/evidence/T30/codex-t30-frozen-call-regressions-1.json",
+      "sha256": "11088aa4f03aee30f046aea09e86a257bdce44eaedc0cead7ae31a89cc2c385e",
+      "exitCode": 0
+    }
+  ],
+  "findings": [],
+  "reviewedProperties": [
+    "Canonical room then group locks and pool/native RPC/DB timeouts retained",
+    "Read committed fresh liveLease and publicationPermission per frame, no cached per-batch authority",
+    "Frozen lease-store expiry/disconnect predicates already use clock_timestamp, not transaction-stable now",
+    "Separate real-PG revoke/BAN/session-expiry races deny later queued frame while native RPC barrier held",
+    "Source/type/current slot/pending CID and verified same-native-SID codec cardinality guards retained",
+    "Shared directional queue serializes frames; max8 per transaction,256 queued/1MiB bound and synchronous403 close before async invalidation",
+    "Close clears both native signaling peers, queue/pending source state and disconnect bookkeeping",
+    "RTP/DTLS/SRTP bypass gateway unchanged; no native SDK timeout increase or synthetic media acceptance claim"
+  ],
+  "counts": {
+    "newIntegration": 9,
+    "frozenCallRegression": 39
+  },
+  "nativeAcceptancePending": true,
+  "publishingRegressionPending": true
+}

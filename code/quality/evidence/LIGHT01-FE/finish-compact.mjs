@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE',out=`${dir}/compact`;
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));
+const owner=ledger.tasks.find(t=>t.id==='LIGHT01-FE');
+assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,owner.id);assert.equal(owner.status,'BLOCKED');
+const labels=['compact-review-1','compact-final-types-1','compact-final-lint-1','compact-final-diff-1'];
+const commands=labels.map(label=>JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`)));
+for(const command of commands){assert.equal(command.exitCode,0);assert.equal(hash(command.evidencePath),command.evidenceSha256);}
+const report=JSON.parse(fs.readFileSync(`${out}/verification.json`));
+for(const [p,h]of Object.entries(report.files))assert.equal(hash(p),h);
+const completedAt=new Date().toISOString();
+const approval={recordedAt:completedAt,request:'THEME-COMPACT-02',humanApproval:'đúng như vậy đấy làm đi',file:'../.doc/mockups/fg-theme-icon-only-proposal.png',sha256:hash('../.doc/mockups/fg-theme-icon-only-proposal.png'),runtimeDelivered:'http://localhost:18080/',scope:'Icon-only direct Light/Dark toggle; System/menu removed; mockup accepted, real app technically verified'};
+fs.writeFileSync(`${out}/approval.json`,JSON.stringify(approval,null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(`${out}/final-checks.json`,JSON.stringify({completedAt,task:owner.id,status:owner.status,verificationSha256:hash(`${out}/verification.json`),commands,localRuntime:{origin:'http://localhost:18080/',apiPort:3000},actualBrowserObserved:'Main guest Lobby connected, one click changed action name from Chuyển sang Sáng to Chuyển sang Tối, tab kept as deliverable; no login/message actions'},null,2)+'\n',{flag:'wx'});
+owner.commands.push(...commands);owner.evidencePaths.push(`${out}/approval.json`,`${out}/final-checks.json`,...commands.map(c=>c.evidencePath));
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('quality/spec-coverage.md','\n| THEME-COMPACT-02 | LIGHT01-FE | Direct icon-only Light/Dark44px, one-time system migration/defaultdark, keyboard/storage/before-paint/Classic/auth/socket/draft/contrast |19 DOM +7 headed E2E,20 screenshots; compact/verification.json and final-checks.json | Technically verified; task BLOCKED historical output hash gate, no next task |\n');
+const local=new Date(Date.parse(completedAt)+7*3600000).toISOString().slice(0,19).replace('T',' ');
+fs.appendFileSync('../.doc/history.md',`\n- Chốt phiên:${local} +07. Headed suite lần2 đạt7/7,20 ảnh; DOM19/19; lint/web types/test types/build và git diff check exit0. Contrast${report.checks.textContrastMeasurements} text measurements,0 lỗi. Review owner audit exit0;${report.ownerResumeAudit.readonlyFiles} files read-only và historical statuses/outputs/commands/evidence giữ nguyên, credentials không đổi, baseline aligned, private scan đạt. Final lint/test types/diff exit0.\n- Lệnh chính: vitest theme.test.tsx --maxWorkers1; tsc web/test configs; Vite build; Playwright theme config --headed; eslint files thay đổi; git diff --check; record helper giữ command/time/exit/log hash. Evidence: [verification](../code/${out}/verification.json), [review](../code/${out}/review.md), [final](../code/${out}/final-checks.json), [approval](../code/${out}/approval.json).\n- Bản thật http://localhost:18080/ đã bật lại và mở IAB; click đổi sang Sáng, action name đổi đúng và Lobby Đã kết nối. Tab cũ mất khỏi browser session sau thao tác đầu; tạo tab mới/markDeliverable, không đăng nhập hoặc gửi chat. Runtime main giữ chạy; Docker services restored, không publish/push/mua dịch vụ.\n- Kết quả: yêu cầu nút chỉ icon được triển khai và kiểm chứng. LIGHT01-FE vẫn BLOCKED do strict gate output hash lịch sử, không sửa checker/outputs/PASS cũ hoặc mở task sau; logo/sidebar ở checkpoint riêng.\n`);
+console.log(JSON.stringify({task:owner.id,status:owner.status,completedAt,checks:report.checks,origin:approval.runtimeDelivered,nextTaskOpened:false}));

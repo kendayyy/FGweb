@@ -1,0 +1,19 @@
+quality/evidence/CHATCRYPTO-QA/vite.config.proposed.ts(7,29): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '({ mode }: ConfigEnv) => { build: { target: string; }; plugins: (Plugin<any>[] | Plugin<any> | Plugin<any>[])[]; resolve: { alias: { '@': string; }; }; server: { host: string; port: number; strictPort: true; proxy: { ...; }; }; preview: { ...; }; }' is not assignable to parameter of type 'UserConfigExport'.
+      Type '({ mode }: ConfigEnv) => { build: { target: string; }; plugins: (Plugin<any>[] | Plugin<any> | Plugin<any>[])[]; resolve: { alias: { '@': string; }; }; server: { host: string; port: number; strictPort: true; proxy: { ...; }; }; preview: { ...; }; }' is not assignable to type 'UserConfigFnObject'.
+        Call signature return types '{ build: { target: string; }; plugins: (Plugin<any>[] | Plugin<any> | Plugin<any>[])[]; resolve: { alias: { '@': string; }; }; server: { host: string; port: number; strictPort: true; proxy: { ...; }; }; preview: { ...; }; }' and 'UserConfig' are incompatible.
+          The types of 'plugins' are incompatible between these types.
+            Type '(Plugin<any>[] | Plugin<any> | Plugin<any>[])[]' is not assignable to type 'PluginOption[]'.
+              Type 'Plugin<any>[] | Plugin<any> | Plugin<any>[]' is not assignable to type 'PluginOption'.
+                Type 'Plugin<any>[]' is not assignable to type 'PluginOption'.
+                  Type 'Plugin<any>[]' is not assignable to type 'PluginOption[]'.
+                    Type 'Plugin<any>' is not assignable to type 'PluginOption'.
+                      Type 'import("E:/FGweb/code/apps/web/node_modules/vite/dist/node/index").Plugin<any>' is not assignable to type 'import("E:/FGweb/code/node_modules/vite/dist/node/index").Plugin<any>'.
+                        Types of property 'hotUpdate' are incompatible.
+                          Type 'ObjectHook<(this: MinimalPluginContext & { environment: DevEnvironment; }, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<...>> | undefined' is not assignable to type 'ObjectHook<(this: HotUpdatePluginContext, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<void | EnvironmentModuleNode[]>> | undefined'.
+                            Type '(this: MinimalPluginContext & { environment: DevEnvironment; }, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<...>' is not assignable to type 'ObjectHook<(this: HotUpdatePluginContext, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<void | EnvironmentModuleNode[]>> | undefined'.
+                              Type '(this: MinimalPluginContext & { environment: DevEnvironment; }, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<...>' is not assignable to type '(this: HotUpdatePluginContext, options: HotUpdateOptions) => void | EnvironmentModuleNode[] | Promise<void | EnvironmentModuleNode[]>'.
+                                The 'this' types of each signature are incompatible.
+                                  Type 'HotUpdatePluginContext' is not assignable to type 'MinimalPluginContext & { environment: DevEnvironment; }'.
+                                    Type 'HotUpdatePluginContext' is missing the following properties from type 'MinimalPluginContext': error, info, warn, debug, meta

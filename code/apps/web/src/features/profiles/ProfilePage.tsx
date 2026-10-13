@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import {GameTitleSchema} from '@fg/contracts';
+import {GameLogo} from '../../components/ui/GameLogo.js';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPublicProfile, fetchGames } from './api.js';
@@ -180,6 +182,7 @@ export const ProfilePage: React.FC = () => {
             {profile.gameProfiles.map((gp) => {
               const matchedGame = games?.find((g) => g.id === gp.gameId);
               const targetGameId = matchedGame ? matchedGame.id : gp.gameId;
+              const logoTitle = GameTitleSchema.safeParse(gp.gameTitle);
 
               return (
                 <div
@@ -196,7 +199,8 @@ export const ProfilePage: React.FC = () => {
                   }}
                 >
                   <div>
-                    <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-focus)', margin: '0 0 10px 0' }}>
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: 700, color: 'var(--color-focus)', margin: '0 0 10px 0' }}>
+                      {logoTitle.success && <GameLogo game={logoTitle.data} decorative/>}
                       {gp.gameTitle}
                     </h4>
 

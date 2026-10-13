@@ -1,0 +1,786 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var CryptoRelayService_1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CryptoRelayService = void 0;
+const crypto_schema_readiness_js_1 = require("./crypto-schema-readiness.js");
+const crypto_transport_budget_js_1 = require("./crypto-transport-budget.js");
+const common_1 = require("@nestjs/common");
+const pg_1 = require("pg");
+const node_crypto_1 = require("node:crypto");
+const zod_1 = require("zod");
+const contracts_1 = require("@fg/contracts");
+const contracts_2 = require("@fg/contracts");
+const chat_service_js_1 = require("../chat/chat.service.js");
+const matrix_signatures_js_1 = require("./matrix-signatures.js");
+const crypto_object_store_js_1 = require("./crypto-object-store.js");
+const crypto_sweep_loop_js_1 = require("./crypto-sweep-loop.js");
+const crypto_membership_js_1 = require("./crypto-membership.js");
+let CryptoRelayService = CryptoRelayService_1 = class CryptoRelayService {
+    chat;
+    schemaReady = false;
+    pool;
+    cleanupActive;
+    objects = new crypto_object_store_js_1.CryptoObjectStore();
+    logger = new common_1.Logger(CryptoRelayService_1.name);
+    sweeps = new crypto_sweep_loop_js_1.CryptoSweepLoop(() => this.cleanup(), () => this.logger.warn('Encrypted cleanup unavailable; retained for retry'));
+    constructor(chat) {
+        this.chat = chat;
+    }
+    async onModuleInit() {
+        this.pool = new pg_1.Pool({ connectionString: process.env.DATABASE_URL, max: 8, connectionTimeoutMillis: 5000, statement_timeout: 10000 });
+        this.schemaReady = await (0, crypto_schema_readiness_js_1.cryptoSchemaAvailable)(this.pool);
+        if (this.schemaReady) {
+            await this.objects.initialize();
+            this.sweeps.start();
+        }
+    }
+    async onModuleDestroy() { await this.sweeps.stop(); await this.cleanupActive?.catch(() => { }); try {
+        await this.objects.closeScan();
+    }
+    finally {
+        await this.pool?.end();
+    } }
+    async cleanup() {
+        if (!this.schemaReady)
+            return;
+        if (this.cleanupActive)
+            return this.cleanupActive;
+        const active = this.sweep();
+        this.cleanupActive = active;
+        try {
+            await active;
+        }
+        finally {
+            if (this.cleanupActive === active)
+                this.cleanupActive = undefined;
+        }
+    }
+    async sweep() {
+        const db = await this.pool.connect();
+        try {
+            await db.query('BEGIN ISOLATION LEVEL READ COMMITTED');
+            const rows = (await db.query(`SELECT id,object_key FROM chat_crypto_upload_drafts WHERE consumed_at IS NULL AND message_id IS NULL AND report_evidence_id IS NULL AND NOT EXISTS(SELECT 1 FROM chat_crypto_legacy_candidate_images ci WHERE ci.draft_id=chat_crypto_upload_drafts.id) AND expires_at<=now() ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED`)).rows;
+            for (const row of rows) {
+                await this.objects.remove(row.object_key);
+                await db.query(`DELETE FROM chat_crypto_upload_drafts WHERE id=$1`, [row.id]);
+            }
+            for (const table of ['chat_crypto_to_device_events', 'chat_crypto_protocol_events']) {
+                await db.query(`DELETE FROM ${table} WHERE id IN (SELECT id FROM ${table} WHERE expires_at<=now() ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED)`);
+            }
+            for (const key of await this.objects.scanCandidates()) {
+                const lock = (await db.query("SELECT pg_try_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_object',current_schema(),$1::text)::text,0::bigint)) AS acquired", [key])).rows[0];
+                if (!lock.acquired)
+                    continue;
+                if (!(await db.query('SELECT 1 FROM chat_crypto_upload_drafts WHERE object_key=$1 LIMIT 1', [key])).rowCount)
+                    await this.objects.remove(key);
+            }
+            await db.query('COMMIT');
+        }
+        catch (error) {
+            await db.query('ROLLBACK');
+            throw error;
+        }
+        finally {
+            db.release();
+        }
+    }
+    parse(schema, input) { const result = schema.safeParse(input); if (!result.success)
+        (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Invalid crypto request'); return result.data; }
+    async transaction(actor, action) {
+        if (!actor)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Login required');
+        if (!this.schemaReady)
+            throw new common_1.ServiceUnavailableException('Chat crypto schema unavailable');
+        const db = await this.pool.connect();
+        let completed;
+        try {
+            await db.query('BEGIN ISOLATION LEVEL READ COMMITTED');
+            const session = await db.query(`SELECT id FROM "session" WHERE id=$1 AND user_id=$2 AND expires_at>clock_timestamp() FOR SHARE`, [actor.sessionId, actor.userId]);
+            if (!session.rowCount)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session revoked');
+            const ban = (await db.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1`, [actor.userId])).rows[0];
+            if (ban?.action === 'BAN')
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Account banned');
+            const result = await action(db, actor.userId);
+            completed = result;
+            const current = (await db.query(`SELECT s.id,COALESCE((SELECT a.action='BAN' FROM admin_actions a WHERE a.target_user_id=s.user_id AND a.action IN ('BAN','UNBAN') ORDER BY a.created_at DESC,a.id DESC LIMIT 1),false) AS banned FROM "session" s WHERE s.id=$1 AND s.user_id=$2 AND s.expires_at>clock_timestamp() FOR SHARE OF s`, [actor.sessionId, actor.userId])).rows[0];
+            if (!current)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session expired or revoked');
+            if (current.banned)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Account banned');
+            await db.query('COMMIT');
+            return result;
+        }
+        catch (error) {
+            if (Buffer.isBuffer(completed))
+                completed.fill(0);
+            await db.query('ROLLBACK');
+            throw error;
+        }
+        finally {
+            db.release();
+        }
+    }
+    async stateRow(db, actor, id, revision) {
+        await this.chat.authorize(id, actor, db, true);
+        const state = await (0, crypto_membership_js_1.ensurePrivateCryptoState)(db, id);
+        if (!state)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Conversation crypto migration required');
+        if (state.mode !== 'E2EE')
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Private crypto route requires private conversation');
+        if (revision !== undefined && Number(state.membership_revision) !== revision)
+            throw new common_1.ConflictException('Membership revision changed');
+        return state;
+    }
+    async member(db, conversationId, userId) {
+        const row = (await db.query(`SELECT 1 FROM conversations c WHERE c.id=$1 AND (c.user1_id=$2 OR c.user2_id=$2 OR EXISTS(SELECT 1 FROM rooms r JOIN room_members rm ON rm.room_id=r.id WHERE r.conversation_id=c.id AND rm.user_id=$2) OR (NOT EXISTS(SELECT 1 FROM rooms r WHERE r.conversation_id=c.id) AND EXISTS(SELECT 1 FROM conversation_members cm WHERE cm.conversation_id=c.id AND cm.user_id=$2))) AND NOT COALESCE((SELECT a.action='BAN' FROM admin_actions a WHERE a.target_user_id=$2 AND a.action IN ('BAN','UNBAN') ORDER BY a.created_at DESC,a.id DESC LIMIT 1),false)`, [conversationId, userId])).rows[0];
+        if (!row)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Recipient is not an eligible member');
+    }
+    async device(db, userId, deviceId) { const row = (await db.query(`SELECT * FROM chat_crypto_devices WHERE user_id=$1 AND device_id=$2`, [userId, deviceId])).rows[0]; if (!row || row.revoked_at)
+        (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Device unavailable'); return row; }
+    deviceDto(row) { return contracts_2.CryptoDeviceSchema.parse({ deviceId: row.device_id, deviceKeys: row.device_keys, createdAt: row.created_at.toISOString(), revokedAt: null }); }
+    async protocolCohort(db, actor, id, state, cohortId) {
+        if (state.migration_state === 'RECONCILED') {
+            if (cohortId !== undefined)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Migration protocol closed');
+            return null;
+        }
+        if (!actor || !cohortId || state.history_status !== 'KNOWN' || !['LEGACY_PENDING', 'MIGRATING'].includes(String(state.migration_state)))
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Historical protocol context required');
+        const eligible = (await db.query(`SELECT h.id FROM chat_crypto_history_cohorts h JOIN chat_crypto_cohort_members m ON m.cohort_id=h.id AND m.conversation_id=h.conversation_id WHERE h.id=$1 AND h.conversation_id=$2 AND m.user_id=$3 AND h.verified_at<=clock_timestamp() AND EXISTS(SELECT 1 FROM chat_crypto_legacy_migrations lm WHERE lm.cohort_id=h.id AND lm.conversation_id=h.conversation_id AND lm.state='PREPARED') FOR SHARE OF h,m`, [cohortId, id, actor.userId])).rowCount;
+        if (!eligible)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Historical protocol access denied');
+        return cohortId;
+    }
+    async protocolMember(db, id, userId, cohortId) {
+        await this.member(db, id, userId);
+        if (cohortId && !((await db.query('SELECT 1 FROM chat_crypto_cohort_members WHERE cohort_id=$1 AND conversation_id=$2 AND user_id=$3 FOR SHARE', [cohortId, id, userId])).rowCount))
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Historical recipient denied');
+    }
+    async protocolDevice(db, userId, deviceId, cohortId) {
+        const device = await this.device(db, userId, deviceId);
+        if (cohortId && !((await db.query('SELECT 1 FROM chat_crypto_devices d JOIN chat_crypto_history_cohorts h ON h.id=$3 WHERE d.user_id=$1 AND d.device_id=$2 AND d.created_at<=h.verified_at AND d.revoked_at IS NULL', [userId, deviceId, cohortId])).rowCount))
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Historical device denied');
+        return device;
+    }
+    async state(actor, id) {
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, id), devices = (await db.query(`SELECT device_id FROM chat_crypto_devices WHERE user_id=$1 AND revoked_at IS NULL ORDER BY device_id`, [userId])).rows;
+            return contracts_2.CryptoConversationStateSchema.parse({ conversationId: id, matrixRoomId: (0, matrix_signatures_js_1.matrixRoomId)(id), matrixUserId: (0, matrix_signatures_js_1.matrixUserId)(userId), mode: state.mode, membershipRevision: Number(state.membership_revision), migrationState: state.migration_state, historyStatus: state.history_status, eligibleDeviceIds: devices.map(d => d.device_id) });
+        });
+    }
+    async queryKeys(actor, input) {
+        const parsed = this.parse(contracts_2.QueryCryptoKeysSchema, input);
+        return this.transaction(actor, async (db) => {
+            const state = await this.stateRow(db, actor, parsed.conversationId, parsed.membershipRevision), cohortId = await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId);
+            const users = [];
+            for (const userId of [...new Set(parsed.userIds)].sort()) {
+                await this.protocolMember(db, parsed.conversationId, userId, cohortId);
+                const devices = (await db.query(`SELECT d.* FROM chat_crypto_devices d WHERE d.user_id=$1 AND d.revoked_at IS NULL AND ($2::text IS NULL OR EXISTS(SELECT 1 FROM chat_crypto_history_cohorts h WHERE h.id=$2 AND d.created_at<=h.verified_at)) ORDER BY d.device_id LIMIT 100`, [userId, cohortId])).rows;
+                const identity = (await db.query(`SELECT public_keys FROM chat_crypto_identity_keys WHERE user_id=$1`, [userId])).rows[0];
+                users.push({ userId, matrixUserId: (0, matrix_signatures_js_1.matrixUserId)(userId), devices: devices.map(d => this.deviceDto(d)), identityKeys: identity?.public_keys ?? null });
+            }
+            await this.chat.authorize(parsed.conversationId, actor, db, true);
+            await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId);
+            for (const user of users)
+                await this.protocolMember(db, parsed.conversationId, user.userId, cohortId);
+            return contracts_2.CryptoKeysResponseSchema.parse({ membershipRevision: parsed.membershipRevision, users });
+        });
+    }
+    async claimKeys(actor, input) {
+        const parsed = this.parse(contracts_2.ClaimCryptoKeysSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, parsed.conversationId, parsed.membershipRevision), cohortId = await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId);
+            await this.protocolDevice(db, userId, parsed.deviceId, cohortId);
+            const unique = new Set(parsed.targets.map(t => JSON.stringify([t.userId, t.deviceId])));
+            if (unique.size !== parsed.targets.length)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Duplicate prekey target');
+            const keys = [];
+            for (const target of [...parsed.targets].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))) {
+                await this.protocolMember(db, parsed.conversationId, target.userId, cohortId);
+                await this.protocolDevice(db, target.userId, target.deviceId, cohortId);
+                const key = (await db.query(`SELECT key_id,signed_key FROM chat_crypto_one_time_keys WHERE user_id=$1 AND device_id=$2 AND claimed_at IS NULL ORDER BY created_at,key_id LIMIT 1 FOR UPDATE SKIP LOCKED`, [target.userId, target.deviceId])).rows[0];
+                if (!key)
+                    throw new common_1.ConflictException('Device has no available signed prekeys');
+                await db.query(`UPDATE chat_crypto_one_time_keys SET claimed_at=now() WHERE user_id=$1 AND device_id=$2 AND key_id=$3`, [target.userId, target.deviceId, key.key_id]);
+                keys.push({ ...target, keyId: key.key_id, signedKey: key.signed_key });
+            }
+            await this.chat.authorize(parsed.conversationId, actor, db, true);
+            await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId);
+            await this.protocolDevice(db, userId, parsed.deviceId, cohortId);
+            for (const target of parsed.targets) {
+                await this.protocolMember(db, parsed.conversationId, target.userId, cohortId);
+                await this.protocolDevice(db, target.userId, target.deviceId, cohortId);
+            }
+            return contracts_2.CryptoClaimResponseSchema.parse({ membershipRevision: parsed.membershipRevision, keys });
+        });
+    }
+    async verification(actor, input) {
+        const event = this.parse(contracts_2.SendCryptoVerificationSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, event.conversationId, event.membershipRevision), cohortId = await this.protocolCohort(db, actor, event.conversationId, state, event.cohortId);
+            await this.protocolDevice(db, userId, event.deviceId, cohortId);
+            await this.protocolMember(db, event.conversationId, event.recipientUserId, cohortId);
+            await this.protocolDevice(db, event.recipientUserId, event.recipientDeviceId, cohortId);
+            const payload = { eventType: event.eventType, content: event.content };
+            await (0, crypto_transport_budget_js_1.lockCryptoTransportBudget)(db, [{ senderId: userId, recipientId: event.recipientUserId }]);
+            const existing = (await db.query(`SELECT conversation_id,membership_revision,cohort_id,event FROM chat_crypto_protocol_events WHERE sender_user_id=$1 AND sender_device_id=$2 AND transaction_id=$3 AND recipient_user_id=$4 AND recipient_device_id=$5`, [userId, event.deviceId, event.transactionId, event.recipientUserId, event.recipientDeviceId])).rows[0];
+            if (existing) {
+                if (existing.conversation_id !== event.conversationId || Number(existing.membership_revision) !== event.membershipRevision || existing.cohort_id !== cohortId || !this.sameJson(existing.event, payload))
+                    throw new common_1.ConflictException('Crypto transaction conflicts');
+            }
+            else {
+                await (0, crypto_transport_budget_js_1.enforceCryptoTransportBudget)(db, [{ senderId: userId, recipientId: event.recipientUserId, payload }], (0, crypto_transport_budget_js_1.cryptoTransportBudget)());
+                const id = (0, node_crypto_1.randomUUID)();
+                await db.query(`INSERT INTO chat_crypto_protocol_events(id,conversation_id,membership_revision,sender_user_id,sender_device_id,recipient_user_id,recipient_device_id,transaction_id,event,expires_at,cohort_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,now()+interval '10 minutes',$10)`, [id, event.conversationId, event.membershipRevision, userId, event.deviceId, event.recipientUserId, event.recipientDeviceId, event.transactionId, payload, cohortId]);
+                await db.query(`INSERT INTO chat_crypto_protocol_outbox(id,verification_event_id) VALUES($1,$2)`, [(0, node_crypto_1.randomUUID)(), id]);
+            }
+            await this.chat.authorize(event.conversationId, actor, db, true);
+            await this.protocolCohort(db, actor, event.conversationId, state, event.cohortId);
+            await this.protocolDevice(db, userId, event.deviceId, cohortId);
+            await this.protocolMember(db, event.conversationId, event.recipientUserId, cohortId);
+            await this.protocolDevice(db, event.recipientUserId, event.recipientDeviceId, cohortId);
+            return { success: true };
+        });
+    }
+    sameJson(a, b) { if (a === b)
+        return true; if (a === null || b === null || typeof a !== 'object' || typeof b !== 'object')
+        return false; if (Array.isArray(a) || Array.isArray(b))
+        return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => this.sameJson(v, b[i])); const x = a, y = b; return Object.keys(x).length === Object.keys(y).length && Object.keys(x).every(k => Object.hasOwn(y, k) && this.sameJson(x[k], y[k])); }
+    async toDevice(actor, input) {
+        const parsed = this.parse(contracts_2.SendCryptoToDeviceSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, parsed.conversationId, parsed.membershipRevision), cohortId = await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId), sender = await this.protocolDevice(db, userId, parsed.deviceId, cohortId);
+            await (0, crypto_transport_budget_js_1.lockCryptoTransportBudget)(db, parsed.recipients.map(target => ({ senderId: userId, recipientId: target.userId })));
+            for (const target of parsed.recipients) {
+                await this.protocolMember(db, parsed.conversationId, target.userId, cohortId);
+                const recipient = await this.protocolDevice(db, target.userId, target.deviceId, cohortId);
+                if (target.content.sender_key !== sender.curve25519_key || Object.keys(target.content.ciphertext).length !== 1 || !target.content.ciphertext[recipient.curve25519_key])
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Olm routing identity mismatch');
+                const existing = (await db.query(`SELECT conversation_id,membership_revision,cohort_id,content FROM chat_crypto_to_device_events WHERE sender_user_id=$1 AND sender_device_id=$2 AND transaction_id=$3 AND recipient_user_id=$4 AND recipient_device_id=$5`, [userId, parsed.deviceId, parsed.transactionId, target.userId, target.deviceId])).rows[0];
+                if (existing) {
+                    if (existing.conversation_id !== parsed.conversationId || Number(existing.membership_revision) !== parsed.membershipRevision || existing.cohort_id !== cohortId || !this.sameJson(existing.content, target.content))
+                        throw new common_1.ConflictException('Crypto transaction conflicts');
+                }
+                else {
+                    await (0, crypto_transport_budget_js_1.enforceCryptoTransportBudget)(db, [{ senderId: userId, recipientId: target.userId, payload: target.content }], (0, crypto_transport_budget_js_1.cryptoTransportBudget)());
+                    const id = (0, node_crypto_1.randomUUID)();
+                    await db.query(`INSERT INTO chat_crypto_to_device_events(id,conversation_id,membership_revision,sender_user_id,sender_device_id,recipient_user_id,recipient_device_id,transaction_id,content,expires_at,cohort_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,now()+interval '1 day',$10)`, [id, parsed.conversationId, parsed.membershipRevision, userId, parsed.deviceId, target.userId, target.deviceId, parsed.transactionId, target.content, cohortId]);
+                    await db.query(`INSERT INTO chat_crypto_protocol_outbox(id,to_device_event_id) VALUES($1,$2)`, [(0, node_crypto_1.randomUUID)(), id]);
+                }
+            }
+            await this.chat.authorize(parsed.conversationId, actor, db, true);
+            await this.protocolCohort(db, actor, parsed.conversationId, state, parsed.cohortId);
+            await this.protocolDevice(db, userId, parsed.deviceId, cohortId);
+            for (const target of parsed.recipients) {
+                await this.protocolMember(db, parsed.conversationId, target.userId, cohortId);
+                await this.protocolDevice(db, target.userId, target.deviceId, cohortId);
+            }
+            return { success: true };
+        });
+    }
+    cursor(userId, deviceId, kind, row) { if (!row)
+        return null; const data = Buffer.from(JSON.stringify([userId, deviceId, kind, row.cursor_time, row.id])).toString('base64url'); return data + '.' + (0, node_crypto_1.createHmac)('sha256', process.env.BETTER_AUTH_SECRET).update(data).digest('base64url'); }
+    decodeCursor(cursor, userId, deviceId, kind) {
+        if (!cursor)
+            return null;
+        try {
+            const [data, signature, ...extra] = cursor.split('.');
+            const expected = (0, node_crypto_1.createHmac)('sha256', process.env.BETTER_AUTH_SECRET).update(data).digest(), supplied = Buffer.from(signature, 'base64url');
+            if (extra.length || supplied.length !== expected.length || !(0, node_crypto_1.timingSafeEqual)(expected, supplied))
+                throw new Error();
+            const [owner, device, type, time, id] = JSON.parse(Buffer.from(data, 'base64url').toString());
+            if (owner !== userId || device !== deviceId || type !== kind || typeof time !== 'string' || !Number.isFinite(Date.parse(time)) || typeof id !== 'string')
+                throw new Error();
+            return { time, id };
+        }
+        catch {
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Invalid crypto cursor');
+        }
+    }
+    async readable(db, row, state, actor, allowAcknowledged = false) {
+        try {
+            if (!actor || !state || row.recipient_user_id !== actor.userId || Number(state.membership_revision) !== Number(row.membership_revision))
+                return false;
+            const id = String(row.conversation_id), cohortId = await this.protocolCohort(db, actor, id, state, row.cohort_id === null || row.cohort_id === undefined ? undefined : String(row.cohort_id));
+            await this.protocolMember(db, id, String(row.sender_user_id), cohortId);
+            await this.protocolDevice(db, String(row.sender_user_id), String(row.sender_device_id), cohortId);
+            await this.protocolMember(db, id, actor.userId, cohortId);
+            await this.protocolDevice(db, actor.userId, String(row.recipient_device_id), cohortId);
+            const table = Object.hasOwn(row, 'content') ? 'chat_crypto_to_device_events' : 'chat_crypto_protocol_events';
+            return Boolean((await db.query(`SELECT 1 FROM ${table} WHERE id=$1 AND ($2::boolean OR acknowledged_at IS NULL) AND expires_at>clock_timestamp()`, [row.id, allowAcknowledged])).rowCount);
+        }
+        catch (error) {
+            if (error instanceof common_1.ConflictException || (typeof error === 'object' && error && 'getStatus' in error))
+                return false;
+            throw error;
+        }
+    }
+    async sync(actor, input) {
+        const parsed = this.parse(contracts_2.CryptoSyncQuerySchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            await this.device(db, userId, parsed.deviceId);
+            const read = async (kind, cursor) => {
+                const after = this.decodeCursor(cursor, userId, parsed.deviceId, kind), table = kind === 'encrypted' ? 'chat_crypto_to_device_events' : 'chat_crypto_protocol_events';
+                const rows = (await db.query(`SELECT *,to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS cursor_time FROM ${table} WHERE recipient_user_id=$1 AND recipient_device_id=$2 AND acknowledged_at IS NULL AND expires_at>now() ${after ? 'AND (created_at,id)>($4::timestamptz,$5::text)' : ''} ORDER BY created_at,id LIMIT $3`, after ? [userId, parsed.deviceId, parsed.limit + 1, after.time, after.id] : [userId, parsed.deviceId, parsed.limit + 1])).rows;
+                const selected = rows.slice(0, parsed.limit);
+                return { selected, items: [], hasMore: rows.length > parsed.limit, cursor: this.cursor(userId, parsed.deviceId, kind, selected.at(-1)) };
+            };
+            const encrypted = await read('encrypted', parsed.after), verification = await read('verification', parsed.verificationAfter);
+            const ids = [...new Set([...encrypted.selected, ...verification.selected].map(row => String(row.conversation_id)))];
+            const ordered = (await db.query(`SELECT DISTINCT unnest($1::text[]) AS conversation_id ORDER BY conversation_id`, [ids])).rows;
+            const states = new Map();
+            for (const row of ordered) {
+                const id = String(row.conversation_id);
+                try {
+                    states.set(id, await this.stateRow(db, actor, id));
+                }
+                catch (error) {
+                    if (typeof error === 'object' && error && 'getStatus' in error)
+                        states.set(id, null);
+                    else
+                        throw error;
+                }
+            }
+            await this.device(db, userId, parsed.deviceId);
+            for (const page of [encrypted, verification])
+                for (const row of page.selected)
+                    if (await this.readable(db, row, states.get(String(row.conversation_id)), actor))
+                        page.items.push(row);
+            const oneTimeKeyCounts = { signed_curve25519: Number((await db.query('SELECT count(*) FROM chat_crypto_one_time_keys WHERE user_id=$1 AND device_id=$2 AND claimed_at IS NULL', [userId, parsed.deviceId])).rows[0].count) };
+            for (const id of new Set([...encrypted.items, ...verification.items].map(row => String(row.conversation_id))))
+                await this.chat.authorize(id, actor, db, true);
+            await this.device(db, userId, parsed.deviceId);
+            if (!(await db.query('SELECT id FROM "session" WHERE id=$1 AND user_id=$2 AND expires_at>clock_timestamp() FOR SHARE', [actor?.sessionId, userId])).rowCount)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session expired or revoked');
+            return contracts_2.CryptoSyncResponseSchema.parse({ oneTimeKeyCounts, encrypted: { items: encrypted.items.map(r => ({ id: r.id, conversationId: r.conversation_id, membershipRevision: Number(r.membership_revision), ...(r.cohort_id ? { cohortId: r.cohort_id } : {}), senderUserId: r.sender_user_id, senderDeviceId: r.sender_device_id, content: r.content, createdAt: r.created_at.toISOString() })), hasMore: encrypted.hasMore, nextCursor: encrypted.cursor }, verification: verification.items.map(r => ({ id: r.id, conversationId: r.conversation_id, membershipRevision: Number(r.membership_revision), ...(r.cohort_id ? { cohortId: r.cohort_id } : {}), senderUserId: r.sender_user_id, senderDeviceId: r.sender_device_id, event: r.event, createdAt: r.created_at.toISOString() })), verificationCursor: verification.cursor });
+        });
+    }
+    async acknowledge(actor, input) {
+        const parsed = this.parse(contracts_2.AckCryptoEventsSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            await this.device(db, userId, parsed.deviceId);
+            const query = `SELECT to_jsonb(e) AS event FROM chat_crypto_to_device_events e WHERE id=ANY($1::text[]) UNION ALL SELECT to_jsonb(e) AS event FROM chat_crypto_protocol_events e WHERE id=ANY($1::text[])`;
+            const events = (await db.query(query, [parsed.eventIds])).rows.map(r => r.event);
+            if (events.length !== new Set(parsed.eventIds).size || events.some(e => e.recipient_user_id !== userId || e.recipient_device_id !== parsed.deviceId))
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Event acknowledgement denied');
+            const ids = [...new Set(events.map(row => String(row.conversation_id)))], ordered = (await db.query(`SELECT DISTINCT unnest($1::text[]) AS conversation_id ORDER BY conversation_id`, [ids])).rows, states = new Map();
+            for (const row of ordered)
+                states.set(String(row.conversation_id), await this.stateRow(db, actor, String(row.conversation_id)));
+            const locked = [];
+            for (const table of ['chat_crypto_to_device_events', 'chat_crypto_protocol_events'])
+                locked.push(...(await db.query(`SELECT * FROM ${table} WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE`, [parsed.eventIds])).rows);
+            if (locked.length !== events.length)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Event acknowledgement denied');
+            for (const row of locked)
+                if (row.recipient_user_id !== userId || row.recipient_device_id !== parsed.deviceId || !await this.readable(db, row, states.get(String(row.conversation_id)), actor, true))
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Event acknowledgement denied');
+            for (const table of ['chat_crypto_to_device_events', 'chat_crypto_protocol_events'])
+                await db.query(`UPDATE ${table} SET acknowledged_at=COALESCE(acknowledged_at,clock_timestamp()) WHERE id=ANY($1::text[]) AND recipient_user_id=$2 AND recipient_device_id=$3`, [parsed.eventIds, userId, parsed.deviceId]);
+            for (const row of locked)
+                if (!await this.readable(db, row, states.get(String(row.conversation_id)), actor, true))
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Event acknowledgement denied');
+            for (const id of ids)
+                await this.chat.authorize(id, actor, db, true);
+            await this.device(db, userId, parsed.deviceId);
+            if (!(await db.query('SELECT id FROM "session" WHERE id=$1 AND user_id=$2 AND expires_at>clock_timestamp() FOR SHARE', [actor?.sessionId, userId])).rowCount)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session expired or revoked');
+            return { success: true };
+        });
+    }
+    async importedBinding(db, message) {
+        const current = (await db.query(`SELECT 1 FROM messages WHERE id=$1 AND conversation_id=$2 AND encryption_mode='E2EE' AND content='' AND crypto_revision=$3 AND crypto_envelope=$4::jsonb AND sender_id=$5 AND client_message_id=$6 AND to_char(created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')=$7`, [message.id, message.conversation_id, message.crypto_revision, message.crypto_envelope, message.sender_id, message.client_message_id, message.created_iso])).rowCount;
+        if (!current)
+            throw new common_1.ConflictException('Imported source changed');
+        const candidates = (await db.query(`SELECT c.*,ss.stage_id FROM chat_crypto_legacy_migrations lm JOIN chat_crypto_legacy_candidates c ON c.message_id=lm.message_id AND c.conversation_id=lm.conversation_id AND c.cohort_id=lm.cohort_id AND c.original_sha256=lm.original_sha256 JOIN chat_crypto_legacy_stage_sources ss ON ss.candidate_id=c.id AND ss.message_id=c.message_id AND ss.conversation_id=c.conversation_id AND ss.cohort_id=c.cohort_id AND ss.membership_revision=c.membership_revision AND ss.original_sha256=c.original_sha256 AND ss.envelope_sha256=c.envelope_sha256 JOIN chat_crypto_legacy_stages st ON st.id=ss.stage_id AND st.conversation_id=c.conversation_id AND st.membership_revision=c.membership_revision JOIN chat_crypto_state cs ON cs.conversation_id=c.conversation_id WHERE lm.message_id=$1 AND lm.state='RECONCILED' AND lm.reconciled_at IS NOT NULL AND st.phase='RECONCILED' AND cs.migration_state='RECONCILED' AND cs.membership_revision>=st.next_live_revision AND c.membership_revision=$2`, [message.id, message.crypto_revision])).rows;
+        if (candidates.length !== 1)
+            throw new common_1.ConflictException('Imported history binding unavailable');
+        const candidate = candidates[0];
+        const session = (await db.query(`SELECT 1 FROM chat_crypto_outbound_sessions WHERE session_id=rtrim($1,'=') AND conversation_id=$2 AND sender_user_id=$3 AND sender_device_id=$4 AND membership_revision=$5`, [message.crypto_envelope.event.session_id, message.conversation_id, candidate.importer_user_id, candidate.importer_device_id, candidate.membership_revision])).rowCount;
+        let digest;
+        try {
+            digest = (0, node_crypto_1.createHash)('sha256').update((0, matrix_signatures_js_1.canonicalSignedPayload)(candidate.envelope)).digest('base64').replace(/=+$/, '');
+        }
+        catch {
+            throw new common_1.ConflictException('Imported envelope unavailable');
+        }
+        if (!session || message.content !== '' || !this.sameJson(candidate.envelope, message.crypto_envelope) || digest !== candidate.envelope_sha256)
+            throw new common_1.ConflictException('Imported history binding changed');
+        const attachments = (await db.query(`SELECT * FROM attachments WHERE message_id=$1 ORDER BY id`, [message.id])).rows;
+        const images = (await db.query(`SELECT ci.*,d.object_key,d.ciphertext_size,d.ciphertext_sha256 AS object_sha256,d.uploader_id,d.device_id,d.conversation_id,d.cohort_id,d.membership_revision,d.encryption_mode,d.envelope,d.message_id AS consumed_message_id,d.report_evidence_id,so.cleanup_state,so.plaintext_sha256 AS staged_plaintext_sha256,so.ciphertext_sha256 AS staged_ciphertext_sha256 FROM chat_crypto_legacy_candidate_images ci JOIN chat_crypto_upload_drafts d ON d.id=ci.draft_id JOIN chat_crypto_legacy_stage_objects so ON so.stage_id=$2 AND so.message_id=$3 AND so.candidate_id=ci.candidate_id AND so.attachment_id=ci.attachment_id AND so.draft_id=ci.draft_id WHERE ci.candidate_id=$1 ORDER BY ci.attachment_id`, [candidate.id, candidate.stage_id, message.id])).rows;
+        const mappedCount = Number((await db.query('SELECT count(*) AS count FROM chat_crypto_legacy_candidate_images WHERE candidate_id=$1', [candidate.id])).rows[0].count);
+        if (images.length !== mappedCount || images.length !== attachments.length || images.length > 4 || images.some((image, index) => { const attachment = attachments[index]; return image.attachment_id !== attachment.id || attachment.conversation_id !== message.conversation_id || attachment.encryption_mode !== 'E2EE' || attachment.crypto_envelope || attachment.file_name !== '' || attachment.mime_type !== 'application/octet-stream' || attachment.file_size !== image.ciphertext_size || image.encryption_mode !== 'E2EE' || image.envelope || image.report_evidence_id || (image.consumed_message_id !== null && image.consumed_message_id !== message.id) || image.uploader_id !== candidate.importer_user_id || image.device_id !== candidate.importer_device_id || image.conversation_id !== candidate.conversation_id || image.cohort_id !== candidate.cohort_id || Number(image.membership_revision) !== Number(candidate.membership_revision) || image.object_sha256 !== image.ciphertext_sha256 || image.staged_ciphertext_sha256 !== image.ciphertext_sha256 || image.staged_plaintext_sha256 !== image.plaintext_sha256 || image.cleanup_state !== 'REMOVED'; }))
+            throw new common_1.ConflictException('Imported image binding changed');
+        return { candidate, images };
+    }
+    async authorizeImportedReport(db, actor, id, messageId) {
+        if (!this.schemaReady)
+            throw new common_1.ServiceUnavailableException('Chat crypto schema unavailable');
+        await this.chat.authorize(id, actor, db, true);
+        const message = (await db.query(`SELECT m.*,to_char(m.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso FROM messages m WHERE m.id=$1 AND m.conversation_id=$2 AND m.encryption_mode='E2EE' FOR SHARE OF m`, [messageId, id])).rows[0];
+        if (!message)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Report source unavailable');
+        const { candidate } = await this.importedBinding(db, message);
+        if (!(await db.query('SELECT 1 FROM chat_crypto_cohort_members WHERE cohort_id=$1 AND conversation_id=$2 AND user_id=$3 FOR SHARE', [candidate.cohort_id, id, actor.userId])).rowCount)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Report source unavailable');
+    }
+    async messageDto(db, id) {
+        const row = (await db.query(`SELECT m.*,s.sender_device_id,to_char(m.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso,EXISTS(SELECT 1 FROM chat_crypto_legacy_migrations lm WHERE lm.message_id=m.id) AS legacy FROM messages m JOIN chat_crypto_outbound_sessions s ON s.session_id=rtrim(m.crypto_envelope->'event'->>'session_id','=') WHERE m.id=$1 AND m.encryption_mode='E2EE'`, [id])).rows[0];
+        if (!row)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.NOT_FOUND, 'Encrypted message not found');
+        const fields = { id: row.id, conversationId: row.conversation_id, senderId: row.sender_id, clientMessageId: row.client_message_id, deviceId: row.sender_device_id, membershipRevision: Number(row.crypto_revision), envelope: row.crypto_envelope, createdAt: row.legacy ? row.created_iso : row.created_at.toISOString() };
+        if (row.legacy) {
+            const { candidate, images } = await this.importedBinding(db, row);
+            return contracts_2.EncryptedMessageSchema.parse({ ...fields, deviceId: candidate.importer_device_id, attachmentIds: images.map(image => image.attachment_id), origin: 'LEGACY_IMPORT', importProvenance: { candidateId: candidate.id, cohortId: candidate.cohort_id, originalSha256: candidate.original_sha256, importerUserId: candidate.importer_user_id, importerDeviceId: candidate.importer_device_id } });
+        }
+        const attachments = (await db.query(`SELECT id FROM chat_crypto_upload_drafts WHERE message_id=$1 ORDER BY id`, [id])).rows, mentionedUserIds = (await db.query('SELECT mentioned_user_id FROM mentions WHERE message_id=$1 ORDER BY mentioned_user_id', [id])).rows.map(row => String(row.mentioned_user_id));
+        return contracts_2.EncryptedMessageSchema.parse({ ...fields, attachmentIds: attachments.map(a => a.id), origin: 'LIVE', ...(mentionedUserIds.length ? { mentionedUserIds } : {}) });
+    }
+    async realtimeSubscription(actor, id, deviceId, cohortId) {
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, id), context = await this.protocolCohort(db, actor, id, state, cohortId);
+            await this.protocolDevice(db, userId, deviceId, context);
+            await this.chat.authorize(id, actor, db, true);
+            await this.protocolCohort(db, actor, id, state, cohortId);
+            await this.protocolDevice(db, userId, deviceId, context);
+            return { ok: true, conversationId: id, deviceId, membershipRevision: Number(state.membership_revision) };
+        });
+    }
+    async dispatchProtocol(publish) {
+        if (!this.schemaReady)
+            return;
+        const db = await this.pool.connect();
+        try {
+            await db.query('BEGIN');
+            const jobs = (await db.query(`SELECT id,to_device_event_id,verification_event_id FROM chat_crypto_protocol_outbox WHERE delivered_at IS NULL ORDER BY created_at,id LIMIT 25 FOR UPDATE SKIP LOCKED`)).rows;
+            for (const job of jobs) {
+                const queue = job.to_device_event_id ? 'ENCRYPTED' : 'VERIFICATION', eventId = String(job.to_device_event_id ?? job.verification_event_id), table = queue === 'ENCRYPTED' ? 'chat_crypto_to_device_events' : 'chat_crypto_protocol_events';
+                const active = (await db.query(`SELECT 1 FROM ${table} WHERE id=$1 AND acknowledged_at IS NULL AND expires_at>clock_timestamp()`, [eventId])).rowCount;
+                if (active)
+                    await publish(contracts_1.CryptoProtocolWakeSignalSchema.parse({ kind: 'PROTOCOL_WAKE', queue, eventId }));
+                await db.query(`UPDATE chat_crypto_protocol_outbox SET delivered_at=clock_timestamp() WHERE id=$1`, [job.id]);
+            }
+            await db.query('COMMIT');
+        }
+        catch (error) {
+            await db.query('ROLLBACK');
+            throw error;
+        }
+        finally {
+            db.release();
+        }
+    }
+    async committedProtocolConversation(signal) {
+        if (!this.schemaReady)
+            return null;
+        const parsed = contracts_1.CryptoProtocolWakeSignalSchema.parse(signal), table = parsed.queue === 'ENCRYPTED' ? 'chat_crypto_to_device_events' : 'chat_crypto_protocol_events';
+        const row = (await this.pool.query(`SELECT conversation_id FROM ${table} WHERE id=$1 AND acknowledged_at IS NULL AND expires_at>clock_timestamp()`, [parsed.eventId])).rows[0];
+        return row ? String(row.conversation_id) : null;
+    }
+    async protocolWakeup(actor, deviceId, input, cohortId) {
+        const signal = this.parse(contracts_1.CryptoProtocolWakeSignalSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            await this.device(db, userId, deviceId);
+            const table = signal.queue === 'ENCRYPTED' ? 'chat_crypto_to_device_events' : 'chat_crypto_protocol_events';
+            const query = `SELECT * FROM ${table} WHERE id=$1 AND recipient_user_id=$2 AND recipient_device_id=$3 AND acknowledged_at IS NULL AND expires_at>clock_timestamp()`;
+            const args = [signal.eventId, userId, deviceId], row = (await db.query(query, args)).rows[0];
+            if (!row)
+                return null;
+            const state = await this.stateRow(db, actor, String(row.conversation_id));
+            if (row.cohort_id !== (cohortId ?? null) || !await this.readable(db, row, state, actor))
+                return null;
+            if (!(await db.query(query, args)).rowCount || !await this.readable(db, row, state, actor))
+                return null;
+            await this.chat.authorize(String(row.conversation_id), actor, db, true);
+            await this.device(db, userId, deviceId);
+            return contracts_1.SocketCryptoSyncAvailableSchema.parse({ conversationId: row.conversation_id, deviceId, membershipRevision: Number(state.membership_revision) });
+        });
+    }
+    async committedCiphertext(id) {
+        if (!this.schemaReady)
+            return null;
+        const db = await this.pool.connect();
+        try {
+            const encrypted = (await db.query(`SELECT 1 FROM messages WHERE id=$1 AND encryption_mode='E2EE'`, [id])).rowCount;
+            return encrypted ? await this.messageDto(db, id) : null;
+        }
+        finally {
+            db.release();
+        }
+    }
+    async realtimeMessage(actor, deviceId, messageId, cohortId) {
+        return this.transaction(actor, async (db, userId) => {
+            const message = await this.messageDto(db, messageId), state = await this.stateRow(db, actor, message.conversationId);
+            await this.device(db, userId, deviceId);
+            if (state.migration_state !== 'RECONCILED')
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Realtime history unavailable');
+            await this.protocolCohort(db, actor, message.conversationId, state, cohortId);
+            if (message.origin !== 'LIVE' || !(await db.query(`SELECT 1 FROM chat_crypto_membership_intervals WHERE conversation_id=$1 AND user_id=$2 AND start_revision<=$3 AND (end_revision IS NULL OR $3<end_revision)`, [message.conversationId, userId, message.membershipRevision])).rowCount)
+                return null;
+            return message;
+        });
+    }
+    async mentionTargets(db, id, senderId, revision, targets) {
+        if (!targets.length)
+            return;
+        const eligible = (await db.query(`SELECT u.id FROM unnest($1::text[]) AS t(id) JOIN "user" u ON u.id=t.id JOIN conversations c ON c.id=$2
+   WHERE u.id<>$3 AND (c.user1_id=u.id OR c.user2_id=u.id OR EXISTS(SELECT 1 FROM rooms r JOIN room_members rm ON rm.room_id=r.id WHERE r.conversation_id=c.id AND rm.user_id=u.id) OR (NOT EXISTS(SELECT 1 FROM rooms r WHERE r.conversation_id=c.id) AND EXISTS(SELECT 1 FROM conversation_members cm WHERE cm.conversation_id=c.id AND cm.user_id=u.id)))
+   AND EXISTS(SELECT 1 FROM chat_crypto_membership_intervals i WHERE i.conversation_id=c.id AND i.user_id=u.id AND i.start_revision<=$4 AND (i.end_revision IS NULL OR $4<i.end_revision))
+   AND NOT COALESCE((SELECT a.action='BAN' FROM admin_actions a WHERE a.target_user_id=u.id AND a.action IN ('BAN','UNBAN') ORDER BY a.created_at DESC,a.id DESC LIMIT 1),false)
+   ORDER BY u.id FOR KEY SHARE OF u`, [targets, id, senderId, revision])).rows;
+        if (eligible.length !== targets.length)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Mention target unavailable');
+    }
+    async mentionNotices(db, recipients, conversationId, messageId, mentionerId) {
+        if (!recipients.length)
+            return;
+        const preferences = new Map((await db.query("SELECT user_id,in_app,push FROM notification_preferences WHERE user_id=ANY($1::text[]) AND notification_type='MENTION' ORDER BY user_id FOR SHARE", [recipients])).rows.map(row => [String(row.user_id), row])), subscribed = new Set((await db.query('SELECT DISTINCT user_id FROM push_subscriptions WHERE user_id=ANY($1::text[])', [recipients])).rows.map(row => String(row.user_id)));
+        const notices = [], jobs = [];
+        for (const recipient of recipients) {
+            const preference = preferences.get(recipient), channels = [];
+            if (preference?.in_app !== false)
+                channels.push('IN_APP');
+            if (preference?.push !== false && subscribed.has(recipient))
+                channels.push('PUSH');
+            if (!channels.length)
+                continue;
+            const notice = { id: (0, node_crypto_1.randomUUID)(), recipient, data: JSON.stringify(contracts_2.MentionNotificationDataSchema.parse({ conversationId, messageId, mentionerId })), dedup: 'crypto-mention:' + messageId + ':' + recipient };
+            notices.push(notice);
+            for (const channel of channels)
+                jobs.push({ id: (0, node_crypto_1.randomUUID)(), notification_id: notice.id, recipient, channel });
+        }
+        if (!notices.length)
+            return;
+        await db.query(`WITH added AS (
+   INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key)
+   SELECT n.id,n.recipient,'MENTION','Tin nhắn mới','Bạn có tin nhắn mới.',n.data,n.dedup FROM jsonb_to_recordset($1::jsonb) AS n(id text,recipient text,data text,dedup text)
+   ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id,user_id,dedup_key
+  ) INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key)
+   SELECT j.id,n.id,n.user_id,j.channel,n.dedup_key FROM jsonb_to_recordset($2::jsonb) AS j(id text,notification_id text,recipient text,channel text)
+   JOIN added n ON n.id=j.notification_id AND n.user_id=j.recipient`, [JSON.stringify(notices), JSON.stringify(jobs)]);
+    }
+    async sendMessage(actor, id, input) {
+        const parsed = this.parse(contracts_2.SendEncryptedMessageSchema, input);
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, id, parsed.membershipRevision);
+            if (state.migration_state !== 'RECONCILED')
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Private migration is not reconciled');
+            const device = await this.device(db, userId, parsed.deviceId), event = parsed.envelope.event, mentionedUserIds = [...(parsed.mentionedUserIds ?? [])].sort();
+            if ((event.sender_key !== undefined && event.sender_key !== device.curve25519_key) || (event.device_id !== undefined && event.device_id !== parsed.deviceId))
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Sender identity mismatch');
+            let sessionId;
+            try {
+                sessionId = (0, matrix_signatures_js_1.matrixBase64)(event.session_id, 32).toString('base64').replace(/=+$/, '');
+            }
+            catch {
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Invalid outbound session');
+            }
+            const existing = (await db.query(`SELECT id,crypto_envelope,crypto_revision FROM messages WHERE sender_id=$1 AND conversation_id=$2 AND client_message_id=$3 FOR UPDATE`, [userId, id, parsed.clientMessageId])).rows[0];
+            if (existing) {
+                const dto = await this.messageDto(db, existing.id), savedMentions = dto.origin === 'LIVE' ? dto.mentionedUserIds ?? [] : [];
+                if (!this.sameJson(savedMentions.slice().sort(), mentionedUserIds) || dto.deviceId !== parsed.deviceId || Number(existing.crypto_revision) !== parsed.membershipRevision || !this.sameJson(existing.crypto_envelope, parsed.envelope) || !this.sameJson([...dto.attachmentIds].sort(), [...(parsed.attachmentIds ?? [])].sort()))
+                    throw new common_1.ConflictException('Message retry conflicts');
+                return dto;
+            }
+            await this.mentionTargets(db, id, userId, parsed.membershipRevision, mentionedUserIds);
+            await db.query(`INSERT INTO chat_crypto_outbound_sessions(session_id,conversation_id,sender_user_id,sender_device_id,membership_revision) VALUES($1,$2,$3,$4,$5) ON CONFLICT DO NOTHING`, [sessionId, id, userId, parsed.deviceId, parsed.membershipRevision]);
+            const binding = (await db.query(`SELECT * FROM chat_crypto_outbound_sessions WHERE session_id=$1 FOR SHARE`, [sessionId])).rows[0];
+            if (binding.conversation_id !== id || binding.sender_user_id !== userId || binding.sender_device_id !== parsed.deviceId || Number(binding.membership_revision) !== parsed.membershipRevision)
+                throw new common_1.ConflictException('Outbound session cannot be reused across revisions');
+            const attachmentIds = [...new Set(parsed.attachmentIds ?? [])].sort();
+            if (attachmentIds.length !== (parsed.attachmentIds ?? []).length)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Duplicate attachment');
+            const drafts = attachmentIds.length ? (await db.query(`SELECT * FROM chat_crypto_upload_drafts WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE`, [attachmentIds])).rows : [];
+            if (drafts.length !== attachmentIds.length || drafts.some(d => d.uploader_id !== userId || d.device_id !== parsed.deviceId || d.conversation_id !== id || d.encryption_mode !== 'E2EE' || d.cohort_id !== null || Number(d.membership_revision) !== parsed.membershipRevision || d.consumed_at || d.expires_at.getTime() <= Date.now()))
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Encrypted attachment claim denied');
+            const messageId = (0, node_crypto_1.randomUUID)();
+            await db.query(`INSERT INTO messages(id,conversation_id,sender_id,type,content,client_message_id,encryption_mode,crypto_envelope,crypto_revision) VALUES($1,$2,$3,$4,'',$5,'E2EE',$6,$7)`, [messageId, id, userId, drafts.length ? 'IMAGE' : 'TEXT', parsed.clientMessageId, parsed.envelope, parsed.membershipRevision]);
+            for (const draft of drafts) {
+                await db.query(`UPDATE chat_crypto_upload_drafts SET message_id=$2,consumed_at=now() WHERE id=$1`, [draft.id, messageId]);
+                await db.query(`INSERT INTO attachments(id,message_id,conversation_id,url,file_name,file_size,mime_type,encryption_mode) VALUES($1,$2,$3,$4,'',$5,'application/octet-stream','E2EE')`, [draft.id, messageId, id, `/api/v1/crypto/conversations/${encodeURIComponent(id)}/attachments/${encodeURIComponent(draft.id)}`, draft.ciphertext_size]);
+            }
+            await db.query(`INSERT INTO realtime_outbox(id,message_id,conversation_id,event_name) VALUES($1,$2,$3,'message.created')`, [(0, node_crypto_1.randomUUID)(), messageId, id]);
+            if (mentionedUserIds.length) {
+                await db.query('INSERT INTO mentions(id,message_id,mentioned_user_id) SELECT m.id,$1,m.recipient FROM jsonb_to_recordset($2::jsonb) AS m(id text,recipient text)', [messageId, JSON.stringify(mentionedUserIds.map(recipient => ({ id: (0, node_crypto_1.randomUUID)(), recipient })))]);
+                await this.mentionNotices(db, mentionedUserIds, id, messageId, userId);
+            }
+            const conversation = await this.chat.conversation(id, db);
+            if (conversation.kind === 'DM') {
+                const recipient = conversation.user1_id === userId ? conversation.user2_id : conversation.user1_id;
+                const banned = recipient && (await db.query(`SELECT action FROM admin_actions WHERE target_user_id=$1 AND action IN('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1`, [recipient])).rows[0]?.action === 'BAN';
+                if (recipient && recipient !== userId && !banned) {
+                    const preference = (await db.query(`SELECT in_app,push FROM notification_preferences WHERE user_id=$1 AND notification_type='DM' FOR SHARE`, [recipient])).rows[0], channels = [];
+                    if (preference?.in_app !== false)
+                        channels.push('IN_APP');
+                    if (preference?.push !== false && (await db.query('SELECT 1 FROM push_subscriptions WHERE user_id=$1 LIMIT 1', [recipient])).rowCount)
+                        channels.push('PUSH');
+                    if (channels.length) {
+                        const data = contracts_2.DMNotificationDataSchema.parse({ conversationId: id, messageId, senderId: userId }), noticeId = (0, node_crypto_1.randomUUID)(), dedup = 'crypto-dm:' + messageId;
+                        const added = await db.query(`INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key) VALUES($1,$2,'DM','Tin nhắn mới','Bạn có tin nhắn mới.',$3,$4) ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id`, [noticeId, recipient, JSON.stringify(data), dedup]);
+                        if (added.rowCount)
+                            for (const channel of channels)
+                                await db.query(`INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key) VALUES($1,$2,$3,$4,$5)`, [(0, node_crypto_1.randomUUID)(), noticeId, recipient, channel, dedup]);
+                    }
+                }
+            }
+            return this.messageDto(db, messageId);
+        });
+    }
+    async messageHistory(actor, id, input) {
+        const parsed = this.parse(zod_1.z.object({ after: zod_1.z.string().max(512).optional(), limit: zod_1.z.coerce.number().int().min(1).max(100).default(50) }).strict(), input);
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, id);
+            if (state.migration_state !== 'RECONCILED')
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Private migration is not reconciled');
+            const after = this.decodeCursor(parsed.after, userId, id, 'messages');
+            const rows = (await db.query(`SELECT m.id,m.created_at,to_char(m.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS cursor_time FROM messages m WHERE m.conversation_id=$1 AND m.encryption_mode='E2EE' AND (EXISTS(SELECT 1 FROM chat_crypto_legacy_migrations lm JOIN chat_crypto_cohort_members cm ON cm.cohort_id=lm.cohort_id AND cm.conversation_id=lm.conversation_id WHERE lm.message_id=m.id AND lm.conversation_id=m.conversation_id AND cm.user_id=$2) OR (NOT EXISTS(SELECT 1 FROM chat_crypto_legacy_migrations lm WHERE lm.message_id=m.id) AND EXISTS(SELECT 1 FROM chat_crypto_membership_intervals i WHERE i.conversation_id=m.conversation_id AND i.user_id=$2 AND i.start_revision<=m.crypto_revision AND (i.end_revision IS NULL OR m.crypto_revision<i.end_revision)))) ${after ? 'AND (m.created_at,m.id)>($4::timestamp,$5::text)' : ''} ORDER BY m.created_at,m.id LIMIT $3`, after ? [id, userId, parsed.limit + 1, after.time, after.id] : [id, userId, parsed.limit + 1])).rows;
+            const selected = rows.slice(0, parsed.limit), items = [];
+            for (const row of selected)
+                items.push(await this.messageDto(db, row.id));
+            await this.chat.authorize(id, actor, db, true);
+            if (!(await db.query(`SELECT 1 FROM "session" WHERE id=$1 AND user_id=$2 AND expires_at>clock_timestamp() FOR SHARE`, [actor?.sessionId, userId])).rowCount)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session expired or revoked');
+            return { items, hasMore: rows.length > parsed.limit, nextCursor: rows.length > parsed.limit ? this.cursor(userId, id, 'messages', selected.at(-1)) : null };
+        });
+    }
+    attachmentDto(row) { return contracts_2.EncryptedAttachmentSchema.parse({ id: row.id, conversationId: row.conversation_id, ciphertextSize: row.ciphertext_size, ciphertextSha256: row.ciphertext_sha256, expiresAt: row.expires_at.toISOString() }); }
+    async uploadAttachment(actor, id, input, file) { return this.uploadCiphertext(actor, id, input, file, false); }
+    async uploadLegacyAttachment(actor, id, input, file) { return this.uploadCiphertext(actor, id, input, file, true); }
+    async uploadCiphertext(actor, id, input, file, historical) {
+        const parsed = historical ? this.parse(contracts_2.LegacyEncryptedUploadRequestSchema, input) : this.parse(contracts_2.EncryptedUploadRequestSchema, input), requestedCohort = 'cohortId' in parsed && typeof parsed.cohortId === 'string' ? parsed.cohortId : undefined;
+        if (!file || file.size !== file.buffer.length || file.size !== parsed.ciphertextSize)
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Invalid ciphertext size');
+        let digest;
+        try {
+            digest = (0, matrix_signatures_js_1.matrixBase64)(parsed.ciphertextSha256, 32);
+        }
+        catch {
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Invalid ciphertext digest');
+        }
+        if (!(0, node_crypto_1.timingSafeEqual)((0, node_crypto_1.createHash)('sha256').update(file.buffer).digest(), digest))
+            (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.INVALID_INPUT, 'Ciphertext digest mismatch');
+        const normalized = digest.toString('base64').replace(/=+$/, '');
+        let created;
+        try {
+            return await this.transaction(actor, async (db, userId) => {
+                const state = await this.stateRow(db, actor, id, parsed.membershipRevision), cohortId = await this.protocolCohort(db, actor, id, state, requestedCohort);
+                await this.protocolDevice(db, userId, parsed.deviceId, cohortId);
+                const reauthorize = async () => { await this.chat.authorize(id, actor, db, true); await this.protocolCohort(db, actor, id, state, requestedCohort); await this.protocolDevice(db, userId, parsed.deviceId, cohortId); };
+                await db.query(`SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_crypto_upload', $1::text,$2::text)::text,0::bigint))`, [userId, parsed.clientUploadId]);
+                const existing = (await db.query(`SELECT * FROM chat_crypto_upload_drafts WHERE uploader_id=$1 AND client_upload_id=$2 FOR UPDATE`, [userId, parsed.clientUploadId])).rows[0];
+                if (existing) {
+                    if (existing.conversation_id !== id || existing.device_id !== parsed.deviceId || existing.cohort_id !== cohortId || Number(existing.membership_revision) !== parsed.membershipRevision || existing.ciphertext_size !== file.size || existing.ciphertext_sha256 !== normalized)
+                        throw new common_1.ConflictException('Upload retry conflicts');
+                    if (existing.consumed_at || existing.expires_at.getTime() <= Date.now())
+                        (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Draft no longer available');
+                    await reauthorize();
+                    return this.attachmentDto(existing);
+                }
+                const objectId = (0, node_crypto_1.randomUUID)(), objectKey = objectId + '.bin';
+                await (0, crypto_object_store_js_1.lockCryptoObjectWrite)(db, objectKey);
+                await this.objects.put(objectKey, file.buffer);
+                created = objectKey;
+                const row = (await db.query(`INSERT INTO chat_crypto_upload_drafts(id,uploader_id,conversation_id,device_id,client_upload_id,membership_revision,encryption_mode,object_key,ciphertext_size,ciphertext_sha256,expires_at,cohort_id) VALUES($1,$2,$3,$4,$5,$6,'E2EE',$7,$8,$9,now()+$10*interval '1 millisecond',$11) RETURNING *`, [objectId, userId, id, parsed.deviceId, parsed.clientUploadId, parsed.membershipRevision, objectKey, file.size, normalized, contracts_2.IMAGE_DRAFT_TTL_MS, cohortId])).rows[0];
+                await reauthorize();
+                return this.attachmentDto(row);
+            });
+        }
+        catch (error) {
+            if (created)
+                await this.objects.remove(created);
+            throw error;
+        }
+    }
+    async readAttachment(actor, id, attachmentId) {
+        return this.transaction(actor, async (db, userId) => {
+            const state = await this.stateRow(db, actor, id);
+            if (state.migration_state !== 'RECONCILED')
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Private migration is not reconciled');
+            const imported = (await db.query(`SELECT m.*,to_char(m.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso FROM attachments a JOIN messages m ON m.id=a.message_id AND m.conversation_id=a.conversation_id JOIN chat_crypto_legacy_migrations lm ON lm.message_id=m.id AND lm.conversation_id=m.conversation_id WHERE a.id=$1 AND a.conversation_id=$2 AND a.encryption_mode='E2EE' AND m.encryption_mode='E2EE'`, [attachmentId, id])).rows[0];
+            if (imported) {
+                const reauthorize = async () => { await this.chat.authorize(id, actor, db, true); if (!(await db.query(`SELECT 1 FROM "session" WHERE id=$1 AND user_id=$2 AND expires_at>clock_timestamp() FOR SHARE`, [actor?.sessionId, userId])).rowCount)
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.LOGIN_REQUIRED, 'Session expired or revoked'); const binding = await this.importedBinding(db, imported); if (!(await db.query(`SELECT 1 FROM chat_crypto_cohort_members WHERE cohort_id=$1 AND conversation_id=$2 AND user_id=$3`, [binding.candidate.cohort_id, id, userId])).rowCount)
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Imported object history unavailable'); const image = binding.images.find(item => item.attachment_id === attachmentId); if (!image)
+                    throw new common_1.ConflictException('Imported image binding unavailable'); return image; };
+                const image = await reauthorize();
+                let bytes;
+                try {
+                    bytes = await this.objects.read(image.object_key);
+                    if (bytes.length !== image.ciphertext_size || !(0, node_crypto_1.timingSafeEqual)((0, node_crypto_1.createHash)('sha256').update(bytes).digest(), (0, matrix_signatures_js_1.matrixBase64)(image.ciphertext_sha256, 32)))
+                        throw new common_1.ConflictException('Imported object integrity failed');
+                    const current = await reauthorize();
+                    if (current.object_key !== image.object_key || current.ciphertext_size !== image.ciphertext_size || current.ciphertext_sha256 !== image.ciphertext_sha256)
+                        throw new common_1.ConflictException('Imported image binding changed');
+                    return bytes;
+                }
+                catch (error) {
+                    bytes?.fill(0);
+                    if (error instanceof common_1.HttpException)
+                        throw error;
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Imported object unavailable');
+                }
+            }
+            const row = (await db.query(`SELECT d.*,m.crypto_revision FROM chat_crypto_upload_drafts d LEFT JOIN messages m ON m.id=d.message_id WHERE d.id=$1 AND d.conversation_id=$2 AND d.encryption_mode='E2EE'`, [attachmentId, id])).rows[0];
+            if (!row)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.NOT_FOUND, 'Encrypted object not found');
+            if (row.cohort_id !== null)
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Historical object requires candidate context');
+            if (row.message_id) {
+                if (!(await db.query(`SELECT 1 FROM chat_crypto_membership_intervals WHERE conversation_id=$1 AND user_id=$2 AND start_revision<=$3 AND (end_revision IS NULL OR $3<end_revision)`, [id, userId, row.crypto_revision])).rowCount)
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Object history is unavailable');
+            }
+            else {
+                if (row.uploader_id !== userId || Number(row.membership_revision) !== Number(state.membership_revision) || row.expires_at.getTime() <= Date.now())
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Draft unavailable');
+                await this.device(db, userId, row.device_id);
+            }
+            const reauthorize = async () => {
+                const latest = await this.stateRow(db, actor, id);
+                if (latest.migration_state !== 'RECONCILED')
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Private migration is not reconciled');
+                const current = (await db.query(`SELECT d.*,m.crypto_revision FROM chat_crypto_upload_drafts d LEFT JOIN messages m ON m.id=d.message_id WHERE d.id=$1 AND d.conversation_id=$2 AND d.encryption_mode='E2EE'`, [attachmentId, id])).rows[0];
+                if (!current || ['object_key', 'ciphertext_size', 'ciphertext_sha256', 'message_id', 'cohort_id', 'uploader_id', 'device_id', 'membership_revision', 'crypto_revision'].some(key => current[key] !== row[key]) || current.expires_at.getTime() !== row.expires_at.getTime())
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Object binding changed');
+                if (current.message_id) {
+                    if (!(await db.query(`SELECT 1 FROM chat_crypto_membership_intervals WHERE conversation_id=$1 AND user_id=$2 AND start_revision<=$3 AND (end_revision IS NULL OR $3<end_revision)`, [id, userId, current.crypto_revision])).rowCount)
+                        (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Object history is unavailable');
+                }
+                else {
+                    if (current.uploader_id !== userId || Number(current.membership_revision) !== Number(latest.membership_revision) || current.expires_at.getTime() <= Date.now())
+                        (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Draft unavailable');
+                    await this.device(db, userId, current.device_id);
+                }
+            };
+            let bytes;
+            try {
+                bytes = await this.objects.read(row.object_key);
+                if (bytes.length !== row.ciphertext_size || !(0, node_crypto_1.timingSafeEqual)((0, node_crypto_1.createHash)('sha256').update(bytes).digest(), (0, matrix_signatures_js_1.matrixBase64)(row.ciphertext_sha256, 32)))
+                    (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Object integrity failed');
+                await reauthorize();
+                return bytes;
+            }
+            catch (error) {
+                bytes?.fill(0);
+                if (error instanceof common_1.HttpException)
+                    throw error;
+                (0, chat_service_js_1.chatError)(contracts_2.ErrorCode.FORBIDDEN, 'Object unavailable');
+            }
+        });
+    }
+};
+exports.CryptoRelayService = CryptoRelayService;
+exports.CryptoRelayService = CryptoRelayService = CryptoRelayService_1 = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [chat_service_js_1.ChatService])
+], CryptoRelayService);
+//# sourceMappingURL=crypto-relay.service.js.map

@@ -15,12 +15,14 @@ THEME-CHANGE-01: người dùng duyệt khả năng chuyển Sáng/Tối/Hệ th
 
 Năm ảnh là baseline hình thức đã được duyệt. Không tự thay theme, dựng lại layout hoặc chuyển sang một phong cách khác khi build. Các số online, tin nhắn, bài đăng, avatars và hình game trong ảnh là dữ liệu minh họa.
 
+GAME-LOGO-01 (07/10/2026): người dùng yêu cầu dùng logo thật cho7 game. Nguồn ảnh và mapping/vị trí tích hợp ở [game-logos/README.md](./game-logos/README.md). Thay chữ viết tắt sidebar và icon tay cầm header Lobby, giữ nguyên layout/tokens FG; dùng cùng mapping ở chọn game/hồ sơ/bộ lọc. Không đảo màu hoặc biến dạng logo. Dota2 đã có ảnh người dùng cung cấp nhưng cần xử lý nền caro, người dùng xác nhận quyền dùng Roblox cho FG ngày07/10/2026; dùng logo theo mapping và ghi đúng trạng thái. Chỉ tích hợp runtime sau gate task hiện tại PASS.
+
 Các giá trị dưới đây chuẩn hóa phong cách ảnh thành thông số để code nhất quán. Màu được lấy mẫu/điều chỉnh từ ảnh; không phải mọi pixel của ảnh AI đều có cùng màu. Font gốc không thể xác định chính xác từ ảnh raster; chọn **Inter** để triển khai gần phong cách đã duyệt, không tuyên bố đây là font gốc của ảnh.
 
 ## 2. Tên và hình thức chung
 
 - Tên sản phẩm, document title, login heading, email sender display name, manifest name/short_name: **FG**. Title từng trang dùng dạng `Lobby · Liên Minh — FG`, `Phòng nhóm — FG`.
-- Wordmark chữ FG nhỏ gọn trong app navigation; chưa tạo biểu tượng hay diễn giải ý nghĩa tên FG.
+- FG-BRAND-LOGO-01 (08/10/2026): người dùng chọn [mẫu01 FG ghép khối](./mockups/fg-logo-concepts/01-monogram.png) làm logo thương hiệu web/sidebar và favicon/PWA icon. Dựng monogram SVG paths theo silhouette đã chọn, F trắng trên dark/navy trên light, G xanh FG, không nền hoặc tagline. Sidebar khung40px trong rail72px; icon nhỏ giữ khoảng thở/nhận diện. Thay wordmark plain tại vị trí branding hiện có sau checkpoint GAME-LOGO-FE; không lấy cả board AI làm asset, không thay icon điều hướng hoặc layout. Xem task FG-BRAND-LOGO-01 cho outputs/tests; duyệt ảnh không là PASS.
 - Nền navy/than tối, panel phân lớp nhẹ, viền mảnh, chữ trắng dịu, action xanh dương, trạng thái xanh lá và action rời cuộc gọi đỏ.
 - Giao diện cộng đồng game: chat chiếm diện tích chính, gọn và dễ đọc, avatars tròn, card nhẹ, icon nét mảnh. Không thêm hero marketing, hiệu ứng neon mạnh, glass blur toàn trang hoặc card phóng lớn làm giảm không gian chat.
 - Ảnh tham chiếu desktop có khung trình bày và tiêu đề “01/02”; không dựng các khung thuyết trình hay viền điện thoại đó thành UI ứng dụng.
@@ -83,15 +85,25 @@ Tên và số lượng dùng tabular numerals khi phù hợp. Text heading lette
 
 ### Desktop từ1200px
 
-- Full-height app shell; sidebar208px; main chat co giãn; panel tìm đội/online352px. Các vùng phân cách bằng viền mảnh, gutter/padding16px.
+- Full-height app shell; sidebar danh mục cố định72px theo SIDEBAR-CHANGE-01 cập nhật; main chat co giãn; panel tìm đội/online352px. Các vùng phân cách bằng viền mảnh, gutter/padding16px.
 - Header game64–80px; tên game + Lobby + thông tin phụ. Friends/messages/notifications là actions gọn trên header.
 - Main chat lớn nhất, message list cuộn riêng, composer luôn ở cuối vùng chat. Page không nhảy scroll khi có tin mới lúc đang đọc lịch sử.
 - Panel phải: Tìm đội → Tạo đội → Chơi ngay/Hẹn giờ → thẻ → Đang online. Online list có nhãn trạng thái và mở hồ sơ/nhắn tin.
 - Sidebar: 7 game, chọn game hiện tại bằng surface xanh nhẹ + viền/marker xanh; FG ở đầu navigation, hồ sơ/trạng thái/phòng/bạn bè phía dưới.
 
+### Sidebar danh mục hẹp cố định — SIDEBAR-CHANGE-01 cập nhật, 07/10/2026
+
+- Người dùng thay yêu cầu toggle bằng sidebar luôn hẹp theo [ảnh tham chiếu08](./mockups/08-sidebar-fixed-compact-user-reference.png). Bỏ nút chevron trong ảnh theo lời người dùng; mockup07 mở/thu chỉ là phương án cũ đã được thay thế.
+- Người dùng chốt [mockup sidebar hẹp cố định](./mockups/08-sidebar-fixed-compact-preview.png) ngày07/10/2026: đây là baseline hình thức cho sidebar danh mục, mã tham chiếu SIDEBAR-COMPACT-APPROVED để phân biệt với mockup08 theme sáng trắng kem. Giữ màu/phong cách FG; áp dụng cấu trúc sidebar này trên cả light/dark qua tokens hiện có. Duyệt ảnh không xác nhận app hoặc chức năng đã PASS.
+- Desktop/tablet từ1024px: sidebar cố định72px, chỉ hiện logo căn giữa; FG nhỏ ở đầu, avatar và icon Phòng của tôi/Bạn bè ở cuối. Logo biểu tượng24px, wordmark ngang contain tối đa48px rộng/18–24px cao, dòng46px. Không crop/vẽ lại logo theo chữ viết tắt sai trong ảnh AI.
+- Không có chế độ mở rộng208px, nút toggle hoặc lưu lựa chọn rộng/hẹp. Tooltip tên game khi hover hoặc focus; mọi nút game/icon điều hướng có accessible name, trạng thái game hiện tại và hit area ít nhất44px. Không phụ thuộc tooltip để người dùng keyboard/screen reader biết tên.
+- Chat dùng phần rộng được giải phóng; panel phải giữ quy tắc responsive. Không thu nhỏ chữ/logo toàn app theo sidebar; tên game vẫn hiện đầy đủ tại header.
+- Mobile dưới1024px dùng nút menu mở drawer danh mục, chọn game hoặc Escape đóng drawer, khôi phục focus về nút mở; game selector và bottom nav giữ nguyên. Không lưu trạng thái drawer mở sau reload.
+- Điều chỉnh bố cục không remount chat/auth, đổi route/game, xóa nội dung đang nhập, reset scroll hoặc ngắt session/socket. Motion theo tokens và reduced motion.
+
 ### Tablet1024–1199px
 
-Sidebar thu72px bằng icons + tooltip; panel phải320px; chat vẫn ưu tiên rộng. Tất cả game vẫn truy cập được, không bỏ chức năng.
+Sidebar cố định72px bằng logos + tooltip, không nút mở rộng; panel phải320px; chat vẫn ưu tiên rộng. Tất cả game vẫn truy cập được, không bỏ chức năng.
 
 ### Dưới1024px
 
@@ -134,7 +146,7 @@ T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt t
 ## 10. Bảng tin cộng đồng — bố cục duyệt 07/10/2026
 
 - Baseline: mockup 03. Người dùng xác nhận “bố cục ổn” và yêu cầu ghi vào tài liệu coding/build; không hỏi lại màu sắc/phong cách FG đã duyệt.
-- Desktop: sidebar FG → Bảng tin active → Lobby → game; vùng chính có header, composer và bài đăng; panel phải là bộ lọc game/loại bài. Tỷ lệ tham khảo sidebar208px/panel280px, feed co giãn; tablet thu sidebar và chuyển bộ lọc lên đầu khi thiếu rộng.
+- Desktop: sidebar FG → Bảng tin active → Lobby → game; vùng chính có header, composer và bài đăng; panel phải là bộ lọc game/loại bài. Sidebar danh mục chung cố định72px theo SIDEBAR-CHANGE-01 cập nhật, panel280px, feed co giãn; tablet chuyển bộ lọc lên đầu khi thiếu rộng.
 - Mobile dưới1024px: một cột; header Bảng tin, chọn game, chips loại bài, composer, bài và bình luận. Bottom navigation Bảng tin/Lobby/Bạn bè/Thông báo; Phòng của tôi từ menu. Có safe-area, controls ít nhất44px, không overflow tại360px.
 - Bài gồm avatar/tên/thời gian, nhãn game/loại, nội dung/ảnh, thích/bình luận, menu và liên hệ qua Nhắn riêng/hồ sơ. Reply lùi một cấp; không biến feed thành chat hoặc thẻ tuyển có số suất.
 - Tái sử dụng Inter self-host, navy surfaces, CTA xanh, token/radius/borders/spacing và trạng thái tại mục3–5. Không chép theme Facebook, thêm hero/neon hoặc font mới.
@@ -148,13 +160,21 @@ T00 vẫn cần chốt các điểm nghiệp vụ/stack chưa được duyệt t
 - Các màn xác minh/reset/đổi/thêm mật khẩu dùng cùng components/tokens, thông báo trạng thái thật. Không hiển thị hash/token, thông tin kỹ thuật bảo mật hay badge “an toàn tuyệt đối” trong UI.
 - Bên coding/build triển khai theo task/rebaseline sau khi task hiện tại review PASS; bố cục đã chốt. Kiểm keyboard/focus, safe-area, input mobile16px và360px không overflow; screenshot thật1440/1280/390/360, UI/E2E headed theo TEST-VISIBILITY-01. Khung trình bày/điện thoại trong ảnh không build vào app; ảnh không là evidence auth/SMTP đã chạy.
 
-## 12. Theme light hoạt động — chờ review hình thức
+## 12. Theme Xám khói — cả light/dark đã chốt, bộ chọn mới đang đề xuất
+
+THEME-COMPACT-02: người dùng đã duyệt [mockup nút chỉ icon](./mockups/fg-theme-icon-only-proposal.png) và yêu cầu triển khai08/10/2026. Hình thức hai trạng thái đã chốt; thay nút menu cũ bằng một button44×44px/bo12px/Classic20px, chỉ icon, không visible label/menu/chevron. Tooltip và accessible name là “Chuyển sang Sáng” hoặc “Chuyển sang Tối”; không dùng aria-pressed với tên hành động thay đổi. ENTER/SPACE dùng hành vi button native, focus giữ tại nút. Giữ SVG mounted, reduced motion và palette Xám khói; chưa PASS code cho đến kiểm thử/review app thật.
 
 Mockup05 là Quản trị hỗ trợ dark đã duyệt; không dùng nó để đánh dấu light đã được người dùng chốt.
 
-- Bộ chọn Sáng/Tối/Hệ thống trên global header, hiện cả trang login. Nút icon mặt trời/mặt trăng mở menu có nhãn, dấu lựa chọn và focus rõ; system thể hiện nhãn Hệ thống dù màu thực tế sáng/tối.
-- Semantic tokens dùng chung, không đổi layout: light canvas#F3F6FB/sidebar#FFFFFF/chat#F8FAFC/panel#FFFFFF/raised#EAF0F7/hover#DEE8F5/border#64748B; text main#172033/sub#334155/quiet#475569; action#1E5ADE/hover#184EC7/active#1442AD/focus#1E5ADE; online#147D46/warning#855500/danger#B4232D. Đây là palette triển khai để review, còn phải đo contrast thực tế trước PASS, không tự nhận đã duyệt hình thức.
-- Dùng data-theme trên html và color-scheme; giữ dark tokens hiện có. Rà màu hardcoded và status surfaces của app đang có; các màn chưa build phải dùng cùng semantic tokens. Không thay assets/video/iframe từ provider ngoài bằng filter đảo màu.
+- Người dùng yêu cầu `npx shadcn@latest add @toggles/classic` ngày07/10/2026: thêm riêng component Classic từ Toggles.dev và cấu hình CLI tối thiểu trong frontend. Đây là bước chuẩn bị, chưa duyệt cách ghép vào header hoặc thay menu ba lựa chọn; khi tích hợp phải giữ Sáng/Tối/Hệ thống, nhãn tiếng Việt, keyboard/focus và reduced motion. Không áp palette mặc định shadcn vào FG.
+
+- Yêu cầu triển khai tiếp theo07/10/2026: dùng Classic trong bộ chọn và build cả hai theme đã chốt. Nút header mở menu ba lựa chọn, dùng icon SVG động Classic theo màu hiệu lực; không lồng button hoặc biến Hệ thống thành lựa chọn nhị phân. Hệ thống vẫn hiện đúng nhãn đã lưu. Giữ44px, keyboard/focus, reduced motion; dùng màu FG. Các mockup bộ chọn còn lại được thay bằng bước review app thật theo yêu cầu này. Viền phân vùng mềm tách với viền control; link/focus/outline được chỉnh cùng sắc để đạt tương phản đo được.
+
+- THEME-COMPACT-02 (08/10/2026) thay yêu cầu bộ chọn ba chế độ: người dùng yêu cầu chỉ Sáng/Tối và nút chỉ icon. Mockup đề xuất [nút gọn](./mockups/fg-theme-icon-only-proposal.png): nút44×44px, bo12px, glyph20px; hiện mặt trời khi Sáng và mặt trăng khi Tối, bấm đổi trực tiếp, không chữ/chevron/menu. Giữ palette Xám khói và Classic đã cài; tooltip/accessible name mô tả hành động đổi, keyboard/focus/reduced motion phải được kiểm thử ở bước triển khai. Ảnh là đề xuất chờ duyệt, chưa là runtime hoặc task PASS. Các yêu cầu ba chế độ trước đó được giữ làm lịch sử, không áp dụng cho yêu cầu mới này.
+- THEME-VISUAL-02: người dùng “chốt cái này” ngày07/10/2026, đính kèm mẫu1 [Light Xám khói](./mockups/fg-light-smoke-approved.png), mã LIGHT-SMOKE-APPROVED. Thay phương án trắng kem đã bị đánh giá quá chói; giữ ảnh/evidence cũ làm lịch sử. Bố cục desktop/mobile trong ảnh được chọn, đồng bộ sidebar hẹp SIDEBAR-COMPACT-APPROVED. Giữ Inter và nhóm chức năng FG; không build khung điện thoại, swatches, nhãn trình bày hoặc dữ liệu mẫu vào app.
+- Palette light đã chọn: canvas#CFD3D6/chat#C8CDD1/sidebar và panel#D8DCE0/input#BDC4CA/selected#B7C5D4/text#29323B/sub#48545F/action#315C9B. Viền trang trí nhẹ, nút/focus rõ; font/hierarchy/spacing/radius theo ảnh và FG. Hex là hướng triển khai, không khẳng định mọi pixel AI đúng token; link/hover/focus/status cần kiểm tương phản thật trước PASS.
+- [Dark Xám khói đã chốt](./mockups/fg-dark-smoke-approved.png), mã DARK-SMOKE-APPROVED: canvas#1F252C/chat#212830/panel#2B333D/bubble#303A46/input#252E38/selected#33465F/text#E2E7ED/sub#B6C1CF/quiet#A5B1C0/action#365F98/link-focus#91AED7. Nền than xám, chữ trắng dịu, không OLED black hoặc neon. Giữ cùng bố cục light; người dùng xác nhận “tôi chốt bản dark và bản light mới nãy” ngày07/10/2026. Phê duyệt hình thức chưa thay implementation/app review/tests.
+- Dùng data-theme trên html và color-scheme; triển khai cả hai palette đã chốt qua checkpoint/migration, giữ hành vi hiện có. Rà màu hardcoded và status surfaces của app đang có; các màn chưa build phải dùng cùng semantic tokens. Không thay assets/video/iframe từ provider ngoài bằng filter đảo màu.
 - Screenshot app thật desktop/mobile và preview browser headed để người dùng chốt; không tạo bitmap thay bản thử chức năng người dùng yêu cầu.
 
 ## 13. Quản trị hỗ trợ — mockup05 đã duyệt
@@ -165,3 +185,10 @@ Mockup05 là Quản trị hỗ trợ dark đã duyệt; không dùng nó để �
 - Trang login chung bổ sung chấp nhận tên kingame theo AUTH-ADMIN-SINGLE checkpoint, giữ khung mockup04. Labels phải phản ánh “Email hoặc tên đăng nhập”, password không hiển thị mặc định.
 - Form tạo/đổi/reset/thêm mật khẩu ghi rõ “8–128 ký tự, ít nhất một chữ hoa và một ký tự đặc biệt”; không trim/normalize, kiểm cùng policy server. Không áp composition rule khi login credential đã tồn tại để khóa user cũ; không thông báo chứa password/token.
 - Screenshot thật desktop/mobile và headed E2E; duyệt ảnh05 không là evidence login/quyền admin/hỗ trợ đã hoạt động.
+
+## 14. Logo FG3D và thanh chờ — LOADING3D-CHANGE-01, 09/10/2026
+
+- Demo R2 tại [code/scratch/fg-3d-loading-preview/index.html](../code/scratch/fg-3d-loading-preview/index.html) là tham chiếu chuyển động đã được yêu cầu đưa vào task; hash/evidence ở task LOADING3D-FE. Bản này không phải app production hoặc task PASS; dựng từ logo SVG canonical của GAME-LOGO-FE, không dùng lại SVG phác hoặc cả board AI làm asset chuẩn.
+- Giữ F trắng bạc trên dark, vật liệu cạnh vát dịu và G xanh FG; light dùng shading/border đủ nhận diện theo semantic tokens. Logo120–176px tùy viewport, giữa vùng skeleton với khoảng thở, xoay360 quanh trục dọc trong6giây, nổi lên/xuống tối đa8px và bóng mềm. Cạnh có độ dày nhìn được khi quay; không xoay phẳng như bánh xe, không neon/vòng trang trí. Logo thường trực sidebar/header/icons không chuyển động.
+- Thanh chờ180–210px rộng,5–6px cao, bo tròn, vệt xanh vô định chạy2giây/vòng đặt dưới logo. Bỏ dòng “Đang tải FG” và ba chấm; accessible status/progressbar vẫn mô tả đang tải. Không đưa nút pause/theme hoặc chữ “Demo” từ preview vào loading UI sản phẩm.
+- Skeleton theo từng layout hiện có, không cố ép mobile thành desktop ba cột. Giữ nav/control đang dùng được, không trap focus. Điều kiện pending/ready/error, delay150ms, reduced-motion, tab hidden và giới hạn scope theo spec18/task LOADING3D-FE; CSS/SVG nhẹ, không WebGL. Headed screenshot desktop/mobile và test thật mới là evidence tích hợp.

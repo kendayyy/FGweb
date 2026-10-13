@@ -1,0 +1,13 @@
+file:///E:/FGweb/code/scripts/verify-task.mjs:12
+  if(typeof expected!=='string'||!/^[a-f0-9]{64}$/i.test(expected)||hash(path.resolve(root,file)).toLowerCase()!==expected.toLowerCase())throw new Error('baseline changed or missing approved source');
+                                                                                                                                               ^
+
+Error: baseline changed or missing approved source
+    at checkBaselines (file:///E:/FGweb/code/scripts/verify-task.mjs:12:144)
+    at audit (file:///E:/FGweb/code/quality/evidence/T28/final-audit.mjs:12:2)
+    at file:///E:/FGweb/code/quality/evidence/T28/close.mjs:7:111
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0

@@ -1,0 +1,80 @@
+
+Running 7 tests using 1 worker
+
+(node:10004) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/7] tests\e2e\game-logos.spec.ts:23:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint
+[2/7] tests\e2e\game-logos.spec.ts:36:1 › mouse and keyboard choose all seven real catalogue games and focus shows full tooltip
+[3/7] tests\e2e\game-logos.spec.ts:44:1 › mobile drawer retains full names, native focus and bounded layout at 360/390px
+[4/7] tests\e2e\game-logos.spec.ts:58:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize
+  1) tests\e2e\game-logos.spec.ts:58:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+        "ewYQqi-dYo7sOsLhAAAP",
+    -   "8XVWxVP3y0QUjultAAAR",
+    +   "s-MVbpH9OqZXsPqPAAAS",
+      ]
+
+      62 |  // Capture after both authenticated hooks initialize, rather than during the auth transition.
+      63 |  await expect(page.locator('.fg-chat-status')).toContainText('Đã kết nối');await expect.poll(async()=>(await sockets()).length).toBe(2);const before=await sockets();const initialized=await socketState();
+    > 64 |  for(const width of [1440,1024,360,390,1280]){await page.setViewportSize({width,height:900});for(const mode of ['light','dark']){await theme(page,mode);await expect(composer).toHaveValue('Bản nháp chưa gửi');await expect(composer).toHaveAttribute('data-logo-draft-witness','original');expect(await sockets()).toEqual(before);const me=await page.request.get(base+'/api/v1/me');expect(me.status()).toBe(200);expect((await me.json()).id).toBe(identity.id);}}
+         |                                                                                                                                                                                                                                                                                                                      ^
+      65 |  const final=await socketState();expect(final.events).toEqual(initialized.events);fs.writeFileSync(`${evidenceDir}/socket-lifecycle.json`,JSON.stringify({initialized,final},null,2)+'\n');
+      66 | });
+      67 | test('FG logo, favicon and complete manifest icon URLs serve real images with correct sizes/MIME',async({page})=>{
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:64:310
+
+    Error Context: .cache\game-logos\results\game-logos-real-native-ses-4eae4-emes-and-rail-drawer-resize\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-real-native-ses-4eae4-emes-and-rail-drawer-resize\error-context.md
+
+
+(node:10612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[5/7] tests\e2e\game-logos.spec.ts:67:1 › FG logo, favicon and complete manifest icon URLs serve real images with correct sizes/MIME
+[6/7] tests\e2e\game-logos.spec.ts:76:1 › a broken game image keeps an accessible clickable fallback and does not hotlink
+[7/7] tests\e2e\game-logos.spec.ts:79:1 › all seven game buttons have decoded local images in light/dark before task completion
+  2) tests\e2e\game-logos.spec.ts:79:1 › all seven game buttons have decoded local images in light/dark before task completion 
+
+    Error: Dota 2
+
+    expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Dota 2 getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible') with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      79 | test('all seven game buttons have decoded local images in light/dark before task completion',async({page})=>{
+      80 |  await page.goto(base);const catalogue=await games(page);
+    > 81 |  for(const mode of ['light','dark']){await theme(page,mode);for(const game of catalogue){const button=page.getByRole('navigation',{name:'Chọn game Lobby'}).getByRole('button',{name:game.title,exact:true});const image=button.locator('img:visible');await expect(image,game.title).toHaveCount(1);await expect.poll(()=>image.evaluate(node=>(node as HTMLImageElement).complete&&(node as HTMLImageElement).naturalWidth>0)).toBe(true);}}
+         |                                                                                                                                                                                                                                                                                       ^
+      82 | });
+      83 |
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:81:279
+
+    Error Context: .cache\game-logos\results\game-logos-all-seven-game--b8aaf-dark-before-task-completion\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-all-seven-game--b8aaf-dark-before-task-completion\error-context.md
+
+
+  2 failed
+    tests\e2e\game-logos.spec.ts:58:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize 
+    tests\e2e\game-logos.spec.ts:79:1 › all seven game buttons have decoded local images in light/dark before task completion 
+  5 passed (1.3m)

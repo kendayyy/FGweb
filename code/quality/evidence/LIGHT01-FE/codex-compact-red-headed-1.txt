@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+(node:12388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion
+  1) tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion 
+
+    Error: Real fixture failed; secrets omitted
+
+      13 |  fixture=spawn(process.execPath,['quality/evidence/LIGHT01-FE/fixture-server.mjs'],{cwd:process.cwd(),env:{...process.env,FG_THEME_WEB_PORT:String(port)},stdio:['ignore','ignore','ignore','ipc'],windowsHide:true});
+      14 |  fixture.on('message',(message:Record<string,unknown>)=>{if(typeof message.id==='string'){pending.get(message.id)?.(message);pending.delete(message.id);}});
+    > 15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real API/PG/Redis fixture startup timed out')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){identity=message.identity as typeof identity;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Real fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Real fixture exited during startup'));});});
+         |                                                                                                                                                                                                                                                                                                                                                                      ^
+      16 | });
+      17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema/Redis cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+      18 | async function select(page:Page,label:string){const theme=label==='Sáng'?'light':'dark';if(await page.locator('html').getAttribute('data-theme')!==theme)await page.getByRole('button',{name:/Chuyển sang/}).click();await assertTheme(page,theme);}
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\theme.spec.ts:15:358)
+
+    Error: Channel closed
+
+      15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real API/PG/Redis fixture startup timed out')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){identity=message.identity as typeof identity;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Real fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Real fixture exited during startup'));});});
+      16 | });
+    > 17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema/Redis cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+         |                                                                                                                                                                                                                                                                                                                                                             ^
+      18 | async function select(page:Page,label:string){const theme=label==='Sáng'?'light':'dark';if(await page.locator('html').getAttribute('data-theme')!==theme)await page.getByRole('button',{name:/Chuyển sang/}).click();await assertTheme(page,theme);}
+      19 | async function sockets(){const id=randomUUID();return await new Promise<string[]>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real socket inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message.socketIds as string[]);});fixture.send({id,kind:'sockets'});});}
+      20 | async function assertTheme(page:Page,theme:string){await expect(page.locator('html')).toHaveAttribute('data-theme',theme);expect(await page.locator('html').evaluate(node=>getComputedStyle(node).colorScheme)).toBe(theme);}
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:17:349
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:17:67
+
+    Error: Owned fixture cleanup failed
+
+      15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real API/PG/Redis fixture startup timed out')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){identity=message.identity as typeof identity;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Real fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Real fixture exited during startup'));});});
+      16 | });
+    > 17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema/Redis cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+         |                                                                                                                                                                                                                                                                                                       ^
+      18 | async function select(page:Page,label:string){const theme=label==='Sáng'?'light':'dark';if(await page.locator('html').getAttribute('data-theme')!==theme)await page.getByRole('button',{name:/Chuyển sang/}).click();await assertTheme(page,theme);}
+      19 | async function sockets(){const id=randomUUID();return await new Promise<string[]>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real socket inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message.socketIds as string[]);});fixture.send({id,kind:'sockets'});});}
+      20 | async function assertTheme(page:Page,theme:string){await expect(page.locator('html')).toHaveAttribute('data-theme',theme);expect(await page.locator('html').evaluate(node=>getComputedStyle(node).colorScheme)).toBe(theme);}
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\theme.spec.ts:17:295)
+
+    Error Context: .cache\theme\results\theme-Classic-direct-toggl-74d6b-d-and-honors-reduced-motion\error-context.md
+
+    Error Context: .cache\theme\results\theme-Classic-direct-toggl-74d6b-d-and-honors-reduced-motion\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:23:1 › Classic direct toggle is icon-only, stays mounted and honors reduced motion 

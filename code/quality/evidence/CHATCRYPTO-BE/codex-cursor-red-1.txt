@@ -1,0 +1,25 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22184) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (36.717 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › paginates verification metadata without duplicates at sub-millisecond database timestamps
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "848b30e3-80dc-4a72-a2b9-3052ca2732db"
+
+      115 |   const first=await request(base).get('/api/v1/crypto/sync?deviceId=B&limit=1').set('Cookie',otherCookie);expect(first.status).toBe(200);expect(first.body.verification).toHaveLength(1);
+      116 |   const second=await request(base).get('/api/v1/crypto/sync').query({deviceId:'B',limit:1,verificationAfter:first.body.verificationCursor}).set('Cookie',otherCookie);expect(second.status).toBe(200);expect(second.body.verification).toHaveLength(1);
+    > 117 |   expect(second.body.verification[0].id).not.toBe(first.body.verification[0].id);
+          |                                              ^
+      118 |   expect((await request(base).get('/api/v1/crypto/sync').query({deviceId:'A',limit:1,verificationAfter:first.body.verificationCursor}).set('Cookie',cookie)).status).toBe(422);
+      119 |   expect((await post('sync/ack',{deviceId:'B',eventIds:[first.body.verification[0].id,second.body.verification[0].id]},otherCookie)).status).toBe(201);
+      120 |  });
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:117:46)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        37.249 s, estimated 39 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

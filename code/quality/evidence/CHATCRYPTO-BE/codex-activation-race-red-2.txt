@@ -1,0 +1,24 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:23500) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (46.778 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › serializes a new admission against first crypto activation without losing its history interval
+
+    Activation race boundary was not reached
+
+      397 |   const seed=await pool.connect();try{await seed.query('BEGIN');await seed.query(`INSERT INTO play_sessions(id,room_id,host_user_id,timing_type,scheduled_at) VALUES('activation-play',$1,'bob','scheduledAt',now()+interval '1 day')`,[roomId]);await seed.query(`INSERT INTO team_members(id,play_session_id,user_id,slot_index,is_host) VALUES('activation-host','activation-play','bob',1,true)`);await seed.query('COMMIT');}catch(error){await seed.query('ROLLBACK');throw error;}finally{seed.release();}
+      398 |   const blocker=await pool.connect();let activation:Promise<request.Response>|undefined,admission:Promise<void>|undefined,settled=false;
+    > 399 |   const until=async(condition:()=>Promise<boolean>)=>{const deadline=Date.now()+5000;while(!await condition()){if(Date.now()>deadline)throw new Error('Activation race boundary was not reached');await new Promise(resolve=>setTimeout(resolve,20));}};
+          |                                                                                                                                             ^
+      400 |   try{
+      401 |    await blocker.query('BEGIN');const pid=Number((await blocker.query('SELECT pg_backend_pid() AS pid')).rows[0].pid);
+      402 |    // Pause after activation snapshots members but before it commits intervals.
+
+      at until (test/chat-crypto-devices.integration.spec.ts:399:141)
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:407:4)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 25 passed, 26 total
+Snapshots:   0 total
+Time:        47.181 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

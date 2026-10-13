@@ -1,0 +1,73 @@
+{
+  "planId": "antigravity-native61-lifecycle-red-probe-correction-1",
+  "targetTask": "T30",
+  "phase": "TEST_AND_DESIGN_PROPOSAL_ONLY",
+  "status": "PROPOSAL_AWAITING_ROOT_EXECUTION",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:07:30.000Z",
+  "tddStage": "FAILING_TEST_BEFORE_PRODUCT_CODE",
+  "productCodeChangesProposedNow": false,
+  "reviewCorrectionsApplied": {
+    "ownedPrivateGatewayStartup": "Harness starts the owned private gateway and LiveKit SFU via startGatewayFixture with real credentials from .env.local; zero localhost/devkey fallback.",
+    "realSdkDelayedWrapper": "native adapter calls real client exact original methods with controlled 40ms delay, returns/rethrows original results/errors unchanged; zero invented fallback.",
+    "nativeReadCountAssertion": "Intended RED asserts actual per-group listRooms read counts <= 2 (not caller promise resolution count); records 4 requested / 4 completed separately.",
+    "durationAndLockDistinction": "Reports request duration separately; samples real pg_stat_activity and pg_blocking_pids from retained inspector without unsupported hold claims.",
+    "realDbBlockingSampling": "Samples pg_stat_activity and pg_blocking_pids during delayed concurrent work; verifies call_groups OPEN and room/member rows intact; sanitizes credentials and raw SQL.",
+    "cleanupOverrideIntegrity": "Cleanup failures override expected RED with exit code 2; writes report safely with flag wx; sanitizes errors without stack traces.",
+    "sourcePinsAndDesignScope": "Includes exact source pins; design scopes guarantee to a fixed concurrent burst while initial pass is active, preserves distinct ended events under individual runs, notes future retry/error/shutdown test needs."
+  },
+  "sourcePins": {
+    "canonicalFixtureServer": {
+      "path": "quality/evidence/T30/fixture-server-canonical-direct-reviewed1.mjs",
+      "sha256": "f7fce3e694a15d1fc2852e50490c884922070d501ca5636f2bd7f4a075fd58ac"
+    },
+    "canonicalGatewayHelper": {
+      "path": "quality/evidence/T30/private-gateway-canonical-direct-reviewed1.mjs",
+      "sha256": "a3439cc574a01d800c5a5a1b36d78b7357bc29c7962765d43f99239b07808a39"
+    },
+    "compiledLifecycleService": {
+      "path": "apps/api/dist/modules/calls/call-lifecycle.service.js"
+    }
+  },
+  "candidateInternalDesign": {
+    "concept": "Per-group coalescing of ordinary reconcile triggers only",
+    "burstGuarantee": "For a fixed concurrent burst of triggers arriving while an initial reconciliation pass is active for group G, work is bounded to at most 1 in-flight pass + 1 fresh trailing pass (<= 2 listRooms reads).",
+    "freshReadGuarantee": "Trailing pass executes after all burst triggers arrive, performing a fresh read of native SFU and database state.",
+    "endedEventHandling": "Distinct screen-ended {identity, at} events are preserved under their own canonical runs (not batched into existing single-ended API).",
+    "invariants": {
+      "roomLockMode": "SELECT id FROM rooms WHERE id=$1 FOR UPDATE (strictly unchanged)",
+      "groupLockMode": "SELECT id,room_id,state FROM call_groups WHERE id=$1 FOR UPDATE (strictly unchanged)",
+      "transactionBoundaries": "Preserved strictly as designed",
+      "actorValidation": "actor() and liveLease() checks fully preserved",
+      "deadlines": "45000ms deadline and 5s region visibility assertions immutable",
+      "sweepInterval": "1000ms periodic sweep unchanged",
+      "noSkipping": "No event processing skipped"
+    }
+  },
+  "deliveredArtifacts": [
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/prepare-lifecycle-probe.mjs",
+      "description": "Source preparation script defining 2 counted anchors, verifying reverse byte equality, and deploying adapted fixture."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/fixture-server-lifecycle-probe-reviewed1.mjs",
+      "description": "Adapted fixture server incorporating Anchor A (timer isolation) and Anchor B (lifecycle probe IPC handler)."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/run-lifecycle-red-probe.mjs",
+      "description": "Parent probe harness executing actual HTTP calls, sending probe IPC, sampling PG blocking, asserting intended RED, and enforcing cleanup settlement."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/plan.json",
+      "description": "Structured proposal plan."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/shortplan.md",
+      "description": "Comprehensive design analysis, review correction review, and root execution instructions."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-correction-1/controls-plan.json",
+      "description": "Controls plan defining validation assertions for the corrected probe."
+    }
+  ]
+}

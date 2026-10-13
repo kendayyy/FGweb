@@ -1,0 +1,81 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22956) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/room-play-sessions.integration.spec.ts (54.282 s)
+  ● T24-FIX1 real member-only room session discovery › returns empty history without recreating a session or altering slots, requests or outbox
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      88 |  it('returns empty history without recreating a session or altering slots, requests or outbox',async()=>{
+      89 |   const t=await room();await pool.query('DELETE FROM recruitments WHERE room_id=$1',[t.roomId]);await pool.query('DELETE FROM team_members WHERE play_session_id=$1',[t.play]);await pool.query('DELETE FROM play_sessions WHERE room_id=$1',[t.roomId]);
+    > 90 |   const result=await list(t.roomId);expect(result.status).toBe(200);expect(pageSchema.parse(result.body)).toEqual({items:[],hasMore:false});
+         |                                                           ^
+      91 |   for(const table of ['play_sessions','active_play_slots','join_requests','notifications','notification_outbox'])expect((await pool.query(`SELECT count(*)::integer AS count FROM ${table}`)).rows[0].count).toBe(0);
+      92 |  });
+      93 |  it.each(['session','membership','ban'])('rechecks %s after waiting on room mutation instead of trusting the HTTP guard',async change=>{
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:90:59)
+
+  ● T24-FIX1 real member-only room session discovery › rechecks session after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+  ● T24-FIX1 real member-only room session discovery › rechecks membership after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+  ● T24-FIX1 real member-only room session discovery › rechecks ban after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       4 failed, 22 passed, 26 total
+Snapshots:   0 total
+Time:        75.567 s, estimated 85 s
+Ran all test suites matching apps/api/test/room-play-sessions.integration.spec.ts|apps/api/test/play-sessions.integration.spec.ts.

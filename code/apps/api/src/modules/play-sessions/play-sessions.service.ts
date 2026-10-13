@@ -1,20 +1,23 @@
 import {Injectable} from '@nestjs/common';
 import type {PoolClient} from 'pg';
 import {randomUUID} from 'node:crypto';
-import {ErrorCode,JoinRequestSchema,PlaySessionSchema,JoinRequestNotificationDataSchema,JoinRequestResultNotificationDataSchema,type JoinRequestDTO,type PlaySessionDTO} from '@fg/contracts';
+import {z} from 'zod';
+import {ErrorCode,IdSchema,IsoDateTimeSchema,JoinRequestSchema,PlaySessionSchema,JoinRequestNotificationDataSchema,JoinRequestResultNotificationDataSchema,type JoinRequestDTO,type PlaySessionDTO,type Page,type ListRoomPlaySessionsQuery} from '@fg/contracts';
 import {TeamsService} from '../teams/teams.service.js';
 import {roomError} from '../rooms/rooms.service.js';
 
 type Room={id:string;owner_id:string;visibility:string;conversation_id:string};
 type Play={id:string;room_id:string;host_user_id:string;state:string;timing_type:string;player_capacity:number;scheduled_at:Date|null;created_iso:string;updated_iso:string};
 type Join={id:string;recruitment_id:string;applicant_id:string;status:string;created_iso:string};
+type LockMode='FOR UPDATE'|'FOR SHARE';
 const playSelect=`SELECT p.*,to_char(p.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso,to_char(p.updated_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS updated_iso FROM play_sessions p`;
 const joinSelect=`SELECT j.*,to_char(j.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso FROM join_requests j`;
+const roomCursor=z.object({roomId:IdSchema,id:IdSchema,createdAt:IsoDateTimeSchema}).strict();
 
 @Injectable()
 export class PlaySessionsService {
  constructor(private readonly teams:TeamsService){}
- private dto(p:Play):PlaySessionDTO{return PlaySessionSchema.parse({id:p.id,roomId:p.room_id,hostUserId:p.host_user_id,timingType:p.timing_type,scheduledAt:p.scheduled_at?.toISOString(),state:p.state,createdAt:p.created_iso,updatedAt:p.updated_iso});}
+ private dto(p:Play):PlaySessionDTO{return PlaySessionSchema.parse({id:p.id,roomId:p.room_id,hostUserId:p.host_user_id,playerCapacity:p.player_capacity,timingType:p.timing_type,scheduledAt:p.scheduled_at?.toISOString(),state:p.state,createdAt:p.created_iso,updatedAt:p.updated_iso});}
  private joinDto(j:Join):JoinRequestDTO{return JoinRequestSchema.parse({id:j.id,recruitmentId:j.recruitment_id,applicantId:j.applicant_id,status:j.status,createdAt:j.created_iso});}
  private async eligible(db:PoolClient,id:string){
   const ban=(await db.query("SELECT action FROM admin_actions WHERE target_user_id=$1 AND action IN('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1",[id])).rows[0];
@@ -33,17 +36,18 @@ export class PlaySessionsService {
    if(m.role!=='HELPER'||!grant.rowCount)roomError(ErrorCode.FORBIDDEN,'Recruitment management permission required');
   }
  }
- private async play(db:PoolClient,id:string):Promise<Play>{const p=(await db.query<Play>(playSelect+' WHERE p.id=$1 FOR UPDATE',[id])).rows[0];if(!p)roomError(ErrorCode.NOT_FOUND,'Play session not found');return p;}
+ private async play(db:PoolClient,id:string,mode:LockMode='FOR UPDATE'):Promise<Play>{const lockClause=mode==='FOR SHARE'?'FOR SHARE':'FOR UPDATE';const p=(await db.query<Play>(`${playSelect} WHERE p.id=$1 ${lockClause}`,[id])).rows[0];if(!p)roomError(ErrorCode.NOT_FOUND,'Play session not found');return p;}
  /** Admission/start/end serialize on the room, then sorted user locks, then play/request rows.
   * The roster is stable while the room is locked, including T22/T23 shared admissions.
   */
- private async context(db:PoolClient,id:string,user:string,session:string,manage=false,requireMember=true,extra:string[]=[]){
+ private async context(db:PoolClient,id:string,user:string,session:string,manage=false,requireMember=true,extra:string[]=[],mode:LockMode='FOR UPDATE'){
+  const lockClause=mode==='FOR SHARE'?'FOR SHARE':'FOR UPDATE';
   const located=(await db.query('SELECT room_id FROM play_sessions WHERE id=$1',[id])).rows[0];if(!located)roomError(ErrorCode.NOT_FOUND,'Play session not found');
-  const room=(await db.query<Room>('SELECT id,owner_id,visibility,conversation_id FROM rooms WHERE id=$1 FOR UPDATE',[located.room_id])).rows[0];if(!room)roomError(ErrorCode.NOT_FOUND,'Room not found');
+  const room=(await db.query<Room>(`SELECT id,owner_id,visibility,conversation_id FROM rooms WHERE id=$1 ${lockClause}`,[located.room_id])).rows[0];if(!room)roomError(ErrorCode.NOT_FOUND,'Room not found');
   const roster=(await db.query<{user_id:string;slot_index:number}>('SELECT user_id,slot_index FROM team_members WHERE play_session_id=$1 ORDER BY slot_index',[id])).rows;
-  await db.query('SELECT id FROM "user" WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE',[[...new Set([user,...extra,...roster.map(r=>r.user_id)])].sort()]);
+  await db.query(`SELECT id FROM "user" WHERE id=ANY($1::text[]) ORDER BY id ${lockClause}`,[[...new Set([user,...extra,...roster.map(r=>r.user_id)])].sort()]);
   await this.actor(db,user,session);if(requireMember)await this.member(db,room,user,manage);
-  const play=await this.play(db,id);await this.actor(db,user,session);
+  const play=await this.play(db,id,mode);await this.actor(db,user,session);
   return {room,play,roster};
  }
  private async card(db:PoolClient,id:string){
@@ -56,6 +60,31 @@ export class PlaySessionsService {
   const dedup=`join:${j.id}:${result??'pending'}`,id=randomUUID();
   const row=await db.query('INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id',[id,user,type,result?'Kết quả xin vào đội':'Có người xin vào đội',result?'Yêu cầu vào đội đã được xét duyệt.':'Có yêu cầu mới cần xét duyệt.',JSON.stringify(data),dedup]);
   if(row.rowCount)await db.query("INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key) VALUES($1,$2,$3,'IN_APP',$4)",[randomUUID(),id,user,dedup]);
+ }
+ async listRoom(user:string,session:string,id:string,query:ListRoomPlaySessionsQuery):Promise<Page<PlaySessionDTO>>{
+  return this.teams.transaction(async db=>{
+   // Room writers serialize membership/policy changes on this same row.
+   // Authorize after waiting; an earlier HTTP guard is not a live ACL proof.
+   const room=(await db.query<Room>('SELECT id,owner_id,visibility,conversation_id FROM rooms WHERE id=$1 FOR SHARE',[id])).rows[0];
+   if(!room)roomError(ErrorCode.NOT_FOUND,'Room not found');
+   await this.actor(db,user,session);await this.member(db,room,user);
+   const parameters:unknown[]=[id];let clause='';
+   if(query.cursor){
+    let cursor:z.infer<typeof roomCursor>;
+    try{
+     const decoded=Buffer.from(query.cursor,'base64url');
+     if(!/^[A-Za-z0-9_-]+$/.test(query.cursor)||decoded.toString('base64url')!==query.cursor)throw Error('Invalid cursor encoding');
+     cursor=roomCursor.parse(JSON.parse(decoded.toString('utf8')));
+    }catch{roomError(ErrorCode.INVALID_INPUT,'Invalid pagination cursor');}
+    if(cursor.roomId!==id)roomError(ErrorCode.INVALID_INPUT,'Cursor belongs to another room');
+    parameters.push(cursor.createdAt,cursor.id);clause=' AND (p.created_at,p.id)<($2::timestamp,$3)';
+   }
+   parameters.push(query.limit+1);
+   const rows=(await db.query<Play>(playSelect+` WHERE p.room_id=$1${clause} ORDER BY p.created_at DESC,p.id DESC LIMIT $${parameters.length}`,parameters)).rows;
+   const items=rows.slice(0,query.limit),hasMore=rows.length>query.limit,last=items.at(-1);
+   await this.actor(db,user,session);await this.member(db,room,user);
+   return {items:items.map(p=>this.dto(p)),hasMore,...(hasMore&&last?{nextCursor:Buffer.from(JSON.stringify({roomId:id,id:last.id,createdAt:last.created_iso})).toString('base64url')}:{})};
+  });
  }
  async join(user:string,session:string,id:string){return this.teams.transaction(async db=>{
   const {room,play,roster}=await this.context(db,id,user,session);if(play.state==='ENDED')roomError(ErrorCode.ACTIVE_PLAY_CONFLICT,'Play session ended');
@@ -70,7 +99,7 @@ export class PlaySessionsService {
   const j=(await db.query<Join>(joinSelect+' WHERE j.id=$1',[requestId])).rows[0];await this.notification(db,room.owner_id,j);await this.actor(db,user,session);return this.joinDto(j);
  });}
  async requests(user:string,session:string,id:string){return this.teams.transaction(async db=>{
-  await this.context(db,id,user,session,true);
+  await this.context(db,id,user,session,true,true,[],'FOR SHARE');
   const rows=(await db.query<Join>(joinSelect+' JOIN recruitments c ON c.id=j.recruitment_id WHERE c.play_session_id=$1 ORDER BY j.created_at,j.id',[id])).rows;
   await this.actor(db,user,session);return rows.map(j=>this.joinDto(j));
  });}

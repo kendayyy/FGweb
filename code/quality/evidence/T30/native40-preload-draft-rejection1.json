@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-10-11T09:39:48.016Z",
+  "completion": {
+    "completedAt": "2026-10-11T08:40:09.461Z",
+    "exitCode": 0,
+    "signal": null,
+    "implementationAcceptance": false
+  },
+  "artifacts": [
+    {
+      "path": "quality/evidence/T30/antigravity-native39-gateway-preload-1/gateway-observer-preload.cjs",
+      "sha256": "b840fcc140a51770e2c08f0d30e98450840dc4fa4923fc78349976e1186444a0"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native39-gateway-preload-1/private-gateway-shaped-fixture.mjs",
+      "sha256": "8f66fd0f38d4c34c20dd38ab4e5abc56a3488bb69694d58254ed9b2024120e52"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native39-gateway-preload-1/fixture-server-shaped.mjs",
+      "sha256": "6b35b3ced729ab3dd69dd36a3e0d513acad03c6e709ce6aeb36cf1224ff5c655"
+    }
+  ],
+  "adopted": false,
+  "findings": [
+    "PatchedPool forwards only options, lacks original constructor args/static/prototype behavior; must use class extends OriginalPool and super(...args)",
+    "Client query callback identity altered; initial diagnostic skip callback spans and invoke original exact args unchanged. Promise wrapper returns replacement promise rather than original; observe side promise handlers that never throw, return original result and preserve error identity/synchronous throw",
+    "Query/RPC spans lack absolute timestamps, pool/PID correlation insufficient for phase timeline. Add startedAt/completedAt and safe poolIndex (client map from own pool connect event only, no connect override)",
+    "RPC code accepts arbitrary1..32 uppercase text, potential private error code; use fixed Twirp enum/status100..599 or other only. Silent missing required methods must mark failure",
+    "Histogram not reset per sample, CPU double-snapshot delta skips CPU; use single absolute snapshot delta and reset histogram each once/sec sample, finite-null unavailable fields",
+    "WS role uses ws.url for server-peer; installed ws _url can exist in server socket too. Use actual ws._isServer boolean; explicit protocol enum whitelist; add guard decode bytes/size and no raw retention",
+    "fs.writeSync may short-write; detect short count as failure. Global duplicate preload currently silently returns; reject duplicate without orphan observer",
+    "stopGatewayObservation uses500ms one-shot sleep, unchecked docker logs status and no maxBuffer/truncation failure. Use bounded polling actual log status checks/maxBuffer cap/one exact final health record with strict schema/finite counters/bools. Existing missing marker/failure must incomplete; never serialize untrusted health/raw logs. Current gateway Docker cleanup rm-f cannot prove graceful close and SIGUSR2 only stops observer",
+    "Need exact original privatefixture/fixture-server byte preservation outside reviewed hooks and actual real PG/WS/RPC/IO/failure controls before adoption"
+  ],
+  "currentPinsUnchanged": true,
+  "noTestsRunOnRejectedDraft": true,
+  "nativeAcceptance": false
+}

@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {audit} from './audit.mjs';
+const dir='quality/evidence/T01-FIX3',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const report=audit(),ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.followups.find(t=>t.id==='T01-FIX3');
+const labels=['setup-green-1','image-pull-1','prepare-probes-1','sdk-compatibility-1','compose-config-1','audit-1','lint-2','diff-1'];
+task.commands=labels.map(label=>{const r=JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`));assert.equal(r.exitCode,0,label);assert.equal(hash(r.evidencePath),r.evidenceSha256,label);return r;});
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(`${p}/${e.name}`):[`${p}/${e.name}`]);
+const outputs=['infra/compose.local.yml',...walk('infra/media'),...walk(dir).filter(p=>!p.endsWith('/closure.json')&&!p.includes('/codex-close-'))];
+task.outputsHash={algorithm:'sha256',files:Object.fromEntries(outputs.map(p=>[p,hash(p)]))};
+task.evidencePaths=[...new Set([...task.evidencePaths,...outputs.filter(p=>p.startsWith(dir)),...labels.map(label=>`${dir}/codex-${label}.json`)])];
+task.status='PASS';task.completedAt=new Date().toISOString();task.review='Locked version setup and native microphone transport/replay/cleanup verified; parent source frozen and original checker unchanged. Audible quality/production TURN/load not claimed.';ledger.activeCheckpoint=null;
+const closure={...report,status:'PASS',completedAt:task.completedAt,parentStillBlocked:true,commands:labels,outputFiles:outputs.length};
+fs.writeFileSync(`${dir}/closure.json`,JSON.stringify(closure,null,2)+'\n');task.evidencePaths.push(`${dir}/closure.json`);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n- T01-FIX3 kết thúc ${new Date(task.completedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00: setup RED2→GREEN2/2, image1.9.12 exact digest đã tải; headed native SDK2.22.3 mic/RTP1301 bytes, revoke/replay/new admission và cleanup schema/container đạt. Compose config/lint/diff/audit exit0. Audit giữ parent WIP, prior PASS records, env và8 baseline. Manual setup closure PASS; T26 vẫn BLOCKED để resume riêng, chưa mở T27. Không chứng minh audible quality/production TURN TLS/tải1000; không restart/migrate main app. Evidence code/quality/evidence/T01-FIX3/closure.json.\n`);
+console.log(JSON.stringify(closure));

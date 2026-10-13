@@ -1,0 +1,156 @@
+{
+  "exitCode": 0,
+  "health": {
+    "sampleCount": 2,
+    "failureCount": 0,
+    "droppedCount": 0,
+    "timerStopped": true,
+    "histogramDisabled": true,
+    "observationComplete": true
+  },
+  "control": {
+    "mode": "healthy",
+    "checks": [
+      "real PG exact original promise/config/this/value",
+      "real PG error and original rejected promise identity",
+      "real callback exact args/return",
+      "real SDK HTTP outcomes original promise/args/this/error for three RPC methods",
+      "real WS unchanged binary send/receive payload and roles",
+      "actual stopped observer remains without timer writes"
+    ],
+    "poolEnded": true,
+    "writeFaultInjected": false,
+    "ok": true
+  },
+  "records": [
+    {
+      "type": "query",
+      "kind": "other",
+      "startedAt": "2026-10-11T12:49:53.213Z",
+      "completedAt": "2026-10-11T12:49:53.387Z",
+      "durationMs": 171.93,
+      "poolIndex": 0,
+      "backendPid": 8473,
+      "ok": true,
+      "sqlState": null
+    },
+    {
+      "type": "query",
+      "kind": "other",
+      "startedAt": "2026-10-11T12:49:53.387Z",
+      "completedAt": "2026-10-11T12:49:53.391Z",
+      "durationMs": 3.68,
+      "poolIndex": 0,
+      "backendPid": 8473,
+      "ok": false,
+      "sqlState": "22012"
+    },
+    {
+      "type": "rpc",
+      "method": "updateParticipant",
+      "startedAt": "2026-10-11T12:49:53.402Z",
+      "completedAt": "2026-10-11T12:49:53.472Z",
+      "durationMs": 69.99,
+      "ok": true,
+      "code": null
+    },
+    {
+      "type": "rpc",
+      "method": "getParticipant",
+      "startedAt": "2026-10-11T12:49:53.472Z",
+      "completedAt": "2026-10-11T12:49:53.481Z",
+      "durationMs": 8.69,
+      "ok": false,
+      "code": "not_found"
+    },
+    {
+      "type": "rpc",
+      "method": "removeParticipant",
+      "startedAt": "2026-10-11T12:49:53.481Z",
+      "completedAt": "2026-10-11T12:49:53.488Z",
+      "durationMs": 7.33,
+      "ok": true,
+      "code": null
+    },
+    {
+      "type": "ws",
+      "socketIndex": 0,
+      "role": "native-upstream",
+      "direction": "send",
+      "case": "subscription",
+      "byteCount": 16,
+      "timestamp": 1791722993511,
+      "seq": 0
+    },
+    {
+      "type": "ws",
+      "socketIndex": 1,
+      "role": "server-peer",
+      "direction": "receive",
+      "case": "subscription",
+      "byteCount": 16,
+      "timestamp": 1791722993514,
+      "seq": 0
+    },
+    {
+      "type": "ws",
+      "socketIndex": 1,
+      "role": "server-peer",
+      "direction": "send",
+      "case": "trackPublished",
+      "byteCount": 16,
+      "timestamp": 1791722993515,
+      "seq": 1
+    },
+    {
+      "type": "ws",
+      "socketIndex": 0,
+      "role": "native-upstream",
+      "direction": "receive",
+      "case": "trackPublished",
+      "byteCount": 16,
+      "timestamp": 1791722993516,
+      "seq": 1
+    },
+    {
+      "type": "metric",
+      "recordedAt": "2026-10-11T12:49:54.099Z",
+      "elapsedMs": 1013.36,
+      "cpuUserMs": 265,
+      "cpuSystemMs": 0,
+      "eventLoopMeanMs": 32.29,
+      "eventLoopMaxMs": 68.29,
+      "eventLoopP99Ms": 68.29,
+      "pools": [
+        {
+          "poolIndex": 0,
+          "totalCount": 1,
+          "idleCount": 0,
+          "waitingCount": 1,
+          "max": 1,
+          "ended": false
+        }
+      ]
+    },
+    {
+      "type": "metric",
+      "recordedAt": "2026-10-11T12:49:55.101Z",
+      "elapsedMs": 1003.94,
+      "cpuUserMs": 0,
+      "cpuSystemMs": 0,
+      "eventLoopMeanMs": 31.4,
+      "eventLoopMaxMs": 33.98,
+      "eventLoopP99Ms": 33.98,
+      "pools": [
+        {
+          "poolIndex": 0,
+          "totalCount": 0,
+          "idleCount": 0,
+          "waitingCount": 0,
+          "max": 1,
+          "ended": true
+        }
+      ]
+    }
+  ]
+}

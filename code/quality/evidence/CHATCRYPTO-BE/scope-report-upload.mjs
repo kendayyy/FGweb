@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/CHATCRYPTO-BE',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),before=JSON.parse(fs.readFileSync(`${dir}/before.json`)),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);
+checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json'))});
+for(const old of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===old.id),old);
+const paths=['packages/database/src/index.ts','packages/database/src/schema/chat-crypto-report-uploads.ts','packages/database/test/chat-crypto-report-uploads.test.ts','packages/database/migrations/0014_chat_crypto_report_uploads.sql','packages/database/migrations/meta/0014_snapshot.json','packages/database/migrations/meta/_journal.json','packages/database/dist/index.js','packages/database/dist/index.d.ts','packages/database/dist/schema/chat-crypto-report-uploads.js','packages/database/dist/schema/chat-crypto-report-uploads.d.ts'];
+const hashes=Object.fromEntries(paths.filter(p=>fs.existsSync(p)).map(p=>{const h=createHash('sha256').update(fs.readFileSync(p)).digest('hex');assert.equal(h,before.readonly[p],p);assert(!task.writeAllowlist.includes(p));return[p,h];}));
+const amendment={adoptedAt:new Date().toISOString(),source:'Persisted human Permission to broaden Write Scope or touch locked files',paths,beforeSha256:hashes,evidence:`${dir}/scope-report-upload.json`,reason:'Current BE owner additive schema prerequisite for report-image source binding/retry identity. No parallel DATA task, historic PASS/snapshot/checker modification or main migration; BE closure owns new output compatibility and stock gate.'};
+fs.writeFileSync(amendment.evidence,JSON.stringify(amendment,null,2)+'\n',{flag:'wx'});task.writeAllowlist.push(...paths);task.approvedScopeAmendments.push(amendment);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify({task:task.id,status:task.status,pinned:paths.length,historicalPASS:before.historical.length}));

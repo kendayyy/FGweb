@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-BE',hash=b=>createHash('sha256').update(b).digest('hex'),baselineBytes=fs.readFileSync('quality/spec-baseline.json'),baseline=JSON.parse(baselineBytes),before=JSON.parse(fs.readFileSync(`${dir}/before.json`)),ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);for(const old of before.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===old.id),old);
+assert.equal(hash(baselineBytes),before.readonly['quality/spec-baseline.json']);
+const current=fs.readFileSync('../.doc/task.md'),text=current.toString('utf8'),lines=text.split(/(?<=\n)/),added=lines.filter(line=>line.includes('HISTORY-CODING2-01')||line.startsWith('- Chỉ bổ sung muộn phiên cũ'));
+assert.equal(added.length,2);assert(added[0].includes('Coding and build 2'));assert(added[1].includes('không tự suy diễn hoặc đổi PASS lịch sử'));
+let original=text;for(const line of added)original=original.replace(line,'');original=original.replace(/(### HISTORY-CHANGE-01[^\n]*\n)(?:\r?\n){2}/,'$1'+(text.includes('\r\n')?'\r\n':'\n'));
+assert.equal(hash(Buffer.from(original)),baseline.hashes.taskSha256,'Any non-authorized task change must stop adoption');
+const paths={specSha256:'../.doc/01-product-spec.md',designSha256:'../.doc/02-frontend-design.md',mockupLobbySha256:'../.doc/mockups/01-lobby-desktop-mobile.png',mockupCallSha256:'../.doc/mockups/02-group-call-live.png',mockupFeedSha256:'../.doc/mockups/03-community-feed-desktop-mobile.png',mockupAuthSha256:'../.doc/mockups/04-login-desktop-mobile.png',mockupAdminSha256:'../.doc/mockups/05-admin-support-desktop.png'};
+for(const [key,path]of Object.entries(paths))assert.equal(hash(fs.readFileSync(path)),baseline.hashes[key]);
+const review={recordedAt:new Date().toISOString(),task:task.id,requirement:'HISTORY-CODING2-01',authorization:'Current human replacement AGENTS instructions, 2026-10-09: each Coding and build 2 session includes chat name/task/time/rounds and evidence-matched history before handoff',baselineBeforeSha256:hash(baselineBytes),taskBeforeSha256:baseline.hashes.taskSha256,taskAfterSha256:hash(current),reconstructedPriorExact:true,authorizedLines:added.map(s=>s.trim()),otherSourcesUnchanged:7,historicalPASSUnchanged:before.historical.length,checkerBeforeSha256:before.readonly['scripts/verify-task.mjs'],checkerUnchanged:hash(fs.readFileSync('scripts/verify-task.mjs'))===before.readonly['scripts/verify-task.mjs'],applicationAcceptanceChanged:false,productionActivation:false};assert(review.checkerUnchanged);
+fs.writeFileSync(`${dir}/history-amendment-review.json`,JSON.stringify(review,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({...review,authorizedLines:undefined,authorization:undefined}));

@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30',put=(n,s)=>fs.writeFileSync(d+'/'+n,s,{flag:'wx'});
+let entry=fs.readFileSync(d+'/enter-native58-reviewed1.mjs','utf8');
+assert(entry.includes("h(d+'/fixture-server-api56-reviewed1.mjs')"));
+entry=entry.replaceAll('native58','native59').replaceAll('diagnostic58','diagnostic59').replaceAll("h(d+'/fixture-server-api56-reviewed1.mjs')","h(d+'/fixture-server-api56-db-bridge-reviewed1.mjs')").replaceAll("j('api56-fixture-smoke-review1-normal.json')","j('api56-bridge-fixture-smoke-review2-normal.json')");
+const additional=`assert.equal(j('codex-t30-api56-bridge-adoption-1.json').exitCode,0);const bridge=j('direct-gateway-full-smoke-review1.json');assert.equal(bridge.records.length,3);for(const r of bridge.records){assert.equal(r.exitCode,0);assert.equal(h(r.evidencePath),r.evidenceSha256);}for(const f of j('direct-gateway-source-review1.json')&&['helper','support','fixture'].map(k=>j('direct-gateway-source-review1.json')[k]))assert.equal(h(f.path),f.sha256);for(const f of j('pending-frames-source-review4.json').files)assert.equal(h(f.path),f.sha256);assert.equal(j('pending-frames-controls-review4.json').controls,15);assert.equal(j('codex-t30-pending-frames-controls-4.json').exitCode,0);assert.equal(h(d+'/rtp-window-reviewed4/screen-share-diagnostic.spec.ts'),h(d+'/rtp-window-reviewed3/screen-share-diagnostic.spec.ts'));`;
+assert(entry.includes('const recordedAt=new Date().toISOString();'));
+entry=entry.replace('const recordedAt=new Date().toISOString();',additional+'const recordedAt=new Date().toISOString();');
+entry=entry.replace('fresh full smoke GREEN/cleanup0.','fresh direct bridge full normal/phaseIO/healthIO smokes verified and own main/network cleanup unchanged.').replace('Exact five build pins','Exact five build pins');
+put('enter-native59-reviewed1.mjs',entry);
+put('supabase-test-resource16.mjs',fs.readFileSync(d+'/supabase-test-resource13.mjs','utf8').replaceAll('resource13','resource16'));
+put('run-native59-sequential1.mjs',fs.readFileSync(d+'/run-native58-sequential1.mjs','utf8').replaceAll('resource13','resource16').replaceAll('stop-13','stop-16').replaceAll('restore-13','restore-16').replaceAll('native58','native59').replaceAll('native-58','native-59').replaceAll('rtp-window-reviewed3','rtp-window-reviewed4'));
+console.log('Prepared native59 entry, no native run or adoption yet.');

@@ -1,0 +1,31 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:4584) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (39.122 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      117 |   const known=await alice.getDevice(bob.userId,bob.deviceId);expect(known!.ed25519Key!.toBase64()).toBe(bob.identityKeys.ed25519.toBase64());await known!.setLocalTrust(sdk.LocalTrust.Verified);const missing=await alice.getMissingSessions([bob.userId]);if(missing)await relay(alice,missing);
+      118 |   const room=new sdk.RoomId(matrixRoomId('legacy'));await alice.invalidateGroupSession(room);const settings=new sdk.EncryptionSettings();settings.historyVisibility=sdk.HistoryVisibility.Joined;settings.sharingStrategy=sdk.CollectStrategy.onlyTrustedDevices();for(const outgoing of await alice.shareRoomKey(room,[bob.userId],settings))await relay(alice,outgoing);
+    > 119 |   const synced=await request(base).get('/api/v1/crypto/sync').set('Cookie',cookies.get('bob')!).query({deviceId:'B'});expect(synced.status).toBe(200);expect(synced.body.encrypted.items.length).toBeGreaterThan(0);expect(synced.body.encrypted.items.every((item:{cohortId:string})=>item.cohortId==='available')).toBe(true);
+          |                                                                                                                                                                                                                                                                                                                      ^
+      120 |   await bob.receiveSyncChanges(JSON.stringify(synced.body.encrypted.items.map((item:{senderUserId:string;content:unknown})=>({sender:matrixUserId(item.senderUserId),type:'m.room.encrypted',content:item.content}))),new sdk.DeviceLists(),new Map());
+      121 |   const archive={msgtype:'org.fg.legacy_import.v1',fg:{version:1,candidateId:'native-original-roundtrip',cohortId:'available',conversationId:'legacy',membershipRevision:revision,originalSha256:digests.get('msg-a'),importerUserId:'alice',importerDeviceId:'A'},source:manifests.get('msg-a'),images:[]},event=JSON.parse(await alice.encryptRoomEvent(room,'m.room.message',JSON.stringify(archive))),prepared=await write('conversations/legacy/legacy/commit',{candidateId:archive.fg.candidateId,messageId:'msg-a',originalSha256:digests.get('msg-a'),deviceId:'A',membershipRevision:revision,cohortId:'available',envelope:{version:1,protocol:'MATRIX_MEGOLM',event}});expect(prepared.status).toBe(201);
+      122 |   for(const machine of [alice,bob]){const decrypted=await machine.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:alice.userId.toString(),event_id:'$'+prepared.body.candidateId,origin_server_ts:Date.now(),content:prepared.body.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));const actual=JSON.parse(decrypted.event);expect(actual.sender).toBe(alice.userId.toString());expect(actual.content).toEqual(archive);expect(sha(canonical(actual.content.source))).toBe(prepared.body.originalSha256);}
+
+      at test/chat-crypto-legacy.integration.spec.ts:119:310
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:102:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        39.623 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

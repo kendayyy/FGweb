@@ -1,0 +1,63 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:38744) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (62.082 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies native report text after committed reporter ban with caller default repeatable read
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      191 |   try{
+      192 |    options.transit=writer;const response=kind==='image'?await uploadImage(tag):await post({consent:true,conversationId:'dm',reason:tag,selectedMessages:[{messageId:ids[1],text:'selected writer boundary text',source:'USER_DISCLOSED'}]});if(response.status===201)createdId=response.body.id;
+    > 193 |    expect(inserted).toBe(true);expect(response.status).toBe(403);expect(buffers.length).toBeGreaterThan(0);expect(buffers.every(bytes=>bytes.every(byte=>byte===0))).toBe(true);
+          |                                                        ^
+      194 |    expect((await pool.query('SELECT (SELECT count(*) FROM reports) AS reports,(SELECT count(*) FROM chat_crypto_report_evidence) AS evidence,(SELECT count(*) FROM chat_crypto_upload_drafts) AS drafts')).rows).toEqual(counts.rows);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);
+      195 |   }finally{
+      196 |    options.transit=saved;encryptObserver.mockRestore();connectionObserver.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);
+
+      at test/chat-crypto-reports.integration.spec.ts:193:56
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies native report image after committed reporter ban with caller default repeatable read
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      191 |   try{
+      192 |    options.transit=writer;const response=kind==='image'?await uploadImage(tag):await post({consent:true,conversationId:'dm',reason:tag,selectedMessages:[{messageId:ids[1],text:'selected writer boundary text',source:'USER_DISCLOSED'}]});if(response.status===201)createdId=response.body.id;
+    > 193 |    expect(inserted).toBe(true);expect(response.status).toBe(403);expect(buffers.length).toBeGreaterThan(0);expect(buffers.every(bytes=>bytes.every(byte=>byte===0))).toBe(true);
+          |                                                        ^
+      194 |    expect((await pool.query('SELECT (SELECT count(*) FROM reports) AS reports,(SELECT count(*) FROM chat_crypto_report_evidence) AS evidence,(SELECT count(*) FROM chat_crypto_upload_drafts) AS drafts')).rows).toEqual(counts.rows);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);
+      195 |   }finally{
+      196 |    options.transit=saved;encryptObserver.mockRestore();connectionObserver.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);
+
+      at test/chat-crypto-reports.integration.spec.ts:193:56
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 46 passed, 48 total
+Snapshots:   0 total
+Time:        65.077 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"556ac7dfc912428e9f0818a6f4665a78","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:85:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

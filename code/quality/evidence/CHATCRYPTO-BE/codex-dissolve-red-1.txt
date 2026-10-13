@@ -1,0 +1,40 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6284) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (42.82 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › dissolves an encrypted group without erasing session tombstones or leaving old chat access
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      351 |  it('dissolves an encrypted group without erasing session tombstones or leaving old chat access',async()=>{
+      352 |   const before=(await pool.query(`SELECT id,crypto_envelope FROM messages WHERE conversation_id='membership-group' ORDER BY id`)).rows;expect(before.length).toBe(4);
+    > 353 |   expect((await request(base).delete('/api/v1/rooms/membership-room').set('Cookie',otherCookie).set('Origin',origin)).status).toBe(200);
+          |                                                                                                                               ^
+      354 |   expect((await pool.query(`SELECT id FROM rooms WHERE id='membership-room'`)).rowCount).toBe(0);
+      355 |   expect((await pool.query(`SELECT id FROM conversation_members WHERE conversation_id='membership-group'`)).rowCount).toBe(0);
+      356 |   expect((await pool.query(`SELECT id,crypto_envelope FROM messages WHERE conversation_id='membership-group' ORDER BY id`)).rows).toEqual(before);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:353:127)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › closes the last-owner leave route while retaining the crypto epoch tombstone
+
+    TypeError: Cannot read properties of undefined (reading 'membership_revision')
+
+      365 |   expect((await request(base).delete('/api/v1/rooms/sole-room/members/bob').set('Cookie',otherCookie).set('Origin',origin)).status).toBe(200);
+      366 |   expect((await pool.query(`SELECT id FROM rooms WHERE id='sole-room'`)).rowCount).toBe(0);expect((await pool.query(`SELECT id FROM conversation_members WHERE conversation_id='sole-group'`)).rowCount).toBe(0);
+    > 367 |   expect(Number((await pool.query(`SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='sole-group'`)).rows[0].membership_revision)).toBe(2);
+          |                                                                                                                                    ^
+      368 |   expect((await request(base).get('/api/v1/crypto/conversations/sole-group/state').set('Cookie',otherCookie)).status).toBe(403);
+      369 |  });
+      370 |  it('denies bans and does not resurrect a deleted session after unban',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:367:132)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 21 passed, 23 total
+Snapshots:   0 total
+Time:        43.35 s, estimated 44 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-10-11T02:46:25.775Z",
+  "reviewer": "Codex",
+  "gatewayAstSameAfterOnlyEightOperationWrappersRemoved": true,
+  "wrappers": 8,
+  "helpers": 1,
+  "labels": 2,
+  "gateway": {
+    "base": {
+      "path": "quality/evidence/T30/signaling-gateway-observation-reviewed.js",
+      "sha256": "ca37d0ee0b1f6b21f102ffa92acc752fa13723b7dcfa75666a7bd69a25d44f07"
+    },
+    "proposal": {
+      "path": "quality/evidence/T30/antigravity-gateway-sql-wait-observation-1/signaling-gateway-observed.js",
+      "sha256": "66dc198b945ae6a1dfa50b0dfb1d777ab517a012704f01f98edab00cda1bc3ae"
+    },
+    "reviewed": {
+      "path": "quality/evidence/T30/signaling-gateway-sql-observation-reviewed.js",
+      "sha256": "66dc198b945ae6a1dfa50b0dfb1d777ab517a012704f01f98edab00cda1bc3ae"
+    }
+  },
+  "fixture": {
+    "path": "quality/evidence/T30/private-gateway-sql-observation-reviewed.mjs",
+    "sha256": "d951f77313a793e83f3b51210a26bceabde5a97ea7b4ae9af58dc1563fd88676",
+    "onlyReadOnlyDiagnosticFileMountChanges": true
+  },
+  "rejectedComponents": [
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-sql-wait-observation-1/pg-wait-observation.mjs",
+      "sha256": "cd4305f9fffc2449d122a8ae8df70a0aa125f5a849308bb758fa050fc9a50790",
+      "findings": [
+        "stop silently swallows 2s timeout and can leave query in-flight before original schema/pool cleanup; timer is not cleared when race completes",
+        "file-write failure counter not reliably emitted; missing observations can be silently accepted",
+        "raw wait/lock enum strings and union blocker PIDs insufficiently restricted to owned scope; per-lock rows can unnecessarily overflow64"
+      ]
+    }
+  ],
+  "acceptedScope": "Gateway slow/error-only8operation wrappers, original operations once/order/results/errors unchanged. No PG sampler or APIfixture edit, no native acceptance; actual smoke and headed SQL diagnosis required.",
+  "nativeAcceptance": false
+}

@@ -1,0 +1,100 @@
+import {describe,it,expect} from 'vitest';
+import * as c from '../src/index.js';
+describe('crypto transport ownership and native SAS support',()=>{
+ it('historical contexts remain bounded public metadata and require known pending private history',()=>{
+  const cohort={cohortId:'verified',sourceCount:1,members:[{userId:'a',deviceIds:['A']},{userId:'b',deviceIds:[]}]};
+  const state={conversationId:'dm',matrixRoomId:'!room:fg.invalid',matrixUserId:'@a:fg.invalid',mode:'E2EE',membershipRevision:1,migrationState:'LEGACY_PENDING',historyStatus:'KNOWN',eligibleDeviceIds:['A'],legacyCohorts:[cohort]};
+  expect(c.CryptoConversationStateSchema.safeParse(state).success).toBe(true);
+  expect(c.CryptoConversationStateSchema.safeParse({...state,legacyCohorts:undefined}).success).toBe(true);
+  for(const changed of [{...state,historyStatus:'UNKNOWN'},{...state,migrationState:'RECONCILED'},{...state,mode:'LOBBY_AEAD'},{...state,legacyCohorts:[cohort,cohort]},
+   {...state,legacyCohorts:[{...cohort,members:[cohort.members[0],cohort.members[0]]}]},{...state,legacyCohorts:[{...cohort,members:[{userId:'a',deviceIds:['A','A']}]}]},
+   {...state,legacyCohorts:[{...cohort,members:[{userId:'a',deviceIds:['A'],verified:true}]}]}, {...state,legacyCohorts:[{...cohort,sourceCount:0}]}])expect(c.CryptoConversationStateSchema.safeParse(changed).success).toBe(false);
+ });
+ it('retains the existing 10000px/20MP image policy inside encrypted content',()=>{
+  const key=Buffer.alloc(32).toString('base64'),secret={v:'v2',key:{kty:'oct',key_ops:['encrypt','decrypt'],alg:'A256CTR',k:Buffer.alloc(32).toString('base64url'),ext:true},iv:Buffer.alloc(16).toString('base64'),hashes:{sha256:key}};
+  const image={attachmentId:'image',secret,fileName:'original.webp',mimeType:'image/webp',plaintextSize:256,width:10000,height:1800};
+  const event={msgtype:'m.image',body:'',fg:{version:1,conversationId:'room',clientMessageId:'msg',senderId:'a',senderDeviceId:'A',membershipRevision:1},images:[image]};
+  expect(c.CryptoDecryptedMessageSchema.safeParse(event).success).toBe(true);
+  expect(c.CryptoDecryptedMessageSchema.safeParse({...event,images:[{...image,width:5000,height:5000}]}).success).toBe(false);
+  expect(c.PrivateMessageEnvelopeSchema.safeParse({version:1,protocol:'MATRIX_MEGOLM',event:{algorithm:'m.megolm.v1.aes-sha2',session_id:key,ciphertext:'A'.repeat(50000)}}).success).toBe(true);
+ });
+ it('binds decrypted message metadata and keeps image keys/reply previews inside ciphertext',()=>{
+  const fg={version:1,conversationId:'room',clientMessageId:'msg',senderId:'a',senderDeviceId:'A',membershipRevision:1,mentionedUserIds:['b'],reply:{messageId:'original',previewText:'Encrypted reply'}};
+  expect(c.CryptoDecryptedMessageSchema.safeParse({msgtype:'m.text',body:'Hello',fg}).success).toBe(true);
+  expect(c.CryptoDecryptedMessageSchema.safeParse({msgtype:'m.text',body:'Hello',fg:{...fg,membershipRevision:0}}).success).toBe(false);
+  expect(c.CryptoDecryptedMessageSchema.safeParse({msgtype:'m.text',body:'Hello',formatted_body:'<script>',fg}).success).toBe(false);
+  expect(c.SendEncryptedMessageSchema.safeParse({clientMessageId:'msg',deviceId:'A',membershipRevision:1,replyPreview:'PRIVATE'}).success).toBe(false);
+ });
+ it('accepts cross-signing additions separately while registration still requires the device self-signature',()=>{
+  const key=Buffer.alloc(32).toString('base64').replace(/=+$/,''),sig=Buffer.alloc(64).toString('base64').replace(/=+$/,'');
+  const device={user_id:'@a:fg.invalid',device_id:'A',algorithms:['m.olm.v1.curve25519-aes-sha2','m.megolm.v1.aes-sha2'],keys:{'curve25519:A':key,'ed25519:A':key},signatures:{'@a:fg.invalid':{[`ed25519:${key}`]:sig}}};
+  expect(c.UploadCryptoSignaturesSchema.safeParse({signedKeys:{'@a:fg.invalid':{A:device}}}).success).toBe(true);
+  expect(c.RegisterCryptoDeviceSchema.safeParse({deviceId:'A',deviceKeys:device,oneTimeKeys:{}}).success).toBe(false);
+ });
+ it('accepts cross-signing signature IDs containing unpadded base64 key characters',()=>{
+  const key=Buffer.alloc(32,255).toString('base64').replace(/=+$/,''),sig=Buffer.alloc(64).toString('base64').replace(/=+$/,'');
+  const signed=(usage:string)=>({user_id:'@a:fg.invalid',usage:[usage],keys:{[`ed25519:${key}`]:key},signatures:{'@a:fg.invalid':{[`ed25519:${key}`]:sig}}});
+  expect(c.UploadCrossSigningKeysSchema.safeParse({masterKey:signed('master'),selfSigningKey:signed('self_signing'),userSigningKey:signed('user_signing')}).success).toBe(true);
+ });
+ it('covers prekey replenishment, private legacy images and explicit report-image disclosure',()=>{
+  for(const [method,path,auth] of [['POST','/api/v1/crypto/devices/:deviceId/one-time-keys','Authenticated'],['GET','/api/v1/crypto/conversations/:id/legacy/attachments/:attachmentId','ConversationMember'],['POST','/api/v1/crypto/reports/attachments','Authenticated']] as const){
+   expect(c.ApiEndpointRegistry.find(r=>r.method===method&&r.path===path)?.auth).toBe(auth);
+  }
+  expect(c.ReportImageDisclosureSchema.safeParse({consent:false,conversationId:'room',messageId:'msg',clientUploadId:'upload',plaintextSize:256}).success).toBe(false);
+  expect(c.ReportImageDisclosureSchema.safeParse({consent:true,conversationId:'room',messageId:'msg',clientUploadId:'upload',plaintextSize:256}).success).toBe(true);
+  expect(c.CryptoSyncQuerySchema.safeParse({deviceId:'A',verificationAfter:'cursor'}).success).toBe(true);
+ });
+ it('preserves bounded native Olm message IDs while rejecting plaintext extension fields',()=>{
+  const key=Buffer.alloc(32).toString('base64').replace(/=+$/,'');
+  const content={algorithm:'m.olm.v1.curve25519-aes-sha2',sender_key:key,'org.matrix.msgid':'native-msg-id',ciphertext:{[key]:{type:0,body:'AAAA'}}};
+  const v={conversationId:'room',membershipRevision:1,deviceId:'A',transactionId:'tx',eventType:'m.room.encrypted',recipients:[{userId:'b',deviceId:'B',content}]};
+  expect(c.SendCryptoToDeviceSchema.safeParse(v).success).toBe(true);
+  expect(c.SendCryptoToDeviceSchema.safeParse({...v,recipients:[{...v.recipients[0],content:{...content,body:'LEAK'}}]}).success).toBe(false);
+ });
+ it('accepts the native SDK SAS acceptance payload without a redundant method field',()=>{
+  const commitment=Buffer.alloc(32).toString('base64').replace(/=+$/,'');
+  expect(c.CryptoVerificationContentSchema.safeParse({eventType:'m.key.verification.accept',content:{transaction_id:'tx',commitment,hash:'sha256',key_agreement_protocol:'curve25519-hkdf-sha256',message_authentication_code:'hkdf-hmac-sha256.v2',short_authentication_string:['decimal','emoji']}}).success).toBe(true);
+ });
+ it('accepts SDK key-withheld metadata without inventing a SAS transaction in its content',()=>{
+  const key=Buffer.alloc(32).toString('base64').replace(/=+$/,'');
+  const content={algorithm:'m.megolm.v1.aes-sha2',code:'m.unverified',from_device:'A',reason:'Device is not verified',room_id:'!room:fg.invalid',sender_key:key,session_id:key};
+  const event={conversationId:'room',membershipRevision:1,deviceId:'A',transactionId:'transport-tx',recipientUserId:'b',recipientDeviceId:'B',eventType:'m.room_key.withheld',content};
+  expect(c.SendCryptoVerificationSchema.safeParse(event).success).toBe(true);
+  expect(c.SendCryptoVerificationSchema.safeParse({...event,content:{...content,private_key:key}}).success).toBe(false);
+  expect(c.SendCryptoVerificationSchema.safeParse({...event,content:{...content,from_device:'OTHER'}}).success).toBe(false);
+  const {room_id:room,session_id:session,...noRoom}=content;void room;void session;
+  expect(c.SendCryptoVerificationSchema.safeParse({...event,content:noRoom}).success).toBe(false);
+  expect(c.SendCryptoVerificationSchema.safeParse({...event,content:{...noRoom,code:'m.no_olm'}}).success).toBe(true);
+ });
+ it('registers ciphertext routes with current-member auth and shared schemas',()=>{
+  const send=c.ApiEndpointRegistry.find(e=>e.method==='POST'&&e.path==='/api/v1/crypto/conversations/:id/messages');
+  expect(send?.auth).toBe('ConversationMember');expect(send?.requestSchema).toBe(c.SendEncryptedMessageSchema);
+  const state=c.ApiEndpointRegistry.find(e=>e.path==='/api/v1/crypto/conversations/:id/state');expect(state?.auth).toBe('ConversationMember');
+ });
+ it('never makes recovery, legacy plaintext batches or key routes public/admin-readable',()=>{
+  for(const suffix of ['/recovery','/keys/query','/keys/claim','/to-device','/legacy/batch']){
+   const routes=c.ApiEndpointRegistry.filter(e=>e.path.startsWith('/api/v1/crypto/')&&e.path.endsWith(suffix));expect(routes.length).toBeGreaterThan(0);for(const e of routes)expect(['Authenticated','ConversationMember']).toContain(e.auth);
+  }
+ });
+ it('SAS handshake is public protocol metadata and cannot carry arbitrary chat/private key fields',()=>{
+  const v={conversationId:'room',membershipRevision:1,deviceId:'A',transactionId:'tx',recipientUserId:'b',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:'tx',from_device:'A',methods:['m.sas.v1'],timestamp:1791460000000}};
+  expect(c.SendCryptoVerificationSchema.safeParse(v).success).toBe(true);
+  expect(c.SendCryptoVerificationSchema.safeParse({...v,content:{...v.content,body:'PRIVATE CHAT'}}).success).toBe(false);
+  expect(c.SendCryptoVerificationSchema.safeParse({...v,content:{...v.content,transaction_id:'native-flow-distinct-from-http-txn'}}).success).toBe(true);
+  expect(c.SendCryptoVerificationSchema.safeParse({...v,content:{...v.content,transaction_id:''}}).success).toBe(false);
+  expect(c.SendCryptoVerificationSchema.safeParse({...v,content:{...v.content,transaction_id:3}}).success).toBe(false);
+  expect(c.SendCryptoVerificationSchema.safeParse({...v,content:{...v.content,from_device:'FOREIGN'}}).success).toBe(false);
+ });
+ it('encrypted to-device batches reject duplicates and excessive total bytes',()=>{
+  const key=Buffer.alloc(32).toString('base64').replace(/=+$/,''),content={algorithm:'m.olm.v1.curve25519-aes-sha2',sender_key:key,ciphertext:{[key]:{type:0,body:'A'.repeat(60000)}}};
+  const event={conversationId:'room',membershipRevision:1,deviceId:'A',transactionId:'tx',eventType:'m.room.encrypted',recipients:[{userId:'b',deviceId:'B',content}]};
+  expect(c.SendCryptoToDeviceSchema.safeParse(event).success).toBe(true);
+  expect(c.SendCryptoToDeviceSchema.safeParse({...event,recipients:[event.recipients[0],event.recipients[0]]}).success).toBe(false);
+  expect(c.SendCryptoToDeviceSchema.safeParse({...event,recipients:Array.from({length:6},(_,i)=>({userId:'b',deviceId:`B${i}`,content}))}).success).toBe(false);
+ });
+ it('native encrypted attachment secret material stays inside decrypted content, never upload DTO',()=>{
+  const descriptor={v:'v2',key:{kty:'oct',key_ops:['encrypt','decrypt'],alg:'A256CTR',k:Buffer.alloc(32).toString('base64url'),ext:true},iv:Buffer.alloc(16).toString('base64'),hashes:{sha256:Buffer.alloc(32).toString('base64')}};
+  expect(c.MatrixEncryptedAttachmentSecretSchema.safeParse(descriptor).success).toBe(true);
+  expect(c.EncryptedUploadRequestSchema.safeParse({...descriptor,ciphertextSize:1}).success).toBe(false);
+ });
+});

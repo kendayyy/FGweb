@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:33476) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (54.759 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › reclaims an owned opaque crash orphan that has no authoritative draft reference
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      626 |  it('reclaims an owned opaque crash orphan that has no authoritative draft reference',async()=>{
+      627 |   const key=randomUUID()+'.bin',target=path.join(objectRoot,key),bytes=randomBytes(32);fs.writeFileSync(target,bytes,{flag:'wx',mode:0o600});expect((await pool.query('SELECT 1 FROM chat_crypto_upload_drafts WHERE object_key=$1',[key])).rowCount).toBe(0);
+    > 628 |   try{await app.get(CryptoRelayService).cleanup();expect(fs.existsSync(target)).toBe(false);}finally{bytes.fill(0);if(fs.existsSync(target))fs.unlinkSync(target);}
+          |                                                                                 ^
+      629 |  });
+      630 |  it('rechecks durable session and ban state on every operation',async()=>{
+      631 |   await pool.query(`DELETE FROM "session" WHERE user_id='alice'`);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:628:81)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 39 passed, 40 total
+Snapshots:   0 total
+Time:        55.267 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

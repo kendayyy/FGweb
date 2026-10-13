@@ -1,0 +1,54 @@
+# FG T30 — Minimal Gateway Startup Boundary Diagnostic Proposal Delivery
+
+A minimal, isolated diagnostic proposal has been created exclusively under [`quality/evidence/T30/antigravity-api57-startup-boundary-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/) to diagnose the gateway execution boundary during live container startup, following root's [`loader-control-review1.json`](file:///E:/FGweb/code/quality/evidence/T30/loader-control-review1.json) findings where isolated module resolution succeeded (~6.9s without preload, 5.5s with preload) while Native59 and API57 normal 2 readiness timed out with empty gateway logs.
+
+---
+
+### Delivered Files in Proposal Directory
+
+1. [`startup-entry.cjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/startup-entry.cjs)
+   - Diagnostic container entrypoint wrapper evaluating:
+     1. Builtins marker (`entry` stage, `entry` type) before any external module evaluation.
+     2. `begin` / `end` around `require('/gateway/preload.cjs')` with monotonic duration.
+     3. `begin` / `end` around `require('/gateway/app/gateway-main.js')` with monotonic duration.
+   - Enforces strict stdout prefix `[FG_GATEWAY_STARTUP] ` with metadata enums only (`sequence`, `type`, `stage`, `at`, `elapsedMs`, `ok`, `code`, `durationMs`).
+   - Never emits `argv`, environment variables, credentials, URLs, or error message strings.
+   - Fixed error code enums only (`MODULE_NOT_FOUND`, `SYNTAX_ERROR`, `TYPE_ERROR`, `STARTUP_FAILED`) and rethrows the exact caught exception identity.
+   - Bounded: $\le 8$ rows total, $\le 1024$ bytes per row, using synchronous `fs.writeSync(1, ...)` complete byte loops.
+   - Preserves `process.argv[2]` as `/gateway/input.json`.
+   - Preserves original module loading order (preload before main).
+   - Preserves original `gateway-main.js` source untouched with zero method wrappers on `Pool`, `query`, `RPC`, or `HTTP`.
+   - No fake ready: `main END` marks synchronous script evaluation completion only; canonical ready log remains in `server.listen()`, and HTTP readiness remains subject to the original 40 retries / 250ms polling against `/health`.
+
+2. [`private-gateway-db-bridge-startup-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/private-gateway-db-bridge-startup-reviewed1.mjs)
+   - Exact copy of [`private-gateway-db-bridge-observer-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/private-gateway-db-bridge-observer-reviewed1.mjs) with only one contiguous anchor change:
+     - Adds readonly bind mount for `/gateway/startup-entry.cjs`.
+     - Changes launch arguments from `node -r /gateway/preload.cjs /gateway/app/gateway-main.js /gateway/input.json` to `node /gateway/startup-entry.cjs /gateway/input.json`.
+   - All other 320 lines (dual DB network attachment, 40 retries, 110s deadline, 55s cleanup, teardown assertions) remain byte-identical.
+
+3. [`private-gateway-db-bridge-observer-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/private-gateway-db-bridge-observer-reviewed1.mjs)
+   - Matching-filename drop-in copy identical to `private-gateway-db-bridge-startup-reviewed1.mjs`.
+
+4. [`fixture-server-api57-db-bridge-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/fixture-server-api57-db-bridge-reviewed1.mjs)
+   - Exact copy of [`fixture-server-api57-db-bridge-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/fixture-server-api57-db-bridge-reviewed1.mjs) with only line 21 helper import changed to `./private-gateway-db-bridge-startup-reviewed1.mjs`. All other 410 lines remain byte-identical.
+
+5. [`prepare-startup-boundary.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/prepare-startup-boundary.mjs)
+   - Anchor preparation and review verification script asserting:
+     - Anchor presence in original files.
+     - Exact substitution in proposed files.
+     - **Reversal Byte Equality**: Reversing anchor substitutions reproduces the exact original helper (`a265e42ad94d0601ec2c15115674531479a1f33c99ada2a98e68138040514255`) and original fixture server (`cf3cd4f2d9f17a4241664e1905d74cc0c768111881e0bbc2024b44b64015cdbf`) byte-for-byte.
+
+6. [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/plan.json)
+   - Machine-readable specification containing source anchors, exact before/after diffs, wrapper invariants, and reversibility checks.
+
+7. [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-api57-startup-boundary-1/shortplan.md)
+   - Human-readable summary detailing diagnostic motivation, wrapper invariants, anchor diffs, and verification contracts.
+
+---
+
+### Strict Constraint Compliance
+
+- **Write Scope**: Confined exclusively to `quality/evidence/T30/antigravity-api57-startup-boundary-1/**`.
+- **Zero Outside Mutations**: No writes to `.doc/history.md`, invocation/completion files, application sources, tests, mutable fixtures, ledger, or environment files.
+- **Zero Execution**: No Docker, test suite, browser, or CLI actions were executed.
+- **Status**: `nativeAcceptance: false`; `T30 IN_PROGRESS`.

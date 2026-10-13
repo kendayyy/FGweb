@@ -1,0 +1,124 @@
+.fg-live-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+}
+
+.fg-live-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fg-live-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.fg-live-empty {
+  color: var(--text-sub);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px;
+  margin: 0;
+}
+
+.fg-live-selector {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px;
+  scrollbar-width: thin;
+}
+
+.fg-live-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-sub);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fg-live-tab:hover {
+  color: var(--text-main);
+  border-color: var(--color-focus);
+}
+
+.fg-live-tab.selected,
+.fg-live-tab[aria-selected="true"] {
+  background: var(--bg-selected);
+  border-color: var(--color-action);
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.fg-live-tab:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.fg-live-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fg-call-live-controls {
+  display: inline-flex;
+  align-items: center;
+}
+
+.fg-live-guidance {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-sub);
+  background: var(--bg-alert-info);
+  border: 1px solid var(--border-alert-info);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin: 0;
+  width: 100%;
+}
+
+.fg-live-error {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-danger);
+  background: var(--bg-alert-error);
+  border: 1px solid var(--border-alert-error);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin: 0;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg-live-tab {
+    transition: none;
+  }
+}

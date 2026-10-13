@@ -1,0 +1,11 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';import {randomUUID} from 'node:crypto';
+const d='quality/evidence/T30',id=randomUUID().replaceAll('-',''),container='fg-local-postgres-1',results=[];
+const meta=spawnSync('docker',['inspect','--format','{{.Name}} {{range .Mounts}}{{.Type}}:{{.Destination}} {{end}}',container],{encoding:'utf8',windowsHide:true});assert.equal(meta.status,0);assert(meta.stdout.includes('/fg-local-postgres-1 bind:/var/lib/postgresql/data'));
+fs.writeFileSync(d+'/storage-fsync-control-plan1.json',JSON.stringify({startedAt:new Date().toISOString(),container,mountType:'Windows host bind confirmed by reviewedcompose and actualDocker',ownedFileSuffix:id,readOnlyDatabase:true,configurationChanged:false,syntheticFilesOnly:true,comparator:'container Linux overlay /tmp, not a production durability benchmark'},null,2)+'\n',{flag:'wx'});
+for(const [label,base]of [['windows-bind','/var/lib/postgresql/data'],['linux-overlay','/tmp']]){
+ const file=base+'/fg_t30_fsync_'+id;assert(['/var/lib/postgresql/data','/tmp'].includes(base));assert(/^\/[^\n]+\/fg_t30_fsync_[a-f0-9]{32}$/.test(file));let status=1;
+ try{status=spawnSync(process.execPath,[d+'/record.mjs','t30-storage-fsync-'+label+'-1','docker','exec','--user','postgres',container,'pg_test_fsync','-s','1','-f',file],{stdio:'inherit',windowsHide:true}).status??1;}
+ finally{const cleanup=spawnSync('docker',['exec','--user','postgres',container,'rm','-f','--',file],{encoding:'utf8',windowsHide:true});const absent=spawnSync('docker',['exec','--user','postgres',container,'test','!','-e',file],{encoding:'utf8',windowsHide:true});results.push({label,file,testExitCode:status,removeExitCode:cleanup.status,actualAbsent:absent.status===0});}
+ if(status!==0)break;
+}
+fs.writeFileSync(d+'/storage-fsync-controls-cleanup1.json',JSON.stringify({completedAt:new Date().toISOString(),results,onlyOwnedSyntheticFilesRemoved:true,databaseConfigurationChanged:false,mainDataChanged:false},null,2)+'\n',{flag:'wx'});assert.equal(results.length,2);assert(results.every(x=>x.testExitCode===0&&x.removeExitCode===0&&x.actualAbsent));console.log('Two actual pg_test_fsync controls completed; only owned synthetic files removed.');

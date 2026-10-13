@@ -1,0 +1,35 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |database| packages/database/test/chat-crypto.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts [ packages/database/test/chat-crypto.test.ts ]
+Error: Transform failed with 1 error:
+E:/FGweb/code/packages/database/test/chat-crypto.test.ts:132:137: ERROR: Expected ";" but found ")"
+  Plugin: vite:esbuild
+  File: E:/FGweb/code/packages/database/test/chat-crypto.test.ts:132:137
+  
+  Expected ";" but found ")"
+  130|   });
+  131|   it('native SDK public keys, SAS/withheld and Olm envelopes satisfy SQL guards without plaintext extensions',async()=>{
+  132|    const fixtures=JSON.parse(fs.readFileSync(path.join(root,'quality/evidence/CHATCRYPTO-DATA/native-interop/wire-fixtures.json'),'utf8')));
+     |                                                                                                                                           ^
+  133|    expect(fixtures.devices.length).toBeGreaterThanOrEqual(3);expect(fixtures.protocol.length).toBeGreaterThanOrEqual(10);expect(fixtures.olm.length).toBeGreaterThanOrEqual(3);
+  134|    for(const d of fixtures.devices)expect((await client.query('SELECT chat_crypto_valid_device_keys($1,$2,$3,$4) AS valid',[d,d.device_id,d.keys[`ed25519:${d.device_id}`],d.keys[`curve25519:${d.device_id}`]])).rows[0].valid).toBe(true);
+  
+ ❯ failureErrorWithLog node_modules/esbuild/lib/main.js:1752:15
+ ❯ node_modules/esbuild/lib/main.js:1019:50
+ ❯ responseCallbacks.<computed> node_modules/esbuild/lib/main.js:886:9
+ ❯ handleIncomingPacket node_modules/esbuild/lib/main.js:941:12
+ ❯ Socket.readFromStdout node_modules/esbuild/lib/main.js:864:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  19:31:42
+   Duration  420ms (worker 97%, environment 3%)
+

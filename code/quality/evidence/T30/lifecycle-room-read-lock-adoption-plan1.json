@@ -1,0 +1,13 @@
+{
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual readonlyPG blocker trace showsLifecycle room lock excludes ROOM_QUERY shared readers while reconcile lasts3.35s. Lifecycle only mutates callgroups/members/admissions/slots, never rooms. Use FOR SHARE on canonical room before unchanged group/member FOR UPDATE: permits room shared readers, still blocks every room UPDATE/DELETE/explicitmutation FOR UPDATE; no weaker KEY SHARE. RealPG RED1read failure/5mutation-group guards pass. OnlyoneSQLanchor changed; fresh eligibility/perpeer policy/nativeRPC inside transaction/coalescing/grace/dedupe/close semantics unchanged. Originalfullnative acceptance remains required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-room-read-lock-reviewed1.ts",
+      "beforeSha256": "9e285175ec1963599a29362af4a5a7d9ea61402763e4f9a5663a06d647296e00",
+      "afterSha256": "d171bcd96fa1a683e2c60d57b0c40377b8d35c9bbdebd59e7542158671ad4266"
+    }
+  ]
+}

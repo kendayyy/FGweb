@@ -1,0 +1,7 @@
+# CHAT-CRYPTO-01 during T28 final closure
+
+Direct human authorization in Idea verified read-only. Live spec/task additions are preserved. Original spec bytes were recovered from the matching historical snapshot; removing only the new CHAT-CRYPTO handoff in an owned copy reconstructs the exact approved task SHA. Eight original approved sources are independently verified through unchanged checkBaselines against an owned snapshot, as at AUTH02-FE. Live amended source hashes are separately frozen and checked. No live document rollback, checker modification, old PASS/output rewrite, or claim that the live baseline is aligned.
+
+Exact change: spec14 encryption exception and new spec17; task adds only CHAT-CRYPTO handoff. Voice/screenshare explicitly excluded; T28 controls, media limits, approved design and eight screenshots remain applicable. Existing plaintext DM/group chat is not E2EE and no crypto feature is implemented here. T28 closure covers its original approved voice scope only. After closure, immediate metadata rebaseline must precede any new feature; pin CHATCRYPTO-DATA/BE/FE/QA ahead of T29. Protocol/library/version and client-assisted legacy migration require a reviewed proposal in DATA; do not silently choose a new stack or destructive backfill.
+
+Retained failures: close-1 correctly rejected changed live docs; baseline-restore-1 rejected the multiple-source change before any mutation. No doc or ledger was restored by that helper. Original technical results and pre-amendment-final-audit.json remain evidence of their actual times.

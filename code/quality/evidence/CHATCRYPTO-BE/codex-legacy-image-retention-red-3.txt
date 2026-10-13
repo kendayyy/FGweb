@@ -1,0 +1,28 @@
+(node:28952) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (39.839 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › retains candidate-bound expired native image ciphertext while sweeping unrelated orphan bytes
+
+    expect(received).resolves.toBeUndefined()
+
+    Received promise rejected instead of resolved
+    Rejected to value: [error: update or delete on table "chat_crypto_upload_drafts" violates foreign key constraint "chat_crypto_legacy_candidate_images_draft_id_chat_crypto_upload" on table "chat_crypto_legacy_candidate_images"]
+
+      94 |   for(const id of [kept,orphan]){fs.writeFileSync(path.join(directory,id+'.bin'),ciphertext);await pool.query(`INSERT INTO chat_crypto_upload_drafts(id,uploader_id,conversation_id,device_id,client_upload_id,membership_revision,encryption_mode,object_key,ciphertext_size,ciphertext_sha256,created_at,expires_at) VALUES($1,'alice','legacy','A',$1,$2,'E2EE',$3,$4,$5,clock_timestamp()-interval '2 hours',clock_timestamp()-interval '1 hour')`,[id,prepared.body.membershipRevision,id+'.bin',ciphertext.length,sha(ciphertext)]);}
+      95 |   await pool.query('INSERT INTO chat_crypto_legacy_candidate_images(candidate_id,attachment_id,draft_id,plaintext_sha256,ciphertext_sha256) VALUES($1,$2,$3,$4,$5)',[prepared.body.candidateId,imageId,kept,sha(image),sha(ciphertext)]);
+    > 96 |   try{await expect(app.get(CryptoRelayService).cleanup()).resolves.toBeUndefined();expect(fs.existsSync(path.join(directory,orphan+'.bin'))).toBe(false);expect((await pool.query('SELECT id FROM chat_crypto_upload_drafts WHERE id=$1',[orphan])).rowCount).toBe(0);expect(fs.readFileSync(path.join(directory,kept+'.bin'))).toEqual(ciphertext);const decoded=sdk.Attachment.decrypt(new sdk.EncryptedAttachment(new Uint8Array(fs.readFileSync(path.join(directory,kept+'.bin'))),info));expect(Buffer.from(decoded)).toEqual(image);expect((await pool.query('SELECT id FROM chat_crypto_upload_drafts WHERE id=$1',[kept])).rowCount).toBe(1);await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES('retention-ban','alice','bob','BAN','fixture')");await expect(app.get(CryptoRelayService).cleanup()).resolves.toBeUndefined();expect(fs.readFileSync(path.join(directory,kept+'.bin'))).toEqual(ciphertext);
+         |             ^
+      97 |   }finally{await pool.query("DELETE FROM admin_actions WHERE id='retention-ban'");await pool.query('DELETE FROM chat_crypto_legacy_candidate_images WHERE candidate_id=$1',[prepared.body.candidateId]);await pool.query('DELETE FROM chat_crypto_upload_drafts WHERE id=ANY($1::text[])',[[kept,orphan]]);for(const id of [kept,orphan])if(fs.existsSync(path.join(directory,id+'.bin')))fs.unlinkSync(path.join(directory,id+'.bin'));}
+      98 |  });});
+      99 |  it('requires explicit historical context for keys and excludes current late members or devices registered after verification',async()=>{await availableSource(async()=>{
+
+      at expect (../../node_modules/expect/build/index.js:2116:15)
+      at test/chat-crypto-legacy.integration.spec.ts:96:13
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:92:111)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 17 passed, 18 total
+Snapshots:   0 total
+Time:        40.289 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

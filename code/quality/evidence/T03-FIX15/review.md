@@ -1,0 +1,5 @@
+# T03-FIX15 — Codex review
+
+Additive optional participant fields map the authorized opaque SFU admission identity to its FG user and distinguish moderator restriction from local self-muted state. The identity validates the exact admission UUID format, never a JWT/session ID/user display name. Old participant payloads remain unchanged. Shared participant endpoint consumes the same schema; credential/session/email fields are stripped. The strict self-mic request accepts only a boolean muted field and rejects actor/permission overrides.
+
+Behavioral RED: nine failures and one compatibility pass. GREEN: ten new cases plus the full prior contracts suite, 130 total. Closure checks fresh build, test/API/web types, lint/diff, frozen files, prior PASS objects, environment and eight baseline hashes plus the unchanged T26-FIX1 gate. No backend enforcement or frontend success is claimed by this contracts checkpoint. Backend producer follows; moderator actions/SFU publication restriction remain T29.

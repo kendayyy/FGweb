@@ -1,0 +1,50 @@
+{
+  "recordedAt": "2026-10-11T00:00:21.342Z",
+  "reviewer": "Codex",
+  "run": "t30-native-fac028cda61448e0994af3f851ea63e2",
+  "photos": [
+    {
+      "path": "quality/evidence/T30/demo/t30-native-fac028cda61448e0994af3f851ea63e2/t30-native-fac028cda61448e0994af3f851ea63e2-step-00001.png",
+      "sha256": "04e4566c26a3e30e1f4e5458bce41be99dc2bae148780a5eda730dba228ddbe8",
+      "inspected": true
+    },
+    {
+      "path": "quality/evidence/T30/demo/t30-native-fac028cda61448e0994af3f851ea63e2/t30-native-fac028cda61448e0994af3f851ea63e2-step-00002.png",
+      "sha256": "85246867b26ace92a7dc6c319a5ec79e5431b6bb19b79afee7c85dd9a1801bc4",
+      "inspected": true
+    },
+    {
+      "path": "quality/evidence/T30/demo/t30-native-fac028cda61448e0994af3f851ea63e2/t30-native-fac028cda61448e0994af3f851ea63e2-step-00003.png",
+      "sha256": "45bc5ee28c748b5cbd376667a06793bfaa44cec31f7e5bad54c71580f6c34bdd",
+      "inspected": true
+    }
+  ],
+  "delivery": [
+    {
+      "name": "1791676490748-t30-native-fac028cda61448e0994af3f851ea63e2-step-00001.json",
+      "status": "sent"
+    },
+    {
+      "name": "1791676492367-t30-native-fac028cda61448e0994af3f851ea63e2-step-00002.json",
+      "status": "sent"
+    },
+    {
+      "name": "1791676576773-t30-native-fac028cda61448e0994af3f851ea63e2-step-00003.json",
+      "status": "sent"
+    }
+  ],
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "findings": [
+    "Diagnostic observer10 on actual build7: joins4018/3871/3972ms, first real capture6484ms passed; second45s failed. Gateway two room57014 at3135/3087ms, connectTimeout false. Verified RoomsService pool2 shared-lock held4182ms; lifecycle room-held1851ms/wait5133ms; Teams shared-held1547ms/wait4019ms. Not sole-cause proof.",
+    "Three photos inspected: initialloader; room6members with call/team pending; sender failurephoto no own avatar/micdisabled/reconnectbutton, Linh/Hà avatars, stage clipped/empty and no successful second capture. Three deliveries sent and all owned cleanup true.",
+    "Source inspection correction: listRoomMembers ALREADY uses Promise.all, not a sequential profile loop. Each member still calls its own full getPublicProfile SQL through unchanged max5 Profiles pool. Proposed single-statement batch full public DTO mapping under same room/session/member locks, no cache/deadline/pool change; source adoption pending."
+  ],
+  "timingSummary": "quality/evidence/T30/gateway-api-timing-summary-10.json",
+  "nativeAcceptance": false
+}

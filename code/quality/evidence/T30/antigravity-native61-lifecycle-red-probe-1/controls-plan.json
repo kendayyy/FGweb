@@ -1,0 +1,97 @@
+{
+  "planId": "antigravity-native61-lifecycle-red-probe-1-controls",
+  "targetTask": "T30",
+  "phase": "TEST_AND_DESIGN_PROPOSAL_ONLY",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:03:30.000Z",
+  "controls": [
+    {
+      "controlId": "CTL-01-SCHEMA-MIGRATION",
+      "name": "Full Ephemeral Schema Migration",
+      "description": "Validates that a dedicated ephemeral schema is created and migrated with complete database tables and seed data, without touching public tables or persistent schemas.",
+      "assertions": [
+        "assert(/^t30_probe_[a-f0-9]{32}$/.test(schema))",
+        "assert(report.schemaCreated)",
+        "assert(game, 'Valorant seed game missing')"
+      ]
+    },
+    {
+      "controlId": "CTL-02-CANONICAL-ACTORS",
+      "name": "Genuine Actor and Auth Provisioning",
+      "description": "Verifies that all 6 actors have valid database rows in user, profiles, game_interests, session, and valid signed session cookies.",
+      "assertions": [
+        "assert.equal(Object.keys(actors).length, 6)",
+        "assert(actors.sender.cookie)",
+        "assert(actors.receiver.cookie)"
+      ]
+    },
+    {
+      "controlId": "CTL-03-SERVICE-RESOLUTION",
+      "name": "Actual Compiled Service Resolution",
+      "description": "Ensures that the probe resolves and executes the real compiled CallLifecycleService from Build 12 via the NestJS dependency injection container.",
+      "assertions": [
+        "assert(lifecycleService instanceof CallLifecycleService)",
+        "assert(callsService instanceof CallsService)",
+        "assert.equal(typeof lifecycleService.reconcileGroup, 'function')"
+      ]
+    },
+    {
+      "controlId": "CTL-04-TIMER-ISOLATION",
+      "name": "Background Periodic Sweep Isolation",
+      "description": "Guarantees that the 1000ms unmetered background sweep timer is stopped during the measurement window so that only explicit concurrent triggers are evaluated.",
+      "assertions": [
+        "assert(report.timerIsolated)",
+        "assert(lifecycleService.timer === undefined || timerCleared)"
+      ]
+    },
+    {
+      "controlId": "CTL-05-SYNTHETIC-DELAY-TRANSPARENCY",
+      "name": "Measured Synthetic Delay Transparency",
+      "description": "Verifies that the test-only local adapter clearly marks simulated RPC delays (40ms) as synthetic instrumentation rather than native server load, while preserving exact SDK protobuf types.",
+      "assertions": [
+        "assert(report.metrics.nativeListRoomsCalls > 0)",
+        "assert(Array.isArray(roomsResult))",
+        "assert(Array.isArray(participantsResult))"
+      ]
+    },
+    {
+      "controlId": "CTL-06-CONCURRENT-BURST",
+      "name": "Concurrent Trigger Execution",
+      "description": "Fires 4 concurrent ordinary reconcile requests against the exact same call group to reproduce overlapping reconciliation pressure.",
+      "assertions": [
+        "assert.equal(report.concurrentTriggersFired, 4)",
+        "assert.equal(report.metrics.reconcileTotalInvocations, 4)"
+      ]
+    },
+    {
+      "controlId": "CTL-07-INTENDED-RED-ASSERTION",
+      "name": "Expected Bounded Work RED Assertion",
+      "description": "Asserts that total completed reconciliation passes are bounded to at most 2 (1 in-flight + 1 trailing pass). On un-coalesced source, this MUST fail because 4 redundant passes execute sequentially.",
+      "assertions": [
+        "assert(actualPasses <= 2, '[RED REPRODUCTION CONFIRMED] ...')",
+        "assert.equal(report.testResult, 'EXPECTED_RED_CONFIRMED')"
+      ]
+    },
+    {
+      "controlId": "CTL-08-ACTOR-LOCK-CONTROLS",
+      "name": "Actor and Lock Integrity Post-Conditions",
+      "description": "Verifies that genuine actor and row-locking SQL executed successfully and that call group, room, and member rows remain intact in PostgreSQL.",
+      "assertions": [
+        "assert.equal(report.controlVerification.callGroupState, 'OPEN')",
+        "assert(report.controlVerification.roomExists)",
+        "assert(report.controlVerification.membersCount >= 1)",
+        "assert(report.controlVerification.actorLockSqlVerified)"
+      ]
+    },
+    {
+      "controlId": "CTL-09-CLEANUP-SETTLEMENT",
+      "name": "Deterministic Teardown and Cleanup Verification",
+      "description": "Ensures that all probe resources (ephemeral schema, NestJS app, Redis connection, pg pool) are completely cleaned up in finally, and confirmed in probe-report.json.",
+      "assertions": [
+        "assert(report.schemaRemoved, 'Schema cascade drop must succeed')",
+        "assert(report.appClosed, 'NestJS application must close cleanly')",
+        "assert(report.poolClosed, 'Database connection pool must end cleanly')"
+      ]
+    }
+  ]
+}

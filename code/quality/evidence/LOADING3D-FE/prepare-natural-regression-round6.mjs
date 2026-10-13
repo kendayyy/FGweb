@@ -1,0 +1,2 @@
+import fs from 'node:fs';const dir='quality/evidence/LOADING3D-FE';let source=fs.readFileSync(dir+'/headed-natural-loading-regression.mjs','utf8').replaceAll('natural-loading-stream-','natural-loader-').replace('let uiStep=0;','assert(/^[A-Za-z0-9_-]{1,65}$/.test(uiRunId));let uiStep=0;');
+fs.writeFileSync(dir+'/headed-natural-loading-round6.mjs',source,{flag:'wx'});console.log('RED5 preserved: stream runId exceeded65. New unique prefix validates before browser startup; product assertions unchanged.');

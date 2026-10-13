@@ -1,0 +1,154 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:45768) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts (31.143 s)
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 1. Single Profile Query Batch Consolidation during listRoomMembers (Counter RED/GREEN Case) › executes exactly 1 SQL query targeting user and profiles table during listRoomMembers with 6 members
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 6
+
+      398 |
+      399 |       // On proposed source, count is 1. On unbatched original source, count is 6 (true SQL counter RED).
+    > 400 |       expect(profileQueryCount).toBe(1);
+          |                                 ^
+      401 |       expect(members).toHaveLength(6);
+      402 |
+      403 |       // Verify full exact RoomMemberSchema DTO, order, grants, summaries, and ISO timestamps
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:400:33)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › fetches multiple user profiles in exact caller-provided order with exactly 1 SQL query
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      442 |
+      443 |       const { result: profiles, count } = await countProfileQueriesDuring(() =>
+    > 444 |         batchAdapter.getPublicProfiles(requestedIds)
+          |                      ^
+      445 |       );
+      446 |
+      447 |       expect(count).toBe(1);
+
+      at quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:444:22
+      at countProfileQueriesDuring (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:109:26)
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:443:49)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › preserves duplicate userIds if provided in the list with exactly 1 SQL query
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      460 |
+      461 |       const { result: profiles, count } = await countProfileQueriesDuring(() =>
+    > 462 |         batchAdapter.getPublicProfiles(requestedIds)
+          |                      ^
+      463 |       );
+      464 |
+      465 |       expect(count).toBe(1);
+
+      at quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:462:22
+      at countProfileQueriesDuring (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:109:26)
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:461:49)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › returns empty array immediately with 0 queries when userIds is empty
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      477 |     it('returns empty array immediately with 0 queries when userIds is empty', async () => {
+      478 |       const batchAdapter = getBatchProfilesAdapter(profilesService);
+    > 479 |       const { result, count } = await countProfileQueriesDuring(() => batchAdapter.getPublicProfiles([]));
+          |                                                                                    ^
+      480 |
+      481 |       expect(count).toBe(0);
+      482 |       expect(result).toEqual([]);
+
+      at quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:479:84
+      at countProfileQueriesDuring (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:109:26)
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:479:39)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › throws NotFoundException with 404 status and exact message on the FIRST missing user ID in caller order
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: NotFoundException
+    Received constructor: TypeError
+
+      494 |         throw new Error('Expected getPublicProfiles to throw NotFoundException');
+      495 |       } catch (err) {
+    > 496 |         expect(err).toBeInstanceOf(NotFoundException);
+          |                     ^
+      497 |         const nf = err as NotFoundException;
+      498 |         expect(nf.getStatus()).toBe(404);
+      499 |         const res = nf.getResponse() as { code?: string; message?: string };
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:496:21)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › validates public profiles against PublicProfileSchema and tests avatar fallback policy
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      519 |       const fixture = await seedFixture();
+      520 |       const batchAdapter = getBatchProfilesAdapter(profilesService);
+    > 521 |       const profiles = await batchAdapter.getPublicProfiles([
+          |                                           ^
+      522 |         fixture.owner.id,
+      523 |         fixture.helper.id,
+      524 |         fixture.member1.id,
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:521:43)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › enforces avatar policy: explicit profile.avatar_url=NULL yields null even if user.image exists
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      557 |       const userId = await createExplicitNullAvatarUser();
+      558 |       const batchAdapter = getBatchProfilesAdapter(profilesService);
+    > 559 |       const [profile] = await batchAdapter.getPublicProfiles([userId]);
+          |                                            ^
+      560 |
+      561 |       expect(profile).toBeDefined();
+      562 |       expect(profile.avatarUrl).toBeNull();
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:559:44)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › handles bare user without profiles and gameProfile rows with default values
+
+    TypeError: batchAdapter.getPublicProfiles is not a function
+
+      567 |       const bareUser = await createBareUser();
+      568 |       const batchAdapter = getBatchProfilesAdapter(profilesService);
+    > 569 |       const [profile] = await batchAdapter.getPublicProfiles([bareUser.id]);
+          |                                            ^
+      570 |
+      571 |       expect(profile).toBeDefined();
+      572 |       expect(profile.id).toBe(bareUser.id);
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:569:44)
+
+  ● FG T30 - Room Profile Batch Consolidation and Authority Integration › 2. ProfilesService.getPublicProfiles direct contract & edge cases (with structural typed batch adapter) › rejects entire batch when game title fails GameTitleSchema and returns no partial DTO
+
+    expect(received).toBeInstanceOf(expected)
+
+    Expected constructor: ZodError
+    Received constructor: TypeError
+
+      594 |           thrownError = err;
+      595 |         }
+    > 596 |         expect(thrownError).toBeInstanceOf(ZodError);
+          |                             ^
+      597 |         const zodErr = thrownError as ZodError;
+      598 |         expect(zodErr.issues.length).toBeGreaterThan(0);
+      599 |       } finally {
+
+      at Object.<anonymous> (quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts:596:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 8 passed, 17 total
+Snapshots:   0 total
+Time:        31.782 s
+Ran all test suites within paths "quality/evidence/T30/room-profile-batch-tests/t30-room-profile-batch.integration.spec.ts".

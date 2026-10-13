@@ -1,0 +1,60 @@
+### FG T30 — Implementation Review 1 Refinements
+
+In accordance with user instructions and project rules (`AGENTS.md`, `NO-ANTI2-01`, `08-testing-and-evidence.md`), all 10 findings from the Codex review have been resolved. The refined proposal files have been authored exclusively under:
+`E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/**`
+
+All prior proposal files (`antigravity-red-1/`, `antigravity-red-review-1/`, `antigravity-red-refine-1/`, `antigravity-implementation-1/`) remain completely preserved and untouched. No actual application/test files, ledger/history records, dependencies, or git states have been modified, and no command executions have occurred in this proposal round.
+
+---
+
+### 1. Refined Proposals Overview
+
+1. **[`apps/web/src/features/calls/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/src/features/calls/media.ts)**
+   - **SFU Permission Awaiting (Finding 1)**: `awaitScreenPublishPermission(timeoutMs = 5000)` checks `room.localParticipant.permissions` snapshot (matching proto source ID `3` for `Track.Source.ScreenShare`). If not yet updated, listens to `RoomEvent.ParticipantPermissionsChanged` with bounded timeout and abort/disconnect cleanup before calling `publishTrack`.
+   - **Optional System Audio (Finding 2)**: `publishScreenTracks(videoTrack, audioTrack)` captures and publishes system audio as `Track.Source.ScreenShareAudio` with `AudioPresets.music` when present and permitted. Local preview is muted. If audio publication fails, rolls back the video track atomically, stops tracks, and releases quota once.
+   - **Local Publisher Preview (Finding 3)**: Includes local screen share in `getScreenPublishers()` with `{ identity: localParticipant.identity, trackSid: 'local-screen', isLocal: true }`. Attaching local preview uses local track without remote subscription or second room.
+   - **Strict Remote Filtering (Finding 5)**: Enforces `pub.kind === Track.Kind.Video && (pub.source === Track.Source.ScreenShare || pub.source === 'screen_share')`, strictly excluding camera streams.
+   - **Idempotent Attachment (Finding 5)**: `attachVideoTrack` checks `attachedTrackSid === sid` and container presence to prevent duplicate `<video>` elements. Stale obsolete subscriptions are explicitly unsubscribed via `pub.setSubscribed(false)`.
+   - **Permission Revoke & Unpublish Mapping (Finding 6)**: Maps `LocalTrackPublication` properly and listens to `RoomEvent.ParticipantPermissionsChanged` to revoke local sharing if server revokes permission. Explicit `stopSharing` prevents recursive double-release.
+   - **Audio Independence**: Auto-subscribed remote microphone audio on `audioRoot` remains completely isolated and untouched across screen share transitions.
+
+2. **[`apps/web/src/features/live/LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/src/features/live/LiveViewer.tsx)**
+   - **Capture-First Flow & Reentrancy Guards (Finding 4)**: Synchronous `getDisplayMedia` in click event tick with `try/catch`. Tracks `inFlightRef` and `busy` state immediately upon click to prevent double-clicks and leased quota races.
+   - **Generation Guard & Claim Race Handling (Finding 4)**: `operationIdRef` guarantees async steps belong to the active operation. Checks `videoTrack.readyState === 'ended'` after HTTP claim: if user stopped sharing while claim was pending, immediately stops tracks, dispatches release once, and never publishes stopped tracks.
+   - **Truthful Error Handling (Finding 4)**: Distinguishes explicit user stop (reports release errors to UI) from component unmount teardown (best-effort release without setting state on unmounted component).
+   - **Pure State Updates (Finding 5)**: Computes selection outside React state updaters to prevent media side-effects inside `setSelectedSid`.
+   - **iPadOS Multi-Touch Detection (Finding 7)**: Detects modern iPadOS Safari desktop UA (`navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1`) as view-only tablet without treating narrow desktop viewports (e.g. 360px) as mobile.
+   - **Instance Identifiers**: Generates unique IDs per viewer instance (`live-stage-${callId}`, `live-tab-${callId}-${sid}`) with `aria-controls` linkage.
+
+3. **[`apps/web/src/features/live/api.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/src/features/live/api.ts)**
+   - **Strict Schema Validation (Finding 10)**: `releaseScreenShare` validates `CallControlSuccessSchema.parse(await response.json())` (`{ success: true }`) strictly per shared contracts.
+   - `claimScreenShare` validates `CallJoinSchema` with `{}` strict body and `credentials: 'include'`.
+
+4. **[`apps/web/src/features/live/live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/src/features/live/live.css)**
+   - **Responsive 16:9 Stage (Finding 8)**: Uses pure `aspect-ratio: 16 / 9` without conflicting `min-height`.
+   - **Single-Row Horizontal Scroll (Finding 8)**: `.fg-live-selector` uses `flex-wrap: nowrap; overflow-x: auto; padding: 4px;` with 44px min-touch targets and unclipped 2px focus outlines.
+   - **Semantic Design Tokens**: Uses standard FG CSS variables (`var(--bg-raised)`, `var(--border-color)`, `var(--color-action)`, etc.) with all invented hex values removed.
+   - Includes `@media (prefers-reduced-motion: reduce) { .fg-live-tab { transition: none; } }`.
+
+5. **[`apps/web/src/features/calls/CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/src/features/calls/CallPanel.tsx)**
+   - **Byte-Equivalent Formatting (Finding 9)**: Preserves original compact formatting and lifecycle logic byte-equivalently, only importing `LiveViewer` and mounting `<LiveViewer callId={active} actorId={actorId} session={media.current} participants={participants}/>` in `fg-call-stage`.
+
+6. **[`apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/apps/web/test/live-viewer.test.tsx)**
+   - **All 19 Original Assertions Preserved**: Full retention of tests 1–19.
+   - **Zero Lint Warnings**: Cleaned the 5 unused mock parameters (`unpublishTrack`, `setMicrophoneEnabled`, `connect`).
+   - **Accurate SDK Transport Mock**: Added `permissions`, `LocalTrackPublished`, `ParticipantPermissionsChanged`, `ScreenSharePresets`, and `AudioPresets`.
+   - **5 New Focused Cases (Tests 20–24)**:
+     - *Test 20*: In-flight double click drops duplicate capture/claim.
+     - *Test 21*: Track ended while HTTP claim is pending stops track, releases slot, does not publish.
+     - *Test 22*: Permission revoke via `ParticipantPermissionsChanged` stops local capture and releases quota once.
+     - *Test 23*: Idempotent attachment: repeat selection does not create duplicate `<video>` elements.
+     - *Test 24*: iPadOS detection (`MacIntel` + `maxTouchPoints: 5`) is view-only.
+
+7. **[`REVIEW.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-review-1/REVIEW.md)**
+   - Concise summary of architectural decisions and transition mapping for Codex review.
+
+---
+
+### 2. Status & Next Step
+
+All files are written in `quality/evidence/T30/antigravity-implementation-review-1/`. Verification remains pending until Codex reviews, applies the proposed files to `code/apps/web/...`, and runs Vitest / Playwright headed verification.

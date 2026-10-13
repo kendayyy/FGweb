@@ -1,0 +1,80 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25156) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (87.495 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rejects conflicting Lobby retries and authenticated ciphertext substitution
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 201
+
+      347 |  it('rejects conflicting Lobby retries and authenticated ciphertext substitution',async()=>{
+      348 |   const sent=await postLobby('lobby-conflict','original Lobby selection');expect(sent.status).toBe(201);
+    > 349 |   expect((await postLobby('lobby-conflict','changed Lobby selection')).status).toBe(409);
+          |                                                                                ^
+      350 |   const other=await postLobby('lobby-substitution','other Lobby message');expect(other.status).toBe(201);
+      351 |   const original=(await pool.query('SELECT crypto_envelope FROM messages WHERE id=$1',[sent.body.id])).rows[0].crypto_envelope;
+      352 |   const replacement=(await pool.query('SELECT crypto_envelope FROM messages WHERE id=$1',[other.body.id])).rows[0].crypto_envelope;
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:349:80)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › encrypts normalized Lobby images before storage and publishes only authenticated selected attachments
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "image.webp"
+    Received: "private-original-name.webp"
+
+      357 |  const uploadLobby=()=>request(base).post('/api/v1/uploads/images').set('Cookie',cookies.alice).set('Origin',origin).field('conversationId',lobby).attach('file',picture,{filename:'private-original-name.png',contentType:'image/png'});
+      358 |  it('encrypts normalized Lobby images before storage and publishes only authenticated selected attachments',async()=>{
+    > 359 |   const upload=await uploadLobby();expect(upload.status).toBe(201);expect(upload.body.fileName).toBe('image.webp');
+          |                                                                                                 ^
+      360 |   const id=upload.body.id,draft=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[id])).rows[0];expect(draft.encryption_mode).toBe('LOBBY_AEAD');expect(draft.envelope.keyId).toBe('fg-lobby');expect(draft.object_key).toBe(id+'.bin');
+      361 |   const disk=fs.readFileSync(path.join(objectRoot,draft.object_key));expect(disk.length).toBe(draft.ciphertext_size);expect(disk.toString('ascii',0,4)).not.toBe('RIFF');expect(JSON.stringify(draft)).not.toContain('private-original-name');expect(fs.existsSync(path.join(objectRoot,'legacy-images',id+'.webp'))).toBe(false);expect((await pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[id])).rowCount).toBe(0);
+      362 |   expect((await request(base).get(`/api/v1/attachments/${id}/content`)).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:359:97)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › does not write a plaintext Lobby image or draft when native custody is missing or denied
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 201
+
+      370 |  it('does not write a plaintext Lobby image or draft when native custody is missing or denied',async()=>{
+      371 |   const before=fs.readdirSync(path.join(objectRoot,'legacy-images')),count=(await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count,saved=lobbyOptions.transit;
+    > 372 |   lobbyOptions.transit=undefined as unknown as OpenBaoTransit;try{expect((await uploadLobby()).status).toBe(503);}finally{lobbyOptions.transit=saved;}
+          |                                                                                                        ^
+      373 |   lobbyToken=process.env.FG_REPORT_TEST_WRITER!;try{expect((await uploadLobby()).status).toBe(503);}finally{lobbyToken=process.env.FG_REPORT_TEST_DENIED!;}
+      374 |   expect(fs.readdirSync(path.join(objectRoot,'legacy-images'))).toEqual(before);expect((await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count).toBe(count);
+      375 |  });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:372:104)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 30 passed, 33 total
+Snapshots:   0 total
+Time:        88.338 s, estimated 91 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"591f347d27554f21af413fbb72dcf88b","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

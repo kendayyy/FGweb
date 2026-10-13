@@ -1,0 +1,15 @@
+.fg-theme{position:relative;flex-shrink:0;font-family:var(--font-family)}
+.fg-theme-trigger{display:flex;align-items:center;gap:9px;min-width:45px;min-height:45px;padding:0 12px;border:1px solid var(--border-color);border-radius:var(--radius-md);background:var(--bg-raised);color:var(--text-main);font:inherit;font-weight:500;cursor:pointer;transition:background-color 150ms ease,border-color 150ms ease}
+.fg-classic-icon{width:20px;height:20px;flex-shrink:0;color:var(--color-focus)}
+.fg-theme-chevron{color:var(--text-sub);transition:transform 150ms ease}
+.fg-theme-trigger[aria-expanded=true] .fg-theme-chevron{transform:rotate(180deg)}
+.fg-theme-trigger:hover{background:var(--bg-hover)}
+.fg-theme-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:100;width:208px;max-width:calc(100vw - 32px);padding:6px;background:var(--bg-panel);border:1px solid var(--border-divider);border-radius:var(--radius-md);box-shadow:var(--shadow-modal)}
+.fg-theme-menu button{display:flex;align-items:center;gap:12px;width:100%;min-height:45px;padding:8px 12px;border:0;border-radius:var(--radius-sm);background:transparent;color:var(--text-main);font:inherit;cursor:pointer}
+.fg-theme-menu button>span{flex:1;text-align:left}
+.fg-theme-check{color:var(--color-focus)}
+.fg-theme-menu button:hover,.fg-theme-menu button:focus-visible{background:var(--bg-hover)}
+.fg-theme-menu button[aria-checked=true]{font-weight:600;background:var(--bg-selected)}
+.fg-auth-header-actions,.fg-app-header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+@media(max-width:1023px){.fg-app-header>div:first-child{grid-column:1;grid-row:1}.fg-app-header-actions{display:contents}.fg-app-header-actions>.fg-theme{grid-column:2;grid-row:1}.fg-app-header-actions>:last-child{grid-column:1 / -1;grid-row:2;justify-self:end}.fg-app-header .fg-theme-menu{left:auto;right:0}}
+@media(max-width:600px){.fg-auth-header{gap:12px;flex-wrap:wrap}.fg-auth-header-actions{gap:8px}.fg-theme-trigger{justify-content:center;width:45px;padding:0}.fg-theme-trigger>span,.fg-theme-chevron{display:none}}

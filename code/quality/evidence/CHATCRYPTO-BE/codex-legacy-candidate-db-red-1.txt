@@ -1,0 +1,81 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-legacy-candidates.test.ts (5 tests | 5 failed) 7151ms
+   ❯ Legacy ciphertext candidates and recipient receipts on actual PostgreSQL (5)
+     × stores ciphertext and public bindings without plaintext manifests, filenames or private keys 214ms
+     × requires existing mapped sources, a matching conversation cohort and an entitled importer device 53ms
+     × rejects invalid ciphertext/revisions and deduplicates source candidates within an epoch 60ms
+     × requires receipts from a cohort member and owned immutable device, with one receipt per candidate/device 34ms
+     × binds unique candidate images to existing original attachments and ciphertext drafts 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-legacy-candidates.test.ts > Legacy ciphertext candidates and recipient receipts on actual PostgreSQL > stores ciphertext and public bindings without plaintext manifests, filenames or private keys
+error: relation "chat_crypto_legacy_candidates" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-candidates.test.ts:26:110
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/chat-crypto-legacy-candidates.test.ts > Legacy ciphertext candidates and recipient receipts on actual PostgreSQL > requires existing mapped sources, a matching conversation cohort and an entitled importer device
+AssertionError: expected error: relation "chat_crypto_legacy_candi… { …(15) } to match object { code: '23503' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23503",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-legacy-candidates.test.ts:24:128
+
+ ❯ test/chat-crypto-legacy-candidates.test.ts:27:114
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/chat-crypto-legacy-candidates.test.ts > Legacy ciphertext candidates and recipient receipts on actual PostgreSQL > rejects invalid ciphertext/revisions and deduplicates source candidates within an epoch
+AssertionError: expected error: relation "chat_crypto_legacy_candi… { …(15) } to match object { code: '23514' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23514",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-legacy-candidates.test.ts:24:128
+
+ ❯ test/chat-crypto-legacy-candidates.test.ts:28:105
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/chat-crypto-legacy-candidates.test.ts > Legacy ciphertext candidates and recipient receipts on actual PostgreSQL > requires receipts from a cohort member and owned immutable device, with one receipt per candidate/device
+error: relation "chat_crypto_legacy_candidates" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-candidates.test.ts:30:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/chat-crypto-legacy-candidates.test.ts > Legacy ciphertext candidates and recipient receipts on actual PostgreSQL > binds unique candidate images to existing original attachments and ciphertext drafts
+error: relation "chat_crypto_legacy_candidates" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-candidates.test.ts:34:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  09:08:48
+   Duration  12.87s (tests 57%, import 42%, transform 1%)
+

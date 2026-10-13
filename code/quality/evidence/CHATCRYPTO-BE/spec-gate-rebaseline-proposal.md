@@ -1,0 +1,13 @@
+# Spec snapshot gate: concrete review proposal
+
+Status: proposal only. No checker, baseline, dependency, historical PASS row or task status is changed. Stock gate currently rejects CHATCRYPTO-BE with "spec baseline changed", although the eight approved document hashes match. See stock-spec-snapshot-review.json and remaining-policy-review.json.
+
+The current checker requires every predecessor and the active task to share today's spec hash. Approved LOADING3D requirements changed the product spec while 75 historical PASS records correctly retain their original spec snapshot. Updating those historical snapshots would misrepresent what was tested. Updating only the backend snapshot would still fail the predecessor comparison.
+
+Proposed governed mechanism for a separately authorized gate change: an append-only approved spec transition record binds the original and current spec hashes, exact approved document delta, affected task IDs and required new acceptance/tests. Historical evidence remains pinned to its original hash. Validation accepts only a complete approved hash lineage to the current spec, verifies actual transition documents and old outputs/evidence, and rejects missing, reordered, fabricated or unrelated transitions. Current task scope and new acceptance must be reviewed independently; a spec transition does not grant PASS or ignore failed commands.
+
+Before adoption, native negative gate tests must cover changed historical rows/evidence, wrong original/current hashes, unapproved document changes, incomplete transition chains, missing required tests, unresolved dependencies and out-of-scope writes. Existing stock checker/output/evidence verification must remain intact. Review the required change to its immutable ownership boundary explicitly; this proposal does not authorize it.
+
+The ban/unban placement is a second independent issue. The user assigned implementation to T37. The recorded decision explicitly does not waive CHATCRYPTO-BE producer acceptance. Resolve that dependency/acceptance contradiction by an approved task rebaseline; do not open T37, remove the requirement or declare the backend complete merely to bypass the gate.
+
+The safest implementation order is: review and authorize the exact metadata/checker boundary change; freeze the before snapshot; create explicit approved transition/acceptance evidence; run genuine failing gate tests; implement minimal lineage validation; run gate regression and predecessor integrity checks; adopt only the reviewed metadata. Production custody, aggregate quotas, legacy cutoff and crypto acceptance remain separate open requirements.

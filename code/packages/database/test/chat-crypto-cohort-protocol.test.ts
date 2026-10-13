@@ -1,0 +1,27 @@
+import {beforeAll,beforeEach,afterEach,afterAll,describe,it,expect} from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+import {parseEnv} from 'node:util';
+import {randomUUID} from 'node:crypto';
+import pg from 'pg';
+import {drizzle} from 'drizzle-orm/node-postgres';
+import {migrate} from 'drizzle-orm/node-postgres/migrator';
+const root=path.resolve(import.meta.dirname,'../../..'),owned=`crypto_be_${randomUUID().replaceAll('-','')}`;
+describe('Historical protocol queue context on actual PostgreSQL',()=>{
+ let client:pg.Client;
+ beforeAll(async()=>{const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8'));client=new pg.Client({connectionString:env.DATABASE_URL,connectionTimeoutMillis:5000,query_timeout:15000});await client.connect();await client.query(`CREATE SCHEMA "${owned}"`);await client.query(`SET search_path TO "${owned}"`);await migrate(drizzle(client),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});});
+ beforeEach(async()=>{
+  await client.query('BEGIN');for(const id of ['a','b'])await client.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[id,id+'@example.invalid']);await client.query("INSERT INTO conversations(id,kind) VALUES('private','ROOM'),('other','ROOM')");
+  for(const [user,id,byte]of [['a','A',1],['b','B',2]] as const){const key=Buffer.alloc(32,byte).toString('base64').replace(/=+$/,'');await client.query('INSERT INTO chat_crypto_devices(user_id,device_id,ed25519_key,curve25519_key,device_keys) VALUES($1,$2,$3,$3,$4)',[user,id,key,{user_id:`@${user}:fg.invalid`,device_id:id,algorithms:['m.olm.v1.curve25519-aes-sha2','m.megolm.v1.aes-sha2'],keys:{[`ed25519:${id}`]:key,[`curve25519:${id}`]:key},signatures:{[`@${user}:fg.invalid`]:{[`ed25519:${id}`]:'A'.repeat(86)}}}]);}
+  const first=Buffer.alloc(32,1).toString('base64').replace(/=+$/,''),second=Buffer.alloc(32,2).toString('base64').replace(/=+$/,''),encrypted={algorithm:'m.olm.v1.curve25519-aes-sha2',sender_key:first,ciphertext:{[second]:{type:0,body:Buffer.alloc(128).toString('base64')}}},verification={eventType:'m.key.verification.request',content:{transaction_id:'verify',from_device:'A',methods:['m.sas.v1'],timestamp:1791460000000}};
+  await client.query("INSERT INTO chat_crypto_to_device_events(id,conversation_id,membership_revision,sender_user_id,sender_device_id,recipient_user_id,recipient_device_id,transaction_id,content,expires_at) VALUES('encrypted','private',1,'a','A','b','B','send',$1,now()+interval '5 minutes')",[encrypted]);await client.query("INSERT INTO chat_crypto_protocol_events(id,conversation_id,membership_revision,sender_user_id,sender_device_id,recipient_user_id,recipient_device_id,transaction_id,event,expires_at) VALUES('verification','private',1,'a','A','b','B','verify',$1,now()+interval '5 minutes')",[verification]);
+  await client.query("INSERT INTO chat_crypto_history_cohorts(id,conversation_id,verified_at,verification_basis) VALUES('verified','private',now(),'EXPLICIT_RECONCILIATION'),('foreign','other',now(),'EXPLICIT_RECONCILIATION')");
+ });
+ afterEach(async()=>{await client.query('ROLLBACK');});afterAll(async()=>{try{expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await client.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}finally{await client?.end();}});
+ const tables=['chat_crypto_to_device_events','chat_crypto_protocol_events'];
+ const rejects=async(action:()=>Promise<unknown>,code:string)=>{await client.query('SAVEPOINT probe');try{await expect(action()).rejects.toMatchObject({code});}finally{await client.query('ROLLBACK TO SAVEPOINT probe');await client.query('RELEASE SAVEPOINT probe');}};
+ it('preserves the existing LIVE queue shape with null context',async()=>{for(const table of tables){const row=(await client.query(`SELECT cohort_id,membership_revision FROM ${table}`)).rows[0];expect(row.cohort_id).toBeNull();expect(Number(row.membership_revision)).toBe(1);}});
+ it('stores verified-cohort routing on both authoritative queues without copying private source/key material',async()=>{for(const table of tables){await client.query(`UPDATE ${table} SET cohort_id='verified'`);expect((await client.query(`SELECT cohort_id FROM ${table}`)).rows[0].cohort_id).toBe('verified');const columns=(await client.query('SELECT column_name FROM information_schema.columns WHERE table_schema=$1 AND table_name=$2',[owned,table])).rows.map(row=>row.column_name);expect(columns).not.toContain('source_manifest');expect(columns).not.toContain('private_key');expect(columns).not.toContain('recovery_code');}});
+ it('rejects nonexistent and foreign-conversation cohorts on either queue',async()=>{for(const table of tables)for(const cohort of ['missing','foreign'])await rejects(()=>client.query(`UPDATE ${table} SET cohort_id=$1`,[cohort]),'23503');});
+ it('retains cohort metadata while protocol rows reference it, without changing queue expiry deletion',async()=>{for(const table of tables)await client.query(`UPDATE ${table} SET cohort_id='verified'`);await rejects(()=>client.query("DELETE FROM chat_crypto_history_cohorts WHERE id='verified'"),'23503');for(const table of tables)await client.query(`DELETE FROM ${table}`);await client.query("DELETE FROM chat_crypto_history_cohorts WHERE id='verified'");expect((await client.query("SELECT id FROM chat_crypto_history_cohorts WHERE id='foreign'")).rowCount).toBe(1);});
+});

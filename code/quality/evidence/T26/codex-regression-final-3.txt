@@ -1,0 +1,1021 @@
+(node:932) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth.integration.spec.ts (15.403 s)
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › fails safely when required production configuration is missing
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › guest public read succeeds (GET /api/v1/health)
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › guest mutation returns 401 Unauthorized
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › rejects unsigned or tampered session cookies
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › OAuth callback rejects invalid state without 500 server error
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › performs real signed cookie session creation, logout invalidation, and replay rejection
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › banned valid session returns 403 and unrelated actions never unban
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › requireAdmin guard uses immutable server-configured user IDs
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › denies admin even when the authenticated user owns the legacy Discord allowlisted identity
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › rejects a correctly signed cookie whose persisted session has expired
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › requireOnboarded guard handles negative and positive cases
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › CSRF guard rejects missing, null, foreign, misleading-prefix, and spoofed Host mutations
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › disables automatic account linking by email
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › handles POST /api/auth/sign-in/social with JSON payload, returns Discord OAuth URL with state, and rejects invalid Origin
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › rejects guest account linking attempts through real handler
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+  ● T08 - Discord Auth, Session Guard & Security (Integration) › configures Secure cookies on HTTPS base URL outside production and rejects tampered / expired session cookies
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      85 |
+      86 |     pool = new pg.Pool({ connectionString: databaseUrl });
+    > 87 |     client = await pool.connect();
+         |              ^
+      88 |
+      89 |     await client.query(`CREATE SCHEMA "${schemaName}"`);
+      90 |     await client.query(`SET search_path TO "${schemaName}"`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/auth.integration.spec.ts:87:14)
+
+Test Suites: 1 failed, 1 total
+Tests:       16 failed, 16 total
+Snapshots:   0 total
+Time:        15.839 s
+Ran all test suites matching apps/api/test/auth.integration.spec.ts.
+(node:13928) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-email.integration.spec.ts (10.804 s)
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › enables verified email auth with explicit password/token policy and disabled unsafe routes
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › creates no pre-verification session, preserves password spaces and salts separately; duplicate is generic
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › verifies once, rejects replay/expired token and returns nullable email-only owner DTOs
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › mails the FG verification screen and exposes JSON success/replay/expiry without a redirect
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › requires valid email/password and rejects unknown identities, short/oversized or actor override requests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › resets once, revokes old sessions, expires links and handles concurrent consumption atomically
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › requires current password for change and revokes other sessions
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › old Discord verification does not attach password; fresh link bound to current user/session retains identity
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › cannot merge or add missing credential through public reset; session revoke/ban/expiry blocks attachment
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › rate-limits login attempts and mail resend without sending to unknown accounts
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › resend links are distinct and each can be consumed only once, including simultaneous verification
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › binds attachment to the same session even for the same user and resolves duplicate consume once
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › denies expired challenge and a ban added after the message was sent
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › checks session expiry at real consumption time after waiting on the owner lock
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● AUTH02 real HTTP, PostgreSQL and SMTP security › returns a real delivery error when the SMTP server refuses the recipient and does not forge success
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+
+  ● Test suite failed to run
+
+    Connection terminated unexpectedly
+
+      82 |   auth=createFgAuth(db,options);server=http.createServer(toNodeHandler(auth));await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+      83 |  },60000);
+    > 84 |  afterAll(async()=>{if(server)await new Promise<void>(resolve=>server.close(()=>resolve()));if(sink){sink.transport.close();await sink.close();}if(pool)await pool.end();if(admin){await admin.query(`DROP SCHEMA "${schemaName}" CASCADE`);await admin.end();}});
+         |                                                                                                                                                                                    ^
+      85 |  it('enables verified email auth with explicit password/token policy and disabled unsafe routes',()=>{
+      86 |   expect(auth.options.emailAndPassword?.enabled).toBe(true);expect(auth.options.emailAndPassword?.requireEmailVerification).toBe(true);expect(auth.options.emailAndPassword?.minPasswordLength).toBe(8);expect(auth.options.emailAndPassword?.maxPasswordLength).toBe(256);expect(auth.options.emailVerification?.expiresIn).toBe(86400);expect(auth.options.emailAndPassword?.resetPasswordTokenExpiresIn).toBe(3600);expect(auth.options.emailAndPassword?.revokeSessionsOnPasswordReset).toBe(true);expect(auth.options.account?.accountLinking?.enabled).toBe(false);
+      87 |   expect(auth.options.disabledPaths).toContain('/set-password');expect(auth.options.disabledPaths).toContain('/get-access-token');expect(auth.options.disabledPaths).toContain('/refresh-token');
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at Object.<anonymous> (test/auth-email.integration.spec.ts:84:180)
+
+Test Suites: 1 failed, 1 total
+Tests:       15 failed, 15 total
+Snapshots:   0 total
+Time:        11.197 s, estimated 31 s
+Ran all test suites matching apps/api/test/auth-email.integration.spec.ts.
+(node:2908) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-admin.integration.spec.ts (11.365 s)
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › enforces composition and code points on native signup including128 astral points
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › does not normalize new credentials on signup or native login
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › keeps actual legacy credential signin and current-password proof working
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › never grants by a Discord allowlist, display name, email or multiple IDs
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › blocks reserved names on public signup, native update, profile and onboarding
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › logs the reserved alias into only the configured verified credential identity and returns native cookies
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › rate limits the alias and enforces logout/revoke/ban without trusting an old session
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › provisions only one pending owner, retries without resetting the hash and activates only after real verification
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › rejects invalid input, occupied identities and an existing kingame owned by another account
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+
+  ● Test suite failed to run
+
+    Connection terminated unexpectedly
+
+      93 |   server=http.createServer(toNodeHandler(auth));await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+      94 |  },60000);
+    > 95 |  afterAll(async()=>{if(server)await new Promise<void>(resolve=>server.close(()=>resolve()));if(sink){sink.transport.close();await sink.close();}if(pool)await pool.end();if(admin){if(!/^test_auth_admin_[a-f0-9]{32}$/.test(schemaName))throw new Error('Unsafe fixture cleanup');await admin.query(`DROP SCHEMA "${schemaName}" CASCADE`);await admin.end();}if(originalAdmin===undefined)delete process.env.ADMIN_USER_IDS;else process.env.ADMIN_USER_IDS=originalAdmin;if(originalDiscord===undefined)delete process.env.ADMIN_DISCORD_IDS;else process.env.ADMIN_DISCORD_IDS=originalDiscord;});
+         |                                                                                                                                                                                                                                                                                    ^
+      96 |  it('enforces composition and code points on native signup including128 astral points',async()=>{
+      97 |   for(const pass of ['Aa!xxxx','abcdefg!','ABCDEFGx','Aa      ',`A${'😀'.repeat(128)}`])expect((await post('/sign-up/email',{name:'FG player',email:email(),password:pass})).status).toBe(400);
+      98 |   for(const pass of [password,`A!${'x'.repeat(126)}`,`A${'😀'.repeat(127)}`]){const address=email();expect((await post('/sign-up/email',{name:'FG player',email:address,password:pass})).status).toBe(200);expect((await stored(address)).email_verified).toBe(false);await verify(address);expect((await post('/sign-in/email',{email:address,password:pass})).status).toBe(200);}
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:95:276)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 5 passed, 14 total
+Snapshots:   0 total
+Time:        11.759 s, estimated 40 s
+Ran all test suites matching apps/api/test/auth-admin.integration.spec.ts.
+(node:3128) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/auth-profile-read.integration.spec.ts (10.949 s)
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › first login returns explicit incomplete onboarding and empty stored interests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › a profile without interests does not falsely complete onboarding
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › stored interests without a profile remain incomplete and are restored from DB
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › onboarding without rank is complete and remains correct across fresh GET requests
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › GET me retains explicitly cleared avatar after another unrelated profile update
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+  ● T08-FIX1 authenticated persisted profile read (real PostgreSQL) › guest cannot read private completion state and public profile omits private identity/state
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 6 total
+Snapshots:   0 total
+Time:        11.295 s, estimated 12 s
+Ran all test suites matching apps/api/test/auth-profile-read.integration.spec.ts.
+(node:21148) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/rooms.integration.spec.ts (12.442 s)
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › rejects guest with 401 LOGIN_REQUIRED
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › rejects unonboarded user with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › rejects banned user with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › rejects invalid gameId with 422 INVALID_INPUT
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms › creates room successfully and sets owner membership & conversation
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns own rooms for owner
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:362:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns empty page for user with no room memberships
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › returns empty page for user with no room memberships
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:362:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › validates malformed pagination cursor with 422 INVALID_INPUT
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms & GET /api/v1/rooms/own › validates malformed pagination cursor with 422 INVALID_INPUT
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:362:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › prevents outsider from viewing room detail with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › prevents outsider from viewing room detail with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:406:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to view room detail
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:406:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › prevents outsider from viewing room members with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › prevents outsider from viewing room members with 403 FORBIDDEN
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:406:23)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to list members
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › GET /api/v1/rooms/:id & GET /api/v1/rooms/:id/members › allows room member to list members
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:406:23)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › prevents non-owner from modifying room settings
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › prevents non-owner from modifying room settings
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:485:23)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/settings & PRIVATE recruitment closure › updates settings and atomically closes OPEN public recruitments when visibility becomes PRIVATE
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:485:23)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › rejects assigning owner-only permission (OWNER_TRANSFER) to helper with 422 INVALID_INPUT
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:542:23)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › assigns valid helper permissions
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › assigns valid helper permissions
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:542:23)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › demotes helper back to member when permissions list is empty
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › PATCH /api/v1/rooms/:id/helpers/:userId › demotes helper back to member when permissions list is empty
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:542:23)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › rejects transferring ownership to an outsider (non-member) with 403 or 422
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › rejects transferring ownership to an outsider (non-member) with 403 or 422
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:609:23)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › POST /api/v1/rooms/:id/transfer-owner › transfers ownership to an existing member
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      189 |     const ownerId = options.ownerId || 'user-owner';
+      190 |
+    > 191 |     const client = await pool.connect();
+          |                    ^
+      192 |     try {
+      193 |       await client.query('BEGIN');
+      194 |       await client.query(
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at createTestRoomSql (test/rooms.integration.spec.ts:191:20)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:609:23)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › prevents owner from leaving room when other members exist
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › allows non-owner member to leave room and revokes chat access
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › dissolves room when sole owner leaves
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+  ● T18 Room Management, Members & Ownership Integration › DELETE /api/v1/rooms/:id/members/:userId & DELETE /api/v1/rooms/:id › allows owner to dissolve room directly
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      58 |     });
+      59 |
+    > 60 |     await pool.query(`CREATE SCHEMA "${owned}"`);
+         |     ^
+      61 |
+      62 |     const client = await pool.connect();
+      63 |     try {
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/rooms.integration.spec.ts:60:5)
+
+
+  ● Test suite failed to run
+
+    Cleanup failed with 1 error(s):
+    Error: Error: connect ECONNREFUSED 127.0.0.1:55432
+        at Object.<anonymous> (E:\FGweb\code\apps\api\test\rooms.integration.spec.ts:164:50)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+      162 |         }
+      163 |       } catch (err) {
+    > 164 |         errors.push(err instanceof Error ? err : new Error(String(err)));
+          |                                                  ^
+      165 |       } finally {
+      166 |         try {
+      167 |           await pool.end();
+
+      at Object.<anonymous> (test/rooms.integration.spec.ts:164:50)
+      at Object.<anonymous> (test/rooms.integration.spec.ts:177:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       23 failed, 23 total
+Snapshots:   0 total
+Time:        12.801 s, estimated 26 s
+Ran all test suites matching apps/api/test/rooms.integration.spec.ts.
+{"isolatedSuites":5,"passed":0}

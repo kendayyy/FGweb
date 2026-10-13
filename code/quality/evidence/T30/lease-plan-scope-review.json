@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-10-10T20:28:25.012Z",
+  "reviewer": "Codex",
+  "approval": "Persistent human continue until completion, necessary narrowly reviewed current T30 integration repair",
+  "reason": "Necessary T30 native repair after measured57014 room-lock timeout, lease SQL p5047ms and609 executions. Real owned EXPLAIN shows repeated planning23.532–27.529ms vs execution0.668–0.788ms; JIT absent, owned ANALYZE leaves planning14.899–17.084ms. Named prepared statement for unchanged liveLease SQL/parameters: cache parse/plan only, execute fresh authority each call/frame. Preserve exact predicates/clock_timestamp/read-committed/room locks and all timeouts. No production/schema/service/feature changes.",
+  "requestedPaths": [
+    "apps/api/src/modules/calls/lease-store.ts",
+    "apps/api/dist/modules/calls/lease-store.js",
+    "apps/api/dist/modules/calls/lease-store.js.map"
+  ],
+  "originals": [
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "sha256": "bfc98b8f0e310180a8f89efd6bac0b23d7df96dd7eaa8a6584a41e95fe01c315"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/lease-store.js",
+      "sha256": "8c6f485f6538514ee5637cc5d3b898ea6abc786bf5662ce1d19236d0336760e6"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/lease-store.js.map",
+      "sha256": "8c8d5c392c118cfc3e93efbd6d64c652f7627b4f25ec0687d9bc9e8a73a5e270"
+    }
+  ],
+  "evidence": [
+    "quality/evidence/T30/gateway-timing-summary-2.json",
+    "quality/evidence/T30/codex-t30-query-plan-diagnostic-2.json"
+  ],
+  "references": [
+    "https://www.postgresql.org/docs/17/sql-prepare.html",
+    "node_modules/pg/lib/query.js",
+    "node_modules/pg/lib/client.js"
+  ],
+  "sourceAdoptionPending": true
+}

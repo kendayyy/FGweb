@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-12T17:46:53.025Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual PG RED verifies all6 current room/group guards and missing group, but current lock uses3 SQL roundtrips. Materialized CTE takes room SHARE before group UPDATE in one SQL statement; same group fields/fresh row lock, joins enforce current matching room. No member/lease/policy/nativeRPC/grace/expiry/coalescing/pool/deadline changes, all remaining source reverse byte-exact. Fresh blocked-group order/closed state and original security regression controls required before native rerun.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-lock-batch-reviewed1.ts",
+      "beforeSha256": "e4df48fdbb22a79f7f4d4289e90fb88a49b725ed1e3242bc0544d452d583452d",
+      "afterSha256": "d32e443a6d2053555444e0755e4e3542d0ab89f3c10339f2d372ff8a906b4efd"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/lifecycle-lock-batch-adoption-plan1.json",
+    "sha256": "2851cc708357305fe49d5367143205ae0c9ae34f624ace2d4103168fab26db35"
+  },
+  "nativeAcceptancePending": true
+}

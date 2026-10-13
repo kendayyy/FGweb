@@ -1,0 +1,4 @@
+import fs from 'node:fs';
+const p='quality/evidence/T30/antigravity-inspector-client-reservation-review-invocation.json',j=JSON.parse(fs.readFileSync(p,'utf8'));
+fs.appendFileSync('../.doc/history.md',`\n- Coding and build 2 — T30 — resume/refactor inspector reservation ${new Date().toISOString()}: resume from rejected round1, verified actual rejection record and history against immutable proposal/current source pins. Same fixed Gemini3.6FlashHigh refactor invoked ${j.startedAt}, isolated review-1 folder only. No Anti2/subagents/application edits/tests run; canonical must retain actual shaped gateway, exact three SQLs and original native deadlines. Require truthful own-client release/end/error/write health and independent cleanup before actual idle/state/fault smoke. Evidence code/${p}; existing99 real guards/APIbuild9 retained, native acceptance pending/80priorPASS unchanged/IN_PROGRESS/no T31.\n`);
+console.log('Actual resume and refactor invocation recorded.');

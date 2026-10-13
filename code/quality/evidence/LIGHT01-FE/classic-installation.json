@@ -1,0 +1,70 @@
+{
+  "taskId": "LIGHT01-FE",
+  "recordedAt": "2026-10-07T16:22:48.475Z",
+  "installation": "COMPLETE",
+  "taskStatus": "BLOCKED",
+  "cliVersion": "4.21.4",
+  "source": "https://toggles.dev/toggles/classic",
+  "files": {
+    "apps/web/components.json": "e8ab8d7981840c30208326b27fd55cabbb88dce980ccd82302c675058bfcc8c5",
+    "apps/web/src/components/ui/classic.tsx": "75a3d1d891845f92fa10f3edbc316c3955a7e05d8bf9fb29b909127419cb246d",
+    "apps/web/tsconfig.json": "5e7170959851c94d53287e6122b699d284647aefd6f4089fb9d5b2ba3d11f05f",
+    "apps/web/vite.config.ts": "d2f165dbd1866c990752602409c7d359bfd778c3a77c31450ad892febc3a215a"
+  },
+  "commands": [
+    {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npx-cli.js --yes shadcn@latest add @toggles/classic --cwd apps/web --yes",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:20:19.337Z",
+      "completedAt": "2026-10-07T16:20:28.474Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-classic-add-2.txt",
+      "evidenceSha256": "4bb26f5c4bd966ba0bd78772f2eb69a4ac314638c705e903158a2f8a76d1c010"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/web/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:20:48.452Z",
+      "completedAt": "2026-10-07T16:21:02.387Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-classic-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/web/src/components/ui/classic.tsx apps/web/vite.config.ts quality/evidence/LIGHT01-FE/classic-install-scope.mjs quality/evidence/LIGHT01-FE/classic-alias-scope.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:21:15.396Z",
+      "completedAt": "2026-10-07T16:21:23.003Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-classic-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:21:46.997Z",
+      "completedAt": "2026-10-07T16:22:05.824Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-classic-build-1.txt",
+      "evidenceSha256": "b83c1b3fec8b04b61e0653332fc80e5d9e6e8f91e99bc7aa9b92ba7f79873b49"
+    }
+  ],
+  "existingRuntimeAndTestsPreserved": 24,
+  "applicationDependenciesUnchanged": true,
+  "applicationStylesAndThemeControlUnchanged": true,
+  "notVerified": [
+    "Rendered Classic animation and accessibility: component is not integrated",
+    "New smoke palette and selector mockup approval",
+    "Historical baseline migration"
+  ],
+  "notes": [
+    "First preflight wrapper failed to spawn npm.cmd on Windows; rerun via Node recorded actual gate failure.",
+    "First add exited0 at unanswered components.json prompt without installing; only second add is counted.",
+    "Relative aliases rejected in first dry run; matching TypeScript/Vite @ aliases configured.",
+    "Installation does not change task PASS status."
+  ]
+}

@@ -1,0 +1,22 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:23260) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (52.179 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    Hash mismatch while decrypting
+
+      at __wbg_Error_92b29b0548f8b746 (../../node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:10443:17)
+      at wasm_bindgen[ac3055c217ef217b]::__wbindgen_error_new::__wbg_Error_92b29b0548f8b746 externref shim (../../wasm:/wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:1:4251833)
+      at <wasm_bindgen[ac3055c217ef217b]::JsError as core[f0fd674eaa06beef]::convert::From<core[f0fd674eaa06beef]::io::error::Error>>::from (../../wasm:/wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:1:3599070)
+      at attachment_decrypt multivalue shim (../../wasm:/wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:1:4131555)
+      at Attachment.decrypt (../../node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:32:26)
+      at test/chat-crypto-legacy.integration.spec.ts:259:301
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        52.612 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

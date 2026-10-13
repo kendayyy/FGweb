@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-10T18:31:57.841Z",
+  "reviewer": "Codex",
+  "source": "quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts",
+  "beforeSha256": "7f7b8f6759b7fc29a32ea4e0894d8d00319d7b9415cb237ee20d3309db3c6836",
+  "target": "quality/evidence/T30/codex-reviewed-corrections-1/media.ts",
+  "afterSha256": "4bcfa566ce5d1407ebe42bfe5839e9491a3e30bb263f0e9394d6923b43e8fdf1",
+  "findings": [
+    "Installed publishUtils.ts selects screenShareEncoding for screen sources; videoEncoding is ignored and SDK default limits capture to15fps. Set actual h720fps30 screen encoding, low video priority while SDK audio defaults high.",
+    "Match native local wrapper mediaStreamTrack identity during in-flight publish, retaining stale SID guards."
+  ],
+  "primarySources": [
+    "node_modules/livekit-client/src/room/participant/publishUtils.ts",
+    "node_modules/livekit-client/src/room/defaults.ts",
+    "node_modules/livekit-client/src/room/participant/LocalParticipant.ts"
+  ],
+  "applicationAdopted": false
+}

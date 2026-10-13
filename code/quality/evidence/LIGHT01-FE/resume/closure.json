@@ -1,0 +1,404 @@
+{
+  "recordedAt": "2026-10-07T18:04:52.448Z",
+  "task": "LIGHT01-FE",
+  "status": "PASS",
+  "reason": "Reviewed replacement ownership snapshot; all mandatory tests/evidence and strict next-task gate pass. Historical outputs remain immutable.",
+  "checks": {
+    "webRegression": 171,
+    "webFiles": 13,
+    "headedE2E": 7,
+    "headedEvidence": "quality/evidence/LIGHT01-FE/codex-compact-headed-2.json",
+    "readonlyFiles": 5028,
+    "historicalRecordsPreserved": true,
+    "credentialsUnchanged": true,
+    "baselines": 8,
+    "checkerUnchanged": true,
+    "strictNextGate": "PASS"
+  },
+  "failedAttemptsRetained": [
+    {
+      "record": {
+        "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/theme.test.tsx --maxWorkers 1",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:24:33.083Z",
+        "completedAt": "2026-10-07T14:24:41.261Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-behavior-red-1.txt",
+        "evidenceSha256": "76a09c5391cade1428f79d9985042737eb09e6ac4a1cb8d89dc31588d288ba89"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-green-unit-1.json",
+      "reason": "Expected behavioral RED retained; corresponding latest behavior checks pass"
+    },
+    {
+      "record": {
+        "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed --grep native authenticated",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:31:58.895Z",
+        "completedAt": "2026-10-07T14:32:16.747Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-mobile-auth-red-1.txt",
+        "evidenceSha256": "a8e837acacbb7782a5d5ae3566b1353892ff1009c8d60d9081480077c1eaca61"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-headed-2.json",
+      "reason": "Expected behavioral RED retained; corresponding latest behavior checks pass"
+    },
+    {
+      "record": {
+        "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:32:56.594Z",
+        "completedAt": "2026-10-07T14:33:32.451Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-headed-e2e-2.txt",
+        "evidenceSha256": "826ec74c42b591e45cdb8df100fb9178b151c10ea2cc8cfd40a488d275f15708"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-headed-2.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node node_modules/eslint/bin/eslint.js apps/web/src/features/theme apps/web/src/App.tsx apps/web/src/features/auth/AuthFields.tsx apps/web/src/features/auth/HeaderAuthWidget.tsx apps/web/src/components/ui/Alert.tsx apps/web/src/features/profiles/ProfileHeader.tsx apps/web/src/features/friends/PeerSocialControls.tsx apps/web/src/features/friends/FriendsModal.tsx apps/web/src/features/direct-messages/DirectMessagesPanel.tsx apps/web/src/features/lobby/LobbyPage.tsx apps/web/test/theme.test.tsx tests/e2e/theme.spec.ts quality/evidence/LIGHT01-FE",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:35:24.898Z",
+        "completedAt": "2026-10-07T14:35:29.560Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-lint-1.txt",
+        "evidenceSha256": "a5464f2980a59271c5569051cdf5191eab806855efeccbae8640e63c4ea14e05"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-final-lint-1.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node node_modules/typescript/bin/tsc --noEmit -p quality/evidence/LIGHT01-FE/test-types.json",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:35:40.292Z",
+        "completedAt": "2026-10-07T14:35:49.103Z",
+        "exitCode": 2,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-test-types-1.txt",
+        "evidenceSha256": "2225f661a00f3cbc7ab3b8f28b9d313b9d9fb8d7a89aaea1f901a1ac03fb4d13"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-final-types-1.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed --grep native authenticated",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:38:50.132Z",
+        "completedAt": "2026-10-07T14:39:19.008Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-mobile-height-red-1.txt",
+        "evidenceSha256": "69e74279e2956e91035d9ed61eced1cf917ba494635870faf94ab1c9d6c714c7"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-headed-2.json",
+      "reason": "Expected behavioral RED retained; corresponding latest behavior checks pass"
+    },
+    {
+      "record": {
+        "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:39:52.971Z",
+        "completedAt": "2026-10-07T14:40:27.181Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-headed-e2e-4.txt",
+        "evidenceSha256": "5351749a6951508e5cfdbcc7dc06078c158519ac8172306bda5f17fecb1863b0"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/codex-compact-headed-2.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node quality/evidence/LIGHT01-FE/audit.mjs",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T14:45:34.884Z",
+        "completedAt": "2026-10-07T14:45:35.046Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-pending-report-audit-1.txt",
+        "evidenceSha256": "cda2935847d750af2753fd33838c4d8055cc9666fbb0599db8ecbc2121349254"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/resume/closure.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node quality/evidence/LIGHT01-FE/warm-audit.mjs",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T15:31:20.463Z",
+        "completedAt": "2026-10-07T15:31:20.730Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-warm-scope-audit-1.txt",
+        "evidenceSha256": "039bf1247d24d670833a9d0c90a98a62a677c54cb601c3d3b1b8dd09d1c9012a"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/resume/closure.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    },
+    {
+      "record": {
+        "command": "node quality/evidence/LIGHT01-FE/warm-audit-reviewed.mjs",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-07T15:35:38.513Z",
+        "completedAt": "2026-10-07T15:35:38.671Z",
+        "exitCode": 1,
+        "signal": null,
+        "evidencePath": "quality/evidence/LIGHT01-FE/codex-warm-final-audit-1.txt",
+        "evidenceSha256": "c4b6259736d1151915dac9ed4e1981712698b88008a3f172f7d08cfca51699fb"
+      },
+      "resolvedBy": "quality/evidence/LIGHT01-FE/resume/closure.json",
+      "reason": "Superseded by verified corrective build/test or reviewed ownership/baseline closure; original log and exit code retained"
+    }
+  ],
+  "replacements": [
+    {
+      "path": "apps/web/vite.config.ts",
+      "previousOwner": "T02-OAUTH-FIX1",
+      "previousHash": "dffcd6f41297ef6b62895e52fa36ba3e1d4b68328fd92dbd7df926cb6407437d",
+      "newHash": "d2f165dbd1866c990752602409c7d359bfd778c3a77c31450ad892febc3a215a"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "previousOwner": "T01",
+      "previousHash": "53e05bcaa43b97c773368e4b08a84d82a8156f58bfe23e908714c578a7e1e5bc",
+      "newHash": "5e7170959851c94d53287e6122b699d284647aefd6f4089fb9d5b2ba3d11f05f"
+    },
+    {
+      "path": "apps/web/src/styles/global.css",
+      "previousOwner": "T09",
+      "previousHash": "16a1fc0f961486d5d6897b545df91f57c8f9ccc8f5b746a167163a281dabad0b",
+      "newHash": "3dc11914ce3f6f155e312d1d6c8d5a0beecc7d40e75ff7fe0386ba1c8d9cb7c2"
+    },
+    {
+      "path": "apps/web/src/features/auth/HeaderAuthWidget.tsx",
+      "previousOwner": "AUTH-ADMIN-SINGLE",
+      "previousHash": "22a2b05a675783a27f9fd78319e3aa14ce33bacce6b107ee65c1c9e32ece985b",
+      "newHash": "08a02f7bf37c1d0284f70dce8c3497b0f820a64a674c7ad01971c43f1ad6fc3b"
+    },
+    {
+      "path": "apps/web/src/styles/tokens.css",
+      "previousOwner": "T09",
+      "previousHash": "3109fc6c14bbcd195d53fa58c2f8b78c51078307ebcd97a7cfc5fff820d4914a",
+      "newHash": "4f389e050026358e0096668ae105a3cec0d142ff0dabe36fe9fc4e1aef1c97af"
+    },
+    {
+      "path": "apps/web/index.html",
+      "previousOwner": "T09",
+      "previousHash": "a471ffa8dca118b0a81ce47e908c6d89f6774c6324351d3e75e814102d7d3454",
+      "newHash": "b1f2a82d4ffa63f1860785251f24957c021a0f526b55e7b8284e19c148e4039f"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "previousOwner": "AUTH02-FE",
+      "previousHash": "da8f681160597fd1e876a57c43dce894d0d212979b4d7533d2761679fd4aadef",
+      "newHash": "f010e0ca5352c1004fd7c0994c9c188046d3321ec71852134cdfce7cd1aba11b"
+    },
+    {
+      "path": "apps/web/src/components/ui/Alert.tsx",
+      "previousOwner": "T09",
+      "previousHash": "961a3a87979d4056fd361a330902bd3fc4e9ae2cae3885084a77cb97e0207a30",
+      "newHash": "6539d93f1fbb45e3ea6f3d8fab5c04b5e5b587cbde6d987b03e1c1ac98d5e4f7"
+    },
+    {
+      "path": "apps/web/src/features/profiles/ProfileHeader.tsx",
+      "previousOwner": "T11",
+      "previousHash": "38903d2b6f37dfc820673878bb152344989c3e7d3f8f41f7aeabe719d8ae6a75",
+      "newHash": "e2e929337ceb73babc3d72d0c96e93d0717f678ac0392ccdbbe17c7bf685af97"
+    },
+    {
+      "path": "apps/web/src/features/lobby/lobby.css",
+      "previousOwner": "T13",
+      "previousHash": "bca0b95828c553eb637f4950cb294fb347aab22106f6b14421ba64bf8ab8472a",
+      "newHash": "bce7b0932a1444ea52d58cbb43aba068746e81fa248159bf01fac34f90c748b0"
+    },
+    {
+      "path": "apps/web/src/features/lobby/LobbyPage.tsx",
+      "previousOwner": "AUTH02-FE",
+      "previousHash": "62dac8888dda92251b0ecaed08f49434da589cfad34ef4e470b778ddac1f109d",
+      "newHash": "ccac67d1ac5dd4fd876800d4ddf191261d5939bfe528e00f86678f65ba17e60a"
+    },
+    {
+      "path": "apps/web/src/features/lobby/responsive.css",
+      "previousOwner": "T13",
+      "previousHash": "f431129e21cef86724059071beb30d18f0f013b6283d73f390bbd64889793ec4",
+      "newHash": "87a9eb0e0d02ca0c65a1200f5aa9ee30120615e9c5665ecb017c53ad0dccaa7e"
+    },
+    {
+      "path": "apps/web/src/features/presence/presence.css",
+      "previousOwner": "T16-FE",
+      "previousHash": "6b81566a25d254ace3b490f6e9bbef89e6efbc358f12b274bbbc90edd3b35336",
+      "newHash": "de0e19a8b4e5e3637d763283e70b5b8785812aa10b6839e26335501d74be5424"
+    },
+    {
+      "path": "apps/web/src/features/friends/FriendsModal.tsx",
+      "previousOwner": "T17-FE",
+      "previousHash": "30bf9eefe5da82641cae535d0f79117597cb669ed40f16c89d42650c4c0e712e",
+      "newHash": "35ab8b86e226e44d59900fa080d5a4aeed67d7b07fe31e4d96844e06da91bd51"
+    },
+    {
+      "path": "apps/web/src/features/friends/PeerSocialControls.tsx",
+      "previousOwner": "T17-FE",
+      "previousHash": "8fc74c1c8da59b311a0074267f9693002db79a3288808ac252b69335eb30377d",
+      "newHash": "1082fc4f34eb1227662e928a82d446f82579fb7c2fd7ad54bf134bb726582bb6"
+    },
+    {
+      "path": "apps/web/src/features/direct-messages/DirectMessagesPanel.tsx",
+      "previousOwner": "T17-FE",
+      "previousHash": "17a8e0ba44951a9b65d31e8a8b769edd58b9a3972a9bdeab8df51c8290588542",
+      "newHash": "9429827380e3c15f1af6937ea60bea145615717cc9851ac9d996b59f336bf63f"
+    },
+    {
+      "path": "apps/web/src/features/rooms/rooms.css",
+      "previousOwner": "T19",
+      "previousHash": "3cf54808387e2cfd1c8b058e18c72daf855c5025e14f76eb77223762620ef604",
+      "newHash": "0c52dd9cde027b74fd48b2214758bd6ea33d61fd31db112bd106151340b4d964"
+    },
+    {
+      "path": "quality/spec-baseline.json",
+      "previousOwner": "T00-REBASE-SUPPORT01",
+      "previousHash": "f510193fca473f926b5f26577c44e82d81cd0fdfaa87766c668d4aed883fcbf0",
+      "newHash": "911360a7921bcf5a8eb456bbb4abe47c64f50721abe079e996971bda8c8a87d8"
+    },
+    {
+      "path": "AGENTS.md",
+      "previousOwner": "T00-REBASE-VISIBILITY2",
+      "previousHash": "479d0fb6332118deedb90375edcf8802fe7c57b2d189e412652441e2c2a67a60",
+      "newHash": "5e1c0f5524a51af4efc0b388b89650599e6e8a820f0c5d0cdfc746af07090ca0"
+    },
+    {
+      "path": "apps/web/src/features/auth/auth.css",
+      "previousOwner": "AUTH-ADMIN-SINGLE",
+      "previousHash": "eee79ee4feba16c29b02ff8cdb574932997ed5c43079f16528a8d0df8503f26a",
+      "newHash": "d20b8f77b796b48086bd0761120c5d9df5eff33b39599da025db7bd7796d8237"
+    },
+    {
+      "path": "apps/web/src/features/auth/AuthFields.tsx",
+      "previousOwner": "AUTH-ADMIN-SINGLE",
+      "previousHash": "0810c9b04b15d220b8dafb9eaa0392bae4ae7b79842f8223b0a201a3d4cad5f6",
+      "newHash": "6dbce9e521295d6629f9143b5b295ed815aff540468d16b51643cb1ce9875436"
+    },
+    {
+      "path": "apps/web/dist/index.html",
+      "previousOwner": "T02-OAUTH-FIX1",
+      "previousHash": "2dad03cab39808016b5daceda74ee2172bf4b9561a8107ca7c959c7647725c7b",
+      "newHash": "bacb532ed47ce7b803f829e69530e80250c830235d62e60132ed9365ab12eda8"
+    }
+  ],
+  "outputsHash": {
+    "specSha256": "259fbb1682a5fc0876c340f8b853337b665a29a704e99cac5dd422aad4e79dc5",
+    "files": {
+      "apps/web/components.json": "e8ab8d7981840c30208326b27fd55cabbb88dce980ccd82302c675058bfcc8c5",
+      "apps/web/src/components/ui/classic.tsx": "bcfc282c38adbc15f5e1adfa283d3b037459d13b911cb76645b7fed94fa1c157",
+      "apps/web/src/features/theme/ThemeProvider.tsx": "b5142b6718056f4fc4cfd5cb057c067c6f6026863f3c7d011f0d6be90dda7f8d",
+      "apps/web/src/features/theme/ThemeSwitcher.tsx": "786f2fb2fcf1fc58ba1a26132edfce2d6e207bacd108b26dce0cb8dfa4d07551",
+      "apps/web/src/features/theme/theme.css": "42067c167cbc61041b00f24940249047f5cfb6f881b52ecb69b9f25dcc4ef029",
+      "apps/web/src/features/theme/theme.ts": "6e8028e43356f9ad2759aef1f5a5e21a55701428b9d2e15aeb222bab7967d277",
+      "apps/web/test/theme.test.tsx": "3c80785aa8c65b3935d1f68b3223f106781d7c30e2f1fd4a5eda1f07500cbff9",
+      "tests/e2e/theme.spec.ts": "5429815e21be56d215c2e12e73484e5baf410a9588295fbfa607772218195ab3",
+      "AGENTS.md": "5e1c0f5524a51af4efc0b388b89650599e6e8a820f0c5d0cdfc746af07090ca0",
+      "apps/web/index.html": "b1f2a82d4ffa63f1860785251f24957c021a0f526b55e7b8284e19c148e4039f",
+      "apps/web/src/App.tsx": "f010e0ca5352c1004fd7c0994c9c188046d3321ec71852134cdfce7cd1aba11b",
+      "apps/web/src/components/ui/Alert.tsx": "6539d93f1fbb45e3ea6f3d8fab5c04b5e5b587cbde6d987b03e1c1ac98d5e4f7",
+      "apps/web/src/features/auth/AuthFields.tsx": "6dbce9e521295d6629f9143b5b295ed815aff540468d16b51643cb1ce9875436",
+      "apps/web/src/features/auth/HeaderAuthWidget.tsx": "08a02f7bf37c1d0284f70dce8c3497b0f820a64a674c7ad01971c43f1ad6fc3b",
+      "apps/web/src/features/auth/auth.css": "d20b8f77b796b48086bd0761120c5d9df5eff33b39599da025db7bd7796d8237",
+      "apps/web/src/features/direct-messages/DirectMessagesPanel.tsx": "9429827380e3c15f1af6937ea60bea145615717cc9851ac9d996b59f336bf63f",
+      "apps/web/src/features/friends/FriendsModal.tsx": "35ab8b86e226e44d59900fa080d5a4aeed67d7b07fe31e4d96844e06da91bd51",
+      "apps/web/src/features/friends/PeerSocialControls.tsx": "1082fc4f34eb1227662e928a82d446f82579fb7c2fd7ad54bf134bb726582bb6",
+      "apps/web/src/features/lobby/LobbyPage.tsx": "ccac67d1ac5dd4fd876800d4ddf191261d5939bfe528e00f86678f65ba17e60a",
+      "apps/web/src/features/lobby/lobby.css": "bce7b0932a1444ea52d58cbb43aba068746e81fa248159bf01fac34f90c748b0",
+      "apps/web/src/features/lobby/responsive.css": "87a9eb0e0d02ca0c65a1200f5aa9ee30120615e9c5665ecb017c53ad0dccaa7e",
+      "apps/web/src/features/presence/presence.css": "de0e19a8b4e5e3637d763283e70b5b8785812aa10b6839e26335501d74be5424",
+      "apps/web/src/features/profiles/ProfileHeader.tsx": "e2e929337ceb73babc3d72d0c96e93d0717f678ac0392ccdbbe17c7bf685af97",
+      "apps/web/src/features/rooms/rooms.css": "0c52dd9cde027b74fd48b2214758bd6ea33d61fd31db112bd106151340b4d964",
+      "apps/web/src/main.tsx": "269c55d7ee91d10b2fb52a8e1d1ca0323898b8325867718bc25026b2a1cd62b7",
+      "apps/web/src/styles/global.css": "3dc11914ce3f6f155e312d1d6c8d5a0beecc7d40e75ff7fe0386ba1c8d9cb7c2",
+      "apps/web/src/styles/tokens.css": "4f389e050026358e0096668ae105a3cec0d142ff0dabe36fe9fc4e1aef1c97af",
+      "apps/web/tsconfig.json": "5e7170959851c94d53287e6122b699d284647aefd6f4089fb9d5b2ba3d11f05f",
+      "apps/web/vite.config.ts": "d2f165dbd1866c990752602409c7d359bfd778c3a77c31450ad892febc3a215a",
+      "quality/spec-baseline.json": "911360a7921bcf5a8eb456bbb4abe47c64f50721abe079e996971bda8c8a87d8",
+      "apps/web/dist/assets/index-CtPmr-2t.css": "3a7425bd1293406fbf0a10e80978424c6a790473af05ac5fcc61b33bf42d86c5",
+      "apps/web/dist/assets/index-UG3_MFM1.js": "45c8a5212cd531046e5f1bf054a73addd69eb07a4c3932de23a917c1de404e78",
+      "apps/web/dist/assets/inter-cyrillic-400-normal-HOLc17fK.woff": "6e441a6c94788318fa02b6d0a633aa29eebe27b69c6567eb1e59b4edc68ed70e",
+      "apps/web/dist/assets/inter-cyrillic-400-normal-obahsSVq.woff2": "f0bb586459ce8f09b238285040f17e3e9e9538b2c5a7aae0775194e33c36c3c3",
+      "apps/web/dist/assets/inter-cyrillic-500-normal-BasfLYem.woff2": "b77a86ec16aadc157f4a99e8898d71cd75ea264753d9bdf13f962f8c3988cbb0",
+      "apps/web/dist/assets/inter-cyrillic-500-normal-CxZf_p3X.woff": "5be18e0345781cb882a267798518553c0e915174fc70731ab5f085ca64ba1ebc",
+      "apps/web/dist/assets/inter-cyrillic-600-normal-4D_pXhcN.woff": "cc190ed1b64eb650a4ad7e97c7a668cb8b34acd9c4c7f7bf4372c0cbacd35795",
+      "apps/web/dist/assets/inter-cyrillic-600-normal-CWCymEST.woff2": "6c2a37f82a676bcd441b735e4e2cda4edb8873a059ab9c362a84f0711f257041",
+      "apps/web/dist/assets/inter-cyrillic-700-normal-CjBOestx.woff2": "5917871d3cc970d8ce195101cbf65c1f68ec948022eb6070030342bb7edfb3bb",
+      "apps/web/dist/assets/inter-cyrillic-700-normal-DrXBdSj3.woff": "72b6daa49173e531027d8a260ef128e142a165811cab6a2875eefe0c3c58fa0e",
+      "apps/web/dist/assets/inter-cyrillic-800-normal-C7MGvYyJ.woff2": "e84cb164b47aaad63db12da876c341c59f78b6b25f9069dcdea3c1f8ca8b8f9b",
+      "apps/web/dist/assets/inter-cyrillic-800-normal-CCHyn08d.woff": "5d3dc126873486c5a8449a14823c613de707c7ee8b1df23a9e34e76116167627",
+      "apps/web/dist/assets/inter-cyrillic-ext-400-normal-BQZuk6qB.woff2": "ef572f9187a8be018d9d9c2c6b77c1f6cb2af4199f02fc16c292ea10ab25a2cc",
+      "apps/web/dist/assets/inter-cyrillic-ext-400-normal-DQukG94-.woff": "5cb2f1cc0936f89a42ceae34f5a5720248dc5b8114c12b1c33a7d2ef01a9b6b9",
+      "apps/web/dist/assets/inter-cyrillic-ext-500-normal-B0yAr1jD.woff2": "1c2db92d3cd9b237ca7c9c07af556d542f28ded1db54cd4382cf776501c5291f",
+      "apps/web/dist/assets/inter-cyrillic-ext-500-normal-BmqWE9Dz.woff": "e250c05aebcf49971e0b25f476992dd463c28c0292ebb204d9db542fb5066ca7",
+      "apps/web/dist/assets/inter-cyrillic-ext-600-normal-Bcila6Z-.woff": "a5073285409443f4653c858de58c5dc0bfc2fd33e60d8747388345e7c5ab1ab3",
+      "apps/web/dist/assets/inter-cyrillic-ext-600-normal-Dfes3d0z.woff2": "509fca9c59564f9a846fa69bc647f9b050fc11abf1c9f6f3da71fb2d5ed425bd",
+      "apps/web/dist/assets/inter-cyrillic-ext-700-normal-BjwYoWNd.woff2": "a46b99781170971e2c99a87ff7ee9f5cf90a9dfcd18175e1be6300201d030123",
+      "apps/web/dist/assets/inter-cyrillic-ext-700-normal-LO58E6JB.woff": "0f3d4be2bd7018f78fa3484a5f6e9d8ce567689426643b84a47e8cabb91e5f16",
+      "apps/web/dist/assets/inter-cyrillic-ext-800-normal-BZOjs1Xv.woff2": "5c3f504d068a53469514175401cb3fe4d210231f44df0ef15d3da5f32d9ff445",
+      "apps/web/dist/assets/inter-cyrillic-ext-800-normal-Ca-gJeZY.woff": "e87b63bf58fb0490d6a456d44cfdf58d496364f1fe8213a06787ef3cdad25fe8",
+      "apps/web/dist/assets/inter-greek-400-normal-B4URO6DV.woff2": "c15ddd00a9927b56f5c655a41f976f79bd848a20cce91fc14227751872a1cc27",
+      "apps/web/dist/assets/inter-greek-400-normal-q2sYcFCs.woff": "bdae9d28729e8c68587d5d54e216d771a40d7a6800e824586a6e2f570c2f10df",
+      "apps/web/dist/assets/inter-greek-500-normal-BIZE56-Y.woff2": "cc197d79d33a3615a047baae85f4d1957f6f98b8898313658e160b1d519b1b6f",
+      "apps/web/dist/assets/inter-greek-500-normal-Xzm54t5V.woff": "86d55a4b1b9cbced7e61e76d5d44cf49d0bd1c814d3df2de67b7136ab4fdcece",
+      "apps/web/dist/assets/inter-greek-600-normal-BZpKdvQh.woff": "090b24e22fc4ddf41450d13bdec81c8a74808b9fc7edaf8df06c909b177a8992",
+      "apps/web/dist/assets/inter-greek-600-normal-plRanbMR.woff2": "9c5a897f9d9fcfe60d90631d766ae62b4bf1edd76633fa7a4b2f8c87e036789b",
+      "apps/web/dist/assets/inter-greek-700-normal-BUv2fZ6O.woff": "53368f53d5fc43381dcc45c8533ba2476f80337136313525f96dcbdc736616a5",
+      "apps/web/dist/assets/inter-greek-700-normal-C3JjAnD8.woff2": "737c6c91cd60372d30e6540096ada83c89c9b4613cd7472e3366bf2e07ad99f1",
+      "apps/web/dist/assets/inter-greek-800-normal-BU00tryP.woff": "67c23188c195ef3f04f4d0552a898f268a63d377924db280693f267679fc9dab",
+      "apps/web/dist/assets/inter-greek-800-normal-CLIouy3y.woff2": "18a6a4a8e29310db74c01b9d85b30e708e0b1fd8d9a2d01a259b82fe4d112422",
+      "apps/web/dist/assets/inter-greek-ext-400-normal-DGGRlc-M.woff2": "eadedd9e13c2582430a9fb1519eb86152fdabb483a6f66d90f8d8a52e977a1b7",
+      "apps/web/dist/assets/inter-greek-ext-400-normal-KugGGMne.woff": "4f2b6f92ddfece8812e79774d446218aa6e0773ff8c2d31130fe2bdc23bd22d0",
+      "apps/web/dist/assets/inter-greek-ext-500-normal-2j5mBUwD.woff": "c85d11bde719108cc9a4f6f5b008087f6c36493b47395580d4f5336182b0f0c7",
+      "apps/web/dist/assets/inter-greek-ext-500-normal-C4iEst2y.woff2": "75a9ec9383a3b7a7bf7cfb94f64edf38d9cfdc5f7ffa0cbed2733627a6e4426d",
+      "apps/web/dist/assets/inter-greek-ext-600-normal-B8X0CLgF.woff": "efc7aa9cce5c505dd8cc4c4daf00247fa805f37bcda96079239ba3358ab27dfb",
+      "apps/web/dist/assets/inter-greek-ext-600-normal-DRtmH8MT.woff2": "399f94d75aa73403e40e2353e8c0cc75c38f7362a6ca263b3b02d9723157ffe5",
+      "apps/web/dist/assets/inter-greek-ext-700-normal-BoQ6DsYi.woff": "b26ed64c9135a750ad580b92152bedeef90771e74e18f6f7759a6d7adb0f1b5d",
+      "apps/web/dist/assets/inter-greek-ext-700-normal-qfdV9bQt.woff2": "b7b2732ebc981b30a5463ffc850407649dba41e625aee124cc63293da4547629",
+      "apps/web/dist/assets/inter-greek-ext-800-normal-B--PVpEC.woff2": "33bc91a610e159df66b874231f4c8f0037ac947fdd1b270cc60a7ee658a2c21f",
+      "apps/web/dist/assets/inter-greek-ext-800-normal-DUe57HfS.woff": "75c98d8d562061bb76f3936cf1b48246d217209497264113742e8dbbc9198af1",
+      "apps/web/dist/assets/inter-latin-400-normal-C38fXH4l.woff2": "8909904ab6c872eb994093482a88a28eca2cd95912d7b6fecd72103b0dc07edc",
+      "apps/web/dist/assets/inter-latin-400-normal-CyCys3Eg.woff": "e20fa0b4fd2dd26e4d14b3ac3cc922509c3a63fa5e910e90c614544aa042dd45",
+      "apps/web/dist/assets/inter-latin-500-normal-BL9OpVg8.woff": "9b42c108da48b5ed55a3072e815ffee2d271562e6c0dd6998910e8f9c09e0a3d",
+      "apps/web/dist/assets/inter-latin-500-normal-Cerq10X2.woff2": "f3779f1efccc4bdcdf9c0a02ab95bf6bd092ed09c48c08cedc725889edd1d19f",
+      "apps/web/dist/assets/inter-latin-600-normal-CiBQ2DWP.woff": "6a9cb3a509b4eeaf12b7dda6c4aacac3e85d07f4201bf4dd716e332e692b87bd",
+      "apps/web/dist/assets/inter-latin-600-normal-LgqL8muc.woff2": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+      "apps/web/dist/assets/inter-latin-700-normal-BLAVimhd.woff": "7c5ed5655730de337704d3fc94628515cd7e3d8d32368871709bf56ac0397e7a",
+      "apps/web/dist/assets/inter-latin-700-normal-Yt3aPRUw.woff2": "6f56409fd3d64bb85f7d070bce20749db2d66b6d63cec586cc22d1c761be2491",
+      "apps/web/dist/assets/inter-latin-800-normal-BYj_oED-.woff2": "a7d0a50f15d389cad679238466bdb5fc9787aa0715719064ce25abaff042820d",
+      "apps/web/dist/assets/inter-latin-800-normal-D1mf63XC.woff": "a2fdc5be8acd75fe8f3fd9de8179828d04fd884c155cd6b63fec23b33651ec88",
+      "apps/web/dist/assets/inter-latin-ext-400-normal-77YHD8bZ.woff": "22ae8360fbad24d2af7c6c9898a346c881774dc87f7cf94bd262c48ad58d7116",
+      "apps/web/dist/assets/inter-latin-ext-400-normal-C1nco2VV.woff2": "6744a7f509ebc6ab220a6cd4ea77e898adf014f03d88dcda5d45d8a9feefb4e9",
+      "apps/web/dist/assets/inter-latin-ext-500-normal-BxGbmqWO.woff": "30d2903ce97f8a89ea0e9c083b42cb8bf97e7bbb5607e7f00352815f19cb0d5b",
+      "apps/web/dist/assets/inter-latin-ext-500-normal-CV4jyFjo.woff2": "2c6fbc42d315528beb06c1096df45487bf4186c4b78b8111d12c9c951f8acca2",
+      "apps/web/dist/assets/inter-latin-ext-600-normal-CIVaiw4L.woff": "22ff20a6170674fb9637c2a072227be86303bb6ec52b829b9d7077405f7196a6",
+      "apps/web/dist/assets/inter-latin-ext-600-normal-D2bJ5OIk.woff2": "e4bdf67b0cd15ca9e184509275be95db942195d3cc2b17f6a0452f2adf75d0bf",
+      "apps/web/dist/assets/inter-latin-ext-700-normal-Ca8adRJv.woff2": "143f9504f1377012aa3e39c90c4354ef429cb0494b9ac0e1437f1a81e5412236",
+      "apps/web/dist/assets/inter-latin-ext-700-normal-TidjK2hL.woff": "1761edba32014180deab3dbbe3f7156c64ef6f34bc76313ba31ce227fc9ff391",
+      "apps/web/dist/assets/inter-latin-ext-800-normal-BOMpwxm3.woff": "40c8e1bb3d3723f1c2fdb3be722cc42c03afaa4317935cdab9cf520cdf5a6ce8",
+      "apps/web/dist/assets/inter-latin-ext-800-normal-DZJjya6U.woff2": "eade55593308b9e4916dd7f47826929ce3e40cad85a2b338d56e5fd1e7bf8e5e",
+      "apps/web/dist/assets/inter-vietnamese-400-normal-Bbgyi5SW.woff": "54aa42d325bcdfd623ecb9eac4a5e3c6420c63d7b86e9d8545fb479f653beb57",
+      "apps/web/dist/assets/inter-vietnamese-400-normal-DMkecbls.woff2": "547ad9fdaeb0ae43487f4b8a02e47c36553c0c0cb73c8aa98f93b7b615f6b55d",
+      "apps/web/dist/assets/inter-vietnamese-500-normal-DOriooB6.woff2": "44e36aa5a8f12130029a29bb0e6695d0262b67446ce321e878b1fb56162b5de6",
+      "apps/web/dist/assets/inter-vietnamese-500-normal-mJboJaSs.woff": "18a4a09f751671cd8929d7c66e8fe7d820b511c36e51cf6047ffceab88eec4a4",
+      "apps/web/dist/assets/inter-vietnamese-600-normal-BuLX-rYi.woff": "24a01e7bd947aeef91ae8f7b8edeb23fadaf5ceda34a610ce62d2bbdaea57e83",
+      "apps/web/dist/assets/inter-vietnamese-600-normal-Cc8MFFhd.woff2": "1aeb94ae9db052a4a2fe6f3046f928cff1fdbd7abdf870a9a01c13cae6faeba5",
+      "apps/web/dist/assets/inter-vietnamese-700-normal-BZaoP0fm.woff": "412023ab2f41333b373e2c6eb2a3ebab806fddd610015d2ae8cd4f4314c7ba92",
+      "apps/web/dist/assets/inter-vietnamese-700-normal-DlLaEgI2.woff2": "5fafa3829a16d9ea5ac3a67c51e54186353122790b604a3e361f96cab188da8b",
+      "apps/web/dist/assets/inter-vietnamese-800-normal-Cm7tD1pz.woff2": "37852ffd38e1064bd06a0b95aed12cbb4f248c6f0b5ffcf9c1a4ffc40500b22c",
+      "apps/web/dist/assets/inter-vietnamese-800-normal-DDlpr_Ee.woff": "46ce148ad9022e973f68e3e69442d950a30c58285c57d81caa813424a4e9a38d",
+      "apps/web/dist/index.html": "bacb532ed47ce7b803f829e69530e80250c830235d62e60132ed9365ab12eda8"
+    }
+  },
+  "nextTask": "GAME-LOGO-FE",
+  "nextTaskRuntimeNotStarted": true
+}

@@ -1,0 +1,15 @@
+services:
+  openbao:
+    image: ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf
+    command: ["server", "-config=/fg/server.hcl"]
+    user: "0:0"
+    labels:
+      fg.task: T02-FIX3
+      fg.profile: isolated-local-setup
+    ports:
+      - "127.0.0.1:${FG_BAO_LOCAL_PORT:-18200}:8200"
+    volumes:
+      - type: bind
+        source: ${FG_BAO_LOCAL_DIR:?Set an absolute directory under code/.runtime/chatcrypto-setup}
+        target: /fg
+    restart: "no"

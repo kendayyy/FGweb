@@ -1,0 +1,34 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:26304) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (79.125 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    error: new row for relation "chat_crypto_upload_drafts" violates check constraint "chat_crypto_upload_lifecycle_check"
+
+      200 |      const updated=await db.query("UPDATE messages SET content='',encryption_mode='E2EE',crypto_envelope=$3,crypto_revision=$4 WHERE id=$1 AND conversation_id=$2 AND encryption_mode='LEGACY_PENDING'",[source.messageId,id,candidate.envelope,parsed.membershipRevision]);if(updated.rowCount!==1)throw new ConflictException('Historical conversion source changed');
+      201 |      for(const image of snapshot.objects.filter(image=>image.messageId===source.messageId)){
+    > 202 |       const draft=(await db.query('SELECT ciphertext_size FROM chat_crypto_upload_drafts WHERE id=$1 FOR UPDATE',[image.draftId])).rows[0];const claimed=await db.query('UPDATE chat_crypto_upload_drafts SET message_id=$2,consumed_at=clock_timestamp() WHERE id=$1 AND message_id IS NULL AND consumed_at IS NULL',[image.draftId,source.messageId]);if(claimed.rowCount!==1)throw new ConflictException('Historical conversion object changed');
+          |                                                                                                                                                          ^
+      203 |       const attachment=await db.query("UPDATE attachments SET encryption_mode='E2EE',crypto_envelope=NULL,file_name='',mime_type='application/octet-stream',url=$4,file_size=$5 WHERE id=$1 AND message_id=$2 AND conversation_id=$3 AND encryption_mode='LEGACY_PENDING'",[image.attachmentId,source.messageId,id,`/api/v1/crypto/conversations/${encodeURIComponent(id)}/attachments/${encodeURIComponent(image.attachmentId)}`,draft.ciphertext_size]);if(attachment.rowCount!==1)throw new ConflictException('Historical conversion attachment changed');
+      204 |      }
+      205 |      const reconciled=await db.query("UPDATE chat_crypto_legacy_migrations SET state='RECONCILED',reconciled_at=clock_timestamp() WHERE message_id=$1 AND conversation_id=$2 AND state='PREPARED'",[source.messageId,id]);if(reconciled.rowCount!==1)throw new ConflictException('Historical conversion source changed');
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at src/modules/chat-crypto/crypto-legacy.service.ts:202:154
+      at CryptoLegacyService.transaction (src/modules/chat-crypto/crypto-legacy.service.ts:43:17)
+          at async Promise.all (index 0)
+      at test/chat-crypto-legacy.integration.spec.ts:281:31
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:45:212)
+      at test/chat-crypto-legacy.integration.spec.ts:276:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:99:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:163:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        79.548 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

@@ -1,0 +1,5 @@
+# Private worker runtime integration
+
+After native producer/transport/schema boundary proof, verify a separate real Node worker entrypoint with explicit private file configuration and same isolated DB job. Child must be asynchronous (parent HTTPS receiver needs event loop), finite --once --job UUID, bounded timeout, safe command/times/exit/output hashes. Secret VAPID config outside DB/encrypted object archive, never CLI arguments/logs/docs. Missing config/TLS/schema fails closed before job mutation, no fallback credentials or auto migration.
+
+Loader strict version1 JSON, absolute regular nonsymlink bounded handle/path identity reads, optional absolute bounded trusted public CA file; no TLS bypass or proxy/unbounded endpoint origins. Standard VAPID/Web Push library; fixed generic payload only. Runner owns private crypto-dm PUSH namespace, processes bounded batches and supports controlled stop; tests only once, no watch/service registration or main outbox/subscription mutation. Runtime native success does not replace headed PWA/browser FE/QA delivery, production provisioning or other BE acceptance.

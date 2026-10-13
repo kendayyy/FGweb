@@ -1,0 +1,155 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2796) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-gateway.integration.spec.ts (34.733 s)
+  ● T26 private native SFU gateway authorization › reaches a real private SFU and returns native JoinResponse with no public signal bypass
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › native logout revokes the original unexpired token and removes the connected participant
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › native room removal revokes an existing participant and replay without deleting the room
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › bans deny before SFU handshake and permanently invalidate the old lease even after unban
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › accepts a native SFU-refreshed token while authorized and rejects it after revocation
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › new admission never revives the previous opaque token
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › rejects validly signed outsider identities, expired tokens, invalid signatures and foreign origins
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › never permits a media token to use SFU administration APIs
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+  ● T26 private native SFU gateway authorization › fails closed during a database outage before permitting SFU traffic
+
+    TypeError: Cannot read properties of undefined (reading '0')
+
+      28 |   assert.equal(Object.keys(inspect.HostConfig.PortBindings??{}).length,0);assert.equal(Object.values(inspect.NetworkSettings.Ports??{}).some(p=>Array.isArray(p)&&p.length>0),false);
+      29 |   const gateway=docker(['run','-d','--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${path.resolve('apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve('node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/app/gateway-main.js','/gateway/input.json']).trim();containers.push(gateway);
+    > 30 |   const info=JSON.parse(docker(['inspect',gateway]))[0],port=Number(info.NetworkSettings.Ports['7883/tcp'][0].HostPort);assert(port>0);
+         |                                                                                                           ^
+      31 |   const server=`http://127.0.0.1:${port}`,ws=`ws://127.0.0.1:${port}`;let ready=false;
+      32 |   for(let i=0;i<40;i++){try{if((await fetch(server+'/health',{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,250));}
+      33 |   // Do not print container logs: failed startup can contain private DB URLs.
+
+      at Module.startGatewayFixture (../../quality/evidence/T26/private-gateway-fixture.mjs:30:107)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:35:24)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 9 total
+Snapshots:   0 total
+Time:        35.749 s
+Ran all test suites matching test/call-gateway.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-gateway.integration.spec.ts

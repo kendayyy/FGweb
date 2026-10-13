@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const source='apps/api/src/modules/calls/signaling-gateway.ts',test='apps/api/test/t30-signaling-throughput.integration.spec.ts';
+const scope=JSON.parse(fs.readFileSync(d+'/signaling-throughput-scope-review.json','utf8'));
+assert.equal(h(source),scope.originals.find(f=>f.path===source).sha256);
+for(const label of ['t30-signaling-sandbox-type-2','t30-signaling-type-correction-lint-1'])assert.equal(JSON.parse(fs.readFileSync(d+'/codex-'+label+'.json','utf8')).exitCode,0);
+assert.equal(JSON.parse(fs.readFileSync(d+'/codex-t30-signaling-throughput-red-1.json','utf8')).exitCode,1);
+const sr=JSON.parse(fs.readFileSync(d+'/signaling-type-correction-review.json','utf8')),tr=JSON.parse(fs.readFileSync(d+'/signaling-test-correction-review.json','utf8'));
+const proposedSource=d+'/antigravity-signaling-type-correction-1/signaling-gateway.ts',proposedTest=d+'/antigravity-signaling-test-correction-1/t30-signaling-throughput.integration.spec.ts';
+assert.equal(h(proposedSource),sr.afterSha256);assert.equal(h(proposedTest),tr.afterSha256);assert.equal(h(test),tr.beforeSha256);
+const reason='Necessary T30 native integration repair after actual outgoing queue10406ms/SDK negotiation timeout: shared serialized inbound/outbound queue, fair8-frame canonical locked transactions, fresh liveLease and source permissions per frame, existing clock_timestamp expiry/current BAN/revoke/session/slot/CID/native-codec checks and timeouts retained. Bounded256-frame/1MiB queued memory and immediate403 closed-queue cleanup. Real old-gateway test7/9: genuine bounded-overflow RED;32PING/PONG2695ms green, not throughput RED; exact no-slot denial message corrected to canonical while retaining reason/no-forward assertions. Sandbox2 type and lint green. Native media and frozen regression acceptance still pending.';
+fs.writeFileSync(d+'/signaling-source-adoption-plan.json',JSON.stringify({reviewer:'Codex',unresolvedSourceFindings:[],reason,files:[{path:source,proposed:proposedSource,beforeSha256:h(source),afterSha256:h(proposedSource)},{path:test,proposed:proposedTest,beforeSha256:h(test),afterSha256:h(proposedTest)}]},null,2)+'\n',{flag:'wx'});
+console.log('Prepared reviewed source and canonical-message test adoption; no source write.');

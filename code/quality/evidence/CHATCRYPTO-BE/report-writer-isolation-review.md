@@ -1,0 +1,7 @@
+# Native report writer actor isolation review
+
+ActualHTTPcookie/nativeMatrix source/normalizedPNG/nativeTLSKMS/externalcommittedBAN latestPGproof: text/image callerRR returned201 (RED1 46/48), RC403/realplaintextzero. Ownresponse-ID roots/evidence orboundunuseddraft/sourcebinding/canonicalfile cleaned, nativewrappercleanuptrue; no postwrapper success claim for RED. Only2owningBEGIN explicitRC disclose/uploadImage, reverseexact2 recreatesbeforefullsourceSHA; adminreader/Auth/sweep/globaldefaults/schema/DTO unchanged. NativeGREEN1 ended2026-10-10 01:24:58.970 +07 exit0,48/48 SHA23c34606b495bb73e5a152d5fadcba5bff97cf72bf7dd34bde86672a49bddf43. BothRC/RR403/no new report/evidence/draft/files/allactualplaintextbufferszero; original44 retained, allnativeTLS/rotation/rewrap/restart/seal/outage/credentialliveness/explicitrevocation/cleanuptrue.
+
+Actualaudit47 snapshot bindsbefore2sources; earlierreader reportservice readonly hash→writerbefore andearlierLobbyafterreporttest→writerbefore mustchainexactlytocurrenthashes. FreshAPIbuild/lint/full17/diff/audit/save pending; oldPASS/checker/main unchanged, IN_PROGRESS/no backendPASS/productionclaim.
+
+Currentfull custody-report-writer-isolation-regression-1 ended2026-10-10 01:37:22.208 +07 exit0,298/298/17 suites,525.303s Jest SHAc8a9bad0df31de866e0f27e828381ecbfff5c07d5d5d5e92b6f79b980145118b. NativeTLS/custody/backuprestore/HTTPSPUSH/MatrixSDK/PG/Redis/3credentialliveness+explicitrevocation/cleanuptrue/mainunchanged/prodfalse. FreshAPIbuild1/lint65 exit0; diff48/audit48/save42 next, IN_PROGRESS/no overallPASS.

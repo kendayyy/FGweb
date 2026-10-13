@@ -1,0 +1,8 @@
+'use strict';
+const fs=require('node:fs'),{performance}=require('node:perf_hooks'),{createRequire}=require('node:module');
+const mode=process.argv[2],start=performance.now();let sequence=0;
+function emit(type,stage,ok=null,code=null,durationMs=null){const row={sequence:++sequence,type,stage,at:new Date().toISOString(),elapsedMs:Math.round((performance.now()-start)*100)/100,ok,code,durationMs};const s='[FG_LOADER] '+JSON.stringify(row)+'\n';if(sequence>20||s.length>1024)process.exit(2);const b=Buffer.from(s);if(fs.writeSync(1,b)!==b.length)process.exit(2);}
+emit('entry','entry');if(!['without-preload','with-preload'].includes(mode)){emit('done','done',false,'INVALID_MODE');process.exit(1);}
+const req=createRequire('/gateway/app/gateway-main.js'),defs=[...(mode==='with-preload'?[['preload','/gateway/preload.cjs']]:[]),['pg','pg'],['ws','ws'],['livekit_sdk','livekit-server-sdk'],['livekit_protocol','@livekit/protocol'],['lease_store','./lease-store.js'],['signaling_gateway','./signaling-gateway.js']];
+for(const [stage,target]of defs){emit('begin',stage);const s=performance.now();try{const value=req(target);if(stage==='signaling_gateway'&&typeof value.createSignalingGateway!=='function')throw Error('export');if(stage==='preload'&&!globalThis.__FG_GATEWAY_OBSERVER_PRELOAD__)throw Error('preload');emit('end',stage,true,null,Math.round((performance.now()-s)*100)/100);}catch(e){emit('end',stage,false,e?.code==='MODULE_NOT_FOUND'?'MODULE_NOT_FOUND':e instanceof SyntaxError?'SYNTAX_ERROR':'LOAD_FAILED',Math.round((performance.now()-s)*100)/100);emit('done','done',false,'LOAD_FAILED');process.exit(1);}}
+emit('done','done',true);process.exit(0);

@@ -1,0 +1,11 @@
+# Final actor authority review — CHATCRYPTO-BE
+
+Native genuine BetterAuth cookie actor, actual owned PostgreSQL epoch wait and expired session row reproduced success on old relay (RED3 46/47). Initial/final clock_timestamp checks now deny401 and roll back unique ciphertext source/outbound session/notifications (GREEN2 47/47). Native externally committed BAN after proven wait denies403 under READ COMMITTED; caller default REPEATABLE READ reproduced stale snapshot (RED isolation48/49). Explicit READ COMMITTED only for relay owning transactions fixes both defaults (GREEN isolation49/49), original client default restored.
+
+Actual native SDK attachment ciphertext, authenticated metadata multipart HTTP201, actual FS bytes/digest/inner authorization and genuine actor: session expires before delayed final SQL, actual expired DB row verified,401 and captured actual completed Buffer zeroed. Boundary2 50/50. Boundary1 malformed multipart400 retained as fixture failure, no weakened DTO/assertions. Earlier HTTP expiry expectations were confounded by legitimate BetterAuth renewal, corrected in history; actual actor-first expiry RED3 is authoritative.
+
+Current-source realtime/fanout14/14 exit0,27 owning driver calls for1000 selected members,990 notices980INAPP+20PUSH and real dedup/ACL/BAN/PGfault rollback. Original26-call fanout adoption remains immutable; final-actor adoption binds exact original relay after hash to new before hash, new current hashes and both native records/logs. No server private keys, schema/contract/main mutation, global isolation change, moderation producer or production claim. BAN after the final decision requires the future producer transaction/epoch integration; this boundary is not claimed closed.
+
+Fresh API build/lint/full17-suite combined/diff/audit/save pending. Native records, source hashes and current fanout evidence pinned in final-actor-authority-adoption.json; task remains IN_PROGRESS.
+
+Fresh APIbuild1/lint59 exit0. custody-final-actor-regression-1 ended2026-10-09 23:50:10.041 +07 exit0,283/283/17suites SHA36575832abb532ef54625e82353773cc35211e914f8e3467c6a6b662fba569ee,560.992s Jest. Actual TLS custody/HTTPS PUSH/backup/restore/SDK/PG/Redis/selectedreport pass; native cleanup true/productionReady false. Diff/audit/save37 next, no overall backend PASS.

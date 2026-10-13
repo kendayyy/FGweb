@@ -1,0 +1,189 @@
+{
+  "recordedAt": "2026-10-11T06:36:02.232Z",
+  "reviewer": "Codex",
+  "evidence": "quality/evidence/T30/pg-wait-native34-summary-1.json",
+  "verifiedExamples": [
+    {
+      "at": "2026-10-11T05:51:59.899Z",
+      "rows": [
+        {
+          "pid": 30063,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 3189,
+          "blockerPids": [
+            30111
+          ]
+        },
+        {
+          "pid": 30092,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 1945,
+          "blockerPids": [
+            30063
+          ]
+        },
+        {
+          "pid": 30111,
+          "owner": "rooms.service.js",
+          "state": "idleInTransaction",
+          "waitEventType": "Client",
+          "queryShape": "selectOther",
+          "xactAgeMs": 3348,
+          "blockerPids": []
+        }
+      ]
+    },
+    {
+      "at": "2026-10-11T05:52:05.047Z",
+      "rows": [
+        {
+          "pid": 30063,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 8312,
+          "blockerPids": [
+            30113
+          ]
+        },
+        {
+          "pid": 30092,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 7067,
+          "blockerPids": [
+            30063
+          ]
+        },
+        {
+          "pid": 29987,
+          "owner": "calls.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 833,
+          "blockerPids": [
+            30063,
+            30092
+          ]
+        },
+        {
+          "pid": 30113,
+          "owner": "rooms.service.js",
+          "state": "idleInTransaction",
+          "waitEventType": "Client",
+          "queryShape": "selectOther",
+          "xactAgeMs": 4509,
+          "blockerPids": []
+        },
+        {
+          "pid": 30115,
+          "owner": "rooms.service.js",
+          "state": "idleInTransaction",
+          "waitEventType": "Client",
+          "queryShape": "selectOther",
+          "xactAgeMs": 4297,
+          "blockerPids": []
+        }
+      ]
+    },
+    {
+      "at": "2026-10-11T05:52:12.052Z",
+      "rows": [
+        {
+          "pid": 30092,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 14078,
+          "blockerPids": [
+            30115
+          ]
+        },
+        {
+          "pid": 29987,
+          "owner": "calls.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 7844,
+          "blockerPids": [
+            30092
+          ]
+        },
+        {
+          "pid": 30115,
+          "owner": "rooms.service.js",
+          "state": "idleInTransaction",
+          "waitEventType": "Client",
+          "queryShape": "selectOther",
+          "xactAgeMs": 11307,
+          "blockerPids": []
+        }
+      ]
+    },
+    {
+      "at": "2026-10-11T05:52:17.082Z",
+      "rows": [
+        {
+          "pid": 30092,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 2897,
+          "blockerPids": [
+            29959
+          ]
+        },
+        {
+          "pid": 30141,
+          "owner": "teams.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsShare",
+          "xactAgeMs": 3273,
+          "blockerPids": [
+            30092
+          ]
+        },
+        {
+          "pid": 29965,
+          "owner": "owned-gateway",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsShare",
+          "xactAgeMs": 2400,
+          "blockerPids": [
+            30092
+          ]
+        },
+        {
+          "pid": 30063,
+          "owner": "call-lifecycle.service.js",
+          "state": "active",
+          "waitEventType": "Lock",
+          "queryShape": "selectRoomsUpdate",
+          "xactAgeMs": 1620,
+          "blockerPids": [
+            30092,
+            30141,
+            29965
+          ]
+        }
+      ]
+    }
+  ],
+  "interpretation": "Actual own PG blocker graph shows room service idle-in-transaction read clients block lifecycle room UPDATE; queued room mutations then block gateway room SHARE. These bounded samples prove blocker identities/state/locks, not why the room service was idle or sole cause of canonical35. Cross-service profile lookup while holding SHARE is source-based candidate requiring operation timing/controlled RED.",
+  "nativeAcceptance": false
+}

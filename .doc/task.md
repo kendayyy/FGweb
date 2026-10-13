@@ -1,5 +1,7 @@
 # FG — Task Implementation Plan
 
+> **CODEX-ONLY-01 — 12/10/2026:** Theo chỉ định mới của người dùng, toàn bộ task FG chỉ dùng Codex trực tiếp triển khai, review, áp dụng, kiểm thử và chốt. Tắt hoàn toàn việc dùng skill/dashboard/monitor Anti2; không dùng/giao việc cho Antigravity. Không tự bật, khởi động lại hoặc phục hồi cockpit-tools; quyền phục hồi tự động cũ đã bị thu hồi. Nội dung giao Antigravity/model Gemini bên dưới là quy trình lịch sử đã được chỉ định này thay thế. Tiếp tục T30 đang IN_PROGRESS, giữ thứ tự/scope/acceptance/checker/evidence/headed UI/E2E/Telegram và 80 PASS hiện có; không mở T31 trước PASS. Evidence cũ được giữ nguyên; driver mới phải tuân thủ chỉ định này.
+
 > **For agentic workers:** Thực hiện tuần tự, mỗi lần đúng một task theo giao thức dưới đây. Có thể dùng superpowers:executing-plans nếu môi trường có skill; Antigravity không cần skill đó để hiểu tài liệu này. Không tự tạo subagent hoặc chạy task song song.
 >
 > **Goal:** Build đủ bản ra mắt theo spec, không nhảy nhiệm vụ, không tự bỏ tính năng; mỗi task có kiểm thử và bằng chứng trước khi chuyển tiếp.
@@ -14,6 +16,64 @@
 >
 > **Status:** Trạng thái thực thi và task sửa lỗi xem `code/quality/tasks.json` cùng evidence, không suy ra từ checkbox trong tài liệu. Ba task Bảng tin bổ sung dưới đây chưa triển khai; chưa thay ledger hoặc đánh PASS trong lần cập nhật tài liệu này.
 
+### CHAT-CRYPTO-01 — checkpoint mã hóa chat mới, duyệt08/10/2026
+
+- Phạm vi chuẩn ở spec mục17: DM/chat nhóm E2EE chữ/ảnh/reply; Lobby mã hóa lưu trữ bằng khóa server riêng và TLS, giữ quyền public. Mã khôi phục riêng, báo cáo chỉ gửi tin người dùng chọn, người mới không đọc lịch sử nhóm cũ. Không tự E2EE voice/live hoặc chat support/bảng tin trong thay đổi này.
+- Khi ghi yêu cầu, T28 IN_PROGRESS. Sau task hiện tại review PASS, review tác động/rebaseline và pin chuỗi `CHATCRYPTO-DATA → CHATCRYPTO-BE → CHATCRYPTO-FE → CHATCRYPTO-QA` trước task tiếp theo chưa bắt đầu; giữ hàng đợi logo/auth/theme/FIX đã có theo quyết định rebaseline, không tự vượt task hoặc chạy song song. Lần này chỉ ghi task đề xuất; chưa sửa dependencies/writeAllowlist/ledger/checker/PASS.
+
+| Checkpoint mới | Scope / outputs trong code/ | Acceptance và evidence trước chuyển tiếp |
+| --- | --- | --- |
+| CHATCRYPTO-DATA | Contracts/schema/ADR threat model, protocol/library version đã review, envelope/version/key IDs, device verification/key distribution/recovery, group membership epochs, private attachments/reply/mention/report, migration dữ liệu cũ và compatibility | Khóa protocol thực, không custom crypto; DTO không lộ khóa hoặc plaintext; tất cả producer/consumer nằm trong scope; migrate DB trống/có dữ liệu giữ ID/lịch sử/quyền. Chốt backfill lịch sử cũ client-assisted và cutoff, không đánh dấu server-encrypted là E2EE; có blocker thì dừng chuỗi |
+| CHATCRYPTO-BE | API/realtime key/ciphertext routing và ACL, Lobby AEAD/rotation/server key management, encrypted objects, backup/migration, report owner/admin và worker notifications | API/DB/object/realtime thật: private ciphertext only, server không giữ private recovery/device keys; không đọc chéo/lấy khóa sau kick/ban/revoke; ciphertext bị sửa bị từ chối; DB backup không kèm master key Lobby; không log/push plaintext; test rotation/restore và failures, không fake success |
+| CHATCRYPTO-FE | Client mã hóa/giải mã qua protocol đã duyệt, verify thiết bị/key changes, backup mã khôi phục, ảnh/reply/mention, trạng thái khóa/lỗi/migration, báo cáo xem trước/xác nhận | Headed E2E DM/nhóm giữa user/device thật, add-member không có tin cũ, rejoin không mở khoảng bị loại, revoked device không đọc tin mới; recovery đúng/sai/mất khóa, password reset không bypass; draft/session/reconnect/dedup và theme/mobile360px giữ đúng; không plaintext fallback |
+| CHATCRYPTO-QA | Security/integration regression, scans log/bundle/API/object storage/cache, tamper/replay/protocol tests, old-data migration/restore, threat-model verification và bàn giao | Evidence thật đủ encrypt/recovery/report/ACL/legacy flows; review độc lập các rủi ro web/XSS/device/metadata và thư viện, không lấy UI khóa ổ làm bằng chứng E2EE; không PASS còn plaintext cũ hoặc chưa có migration đối soát; không destructive production cleanup để vượt test |
+
+- T39/T42 phải bao phủ spec17; T40 kiểm backup ciphertext, recovery/khóa riêng và rotation/restore; T41 giữ1.000 media concurrent, đo overhead chat, không giảm mục tiêu hoặc giới hạn user hợp lệ để có PASS. Raw logs/test artifacts chỉ ở code/, UI/E2E local headed; mỗi phiên update history.md.
+
+### CHATCRYPTO-BAN-T37-01 — quyết định thứ tự ngày10/10/2026
+
+- Người dùng chốt "để vào task 37": producer ban/unban thuộc T37, không đưa vào prerequisite hay triển khai trong CHATCRYPTO-BE. Giữ thứ tự task hiện hành; T37 chưa bắt đầu.
+- Bàn giao T37 dùng route/DTO đã có: PATCH /api/v1/admin/users/:id/ban, AdminUserActionRequestSchema. BAN phải atomic audit/revoke session/đổi private epoch/đóng intervals; UNBAN không phục hồi stale session hoặc quyền đọc khoảng bị ban. Repeated actions idempotent, giữ device/recovery ciphertext, broadcast revoke chỉ sau commit.
+- T37 phải có native HTTP/auth/PG/socket và SDK-backed routing/history evidence; kiểm sole-admin/CSRF/latest authority, lock ordering, rollback khi lỗi/race và logout/ban/thu hồi quyền. Không dùng SQL fixture ban như bằng chứng producer đã tích hợp.
+- Rebaseline được người dùng xác nhận10/10/2026 sau đề xuất gate: CHATCRYPTO-BE nghiệm thu consumer ACL/latest BAN/session/epoch/revocation bằng native evidence; producer ban/unban atomic thuộc acceptance T37, không còn là điều kiện producer để đóng BE. T37 vẫn phải đạt toàn bộ kiểm thử bàn giao trước release, chưa triển khai/chưa PASS. Giữ lịch sử quyết định ban-producer-t37-decision.json; không gọi SQL fixture là producer thật. Evidence rebaseline: code/quality/evidence/CHATCRYPTO-BE/spec-gate-adoption.json và spec-gate-manifest.json.
+
+### LOADING3D-CHANGE-01 — checkpoint mới LOADING3D-FE, duyệt09/10/2026
+
+- Người dùng yêu cầu đưa demo logo FG3D xoay đủ360 độ quanh trục dọc, nổi nhẹ phía trên thanh progress vào spec/task để **Coding and build 2** triển khai. Spec mục18/design mục14 là nguồn chuẩn; demo [preview R2](../code/scratch/fg-3d-loading-preview/index.html) chỉ tham chiếu chuyển động, không là implementation sản phẩm. SHA256 HTML R2: `1B5D3E6970E688520A6510887D82EB75FCB27356C5E23CD84310D420E92D71F6`; evidence demo ở code/scratch/fg-3d-loading-preview/evidence-r2.json.
+- Xếp tuần tự: `CHATCRYPTO-BE → CHATCRYPTO-FE → CHATCRYPTO-QA → LOADING3D-FE → T29`, giữ các gate/FIX đã có. Khi ghi09/10/2026, BE IN_PROGRESS; GAME-LOGO-FE/LIGHT01-FE đã PASS. Không chen vào BE/FE/QA hoặc mở lại task logo/theme đã PASS. Chỉ mở LOADING3D-FE sau CHATCRYPTO-QA review PASS và review tác động/rebaseline có evidence; pin thêm tiền nhiệm GAME-LOGO-FE và LIGHT01-FE, cập nhật dependency T29 trong bước rebaseline được review.
+- Lần này chỉ tài liệu/metadata, chưa thêm task vào ledger hoặc sửa checker/writeAllowlist/PASS/frozen hashes. Coding and build 2 rà outputs thuộc owner cũ, pin allowlist assets/shared loading component/app bootstrap hoặc route initial-loading boundaries/tests/evidence trước triển khai; giữ nguyên evidence và các task FIX lịch sử.
+
+| Checkpoint | Scope / outputs trong code/ | Acceptance trước chuyển tiếp |
+| --- | --- | --- |
+| LOADING3D-FE | Shared loading/skeleton component; dùng logo SVG canonical đã triển khai tại GAME-LOGO-FE và CSS chiều sâu/xoay; tích hợp app bootstrap và tải đầu trang Lobby/DM/nhóm/Bảng tin khi các màn đã tồn tại; semantic light/dark tokens, accessibility/reduced-motion; unit/component và headed UI/E2E; quality/spec-coverage.md và evidence | Logo đúng silhouette, xoay360/6giây, nổi nhẹ và progressbar vô định thay dòng đang tải; chỉ hiển thị khi pending thật, ready/error/cancel không bị màn chờ che; không phần trăm giả, remount form/session/socket hoặc ngắt gọi; keyboard, reduced-motion, tab hidden và mobile360px đạt; build/lint/typecheck package + review/evidence thật |
+
+- Component nhận pending/error/ready từ state hiện có; không tạo API/DB/migration hoặc timer giả hoàn thành. Hiện loader sau150ms pending để tránh nháy, bỏ ngay khi ready/error/cancel, không trì hoãn nội dung cho đủ vòng xoay. Chỉ tải đầu vùng nội dung/app bootstrap; refetch nền hoặc thao tác gửi tin giữ nội dung hiện có và loading nhỏ tại control, không phủ logo lên cuộc gọi/luồng live.
+- Error dùng trạng thái lỗi/retry thật của boundary hiện có, không quay vô hạn che lỗi hoặc báo thành công giả. Logo/animation không tự hiển thị plaintext chat hoặc vượt trạng thái khóa/recovery E2EE. Các màn chưa triển khai dùng component này khi đến task sở hữu, không xây màn giả trong checkpoint.
+- Tests: pending nhanh/chậm, ready/error/retry/cancel/unmount; role progressbar không aria-valuenow khi vô định và status đọc một lần; reduced-motion không animation, hidden tab dừng animation và trở lại chạy, không layout shift/tràn ngang. Headed API/DB thật kiểm initial loading tại các route đã có, slow network/failure rồi recovery, light/dark, reload, keyboard, desktop1440/1280 và mobile390/360; draft/session/socket/call hiện có không mất. Lưu command/time/exit/log/hash/ảnh thật trong code/, chưa kiểm phần nào ghi rõ.
+- T39/T42 thêm hồi quy loader; mọi phiên Coding and build 2 ghi history.md với task ID LOADING3D-FE và evidence. Demo/duyệt hình không là PASS sản phẩm; chỉ chuyển T29 sau checkpoint được review PASS.
+
+### FG-BRAND-LOGO-01 — bổ sung logo/icon FG đã duyệt08/10/2026
+
+- Người dùng chọn ảnh đầu tiên [01 — FG ghép khối](./mockups/fg-logo-concepts/01-monogram.png) và yêu cầu thêm vào task để coding/build thực hiện. Bổ sung scope vào checkpoint GAME-LOGO-FE cùng logo game/sidebar; không tạo task chạy song song, không thay thứ tự gate đang có. Phân biệt logo thương hiệu FG với7 logo game.
+- SHA256 ảnh chọn: `3E65406B8C69FF7E67D65D41099CAD8703E8A528F651DCEA7A8940CAE2189934`.
+- Dựng asset logo FG sạch dạng SVG paths từ monogram đã chọn: F/G ghép khối, góc cắt, giữ silhouette/tỷ lệ, F trắng trên dark hoặc navy trên light, G xanh FG. Không lấy cả board raster làm logo, không dùng font thay hình đã chọn, không thêm tagline/khung/mascot. Các mẫu02/03 chưa được chọn.
+- Runtime assets chỉ trong code/: logo dark/light SVG có nền trong suốt, favicon SVG và ICO16/32/48px; apple-touch-icon180px; PWA icons192/512px và maskable192/512px. Maskable có nền navy đặc và toàn bộ monogram nằm trong vùng an toàn; tối ưu padding để favicon nhỏ vẫn rõ FG.
+- Áp dụng shared FG logo vào sidebar72px, header và khung đăng nhập có branding hiện tại; cập nhật favicon/document links và PWA manifest, tên app vẫn FG. Sidebar logo vừa khung40px, không mở rộng rail hoặc thay theme/layout/icon điều hướng; hiện accessible name FG, tránh screen reader đọc lặp. Không đổi API/DB/auth/session vì logo.
+- Review tác động/rebaseline có hash ảnh đã duyệt và phạm vi assets/components/manifest/test trước build. Acceptance: đồng nhất hình giữa logo/icon, không méo/cắt/nền caro, đọc rõ16/24/32/40px trên light/dark, tất cả icon URLs trả đúng file/MIME không404, manifest đủ icon và maskable an toàn. Kiểm favicon browser và preview PWA thật trên môi trường hỗ trợ; phần chưa kiểm được báo rõ.
+- UI/E2E local headed kiểm sidebar/header/login desktop/mobile360px, đổi theme/reload, không mất draft/session; lưu ảnh/logo/icon previews, command/time/exit/log/hash/evidence thực trong code/. Ghi mỗi phiên vào history.md, không tự đổi PASS từ duyệt mockup.
+
+### GAME-LOGO-01 — yêu cầu logo game và sidebar07/10/2026
+
+- Người dùng yêu cầu tìm và gắn logo7 game; xem spec mục2, design mục1 và [nguồn/logo tham chiếu](./game-logos/README.md). Đã chuẩn bị nguồn trong .doc/, chưa sửa ứng dụng hoặc đánh PASS. Ledger tại thời điểm chuẩn bị đang LIGHT01-FE IN_PROGRESS; giữ task này, không thực hiện task logo song song.
+- Sau LIGHT01-FE PASS, review tác động/rebaseline có evidence rồi bổ sung checkpoint GAME-LOGO-FE vào hàng đợi, pin dependencies/writeAllowlist theo thứ tự các task chưa bắt đầu. Không đổi PASS hoặc hash outputs lịch sử để hợp thức hóa yêu cầu mới.
+- Scope frontend: local assets trong code/apps/web/public/game-logos/, shared mapping GameTitle, logo sidebar/header Lobby và màn chọn game quan tâm/hồ sơ đã có. Bảng tin dùng shared mapping khi T38-FEED-FE triển khai. Không thay API/DB/gameId, theme hoặc layout đã duyệt.
+- Trước tích hợp: xác nhận điều kiện dùng assets từng hãng, sanitize SVG và tối ưu kích thước mà không biến dạng. Dota2 đã có ảnh người dùng cung cấp tại .doc/game-logos/dota-2-user.png (800×800 RGB24); nền caro là pixel thật, cần bản trong suốt/tách nền trước dùng trong UI. Người dùng xác nhận quyền dùng Roblox cho FG ngày07/10/2026; cho phép dùng logo trong mockup06 và bàn giao mapping, không suy ra đã xác minh giấy phép từ hãng hoặc đã triển khai. Không dùng badge Experience cho ngữ cảnh khác.
+- Acceptance: đúng game/nguồn, không ảnh hỏng hoặc hotlink, logo rõ trên light/dark/system, tỷ lệ/màu gốc, tên/fallback/a11y vẫn có. Chọn game/route/dữ liệu đang nhập/session không bị ảnh hưởng. Phạm vi thiếu asset/quyền dùng phải được báo rõ, không đánh PASS yêu cầu đủ7 logo nếu chưa đủ.
+- UI/E2E headed local kiểm chọn game bằng chuột/bàn phím, reload/theme, ảnh lỗi, sidebar thu và mobile360px; lưu ảnh desktop/mobile và command/time/exit/log/hash evidence thật trong code/. Không mở terminal/log chỉ để trình diễn.
+- SIDEBAR-CHANGE-01 cập nhật: người dùng bỏ toggle, chọn sidebar hẹp cố định theo ảnh08; supersede yêu cầu208px mở/local persistence/mockup07. Bổ sung cùng checkpoint GAME-LOGO-FE sau gate/rebaseline: desktop/tablet72px chỉ logos, tooltip/accessibility, mobile drawer theo design mục6. Không mở task song song hoặc coi duyệt hình là PASS.
+- Chốt hình thức07/10/2026: [SIDEBAR-COMPACT-APPROVED](./mockups/08-sidebar-fixed-compact-preview.png), SHA256 `45A533F27096B6DEF259DF45AE18793730FFED112161818CC634CAC05AD4B814`. Include ảnh/hash trong review tác động và rebaseline trước build. Phân biệt theo path/key với mockup08 theme sáng; không lấy số08 để lựa chọn nhầm asset. Giữ evidence cũ, không sửa trạng thái PASS hoặc checker trong lần ghi tài liệu này.
+- Acceptance bổ sung: không còn nút toggle hoặc chế độ mở rộng, tên đầy đủ ở tooltip/focus và accessible name; chọn đủ7 game bằng chuột/keyboard, trạng thái active rõ, reload giữ bố cục hẹp, responsive1024/1200/360px không tràn. Bố cục không làm mất draft/session/scroll hoặc tạo socket mới. Headed E2E + ảnh sidebar hẹp/mobile thật lưu trong code/. Giữ evidence/test lịch sử; review cập nhật acceptance theo yêu cầu mới, không nới checker.
+
 ### FEED-CHANGE-01 — bàn giao yêu cầu duyệt 07/10/2026
 
 - Bảng tin là phần bản ra mắt theo spec mục13 và frontend-design mục10; mockup03 đã duyệt bố cục. Mặc định kỹ thuật được ghi rõ trong spec để implementer không suy diễn tính năng từ ảnh.
@@ -22,6 +82,15 @@
 - T03/T05/T07 cũ là nguồn contracts/schema để mở rộng tại T38-FEED-DATA; không triển khai feed ngầm trong task hiện tại. T39 coverage phải gồm mục13; T40 backup/restore gồm bài/ảnh/bình luận; T41 thêm workload API feed mà vẫn giữ nguyên media benchmark; T42 phải có Bảng tin đầy đủ.
 
 ## 1. Luật thực thi bắt buộc
+
+### HISTORY-CHANGE-01 — nhật ký mọi phiên coding/build
+
+- HISTORY-CODING2-01 (09/10/2026): chat **Coding and build 2** phải ghi từng phiên vào history.md, tiêu đề có tên chat và ID checkpoint thực. Ghi lúc bắt đầu, cập nhật từng vòng sửa/build/test/review, đóng mục trước báo hoàn tất/bàn giao/blocker. Acceptance bàn giao: có mục history tương ứng, giờ/agent/files/commands/exit code/evidence/kết quả/việc còn lại đầy đủ và khớp ledger; agent trỏ mục vừa ghi. Thiếu history phải bổ sung, không tuyên bố bàn giao đủ.
+- Chỉ bổ sung muộn phiên cũ khi có evidence thực và ghi rõ thời gian bổ sung; không tự suy diễn hoặc đổi PASS lịch sử. Đây là tiêu chí tài liệu xuyên task, không mở checkpoint ứng dụng khác, gửi lệnh sang chat hoặc triển khai tự động ghi/checker trong lần này.
+
+- Người dùng yêu cầu07/10/2026: mọi phiên build/sửa lỗi/refactor/cấu hình/migration/test phải ghi vào [history.md](./history.md), kể cả phiên bị ngắt, thất bại hoặc blocked. Đọc các mục gần nhất trước resume; mở mục khi bắt đầu, cập nhật vòng sửa/test/review, chốt thời gian/kết quả/blocker trước bàn giao theo rule11.
+- Yêu cầu tài liệu xuyên task: history được phép cập nhật cùng task hiện tại nhưng không mở task khác hoặc sửa trạng thái PASS. Ghi commands đã che secrets, exit code thật, links evidence tại code/. Thiếu test thì ghi chưa chạy, không giả success; giữ lịch sử cũ, đính chính bằng mục mới.
+- Bàn giao/review kiểm có mục history của phiên và kết quả khớp evidence/ledger. Nếu allowlist/gate hiện tại chưa cho .doc/history.md thì review tác động/rebaseline phạm vi tài liệu có evidence; không nới checker hoặc sửa PASS lịch sử. Lần này chỉ thêm hướng dẫn, chưa sửa ledger/checker.
 
 ### SUPPORT-ADMIN-01 / AUTH-PASSWORD-03 — bàn giao bổ sung
 
@@ -43,9 +112,21 @@ Chuỗi bổ sung sau rebaseline: T36 → T36-SUPPORT-DATA → T37 → T38 → c
 
 ### THEME-CHANGE-01 — checkpoint LIGHT01-FE, chờ task hiện tại PASS
 
+**LIGHT01-FE — review đóng checkpoint08/10/2026:** giữ nguyên checker và PASS/hash/evidence lịch sử. Audit ownership theo closure T00-REBASE-SUPPORT01: xác minh outputs ngoài owner còn nguyên, các thay đổi theme/Classic thuộc scope đã pin và tests/evidence thật; freeze replacement snapshots khi đóng owner. Pin thêm đúng metadata `code/quality/spec-baseline.json` (amendments THEME/HISTORY/FG-BRAND đã được người dùng yêu cầu) và `code/AGENTS.md` (HISTORY-CHANGE-01 đã xác minh) vào scope output ownership để gate task tiếp kiểm snapshot mới; không sửa nội dung AGENTS hoặc coi logo đã triển khai. Regression frontend và audit required đạt trước chốt. Sau LIGHT PASS, GAME-LOGO-FE được thêm tuần tự, trước T24-FIX1; gate gốc của task kế tiếp bắt buộc đạt.
+
+**THEME-COMPACT-02 — mockup được duyệt và triển khai08/10/2026:** người dùng xác nhận “đúng như vậy đấy làm đi”. Pin scope theme.ts/ThemeProvider.tsx/ThemeSwitcher.tsx/theme.css, apps/web/index.html, apps/web/test/theme.test.tsx, tests/e2e/theme.spec.ts và quality/evidence/LIGHT01-FE/. Bỏ ba-choice acceptance do yêu cầu mới; giữ test lịch sử trong evidence, cập nhật tests sở hữu thành hai-mode contracts với mapping yêu cầu. Test RED → implementation → green: direct toggle/native keyboard/no menu hoặc nhãn hiển thị;44px desktop/mobile; saved/reload/tab sync/storage denied+invalid; legacy system migrate một lần theo màu máy, mặc định dark; before-paint, Classic/reduced motion, composer/auth/socket không đổi; contrast/headed screenshots. Review baseline amendment có ảnh/hash, không đổi historical PASS/outputs/checker. Giữ logo/sidebar checkpoint riêng.
+
+**THEME-COMPACT-02 — yêu cầu08/10/2026:** trong LIGHT01-FE, tạo mockup nút chỉ icon đổi Sáng/Tối; bỏ Hệ thống/menu theo yêu cầu mới, thay acceptance ba chế độ trước đó. Evidence tại `code/quality/evidence/LIGHT01-FE/compact-toggle-preview/`; ảnh chờ người dùng duyệt. Phiên này chỉ tạo preview/ghi nhận tài liệu, không sửa runtime, ledger hoặc spec-baseline. Sau duyệt hình, pin/review migration lưu trữ/mặc định, cập nhật tests kiểm chứng hai chế độ và chạy headed app thật; không sử dụng kết quả tests ba chế độ cũ để đánh PASS mới. Giữ thứ tự task và strict gate hiện có.
+
 User duyệt bản preview FG thật07/10/2026, spec mục15/design mục12. Tại kiểm tra yêu cầu này T03-FIX12 đang IN_PROGRESS, T25 BLOCKED; không thực thi theme song song hoặc vượt gate. Sau task hiện tại/tiền nhiệm review PASS, xử lý rebaseline có evidence và thêm LIGHT01-FE sau các AUTH02 checkpoints đã xếp trước đó, trước khi tiếp tục task kế tiếp. Giữ thứ tự FIX/ledger đang có; cập nhật bảng/ledger khi migration được review, không tự đổi PASS các task cũ. Phê duyệt này cho phép light khác dark palette, vẫn giữ layout/phong cách.
 
+**THEME-VISUAL-02 — cập nhật07/10/2026:** Người dùng chốt LIGHT-SMOKE-APPROVED (mẫu1 Xám khói), thay trắng kem. Theo design mục12, dùng cùng bố cục/Inter/sidebar hẹp và CTA xanh tiết chế. DARK-SMOKE-APPROVED đã được người dùng chốt cùng light ngày07/10/2026. Bộ chọn giao diện mới đang ở bước mockup theo yêu cầu, giữ Sáng/Tối/Hệ thống; chưa có implementation/tests/PASS mới. Bổ sung trong LIGHT01-FE hiện tại theo gate/rebaseline và scope đã pin; phần logo/sidebar vẫn theo checkpoint sở hữu, không thực thi task song song. Lưu hash ảnh, before/after, contrast và headed app thực tế; không đánh PASS từ duyệt mockup.
+
 **Files trong code/:** apps/web/src/features/theme/{theme,ThemeProvider,ThemeSwitcher}.{ts,tsx} theo trách nhiệm; apps/web/src/{App,main}.tsx; apps/web/index.html và bootstrap theme trước paint; apps/web/src/styles/{tokens,global}.css; CSS/components đang có màu hardcoded cần đổi sang semantic (pin đường dẫn vào allowlist trước task); apps/web/test/theme.test.tsx; tests/e2e/theme.spec.ts; quality/spec-coverage.md; quality/evidence/LIGHT01-FE/. Không sửa API/contracts/data/business logic để đổi theme.
+
+**Chuẩn bị Classic — yêu cầu trực tiếp07/10/2026:** cài `@toggles/classic` bằng shadcn trong frontend, pin `apps/web/components.json`, `apps/web/src/components/ui/classic.tsx`, alias TypeScript/Vite và evidence trong LIGHT01-FE. Chỉ thêm component/config; chưa ghép header, chưa chọn mockup bộ chọn, chưa thay baseline hoặc đánh PASS. Cài đặt và kiểm tra lint/typecheck/build có evidence riêng; integration và kiểm thử UI headed thuộc bước tiếp theo sau review hình thức/baseline.
+
+**Triển khai Classic + Xám khói — yêu cầu tiếp theo07/10/2026:** người dùng yêu cầu gắn Classic vào bộ chọn, build light/dark đã chốt. Trong cùng LIGHT01-FE, giữ menu ba lựa chọn, tách SVG Classic để không lồng button, áp palette theo design12, kiểm reduced motion/controlled icon/keyboard và contrast thật. Phạm vi bổ sung `apps/web/src/components/ui/classic.tsx`, utilities Tailwind không preflight trong global CSS; scope/evidence pin trước write. Review/migrate baseline có snapshots và hashes, giữ kết quả/outputs lịch sử; logo/sidebar vẫn ở checkpoint riêng. Mockup bộ chọn chưa chọn được thay bằng review app thật, không tự đánh PASS.
 
 **Deliverable:** app local hiện tại/API DB thật + bộ chọn hoạt động ba giá trị; lưu fg.theme và đồng bộ tabs, storage fallback, system device changes, init trước paint, không remount/query invalidation/auth/socket restart. Rà màu theo spec/design; không mock feature chưa triển khai. Header global hiển thị control ở login; không nhân đôi control gây focus thừa.
 
@@ -278,7 +359,8 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 | T26 | BACKEND | Tạo nhóm gọi và admission tối đa 10 người | T25 |
 | T27 | BACKEND | Webhook, reconnect và tự đóng nhóm gọi | T26 |
 | T28 | FRONTEND | Vào gọi, mic và âm lượng riêng | T27 |
-| T29 | BACKEND | Cấp quyền phát màn hình và moderation cuộc gọi | T28 |
+| LOADING3D-FE | FRONTEND | Logo FG3D xoay/nổi và skeleton progressbar theo LOADING3D-CHANGE-01 | CHATCRYPTO-QA; GAME-LOGO-FE; LIGHT01-FE; rebaseline review |
+| T29 | BACKEND | Cấp quyền phát màn hình và moderation cuộc gọi | LOADING3D-FE (sau chuỗi CHATCRYPTO đã pin) |
 | T30 | FRONTEND | Live màn hình, chọn luồng và thích ứng chất lượng | T29 |
 | T31 | BACKEND | Nguồn live ngoài và kiểm tra URL | T30 |
 | T32 | FRONTEND | Xem YouTube/Twitch trong phòng | T31 |
@@ -691,6 +773,8 @@ Mỗi task dưới đây là một checkpoint độc lập. Files và tests đư
 **Phần:** BACKEND. **Files:** code/apps/api/src/modules/moderation/; code/apps/api/test/moderation.integration.spec.ts
 
 **Tạo cho task sau:** Report user/message; admin report list/resolve; delete message; ban/unban endpoints.
+
+**Bàn giao CHATCRYPTO-BAN-T37-01 (10/10/2026):** T37 sở hữu producer ban/unban và tích hợp crypto epoch/interval/session/socket theo mục quyết định ở trên; kiểm native atomic rollback/lock ordering/idempotency, không phục hồi session cũ hoặc lịch sử khoảng bị ban. Chưa có implementation/evidence producer; quyết định này không mở T37 trước tiền nhiệm PASS.
 
 - [ ] **RED / kiểm tra cần có:** moderation.integration.spec.ts: helper không admin; unauth403; message deleted clients retracted; reporter khác room không xem private content; ban đang online bị ngắt và không login; unban không tự restore stale session.
 - [ ] **Build:** Report ở room chỉ member thấy context; admin site role khác helper room. Ban revoke sessions/delivery/WS/call quyền; audit actor/reason/target. Không thêm moderator theo game hoặc reputation ngoài spec.

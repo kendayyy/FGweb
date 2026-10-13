@@ -1,0 +1,4 @@
+ALTER TABLE "chat_crypto_to_device_events" ADD COLUMN "cohort_id" text;--> statement-breakpoint
+ALTER TABLE "chat_crypto_protocol_events" ADD COLUMN "cohort_id" text;--> statement-breakpoint
+ALTER TABLE "chat_crypto_to_device_events" ADD CONSTRAINT "chat_crypto_to_device_events_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk" FOREIGN KEY ("cohort_id","conversation_id") REFERENCES "chat_crypto_history_cohorts"("id","conversation_id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "chat_crypto_protocol_events" ADD CONSTRAINT "chat_crypto_protocol_events_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk" FOREIGN KEY ("cohort_id","conversation_id") REFERENCES "chat_crypto_history_cohorts"("id","conversation_id") ON DELETE restrict ON UPDATE no action;

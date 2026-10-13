@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-13T02:51:17.245Z",
+  "reviewer": "Codex",
+  "files": [
+    {
+      "old": "lifecycle-red-probe-support-reviewed4.mjs",
+      "next": "lifecycle-red-probe-support-reviewed5.mjs",
+      "beforeSha256": "8b8a995b9586015a55371338f029af4d128c1824805551cd0b630b55deb3ff7e",
+      "afterSha256": "4403000f24d39e535c4cecf82c5bcaa5fbe1bbd1da538b78ee4272bcbaed98f1",
+      "reverseByteExact": true,
+      "edits": [
+        [
+          "reads++;if(reads===1){enteredFirst();await gate;}",
+          "reads++;"
+        ],
+        [
+          "participants++;await new Promise(resolve=>setTimeout(resolve,40));",
+          "participants++;if(participants===1){enteredFirst();await gate;}await new Promise(resolve=>setTimeout(resolve,40));"
+        ]
+      ]
+    },
+    {
+      "old": "lifecycle-coalescing-controls-reviewed5.mjs",
+      "next": "lifecycle-coalescing-controls-reviewed6.mjs",
+      "beforeSha256": "9adae68dfe86a3f4c1147f1dc7b8f37e4d8800c63de2bfff46d696af00fbabbd",
+      "afterSha256": "b543662a7dd1592136c71bf985e81598a88e90e001540e66e4183ea77a043f19",
+      "reverseByteExact": true,
+      "edits": [
+        [
+          "  client.listRooms=async function(...callArgs){\n   const c=current;if(!c||!Array.isArray(callArgs[0])||!callArgs[0].some(name=>name===`fg-call_${group1}`||name===`fg-call_${group2}`))return Reflect.apply(rooms,this,callArgs);\n   const ordinal=++c.attempts;if(c.fault)throw c.fault;\n   const value=await Reflect.apply(rooms,this,callArgs);sdkReads++;c.reads++;c.groups.add(callArgs[0]?.[0]===`fg-call_${group1}`?'group1':callArgs[0]?.[0]===`fg-call_${group2}`?'group2':'other');\n   c.snapshots.push(value[0]?.metadata??'');const gate=c.hooks.get(ordinal);if(gate){gate.enter();await gate.wait;}return value;\n  };\n  client.listParticipants=async function(...callArgs){const value=await Reflect.apply(people,this,callArgs),c=current;if(c&&[`fg-call_${group1}`,`fg-call_${group2}`].includes(callArgs[0])){c.participantSnapshots.push(value.find(peer=>peer.identity===slot.identity)?.metadata??null);if(c.participantGate&&c.participantSnapshots.length===1){c.participantGate.enter();await c.participantGate.wait;}}return value;};",
+          "  client.listRooms=async function(...callArgs){return Reflect.apply(rooms,this,callArgs);};\n  client.listParticipants=async function(...callArgs){\n   const c=current;if(!c||![`fg-call_${group1}`,`fg-call_${group2}`].includes(callArgs[0]))return Reflect.apply(people,this,callArgs);\n   const ordinal=++c.attempts;if(c.fault)throw c.fault;\n   const value=await Reflect.apply(people,this,callArgs);sdkReads++;c.reads++;c.groups.add(callArgs[0]===`fg-call_${group1}`?'group1':'group2');\n   c.participantSnapshots.push(value.find(peer=>peer.identity===slot.identity)?.metadata??null);\n   if(c.participantGate&&c.participantSnapshots.length===1){c.participantGate.enter();await c.participantGate.wait;}\n   const gate=c.hooks.get(ordinal);if(gate){gate.enter();await gate.wait;}return value;\n  };"
+        ]
+      ]
+    },
+    {
+      "old": "fixture-server-coalescing-green-reviewed11.mjs",
+      "next": "fixture-server-coalescing-green-reviewed12.mjs",
+      "beforeSha256": "8e58c62bef0f62da2a073fbfd0cba32e28e9cbc3512404c89a8566ee2485ede8",
+      "afterSha256": "709c79f53c8de08e7027fecceadf32879a5f16eb1bb2bd5803ae8b967584ae09",
+      "reverseByteExact": true,
+      "edits": [
+        [
+          "lifecycle-red-probe-support-reviewed4.mjs",
+          "lifecycle-red-probe-support-reviewed5.mjs"
+        ],
+        [
+          "lifecycle-coalescing-controls-reviewed5.mjs",
+          "lifecycle-coalescing-controls-reviewed6.mjs"
+        ]
+      ]
+    },
+    {
+      "old": "probe-coalescing-build26-web3-reviewed1.mjs",
+      "next": "probe-coalescing-build26-web3-reviewed2.mjs",
+      "beforeSha256": "0539506a9cd48218bb5977cfe543a03612f197e93731ea9327476ceeeaabf236",
+      "afterSha256": "9d07b6b9aeb7fd36a363587f3f29017f03c63bf300ca86ed87763a58fac35db6",
+      "reverseByteExact": true,
+      "edits": [
+        [
+          "fixture-server-coalescing-green-reviewed11.mjs",
+          "fixture-server-coalescing-green-reviewed12.mjs"
+        ],
+        [
+          "folder=d+'/coalescing-build26-web3'",
+          "folder=d+'/coalescing-build26-web3-2'"
+        ],
+        [
+          "assert.equal(burst.actualListParticipantsCalls,burst.actualListRoomsCalls);assert(burst.actualListRoomsCalls<=2,'INTENDED_RED_BOUNDED_NATIVE_READS');",
+          "assert.equal(burst.actualListParticipantsCalls,2,'Exactly one initial and one fresh trailing snapshot for four callers');assert.equal(burst.actualListRoomsCalls,0,'Actual joined participant proves presence without redundant room RPC');"
+        ],
+        [
+          "coalescing-build26-web3-review1.json",
+          "coalescing-build26-web3-review2.json"
+        ]
+      ]
+    }
+  ],
+  "reason": "Build26 nonempty native snapshot correctly omits listRooms. Observe/gate/inject errors on mandatory listParticipants instead. All seven coalescing control bodies and deadlines byte exact; burst strengthens exact two snapshots and zero redundant rooms on actual joined peer. No application or frozen E2E changes.",
+  "nativeAcceptance": false
+}

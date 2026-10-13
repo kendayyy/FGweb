@@ -1,0 +1,40 @@
+{"phase":"compiled-api-bootstrap","realAppModuleStarted":true,"twoRealSignedSessions":true,"twoNativeDevicesRegistered":true,"realStateRevision":3,"isolatedPostgreSQL":true,"mainMutation":false}
+✖ frontend adapter carries native SAS and Megolm through actual AppModule/auth/isolated PostgreSQL (17229.223ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21551.353
+
+✖ failing tests:
+
+test at apps\web\test\crypto-http.native.ts:1:1160
+✖ frontend adapter carries native SAS and Megolm through actual AppModule/auth/isolated PostgreSQL (17229.223ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: null pointer passed to rust
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-http.native.ts:81:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: null pointer passed to rust
+        at __wbg___wbindgen_throw_344f42d3211c4765 (file:///E:/FGweb/code/node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:10535:11)
+        at matrix_sdk_crypto_wasm.wasm.wasm_bindgen[ac3055c217ef217b]::throw_str (wasm://wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:wasm-function[11941]:0x41ba82)
+        at matrix_sdk_crypto_wasm.wasm.wasm_bindgen[ac3055c217ef217b]::__rt::throw_null (wasm://wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:wasm-function[11893]:0x41b844)
+        at matrix_sdk_crypto_wasm.wasm.wasm_bindgen[ac3055c217ef217b]::__rt::assert_not_null::<wasm_bindgen[ac3055c217ef217b]::__rt::WasmRefCell<matrix_sdk_crypto_wasm[da300c34a39c0683]::Versions>> (wasm://wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:wasm-function[11252]:0x413d7d)
+        at matrix_sdk_crypto_wasm.wasm.<matrix_sdk_crypto_wasm[da300c34a39c0683]::identifiers::RoomId as wasm_bindgen[ac3055c217ef217b]::convert::traits::FromWasmAbi>::from_abi (wasm://wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:wasm-function[4748]:0x385b4f)
+        at matrix_sdk_crypto_wasm.wasm.__wbg_deviceid_free (wasm://wasm/matrix_sdk_crypto_wasm.wasm-01dd005e:wasm-function[6765]:0x3b2d49)
+        at UserId.free (file:///E:/FGweb/code/node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:9866:14)
+        at CryptoConversation.context (E:\FGweb\code\apps\web\src\features\crypto\conversation.ts:37:76)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async <anonymous> (E:\FGweb\code\apps\web\src\features\crypto\conversation.ts:62:34),
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-10T16:50:23.942Z",
+  "reason": "Actual muted-audio RED published native microphone audio re-labeled SCREEN_SHARE_AUDIO while MIC_MUTED. Current DB policy must suppress every outgoing audio source during moderator mute, preserve SCREEN_SHARE video/subscription/quota, restore both audio sources only after ALLOW_MIC. Native existing audio tracks are muted/permissions removed for MIC and SCREEN_SHARE_AUDIO. Self microphone toggle behavior remains independent; no DB migration or removed audio capability.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "proposed": "quality/evidence/T29/audio-restriction-0-proposed.ts",
+      "beforeSha256": "a70350a11df443af080941c12c0f04eee3930f1fab239aaa394b414ef9e0ed87",
+      "afterSha256": "f5f33944bd24a58a41a0d6d0cbe8fb01300886f2f97b1cbbcc239634c49a4e55"
+    },
+    {
+      "path": "apps/api/src/modules/calls/call-moderation.service.ts",
+      "proposed": "quality/evidence/T29/audio-restriction-1-proposed.ts",
+      "beforeSha256": "4f082760318744abefb392a271af3cde6992c7cd74d3737ad606f530eec0602c",
+      "afterSha256": "68402d4c3f187ef54a2b416ce6ef025dacd3042099380cd414ea5c56c302e94c"
+    }
+  ],
+  "redEvidence": {
+    "path": "quality/evidence/T29/codex-t29-muted-audio-red-1.json",
+    "sha256": "bf308d67147a178206254f9a86218d67bc8adee6642351f4ede5dac68e9c07af"
+  },
+  "planEvidence": {
+    "path": "quality/evidence/T29/audio-restriction-plan.json",
+    "sha256": "038fa6c98480cfcc8edef18ebac42f9aa4db2d1e47456c609900f788da5fbb96"
+  },
+  "nativeAcceptancePending": true
+}

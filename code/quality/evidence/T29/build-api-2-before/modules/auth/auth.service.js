@@ -1,0 +1,254 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthService = void 0;
+exports.createFgAuth = createFgAuth;
+const common_1 = require("@nestjs/common");
+const better_auth_1 = require("better-auth");
+const drizzle_1 = require("better-auth/adapters/drizzle");
+const node_1 = require("better-auth/node");
+const pg_1 = require("pg");
+const node_postgres_1 = require("drizzle-orm/node-postgres");
+const drizzle_orm_1 = require("drizzle-orm");
+const schema = __importStar(require("@fg/database"));
+const contracts_1 = require("@fg/contracts");
+const auth_mail_js_1 = require("./auth-mail.js");
+const auth_security_js_1 = require("./auth-security.js");
+const api_1 = require("better-auth/api");
+const node_crypto_1 = require("node:crypto");
+const auth_password_js_1 = require("./auth-password.js");
+const auth_admin_js_1 = require("./auth-admin.js");
+function createFgAuth(db, options) {
+    const isHttps = options.baseURL.startsWith('https://');
+    const mail = options.mailTransport ?? (0, auth_mail_js_1.authMailTransport)(), from = options.mailFrom ?? process.env.SMTP_FROM;
+    const security = (0, auth_security_js_1.createAuthSecurity)(db, mail, from, options.baseURL);
+    return (0, better_auth_1.betterAuth)({
+        database: (0, drizzle_1.drizzleAdapter)(db, {
+            provider: 'pg',
+            schema: {
+                user: schema.user,
+                session: schema.session,
+                account: schema.account,
+                verification: schema.verification,
+            },
+        }),
+        baseURL: options.baseURL,
+        secret: options.secret,
+        disabledPaths: ['/get-access-token', '/refresh-token', '/set-password'],
+        logger: { disabled: true },
+        plugins: [security.plugin],
+        hooks: { before: security.before },
+        rateLimit: { enabled: true, window: 60, max: 100, customRules: { '/fg/sign-in/admin': { window: 60, max: 5 }, '/sign-in/email': { window: 60, max: 5 }, '/sign-up/email': { window: 60, max: 5 }, '/send-verification-email': { window: 60, max: 3 }, '/request-password-reset': { window: 60, max: 3 }, '/fg/password-challenge': { window: 60, max: 3 } } },
+        databaseHooks: { user: { create: { before: async (user) => { if ((0, auth_admin_js_1.isReservedAdminName)(user.name))
+                        throw new api_1.APIError('BAD_REQUEST', { code: 'RESERVED_USERNAME', message: 'Tên này được dành riêng cho quản trị.' }); } } }, session: { create: { before: async (session) => { if (await security.banned(session.userId))
+                        throw new api_1.APIError('FORBIDDEN', { code: 'ACCOUNT_BANNED', message: 'Tài khoản đã bị khóa.' }); } }, delete: { before: async (session) => { await options.onSessionDeleting?.(session.id); }, after: async (session) => { await options.onSessionDeleted?.(session.userId); } } } },
+        emailAndPassword: {
+            enabled: true, requireEmailVerification: true, autoSignIn: false, minPasswordLength: 8, maxPasswordLength: 256, resetPasswordTokenExpiresIn: 3600, revokeSessionsOnPasswordReset: true,
+            password: { hash: auth_password_js_1.hashFgPassword, verify: auth_password_js_1.verifyFgPassword },
+            sendResetPassword: async ({ user, url }) => { await (0, auth_mail_js_1.sendAuthMail)(mail, from, user.email, 'RESET', url); },
+        },
+        emailVerification: { expiresIn: 86400, sendOnSignUp: true, sendOnSignIn: false, autoSignInAfterVerification: false, sendVerificationEmail: async ({ user }) => {
+                const token = await (0, api_1.createEmailVerificationToken)(options.secret, user.email, undefined, 86400, { jti: (0, node_crypto_1.randomUUID)() });
+                const link = new URL('/auth/verify', options.baseURL);
+                link.searchParams.set('token', token);
+                await security.recordEmailToken(user.id, token);
+                await (0, auth_mail_js_1.sendAuthMail)(mail, from, user.email, 'VERIFY', link.toString());
+            } },
+        socialProviders: {
+            discord: {
+                clientId: options.discordClientId,
+                clientSecret: options.discordClientSecret,
+                redirectURI: `${options.baseURL}/api/auth/callback/discord`,
+            },
+        },
+        account: {
+            accountLinking: {
+                enabled: false,
+            },
+        },
+        advanced: {
+            useSecureCookies: isHttps,
+            disableOriginCheck: false,
+            disableCSRFCheck: false,
+        },
+    });
+}
+let AuthService = class AuthService {
+    db;
+    pool;
+    authInstance;
+    callHooks;
+    setCallHooks(hooks) { this.callHooks = hooks; }
+    onModuleInit() {
+        this.initDatabaseAndAuth();
+    }
+    async onModuleDestroy() {
+        if (this.pool) {
+            await this.pool.end();
+        }
+    }
+    setDb(db) {
+        this.db = db;
+        this.initAuth();
+    }
+    initDatabaseAndAuth() {
+        if (this.db)
+            return;
+        const connectionString = process.env.DATABASE_URL;
+        if (!connectionString) {
+            throw new Error('DATABASE_URL environment variable is required');
+        }
+        this.pool = new pg_1.Pool({ connectionString });
+        const databaseSchema = { ...schema };
+        Reflect.deleteProperty(databaseSchema, 'default');
+        this.db = (0, node_postgres_1.drizzle)(this.pool, { schema: databaseSchema });
+        this.initAuth();
+    }
+    initAuth() {
+        const baseURL = process.env.BETTER_AUTH_URL || process.env.PUBLIC_ORIGIN;
+        if (!baseURL) {
+            throw new Error('BETTER_AUTH_URL or PUBLIC_ORIGIN environment variable is required');
+        }
+        const secret = process.env.BETTER_AUTH_SECRET;
+        if (!secret) {
+            throw new Error('BETTER_AUTH_SECRET environment variable is required');
+        }
+        const discordClientId = process.env.DISCORD_CLIENT_ID;
+        const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
+        if (!discordClientId || !discordClientSecret) {
+            throw new Error('DISCORD_CLIENT_ID and DISCORD_CLIENT_SECRET environment variables are required');
+        }
+        this.authInstance = createFgAuth(this.db, {
+            baseURL,
+            secret,
+            discordClientId,
+            discordClientSecret,
+            onSessionDeleting: async (sessionId) => { await this.callHooks?.before(sessionId); },
+            onSessionDeleted: async (userId) => { await this.callHooks?.after(userId); },
+        });
+    }
+    getAuthInstance() {
+        if (!this.authInstance) {
+            this.initAuth();
+        }
+        return this.authInstance;
+    }
+    getAuthHandler() {
+        return (0, node_1.toNodeHandler)(this.getAuthInstance());
+    }
+    getAuthConfig() {
+        return this.getAuthInstance().options;
+    }
+    async isUserBanned(userId) {
+        const [latestAction] = await this.db
+            .select()
+            .from(schema.adminActions)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.adminActions.targetUserId, userId), (0, drizzle_orm_1.inArray)(schema.adminActions.action, ['BAN', 'UNBAN'])))
+            .orderBy((0, drizzle_orm_1.desc)(schema.adminActions.createdAt), (0, drizzle_orm_1.desc)(schema.adminActions.id))
+            .limit(1);
+        return latestAction?.action === 'BAN';
+    }
+    async isUserOnboarded(userId) {
+        const [profile] = await this.db
+            .select()
+            .from(schema.profiles)
+            .where((0, drizzle_orm_1.eq)(schema.profiles.userId, userId));
+        if (!profile) {
+            return false;
+        }
+        const interests = await this.db
+            .select()
+            .from(schema.gameInterests)
+            .where((0, drizzle_orm_1.eq)(schema.gameInterests.userId, userId));
+        return interests.length > 0;
+    }
+    async isUserAdmin(userId) {
+        if (!userId || userId !== (0, auth_admin_js_1.soleAdminUserId)() || await this.isUserBanned(userId))
+            return false;
+        const [user] = await this.db.select().from(schema.user).where((0, drizzle_orm_1.eq)(schema.user.id, userId)).limit(1);
+        if (!user || user.name !== 'kingame' || !user.emailVerified)
+            return false;
+        const [credential] = await this.db.select({ id: schema.account.id }).from(schema.account).where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.account.userId, userId), (0, drizzle_orm_1.eq)(schema.account.accountId, userId), (0, drizzle_orm_1.eq)(schema.account.providerId, 'credential'))).limit(1);
+        return Boolean(credential);
+    }
+    async getUserMe(userId) {
+        const [dbUser] = await this.db
+            .select()
+            .from(schema.user)
+            .where((0, drizzle_orm_1.eq)(schema.user.id, userId));
+        if (!dbUser) {
+            throw new Error(`User not found: ${userId}`);
+        }
+        const [discordAccount] = await this.db
+            .select()
+            .from(schema.account)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.account.userId, userId), (0, drizzle_orm_1.eq)(schema.account.providerId, 'discord')));
+        const [profile] = await this.db
+            .select()
+            .from(schema.profiles)
+            .where((0, drizzle_orm_1.eq)(schema.profiles.userId, userId));
+        const interests = await this.db
+            .select({ title: schema.games.title })
+            .from(schema.gameInterests)
+            .innerJoin(schema.games, (0, drizzle_orm_1.eq)(schema.gameInterests.gameId, schema.games.id))
+            .where((0, drizzle_orm_1.eq)(schema.gameInterests.userId, userId))
+            .orderBy(schema.games.title);
+        const meData = {
+            id: dbUser.id,
+            displayName: profile?.displayName || dbUser.name,
+            avatarUrl: profile ? profile.avatarUrl : (dbUser.image ?? null),
+            email: dbUser.email,
+            emailVerified: dbUser.emailVerified,
+            discordId: discordAccount?.accountId ?? null,
+            customStatus: profile?.customStatus || 'JUST_CHATTING',
+            createdAt: dbUser.createdAt.toISOString(),
+            updatedAt: dbUser.updatedAt.toISOString(),
+            onboardingComplete: Boolean(profile) && interests.length > 0,
+            interestedGames: interests.map(interest => interest.title),
+        };
+        return contracts_1.MeDTOSchema.parse(meData);
+    }
+};
+exports.AuthService = AuthService;
+exports.AuthService = AuthService = __decorate([
+    (0, common_1.Injectable)()
+], AuthService);
+//# sourceMappingURL=auth.service.js.map

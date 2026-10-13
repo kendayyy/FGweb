@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script id="fg-theme-init">
+      (function () {
+        var preference = 'system';
+        try { var saved = localStorage.getItem('fg.theme'); if (saved === 'light' || saved === 'dark') preference = saved; } catch (_) {}
+        var dark = typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = preference === 'system' ? (dark ? 'dark' : 'light') : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <title>FG</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

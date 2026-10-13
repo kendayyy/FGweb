@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:20788) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (68.479 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds database roundtrips for a thousand selected mentions while preserving prefs retry ACL and rollback
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 64
+    Received:    4992
+
+      198 |    try{expect((await post('conversations/'+conversation+'/messages',await make('fault'))).status).toBe(500);}finally{await pool.query(`DROP TRIGGER ${fault} ON notification_outbox`);await pool.query(`DROP FUNCTION ${fault}()`);}
+      199 |    expect((await pool.query('SELECT id FROM messages WHERE conversation_id=$1',[conversation])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[message.id])).rowCount).toBe(1000);expect((await pool.query("SELECT id FROM notifications WHERE type='MENTION' AND dedup_key LIKE $1",['crypto-mention:'+message.id+':%'])).rowCount).toBe(990);expect((await pool.query('SELECT id FROM notification_outbox WHERE notification_id=ANY($1::text[])',[notices.map(row=>row.id)])).rowCount).toBe(990);
+    > 200 |    fs.writeFileSync(path.resolve('quality/evidence/CHATCRYPTO-BE','mention-fanout-native-'+suffix+'.json'),JSON.stringify({recordedAt:new Date().toISOString(),recipients:1000,mentions:1000,notifications:990,inAppJobs:990,optouts:10,producerQueries,elapsedMilliseconds,retryDedup:true,unknownDenied:true,banDenied:true,actualPgFaultRollback:true,privatePreviewAbsent:true,emailJobs:0,mediaCapacityClaim:false},null,2)+'\n',{flag:'wx'});expect(producerQueries).toBeLessThanOrEqual(64);
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+      201 |   }finally{measuring=false;relay.pool.off('acquire',observe);for(const restore of restores)restore();}
+      202 |  },60000);
+      203 |  it('does not retain a disconnected socket whose subscription was waiting on a real epoch lock',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:200:460)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        68.88 s, estimated 69 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

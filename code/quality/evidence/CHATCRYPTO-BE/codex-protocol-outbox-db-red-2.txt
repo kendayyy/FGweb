@@ -1,0 +1,85 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-protocol-outbox.test.ts (6 tests | 6 failed) 7451ms
+   ❯ Durable protocol wakeup metadata on actual PostgreSQL (6)
+     × contains only event references and delivery timestamps, with no copied payload or recipient routing 189ms
+     × requires exactly one existing authoritative event 44ms
+     × deduplicates each encrypted or verification source independently 30ms
+     × cascades expired source deletion while keeping other live events and jobs 34ms
+     × rejects a delivery timestamp before creation and permits an actual committed delivery timestamp 31ms
+     × indexes the pending dispatch access path without indexing ciphertext or payload 57ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > contains only event references and delivery timestamps, with no copied payload or recipient routing
+error: relation "chat_crypto_protocol_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-protocol-outbox.test.ts:24:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > requires exactly one existing authoritative event
+AssertionError: expected error: relation "chat_crypto_protocol_out… { …(15) } to match object { code: '23514' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23514",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-protocol-outbox.test.ts:22:128
+
+ ❯ test/chat-crypto-protocol-outbox.test.ts:26:67
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > deduplicates each encrypted or verification source independently
+error: relation "chat_crypto_protocol_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-protocol-outbox.test.ts:27:82
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > cascades expired source deletion while keeping other live events and jobs
+error: relation "chat_crypto_protocol_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-protocol-outbox.test.ts:28:91
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > rejects a delivery timestamp before creation and permits an actual committed delivery timestamp
+error: relation "chat_crypto_protocol_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-protocol-outbox.test.ts:29:113
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/chat-crypto-protocol-outbox.test.ts > Durable protocol wakeup metadata on actual PostgreSQL > indexes the pending dispatch access path without indexing ciphertext or payload
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/chat-crypto-protocol-outbox.test.ts:30:363
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  03:58:16
+   Duration  9.35s (tests 84%, import 15%, transform 1%)
+

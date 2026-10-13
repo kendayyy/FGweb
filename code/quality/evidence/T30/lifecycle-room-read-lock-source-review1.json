@@ -1,0 +1,82 @@
+{
+  "at": "2026-10-12T10:11:01.117Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual readonlyPG blocker trace showsLifecycle room lock excludes ROOM_QUERY shared readers while reconcile lasts3.35s. Lifecycle only mutates callgroups/members/admissions/slots, never rooms. Use FOR SHARE on canonical room before unchanged group/member FOR UPDATE: permits room shared readers, still blocks every room UPDATE/DELETE/explicitmutation FOR UPDATE; no weaker KEY SHARE. RealPG RED1read failure/5mutation-group guards pass. OnlyoneSQLanchor changed; fresh eligibility/perpeer policy/nativeRPC inside transaction/coalescing/grace/dedupe/close semantics unchanged. Originalfullnative acceptance remains required.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-room-read-lock-reviewed1.ts",
+      "beforeSha256": "9e285175ec1963599a29362af4a5a7d9ea61402763e4f9a5663a06d647296e00",
+      "afterSha256": "d171bcd96fa1a683e2c60d57b0c40377b8d35c9bbdebd59e7542158671ad4266"
+    }
+  ],
+  "red": {
+    "command": "node quality/evidence/T30/lifecycle-room-read-lock-control1.mjs red",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-12T10:09:55.746Z",
+    "completedAt": "2026-10-12T10:10:03.009Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-room-read-lock-red-1.txt",
+    "evidenceSha256": "f14b5d86c7460d9fc0fb3d204df507cf7ba7be2c4d435bba1b02cf4a7afd849d"
+  },
+  "control": {
+    "at": "2026-10-12T10:10:02.958Z",
+    "mode": "red",
+    "actualCompiledLifecycleLock": true,
+    "actualPg": true,
+    "results": [
+      {
+        "name": "room readonly share",
+        "shouldBlock": false,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": false
+      },
+      {
+        "name": "room mutator canonical update",
+        "shouldBlock": true,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": true
+      },
+      {
+        "name": "room nonkey update",
+        "shouldBlock": true,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": true
+      },
+      {
+        "name": "room deletion",
+        "shouldBlock": true,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": true
+      },
+      {
+        "name": "group shared admission read",
+        "shouldBlock": true,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": true
+      },
+      {
+        "name": "group quota writer",
+        "shouldBlock": true,
+        "blocked": true,
+        "sqlState": "57014",
+        "passed": true
+      }
+    ],
+    "schemaRemoved": true,
+    "clientsEnded": true,
+    "nativeAcceptance": false
+  },
+  "cause": "quality/evidence/T30/publisher-blocking2-result-review.json",
+  "onlyOneAnchorChanged": true,
+  "officialLockConflictSource": "https://www.postgresql.org/docs/17/explicit-locking.html#LOCKING-ROWS",
+  "allOtherSourceBytesExact": true,
+  "nativeAcceptance": false
+}

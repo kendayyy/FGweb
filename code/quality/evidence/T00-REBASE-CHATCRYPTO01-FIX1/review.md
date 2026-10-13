@@ -1,0 +1,3 @@
+# Coverage owner repair — PASS
+
+DATA gate correctly rejected the approved rebase coverage append because metadata close had omitted output ownership and appended it after candidate gate. DATA remained NOT_STARTED. Exact current suffix removal reconstructs T28 immutable original hash. This owner seals the approved current file; no historical PASS, hash, command, evidence or timestamp changed. Eight live baselines and all other latest outputs/commands verified. Unchanged stock DATA gate must pass both candidate checks before ledger write. No coverage append or output mutation follows the gate in this closure. No application change or crypto claim.

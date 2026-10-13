@@ -1,0 +1,31 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+
+const dir='quality/evidence/CHATCRYPTO-BE';
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=read('quality/tasks.json'),prior=structuredClone(ledger);
+const task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+const review=read(`${dir}/remaining-policy-review.json`);
+const record=read(`${dir}/codex-remaining-policy-review-1.json`);
+assert.equal(task.status,'IN_PROGRESS');assert.equal(record.exitCode,0);
+assert.equal(hash(record.evidencePath),record.evidenceSha256);
+assert.equal(review.backendComplete,false);assert.equal(review.stockGateAccepted,false);
+for(const [p,digest]of Object.entries(review.sourceHashes))assert.equal(hash(p),digest);
+for(const [p,digest]of Object.entries(read(`${dir}/progress-review.json`).sourceHashes))assert.equal(hash(p),digest);
+const names=['remaining-policy-review.mjs','remaining-policy-review.md','remaining-policy-review.json','spec-gate-rebaseline-proposal.md','codex-remaining-policy-review-1.json','codex-remaining-policy-review-1.txt'];
+const paths=names.map(name=>`${dir}/${name}`);
+const approvedPaths=task.writeAllowlist;
+for(const p of paths){assert(fs.existsSync(p));assert(approvedPaths.some(pattern=>pattern.endsWith('/**')?p.startsWith(pattern.slice(0,-2)):p===pattern));}
+task.evidencePaths=[...new Set([...task.evidencePaths,...paths])];
+if(!task.commands.some(c=>c.evidencePath===record.evidencePath))task.commands.push(record);
+assert(!task.remainingPolicyReview,'Preserve existing supplemental review');
+task.remainingPolicyReview={recordedAt:review.recordedAt,evidencePath:`${dir}/remaining-policy-review.json`,artifactHashes:Object.fromEntries(paths.map(p=>[p,hash(p)])),backendComplete:false,gateRebaselineAuthorized:false,aggregateIngressPolicyApproved:false};
+for(const row of prior.tasks.filter(t=>t.id!=='CHATCRYPTO-BE'))assert.deepEqual(ledger.tasks.find(t=>t.id===row.id),row);
+const restored=structuredClone(task),original=prior.tasks.find(t=>t.id==='CHATCRYPTO-BE');
+restored.evidencePaths=original.evidencePaths;restored.commands=original.commands;delete restored.remainingPolicyReview;
+assert.deepEqual(restored,original);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const actual=read('quality/tasks.json');assert.deepEqual(actual,ledger);
+console.log(JSON.stringify({task:task.id,status:task.status,onlyActiveTaskEvidenceAdded:true,otherTaskRowsUnchanged:prior.tasks.length-1,artifactsAttached:paths.length,checkerChanged:false,backendComplete:false,gateRebaselineAuthorized:false}));

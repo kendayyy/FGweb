@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='.runtime/t26/predecessor-source';fs.mkdirSync(dir,{recursive:true});
+fs.cpSync('apps/api/src',`${dir}/src`,{recursive:true,filter:source=>!source.split(path.sep).includes('calls')});
+const app=`${dir}/src/app.module.ts`,before=JSON.parse(fs.readFileSync('quality/evidence/T26/before.json'));
+let source=fs.readFileSync(app,'utf8');source=source.replace(/^import \{ CallsModule \} from '\.\/modules\/calls\/calls.module.js';\r?\n/m,'').replace(/^import \{CallsModule\} from '\.\/modules\/calls\/calls.module.js';\r?\n/m,'').replace(/^\s*CallsModule,\r?\n/m,'');
+source=source.replace(', CallsModule]',']');fs.writeFileSync(app,source);
+assert.equal(createHash('sha256').update(fs.readFileSync(app)).digest('hex'),before.readonly['apps/api/src/app.module.ts'],'Isolated AppModule must reproduce frozen predecessor bytes');
+const config=JSON.parse(fs.readFileSync('apps/api/tsconfig.json'));config.compilerOptions.incremental=false;config.compilerOptions.baseUrl=path.resolve(dir);config.compilerOptions.outDir=path.resolve('quality/evidence/T26/derived-proof');config.include=['src/**/*'];fs.writeFileSync(`${dir}/tsconfig.json`,JSON.stringify(config,null,2)+'\n');
+console.log('Isolated pre-calls compiler source prepared; production sources unchanged');

@@ -1,0 +1,2 @@
+import fs from 'node:fs';const d='quality/evidence/T30';let s=fs.readFileSync(d+'/review-publishing-build21-photos1.mjs','utf8').replaceAll('build21-alone','build22-alone').replaceAll('t30-reg-webhook-ce5e85e0fffb403187fab6c0d2ff7069','t30-reg-webhook-5d2d37b2dcf54edd9c499a34f44ff79b').replaceAll('publishing-regression-photo-review-15','publishing-regression-photo-review-16');
+s=s.replace('blue frame12, frame21, final frame21','actual blue moving canvas frames and final connection');fs.writeFileSync(d+'/review-publishing-build22-photos1.mjs',s,{flag:'wx'});

@@ -1,0 +1,7 @@
+# T01-FIX3 — setup compatibility review
+
+User approved self-hosted SFU 1.9.12 through the T26 version proposal. Exact image digest is pinned in compose and the media manifest; client SDK remains 2.22.3. Main services were not restarted or migrated. The private deployment blueprint exposes only gateway signaling; production inputs/TURN TLS remain deployment tasks.
+
+Setup tests failed before configuration (two failures), then passed 2/2. The real headed two-browser SDK probe reached the private SFU through the compiled gateway and transmitted native microphone audio: receiver inbound RTP bytes 1301. It rejected an unexpired revoked token and connected a fresh admission. Native answers acknowledge offer IDs 2 and 3, matching the unchanged SDK. The probe used a test-only TURN endpoint mapping in both initial and updated RTCPeerConnection configuration. No SDK, grant or behavior assertions were patched.
+
+The setup fixture used isolated PostgreSQL schema and Docker containers/network; cleanup succeeded. Synthetic audio proves transport, not audible quality, production TURN TLS or load capacity. T26 business logic and evidence stayed frozen while this child checkpoint ran. The two bootstrap record paths were sealed after the opening command completed; all other parent files stay at their entry hashes. Historical PASS records and eight baselines remain unchanged. Manual setup gating follows rule02; the stock next-task checker remains required at T26 closure.

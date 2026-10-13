@@ -1250,7 +1250,17 @@ describe('T07 - Call, Notification, Moderation & Outbox Constraints', () => {
       for (const t of tables) {
         const orderCol = t === 'active_play_slots' ? 'user_id' : 'id';
         const snapshotAfter = (await testClient.query(`SELECT * FROM "${t}" ORDER BY ${orderCol}`)).rows;
-        expect(snapshotAfter).toEqual(snapshotBefore[t]);
+        // Preserve every original field and also assert the approved additive
+        // crypto defaults. A partial match would conceal accidental changes.
+        const expected = t === 'messages'
+          ? snapshotBefore[t].map(row => ({
+              ...(row as Record<string, unknown>),
+              encryption_mode: 'LEGACY_PENDING',
+              crypto_envelope: null,
+              crypto_revision: null,
+            }))
+          : snapshotBefore[t];
+        expect(snapshotAfter).toEqual(expected);
       }
 
       const roomRes = await testClient.query("SELECT visibility FROM rooms WHERE id = 'room_priv_1'");

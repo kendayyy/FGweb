@@ -1,0 +1,223 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:19392) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (17.683 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › requires session and same-origin writes
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › registers native keys once, advances epoch once and never exposes private data
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rejects foreign owner, modified signature and immutable-device replacement
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › refuses prekey replacement and stores genuinely signed prekeys
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › returns current state only to members and includes the fixed public Matrix mapping
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › queries member keys and claims distinct signed prekeys exactly once under contention
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › queues native SAS metadata to the addressed member device, rejects dedup conflicts and foreign ACKs
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › stores only encrypted independent recovery and enforces compare-and-swap
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › keeps a revoked-device tombstone and cannot re-register it
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › allows exactly one recovery update when two tabs race at the same version
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › accepts genuine encrypted room-key backups larger than the old 100 KiB JSON default
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › denies bans and does not resurrect a deleted session after unban
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rechecks durable session and ban state on every operation
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      33 |   const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);
+      34 |   url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});
+    > 35 |   await pool.query(`CREATE SCHEMA "${owned}"`);
+         |   ^
+      36 |   const client=await pool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{client.release();}
+      37 |   for(const user of ['alice','bob','outsider']){
+      38 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,`${user}@example.invalid`]);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:35:3)
+
+
+  ● Test suite failed to run
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      48 |  afterAll(async()=>{
+      49 |   for(const m of machines)m.close();
+    > 50 |   try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}}finally{await pool?.end();process.env=savedEnv;}}
+         |                                                                                                  ^
+      51 |  });
+      52 |  const post=(route:string,body:unknown,auth=cookie)=>request(base).post(`/api/v1/crypto/${route}`).set('Cookie',auth).set('Origin',origin).send(body);
+      53 |  it('requires session and same-origin writes',async()=>{
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:50:98)
+
+Test Suites: 1 failed, 1 total
+Tests:       13 failed, 13 total
+Snapshots:   0 total
+Time:        18.145 s, estimated 19 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

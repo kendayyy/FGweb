@@ -1,0 +1,110 @@
+{
+  "taskId": "T30",
+  "proposalId": "antigravity-native58-direct-gateway-1",
+  "proposalType": "diagnostic-gateway-placement",
+  "interpretation": "Idle synthetic SELECT 1 benchmark in db-route-results-review1.json showed route overhead for one Docker control process (host-published p50~3.76ms/p95~10.71ms vs direct-bridge p50~0.70ms/p95~1.94ms) with zero changes to driver, image, credentials, or options. This proves idle route network stack overhead only; it does NOT prove the full 158-query cost in the switching window, does NOT prove PostgreSQL SCRAM authentication stall, and does NOT prove RTP media delay root cause. This proposal delivers an isolated gateway placement diagnostic fixture to evaluate direct bridge database routing as a single variable during genuine SFU signaling without altering application authority, locking, or test assertions.",
+  "filesDelivered": {
+    "diagnosticHelper": "quality/evidence/T30/antigravity-native58-direct-gateway-1/private-gateway-observer-direct1.mjs",
+    "compatibilityCopy": "quality/evidence/T30/antigravity-native58-direct-gateway-1/private-gateway-observer-reviewed2.mjs",
+    "plan": "quality/evidence/T30/antigravity-native58-direct-gateway-1/plan.json",
+    "shortplan": "quality/evidence/T30/antigravity-native58-direct-gateway-1/shortplan.md"
+  },
+  "preflightValidation": {
+    "originalDatabaseUrl": {
+      "protocolsAllowed": ["postgres:", "postgresql:"],
+      "hostnamesAllowed": ["localhost", "127.0.0.1"],
+      "publishedPortValidation": "Must match fg-local-postgres-1 published 5432/tcp host binding exactly"
+    },
+    "databaseServiceInvariants": {
+      "pgContainerName": "fg-local-postgres-1",
+      "redisContainerName": "fg-local-redis-1",
+      "requiredStatus": "healthy",
+      "requiredNetwork": "fg-local_default",
+      "requiredAlias": "fg-local-postgres-1",
+      "networkIdMatch": "pg NetworkSettings.Networks['fg-local_default'].NetworkID matches fg-local_default inspected ID",
+      "mainNetworkAttachmentUntouched": true
+    },
+    "privacyGuarantees": {
+      "inspectConfigDumped": false,
+      "environmentDumped": false,
+      "rawErrorsDumped": false,
+      "rawCredentialsDumped": false
+    }
+  },
+  "urlConstruction": {
+    "method": "Direct clone preserving credentials, db path, search_path, SSL, and query options byte-equivalent",
+    "hostnameTarget": "fg-local-postgres-1",
+    "portTarget": 5432,
+    "allocationTiming": "Executed only after preflight validation succeeds, before any private runtime/secret file allocation"
+  },
+  "containerLifecycle": {
+    "creation": {
+      "command": "docker create --pull=never",
+      "image": "node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "security": {
+        "readOnly": true,
+        "capDrop": ["ALL"],
+        "securityOpts": ["no-new-privileges"],
+        "user": "node"
+      },
+      "label": "fg-owner=t30-gateway-<uuid>",
+      "mounts": "Byte-identical preload, calls app, node_modules, and gateway.json mounts",
+      "addHostOverride": false
+    },
+    "attachment": {
+      "action": "docker network connect fg-local_default <gatewayId>",
+      "timing": "Connected to existing fg-local_default before docker start",
+      "scope": "Connects only newly created owned gateway; never connects or disconnects any existing service",
+      "dualNetworkTopology": [
+        "fg-t30-screen-gateway-<uuid> (private SFU network for upstream HTTP/WS)",
+        "fg-local_default (existing application database bridge for direct PostgreSQL 5432)"
+      ]
+    },
+    "start": {
+      "command": "docker start <gatewayId>",
+      "target": "Exact 64-character container ID returned from create"
+    }
+  },
+  "cleanupAndFailClosed": {
+    "interruptedCreateRecovery": "Inspects and recovers ONLY container with exact uuid name /fg-gateway-<uuid> and label fg-owner=t30-gateway-<uuid>; never sweeps unrelated containers",
+    "ownedResourcesRemoved": [
+     "gateway container",
+     "sfu container",
+     "turn shaper container (if turnTcp enabled)",
+     "private SFU network fg-t30-screen-gateway-<uuid>",
+     "private runtime directory .runtime/t30/gateway-<uuid>"
+    ],
+    "failClosedAssertions": [
+      "fg-local-postgres-1 ID, Config, Networks, Running, and Health remain byte-unchanged",
+      "fg-local-redis-1 ID, Config, Networks, Running, and Health remain byte-unchanged",
+      "fg-local_default Network ID and Container mapping remain byte-unchanged"
+    ],
+    "verificationFailureAction": "Throws AssertionError immediately; never falsely reports mainServicesUnchanged"
+  },
+  "byteExactPreservation": {
+    "sanitizedDiagnostics": true,
+    "redactionRules": true,
+    "gatewayHealthMarkers": true,
+    "observerStopSignalUSR2": true,
+    "observerStopDeadlineMs": 3000,
+    "readinessDeadlineMs": 10000,
+    "rpcAndQueryBuffering": true,
+    "deadlinesAndAssertionsUnchanged": true,
+    "appSourceUntouched": true,
+    "bothCanonicalHelpersUntouched": true
+  },
+  "plannedVerificationControls": [
+    "1. Control A: Fresh full-normal actual SDK private WS / PG HTTP / auth / ACL / TURN / CSP / assets / inspector cleanup verification",
+    "2. Control B: Intentional observer IO and startup failure cleanup controls (fail-closed verification)",
+    "3. Control C: Root source-reverse checks comparing direct gateway helper against canonical private-gateway-observer-reviewed2.mjs",
+    "4. Optional Run: Headed identical diagnostic 4 (pending-frame bytebounds controls 15 GREEN) using new fixture copy and one-variable route"
+  ],
+  "disclaimers": {
+    "executedInThisTurn": false,
+    "acceptanceClaimed": false,
+    "hardwareCauseInferred": false,
+    "appFixOrRoutePromotion": false,
+    "readyForRootExecution": true,
+    "nativeAcceptance": false
+  }
+}

@@ -1,0 +1,81 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-report-uploads.test.ts (5 tests | 5 failed) 8295ms
+   ❯ Additive report-image source binding on actual isolated PostgreSQL (5)
+     × stores a binding without repurposing message_id or changing old plaintext data 288ms
+     × rejects a non-report draft and a source from another conversation 49ms
+     × enforces source/upload foreign keys and keyed-fingerprint shape 35ms
+     × keeps bindings immutable and source tombstones protected 26ms
+     × removes abandoned source metadata with its draft and permits migration reapplication 26ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-report-uploads.test.ts > Additive report-image source binding on actual isolated PostgreSQL > stores a binding without repurposing message_id or changing old plaintext data
+error: relation "chat_crypto_report_upload_sources" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-report-uploads.test.ts:28:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/chat-crypto-report-uploads.test.ts > Additive report-image source binding on actual isolated PostgreSQL > rejects a non-report draft and a source from another conversation
+AssertionError: expected error: relation "chat_crypto_report_uploa… { …(15) } to match object { code: '23514' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23514",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-report-uploads.test.ts:26:129
+
+ ❯ test/chat-crypto-report-uploads.test.ts:31:83
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/chat-crypto-report-uploads.test.ts > Additive report-image source binding on actual isolated PostgreSQL > enforces source/upload foreign keys and keyed-fingerprint shape
+AssertionError: expected error: relation "chat_crypto_report_uploa… { …(15) } to match object { code: '23503' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23503",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-report-uploads.test.ts:26:129
+
+ ❯ test/chat-crypto-report-uploads.test.ts:32:81
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/chat-crypto-report-uploads.test.ts > Additive report-image source binding on actual isolated PostgreSQL > keeps bindings immutable and source tombstones protected
+error: relation "chat_crypto_report_upload_sources" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-report-uploads.test.ts:34:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/chat-crypto-report-uploads.test.ts > Additive report-image source binding on actual isolated PostgreSQL > removes abandoned source metadata with its draft and permits migration reapplication
+error: relation "chat_crypto_report_upload_sources" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-report-uploads.test.ts:38:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  01:17:31
+   Duration  11.43s (tests 83%, import 14%, transform 2%, worker 1%)
+

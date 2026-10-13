@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:11304) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (40.836 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › changes the private epoch only after actual room-invitation approval, then revokes self-leave access
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      376 |   const invited=await request(base).post('/api/v1/invitations').set('Cookie',otherCookie).set('Origin',origin).send({targetType:'ROOM',roomId,receiverId:'alice'});expect(invited.status).toBe(201);expect(await revision()).toBe(1);
+      377 |   const invitationId=invited.body.id as string;
+    > 378 |   expect((await request(base).patch(`/api/v1/invitations/${invitationId}/respond`).set('Cookie',cookie).set('Origin',origin).send({action:'ACCEPT'})).status).toBe(200);expect(await revision()).toBe(1);
+          |                                                                                                                                                                                                  ^
+      379 |   expect((await request(base).get(`/api/v1/crypto/conversations/${id}/state`).set('Cookie',cookie)).status).toBe(403);
+      380 |   const approve=()=>request(base).post(`/api/v1/invitations/${invitationId}/approve`).set('Cookie',otherCookie).set('Origin',origin).send({invitationId,action:'ACCEPT'});
+      381 |   expect((await approve()).status).toBe(201);expect(await revision()).toBe(2);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:378:194)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 24 passed, 25 total
+Snapshots:   0 total
+Time:        41.253 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

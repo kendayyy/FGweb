@@ -1,0 +1,24 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {checkGate,checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/CHATCRYPTO-FE',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const bytes=fs.readFileSync('quality/tasks.json','utf8'),ledger=JSON.parse(bytes),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-FE');assert.equal(task.status,'IN_PROGRESS');assert.deepEqual(task.blockers,[]);
+checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json','utf8'))});checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:task.specSha256});
+const audit=JSON.parse(fs.readFileSync(dir+'/approved-closure-audit.json','utf8'));assert.equal(audit.nativeTests,38);assert.equal(audit.webTests,236);assert.equal(audit.contractsTests,217);assert.equal(audit.mainCryptoAbsent,true);
+const original=JSON.parse(fs.readFileSync(dir+'/before.json','utf8'));for(const row of original.historical)assert.deepEqual(ledger.tasks.find(t=>t.id===row.id),row);
+const records=fs.readdirSync(dir).filter(n=>/^codex-.+\.json$/.test(n)).map(n=>{const r=JSON.parse(fs.readFileSync(dir+'/'+n,'utf8'));assert.equal(hash(r.evidencePath),r.evidenceSha256);return {path:dir+'/'+n,record:r};});
+for(const label of ['approved-sync-fixture-apply-1','approved-sync-contracts-regression-1','approved-sync-contracts-lint-1','approved-closure-audit-1','approved-closure-stage-1'])assert.equal(records.find(x=>x.path.endsWith('/codex-'+label+'.json'))?.record.exitCode,0,label);
+task.preTaskPrerequisiteCommands=records.filter(x=>x.record.exitCode===0&&Date.parse(x.record.startedAt)<Date.parse(task.startedAt)).map(x=>x.record);
+task.commands=records.filter(x=>x.record.exitCode===0&&Date.parse(x.record.startedAt)>=Date.parse(task.startedAt)).map(x=>x.record);
+task.failedAttempts=records.filter(x=>x.record.exitCode!==0).map(x=>x.record);
+// Pre-enrollment gate/adoption records retain their real times and are not recast as in-task tests.
+const walk=root=>fs.existsSync(root)?fs.readdirSync(root,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(root+'/'+e.name):e.isFile()?[root+'/'+e.name]:[]):[];
+const files=[...new Set(task.writeAllowlist.flatMap(p=>p.endsWith('/**')?walk(p.slice(0,-3)):fs.existsSync(p)&&fs.statSync(p).isFile()?[p]:[]))].filter(p=>!p.startsWith('.runtime/')&&!p.startsWith('.cache/')&&!p.startsWith(dir+'/codex-reviewed-frontend-close-')&&p!==dir+'/closure.json');
+for(const file of files)assert(path.resolve(file).startsWith(process.cwd()+path.sep));
+task.status='PASS';task.completedAt=new Date().toISOString();task.review=dir+'/frontend-acceptance-review.md';
+task.closureScope={localEncryptedFrontendAcceptance:true,independentQaAcceptance:false,mainMigration:false,productionActivation:false,banProducerTask:'T37',banProducerImplemented:false,mediaCapacityClaim:false};
+const closure={recordedAt:task.completedAt,status:task.status,review:task.review,scope:task.closureScope,nativeTests:38,webTests:236,contractsTests:217,historicalPassUnchanged:76,successfulInTaskCommands:task.commands.length,preTaskPrerequisiteCommandsRetained:task.preTaskPrerequisiteCommands.length,failedAttemptsRetained:task.failedAttempts.length,next:'CHATCRYPTO-QA',nextTaskStarted:false};
+fs.writeFileSync(dir+'/closure.json',JSON.stringify(closure,null,2)+'\n',{flag:'wx'});
+task.evidencePaths=[...new Set([...task.evidencePaths,...records.flatMap(x=>[x.path,x.record.evidencePath]),task.review,dir+'/closure.json'])];
+task.outputsHash={specSha256:task.specSha256,files:Object.fromEntries([...files,dir+'/closure.json'].map(p=>[p,hash(p)]))};
+for(let i=0;i<5;i++){assert.equal(fs.readFileSync('quality/tasks.json','utf8'),bytes);try{fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');break;}catch(e){if(e.code!=='UNKNOWN'||i===4)throw e;await new Promise(r=>setTimeout(r,250));}}
+fs.appendFileSync('E:/FGweb/.doc/history.md',`\n- Coding and build 2 — CHATCRYPTO-FE — kết thúc phiên xác nhận/review ${new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00. Sau xác nhận người dùng áp dụng đúng fixture SHA, full contracts217/217/28files và lint exit0; native38/web236/current headed/build/type/lint/fourviewports retained. Closure audit8baselines/10802readonly/76historical/checker/env/maincryptoabsent/ownschema-container-runtime0 exit0, append-only coverage/gate stage exit0. Codex frontend acceptance review đạt, ledger PASS với snapshot thực;${task.failedAttempts.length}red runs giữ nguyên. Ba prerequisite commands có giờ thật trước enrollment05:13:26Z được phân loại riêng, không đổi timestamps hoặc giả test trong task. Evidence code/${dir}/closure.json và frontend-acceptance-review.md. QA chưa bắt đầu, không main/production/T37producer/media capacity claim.\n`);
+console.log(JSON.stringify(closure));

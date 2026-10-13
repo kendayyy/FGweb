@@ -1,0 +1,13 @@
+# CHATCRYPTO-BE remaining policy review
+
+This is a source/evidence review, not a new runtime test or backend PASS. The accompanying recorded command checks current checkpoint hashes, unchanged historical PASS records, the stock checker and the approved document baseline. Source anchors and hashes are in remaining-policy-review.json.
+
+Per-request limits, device/prekey limits and transport expiry already exist. They do not bound aggregate ciphertext storage or aggregate pending work. A 10-minute or one-day expiry does not prevent a sender from creating a large backlog before expiry. Cleanup removes at most 100 unlocked expired rows from each transport queue per sweep, using the unchanged 60-second default loop. Locks, failures and long-running sweeps reduce that nominal ceiling. The previous manually driven backlog experiment does not measure periodic throughput.
+
+Before aggregate enforcement is implemented, define authenticated sender and recipient pending-row/byte budgets, cross-instance atomic admission, retry/idempotency accounting, and lifecycle release on ACK/expiry. ACK currently retains transport records until expiry for dedup: any accounting must follow actual retained bytes, not pretend ACK frees storage. Define separate treatment for persisted message history, temporary attachments and encrypted recovery backups. Do not silently use body ceilings as aggregate quotas, erase acknowledged dedup records, or invent a retention policy for chat history.
+
+Required native validation after a policy decision: concurrent requests at the exact aggregate boundary; two API instances sharing the budget; recipient-targeted fanout; idempotent retries with no extra charge; failures after object write/outbox insertion with full rollback/cleanup; ACK versus expiry accounting; late BAN/session/epoch rejection; bounded cleanup with competing locks. Keep the approved 1000 selected mentions and the independent 1000 call/live goal. No numeric aggregate ceiling or production capacity claim is approved by this review.
+
+Report retention remains explicitly configured by the operator. Local real OpenBao/restore evidence establishes capabilities, not deployed off-machine custody, production retention or a completed main legacy cutoff. Ban/unban producer remains assigned to T37 by the user; its backend acceptance is still unsatisfied and the gate is not waived.
+
+Current scoped regression is crypto-cache-regression-1 (10 tests). Last broad regression is custody-deadline-regression-1 (301 tests), predating the cache header change; it is not current for every source. All recorded failures remain preserved.

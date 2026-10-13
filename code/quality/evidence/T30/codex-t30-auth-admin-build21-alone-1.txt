@@ -1,0 +1,56 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:4716) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL apps/api/test/auth-admin.integration.spec.ts (48.485 s)
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › logs the reserved alias into only the configured verified credential identity and returns native cookies
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      at _getError (../../node_modules/jest-circus/build/jestAdapterInit.js:1985:12)
+          at Array.map (<anonymous>)
+
+    Cause:
+        thrown: "Exceeded timeout of 5000 ms for a test.
+        Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+          124 |   expect((await pool.query('SELECT name FROM "user" WHERE id=$1',[owner.id])).rows[0].name).toBe('Ordinary');
+          125 |  });
+        > 126 |  it('logs the reserved alias into only the configured verified credential identity and returns native cookies',async()=>{
+              |  ^
+          127 |   const owner=await existing('kingame'),other=await existing('Ordinary');process.env.ADMIN_USER_IDS=owner.id;
+          128 |   const logged=await post('/fg/sign-in/admin',{username:'kingame',password});expect(logged.status).toBe(200);expect(logged.body.user.id).toBe(owner.id);expect(logged.body.user).not.toHaveProperty('password');
+          129 |   const session=await supertest(server).get('/api/auth/get-session').set('Cookie',cookie(logged));expect(session.body.user.id).toBe(owner.id);expect(await service.isUserAdmin(session.body.user.id)).toBe(true);
+
+          at test/auth-admin.integration.spec.ts:126:2
+          at test/auth-admin.integration.spec.ts:76:1
+
+  ● sole admin and password policy through real HTTP/PostgreSQL/SMTP › rate limits the alias and enforces logout/revoke/ban without trusting an old session
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+      137 |   const owner=await existing('kingame');process.env.ADMIN_USER_IDS=owner.id;
+      138 |   const statuses=[];for(let i=0;i<7;i++)statuses.push((await post('/fg/sign-in/admin',{username:'kingame',password:'wrong'},undefined,'203.0.113.80')).status);expect(statuses).toContain(429);expect(statuses).toContain(401);
+    > 139 |   const logged=await post('/fg/sign-in/admin',{username:'kingame',password});expect(logged.status).toBe(200);
+          |                                                                                                    ^
+      140 |   expect((await post('/sign-out',{},cookie(logged))).status).toBe(200);expect((await supertest(server).get('/api/auth/get-session').set('Cookie',cookie(logged))).body).toBeNull();
+      141 |   await pool.query('INSERT INTO admin_actions(id,actor_id,target_user_id,action,created_at) VALUES($1,$2,$2,$3,now())',[randomUUID(),owner.id,'BAN']);
+      142 |   expect((await post('/fg/sign-in/admin',{username:'kingame',password})).status).toBe(403);expect(await service.isUserAdmin(owner.id)).toBe(false);
+
+      at Object.<anonymous> (test/auth-admin.integration.spec.ts:139:100)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 12 passed, 14 total
+Snapshots:   0 total
+Time:        49.343 s
+Ran all test suites within paths "apps/api/test/auth-admin.integration.spec.ts".

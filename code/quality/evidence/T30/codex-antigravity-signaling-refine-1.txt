@@ -1,0 +1,27 @@
+The revised proposals resolving all five reviewer findings from [`signaling-proposal-review-1.json`](file:///E:/FGweb/code/quality/evidence/T30/signaling-proposal-review-1.json) and [`signaling-source-interim-review.json`](file:///E:/FGweb/code/quality/evidence/T30/signaling-source-interim-review.json) have been written strictly under [`quality/evidence/T30/antigravity-signaling-refine-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-refine-1/):
+
+### Summary of Changes
+
+1. [`apps/api/src/modules/calls/signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-refine-1/apps/api/src/modules/calls/signaling-gateway.ts)
+   - **Per-frame fresh authorization**: Under the shared canonical `lockedLease` transaction (locking `rooms` then `call_groups`), fresh [`liveLease`](file:///E:/FGweb/code/apps/api/src/modules/calls/lease-store.ts#L5-L18) and [`publicationPermission`](file:///E:/FGweb/code/apps/api/src/modules/calls/lease-store.ts#L26) are evaluated before **every frame** in the batch. Authorization facts are never cached across frames.
+   - **Bounded batch size (max 8 frames)**: Reduced batch bound to max 8 frames (from 16) to ensure fair lock holding within the canonical 3-second statement timeout.
+   - **Zero production observer hooks**: Removed `testObserver` and all test-specific code from `GatewayOptions`. The signature matches the canonical baseline.
+   - **Preserved invariants**: Preserved exact CID bounds (<= 256), track types/sources, max 1 native track per quota/source, secondary codec verification on matching SID, handshake frame queuing, 1-second `live()` polling revalidation, and canonical timeouts (3s statement, 2s connection, 3s native RPC, 5s join).
+
+2. [`apps/api/test/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-refine-1/apps/api/test/t30-signaling-throughput.integration.spec.ts)
+   - **Black-box 32 PING/PONG throughput within 8s**: Sends 32 genuine WebSocket PINGs traversing outbound through the gateway to the fake SFU, which immediately replies with PONGs traversing inbound back to the client. Both directions exercise real PostgreSQL row locks. Asserts all 32 responses arrive in sequence within an 8-second deadline. (Establishes semantic RED on the unbatched old source due to serialization delay, and GREEN on the batched proposal).
+   - **Deterministic mid-batch race barrier**: Uses an external PG connection holding a row lock on `rooms`, verifies the gateway is blocked using `pg_blocking_pids`, enqueues `[screen addTrack, protected laterPing(999)]`, commits the room lock, stalls fake native `GetParticipant` on a barrier, commits an administrative `BAN` and admission revocation in a separate PG connection, and releases the RPC barrier. Asserts that `laterPing(999)` is **never forwarded** to the upstream SFU and both WebSockets close.
+   - **Fixed fixture SQL**: Uses 3 distinct parameters for `game_interests(id, user_id, game_id)` and seeds an admin user for `admin_actions(actor_id)`.
+   - **Fake SFU participant tracks**: Mutates the shared array in place (`setParticipantTracks`), ensuring the HTTP handler closure always reads the latest tracks.
+   - **Strict type narrowing**: Exhaustively narrows `msg.message.case` before accessing discriminated union fields.
+   - **Preserved test coverage**: Includes quota denial (`NOT_ALLOWED`), quota granted with pending CID, duplicate screen denial (`LIMIT_EXCEEDED`), secondary codec extension, queue overflow (>= 256 frames), and malformed protobuf cleanup (400).
+
+3. [`implementation-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-refine-1/implementation-notes.md)
+   - Documents the root-cause analysis, exact resolutions for all five reviewer findings, architectural invariants, and fixture assumptions.
+
+---
+
+### Confinement & Status
+- **Proposed-only confinement**: Zero changes to production code (`apps/api/src/`), existing tests, compiled distribution files, or git ledger.
+- **No commands executed**: Zero test, build, lint, or browser runs were executed during this turn.
+- Awaiting Codex review and execution. No PASS claimed.

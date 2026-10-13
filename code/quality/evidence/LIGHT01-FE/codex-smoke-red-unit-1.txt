@@ -1,0 +1,76 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/theme.test.tsx (15 tests | 1 failed) 1050ms
+   × keeps the animated icon mounted while effective System color changes, with one menu trigger 243ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/theme.test.tsx > keeps the animated icon mounted while effective System color changes, with one menu trigger
+AssertionError: expected SVGSVGElement{ …(2) } to be SVGSVGElement{ …(1) } // Object.is equality
+
+- Expected
++ Received
+
+  <svg
+    aria-hidden="true"
+-   class="lucide lucide-sun"
++   class="lucide lucide-moon"
+    fill="none"
+    height="18"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="18"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+-   <circle
+-     cx="12"
+-     cy="12"
+-     r="4"
+-   />
+    <path
+-     d="M12 2v2"
+-   />
+-   <path
+-     d="M12 20v2"
+-   />
+-   <path
+-     d="m4.93 4.93 1.41 1.41"
+-   />
+-   <path
+-     d="m17.66 17.66 1.41 1.41"
+-   />
+-   <path
+-     d="M2 12h2"
+-   />
+-   <path
+-     d="M20 12h2"
+-   />
+-   <path
+-     d="m6.34 17.66-1.41 1.41"
+-   />
+-   <path
+-     d="m19.07 4.93-1.41 1.41"
++     d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+    />
+  </svg>
+
+ ❯ test/theme.test.tsx:25:39
+     23|  expect(icon).not.toBeNull();
+     24|  device(true);
+     25|  expect(trigger.querySelector('svg')).toBe(icon);
+       |                                       ^
+     26|  expect(trigger).toHaveAccessibleName('Chế độ màu: Hệ thống');
+     27|  select('Sáng');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 14 passed (15)
+   Start at  23:30:42
+   Duration  7.52s (environment 41%, transform 23%, tests 15%, import 14%, setup 8%)
+

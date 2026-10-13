@@ -1,0 +1,34 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18004) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (46.002 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).rejects.toMatchObject(expected)
+
+    - Expected  - 3
+    + Received  + 1
+
+    - Object {
+    -   "status": 409,
+    - }
+    + [TypeError: reviewService.reviewReconciliation is not a function]
+
+      207 |    try{expect((await file()).status).toBe(409);expect(rejectedBuffers.length).toBeGreaterThan(0);expect(rejectedBuffers.every(bytes=>bytes.every(byte=>byte===0))).toBe(true);}finally{ioSpy.mockRestore();await pool.query("DELETE FROM admin_actions WHERE id='image-candidate-late-ban'");}
+      208 |    const reviewService=app.get(CryptoLegacyService) as unknown as {reviewReconciliation:(actor:Awaited<ReturnType<ChatService['actor']>>,id:string,input:unknown)=>Promise<unknown>},actor=await app.get(ChatService).actor({cookie:cookies.get('alice')!}),gateInput={deviceId:'A',membershipRevision:revision,cohortId:'available',expectedSourceCount:3},review=(input:unknown=gateInput)=>Promise.resolve().then(()=>reviewService.reviewReconciliation(actor,'legacy',input));
+    > 209 |    await expect(review()).rejects.toMatchObject({status:409});await expect(review({...gateInput,expectedSourceCount:2})).rejects.toMatchObject({status:409});
+          |                                   ^
+      210 |    const unmappedSource={version:1,conversationId:'legacy',messageId:'msg-c',senderId:'alice',clientMessageId:'retry-msg-c',type:'TEXT',content:'unmapped-source-private',replyToId:null,mentionedUserIds:[],createdAt:'2026-01-01T00:00:00.123458Z',updatedAt:'2026-01-01T00:00:00.123458Z',attachments:[]},unmappedSha=sha(canonical(unmappedSource));await pool.query("INSERT INTO chat_crypto_legacy_migrations(message_id,conversation_id,cohort_id,original_sha256,state) VALUES('msg-c','legacy','available',$1,'PREPARED')",[unmappedSha]);
+      211 |    try{
+      212 |     await expect(review()).rejects.toMatchObject({status:409});const imported={...archive,fg:{...archive.fg,candidateId:'native-all-source-last',originalSha256:unmappedSha},source:unmappedSource},encrypted=JSON.parse(await alice.encryptRoomEvent(room,'m.room.message',JSON.stringify(imported))),last=await write('conversations/legacy/legacy/commit',{candidateId:imported.fg.candidateId,messageId:'msg-c',originalSha256:unmappedSha,deviceId:'A',membershipRevision:revision,cohortId:'available',envelope:{version:1,protocol:'MATRIX_MEGOLM',event:encrypted}});expect(last.status).toBe(201);await expect(review()).rejects.toMatchObject({status:409});
+
+      at Object.toMatchObject (../../node_modules/expect/build/index.js:2155:20)
+      at test/chat-crypto-legacy.integration.spec.ts:209:35
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        46.55 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

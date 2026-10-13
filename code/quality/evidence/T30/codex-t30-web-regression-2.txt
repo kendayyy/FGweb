@@ -1,0 +1,66 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/live-viewer.test.tsx (33 tests | 24 failed) 12737ms
+   ❯ T30 approved LiveViewer and screen share behavior (RED proposal) (33)
+     × retains both available choices in selector upon TrackUnsubscribed during switching 85ms
+     × ended remote stream via TrackUnpublished chooses available fallback automatically 47ms
+     × removes participant sources and falls back when participant disconnects 35ms
+     × invokes getDisplayMedia synchronously in click before any await and requests 720p30 1068ms
+     × denied or canceled capture does not dispatch claim or release, leaving quota untouched 31ms
+     × stops captured track and releases quota once if publish fails after successful claim 55ms
+     × stops captured track and explains the 3 screen slots limit when 4th publisher attempts to share 55ms
+     × hides capture button and displays view-only guidance on mobile browser while preserving viewing 7ms
+     × hides capture button and displays guidance on desktop browsers without getDisplayMedia support 4ms
+     × permits desktop capture even when responsive viewport is narrow 14ms
+     × cleans screen tracks and quota on leave or route change without ending persistent room or team 1031ms
+     × releases quota and resets button when browser native stop sharing button is clicked 1042ms
+     × resets local state and releases quota when moderator stops local screen share 1034ms
+     × navigates selector tabs using keyboard Arrow keys, Home and End with focus retention 59ms
+     × stops local capture and releases quota when server revokes screen share permission 1038ms
+     × detects iPadOS desktop Safari as view-only tablet device 5ms
+     × waits for delayed native permission grant before completing screen publish 1097ms
+     × atomically unpublishes video track and releases quota if optional system audio publish fails 51ms
+     × prevents duplicate release and cleans up safely when stopped while publish is in-flight 1124ms
+     × rolls back and unpublishes if raw capture ends while native SDK publish is in-flight 41ms
+     × attaches exactly one muted playsinline video for local preview without remote subscriptions 1033ms
+     × preserves remote video attachment and subscription when local sharing is stopped while watching remote 1067ms
+     × preserves and unpublishes system audio handle when screen tracks are unpublished 1035ms
+     × does not cancel new publication when a stale unpublication event arrives for old track SID 1034ms
+ ❯ |web| apps/web/test/presence.test.tsx (21 tests | 21 failed) 42ms
+   ❯ T16-FE Presence & Online Users Panel (21)
+     × 1. deduplicates duplicate users across pages, events, and multiple tabs, retaining first profile displayName 14ms
+     × 2. lost socket connection leaves chosen custom status intact 2ms
+     × 3. game switch releases old canonical subscription and resets scope 2ms
+     × 4. profile links encode opaque user IDs properly 1ms
+     × 5. failed save of custom status keeps previous confirmed status with visible error and retry 1ms
+     × 6. canonical ack derives ID; member sends 15s heartbeat; guest sends no heartbeat 2ms
+     × 7. stale HTTP responses, acks, events, or status saves after game switch or logout are ignored 1ms
+     × 8. ignores malformed or wrong-scope presence events 1ms
+     × 9. handles empty, error, and retry states correctly 1ms
+     × 10. supports pagination with cursor and appends new unique users 2ms
+     × 11. regression: strict SocketScopedPresenceChangedPayloadSchema required, ignores legacy/unscoped events and events before canonical ACK 1ms
+     × 12. regression: online->offline while profile fetch is pending does not re-add user 1ms
+     × 13. regression: heartbeat uses emitWithAck and stops timer on error/timeout/rejection 1ms
+     × 14. regression: loadMore failure exposes error/retry and preserves loaded users 1ms
+     × 15. regression: socket does not open while auth is loading/error/signing-out; status save uses confirmed server response 1ms
+     × 16. auth loading & 500 error fails closed (0 sockets), while 401 settled guest opens socket with 0 heartbeats 1ms
+     × 17. drops early unscoped events before canonical subscribe ACK 1ms
+     × 18. old epoch timeout/rejection cannot flip new connected scope state to offline 1ms
+     × 19. actual auth.signOut lifecycle disconnects presence and late PATCH response does not recreate old user cache 1ms
+     × 20. tests distinct subscribe rejection, heartbeat session revoked error, and socket timeout 1ms
+     × 21. deferred status PATCH shows saving state and error recovery re-enables selector 1ms
+ ❯ |web| apps/web/test/social.test.tsx (17 tests | 12 failed) 13368ms
+   ❯ T17-FE Friends, DMs, and Block filtering behavior (17)
+     × allows starting a direct conversation without friendship 1031ms
+     × opens DirectMessagesPanel on ProfilePage when user clicks DM button 1048ms
+     × locked DM has an actual unlock route and cannot send through the former plaintext composer 459ms
+     × closed locked DM ignores plaintext socket events and counts strict encrypted metadata once 1060ms
+     × locked private history remains unreadable and never fetches the former plaintext history endpoint 1071ms
+     × deduplicates unread counts when bridge event arrives before socket event or vice versa 1073ms
+     × ignores malformed or wrong-actor bridge events 1105ms
+     × suppresses late old message timestamp after READ 1116ms
+     × changing a locked DM never starts a plaintext send or displays a late former-transport response 1053ms
+     × switching away and back while locked does not revive cached legacy plaintext 1214ms
+     × a locked DM remains fail closed when the obsolete plaintext history transport would fail 1122ms
+     × handles paginated friends list with load more button 1186ms

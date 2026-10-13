@@ -1,0 +1,107 @@
+{
+  "recordedAt": "2026-10-11T04:09:16.503Z",
+  "reviewer": "Codex",
+  "pins": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "sha256": "13b05bbd3e8eed3384ef10aceb141817bd13267c7ba7ab8c40993c18ca69b531"
+    },
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "sha256": "36ece485c93dd1365f8ceb4c1ce9ea35aef052f802ecb6bd63213e4c2672f4b7"
+    },
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "sha256": "a973561c611e35a8fd4e5cfb575923ceb5ad880a74ce0540afa3bfcb355c90fa"
+    },
+    {
+      "path": "apps/api/src/modules/calls/publishing.service.ts",
+      "sha256": "06d3281a0b8b76f0f145f57650ac969405f27a0a7bef8ee47407a15084d57805"
+    },
+    {
+      "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+      "sha256": "495e98f043f051c58f50442c86ff5837487dfa3aa928bbff4001398bc88bee1a"
+    },
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "sha256": "b16d6ba271d33e9531f25169c019a52f779a8ae615ae9f441b3270567965cf0a"
+    },
+    {
+      "path": "tests/e2e/screen-share.spec.ts",
+      "sha256": "8e126efd434516a6870e9f48029c4317cc2a427e78d3157e660b00ebdba10cc8"
+    },
+    {
+      "path": "apps/api/test/call-controls.integration.spec.ts",
+      "sha256": "ae717984122e050611629be2e8850984673709b88b5dbe3cb92790765805fbdd"
+    },
+    {
+      "path": "apps/api/test/call-admission.integration.spec.ts",
+      "sha256": "9689278e264bb846cac21ffcf749c659cbe23410719b2ccf12b356a75aac8c8c"
+    },
+    {
+      "path": "apps/api/test/call-gateway.integration.spec.ts",
+      "sha256": "8e2b5d6d15bf1854020e0804b55a9374555fbb7c2b6f6da452b2a6526570daf6"
+    },
+    {
+      "path": "apps/api/test/call-lifecycle.integration.spec.ts",
+      "sha256": "c2d89659e53f7b712d6b289986658d181e9fc0e90835b06d3edfc9d8fe210e31"
+    },
+    {
+      "path": "apps/web/dist/index.html",
+      "sha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90"
+    },
+    {
+      "path": "scripts/verify-task.mjs",
+      "sha256": "21280218b35f77fd48097615a65e679e801ac4d6b8f183782854a42eb36f1391"
+    },
+    {
+      "path": ".env.local",
+      "sha256": "c085045a92b1699a519f4297bff10b2c1dc0bb9bfb0ad22e470cefdabe64c3b1"
+    },
+    {
+      "path": "quality/evidence/T30/regressions/publishing-gateway.integration.spec.ts",
+      "sha256": "06937e130b0ede331faeee8b81c5158addbf906d86e66a38eefd76e0cd769b13"
+    },
+    {
+      "path": "quality/evidence/T30/private-gateway-fixture.mjs",
+      "sha256": "de3a1a598a07d9d39c1edbabd92f35d927406916973b4d1ce837b426667a2fed"
+    },
+    {
+      "path": "packages/database/src/schema/calls.ts",
+      "sha256": "3b572c682cd090b969dd3ab832dd2e5e72ce07ad3e55931a9de983fb37b178cf"
+    }
+  ],
+  "failedFrozenRun": {
+    "command": "node quality/evidence/T30/run-backend-regressions-with-team-play.mjs publishing publishing-gateway",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T04:03:28.683Z",
+    "completedAt": "2026-10-11T04:05:39.288Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-regressions-3.txt",
+    "evidenceSha256": "2ff070a479a8842429fd749d2bd869e27d342b9c6d2c9b68ac2a96d4584469c3"
+  },
+  "cleanup": {
+    "path": "quality/evidence/T30/regression-runtime-review-ddc4c5fe-b906-47b2-a4a5-bf3763bb8e92.json",
+    "result": {
+      "completedAt": "2026-10-11T04:05:39.252Z",
+      "names": [
+        "publishing",
+        "publishing-gateway"
+      ],
+      "exitCode": 1,
+      "removed": [
+        "gateway-b346130c-ccc3-43d9-9dac-74f99a49499f",
+        "gateway-b4a409d0-6c80-4c04-8028-3b6e60cacaf0",
+        "temporary-regression-ddc4c5fe-b906-47b2-a4a5-bf3763bb8e92"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    }
+  },
+  "sourceHypothesis": "Native removal may precede Calls.reconcile; cascade deletes all admission/member history, lifecycle nativeExists/noMember branch cannot distinguish fresh group.",
+  "causeNotYetProven": true,
+  "build9NotRun": true,
+  "originalFrozenTestsUnchanged": true,
+  "actualNativeAcceptance": false
+}

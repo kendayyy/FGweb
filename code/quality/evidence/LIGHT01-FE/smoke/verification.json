@@ -1,0 +1,245 @@
+{
+  "taskId": "LIGHT01-FE",
+  "recordedAt": "2026-10-07T16:47:01.797Z",
+  "status": "BLOCKED",
+  "implementation": "BUILT_AND_TECHNICALLY_VERIFIED",
+  "baselineAligned": true,
+  "strictGate": "output hash changed",
+  "ownerResumeAudit": {
+    "readonlyFiles": 5028,
+    "frozenOutsideOwner": 4484,
+    "historicalResultsPreserved": true
+  },
+  "checks": {
+    "webTests": 167,
+    "testFiles": 13,
+    "headedE2E": 6,
+    "renderedTextContrastChecks": 384,
+    "focusContrastMin": 4.23434159427708,
+    "lightControlBorderContrastMin": 3.3648794506913,
+    "screenshots": 20,
+    "lint": true,
+    "typecheck": true,
+    "build": true
+  },
+  "files": {
+    "apps/web/src/components/ui/classic.tsx": "bcfc282c38adbc15f5e1adfa283d3b037459d13b911cb76645b7fed94fa1c157",
+    "apps/web/src/features/theme/ThemeSwitcher.tsx": "f7a6afa18280347e238c6948d8965cf7b508df9ebf68e05901282f7d9adecae5",
+    "apps/web/src/features/theme/theme.css": "841526b39da663d9bc3502e02f3b5dd3731fc7b3632799f8099d32fb8f371fd5",
+    "apps/web/src/styles/tokens.css": "4f389e050026358e0096668ae105a3cec0d142ff0dabe36fe9fc4e1aef1c97af",
+    "apps/web/src/styles/global.css": "3dc11914ce3f6f155e312d1d6c8d5a0beecc7d40e75ff7fe0386ba1c8d9cb7c2",
+    "apps/web/src/features/lobby/lobby.css": "bce7b0932a1444ea52d58cbb43aba068746e81fa248159bf01fac34f90c748b0",
+    "apps/web/test/theme.test.tsx": "171b1043100ba23566930142ec2ecc2b910a8e34bb8d92cf086b86c84ae90512",
+    "tests/e2e/theme.spec.ts": "c423fda54ec362849b77dc82bdce2a88efeb98dd7436419873d4759d4ae25c38"
+  },
+  "commands": [
+    {
+      "command": "node node_modules/vitest/vitest.mjs run --root apps/web test/theme.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:34:02.808Z",
+      "completedAt": "2026-10-07T16:34:10.328Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-green-unit-1.txt",
+      "evidenceSha256": "7adc97de9bfebca35670fbd0572ae4ed11eda52e65031ae2605119c7c5bc773e"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p apps/web/tsconfig.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:34:25.621Z",
+      "completedAt": "2026-10-07T16:34:35.249Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p quality/evidence/LIGHT01-FE/test-types.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:34:35.388Z",
+      "completedAt": "2026-10-07T16:34:44.236Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-test-types-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node apps/web/node_modules/vite/bin/vite.js build apps/web --config apps/web/vite.config.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:35:15.348Z",
+      "completedAt": "2026-10-07T16:35:20.055Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-build-1.txt",
+      "evidenceSha256": "39f0d7aebab42cab3c66f53db681cbc55dac229a44e56ef6e35ee967fe24b63f"
+    },
+    {
+      "command": "node node_modules/@playwright/test/cli.js test --config quality/evidence/LIGHT01-FE/playwright.config.ts --headed",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:35:38.297Z",
+      "completedAt": "2026-10-07T16:36:26.639Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-headed-1.txt",
+      "evidenceSha256": "6be49eb6856c7422ce6fa7d6c71ac98aeaea2e323fe5bc3c057bbac5c69412ee"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js apps/web/src/features/theme apps/web/src/components/ui/classic.tsx apps/web/test/theme.test.tsx tests/e2e/theme.spec.ts quality/evidence/LIGHT01-FE/prepare-smoke.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:36:42.361Z",
+      "completedAt": "2026-10-07T16:36:47.024Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/LIGHT01-FE/smoke-regression.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:38:32.511Z",
+      "completedAt": "2026-10-07T16:40:13.606Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-suite-1.txt",
+      "evidenceSha256": "e157b1bb859670a0ad502f0428085351bc37186cc20fcd5559eee0391d3f1b32"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth-admin.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:38:32.758Z",
+      "completedAt": "2026-10-07T16:38:39.779Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-1.txt",
+      "evidenceSha256": "422a9f652876e6cd30dc39a3225293ae7d14dff766ea4a596cf64f89b010ec9e"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth-email.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:38:39.882Z",
+      "completedAt": "2026-10-07T16:38:48.613Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-2.txt",
+      "evidenceSha256": "12b75a935c770fe8cba7788c12d471d1f2290a561fec47074650c06bcd52b7d7"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/auth.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:38:48.723Z",
+      "completedAt": "2026-10-07T16:38:55.747Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-3.txt",
+      "evidenceSha256": "53db5d73ccb9d176625d27d55aa3c83e2d57ba59c792bcf89b11ee02dc75f925"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/chat-rich.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:38:55.837Z",
+      "completedAt": "2026-10-07T16:39:01.519Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-4.txt",
+      "evidenceSha256": "31a281e32f77345d3316868f1f68e4a7e770d6768789bd2b0c418a96864a9a3f"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:01.630Z",
+      "completedAt": "2026-10-07T16:39:07.016Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-5.txt",
+      "evidenceSha256": "a45268930db795bafa50ea7f55e25e9da36e65c665078b0eaa37c2500b33dfc3"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/codex-auth-ui-regressions.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:07.117Z",
+      "completedAt": "2026-10-07T16:39:12.760Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-6.txt",
+      "evidenceSha256": "bb1986cc6b9654402d26897a1738880ad077c4976a872e0826d3a97b6c10b85c"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/lobby.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:12.875Z",
+      "completedAt": "2026-10-07T16:39:22.276Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-7.txt",
+      "evidenceSha256": "08ec4a15bde95b57146125fc001c4323d2965b273153d289ffd26a085f2694bd"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/presence.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:22.416Z",
+      "completedAt": "2026-10-07T16:39:29.540Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-8.txt",
+      "evidenceSha256": "5e4c48641f0b44d84f7210d8bc81fa23a4ca9dc0b7596db04aa86ff3174d09e8"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/profiles.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:29.670Z",
+      "completedAt": "2026-10-07T16:39:35.611Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-9.txt",
+      "evidenceSha256": "78bc434db502b3ee05ebe98eb3290e71d488841381b137332b392053713eb42f"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/recruitments.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:35.716Z",
+      "completedAt": "2026-10-07T16:39:44.992Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-10.txt",
+      "evidenceSha256": "3ed8df15324e7ba121a238dfe8cb08187d4cd1aa5c1daa767b384fb20d067194"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/rooms.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:45.104Z",
+      "completedAt": "2026-10-07T16:39:56.859Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-11.txt",
+      "evidenceSha256": "bdaa985b4add978162cdcaabe4a87532721bd9b223132e269824191f70bcb292"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/social.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:39:56.961Z",
+      "completedAt": "2026-10-07T16:40:05.725Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-12.txt",
+      "evidenceSha256": "dce5312dc06db1fff79f01618dff5bb7e41f0d2ffb11d173fb6eb0eb936daa99"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe node_modules/vitest/vitest.mjs run --root apps/web test/theme.test.tsx --maxWorkers 1",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-07T16:40:05.831Z",
+      "completedAt": "2026-10-07T16:40:13.554Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/LIGHT01-FE/codex-smoke-regression-13.txt",
+      "evidenceSha256": "b3f1100ae8bd7de3546b3f330723e39870fcc6795f8ef1a8dc2100eb2771c673"
+    }
+  ],
+  "limitations": [
+    "Actual new app appearance review is pending; approved mockups alone do not close task",
+    "Strict gate still compares superseded predecessor output hashes inside the current authorized owner scope; checker and historical hashes not changed",
+    "Logo and fixed72px sidebar integration remains a later owner checkpoint"
+  ],
+  "origin": "http://localhost:18080/",
+  "configurationAndAdminInputPreserved": true,
+  "privateValuesLeaked": false
+}

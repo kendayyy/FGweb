@@ -1,0 +1,6302 @@
+{
+  "id": "ec34efcc-dd22-4690-ae1f-912206d28171",
+  "prevId": "b1ab4c1d-d500-4b42-a914-ea71d0de8b37",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.account": {
+      "name": "account",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "account_provider_account_unique": {
+          "name": "account_provider_account_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "provider_id",
+            "account_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.session": {
+      "name": "session",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "session_token_unique": {
+          "name": "session_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_verified": {
+          "name": "email_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.verification": {
+      "name": "verification",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.game_interests": {
+      "name": "game_interests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "game_interests_user_id_user_id_fk": {
+          "name": "game_interests_user_id_user_id_fk",
+          "tableFrom": "game_interests",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "game_interests_game_id_games_id_fk": {
+          "name": "game_interests_game_id_games_id_fk",
+          "tableFrom": "game_interests",
+          "tableTo": "games",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_game_interest_unique": {
+          "name": "user_game_interest_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "game_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.game_profiles": {
+      "name": "game_profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "in_game_name": {
+          "name": "in_game_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rank": {
+          "name": "rank",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "play_hours": {
+          "name": "play_hours",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "play_style": {
+          "name": "play_style",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "game_profiles_user_id_user_id_fk": {
+          "name": "game_profiles_user_id_user_id_fk",
+          "tableFrom": "game_profiles",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "game_profiles_game_id_games_id_fk": {
+          "name": "game_profiles_game_id_games_id_fk",
+          "tableFrom": "game_profiles",
+          "tableTo": "games",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_game_profile_unique": {
+          "name": "user_game_profile_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "game_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "custom_status": {
+          "name": "custom_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'JUST_CHATTING'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profiles_user_id_user_id_fk": {
+          "name": "profiles_user_id_user_id_fk",
+          "tableFrom": "profiles",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "icon_url": {
+          "name": "icon_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "banner_url": {
+          "name": "banner_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "games_title_unique": {
+          "name": "games_title_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "title"
+          ]
+        },
+        "games_id_title_unique": {
+          "name": "games_id_title_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "title"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lobbies": {
+      "name": "lobbies",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lobbies_game_id_games_id_fk": {
+          "name": "lobbies_game_id_games_id_fk",
+          "tableFrom": "lobbies",
+          "tableTo": "games",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "lobbies_game_id_unique": {
+          "name": "lobbies_game_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "game_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.conversation_members": {
+      "name": "conversation_members",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "conversation_members_conversation_id_conversations_id_fk": {
+          "name": "conversation_members_conversation_id_conversations_id_fk",
+          "tableFrom": "conversation_members",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "conversation_members_user_id_user_id_fk": {
+          "name": "conversation_members_user_id_user_id_fk",
+          "tableFrom": "conversation_members",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "conversation_member_unique": {
+          "name": "conversation_member_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "conversation_id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.conversations": {
+      "name": "conversations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lobby_id": {
+          "name": "lobby_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user1_id": {
+          "name": "user1_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user2_id": {
+          "name": "user2_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "conversations_lobby_id_lobbies_id_fk": {
+          "name": "conversations_lobby_id_lobbies_id_fk",
+          "tableFrom": "conversations",
+          "tableTo": "lobbies",
+          "columnsFrom": [
+            "lobby_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "conversations_user1_id_user_id_fk": {
+          "name": "conversations_user1_id_user_id_fk",
+          "tableFrom": "conversations",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user1_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "conversations_user2_id_user_id_fk": {
+          "name": "conversations_user2_id_user_id_fk",
+          "tableFrom": "conversations",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user2_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "conversations_lobby_id_unique": {
+          "name": "conversations_lobby_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "lobby_id"
+          ]
+        },
+        "conversations_id_kind_unique": {
+          "name": "conversations_id_kind_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "kind"
+          ]
+        },
+        "dm_pair_unique": {
+          "name": "dm_pair_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user1_id",
+            "user2_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "conversation_kind_shape_check": {
+          "name": "conversation_kind_shape_check",
+          "value": "(kind = 'DM' AND user1_id IS NOT NULL AND user2_id IS NOT NULL AND user1_id < user2_id AND lobby_id IS NULL) OR (kind = 'LOBBY' AND lobby_id IS NOT NULL AND user1_id IS NULL AND user2_id IS NULL) OR (kind = 'ROOM' AND lobby_id IS NULL AND user1_id IS NULL AND user2_id IS NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.attachments": {
+      "name": "attachments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_name": {
+          "name": "file_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_size": {
+          "name": "file_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encryption_mode": {
+          "name": "encryption_mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LEGACY_PENDING'"
+        },
+        "crypto_envelope": {
+          "name": "crypto_envelope",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "attachments_message_id_messages_id_fk": {
+          "name": "attachments_message_id_messages_id_fk",
+          "tableFrom": "attachments",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "attachments_conversation_id_conversations_id_fk": {
+          "name": "attachments_conversation_id_conversations_id_fk",
+          "tableFrom": "attachments",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "attachments_message_conversation_fk": {
+          "name": "attachments_message_conversation_fk",
+          "tableFrom": "attachments",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "attachment_encryption_shape_check": {
+          "name": "attachment_encryption_shape_check",
+          "value": "(\"attachments\".\"encryption_mode\"='LEGACY_PENDING' AND \"attachments\".\"crypto_envelope\" IS NULL) OR (\"attachments\".\"encryption_mode\"='E2EE' AND \"attachments\".\"file_name\"='' AND \"attachments\".\"mime_type\"='application/octet-stream' AND \"attachments\".\"crypto_envelope\" IS NULL AND \"attachments\".\"file_size\" BETWEEN 1 AND 5242880) OR (\"attachments\".\"encryption_mode\"='LOBBY_AEAD' AND chat_crypto_valid_envelope(\"attachments\".\"crypto_envelope\",'LOBBY_AEAD','fg-lobby'))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.mentions": {
+      "name": "mentions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mentioned_user_id": {
+          "name": "mentioned_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mentions_message_id_messages_id_fk": {
+          "name": "mentions_message_id_messages_id_fk",
+          "tableFrom": "mentions",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "mentions_mentioned_user_id_user_id_fk": {
+          "name": "mentions_mentioned_user_id_user_id_fk",
+          "tableFrom": "mentions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "mentioned_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "message_mentioned_user_unique": {
+          "name": "message_mentioned_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "message_id",
+            "mentioned_user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.messages": {
+      "name": "messages",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'TEXT'"
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "encryption_mode": {
+          "name": "encryption_mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LEGACY_PENDING'"
+        },
+        "crypto_envelope": {
+          "name": "crypto_envelope",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "crypto_revision": {
+          "name": "crypto_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_message_id": {
+          "name": "client_message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reply_to_id": {
+          "name": "reply_to_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "messages_conversation_cursor_idx": {
+          "name": "messages_conversation_cursor_idx",
+          "columns": [
+            {
+              "expression": "conversation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "messages_conversation_id_conversations_id_fk": {
+          "name": "messages_conversation_id_conversations_id_fk",
+          "tableFrom": "messages",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "messages_sender_id_user_id_fk": {
+          "name": "messages_sender_id_user_id_fk",
+          "tableFrom": "messages",
+          "tableTo": "user",
+          "columnsFrom": [
+            "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "messages_reply_to_same_conversation_fk": {
+          "name": "messages_reply_to_same_conversation_fk",
+          "tableFrom": "messages",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "reply_to_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "message_id_conversation_unique": {
+          "name": "message_id_conversation_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "conversation_id"
+          ]
+        },
+        "sender_client_message_id_unique": {
+          "name": "sender_client_message_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_id",
+            "conversation_id",
+            "client_message_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "message_type_check": {
+          "name": "message_type_check",
+          "value": "type IN ('TEXT', 'IMAGE')"
+        },
+        "message_encryption_shape_check": {
+          "name": "message_encryption_shape_check",
+          "value": "(\"messages\".\"encryption_mode\"='LEGACY_PENDING' AND \"messages\".\"crypto_envelope\" IS NULL AND \"messages\".\"crypto_revision\" IS NULL) OR (\"messages\".\"content\"='' AND \"messages\".\"crypto_revision\" IS NOT NULL AND \"messages\".\"crypto_revision\" BETWEEN 1 AND 9007199254740991 AND chat_crypto_valid_envelope(\"messages\".\"crypto_envelope\",\"messages\".\"encryption_mode\",'fg-lobby'))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.blocks": {
+      "name": "blocks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "blocker_id": {
+          "name": "blocker_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "blocked_id": {
+          "name": "blocked_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "blocks_blocker_id_user_id_fk": {
+          "name": "blocks_blocker_id_user_id_fk",
+          "tableFrom": "blocks",
+          "tableTo": "user",
+          "columnsFrom": [
+            "blocker_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "blocks_blocked_id_user_id_fk": {
+          "name": "blocks_blocked_id_user_id_fk",
+          "tableFrom": "blocks",
+          "tableTo": "user",
+          "columnsFrom": [
+            "blocked_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "block_pair_unique": {
+          "name": "block_pair_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "blocker_id",
+            "blocked_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "block_no_self": {
+          "name": "block_no_self",
+          "value": "blocker_id <> blocked_id"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.friend_requests": {
+      "name": "friend_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "receiver_id": {
+          "name": "receiver_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "friend_requests_sender_id_user_id_fk": {
+          "name": "friend_requests_sender_id_user_id_fk",
+          "tableFrom": "friend_requests",
+          "tableTo": "user",
+          "columnsFrom": [
+            "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "friend_requests_receiver_id_user_id_fk": {
+          "name": "friend_requests_receiver_id_user_id_fk",
+          "tableFrom": "friend_requests",
+          "tableTo": "user",
+          "columnsFrom": [
+            "receiver_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "friend_request_pair_unique": {
+          "name": "friend_request_pair_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_id",
+            "receiver_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "friend_request_no_self": {
+          "name": "friend_request_no_self",
+          "value": "sender_id <> receiver_id"
+        },
+        "friend_request_status_check": {
+          "name": "friend_request_status_check",
+          "value": "status IN ('PENDING', 'ACCEPTED', 'REJECTED', 'CANCELLED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.friendships": {
+      "name": "friendships",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user1_id": {
+          "name": "user1_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user2_id": {
+          "name": "user2_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "friendships_user1_id_user_id_fk": {
+          "name": "friendships_user1_id_user_id_fk",
+          "tableFrom": "friendships",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user1_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "friendships_user2_id_user_id_fk": {
+          "name": "friendships_user2_id_user_id_fk",
+          "tableFrom": "friendships",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user2_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "friendship_pair_unique": {
+          "name": "friendship_pair_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user1_id",
+            "user2_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "friendship_canonical_order": {
+          "name": "friendship_canonical_order",
+          "value": "user1_id < user2_id"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.permission_grants": {
+      "name": "permission_grants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "grantee_role": {
+          "name": "grantee_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'HELPER'"
+        },
+        "permission": {
+          "name": "permission",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "granted_at": {
+          "name": "granted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "granted_by": {
+          "name": "granted_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "permission_grants_user_id_user_id_fk": {
+          "name": "permission_grants_user_id_user_id_fk",
+          "tableFrom": "permission_grants",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "permission_grants_granted_by_user_id_fk": {
+          "name": "permission_grants_granted_by_user_id_fk",
+          "tableFrom": "permission_grants",
+          "tableTo": "user",
+          "columnsFrom": [
+            "granted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "permission_grants_room_id_rooms_id_fk": {
+          "name": "permission_grants_room_id_rooms_id_fk",
+          "tableFrom": "permission_grants",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "permission_grants_member_fk": {
+          "name": "permission_grants_member_fk",
+          "tableFrom": "permission_grants",
+          "tableTo": "room_members",
+          "columnsFrom": [
+            "room_id",
+            "user_id",
+            "grantee_role"
+          ],
+          "columnsTo": [
+            "room_id",
+            "user_id",
+            "role"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "room_user_permission_unique": {
+          "name": "room_user_permission_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "room_id",
+            "user_id",
+            "permission"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "permission_grantee_role_check": {
+          "name": "permission_grantee_role_check",
+          "value": "grantee_role = 'HELPER'"
+        },
+        "helper_permission_check": {
+          "name": "helper_permission_check",
+          "value": "permission IN ('MANAGE_CHAT', 'MANAGE_CALLS', 'MANAGE_RECRUITMENT', 'MANAGE_MEMBERS')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.room_members": {
+      "name": "room_members",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MEMBER'"
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "room_members_one_owner_per_room_idx": {
+          "name": "room_members_one_owner_per_room_idx",
+          "columns": [
+            {
+              "expression": "room_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "role = 'OWNER'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "room_members_room_id_rooms_id_fk": {
+          "name": "room_members_room_id_rooms_id_fk",
+          "tableFrom": "room_members",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "room_members_user_id_user_id_fk": {
+          "name": "room_members_user_id_user_id_fk",
+          "tableFrom": "room_members",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "room_member_room_user_unique": {
+          "name": "room_member_room_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "room_id",
+            "user_id"
+          ]
+        },
+        "room_members_room_user_role_unique": {
+          "name": "room_members_room_user_role_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "room_id",
+            "user_id",
+            "role"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "room_member_role_check": {
+          "name": "room_member_role_check",
+          "value": "role IN ('OWNER', 'HELPER', 'MEMBER')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.rooms": {
+      "name": "rooms",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "owner_role": {
+          "name": "owner_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OWNER'"
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PUBLIC'"
+        },
+        "invite_policy": {
+          "name": "invite_policy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OWNER_APPROVAL'"
+        },
+        "player_capacity": {
+          "name": "player_capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 5
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_kind": {
+          "name": "conversation_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ROOM'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "rooms_game_id_games_id_fk": {
+          "name": "rooms_game_id_games_id_fk",
+          "tableFrom": "rooms",
+          "tableTo": "games",
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "rooms_owner_id_user_id_fk": {
+          "name": "rooms_owner_id_user_id_fk",
+          "tableFrom": "rooms",
+          "tableTo": "user",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "rooms_conversation_fk": {
+          "name": "rooms_conversation_fk",
+          "tableFrom": "rooms",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id",
+            "conversation_kind"
+          ],
+          "columnsTo": [
+            "id",
+            "kind"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "rooms_owner_membership_fk": {
+          "name": "rooms_owner_membership_fk",
+          "tableFrom": "rooms",
+          "tableTo": "room_members",
+          "columnsFrom": [
+            "id",
+            "owner_id",
+            "owner_role"
+          ],
+          "columnsTo": [
+            "room_id",
+            "user_id",
+            "role"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "rooms_id_owner_unique": {
+          "name": "rooms_id_owner_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "owner_id"
+          ]
+        },
+        "rooms_id_game_unique": {
+          "name": "rooms_id_game_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "game_id"
+          ]
+        },
+        "rooms_id_capacity_unique": {
+          "name": "rooms_id_capacity_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "player_capacity"
+          ]
+        },
+        "rooms_conversation_id_unique": {
+          "name": "rooms_conversation_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "conversation_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "room_owner_role_check": {
+          "name": "room_owner_role_check",
+          "value": "owner_role = 'OWNER'"
+        },
+        "room_visibility_check": {
+          "name": "room_visibility_check",
+          "value": "visibility IN ('PUBLIC', 'PRIVATE')"
+        },
+        "room_invite_policy_check": {
+          "name": "room_invite_policy_check",
+          "value": "invite_policy IN ('OWNER_APPROVAL', 'DIRECT_MEMBER')"
+        },
+        "room_player_capacity_check": {
+          "name": "room_player_capacity_check",
+          "value": "player_capacity >= 1 AND player_capacity <= 10"
+        },
+        "room_conversation_kind_check": {
+          "name": "room_conversation_kind_check",
+          "value": "conversation_kind = 'ROOM'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.active_play_slots": {
+      "name": "active_play_slots",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "play_session_id": {
+          "name": "play_session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ACTIVE'"
+        },
+        "slot_index": {
+          "name": "slot_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "active_play_slots_user_id_user_id_fk": {
+          "name": "active_play_slots_user_id_user_id_fk",
+          "tableFrom": "active_play_slots",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "active_play_slots_session_state_fk": {
+          "name": "active_play_slots_session_state_fk",
+          "tableFrom": "active_play_slots",
+          "tableTo": "play_sessions",
+          "columnsFrom": [
+            "play_session_id",
+            "session_state"
+          ],
+          "columnsTo": [
+            "id",
+            "state"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "active_play_slots_roster_fk": {
+          "name": "active_play_slots_roster_fk",
+          "tableFrom": "active_play_slots",
+          "tableTo": "team_members",
+          "columnsFrom": [
+            "play_session_id",
+            "user_id",
+            "slot_index"
+          ],
+          "columnsTo": [
+            "play_session_id",
+            "user_id",
+            "slot_index"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "active_play_slot_state_check": {
+          "name": "active_play_slot_state_check",
+          "value": "session_state = 'ACTIVE'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.play_sessions": {
+      "name": "play_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "host_user_id": {
+          "name": "host_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_capacity": {
+          "name": "player_capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 5
+        },
+        "timing_type": {
+          "name": "timing_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scheduled_at": {
+          "name": "scheduled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'SCHEDULED'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "play_sessions_room_id_rooms_id_fk": {
+          "name": "play_sessions_room_id_rooms_id_fk",
+          "tableFrom": "play_sessions",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "play_sessions_host_user_id_user_id_fk": {
+          "name": "play_sessions_host_user_id_user_id_fk",
+          "tableFrom": "play_sessions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "host_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "play_sessions_id_room_unique": {
+          "name": "play_sessions_id_room_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "room_id"
+          ]
+        },
+        "play_sessions_id_state_unique": {
+          "name": "play_sessions_id_state_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "state"
+          ]
+        },
+        "play_sessions_id_capacity_unique": {
+          "name": "play_sessions_id_capacity_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "player_capacity"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "play_session_state_check": {
+          "name": "play_session_state_check",
+          "value": "state IN ('SCHEDULED', 'ACTIVE', 'ENDED')"
+        },
+        "play_session_timing_check": {
+          "name": "play_session_timing_check",
+          "value": "timing_type IN ('now', 'scheduledAt')"
+        },
+        "play_session_capacity_check": {
+          "name": "play_session_capacity_check",
+          "value": "player_capacity >= 1 AND player_capacity <= 10"
+        },
+        "play_session_scheduled_at_check": {
+          "name": "play_session_scheduled_at_check",
+          "value": "(timing_type = 'now' AND scheduled_at IS NULL) OR (timing_type = 'scheduledAt' AND scheduled_at IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.team_members": {
+      "name": "team_members",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "play_session_id": {
+          "name": "play_session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slot_index": {
+          "name": "slot_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_capacity": {
+          "name": "player_capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 5
+        },
+        "is_host": {
+          "name": "is_host",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_members_play_session_id_play_sessions_id_fk": {
+          "name": "team_members_play_session_id_play_sessions_id_fk",
+          "tableFrom": "team_members",
+          "tableTo": "play_sessions",
+          "columnsFrom": [
+            "play_session_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "team_members_user_id_user_id_fk": {
+          "name": "team_members_user_id_user_id_fk",
+          "tableFrom": "team_members",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "team_members_session_capacity_fk": {
+          "name": "team_members_session_capacity_fk",
+          "tableFrom": "team_members",
+          "tableTo": "play_sessions",
+          "columnsFrom": [
+            "play_session_id",
+            "player_capacity"
+          ],
+          "columnsTo": [
+            "id",
+            "player_capacity"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "team_member_session_user_unique": {
+          "name": "team_member_session_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "play_session_id",
+            "user_id"
+          ]
+        },
+        "team_member_session_slot_unique": {
+          "name": "team_member_session_slot_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "play_session_id",
+            "slot_index"
+          ]
+        },
+        "team_members_session_user_slot_unique": {
+          "name": "team_members_session_user_slot_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "play_session_id",
+            "user_id",
+            "slot_index"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "slot_index_bounds_check": {
+          "name": "slot_index_bounds_check",
+          "value": "slot_index >= 1 AND slot_index <= player_capacity"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.invitations": {
+      "name": "invitations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "target_type": {
+          "name": "target_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "receiver_id": {
+          "name": "receiver_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "play_session_id": {
+          "name": "play_session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "recipient_accepted_at": {
+          "name": "recipient_accepted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "invitations_sender_id_user_id_fk": {
+          "name": "invitations_sender_id_user_id_fk",
+          "tableFrom": "invitations",
+          "tableTo": "user",
+          "columnsFrom": [
+            "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invitations_receiver_id_user_id_fk": {
+          "name": "invitations_receiver_id_user_id_fk",
+          "tableFrom": "invitations",
+          "tableTo": "user",
+          "columnsFrom": [
+            "receiver_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invitations_room_id_rooms_id_fk": {
+          "name": "invitations_room_id_rooms_id_fk",
+          "tableFrom": "invitations",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "invitations_session_room_fk": {
+          "name": "invitations_session_room_fk",
+          "tableFrom": "invitations",
+          "tableTo": "play_sessions",
+          "columnsFrom": [
+            "play_session_id",
+            "room_id"
+          ],
+          "columnsTo": [
+            "id",
+            "room_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "invitation_no_self_check": {
+          "name": "invitation_no_self_check",
+          "value": "sender_id <> receiver_id"
+        },
+        "invitation_target_shape_check": {
+          "name": "invitation_target_shape_check",
+          "value": "(target_type = 'ROOM' AND play_session_id IS NULL) OR (target_type = 'PLAY_SESSION' AND play_session_id IS NOT NULL)"
+        },
+        "invitation_status_check": {
+          "name": "invitation_status_check",
+          "value": "status IN ('PENDING', 'ACCEPTED', 'REJECTED', 'CANCELLED')"
+        },
+        "invitation_target_type_check": {
+          "name": "invitation_target_type_check",
+          "value": "target_type IN ('ROOM', 'PLAY_SESSION')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.join_requests": {
+      "name": "join_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "recruitment_id": {
+          "name": "recruitment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "applicant_id": {
+          "name": "applicant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "join_requests_recruitment_id_recruitments_id_fk": {
+          "name": "join_requests_recruitment_id_recruitments_id_fk",
+          "tableFrom": "join_requests",
+          "tableTo": "recruitments",
+          "columnsFrom": [
+            "recruitment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "join_requests_applicant_id_user_id_fk": {
+          "name": "join_requests_applicant_id_user_id_fk",
+          "tableFrom": "join_requests",
+          "tableTo": "user",
+          "columnsFrom": [
+            "applicant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "join_request_recruitment_applicant_unique": {
+          "name": "join_request_recruitment_applicant_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "recruitment_id",
+            "applicant_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "join_request_status_check": {
+          "name": "join_request_status_check",
+          "value": "status IN ('PENDING', 'ACCEPTED', 'REJECTED', 'CANCELLED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.recruitments": {
+      "name": "recruitments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "game_id": {
+          "name": "game_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "game_title": {
+          "name": "game_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "play_session_id": {
+          "name": "play_session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mode": {
+          "name": "mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_capacity": {
+          "name": "player_capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 5
+        },
+        "current_players": {
+          "name": "current_players",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "timing_type": {
+          "name": "timing_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scheduled_at": {
+          "name": "scheduled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requirement_text": {
+          "name": "requirement_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experience_name": {
+          "name": "experience_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "experience_url": {
+          "name": "experience_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OPEN'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recruitments_room_game_fk": {
+          "name": "recruitments_room_game_fk",
+          "tableFrom": "recruitments",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id",
+            "game_id"
+          ],
+          "columnsTo": [
+            "id",
+            "game_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "recruitments_game_title_fk": {
+          "name": "recruitments_game_title_fk",
+          "tableFrom": "recruitments",
+          "tableTo": "games",
+          "columnsFrom": [
+            "game_id",
+            "game_title"
+          ],
+          "columnsTo": [
+            "id",
+            "title"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "recruitments_play_session_fk": {
+          "name": "recruitments_play_session_fk",
+          "tableFrom": "recruitments",
+          "tableTo": "play_sessions",
+          "columnsFrom": [
+            "play_session_id",
+            "room_id"
+          ],
+          "columnsTo": [
+            "id",
+            "room_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "recruitment_capacity_check": {
+          "name": "recruitment_capacity_check",
+          "value": "player_capacity >= 1 AND player_capacity <= 10"
+        },
+        "recruitment_current_players_check": {
+          "name": "recruitment_current_players_check",
+          "value": "current_players >= 1 AND current_players <= player_capacity"
+        },
+        "recruitment_timing_check": {
+          "name": "recruitment_timing_check",
+          "value": "timing_type IN ('now', 'scheduledAt')"
+        },
+        "recruitment_scheduled_at_check": {
+          "name": "recruitment_scheduled_at_check",
+          "value": "(timing_type = 'now' AND scheduled_at IS NULL) OR (timing_type = 'scheduledAt' AND scheduled_at IS NOT NULL)"
+        },
+        "recruitment_roblox_fields_check": {
+          "name": "recruitment_roblox_fields_check",
+          "value": "(game_title = 'Roblox' AND experience_name IS NOT NULL AND length(trim(experience_name)) > 0 AND experience_url IS NOT NULL AND length(trim(experience_url)) > 0) OR (game_title <> 'Roblox' AND experience_name IS NULL AND experience_url IS NULL)"
+        },
+        "recruitment_state_check": {
+          "name": "recruitment_state_check",
+          "value": "state IN ('OPEN', 'CLOSED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.call_groups": {
+      "name": "call_groups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OPEN'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "ended_at": {
+          "name": "ended_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "call_groups_room_id_rooms_id_fk": {
+          "name": "call_groups_room_id_rooms_id_fk",
+          "tableFrom": "call_groups",
+          "tableTo": "rooms",
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "call_groups_id_room_unique": {
+          "name": "call_groups_id_room_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "room_id"
+          ]
+        },
+        "call_groups_id_state_unique": {
+          "name": "call_groups_id_state_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "state"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "call_group_state_check": {
+          "name": "call_group_state_check",
+          "value": "state IN ('OPEN', 'CLOSED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.call_members": {
+      "name": "call_members",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "call_group_id": {
+          "name": "call_group_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seat_index": {
+          "name": "seat_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_muted": {
+          "name": "is_muted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "left_at": {
+          "name": "left_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "call_state": {
+          "name": "call_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "CASE WHEN left_at IS NULL THEN 'OPEN' ELSE NULL END",
+            "type": "stored"
+          }
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "CASE WHEN left_at IS NULL THEN true ELSE NULL END",
+            "type": "stored"
+          }
+        }
+      },
+      "indexes": {
+        "call_members_group_seat_active_idx": {
+          "name": "call_members_group_seat_active_idx",
+          "columns": [
+            {
+              "expression": "call_group_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "seat_index",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "left_at IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "call_members_user_active_idx": {
+          "name": "call_members_user_active_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "left_at IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "call_members_user_id_user_id_fk": {
+          "name": "call_members_user_id_user_id_fk",
+          "tableFrom": "call_members",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_members_room_member_fk": {
+          "name": "call_members_room_member_fk",
+          "tableFrom": "call_members",
+          "tableTo": "room_members",
+          "columnsFrom": [
+            "room_id",
+            "user_id"
+          ],
+          "columnsTo": [
+            "room_id",
+            "user_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_members_call_group_fk": {
+          "name": "call_members_call_group_fk",
+          "tableFrom": "call_members",
+          "tableTo": "call_groups",
+          "columnsFrom": [
+            "call_group_id",
+            "room_id"
+          ],
+          "columnsTo": [
+            "id",
+            "room_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_members_open_call_fk": {
+          "name": "call_members_open_call_fk",
+          "tableFrom": "call_members",
+          "tableTo": "call_groups",
+          "columnsFrom": [
+            "call_group_id",
+            "call_state"
+          ],
+          "columnsTo": [
+            "id",
+            "state"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "call_member_group_user_unique": {
+          "name": "call_member_group_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id",
+            "user_id"
+          ]
+        },
+        "call_members_group_user_active_unique": {
+          "name": "call_members_group_user_active_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id",
+            "user_id",
+            "active"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "call_member_seat_index_check": {
+          "name": "call_member_seat_index_check",
+          "value": "seat_index >= 1 AND seat_index <= 10"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.call_publish_slots": {
+      "name": "call_publish_slots",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "call_group_id": {
+          "name": "call_group_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ordinal": {
+          "name": "ordinal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_call_active": {
+          "name": "is_call_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "call_publish_slots_user_id_user_id_fk": {
+          "name": "call_publish_slots_user_id_user_id_fk",
+          "tableFrom": "call_publish_slots",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_publish_slots_active_member_fk": {
+          "name": "call_publish_slots_active_member_fk",
+          "tableFrom": "call_publish_slots",
+          "tableTo": "call_members",
+          "columnsFrom": [
+            "call_group_id",
+            "user_id",
+            "is_call_active"
+          ],
+          "columnsTo": [
+            "call_group_id",
+            "user_id",
+            "active"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "call_publish_slot_ordinal_unique": {
+          "name": "call_publish_slot_ordinal_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id",
+            "ordinal"
+          ]
+        },
+        "call_publish_slot_user_unique": {
+          "name": "call_publish_slot_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "call_publish_slot_ordinal_bounds": {
+          "name": "call_publish_slot_ordinal_bounds",
+          "value": "ordinal >= 1 AND ordinal <= 3"
+        },
+        "call_publish_slot_active_check": {
+          "name": "call_publish_slot_active_check",
+          "value": "is_call_active = true"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.call_restrictions": {
+      "name": "call_restrictions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "call_group_id": {
+          "name": "call_group_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_user_id": {
+          "name": "target_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "restriction_type": {
+          "name": "restriction_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issued_by": {
+          "name": "issued_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "call_restrictions_call_group_id_call_groups_id_fk": {
+          "name": "call_restrictions_call_group_id_call_groups_id_fk",
+          "tableFrom": "call_restrictions",
+          "tableTo": "call_groups",
+          "columnsFrom": [
+            "call_group_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_restrictions_target_user_id_user_id_fk": {
+          "name": "call_restrictions_target_user_id_user_id_fk",
+          "tableFrom": "call_restrictions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "target_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_restrictions_issued_by_user_id_fk": {
+          "name": "call_restrictions_issued_by_user_id_fk",
+          "tableFrom": "call_restrictions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "issued_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "call_restriction_group_target_type_unique": {
+          "name": "call_restriction_group_target_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id",
+            "target_user_id",
+            "restriction_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "call_restriction_type_check": {
+          "name": "call_restriction_type_check",
+          "value": "restriction_type IN ('MIC_MUTED', 'STREAM_BLOCKED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.external_lives": {
+      "name": "external_lives",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "call_group_id": {
+          "name": "call_group_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "configured_by": {
+          "name": "configured_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_call_active": {
+          "name": "is_call_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "external_lives_configured_by_user_id_fk": {
+          "name": "external_lives_configured_by_user_id_fk",
+          "tableFrom": "external_lives",
+          "tableTo": "user",
+          "columnsFrom": [
+            "configured_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "external_lives_call_group_fk": {
+          "name": "external_lives_call_group_fk",
+          "tableFrom": "external_lives",
+          "tableTo": "call_groups",
+          "columnsFrom": [
+            "call_group_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "external_lives_active_member_fk": {
+          "name": "external_lives_active_member_fk",
+          "tableFrom": "external_lives",
+          "tableTo": "call_members",
+          "columnsFrom": [
+            "call_group_id",
+            "configured_by",
+            "is_call_active"
+          ],
+          "columnsTo": [
+            "call_group_id",
+            "user_id",
+            "active"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "external_lives_call_group_unique": {
+          "name": "external_lives_call_group_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "call_group_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "external_live_provider_check": {
+          "name": "external_live_provider_check",
+          "value": "provider IN ('youtube', 'twitch')"
+        },
+        "external_lives_active_check": {
+          "name": "external_lives_active_check",
+          "value": "is_call_active = true"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.webhook_events": {
+      "name": "webhook_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_type": {
+          "name": "event_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processed_at": {
+          "name": "processed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "webhook_events_event_id_unique": {
+          "name": "webhook_events_event_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "event_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notification_outbox": {
+      "name": "notification_outbox",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "notification_id": {
+          "name": "notification_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "channel": {
+          "name": "channel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "retry_count": {
+          "name": "retry_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "max_retries": {
+          "name": "max_retries",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 3
+        },
+        "dedup_key": {
+          "name": "dedup_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_error": {
+          "name": "last_error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scheduled_at": {
+          "name": "scheduled_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notification_outbox_user_id_user_id_fk": {
+          "name": "notification_outbox_user_id_user_id_fk",
+          "tableFrom": "notification_outbox",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "outbox_notification_user_fk": {
+          "name": "outbox_notification_user_fk",
+          "tableFrom": "notification_outbox",
+          "tableTo": "notifications",
+          "columnsFrom": [
+            "notification_id",
+            "user_id"
+          ],
+          "columnsTo": [
+            "id",
+            "user_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "outbox_channel_user_dedup_unique": {
+          "name": "outbox_channel_user_dedup_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "channel",
+            "user_id",
+            "dedup_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "outbox_channel_check": {
+          "name": "outbox_channel_check",
+          "value": "channel IN ('IN_APP', 'PUSH', 'EMAIL')"
+        },
+        "outbox_status_check": {
+          "name": "outbox_status_check",
+          "value": "status IN ('PENDING', 'PROCESSING', 'SENT', 'FAILED')"
+        },
+        "outbox_retry_bounds_check": {
+          "name": "outbox_retry_bounds_check",
+          "value": "retry_count >= 0 AND max_retries >= 1 AND retry_count <= max_retries"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.notification_preferences": {
+      "name": "notification_preferences",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notification_type": {
+          "name": "notification_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "in_app": {
+          "name": "in_app",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "push": {
+          "name": "push",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "email": {
+          "name": "email",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notification_preferences_user_id_user_id_fk": {
+          "name": "notification_preferences_user_id_user_id_fk",
+          "tableFrom": "notification_preferences",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "notification_pref_user_type_unique": {
+          "name": "notification_pref_user_type_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "notification_type"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "notification_pref_type_check": {
+          "name": "notification_pref_type_check",
+          "value": "notification_type IN ('DM', 'MENTION', 'FRIEND_INVITE', 'ROOM_INVITE', 'TEAM_INVITE', 'JOIN_REQUEST', 'JOIN_REQUEST_RESULT', 'REMINDER_10MIN')"
+        },
+        "notification_pref_email_forbidden_check": {
+          "name": "notification_pref_email_forbidden_check",
+          "value": "(notification_type IN ('DM', 'MENTION', 'JOIN_REQUEST', 'JOIN_REQUEST_RESULT') AND email = false) OR (notification_type IN ('FRIEND_INVITE', 'ROOM_INVITE', 'TEAM_INVITE', 'REMINDER_10MIN'))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_read": {
+          "name": "is_read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "dedup_key": {
+          "name": "dedup_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_user_id_user_id_fk": {
+          "name": "notifications_user_id_user_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "notifications_user_dedup_unique": {
+          "name": "notifications_user_dedup_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "dedup_key"
+          ]
+        },
+        "notifications_id_user_unique": {
+          "name": "notifications_id_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "notification_type_check": {
+          "name": "notification_type_check",
+          "value": "type IN ('DM', 'MENTION', 'FRIEND_INVITE', 'ROOM_INVITE', 'TEAM_INVITE', 'JOIN_REQUEST', 'JOIN_REQUEST_RESULT', 'REMINDER_10MIN')"
+        },
+        "notification_dedup_key_nonempty": {
+          "name": "notification_dedup_key_nonempty",
+          "value": "length(trim(dedup_key)) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.push_subscriptions": {
+      "name": "push_subscriptions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endpoint": {
+          "name": "endpoint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "p256dh": {
+          "name": "p256dh",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auth": {
+          "name": "auth",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "push_subscriptions_user_id_user_id_fk": {
+          "name": "push_subscriptions_user_id_user_id_fk",
+          "tableFrom": "push_subscriptions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "push_sub_endpoint_unique": {
+          "name": "push_sub_endpoint_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "endpoint"
+          ]
+        },
+        "push_sub_user_endpoint_unique": {
+          "name": "push_sub_user_endpoint_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "endpoint"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.admin_actions": {
+      "name": "admin_actions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_user_id": {
+          "name": "target_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "admin_actions_actor_id_user_id_fk": {
+          "name": "admin_actions_actor_id_user_id_fk",
+          "tableFrom": "admin_actions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "actor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "admin_actions_target_user_id_user_id_fk": {
+          "name": "admin_actions_target_user_id_user_id_fk",
+          "tableFrom": "admin_actions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "target_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "admin_action_type_check": {
+          "name": "admin_action_type_check",
+          "value": "action IN ('BAN', 'UNBAN', 'RESOLVE_REPORT', 'DISMISS_REPORT')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.reports": {
+      "name": "reports",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "reporter_id": {
+          "name": "reporter_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_type": {
+          "name": "target_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "target_id": {
+          "name": "target_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reported_user_id": {
+          "name": "reported_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reported_message_id": {
+          "name": "reported_message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reports_reporter_id_user_id_fk": {
+          "name": "reports_reporter_id_user_id_fk",
+          "tableFrom": "reports",
+          "tableTo": "user",
+          "columnsFrom": [
+            "reporter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reports_reported_user_id_user_id_fk": {
+          "name": "reports_reported_user_id_user_id_fk",
+          "tableFrom": "reports",
+          "tableTo": "user",
+          "columnsFrom": [
+            "reported_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reports_reported_message_id_messages_id_fk": {
+          "name": "reports_reported_message_id_messages_id_fk",
+          "tableFrom": "reports",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "reported_message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "report_target_type_check": {
+          "name": "report_target_type_check",
+          "value": "target_type IN ('USER', 'MESSAGE')"
+        },
+        "report_status_check": {
+          "name": "report_status_check",
+          "value": "status IN ('PENDING', 'RESOLVED', 'DISMISSED')"
+        },
+        "report_reason_length_check": {
+          "name": "report_reason_length_check",
+          "value": "length(reason) >= 1 AND length(reason) <= 200"
+        },
+        "report_details_length_check": {
+          "name": "report_details_length_check",
+          "value": "details IS NULL OR length(details) <= 1000"
+        },
+        "report_target_shape_check": {
+          "name": "report_target_shape_check",
+          "value": "(target_type = 'USER' AND reported_user_id IS NOT NULL AND reported_message_id IS NULL AND target_id = reported_user_id) OR (target_type = 'MESSAGE' AND reported_message_id IS NOT NULL AND reported_user_id IS NULL AND target_id = reported_message_id)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.realtime_outbox": {
+      "name": "realtime_outbox",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_name": {
+          "name": "event_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attempts": {
+          "name": "attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "realtime_outbox_pending_cursor_idx": {
+          "name": "realtime_outbox_pending_cursor_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"realtime_outbox\".\"delivered_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "realtime_outbox_message_conversation_fk": {
+          "name": "realtime_outbox_message_conversation_fk",
+          "tableFrom": "realtime_outbox",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "realtime_outbox_message_event_unique": {
+          "name": "realtime_outbox_message_event_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "message_id",
+            "event_name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "realtime_outbox_attempts_check": {
+          "name": "realtime_outbox_attempts_check",
+          "value": "\"realtime_outbox\".\"attempts\" >= 0"
+        },
+        "realtime_outbox_event_check": {
+          "name": "realtime_outbox_event_check",
+          "value": "\"realtime_outbox\".\"event_name\" = 'message.created'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.pending_image_uploads": {
+      "name": "pending_image_uploads",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uploader_id": {
+          "name": "uploader_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_name": {
+          "name": "file_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_size": {
+          "name": "file_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "pending_image_uploads_expiry_idx": {
+          "name": "pending_image_uploads_expiry_idx",
+          "columns": [
+            {
+              "expression": "expires_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pending_image_uploads_uploader_id_user_id_fk": {
+          "name": "pending_image_uploads_uploader_id_user_id_fk",
+          "tableFrom": "pending_image_uploads",
+          "tableTo": "user",
+          "columnsFrom": [
+            "uploader_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pending_image_uploads_conversation_id_conversations_id_fk": {
+          "name": "pending_image_uploads_conversation_id_conversations_id_fk",
+          "tableFrom": "pending_image_uploads",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "pending_image_uploads_size_check": {
+          "name": "pending_image_uploads_size_check",
+          "value": "\"pending_image_uploads\".\"file_size\">0 AND \"pending_image_uploads\".\"file_size\"<=5242880"
+        },
+        "pending_image_uploads_mime_check": {
+          "name": "pending_image_uploads_mime_check",
+          "value": "\"pending_image_uploads\".\"mime_type\"='image/webp'"
+        },
+        "pending_image_uploads_expiry_check": {
+          "name": "pending_image_uploads_expiry_check",
+          "value": "\"pending_image_uploads\".\"expires_at\">\"pending_image_uploads\".\"created_at\""
+        },
+        "pending_image_uploads_filename_check": {
+          "name": "pending_image_uploads_filename_check",
+          "value": "length(\"pending_image_uploads\".\"file_name\") BETWEEN 1 AND 255 AND position('/' in \"pending_image_uploads\".\"file_name\")=0 AND position(chr(92) in \"pending_image_uploads\".\"file_name\")=0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.call_admissions": {
+      "name": "call_admissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "call_member_id": {
+          "name": "call_member_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "connected_at": {
+          "name": "connected_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "disconnected_at": {
+          "name": "disconnected_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "call_admissions_member_live_idx": {
+          "name": "call_admissions_member_live_idx",
+          "columns": [
+            {
+              "expression": "call_member_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"call_admissions\".\"revoked_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "call_admissions_expiry_live_idx": {
+          "name": "call_admissions_expiry_live_idx",
+          "columns": [
+            {
+              "expression": "expires_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"call_admissions\".\"revoked_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "call_admissions_call_member_id_call_members_id_fk": {
+          "name": "call_admissions_call_member_id_call_members_id_fk",
+          "tableFrom": "call_admissions",
+          "tableTo": "call_members",
+          "columnsFrom": [
+            "call_member_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "call_admissions_session_id_session_id_fk": {
+          "name": "call_admissions_session_id_session_id_fk",
+          "tableFrom": "call_admissions",
+          "tableTo": "session",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "call_admission_expiry_check": {
+          "name": "call_admission_expiry_check",
+          "value": "\"call_admissions\".\"expires_at\">\"call_admissions\".\"created_at\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_devices": {
+      "name": "chat_crypto_devices",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_keys": {
+          "name": "device_keys",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ed25519_key": {
+          "name": "ed25519_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "curve25519_key": {
+          "name": "curve25519_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_devices_user_id_user_id_fk": {
+          "name": "chat_crypto_devices_user_id_user_id_fk",
+          "tableFrom": "chat_crypto_devices",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "chat_crypto_devices_user_id_device_id_pk": {
+          "name": "chat_crypto_devices_user_id_device_id_pk",
+          "columns": [
+            "user_id",
+            "device_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "chat_crypto_device_curve_unique": {
+          "name": "chat_crypto_device_curve_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "curve25519_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_device_id_check": {
+          "name": "chat_crypto_device_id_check",
+          "value": "length(\"chat_crypto_devices\".\"device_id\") BETWEEN 1 AND 128"
+        },
+        "chat_crypto_device_public_keys_check": {
+          "name": "chat_crypto_device_public_keys_check",
+          "value": "chat_crypto_valid_device_keys(\"chat_crypto_devices\".\"device_keys\",\"chat_crypto_devices\".\"device_id\",\"chat_crypto_devices\".\"ed25519_key\",\"chat_crypto_devices\".\"curve25519_key\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_identity_keys": {
+      "name": "chat_crypto_identity_keys",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "public_keys": {
+          "name": "public_keys",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revision": {
+          "name": "revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_identity_keys_user_id_user_id_fk": {
+          "name": "chat_crypto_identity_keys_user_id_user_id_fk",
+          "tableFrom": "chat_crypto_identity_keys",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_identity_revision_check": {
+          "name": "chat_crypto_identity_revision_check",
+          "value": "\"chat_crypto_identity_keys\".\"revision\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_identity_public_only_check": {
+          "name": "chat_crypto_identity_public_only_check",
+          "value": "chat_crypto_valid_identity_keys(\"chat_crypto_identity_keys\".\"public_keys\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_one_time_keys": {
+      "name": "chat_crypto_one_time_keys",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "key_id": {
+          "name": "key_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "signed_key": {
+          "name": "signed_key",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "claimed_at": {
+          "name": "claimed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_crypto_otk_available_idx": {
+          "name": "chat_crypto_otk_available_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"chat_crypto_one_time_keys\".\"claimed_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_one_time_keys_user_id_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_one_time_keys_user_id_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_one_time_keys",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "user_id",
+            "device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "chat_crypto_one_time_keys_user_id_device_id_key_id_pk": {
+          "name": "chat_crypto_one_time_keys_user_id_device_id_key_id_pk",
+          "columns": [
+            "user_id",
+            "device_id",
+            "key_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_otk_public_only_check": {
+          "name": "chat_crypto_otk_public_only_check",
+          "value": "\"chat_crypto_one_time_keys\".\"key_id\" ~ '^signed_curve25519:[A-Za-z0-9_.-]+$' AND chat_crypto_valid_one_time_key(\"chat_crypto_one_time_keys\".\"signed_key\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_recovery_backups": {
+      "name": "chat_crypto_recovery_backups",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "backup_version": {
+          "name": "backup_version",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ciphertext": {
+          "name": "ciphertext",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_recovery_backups_user_id_user_id_fk": {
+          "name": "chat_crypto_recovery_backups_user_id_user_id_fk",
+          "tableFrom": "chat_crypto_recovery_backups",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_recovery_version_check": {
+          "name": "chat_crypto_recovery_version_check",
+          "value": "\"chat_crypto_recovery_backups\".\"backup_version\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_recovery_cipher_check": {
+          "name": "chat_crypto_recovery_cipher_check",
+          "value": "octet_length(\"chat_crypto_recovery_backups\".\"ciphertext\") BETWEEN 100 AND 16777216 AND \"chat_crypto_recovery_backups\".\"ciphertext\" ~ '^-----BEGIN MEGOLM SESSION DATA-----[\r\n]+[A-Za-z0-9+/=\r\n]+[\r\n]+-----END MEGOLM SESSION DATA-----$' AND \"chat_crypto_recovery_backups\".\"ciphertext\" LIKE '%-----END MEGOLM SESSION DATA-----'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_cohort_members": {
+      "name": "chat_crypto_cohort_members",
+      "schema": "",
+      "columns": {
+        "cohort_id": {
+          "name": "cohort_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_cohort_members_user_id_user_id_fk": {
+          "name": "chat_crypto_cohort_members_user_id_user_id_fk",
+          "tableFrom": "chat_crypto_cohort_members",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_cohort_members_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk": {
+          "name": "chat_crypto_cohort_members_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk",
+          "tableFrom": "chat_crypto_cohort_members",
+          "tableTo": "chat_crypto_history_cohorts",
+          "columnsFrom": [
+            "cohort_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "chat_crypto_cohort_members_cohort_id_user_id_pk": {
+          "name": "chat_crypto_cohort_members_cohort_id_user_id_pk",
+          "columns": [
+            "cohort_id",
+            "user_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_history_cohorts": {
+      "name": "chat_crypto_history_cohorts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified_at": {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verification_basis": {
+          "name": "verification_basis",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_history_cohorts_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_history_cohorts_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_history_cohorts",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "chat_crypto_cohort_conversation_unique": {
+          "name": "chat_crypto_cohort_conversation_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "conversation_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_cohort_basis_check": {
+          "name": "chat_crypto_cohort_basis_check",
+          "value": "\"chat_crypto_history_cohorts\".\"verification_basis\" IN ('MEMBERSHIP_INTERVALS','EXPLICIT_RECONCILIATION')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_legacy_migrations": {
+      "name": "chat_crypto_legacy_migrations",
+      "schema": "",
+      "columns": {
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cohort_id": {
+          "name": "cohort_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_sha256": {
+          "name": "original_sha256",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prepared_at": {
+          "name": "prepared_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reconciled_at": {
+          "name": "reconciled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_legacy_migrations_message_id_conversation_id_messages_id_conversation_id_fk": {
+          "name": "chat_crypto_legacy_migrations_message_id_conversation_id_messages_id_conversation_id_fk",
+          "tableFrom": "chat_crypto_legacy_migrations",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_legacy_migrations_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk": {
+          "name": "chat_crypto_legacy_migrations_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk",
+          "tableFrom": "chat_crypto_legacy_migrations",
+          "tableTo": "chat_crypto_history_cohorts",
+          "columnsFrom": [
+            "cohort_id",
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id",
+            "conversation_id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_original_digest_check": {
+          "name": "chat_crypto_original_digest_check",
+          "value": "\"chat_crypto_legacy_migrations\".\"original_sha256\" ~ '^[A-Za-z0-9+/]{43}=?$'"
+        },
+        "chat_crypto_receipt_state_check": {
+          "name": "chat_crypto_receipt_state_check",
+          "value": "(\"chat_crypto_legacy_migrations\".\"state\"='PREPARED' AND \"chat_crypto_legacy_migrations\".\"reconciled_at\" IS NULL) OR (\"chat_crypto_legacy_migrations\".\"state\"='RECONCILED' AND \"chat_crypto_legacy_migrations\".\"reconciled_at\" IS NOT NULL AND \"chat_crypto_legacy_migrations\".\"reconciled_at\">=\"chat_crypto_legacy_migrations\".\"prepared_at\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_membership_intervals": {
+      "name": "chat_crypto_membership_intervals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_revision": {
+          "name": "start_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_revision": {
+          "name": "end_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "left_at": {
+          "name": "left_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_crypto_one_active_interval_idx": {
+          "name": "chat_crypto_one_active_interval_idx",
+          "columns": [
+            {
+              "expression": "conversation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"chat_crypto_membership_intervals\".\"end_revision\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chat_crypto_history_access_idx": {
+          "name": "chat_crypto_history_access_idx",
+          "columns": [
+            {
+              "expression": "conversation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "start_revision",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_membership_intervals_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_membership_intervals_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_membership_intervals",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_membership_intervals_user_id_user_id_fk": {
+          "name": "chat_crypto_membership_intervals_user_id_user_id_fk",
+          "tableFrom": "chat_crypto_membership_intervals",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_interval_check": {
+          "name": "chat_crypto_interval_check",
+          "value": "\"chat_crypto_membership_intervals\".\"start_revision\" BETWEEN 1 AND 9007199254740991 AND ((\"chat_crypto_membership_intervals\".\"end_revision\" IS NULL AND \"chat_crypto_membership_intervals\".\"left_at\" IS NULL) OR (\"chat_crypto_membership_intervals\".\"end_revision\" IS NOT NULL AND \"chat_crypto_membership_intervals\".\"left_at\" IS NOT NULL AND \"chat_crypto_membership_intervals\".\"end_revision\">\"chat_crypto_membership_intervals\".\"start_revision\" AND \"chat_crypto_membership_intervals\".\"end_revision\"<=9007199254740991 AND \"chat_crypto_membership_intervals\".\"left_at\">=\"chat_crypto_membership_intervals\".\"joined_at\"))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_report_evidence": {
+      "name": "chat_crypto_report_evidence",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "report_id": {
+          "name": "report_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reporter_id": {
+          "name": "reporter_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "consented_at": {
+          "name": "consented_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "envelope": {
+          "name": "envelope",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_report_evidence_report_id_reports_id_fk": {
+          "name": "chat_crypto_report_evidence_report_id_reports_id_fk",
+          "tableFrom": "chat_crypto_report_evidence",
+          "tableTo": "reports",
+          "columnsFrom": [
+            "report_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_report_evidence_reporter_id_user_id_fk": {
+          "name": "chat_crypto_report_evidence_reporter_id_user_id_fk",
+          "tableFrom": "chat_crypto_report_evidence",
+          "tableTo": "user",
+          "columnsFrom": [
+            "reporter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_report_source_check": {
+          "name": "chat_crypto_report_source_check",
+          "value": "\"chat_crypto_report_evidence\".\"source\" IN ('USER_DISCLOSED','LEGACY_IMPORT')"
+        },
+        "chat_crypto_report_envelope_check": {
+          "name": "chat_crypto_report_envelope_check",
+          "value": "chat_crypto_valid_envelope(\"chat_crypto_report_evidence\".\"envelope\",'LOBBY_AEAD','fg-report')"
+        },
+        "chat_crypto_report_expiry_check": {
+          "name": "chat_crypto_report_expiry_check",
+          "value": "\"chat_crypto_report_evidence\".\"expires_at\">\"chat_crypto_report_evidence\".\"created_at\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_state": {
+      "name": "chat_crypto_state",
+      "schema": "",
+      "columns": {
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "mode": {
+          "name": "mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membership_revision": {
+          "name": "membership_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "migration_state": {
+          "name": "migration_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LEGACY_PENDING'"
+        },
+        "history_status": {
+          "name": "history_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'UNKNOWN'"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chat_crypto_state_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_state_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_state",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_mode_check": {
+          "name": "chat_crypto_mode_check",
+          "value": "\"chat_crypto_state\".\"mode\" IN ('E2EE','LOBBY_AEAD')"
+        },
+        "chat_crypto_revision_check": {
+          "name": "chat_crypto_revision_check",
+          "value": "\"chat_crypto_state\".\"membership_revision\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_migration_state_check": {
+          "name": "chat_crypto_migration_state_check",
+          "value": "\"chat_crypto_state\".\"migration_state\" IN ('LEGACY_PENDING','MIGRATING','RECONCILED')"
+        },
+        "chat_crypto_history_status_check": {
+          "name": "chat_crypto_history_status_check",
+          "value": "\"chat_crypto_state\".\"history_status\" IN ('KNOWN','UNKNOWN')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_to_device_events": {
+      "name": "chat_crypto_to_device_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membership_revision": {
+          "name": "membership_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_user_id": {
+          "name": "sender_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_device_id": {
+          "name": "sender_device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient_user_id": {
+          "name": "recipient_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient_device_id": {
+          "name": "recipient_device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "acknowledged_at": {
+          "name": "acknowledged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_crypto_device_sync_idx": {
+          "name": "chat_crypto_device_sync_idx",
+          "columns": [
+            {
+              "expression": "recipient_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "recipient_device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"chat_crypto_to_device_events\".\"acknowledged_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_to_device_events_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_to_device_events_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_to_device_events",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_to_device_events_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_to_device_events_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_to_device_events",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "sender_user_id",
+            "sender_device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_to_device_events_recipient_user_id_recipient_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_to_device_events_recipient_user_id_recipient_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_to_device_events",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "recipient_user_id",
+            "recipient_device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "chat_crypto_to_device_dedup": {
+          "name": "chat_crypto_to_device_dedup",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_user_id",
+            "sender_device_id",
+            "transaction_id",
+            "recipient_user_id",
+            "recipient_device_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_to_device_revision_check": {
+          "name": "chat_crypto_to_device_revision_check",
+          "value": "\"chat_crypto_to_device_events\".\"membership_revision\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_to_device_expiry_check": {
+          "name": "chat_crypto_to_device_expiry_check",
+          "value": "\"chat_crypto_to_device_events\".\"expires_at\">\"chat_crypto_to_device_events\".\"created_at\""
+        },
+        "chat_crypto_to_device_cipher_check": {
+          "name": "chat_crypto_to_device_cipher_check",
+          "value": "chat_crypto_valid_olm(\"chat_crypto_to_device_events\".\"content\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_outbound_sessions": {
+      "name": "chat_crypto_outbound_sessions",
+      "schema": "",
+      "columns": {
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_user_id": {
+          "name": "sender_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_device_id": {
+          "name": "sender_device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membership_revision": {
+          "name": "membership_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "chat_crypto_session_epoch_idx": {
+          "name": "chat_crypto_session_epoch_idx",
+          "columns": [
+            {
+              "expression": "conversation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sender_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sender_device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "membership_revision",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_outbound_sessions_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_outbound_sessions_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_outbound_sessions",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_outbound_sessions_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_outbound_sessions_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_outbound_sessions",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "sender_user_id",
+            "sender_device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_session_id_check": {
+          "name": "chat_crypto_session_id_check",
+          "value": "\"chat_crypto_outbound_sessions\".\"session_id\" ~ '^[A-Za-z0-9+/]{43}=?$'"
+        },
+        "chat_crypto_session_revision_check": {
+          "name": "chat_crypto_session_revision_check",
+          "value": "\"chat_crypto_outbound_sessions\".\"membership_revision\" BETWEEN 1 AND 9007199254740991"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_protocol_events": {
+      "name": "chat_crypto_protocol_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membership_revision": {
+          "name": "membership_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_user_id": {
+          "name": "sender_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_device_id": {
+          "name": "sender_device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient_user_id": {
+          "name": "recipient_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient_device_id": {
+          "name": "recipient_device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event": {
+          "name": "event",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "acknowledged_at": {
+          "name": "acknowledged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_crypto_protocol_sync_idx": {
+          "name": "chat_crypto_protocol_sync_idx",
+          "columns": [
+            {
+              "expression": "recipient_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "recipient_device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"chat_crypto_protocol_events\".\"acknowledged_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_protocol_events_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_protocol_events_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_protocol_events",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_protocol_events_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_protocol_events_sender_user_id_sender_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_protocol_events",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "sender_user_id",
+            "sender_device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_protocol_events_recipient_user_id_recipient_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_protocol_events_recipient_user_id_recipient_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_protocol_events",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "recipient_user_id",
+            "recipient_device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "chat_crypto_protocol_dedup": {
+          "name": "chat_crypto_protocol_dedup",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_user_id",
+            "sender_device_id",
+            "transaction_id",
+            "recipient_user_id",
+            "recipient_device_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_protocol_revision_check": {
+          "name": "chat_crypto_protocol_revision_check",
+          "value": "\"chat_crypto_protocol_events\".\"membership_revision\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_protocol_payload_check": {
+          "name": "chat_crypto_protocol_payload_check",
+          "value": "chat_crypto_valid_protocol_event(\"chat_crypto_protocol_events\".\"event\",\"chat_crypto_protocol_events\".\"sender_device_id\",\"chat_crypto_protocol_events\".\"transaction_id\")"
+        },
+        "chat_crypto_protocol_expiry_check": {
+          "name": "chat_crypto_protocol_expiry_check",
+          "value": "\"chat_crypto_protocol_events\".\"expires_at\">\"chat_crypto_protocol_events\".\"created_at\" AND (\"chat_crypto_protocol_events\".\"acknowledged_at\" IS NULL OR \"chat_crypto_protocol_events\".\"acknowledged_at\">=\"chat_crypto_protocol_events\".\"created_at\")"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_upload_drafts": {
+      "name": "chat_crypto_upload_drafts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "uploader_id": {
+          "name": "uploader_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_upload_id": {
+          "name": "client_upload_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "membership_revision": {
+          "name": "membership_revision",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "encryption_mode": {
+          "name": "encryption_mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "object_key": {
+          "name": "object_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ciphertext_size": {
+          "name": "ciphertext_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ciphertext_sha256": {
+          "name": "ciphertext_sha256",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "envelope": {
+          "name": "envelope",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message_id": {
+          "name": "message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "report_evidence_id": {
+          "name": "report_evidence_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "consumed_at": {
+          "name": "consumed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_crypto_draft_expiry_idx": {
+          "name": "chat_crypto_draft_expiry_idx",
+          "columns": [
+            {
+              "expression": "expires_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"chat_crypto_upload_drafts\".\"consumed_at\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_upload_drafts_uploader_id_user_id_fk": {
+          "name": "chat_crypto_upload_drafts_uploader_id_user_id_fk",
+          "tableFrom": "chat_crypto_upload_drafts",
+          "tableTo": "user",
+          "columnsFrom": [
+            "uploader_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_upload_drafts_conversation_id_conversations_id_fk": {
+          "name": "chat_crypto_upload_drafts_conversation_id_conversations_id_fk",
+          "tableFrom": "chat_crypto_upload_drafts",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_upload_drafts_message_id_messages_id_fk": {
+          "name": "chat_crypto_upload_drafts_message_id_messages_id_fk",
+          "tableFrom": "chat_crypto_upload_drafts",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_upload_drafts_report_evidence_id_chat_crypto_report_evidence_id_fk": {
+          "name": "chat_crypto_upload_drafts_report_evidence_id_chat_crypto_report_evidence_id_fk",
+          "tableFrom": "chat_crypto_upload_drafts",
+          "tableTo": "chat_crypto_report_evidence",
+          "columnsFrom": [
+            "report_evidence_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_upload_drafts_uploader_id_device_id_chat_crypto_devices_user_id_device_id_fk": {
+          "name": "chat_crypto_upload_drafts_uploader_id_device_id_chat_crypto_devices_user_id_device_id_fk",
+          "tableFrom": "chat_crypto_upload_drafts",
+          "tableTo": "chat_crypto_devices",
+          "columnsFrom": [
+            "uploader_id",
+            "device_id"
+          ],
+          "columnsTo": [
+            "user_id",
+            "device_id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "chat_crypto_upload_dedup": {
+          "name": "chat_crypto_upload_dedup",
+          "nullsNotDistinct": false,
+          "columns": [
+            "uploader_id",
+            "client_upload_id"
+          ]
+        },
+        "chat_crypto_object_key_unique": {
+          "name": "chat_crypto_object_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "object_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "chat_crypto_upload_revision_check": {
+          "name": "chat_crypto_upload_revision_check",
+          "value": "\"chat_crypto_upload_drafts\".\"membership_revision\" BETWEEN 1 AND 9007199254740991"
+        },
+        "chat_crypto_upload_digest_check": {
+          "name": "chat_crypto_upload_digest_check",
+          "value": "\"chat_crypto_upload_drafts\".\"ciphertext_sha256\" ~ '^[A-Za-z0-9+/]{43}=?$'"
+        },
+        "chat_crypto_upload_object_key_check": {
+          "name": "chat_crypto_upload_object_key_check",
+          "value": "\"chat_crypto_upload_drafts\".\"object_key\" ~ '^[A-Za-z0-9_.-]{1,255}$'"
+        },
+        "chat_crypto_upload_mode_check": {
+          "name": "chat_crypto_upload_mode_check",
+          "value": "(\"chat_crypto_upload_drafts\".\"encryption_mode\"='E2EE' AND \"chat_crypto_upload_drafts\".\"device_id\" IS NOT NULL AND \"chat_crypto_upload_drafts\".\"envelope\" IS NULL AND \"chat_crypto_upload_drafts\".\"ciphertext_size\" BETWEEN 1 AND 5242880 AND \"chat_crypto_upload_drafts\".\"report_evidence_id\" IS NULL) OR (\"chat_crypto_upload_drafts\".\"encryption_mode\" IN ('LOBBY_AEAD','REPORT_AEAD') AND \"chat_crypto_upload_drafts\".\"ciphertext_size\" BETWEEN 1 AND 8388608 AND chat_crypto_valid_envelope(\"chat_crypto_upload_drafts\".\"envelope\",'LOBBY_AEAD',CASE WHEN \"chat_crypto_upload_drafts\".\"encryption_mode\"='REPORT_AEAD' THEN 'fg-report' ELSE 'fg-lobby' END) AND (\"chat_crypto_upload_drafts\".\"encryption_mode\"<>'REPORT_AEAD' OR \"chat_crypto_upload_drafts\".\"message_id\" IS NULL))"
+        },
+        "chat_crypto_upload_lifecycle_check": {
+          "name": "chat_crypto_upload_lifecycle_check",
+          "value": "\"chat_crypto_upload_drafts\".\"expires_at\">\"chat_crypto_upload_drafts\".\"created_at\" AND ((\"chat_crypto_upload_drafts\".\"consumed_at\" IS NULL AND \"chat_crypto_upload_drafts\".\"message_id\" IS NULL AND \"chat_crypto_upload_drafts\".\"report_evidence_id\" IS NULL) OR (\"chat_crypto_upload_drafts\".\"consumed_at\" IS NOT NULL AND \"chat_crypto_upload_drafts\".\"consumed_at\">=\"chat_crypto_upload_drafts\".\"created_at\" AND \"chat_crypto_upload_drafts\".\"consumed_at\"<\"chat_crypto_upload_drafts\".\"expires_at\" AND ((\"chat_crypto_upload_drafts\".\"message_id\" IS NOT NULL AND \"chat_crypto_upload_drafts\".\"report_evidence_id\" IS NULL) OR (\"chat_crypto_upload_drafts\".\"message_id\" IS NULL AND \"chat_crypto_upload_drafts\".\"report_evidence_id\" IS NOT NULL))))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_report_upload_sources": {
+      "name": "chat_crypto_report_upload_sources",
+      "schema": "",
+      "columns": {
+        "upload_id": {
+          "name": "upload_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "source_message_id": {
+          "name": "source_message_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "retry_fingerprint": {
+          "name": "retry_fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "crypto_report_upload_source_idx": {
+          "name": "crypto_report_upload_source_idx",
+          "columns": [
+            {
+              "expression": "source_message_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "crypto_report_upload_draft_fk": {
+          "name": "crypto_report_upload_draft_fk",
+          "tableFrom": "chat_crypto_report_upload_sources",
+          "tableTo": "chat_crypto_upload_drafts",
+          "columnsFrom": [
+            "upload_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "crypto_report_upload_source_fk": {
+          "name": "crypto_report_upload_source_fk",
+          "tableFrom": "chat_crypto_report_upload_sources",
+          "tableTo": "messages",
+          "columnsFrom": [
+            "source_message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "crypto_report_upload_fingerprint_check": {
+          "name": "crypto_report_upload_fingerprint_check",
+          "value": "\"chat_crypto_report_upload_sources\".\"retry_fingerprint\" ~ '^[A-Za-z0-9+/]{43}=?$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.chat_crypto_report_audit": {
+      "name": "chat_crypto_report_audit",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "report_id": {
+          "name": "report_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "name": "attachment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "crypto_report_audit_report_idx": {
+          "name": "crypto_report_audit_report_idx",
+          "columns": [
+            {
+              "expression": "report_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_crypto_report_audit_actor_id_user_id_fk": {
+          "name": "chat_crypto_report_audit_actor_id_user_id_fk",
+          "tableFrom": "chat_crypto_report_audit",
+          "tableTo": "user",
+          "columnsFrom": [
+            "actor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "chat_crypto_report_audit_report_id_reports_id_fk": {
+          "name": "chat_crypto_report_audit_report_id_reports_id_fk",
+          "tableFrom": "chat_crypto_report_audit",
+          "tableTo": "reports",
+          "columnsFrom": [
+            "report_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "crypto_report_audit_action_check": {
+          "name": "crypto_report_audit_action_check",
+          "value": "(\"chat_crypto_report_audit\".\"action\"='READ_REPORT' AND \"chat_crypto_report_audit\".\"attachment_id\" IS NULL) OR (\"chat_crypto_report_audit\".\"action\"='READ_IMAGE' AND \"chat_crypto_report_audit\".\"attachment_id\" IS NOT NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

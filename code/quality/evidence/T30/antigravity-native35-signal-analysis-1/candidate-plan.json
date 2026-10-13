@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "planId": "fg-t30-native35-signal-refactor-plan-1",
+  "targetTask": "T30",
+  "generatedAt": "2026-10-11T06:37:30.000Z",
+  "status": "PROPOSED",
+  "author": "Antigravity (Gemini 3.6 Flash High)",
+  "reviewer": "Codex",
+  "summary": "Targeted refactor plan to eliminate PostgreSQL lock contention, query amplification, and 57014 statement timeouts causing gateway signal disconnections in Native35 while preserving all 99 guards, 45s deadlines, and per-frame fresh authority checks.",
+  "allowedFiles": [
+    {
+      "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+      "methodScope": [
+        "lockedLease",
+        "processBatch"
+      ],
+      "changeDescription": "Eliminate redundant liveLease re-queries in lockedLease and frame 0 of processBatch. Consume combined liveLeaseWithPolicy to reduce per-frame SQL queries from 2 to 1 while retaining full transaction isolation, lock order, and native authority."
+    },
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "methodScope": [
+        "liveLeaseWithPolicy",
+        "publicationSources",
+        "publicationPermission"
+      ],
+      "changeDescription": "Add minimal combined SQL field projection liveLeaseWithPolicy returning both the verified LiveLease and fresh publication permission flags in a single query with identical clock guards and subquery checks."
+    },
+    {
+      "path": "apps/api/src/modules/rooms/rooms.service.ts",
+      "methodScope": [
+        "listOwnRooms"
+      ],
+      "changeDescription": "Remove redundant sequential N+1 room_members queries inside open transaction and move profile resolution outside the transaction to eliminate client-induced idleInTransaction delays."
+    },
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "methodScope": [
+        "reconcileGroup"
+      ],
+      "changeDescription": "Add narrow in-flight promise coalescing for reconciling groups to prevent overlapping FOR UPDATE transactions between the 1s sweep timer and incoming LiveKit webhooks."
+    }
+  ],
+  "forbiddenChanges": [
+    "No modification to test files, frozen assertions, or test timeouts",
+    "No relaxation of 99 guards, API build 9, or security boundaries",
+    "No removal of fresh per-frame lease verification or publication policy checks",
+    "No movement of native authority calls outside the transaction without formal proof",
+    "No arbitrary modification of connection pool size (16/16) or statement_timeout (3000ms)",
+    "No snapshot caching or stale policy bypass"
+  ],
+  "invariantsPreserved": {
+    "freshPerFrameGuards": true,
+    "lockOrderingSafe": true,
+    "nativeAuthorityEnforced": true,
+    "screenQuotaLimitEnforced": true,
+    "zeroSecretExposure": true,
+    "exitCodeAndEvidencePreserved": true
+  },
+  "targetedRedTestPlan": {
+    "testFile": "apps/api/test/calls-signal-perf-lock.integration.spec.ts",
+    "scenarios": [
+      {
+        "name": "Combined Fresh Query Count per Frame",
+        "expectedQueriesPerFrame": 1,
+        "previousQueriesPerFrame": 2
+      },
+      {
+        "name": "Mid-Batch Revocation Immediate Rollback",
+        "assertion": "Revoked session during frame batch rolls back transaction cleanly with 403 error"
+      },
+      {
+        "name": "Mid-Batch Screen Quota Depletion",
+        "assertion": "Depleted slot during addTrack rejects publication without creating orphan SFU tracks"
+      },
+      {
+        "name": "Concurrent Lifecycle Sweep with Gateway Frame Batch",
+        "assertion": "Zero 57014 statement_timeout errors and lock wait duration strictly under 1000ms"
+      }
+    ]
+  },
+  "minimalNumericInstrumentation": {
+    "enabled": false,
+    "standbySpecification": {
+      "metrics": [
+        "t_lock_ms",
+        "t_batch_ms",
+        "t_native_ms",
+        "err_code"
+      ],
+      "privacy": "Numeric milliseconds and sanitized SQLSTATE string only. Zero raw SQL, parameters, URLs, or user IDs logged."
+    }
+  }
+}

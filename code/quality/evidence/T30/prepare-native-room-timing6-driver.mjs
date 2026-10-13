@@ -1,0 +1,5 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30';let s=fs.readFileSync(d+'/prepare-native-room-timing4.mjs','utf8');
+for(const [a,b]of [["PlaySessionsService:['listRoom','get']","PlaySessionsService:['listRoom']"],['timing4','timing6'],['timing-4','timing-6'],['control4','control6'],['control-4','control-6'],['resource101','resource103'],['stop-101','stop-103'],['restore-101','restore-103']])s=s.replaceAll(a,b);
+assert(!fs.existsSync(d+'/prepare-native-room-timing6.mjs'));fs.writeFileSync(d+'/prepare-native-room-timing6.mjs',s,{flag:'wx'});
+fs.appendFileSync('../.doc/history.md','\n- Coding and build 2 — T30 — '+new Date().toISOString()+': Timing4 pre-run source inspection detects non-existent PlaySessions get method; no diagnostic run. Timing5 prepare actualexit1 EEXIST retained because control label incomplete, no fixture run/resource stop; attempted control5 missing-module exit1 preserved. Fresh timing6 corrects generator labels and uses actual listRoom only; original app/frozen source/canonical unchanged.\n');

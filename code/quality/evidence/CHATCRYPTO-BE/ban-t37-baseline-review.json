@@ -1,0 +1,14 @@
+{
+  "authority": "Direct user message: để vào task 37",
+  "recordedAt": "2026-10-10T01:42:25.117994+00:00",
+  "gateWaived": false,
+  "taskBeforeSha256": "03e993ea2d22a21e0775554324891d88831b5069ee1b7622908ff53d48e1fa24",
+  "taskAfterSha256": "7f41ee11fa201137b379f1c1ab2fe8da329acf9a59eabd41b547a52e85b62231",
+  "baselineBeforeSha256": "782e1a6cfcb86fd983e43c4be932400a82f55e7494ec076b703b0c75a46a10c9",
+  "baselineAfterSha256": "1831a7f4f0029925c91618b8c15fb82510133b54f8f9124b26bb39fa007413e4",
+  "decisionBlock": "### CHATCRYPTO-BAN-T37-01 — quyết định thứ tự ngày10/10/2026\n\n- Người dùng chốt \"để vào task 37\": producer ban/unban thuộc T37, không đưa vào prerequisite hay triển khai trong CHATCRYPTO-BE. Giữ thứ tự task hiện hành; T37 chưa bắt đầu.\n- Bàn giao T37 dùng route/DTO đã có: PATCH /api/v1/admin/users/:id/ban, AdminUserActionRequestSchema. BAN phải atomic audit/revoke session/đổi private epoch/đóng intervals; UNBAN không phục hồi stale session hoặc quyền đọc khoảng bị ban. Repeated actions idempotent, giữ device/recovery ciphertext, broadcast revoke chỉ sau commit.\n- T37 phải có native HTTP/auth/PG/socket và SDK-backed routing/history evidence; kiểm sole-admin/CSRF/latest authority, lock ordering, rollback khi lỗi/race và logout/ban/thu hồi quyền. Không dùng SQL fixture ban như bằng chứng producer đã tích hợp.\n- Quyết định chỉ xác nhận nơi triển khai. Acceptance ban/unban producer/epoch của CHATCRYPTO-BE còn chưa đạt; không tự bỏ gate, sửa checker/baseline/dependency hoặc đánh PASS BE/T37 từ quyết định này. Evidence: code/quality/evidence/CHATCRYPTO-BE/ban-producer-t37-decision.json và ban-producer-gate-review.md.\n\n",
+  "t37Handoff": "\n\n**Bàn giao CHATCRYPTO-BAN-T37-01 (10/10/2026):** T37 sở hữu producer ban/unban và tích hợp crypto epoch/interval/session/socket theo mục quyết định ở trên; kiểm native atomic rollback/lock ordering/idempotency, không phục hồi session cũ hoặc lịch sử khoảng bị ban. Chưa có implementation/evidence producer; quyết định này không mở T37 trước tiền nhiệm PASS.",
+  "priorTaskCrlf": false,
+  "onlyTaskDocumentHashChanged": true,
+  "checkerUnchanged": true
+}

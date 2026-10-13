@@ -1,0 +1,95 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-legacy-stages.test.ts (6 tests | 6 failed) 7242ms
+   ❯ Durable original-cohort legacy stages on actual PostgreSQL (6)
+     × retains an immutable public source/image routing snapshot without source conversion 289ms
+     × rejects a stage with a foreign seed cohort, wrong reviewer device, or duplicate conversation 64ms
+     × rejects omitted or contradictory counts, unsafe revisions, and noncanonical public digests 49ms
+     × binds each staged source to the exact candidate, original cohort, conversation and epoch 41ms
+     × retains exact original-image/ciphertext-draft mappings and resumable cleanup progress 44ms
+     × requires durable conversion/completion clocks for each lifecycle phase 48ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > retains an immutable public source/image routing snapshot without source conversion
+error: relation "chat_crypto_legacy_stages" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-stages.test.ts:35:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > rejects a stage with a foreign seed cohort, wrong reviewer device, or duplicate conversation
+AssertionError: expected error: relation "chat_crypto_legacy_stage… { …(15) } to match object { code: '23503' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23503",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-legacy-stages.test.ts:28:128
+
+ ❯ test/chat-crypto-legacy-stages.test.ts:42:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > rejects omitted or contradictory counts, unsafe revisions, and noncanonical public digests
+AssertionError: expected error: relation "chat_crypto_legacy_stage… { …(15) } to match object { code: '23514' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23514",
++ DatabaseError {
++   "code": "42P01",
+  }
+
+ ❯ rejects test/chat-crypto-legacy-stages.test.ts:28:128
+
+ ❯ test/chat-crypto-legacy-stages.test.ts:47:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > binds each staged source to the exact candidate, original cohort, conversation and epoch
+error: relation "chat_crypto_legacy_stages" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-stages.test.ts:52:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > retains exact original-image/ciphertext-draft mappings and resumable cleanup progress
+error: relation "chat_crypto_legacy_stages" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-stages.test.ts:57:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  test/chat-crypto-legacy-stages.test.ts > Durable original-cohort legacy stages on actual PostgreSQL > requires durable conversion/completion clocks for each lifecycle phase
+error: relation "chat_crypto_legacy_stages" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-legacy-stages.test.ts:63:3
+     61|  });
+     62|  it('requires durable conversion/completion clocks for each lifecycle …
+     63|   await stage();await rejects(()=>client.query("UPDATE chat_crypto_leg…
+       |   ^
+     64|   await rejects(()=>client.query("UPDATE chat_crypto_legacy_stages SET…
+     65|   await rejects(()=>client.query("UPDATE chat_crypto_legacy_stages SET…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  13:18:13
+   Duration  9.12s (tests 87%, import 10%, transform 1%, worker 1%)
+

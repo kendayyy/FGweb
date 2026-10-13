@@ -1,0 +1,147 @@
+{
+  "recordedAt": "2026-10-11T02:56:31.108Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-api-room-owner-reviewed.mjs",
+    "sha256": "9d4d97ad27b74f8843dd21974e4571e4af789a107bf4a345334bd4acf103098a"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T02:56:00.195Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T02:56:06.902Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T02:56:06.923Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T02:56:15.442Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T02:56:19.425Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "actual observed gateway HTTP unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "actual observed gateway upgrade unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "actual current session gateway authorization after owned room row-lock contention",
+      "status": 200,
+      "ownedLockHeldMs": 500
+    },
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "e545fc5634f229810b838d8b7cf32d82a7f9f524116cd40b476ac401ca25f3b2"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "actual numeric API pool owner/PID/lock observations and final failure health",
+      "ownerCount": 17,
+      "lockRecordCount": 24,
+      "ownerHealth": {
+        "recordedAt": "2026-10-11T02:56:31.035Z",
+        "failureCount": 0,
+        "observationComplete": true
+      }
+    },
+    {
+      "kind": "actual slow owned room lock forwarded and measured",
+      "rows": [
+        {
+          "type": "sqlOperation",
+          "label": "liveLeaseInitial",
+          "at": "2026-10-11T02:56:21.555Z",
+          "durationMs": 156.995,
+          "backendPid": 5662
+        },
+        {
+          "type": "sqlOperation",
+          "label": "lockRoomsUpdate",
+          "at": "2026-10-11T02:56:21.906Z",
+          "durationMs": 350.67,
+          "backendPid": 5662
+        }
+      ]
+    },
+    {
+      "kind": "actual guarded HTTP/upgrade error telemetry and real perf samples",
+      "errors": [
+        {
+          "type": "error",
+          "site": "httpHandler",
+          "at": "2026-10-11T02:56:20.703Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "headersSent": false
+        },
+        {
+          "type": "error",
+          "site": "upgrade",
+          "phase": "authorize",
+          "durationMs": 1,
+          "at": "2026-10-11T02:56:20.748Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "socketDestroyed": false
+        }
+      ],
+      "sampleCount": 8
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-10f7cc91-b8f7-4c29-847d-68797dcb03b4",
+    "temporary-built-smoke-135ddd71-d26b-45f1-9f11-dea48bb29512"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

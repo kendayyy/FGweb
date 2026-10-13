@@ -1,0 +1,351 @@
+{
+  "canonicalSmokeChecks": 18,
+  "heartbeatBatchCases": 8,
+  "retainedAuthProfileTeamSourceAndCompiledUnchanged": true,
+  "retainedProfileAuthCases": 21,
+  "retainedRoomCryptoCases": 35,
+  "startupFaultControls": {
+    "command": {
+      "command": "node quality/evidence/T30/rooms-calls-pool-startup-fault-control1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T08:36:33.680Z",
+      "completedAt": "2026-10-12T08:36:38.239Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-rooms-calls-pool-startup-fault-1.txt",
+      "evidenceSha256": "c605ba4e207d901998280aea61acdf8a55bee5e41b0bdea190c6c8fdc27f0e8d"
+    },
+    "review": {
+      "at": "2026-10-12T08:36:38.167Z",
+      "reviewer": "Codex",
+      "controls": 2,
+      "results": [
+        {
+          "service": "RoomsService",
+          "attempts": 4,
+          "actualPgClients": 3,
+          "realBackendPids": [
+            16234,
+            16233,
+            16232
+          ],
+          "allFulfilledClientsReleased": true,
+          "exactFaultPropagated": true,
+          "syntheticFourthConnectFailure": true,
+          "poolEnded": true,
+          "totalAfterEnd": 0,
+          "prototypeRestored": true
+        },
+        {
+          "service": "CallsService",
+          "attempts": 4,
+          "actualPgClients": 3,
+          "realBackendPids": [
+            16244,
+            16242,
+            16243
+          ],
+          "allFulfilledClientsReleased": true,
+          "exactFaultPropagated": true,
+          "syntheticFourthConnectFailure": true,
+          "poolEnded": true,
+          "totalAfterEnd": 0,
+          "prototypeRestored": true
+        }
+      ],
+      "scope": "Three actual PostgreSQL startup clients and one exact synthetic acquisition failure per service; no application or native media acceptance.",
+      "nativeAcceptance": false
+    }
+  },
+  "retainedPools": [
+    {
+      "name": "rooms",
+      "command": {
+        "command": "node quality/evidence/T30/rooms-pool-reuse-control1.mjs green",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-12T08:23:52.194Z",
+        "completedAt": "2026-10-12T08:24:06.068Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-rooms-pool-reuse-green-1.txt",
+        "evidenceSha256": "4fabd6fa7e0af13d8c2fc1064f05f38d1d5ee82d5299300fc88133ebdb74ff7d"
+      },
+      "observation": {
+        "at": "2026-10-12T08:24:06.019Z",
+        "mode": "green",
+        "actualPg": true,
+        "startupReady": 4,
+        "before": 4,
+        "after": 4,
+        "pids": [
+          14107,
+          14106,
+          14105,
+          14104
+        ],
+        "afterPids": [
+          14104,
+          14105,
+          14106,
+          14107
+        ],
+        "max": 16,
+        "connectTimeout": 5000,
+        "statementTimeout": 10000
+      },
+      "cleanup": {
+        "at": "2026-10-12T08:24:06.026Z",
+        "poolEnded": true,
+        "total": 0
+      }
+    },
+    {
+      "name": "calls",
+      "command": {
+        "command": "node quality/evidence/T30/calls-pool-reuse-control1.mjs green",
+        "cwd": "E:\\FGweb\\code",
+        "startedAt": "2026-10-12T08:24:06.182Z",
+        "completedAt": "2026-10-12T08:24:20.767Z",
+        "exitCode": 0,
+        "signal": null,
+        "evidencePath": "quality/evidence/T30/codex-t30-calls-pool-reuse-green-1.txt",
+        "evidenceSha256": "4fabd6fa7e0af13d8c2fc1064f05f38d1d5ee82d5299300fc88133ebdb74ff7d"
+      },
+      "observation": {
+        "at": "2026-10-12T08:24:20.715Z",
+        "mode": "green",
+        "actualPg": true,
+        "startupReady": 4,
+        "before": 4,
+        "after": 4,
+        "pids": [
+          14140,
+          14139,
+          14138,
+          14137
+        ],
+        "afterPids": [
+          14137,
+          14138,
+          14139,
+          14140
+        ],
+        "max": 16,
+        "connectTimeout": 5000,
+        "statementTimeout": 15000
+      },
+      "cleanup": {
+        "at": "2026-10-12T08:24:20.719Z",
+        "poolEnded": true,
+        "total": 0
+      }
+    }
+  ],
+  "currentRoomCryptoCases": 0,
+  "lifecycleLeaseBatchCases": 10,
+  "bulkLeaseAuthorityCases": 23,
+  "teamsPoolReuse": {
+    "warm": {
+      "command": "node quality/evidence/T30/teams-pool-reuse-control2.mjs green",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T07:14:08.837Z",
+      "completedAt": "2026-10-12T07:14:23.133Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-teams-pool-reuse-green-1.txt",
+      "evidenceSha256": "4fabd6fa7e0af13d8c2fc1064f05f38d1d5ee82d5299300fc88133ebdb74ff7d"
+    },
+    "reuse": {
+      "at": "2026-10-12T07:14:23.081Z",
+      "mode": "green",
+      "actualPg": true,
+      "startupReady": 4,
+      "before": 4,
+      "after": 4,
+      "pids": [
+        3959,
+        3958,
+        3957,
+        3956
+      ],
+      "afterPids": [
+        3956,
+        3957,
+        3958,
+        3959
+      ],
+      "max": 16,
+      "connectTimeout": 5000,
+      "statementTimeout": 10000
+    }
+  },
+  "additionalTeamAuthorityCases": 98,
+  "teamAuthorityVerification": {
+    "initialSetupFailedCommand": {
+      "command": "node C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js run test --workspace @fg/api -- --runInBand test/team-approval.integration.spec.ts test/rooms.integration.spec.ts test/room-play-sessions.integration.spec.ts test/play-sessions.integration.spec.ts test/play-session-capacity.integration.spec.ts test/invitations.integration.spec.ts test/chat-crypto-room-authority.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T07:14:23.281Z",
+      "completedAt": "2026-10-12T07:17:08.340Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-teams-pool-build15-regressions-1.txt",
+      "evidenceSha256": "4bf254c5bb587202da411edcf6a7dd0a4007de95922a5ed0f46930660379b3aa"
+    },
+    "verifiedCasesFromFivePassedSuites": 63,
+    "correctedRootRunnerCommand": {
+      "command": "node quality/evidence/T30/run-build21-auth-root-regressions1.mjs profiles auth-profile-read rooms chat-crypto-room-authority",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T13:39:54.992Z",
+      "completedAt": "2026-10-12T13:42:34.049Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-profiles-room-crypto-build21-regressions-1.txt",
+      "evidenceSha256": "eaa10a09fada3da6d1a4f70d866e4f46a8ae76fd2cb206bc6c868836dd408089"
+    },
+    "correctedTwoSuitesCases": 35
+  },
+  "apiBuild": 22,
+  "webhookDedupeControls": 3,
+  "noCockpitStartup": true,
+  "recordedAt": "2026-10-12T17:23:54.392Z",
+  "reviewer": "Codex",
+  "records": [
+    {
+      "command": "node quality/evidence/T30/run-noop-write3.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T17:18:53.921Z",
+      "completedAt": "2026-10-12T17:19:53.264Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-lifecycle-noop-build22-green-1.txt",
+      "evidenceSha256": "3d89785ef6737ba04757ab65e559a46d0193c31c6c949b16b289ff2911417d5f",
+      "label": "t30-lifecycle-noop-build22-green-1",
+      "total": 7,
+      "runtimeCleanup": {
+        "path": "quality/evidence/T30/regression-runtime-review-4b6e4651-5880-41e3-afdb-0de4569bed5b.json",
+        "completedAt": "2026-10-12T17:19:53.236Z",
+        "names": [
+          "noop-write"
+        ],
+        "exitCode": 0,
+        "removed": [
+          "temporary-regression-4b6e4651-5880-41e3-afdb-0de4569bed5b"
+        ],
+        "retained": [],
+        "privateRuntimeRemoved": true
+      }
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions.mjs call-admission call-gateway call-controls",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T17:11:22.758Z",
+      "completedAt": "2026-10-12T17:13:57.243Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-call-build22-regressions-1.txt",
+      "evidenceSha256": "f77f1aaf21c051735543d2ecd6af132ca2e7c32f39f7d93336b86d5c9db022ea",
+      "label": "t30-frozen-call-build22-regressions-1",
+      "total": 39,
+      "runtimeCleanup": {
+        "path": "quality/evidence/T30/regression-runtime-review-4287cfc7-9e68-49dc-9e51-2dfae710a949.json",
+        "completedAt": "2026-10-12T17:13:57.221Z",
+        "names": [
+          "call-admission",
+          "call-gateway",
+          "call-controls"
+        ],
+        "exitCode": 0,
+        "removed": [
+          "gateway-b0b168e7-71a5-4f92-8fee-71f7960e05c7",
+          "gateway-b5779803-d364-4cd0-915c-2042fcdbbeb1",
+          "gateway-b74c1390-28e6-4767-b1a7-d2fca7df5ae5",
+          "temporary-regression-4287cfc7-9e68-49dc-9e51-2dfae710a949"
+        ],
+        "retained": [],
+        "privateRuntimeRemoved": true
+      }
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-with-team-play.mjs publishing",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T17:13:57.371Z",
+      "completedAt": "2026-10-12T17:15:20.616Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-build22-alone-1.txt",
+      "evidenceSha256": "05f09229a1f678ed396382ba88dc388b361dddc7e6cba6c5c678c0f813e73848",
+      "label": "t30-frozen-publishing-build22-alone-1",
+      "total": 11,
+      "runtimeCleanup": {
+        "path": "quality/evidence/T30/regression-runtime-review-cffadf63-fc7a-4b4e-9b2f-20b8c0226f28.json",
+        "completedAt": "2026-10-12T17:15:20.599Z",
+        "names": [
+          "publishing"
+        ],
+        "exitCode": 0,
+        "removed": [
+          "gateway-069077c0-9f85-45fb-b547-b443a4b05ffe",
+          "temporary-regression-cffadf63-fc7a-4b4e-9b2f-20b8c0226f28"
+        ],
+        "retained": [],
+        "privateRuntimeRemoved": true
+      }
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-with-team-play.mjs publishing-gateway",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-12T17:15:20.757Z",
+      "completedAt": "2026-10-12T17:17:21.353Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-gateway-build22-alone-1.txt",
+      "evidenceSha256": "fff842728685e0562b985cc0ac297d3bf9e956b24e1a26e5117e54b95cfafae9",
+      "label": "t30-frozen-publishing-gateway-build22-alone-1",
+      "total": 16,
+      "runtimeCleanup": {
+        "path": "quality/evidence/T30/regression-runtime-review-f1e8e47d-160e-417f-8c76-dc95bca06921.json",
+        "completedAt": "2026-10-12T17:17:21.329Z",
+        "names": [
+          "publishing-gateway"
+        ],
+        "exitCode": 0,
+        "removed": [
+          "gateway-897fc275-6a01-40d7-887b-b3802f401da3",
+          "temporary-regression-f1e8e47d-160e-417f-8c76-dc95bca06921"
+        ],
+        "retained": [],
+        "privateRuntimeRemoved": true
+      }
+    }
+  ],
+  "currentRerunCases": 73,
+  "splitOriginalPublishingSuites": true,
+  "build": {
+    "recordedAt": "2026-10-12T17:09:03.624Z",
+    "reviewer": "Codex",
+    "commandEvidence": "quality/evidence/T30/codex-t30-api-build-22.json",
+    "compiledChanges": [
+      {
+        "path": "apps/api/dist/modules/calls/call-lifecycle.service.js",
+        "beforeSha256": "3231b80a84cbad192e4d8e71c2a49c8829cca48fec61cb02096e2d96f3c775e7",
+        "afterSha256": "0fce27ab64124834ef3713a2f9bb88715fba00fadd2e965d49ffdab7ae3c22ac"
+      },
+      {
+        "path": "apps/api/dist/modules/calls/call-lifecycle.service.js.map",
+        "beforeSha256": "803d147708e3539edc084e851bd46835b2c47aa18e89465238b9c23c23e98ee3",
+        "afterSha256": "f32f9eb5fad5dcebed2438dd4d405fbee2ad0a9a375a91dda666dffe649c32cc"
+      }
+    ],
+    "allOtherCompiledFilesUnchanged": true,
+    "nativeAcceptancePending": true
+  },
+  "cleanupVerified": true,
+  "photosInspected": true,
+  "telegramSent": true,
+  "photosEvidence": {
+    "path": "quality/evidence/T30/publishing-regression-photo-review-16.json",
+    "sha256": "61cb8c1b16d019c533db3ee12431fb10ab4409d1d9a2b4ed84aaebbc759b2636"
+  },
+  "meaningfulCoalescingControls": 17,
+  "nativeAcceptance": false
+}

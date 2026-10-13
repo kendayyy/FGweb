@@ -1,0 +1,106 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/call-controls-transport.test.ts (10 tests | 9 failed) 29ms
+   ❯ T03-FIX15 real call controls transport (10)
+     × preserves the opaque SFU identity for authorized per-user audio controls 13ms
+     × preserves an explicit moderator restriction independently of self-muted state 1ms
+     × rejects malformed SFU identity  2ms
+     × rejects malformed SFU identity viewer 1ms
+     × rejects malformed SFU identity session_private 1ms
+     × rejects malformed SFU identity eyJ.invalid.jwt 1ms
+     × rejects malformed SFU identity admission_invalid 1ms
+     × registered participant list carries both fields and exposes no credential or session fields 4ms
+     × strict self-mic accepts only a boolean muted action, never client authority overrides 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > preserves the opaque SFU identity for authorized per-user audio controls
+AssertionError: expected undefined to be 'admission_12eb826a-420f-49c1-8272-4d7…' // Object.is equality
+
+- Expected:
+"admission_12eb826a-420f-49c1-8272-4d7ee3c02fd8"
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/call-controls-transport.test.ts:5:176
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > preserves an explicit moderator restriction independently of self-muted state
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/call-controls-transport.test.ts:6:191
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > rejects malformed SFU identity 
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > rejects malformed SFU identity viewer
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > rejects malformed SFU identity session_private
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > rejects malformed SFU identity eyJ.invalid.jwt
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > rejects malformed SFU identity admission_invalid
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/contracts/test/call-controls-transport.test.ts:7:213
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > registered participant list carries both fields and exposes no credential or session fields
+AssertionError: expected [ { callId: 'call', …(4) } ] to deeply equal [ { callId: 'call', …(6) } ]
+
+- Expected
++ Received
+
+@@ -2,10 +2,8 @@
+    {
+      "callId": "call",
+      "isMuted": true,
+      "isPublishing": false,
+      "joinedAt": "2026-10-08T00:00:00Z",
+-     "mediaIdentity": "admission_12eb826a-420f-49c1-8272-4d7ee3c02fd8",
+-     "micRestricted": true,
+      "userId": "viewer",
+    },
+  ]
+
+ ❯ packages/contracts/test/call-controls-transport.test.ts:9:365
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  |contracts| packages/contracts/test/call-controls-transport.test.ts > T03-FIX15 real call controls transport > strict self-mic accepts only a boolean muted action, never client authority overrides
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/contracts/test/call-controls-transport.test.ts:10:367
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 1 passed (10)
+   Start at  15:40:13
+   Duration  1.65s (transform 44%, import 44%, worker 8%, tests 4%)
+

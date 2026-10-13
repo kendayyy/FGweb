@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:15540) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (38.807 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › synchronizes opposite event orders across conversations without a lock-order deadlock
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      386 |    await until(async()=>Boolean((await pool.query(`SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid)) AND query LIKE '%conversations%'`,[firstPid])).rowCount));
+      387 |   }finally{await blocker.query('ROLLBACK');blocker.release();}
+    > 388 |   const [bobResult,aliceResult]=await Promise.all([bobSync!,aliceSync!]);expect(bobResult.status).toBe(200);expect(aliceResult.status).toBe(200);
+          |                                                                                                                                        ^
+      389 |   expect(bobResult.body.verification.map((item:{event:{content:{transaction_id:string}}})=>item.event.content.transaction_id).sort()).toEqual(['alice-sync-order-a','alice-sync-order-b']);
+      390 |   expect(aliceResult.body.verification.map((item:{event:{content:{transaction_id:string}}})=>item.event.content.transaction_id).sort()).toEqual(['bob-sync-order-a','bob-sync-order-b']);
+      391 |  });
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:388:136)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 23 passed, 24 total
+Snapshots:   0 total
+Time:        39.24 s, estimated 40 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

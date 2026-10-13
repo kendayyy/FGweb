@@ -1,0 +1,37 @@
+## UI Pro Max Search Results
+**Domain:** ux | **Query:** keyboard focus aria label live status touch target
+**Source:** ux-guidelines.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Touch
+- **Issue:** Touch Target Size
+- **Platform:** Mobile
+- **Description:** Touch target guidance depends on platform and web context
+- **Do:** Use 44pt on iOS and 48dp on Android; for web use the separate WCAG Target Size rule
+- **Don't:** Treat one unit or minimum as universal across platforms
+- **Code Example Good:** iOS 44pt; Android 48dp; Web 24 CSS px plus WCAG exceptions
+- **Code Example Bad:** w-6 h-6 buttons
+- **Severity:** High
+
+### Result 2
+- **Category:** Accessibility
+- **Issue:** Contextual Live Badge Updates
+- **Platform:** Web
+- **Description:** Async badge and count changes should announce a meaningful contextual status without moving focus
+- **Do:** Use one appropriate atomic status message such as 3 items in cart
+- **Don't:** Announce a bare number or make every badge a competing live region
+- **Code Example Good:** <span role='status' aria-atomic='true'>3 items in cart</span>
+- **Code Example Bad:** <span aria-live='polite'>3</span>
+- **Severity:** High
+
+### Result 3
+- **Category:** Interaction
+- **Issue:** Focus States
+- **Platform:** All
+- **Description:** Keyboard focus, including controls inside a modal, needs a visible indicator
+- **Do:** Use a visible focus ring on every interactive control, including modal controls
+- **Don't:** Remove focus outline without replacement
+- **Code Example Good:** focus:ring-2 focus:ring-blue-500
+- **Code Example Bad:** outline-none without alternative
+- **Severity:** High
+

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/CHATCRYPTO-FE', label = 'headed-device-2';
+const hash = value => createHash('sha256').update(value).digest('hex');
+const recordPath = `${dir}/codex-${label}.json`, record = JSON.parse(fs.readFileSync(recordPath, 'utf8'));
+const source = fs.readFileSync(record.evidencePath, 'utf8'), safe = source.replace(/(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{43}(?![A-Za-z0-9_-])/g, '[REDACTED_43_CHAR_TOKEN]');
+if (safe === source) throw new Error('Expected fixture diagnostic redaction');
+const correction = { recordedAt: new Date().toISOString(), originalLogSha256: hash(source), sanitizedLogSha256: hash(safe), reason: 'Playwright error snapshot exposed generated isolated fixture recovery value; schema/storage dropped, no actual user credential. Remove raw value, retain true command/time/exit and original hash only. FE evidence not historical PASS. Subsequent headed recorder sanitizes43-character tokens and submit hides code.', recordPath };
+fs.writeFileSync(record.evidencePath, safe); record.evidenceSha256 = hash(safe); record.evidenceRedactionReason = correction.reason;
+fs.writeFileSync(recordPath, JSON.stringify(record, null, 2) + '\n');
+fs.writeFileSync(`${dir}/fixture-diagnostic-redaction.json`, JSON.stringify(correction, null, 2) + '\n', { flag: 'wx' }); console.log(JSON.stringify(correction));

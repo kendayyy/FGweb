@@ -1,0 +1,129 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:29408) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts (26.906 s)
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-1: liveLeaseWithPolicy is exported and defined as a function
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      618 |   describe('RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions', () => {
+      619 |     it('RED-1: liveLeaseWithPolicy is exported and defined as a function', () => {
+    > 620 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      621 |     });
+      622 |
+      623 |     it('RED-2: liveLeaseWithPolicy returns identical lease and permission matching original functions on valid caller', async () => {
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:620:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-2: liveLeaseWithPolicy returns identical lease and permission matching original functions on valid caller
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      622 |
+      623 |     it('RED-2: liveLeaseWithPolicy returns identical lease and permission matching original functions on valid caller', async () => {
+    > 624 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      625 |       const fixture = await seedFixture();
+      626 |
+      627 |       const origLease = await leaseStore.liveLease(pool, fixture.validCaller.admissionId);
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:624:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-3: liveLeaseWithPolicy returns undefined across all invalid and deleted states
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      635 |
+      636 |     it('RED-3: liveLeaseWithPolicy returns undefined across all invalid and deleted states', async () => {
+    > 637 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      638 |       const fixture = await seedFixture();
+      639 |       const client = await pool.connect();
+      640 |       try {
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:637:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-4: liveLeaseWithPolicy honors real server clock 20s/29s grace, denies 31s, and restores on rejoin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      667 |
+      668 |     it('RED-4: liveLeaseWithPolicy honors real server clock 20s/29s grace, denies 31s, and restores on rejoin', async () => {
+    > 669 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      670 |       const fixture = await seedFixture();
+      671 |       const client = await pool.connect();
+      672 |       try {
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:669:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-5: liveLeaseWithPolicy returns exact publication permission matrix across all 6 real policy combinations
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      740 |
+      741 |     it('RED-5: liveLeaseWithPolicy returns exact publication permission matrix across all 6 real policy combinations', async () => {
+    > 742 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      743 |       const fixture = await seedFixture();
+      744 |       const client = await pool.connect();
+      745 |       try {
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:742:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-6: demonstrates immediate zero-cache reflection on live database mutations and fresh transitions
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      824 |
+      825 |     it('RED-6: demonstrates immediate zero-cache reflection on live database mutations and fresh transitions', async () => {
+    > 826 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      827 |       const fixture = await seedFixture();
+      828 |       const caller = fixture.validCaller;
+      829 |       const client = await pool.connect();
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:826:44)
+
+  ● T30 Frame Lease Policy Combined Query Integration Suite (Review-1) › RED Tests: Candidate liveLeaseWithPolicy Implementation & Parity Assertions › RED-7: executes exactly 1 real PostgreSQL query during single helper invocation (vs 2 for sequential original)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      916 |
+      917 |     it('RED-7: executes exactly 1 real PostgreSQL query during single helper invocation (vs 2 for sequential original)', async () => {
+    > 918 |       expect(typeof liveLeaseWithPolicyFn).toBe('function');
+          |                                            ^
+      919 |       const fixture = await seedFixture();
+      920 |       const client = await pool.connect();
+      921 |       try {
+
+      at Object.<anonymous> (quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts:918:44)
+
+Test Suites: 1 failed, 1 total
+Tests:       7 failed, 4 passed, 11 total
+Snapshots:   0 total
+Time:        27.334 s
+Ran all test suites within paths "quality/evidence/T30/frame-lease-policy-tests3/t30-frame-lease-policy.integration.spec.ts".

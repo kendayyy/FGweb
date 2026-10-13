@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkBaselines} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T26',childDir='quality/evidence/T01-FIX3',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),parent=ledger.tasks.find(t=>t.id==='T26'),child=ledger.followups.find(t=>t.id==='T01-FIX3'),before=JSON.parse(fs.readFileSync(`${childDir}/before.json`)),seal=JSON.parse(fs.readFileSync(`${childDir}/entry-seal.json`));
+assert.equal(parent.status,'BLOCKED');assert.equal(child.status,'PASS');assert.equal(ledger.activeCheckpoint,null);assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,'T26');
+checkBaselines({root:process.cwd(),baseline:JSON.parse(fs.readFileSync('quality/spec-baseline.json'))});
+for(const [p,h]of Object.entries(before.readonly))assert.equal(hash(p),seal.paths[p]??h,p);
+for(const [p,h]of Object.entries(child.outputsHash.files))assert.equal(hash(p),h,p);
+for(const cmd of child.commands){assert.equal(cmd.exitCode,0);assert.equal(hash(cmd.evidencePath),cmd.evidenceSha256);}
+assert.equal(hash('.env.local'),before.configuration.env);
+const paths=['infra/compose.local.yml','infra/media/**',`${childDir}/**`];
+parent.writeAllowlist=[...new Set([...parent.writeAllowlist,...paths])];
+parent.approvedScopeAmendments.push({id:'T26-ADOPT-T01-FIX3',recordedAt:new Date().toISOString(),source:'Human approved version setup; child checkpoint PASS, outputs verified before sequential parent resume',paths,evidence:`${childDir}/closure.json`});
+parent.status='IN_PROGRESS';parent.blockers=[];parent.resumedAt=new Date().toISOString();
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+const fixture=fs.readFileSync(`${childDir}/private-gateway-fixture.mjs`,'utf8').replaceAll('.runtime/t01-fix3/','.runtime/t26/');
+const probe=fs.readFileSync(`${childDir}/compatibility-probe.mjs`,'utf8').replaceAll('quality/evidence/T01-FIX3/','quality/evidence/T26/').replaceAll('t01fix3_rtc_','t26_rtc_');
+fs.writeFileSync(`${dir}/private-gateway-fixture.mjs`,fixture);fs.writeFileSync(`${dir}/gateway-webrtc-probe.mjs`,probe);
+const report={recordedAt:new Date().toISOString(),task:'T26',status:'IN_PROGRESS',checkpoint:'T01-FIX3 PASS',verifiedChildOutputs:Object.keys(child.outputsHash.files).length,frozenParentVerified:true,scopePinnedBeforeAdoption:true,setupFixtureImage:'Approved manifest',testOnlyTransportMapping:'Native TURN endpoint translation in constructor and setConfiguration; behavior assertions unchanged',next:'Repeat native API admission/gateway and headed RTP tests'};
+fs.writeFileSync(`${dir}/version-resume.json`,JSON.stringify(report,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T26 resume sau T01-FIX3\n- Codex; verify child PASS/outputs/commands và frozen parent WIP/env/8 baseline trước resume. Pin/adopt đúng config và evidence checkpoint version theo duyệt người dùng. Fixture đọc manifest1.9.12; native TURN test-only mapping áp dụng constructor và setConfiguration như probe đã đạt, không SDK/grant/assertion patch. Tiếp tục admission/gateway/headed RTP; chưa mở T27.\n`);
+console.log(JSON.stringify(report));

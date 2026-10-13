@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const d='quality/evidence/T30';
+const command=JSON.parse(fs.readFileSync(d+'/codex-t30-frame-lease-policy-red-1.json'));
+assert.equal(command.exitCode,1);
+const log=fs.readFileSync(command.evidencePath,'utf8');
+assert(log.includes('connect ECONNREFUSED 127.0.0.1:55432'));
+assert(log.includes('11 failed, 11 total'));
+const review={reviewedAt:new Date().toISOString(),command,classification:'environment failure before schema creation, not valid candidate RED',schemaCreated:false,applicationChanged:false,dockerEnginePipeAbsentObserved:true,localDockerDesktopHiddenStartRequested:true,taskStatus:'IN_PROGRESS',priorPass:80};
+fs.writeFileSync(d+'/frame-lease-policy-environment-failure-1.json',JSON.stringify(review,null,2)+'\n',{flag:'wx'});
+fs.appendFileSync('../.doc/history.md',`\n- Coding and build 2 — T30 — actual frame policy environment failure ${review.reviewedAt}: command ${command.startedAt}–${command.completedAt} exit1 SHA${command.evidenceSha256}; all11 blocked before own schema creation by real ECONNREFUSED local PostgreSQL. Docker Desktop Linux engine pipe absent/no Docker processes observed. This is not valid missing-helper RED; zero control PASS claimed. Actual cleanup pool ended/prototype identity/env restored true, schemaRemoved false because creation never succeeded, no fictitious all-cleanup success. Existing installed Docker Desktop started hidden to restore authorized local test environment; readiness and retry pending. Evidence code/${d}/frame-lease-policy-environment-failure-1.json; no application mutation/current99/build9/frozen/80priorPASS unchanged/IN_PROGRESS/no Anti2/no T31.\n`);
+console.log('Actual environment failure recorded; candidate RED still pending.');

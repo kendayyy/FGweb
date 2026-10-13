@@ -1,0 +1,7 @@
+# CHAT-CRYPTO-01 rebaseline — Codex review PASS
+
+Approved direct human messages in Idea captured in authorization.json. T28 reviewed original voice scope PASS before this owner; no feature task ran concurrently. Eight live sources verified by unchanged checker. Only spec/task source hashes change, exact additive impact reviewed at T28; six other sources unchanged. All application/env bytes and historical PASS statuses, output hashes, commands, evidence and timestamps preserved. Active spec provenance adopts the approved amendment with explicit baselineAdoptions; immutable original closure remains unchanged.
+
+New order: CHATCRYPTO-DATA → BE → FE → QA → T29. Stock gate rejects skipping to T29; candidate owner PASS must pass stock DATA gate before ledger closure. Protocol/library/version, dependency setup, recovery/report and client-assisted migration decisions remain DATA prerequisites. No crypto implementation, key creation, deletion, dependency install or paid service here. Old private chat remains plaintext until migration and QA; no E2EE claim.
+
+Bootstrap recorder mistake created two new artifacts in T28 evidence after closure; neither was historical output. Exact paths adopted by this owner and final hashes sealed, with original readonly snapshot preserved and only two explicit exclusions audited. Subsequent commands use correct owner recorder. No checker relaxation or historical output rewrite.

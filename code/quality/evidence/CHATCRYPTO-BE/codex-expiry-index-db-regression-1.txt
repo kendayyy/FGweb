@@ -1,0 +1,105 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |database| packages/database/test/social-chat.test.ts (10 tests | 1 failed) 13467ms
+   ❯ T05 - Chat, Social Relations, and Forward Migration Schema (10)
+     × should preserve T04 data when applying T05 forward migration over old T04 migration and seed 5010ms
+ ❯ |database| packages/database/test/pending-uploads.test.ts (6 tests | 5 failed) 15599ms
+   ❯ durable unsent image uploads on actual PostgreSQL (6)
+     × migrates an empty schema without relaxing linked image constraints 5025ms
+     × enforces ownership/context references, WebP size and expiry boundaries 38ms
+     × rollback restores the pending image after a failed message/attachment claim 88ms
+     × two concurrent consumers cannot both claim the same draft 112ms
+     × indexes expiry selection and removes expired drafts without removing linked images 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > migrates an empty schema without relaxing linked image constraints
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ packages/database/test/pending-uploads.test.ts:49:5
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > enforces ownership/context references, WebP size and expiry boundaries
+error: insert or update on table "pending_image_uploads" violates foreign key constraint "pending_image_uploads_uploader_id_user_id_fk"
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/pending-uploads.test.ts:63:9
+     61|     });
+     62|     it('enforces ownership/context references, WebP size and expiry bo…
+     63|         await insert('draft');
+       |         ^
+     64|         await expect(insert('bad-owner', { uploader_id: 'outsider' }))…
+     65|         await expect(insert('bad-conversation', { conversation_id: 'ot…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > rollback restores the pending image after a failed message/attachment claim
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/database/test/pending-uploads.test.ts:80:104
+     78|             await client.query('ROLLBACK');
+     79|         }
+     80|         expect((await client.query(`SELECT id FROM pending_image_uploa…
+       |                                                                                                        ^
+     81|         expect((await client.query(`SELECT id FROM messages WHERE id='…
+     82|         expect((await client.query(`SELECT id FROM attachments WHERE i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > two concurrent consumers cannot both claim the same draft
+AssertionError: expected [ +0, +0 ] to deeply equal [ +0, 1 ]
+
+- Expected
++ Received
+
+  [
+    0,
+-   1,
++   0,
+  ]
+
+ ❯ packages/database/test/pending-uploads.test.ts:91:66
+     89|             await Promise.all(peers.map(peer => peer.connect()));
+     90|             const claims = await Promise.all(peers.map(peer => peer.qu…
+     91|             expect(claims.map(result => result.rowCount).sort()).toEqu…
+       |                                                                  ^
+     92|         }
+     93|         finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |database| packages/database/test/pending-uploads.test.ts > durable unsent image uploads on actual PostgreSQL > indexes expiry selection and removes expired drafts without removing linked images
+error: insert or update on table "pending_image_uploads" violates foreign key constraint "pending_image_uploads_uploader_id_user_id_fk"
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/pending-uploads.test.ts:97:108
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |database| packages/database/test/social-chat.test.ts > T05 - Chat, Social Relations, and Forward Migration Schema > should preserve T04 data when applying T05 forward migration over old T04 migration and seed
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ packages/database/test/social-chat.test.ts:464:3
+    462|   });
+    463|
+    464|   it('should preserve T04 data when applying T05 forward migration ove…
+       |   ^
+    465|     const migSchemaName = `test_t05_mig_${Date.now()}_${Math.random().…
+    466|     const migClient = new pg.Client({ connectionString: env.DATABASE_U…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  2 failed | 14 passed (16)
+      Tests  6 failed | 103 passed (109)
+   Start at  22:08:54
+   Duration  233.63s (tests 89%, import 11%)
+

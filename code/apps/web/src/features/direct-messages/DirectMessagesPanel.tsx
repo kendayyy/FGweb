@@ -1,9 +1,8 @@
+import {InitialLoading} from '../../components/ui/InitialLoading.js';
 import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, AlertCircle } from 'lucide-react';
-import { MessageDTO } from '@fg/contracts';
 import { useAuth } from '../auth/index.js';
-import { RichComposer } from '../chat/RichComposer.tsx';
-import { RichMessage } from '../chat/RichMessage.tsx';
+import { PrivateChatPane } from '../crypto/PrivateChatPane';
 import { useDirectMessages, DMState } from './useDirectMessages.ts';
 import { useDialogFocusTrap } from '../friends/useDialogFocusTrap.js';
 
@@ -33,7 +32,6 @@ function DirectMessagesPanelPresentation({
   dm,
 }: DirectMessagesPanelProps & { dm: DMState }) {
   const { user } = useAuth();
-  const [reply, setReply] = useState<MessageDTO | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const containerRef = useDialogFocusTrap<HTMLDivElement>(isOpen, () => {
@@ -58,13 +56,6 @@ function DirectMessagesPanelPresentation({
     }
   }, [isOpen, initialConversationId, setActiveConversationId]);
 
-  // Clear reply quote if conversation changes or reply belongs to different conversation
-  useEffect(() => {
-    if (reply && reply.conversationId !== dm.activeConversationId) {
-      setReply(null);
-    }
-  }, [dm.activeConversationId, reply]);
-
   if (!isOpen || !user) return null;
 
   const handleClose = () => {
@@ -87,7 +78,7 @@ function DirectMessagesPanelPresentation({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backgroundColor: 'var(--bg-overlay-heavy)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -111,7 +102,7 @@ function DirectMessagesPanelPresentation({
           minHeight: isMobile ? '360px' : '440px',
           display: 'flex',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+          boxShadow: 'var(--shadow-modal)',
         }}
       >
         {/* Sidebar / Conversation List */}
@@ -159,10 +150,10 @@ function DirectMessagesPanelPresentation({
             </div>
 
             <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
-              {dm.isLoadingConversations ? (
-                <p style={{ color: 'var(--text-quiet)', textAlign: 'center', padding: '16px' }}>Đang tải...</p>
+              {dm.isLoadingConversations && dm.conversations.length===0 ? (
+                <InitialLoading pending layout="list" label="Đang tải cuộc trò chuyện"/>
               ) : dm.conversationsError ? (
-                <div style={{ textAlign: 'center', padding: '16px', color: 'var(--color-danger)' }} role="alert">
+                <div style={{ textAlign: 'center', padding: '16px', color: 'var(--text-danger)' }} role="alert">
                   <AlertCircle size={24} style={{ marginBottom: '8px' }} />
                   <p style={{ fontSize: '13px', marginBottom: '12px' }}>
                     {dm.conversationsError.message || 'Không thể tải danh sách cuộc trò chuyện.'}
@@ -330,9 +321,9 @@ function DirectMessagesPanelPresentation({
                     <div
                       style={{
                         padding: '8px 16px',
-                        backgroundColor: 'rgba(229, 72, 77, 0.15)',
+                        backgroundColor: 'var(--bg-error-inline)',
                         borderBottom: '1px solid var(--color-danger)',
-                        color: 'var(--color-danger)',
+                        color: 'var(--text-danger)',
                         fontSize: '13px',
                         display: 'flex',
                         alignItems: 'center',
@@ -355,113 +346,15 @@ function DirectMessagesPanelPresentation({
                     </div>
                   )}
 
-                  {/* Message List */}
-                  <div
-                    style={{
-                      flex: 1,
-                      overflowY: 'auto',
-                      padding: '16px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '12px',
-                    }}
-                    data-testid="dm-message-list"
-                  >
-                    {dm.isLoadingOlderMessages ? (
-                      <p style={{ color: 'var(--text-quiet)', textAlign: 'center', fontSize: '12px' }}>Đang tải tin cũ...</p>
-                    ) : dm.olderMessagesError ? (
-                      <div style={{ textAlign: 'center', color: 'var(--color-danger)', fontSize: '12px' }} role="alert">
-                        <span>{dm.olderMessagesError.message || 'Không thể tải tin nhắn cũ.'}</span>{' '}
-                        <button
-                          type="button"
-                          className="fg-btn fg-btn-secondary"
-                          onClick={() => dm.loadOlderMessages()}
-                          style={{ minHeight: '44px', padding: '4px 12px', fontSize: '12px', marginLeft: '8px' }}
-                        >
-                          Thử lại
-                        </button>
-                      </div>
-                    ) : dm.hasOlderMessages ? (
-                      <button
-                        type="button"
-                        className="fg-btn fg-btn-secondary"
-                        onClick={() => dm.loadOlderMessages()}
-                        style={{ alignSelf: 'center', marginBottom: '8px', fontSize: '12px', minHeight: '44px', padding: '8px 16px' }}
-                      >
-                        Xem tin cũ hơn
-                      </button>
-                    ) : null}
-
-                    {dm.isLoadingMessages ? (
-                      <p style={{ color: 'var(--text-quiet)', textAlign: 'center' }}>Đang tải tin nhắn...</p>
-                    ) : dm.messagesError ? (
-                      <div style={{ textAlign: 'center', margin: 'auto', color: 'var(--color-danger)', padding: '16px' }} role="alert">
-                        <AlertCircle size={32} style={{ marginBottom: '8px' }} />
-                        <p style={{ marginBottom: '12px' }}>{dm.messagesError.message || 'Không thể tải lịch sử tin nhắn.'}</p>
-                        <button
-                          type="button"
-                          className="fg-btn fg-btn-secondary"
-                          onClick={() => dm.refetchMessages()}
-                          style={{ minHeight: '44px', padding: '6px 16px', fontSize: '13px' }}
-                        >
-                          Thử lại
-                        </button>
-                      </div>
-                    ) : dm.messages.length === 0 ? (
-                      <div style={{ textAlign: 'center', margin: 'auto', color: 'var(--text-quiet)' }}>
-                        <MessageCircle size={32} style={{ marginBottom: '8px' }} />
-                        <p>Bắt đầu cuộc trò chuyện với {activePeer.displayName}</p>
-                      </div>
-                    ) : (
-                      dm.messages.map((msg) => (
-                        <div
-                          key={msg.id}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: msg.senderId === user.id ? 'flex-end' : 'flex-start',
-                          }}
-                          data-message-id={msg.id}
-                        >
-                          <div
-                            style={{
-                              fontSize: '12px',
-                              color: 'var(--text-quiet)',
-                              marginBottom: '2px',
-                            }}
-                          >
-                            {msg.sender.displayName}
-                          </div>
-                          <RichMessage message={msg} onReply={setReply} />
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Composer */}
-                  <div style={{ padding: '12px', borderTop: '1px solid var(--border-color)' }}>
-                    <RichComposer
-                      key={`${user.id}-${dm.activeConversationId || 'none'}`}
-                      conversationId={dm.activeConversationId}
-                      disabled={dm.isSending}
-                      candidates={[activePeer]}
-                      reply={reply}
-                      onCancelReply={() => setReply(null)}
-                      onSend={async (req) => {
-                        await dm.sendMessage(req);
-                        setReply(null);
-                      }}
-                      label="Tin nhắn riêng"
-                      placeholder="Nhắn tin riêng…"
-                    />
-                  </div>
+                  <PrivateChatPane key={user.id + ':' + dm.activeConversationId} conversationId={dm.activeConversationId} actorId={user.id}
+                    participants={[{id:user.id,displayName:user.displayName},{id:activePeer.id,displayName:activePeer.displayName}]}/>
                 </>
               ) : (
                 <div style={{ margin: 'auto', textAlign: 'center', padding: '24px' }}>
-                  {dm.isLoadingConversations ? (
-                    <p style={{ color: 'var(--text-quiet)' }}>Đang tải cuộc trò chuyện...</p>
+                  {dm.isLoadingConversations && dm.conversations.length===0 ? (
+                    <InitialLoading pending layout="chat" label="Đang tải cuộc trò chuyện"/>
                   ) : dm.conversationsError ? (
-                    <div style={{ color: 'var(--color-danger)' }} role="alert">
+                    <div style={{ color: 'var(--text-danger)' }} role="alert">
                       <AlertCircle size={32} style={{ marginBottom: '8px' }} />
                       <p style={{ marginBottom: '12px' }}>
                         {dm.conversationsError.message || 'Không thể tải danh sách cuộc trò chuyện.'}

@@ -1,0 +1,31 @@
+
+Running 1 test using 1 worker
+
+(node:23268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup
+  1) tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 900
+    Received:    1128.7000732421875
+
+      66 |     await receiver.setViewportSize({width,height});await receiver.locator('.fg-rooms-stage').evaluate(stage=>{stage.scrollTop=0;});
+      67 |     await receiver.screenshot({path:`${evidence}/screenshots/${theme}-desktop-${width}.png`});
+    > 68 |     const controls=await receiver.getByRole('button',{name:'Rời cuộc gọi'}).boundingBox();expect(controls).not.toBeNull();expect(controls!.y).toBeGreaterThanOrEqual(0);expect(controls!.y+controls!.height).toBeLessThanOrEqual(height);
+         |                                                                                                                                                                                                              ^
+      69 |    }
+      70 |    for(const [width,height]of [[390,844],[360,800]]){
+      71 |     await receiver.setViewportSize({width,height});await receiver.getByTestId('mobile-tab-calls').click();await expect(receiver.getByRole('region',{name:'Nhóm gọi'})).toBeVisible();
+        at E:\FGweb\code\tests\e2e\voice.spec.ts:68:206
+
+    Error Context: .cache\t28\headed-3\voice-actual-FG-UI-native--ff99f-solated-leave-route-cleanup\error-context.md
+
+    Error Context: .cache\t28\headed-3\voice-actual-FG-UI-native--ff99f-solated-leave-route-cleanup\error-context.md
+
+
+  1 failed
+    tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup 

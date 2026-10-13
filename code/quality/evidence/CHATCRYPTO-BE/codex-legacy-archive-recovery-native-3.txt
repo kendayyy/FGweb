@@ -1,0 +1,309 @@
+(node:8964) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (24.533 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › initializes the read-only source boundary without creating a missing legacy directory
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › reads only explicitly mapped sources, with exact text/image digest and sub-millisecond cursor parity
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rejects unknown history and newly registered devices after cohort verification
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rechecks a newly banned actor after actual source-image I/O and clears rejected plaintext buffers
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › detects changed original text and image bytes rather than returning mismatched source material
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › retains candidate-bound expired native image ciphertext while sweeping unrelated orphan bytes
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › uploads only cohort-owned native image ciphertext with immutable retry and post-write authorization
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › requires explicit historical context for keys and excludes current late members or devices registered after verification
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › binds public verification to the historical cohort and deduplicates context immutably
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › wakes an original historical device through actual Socket.IO/Redis and closes invalid subscription contexts
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › authorizes historical ACK from authoritative context and preserves idempotence without acknowledging denied rows
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rejects public sender metadata belonging to another native registered device
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rejects noncanonical public digest/session encodings as invalid input without persisting a candidate
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rolls back candidate/session writes when an original recipient is banned after the real source read
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rolls back a real PostgreSQL candidate insert failure and retains the original plaintext source
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › refuses candidate preparation when a verified historical recipient is unavailable rather than shrinking the cohort
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › prepares native ciphertext idempotently and preserves source text/times without claiming reconciliation
+
+    error: the database system is starting up
+
+      39 |  async function register(user:string,deviceId:string){const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(deviceId));machines.push(machine);const outgoing=(await machine.outgoingRequests()).find(item=>item.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest,keys=JSON.parse(outgoing.body);expect((await write('devices',{deviceId,deviceKeys:keys.device_keys,oneTimeKeys:keys.one_time_keys},user)).status).toBe(201);}
+      40 |  beforeAll(async()=>{
+    > 41 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                                                                                                                                                                                                     ^
+      42 |   for(const user of ['alice','bob','outsider','leaver']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[user,user+'@example.invalid']);await pool.query('INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval \'1 day\',now(),now())',[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));}
+      43 |   await pool.query("INSERT INTO conversations(id,kind) VALUES('legacy','ROOM')");for(const user of ['alice','bob','outsider'])await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,\'legacy\',$1)',[user]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('legacy','E2EE','LEGACY_PENDING','KNOWN')");
+      44 |   fs.mkdirSync(images,{recursive:true});image=await sharp({create:{width:3,height:2,channels:3,background:'#246789'}}).webp().toBuffer();fs.writeFileSync(path.join(images,imageId+'.webp'),image);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:41:245)
+
+
+  ● Test suite failed to run
+
+    error: the database system is starting up
+
+      53 |   await pool.query('INSERT INTO attachments(id,message_id,conversation_id,url,file_name,file_size,mime_type) VALUES($1,\'msg-b\',\'legacy\',$2,\'original.webp\',$3,\'image/webp\')',[imageId,'/api/v1/attachments/'+imageId+'/content',image.length]);await pool.query("INSERT INTO mentions(id,message_id,mentioned_user_id) VALUES('source-mention','msg-b','bob')");
+      54 |  });
+    > 55 |  afterAll(async()=>{for(const machine of machines)machine.close();try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(root)){expect(fs.realpathSync(root)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),owned));fs.rmSync(root,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+         |                                                                                                                                                                  ^
+      56 |  it('initializes the read-only source boundary without creating a missing legacy directory',async()=>{
+      57 |   const original=process.env.FG_UPLOADS_DIR,missing=path.join(root,'not-created'),service=new CryptoLegacyService(app.get(ChatService));process.env.FG_UPLOADS_DIR=missing;try{await service.onModuleInit();expect(fs.existsSync(missing)).toBe(false);}finally{await service.onModuleDestroy();process.env.FG_UPLOADS_DIR=original;}
+      58 |  });
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:55:162)
+
+Test Suites: 1 failed, 1 total
+Tests:       19 failed, 19 total
+Snapshots:   0 total
+Time:        26.615 s, estimated 42 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

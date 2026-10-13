@@ -1,0 +1,97 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:4564) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (37.727 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › lets only the sole admin read explicitly submitted evidence and commits metadata-only audit before response
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      254 |   adminReport=await retainedReport('admin-read');const prior=process.env.ADMIN_USER_IDS;process.env.ADMIN_USER_IDS='outsider';
+      255 |   try{
+    > 256 |    expect((await readReport(adminReport.reportId,cookies.alice)).status).toBe(403);expect((await request(base).post(`/api/v1/crypto/reports/${adminReport.reportId}/read`).set('Origin',origin).send({})).status).toBe(401);
+          |                                                                          ^
+      257 |    const result=await readReport(adminReport.reportId);expect(result.status).toBe(201);expect(result.headers['cache-control']).toBe('no-store');expect(result.body).toEqual({id:adminReport.reportId,selectedMessages:[{evidenceId:adminReport.evidence.id,messageId:ids[0],conversationId:'dm',text:'disclosed-text-0',reason:'selected-fixture-reason',source:'USER_DISCLOSED',authenticity:'USER_SUPPLIED_UNVERIFIED',reportAttachmentIds:[adminReport.draft.id]}]});
+      258 |    const audit=(await pool.query('SELECT * FROM chat_crypto_report_audit WHERE report_id=$1',[adminReport.reportId])).rows;expect(audit).toHaveLength(1);expect(audit[0].actor_id).toBe('outsider');expect(audit[0].action).toBe('READ_REPORT');for(const value of ['disclosed-text','selected-fixture-reason','original-undisclosed'])expect(JSON.stringify(audit)).not.toContain(value);
+      259 |    expect((await request(base).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.outsider)).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:256:74)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › audits selected report-image access and denies foreign or private source attachments
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      264 |   try{
+      265 |    const before=(await pool.query('SELECT count(*) FROM chat_crypto_report_audit')).rows[0].count;expect((await get(imageReceipt.id)).status).toBe(404);expect((await get('unselected')).status).toBe(404);expect((await pool.query('SELECT count(*) FROM chat_crypto_report_audit')).rows[0].count).toBe(before);
+    > 266 |    const result=await get(adminReport.draft.id);expect(result.status).toBe(200);expect(result.headers['content-type']).toBe('image/webp');expect(result.headers['cache-control']).toBe('no-store');const meta=await sharp(result.body).metadata();expect(meta.format).toBe('webp');expect(meta.exif).toBeUndefined();expect((await pool.query("SELECT id FROM chat_crypto_report_audit WHERE report_id=$1 AND action='READ_IMAGE' AND attachment_id=$2",[adminReport.reportId,adminReport.draft.id])).rowCount).toBe(1);
+          |                                                                       ^
+      267 |   }finally{if(previous===undefined)delete process.env.ADMIN_USER_IDS;else process.env.ADMIN_USER_IDS=previous;}
+      268 |  });
+      269 |  it('denies multiple admin IDs, revoked grants, bans, absent reader custody and expiry without disclosures/audits',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:266:71)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies multiple admin IDs, revoked grants, bans, absent reader custody and expiry without disclosures/audits
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      270 |   const prior=process.env.ADMIN_USER_IDS;const before=(await pool.query('SELECT count(*) FROM chat_crypto_report_audit')).rows[0].count;
+      271 |   try{
+    > 272 |    for(const grant of ['alice,outsider','alice','']){process.env.ADMIN_USER_IDS=grant;expect((await readReport(adminReport.reportId)).status).toBe(403);}
+          |                                                                                                                                               ^
+      273 |    process.env.ADMIN_USER_IDS='outsider';await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES('read-ban','alice','outsider','BAN','fixture')");try{expect((await readReport(adminReport.reportId)).status).toBe(403);}finally{await pool.query("DELETE FROM admin_actions WHERE id='read-ban'");}
+      274 |    const saved=readOptions.transit;readOptions.transit=undefined as unknown as OpenBaoTransit;try{expect((await readReport(adminReport.reportId)).status).toBe(503);}finally{readOptions.transit=saved;}
+      275 |    const expired=await retainedReport('read-expired');await expire(expired.evidence.id);expect((await readReport(expired.reportId)).status).toBe(404);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:272:143)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › fails closed with no plaintext response when native decrypt custody or PostgreSQL audit insertion fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 404
+
+      280 |   const prior=process.env.ADMIN_USER_IDS;process.env.ADMIN_USER_IDS='outsider';const before=(await pool.query('SELECT count(*) FROM chat_crypto_report_audit')).rows[0].count,saved=readOptions.transit;
+      281 |   try{
+    > 282 |    readOptions.transit=options.transit;try{expect((await readReport(adminReport.reportId)).status).toBe(503);}finally{readOptions.transit=saved;}
+          |                                                                                                    ^
+      283 |    await pool.query("CREATE FUNCTION report_audit_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'fixture audit fault'; END $$");await pool.query('CREATE TRIGGER report_audit_fault BEFORE INSERT ON chat_crypto_report_audit FOR EACH ROW EXECUTE FUNCTION report_audit_fault()');
+      284 |    try{const result=await readReport(adminReport.reportId);expect(result.status).toBe(500);expect(JSON.stringify(result.body)).not.toContain('disclosed-text');}finally{await pool.query('DROP TRIGGER report_audit_fault ON chat_crypto_report_audit');await pool.query('DROP FUNCTION report_audit_fault()');}
+      285 |    expect((await pool.query('SELECT count(*) FROM chat_crypto_report_audit')).rows[0].count).toBe(before);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:282:100)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 20 passed, 24 total
+Snapshots:   0 total
+Time:        38.167 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"a559fe2aa43d49dda180de4cc31189df","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

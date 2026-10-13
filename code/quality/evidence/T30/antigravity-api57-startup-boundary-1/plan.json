@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "planId": "antigravity-api57-startup-boundary-1",
+  "target": "T30",
+  "nativeAcceptance": false,
+  "rationale": "Investigate actual gateway startup execution boundary following root loader-control-review1.json (isolated imports ~6.9s/5.5s succeed, but real gateway readiness timed out with empty logs before HTTP checks). Minimal wrapper diagnoses whether execution halts during process entry, observer preload evaluation, or gateway-main.js evaluation in live containers.",
+  "hypothesis": "Wrapping container entry in a diagnostic script with strict safe stdout markers isolates the exact phase where execution stalls (process entry -> preload evaluation -> gateway-main.js evaluation) without modifying gateway-main.js, without altering module loading order, and without wrapping Pool, query, RPC, or HTTP methods.",
+  "sourceAnchors": {
+    "gatewayMain": {
+      "path": "apps/api/dist/modules/calls/gateway-main.js",
+      "sha256": "e0a44649044b3cfe3d040b3d74a409bbc3eb877e7adc96195e91637aa114a4ad"
+    },
+    "observerPreload": {
+      "path": "quality/evidence/T30/gateway-observer-preload-reviewed2.cjs",
+      "sha256": "3dafab5f83009e77df88b7ae6dd4229e6bce657ca2a243cf7a3ae1ec23ab3729"
+    },
+    "originalHelper": {
+      "path": "quality/evidence/T30/private-gateway-db-bridge-observer-reviewed1.mjs",
+      "sha256": "a265e42ad94d0601ec2c15115674531479a1f33c99ada2a98e68138040514255"
+    },
+    "originalFixtureServer": {
+      "path": "quality/evidence/T30/fixture-server-api57-db-bridge-reviewed1.mjs",
+      "sha256": "cf3cd4f2d9f17a4241664e1905d74cc0c768111881e0bbc2024b44b64015cdbf"
+    },
+    "startupWrapper": {
+      "path": "quality/evidence/T30/antigravity-api57-startup-boundary-1/startup-entry.cjs"
+    },
+    "proposedHelper": {
+      "path": "quality/evidence/T30/antigravity-api57-startup-boundary-1/private-gateway-db-bridge-startup-reviewed1.mjs"
+    },
+    "proposedFixtureServer": {
+      "path": "quality/evidence/T30/antigravity-api57-startup-boundary-1/fixture-server-api57-db-bridge-reviewed1.mjs"
+    }
+  },
+  "changes": [
+    {
+      "file": "quality/evidence/T30/private-gateway-db-bridge-startup-reviewed1.mjs",
+      "description": "Add readonly mount of startup wrapper and replace node launch to execute wrapper with same input.json argument",
+      "before": "  const preloadMount=path.resolve(root,'quality/evidence/T30/gateway-observer-preload-reviewed2.cjs');\n  const gateway=createDirectGateway({docker,containers,id,network,args:['create','--pull=never','--label',`fg-owner=t30-gateway-${id}`,'--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${preloadMount},target=/gateway/preload.cjs,readonly`,'--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','-r','/gateway/preload.cjs','/gateway/app/gateway-main.js','/gateway/input.json']});",
+      "after": "  const preloadMount=path.resolve(root,'quality/evidence/T30/gateway-observer-preload-reviewed2.cjs');\n  const startupMount=path.resolve(root,'quality/evidence/T30/startup-entry-reviewed1.cjs');\n  const gateway=createDirectGateway({docker,containers,id,network,args:['create','--pull=never','--label',`fg-owner=t30-gateway-${id}`,'--name',`fg-gateway-${id}`,'--network',network,'--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user','node','-p','127.0.0.1::7883','--mount',`type=bind,source=${preloadMount},target=/gateway/preload.cjs,readonly`,'--mount',`type=bind,source=${startupMount},target=/gateway/startup-entry.cjs,readonly`,'--mount',`type=bind,source=${path.resolve(root,'apps/api/dist/modules/calls')},target=/gateway/app,readonly`,'--mount',`type=bind,source=${path.resolve(root,'node_modules')},target=/gateway/node_modules,readonly`,'--mount',`type=bind,source=${path.resolve(dir,'gateway.json')},target=/gateway/input.json,readonly`,nodeImage,'node','/gateway/startup-entry.cjs','/gateway/input.json']});"
+    },
+    {
+      "file": "quality/evidence/T30/fixture-server-api57-db-bridge-reviewed1.mjs",
+      "description": "Update helper import to point to private-gateway-db-bridge-startup-reviewed1.mjs",
+      "before": "import {startGatewayFixture} from './private-gateway-db-bridge-observer-reviewed1.mjs';",
+      "after": "import {startGatewayFixture} from './private-gateway-db-bridge-startup-reviewed1.mjs';"
+    }
+  ],
+  "wrapperInvariants": {
+    "stdoutPrefix": "[FG_GATEWAY_STARTUP] ",
+    "maxRows": 8,
+    "maxRowBytes": 1024,
+    "writeSyncCompleteBytes": true,
+    "stages": ["entry", "preload", "main"],
+    "types": ["entry", "begin", "end"],
+    "allowedCodes": ["MODULE_NOT_FOUND", "SYNTAX_ERROR", "TYPE_ERROR", "STARTUP_FAILED"],
+    "loadingOrder": ["preload", "main"],
+    "argv2Preserved": "/gateway/input.json",
+    "rethrowExact": true,
+    "noFakeReady": true,
+    "readyLogLocation": "gateway-main.js listen callback (console.log('Private media admission gateway ready'))",
+    "httpReadinessPreserved": "40 iterations * 250ms fetch http://127.0.0.1:${port}/health"
+  },
+  "reversalByteEquality": {
+    "originalHelperReverseByteExact": true,
+    "fixtureOnlyImportChanged": true
+  }
+}

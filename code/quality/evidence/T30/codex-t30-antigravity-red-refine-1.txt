@@ -1,0 +1,43 @@
+# FG T30 — Báo cáo đề xuất RED hoàn thiện vòng 3 (`antigravity-red-refine-1`)
+
+Đã bảo toàn nguyên vẹn toàn bộ các tệp tại `antigravity-red-1` và `antigravity-red-review-1`. Đề xuất tinh chỉnh hoàn thiện duy nhất được tạo tại `code/quality/evidence/T30/antigravity-red-refine-1/**` theo đúng yêu cầu:
+
+---
+
+## 1. Đường dẫn các tệp đề xuất
+
+1. [apps/web/test/live-viewer.test.tsx](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-refine-1/apps/web/test/live-viewer.test.tsx): Đề xuất tệp kiểm thử DOM Vitest hoàn chỉnh duy nhất, không tạo bản sao ở gốc thư mục.
+2. [PLAN.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-refine-1/PLAN.md): Kế hoạch kiến trúc và giao diện rút gọn, phản ánh chính xác ranh giới thực thi.
+
+---
+
+## 2. Chi tiết các điểm đã tinh chỉnh & khắc phục
+
+### 2.1 Phân biệt `TrackUnpublished` vs `TrackUnsubscribed` & `ParticipantDisconnected`
+- **Thêm sự kiện `TrackUnpublished` vào mock**: Xóa publication khỏi `peer.trackPublications` rồi bắn `RoomEvent.TrackUnpublished(pub, peer)` đúng chữ ký LiveKit SDK. Đây là sự kiện duy nhất đại diện cho việc người phát thực sự dừng chia sẻ màn hình, kích hoạt cơ chế tự động chuyển fallback sang luồng còn lại hoặc về trạng thái chờ rỗng.
+- **Tách biệt bài test `TrackUnsubscribed`**: Khi chuyển đổi luồng (ví dụ từ Linh sang Huy), `TrackUnsubscribed` bắn ra cho luồng Linh chỉ gỡ video element khỏi stage nhưng **tuyệt đối không xóa luồng Linh khỏi selector**. Cả 2 nút chọn Linh và Huy vẫn tồn tại trên selector để người dùng có thể bấm xem lại bất cứ lúc nào.
+- **Sự kiện `ParticipantDisconnected`**: Xóa toàn bộ luồng thuộc về người tham gia đó và kích hoạt fallback nếu đang xem luồng của họ.
+
+### 2.2 Sửa lỗi timing claim trễ và bổ sung bài test capture trễ
+- **Bài test claim trễ sau khi unmount**: Chờ cho request `fetch('/screen-share/claim')` thực sự được phát đi và ghi nhận vào `requests` trước khi gọi `view.unmount()`. Sau đó mới giải phóng `resolveClaim` thành 201; kiểm tra track bị dừng, giải phóng đúng 1 lần (`release` count = 1), không publish lên Room.
+- **Bài test capture trễ độc lập**: Unmount component khi `getDisplayMedia` đang pending; sau khi unmount mới giải phóng stream; kiểm tra track lập tức bị dừng (`mockTrack.stop()`), số lượt claim = 0, số lượt release = 0, không publish. Đảm bảo ranh giới chống rò rỉ quota và stream hoàn hảo.
+
+### 2.3 Dọn dẹp session và khôi phục môi trường an toàn
+- Trong `afterEach`, gọi `await act(async () => { await session?.disconnect(); })` để dọn dẹp triệt để `MediaSession`, gỡ toàn bộ listeners trên Room mock, chống rò rỉ state xuyên suốt các ca test.
+- Lưu và khôi phục an toàn các biến toàn cục trình duyệt (`navigator.mediaDevices`, `navigator.userAgent`, `window.innerWidth`).
+
+### 2.4 Loại bỏ `any`, tuân thủ nghiêm ngặt ESLint và SDK Types
+- Thay thế toàn bộ kiểu `any` bằng các interface mock tối thiểu rõ ràng (`MockRemoteTrack`, `MockTrackPublication`, `MockRemoteParticipant`, `MockLocalParticipant`) hoặc `unknown` với narrow cast.
+- Loại bỏ toàn bộ tham số, biến và import không sử dụng, khớp với `eslint.config.js`.
+- Tất cả fixture đều khởi tạo qua `CallParticipantSchema.parse`, `CallJoinSchema.parse`, `UserSummarySchema.parse` với `mediaIdentity` chuẩn UUID v4.
+
+### 2.5 Kiểm tra tính độc lập của luồng âm thanh cuộc gọi
+- Bổ sung ca test xác minh độc lập: Remote audio track được auto-subscribe bởi `createMediaSession` baseline và gắn vào `audioRoot`. Khi chuyển đổi luồng màn hình hoặc unpublish màn hình, luồng âm thanh trên `audioRoot` hoàn toàn không bị ảnh hưởng và vẫn duy trì `isSubscribed: true`.
+
+### 2.6 Kiểm tra linh hoạt ràng buộc 720p30
+- Helper `matchesConstraint` chấp nhận cả dạng số nguyên thủy (number) lẫn object (`{ ideal: ... }`, `{ max: ... }`), kiểm tra chính xác chiều rộng 1280, chiều cao 720, tốc độ khung hình 30fps mà không áp đặt cấu trúc nội bộ cứng nhắc.
+- Bảo toàn kiểm tra gọi `getDisplayMedia` đồng bộ ngay trong tick sự kiện click trước bất kỳ lệnh `await` nào.
+
+---
+
+*Ghi chú: Đề xuất đã sẵn sàng để Codex áp dụng vào `apps/web/test/live-viewer.test.tsx` và chạy RED kiểm chứng. Sau khi có kết quả RED, Antigravity sẽ tiến hành triển khai mã nguồn chi tiết.*

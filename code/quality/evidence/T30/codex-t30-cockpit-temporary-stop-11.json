@@ -1,0 +1,10 @@
+{
+  "command": "pwsh -NoProfile -Command $p = Get-Process -Id 64372 -ErrorAction Stop; if ($p.Path -ne 'C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe') { throw 'Unexpected cockpit identity' }; $v = [ordered]@{ at=[DateTime]::UtcNow.ToString('o'); processId=$p.Id; executable=$p.Path; userAuthorizedTemporaryClose=$true }; $v | ConvertTo-Json | Set-Content -LiteralPath 'quality/evidence/T30/cockpit-temporary-close11.json' -Encoding utf8NoBOM; Stop-Process -Id $p.Id -ErrorAction Stop; $p.WaitForExit(); if (Get-Process -Id 64372 -ErrorAction SilentlyContinue) { throw 'Cockpit close not confirmed' }; Write-Output 'Exact authorized Cockpit process closed.'",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-11T19:40:33.462Z",
+  "completedAt": "2026-10-11T19:40:35.232Z",
+  "exitCode": 1,
+  "signal": null,
+  "evidencePath": "quality/evidence/T30/codex-t30-cockpit-temporary-stop-11.txt",
+  "evidenceSha256": "b49b344acd8c36f61bdeb1b89bf8c2bc7fef6ed4ed931b96d0ffe382d394ce6a"
+}

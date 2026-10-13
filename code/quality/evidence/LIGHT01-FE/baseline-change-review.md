@@ -1,0 +1,9 @@
+# Late GAME-LOGO-01 amendment
+
+At14:45Z final audit failed because spec/design/task changed after the successful14:42Z eight-source audit. No checker or baseline was weakened, no documents reverted. Changes only add logo handoff content; current theme spec15/design12 acceptance and all five mockups remain unchanged. The frontend rule additionally records the logo request. Assets remain in .doc/game-logos and are not production assets yet.
+
+Trusted user authorization confirmed by read_thread (not a received agent instruction): task **Idea**, thread01a114a3-ab20-70e2-b020-db31d489bffd, user turn01a116cd-d5f8-72d1-9284-28178d493aec: “bản kiếm các logo của các game gắn vào đi”. No message was sent to that task. Its documented handoff defers logo implementation until LIGHT01-FE PASS and requires reviewed rebaseline/task scope, so no logo code or parallel task was started here.
+
+All166 unit/component and5 headed tests, types/lint/build and earlier frozen-output audit genuinely passed against the approved current-theme implementation. These results are preserved. The later failing baseline audit is preserved too; it supersedes any statement that the workspace baseline is still aligned now. Required light appearance review and formal migration of this approved future-feature amendment remain before overall task closure/next strict gate. Do not mark PASS from the earlier audit, blindly update manifest hashes or undo user-requested documents.
+
+Process ruling for resume: review the exact additive docs delta, record old/new hashes and preserved historical owners/evidence, and resolve migration timing explicitly in the owning metadata step. Logo assets/usage/fallbacks and actual integration acceptance belong to its later frontend checkpoint; they are not theme acceptance and not silently completed here.

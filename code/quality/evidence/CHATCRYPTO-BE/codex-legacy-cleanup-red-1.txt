@@ -1,0 +1,30 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:16900) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (96.808 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      293 |      await withReaderClone(async(pool,base,readerApp)=>{
+      294 |       type CleanResult={operationId:string;conversationId:string;phase:'RECONCILED';membershipRevision:number;nextLiveRevision:number;sourceCount:number;attachmentCount:number};type Cleaner=CryptoLegacyService&{cleanupStagedReconciliation:(actor:{userId:string;sessionId:string},id:string,input:unknown)=>Promise<CleanResult>};const cleaner=readerApp.get(CryptoLegacyService) as Cleaner,actor={userId:'alice',sessionId:'alice-session'},sourcePath=path.join(process.env.FG_UPLOADS_DIR!,imageId+'.webp'),cipherPath=path.join(process.env.FG_CRYPTO_OBJECTS_DIR!,String(imageDraft!.object_key)),cleanup=()=>cleaner.cleanupStagedReconciliation(actor,'legacy',gateInput);
+    > 295 |       expect(typeof cleaner.cleanupStagedReconciliation).toBe('function');await cleaner.convertStagedReconciliation(actor,'legacy',gateInput);expect(sourcePath).not.toBe(path.join(images,imageId+'.webp'));expect(fs.readFileSync(sourcePath)).toEqual(image);expect(fs.readFileSync(cipherPath)).toEqual(imageBytes);
+          |                                                          ^
+      296 |       process.env.FG_LEGACY_SOURCE_CLEANUP='disabled';const disabled=new CryptoLegacyService(readerApp.get(ChatService)) as Cleaner;await disabled.onModuleInit();process.env.FG_LEGACY_SOURCE_CLEANUP='enabled';try{await expect(disabled.cleanupStagedReconciliation(actor,'legacy',gateInput)).rejects.toMatchObject({status:503});expect(fs.existsSync(sourcePath)).toBe(true);}finally{await disabled.onModuleDestroy();}
+      297 |       const wrongSource=Buffer.from(image);wrongSource[wrongSource.length-1]^=1;fs.writeFileSync(sourcePath,wrongSource);try{await expect(cleanup()).rejects.toMatchObject({status:409});expect(fs.readFileSync(sourcePath)).toEqual(wrongSource);expect(fs.readFileSync(cipherPath)).toEqual(imageBytes);}finally{fs.writeFileSync(sourcePath,image);}
+      298 |       const preserved=sourcePath+'.fixture-preserved';fs.renameSync(sourcePath,preserved);fs.mkdirSync(sourcePath);try{await expect(cleanup()).rejects.toMatchObject({status:503});expect(fs.lstatSync(sourcePath).isDirectory()).toBe(true);}finally{fs.rmdirSync(sourcePath);fs.renameSync(preserved,sourcePath);}
+
+      at test/chat-crypto-legacy.integration.spec.ts:295:58
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:46:218)
+      at test/chat-crypto-legacy.integration.spec.ts:293:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:100:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:164:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        97.261 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

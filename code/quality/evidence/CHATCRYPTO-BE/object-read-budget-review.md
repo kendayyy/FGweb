@@ -1,0 +1,7 @@
+# Opaque object read byte-budget review (partial)
+
+CHATCRYPTO-BE IN_PROGRESS. object-read-budget-red-1 exit1,5/6: actual call-through lstat then owned growth beyond5MiB returned oversized buffer. Replace unbounded handle.readFile with actual opened regular-file/size/device/inode binding, bounded original size+1 allocation/reads, final handle/path size/identity/canonical path checks and zeroed rejected buffers/closed handle. Explicit private5MiB and Transit8MiB budgets remain; no server image pixel/decryption validation claim.
+
+object-read-budget-green-1 exit0,6/6; object-read-budget-boundary-1 exit0,9/9 SHA6ae5326a8c70cc4099d24340df1043d302c930922de20ec013dd7b3eb81cd553. Real handle.read call-through observer grows/truncates/replaces owned file after first real read; all denied with backing buffers≤original64+1/zeroed and total requested bytes≤66. Existing opaque roundtrip/no overwrite/junction/path and5/8MiB cases retained. This bounds object-store read memory; aggregate user/session ingestion quotas and filesystem orphan enumeration/performance remain separate review items. Digest/client AEAD and service post-I/O ACL checks stay authoritative.
+
+API build1/lint55 exit0. custody-object-budget-regression-1 ended21:18:01 +07 exit0,267/267/17 suites SHA d397781f7c45e7a2aa086166e0228d7296e5864098843c284b0a97c6bc8f77b7; actual native image/report/backup/rotation/role/SDK/realtime preserved. Fresh audit pending. Main/production unchanged, no overall PASS.

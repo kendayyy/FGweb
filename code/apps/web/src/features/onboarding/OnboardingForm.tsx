@@ -1,3 +1,4 @@
+import {GameLogo} from '../../components/ui/GameLogo.js';
 import React, { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { GameTitle, GameTitleSchema, OnboardingRequest } from '@fg/contracts';
@@ -212,7 +213,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ defaultDisplayNa
                     disabled={isSubmitting}
                     style={{ width: '18px', height: '18px', accentColor: 'var(--color-action)' }}
                   />
-                  <span>{game}</span>
+                  <GameLogo game={game} decorative/><span>{game}</span>
                 </label>
               );
             })}

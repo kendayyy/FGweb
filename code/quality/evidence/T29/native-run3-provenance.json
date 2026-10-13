@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-10-10T16:25:05.810Z",
+  "runner": "quality/evidence/T29/headed-native-policy-3.mjs",
+  "sha256": "d9c67a00bd464517dcafb1558764873353824bf69c0d3cd5b95db4a3229fb959",
+  "redEvidence": {
+    "path": "quality/evidence/T29/codex-t29-headed-native-2.json",
+    "sha256": "030d3fdd93097d8232c314042f6d77122a392a084f09413acb05c8def1b8b71b"
+  },
+  "reason": "Native2 passed actual3 SFU screen tracks/quota and release with unexpired stale privileged JWT reconnect. Later native admin observation incorrectly re-verified original60s JWT to obtain participant identity; expired observation token caused JWTExpired. Cache verified identity immediately at original join; native admin reads use that identity, never client expired JWT. Actual replay still explicitly verifies fresh issued pre-revocation tokens before reconnect. Rethrow sanitized failure message without JWT decoded payload. Assertions/timeouts/server source unchanged.",
+  "nativeAcceptancePending": true
+}

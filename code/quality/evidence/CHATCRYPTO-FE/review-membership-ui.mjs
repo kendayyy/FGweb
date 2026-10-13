@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/CHATCRYPTO-FE', path = 'apps/web/src/features/rooms/RoomsPage.tsx';
+const hash = value => createHash('sha256').update(value).digest('hex');
+const ledgerBytes = fs.readFileSync('quality/tasks.json', 'utf8'), ledger = JSON.parse(ledgerBytes), task = ledger.tasks.find(row => row.id === 'CHATCRYPTO-FE'); assert.equal(task.status, 'IN_PROGRESS');
+const bytes = fs.readFileSync(path), beforePath = `${dir}/membership-ui-before.json`, originalPath = `${dir}/membership-ui-original.tsx`, reviewPath = `${dir}/membership-ui-scope-review.md`;
+fs.writeFileSync(originalPath, bytes, { flag: 'wx' });
+fs.writeFileSync(beforePath, JSON.stringify({ recordedAt: new Date().toISOString(), files: { [path]: hash(bytes) }, rows: Object.fromEntries(ledger.tasks.filter(row => row.id !== task.id).map(row => [row.id, hash(JSON.stringify(row))])), gateRebaseline: task.gateRebaseline }, null, 2) + '\n', { flag: 'wx' });
+fs.writeFileSync(reviewPath, '# Group membership UI review before edit\n\nCurrent room member metadata can lag an actual join/kick. A successful self crypto state followed by403 for an obsolete peer key query must not be confused with loss of own room access. Native client will recheck current self state after this403; only genuine current self denial clears the room. Otherwise request actual parent member metadata refresh and keep drafts. Add one room callback that refetches existing authorized room member metadata; no actor/helper/admin/session bypass or plaintext fallback. Preserve pending draft through member change but use a new public send transaction after changed recipients, and suppress old async completion clearing new recipient-scope drafts. Capture exact current RoomsPage before edit, preserve existing scope/old PASS records/checker. New native HTTP and actual headed group membership evidence required before ownership pin/acceptance. Ban producer remains at T37 and will not be simulated as integrated.\n', { flag: 'wx' });
+task.approvedScopeAmendments.push({ source: reviewPath, reason: 'Fresh actual membership metadata after stale peer denial, preserving own ACL and drafts', paths: [path] });
+task.evidencePaths = [...new Set([...task.evidencePaths, beforePath, originalPath, reviewPath])]; assert.equal(fs.readFileSync('quality/tasks.json', 'utf8'), ledgerBytes); fs.writeFileSync('quality/tasks.json', JSON.stringify(ledger, null, 2) + '\n');
+console.log(JSON.stringify({ preEditReview: true, path, originalSha256: hash(bytes), mainMutation: false, task: task.id }));

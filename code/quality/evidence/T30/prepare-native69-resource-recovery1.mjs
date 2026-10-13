@@ -1,0 +1,6 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';const d='quality/evidence/T30';
+assert(!fs.existsSync(d+'/supabase-test-resource54.json'),'Failed resource54 must have made no mutation');
+const failed=JSON.parse(fs.readFileSync(d+'/codex-t30-supabase-temporary-stop-54.json'));assert.equal(failed.exitCode,1);
+fs.writeFileSync(d+'/supabase-test-resource55.mjs',fs.readFileSync(d+'/supabase-test-resource54.mjs','utf8').replaceAll('resource54','resource55'),{flag:'wx'});
+fs.writeFileSync(d+'/run-native69-build14-resource2.mjs',fs.readFileSync(d+'/run-native69-build14-resource1.mjs','utf8').replaceAll('resource54','resource55').replaceAll('stop-54','stop-55').replaceAll('restore-54','restore-55'),{flag:'wx'});
+for(const label of ['t30-docker-desktop-start-1','t30-fg-services-start-1']){const r=JSON.parse(fs.readFileSync(d+'/codex-'+label+'.json'));assert.equal(r.exitCode,0);fs.appendFileSync('../.doc/history.md','\n- Coding and build 2 — T30 — '+r.startedAt+'–'+r.completedAt+' exit0: '+label+'; actual Docker daemon unavailable before resource54 inspect; no saved resource54/no container mutation/no native69 test started. Restored Docker and only existing two FG database/cache services, no cockpit startup. Evidence code/'+d+'/codex-'+label+'.json; fresh resource55 retry pending/IN_PROGRESS/noT31.\n');}

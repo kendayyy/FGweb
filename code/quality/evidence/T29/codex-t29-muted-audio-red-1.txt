@@ -1,0 +1,9 @@
+{"status":"FAILED","passedChecks":2,"schemaRemoved":true,"containersRemoved":true,"networkRemoved":true}
+file:///E:/FGweb/code/quality/evidence/T29/headed-muted-audio-probe-1.mjs:30
+}catch(error){report.status='FAILED';report.failure={name:error.name,message:String(error.message).replaceAll(env.LIVEKIT_API_SECRET,'[REDACTED]').replaceAll(env.DATABASE_URL,'[REDACTED]').replace(/\beyJ[A-Za-z0-9_.-]+\b/g,'[JWT REDACTED]')};if(activePage&&!activePage.isClosed())try{await stream('T29 native assertion thất bại',report.failure.message.slice(0,450),'FAILED');}catch{report.failureCaptureUnavailable=true;}throw new Error(report.failure.name+': '+report.failure.message);}
+                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+
+Error: AssertionError: Muted microphone bypassed by labeling its native audio SCREEN_SHARE_AUDIO
+    at file:///E:/FGweb/code/quality/evidence/T29/headed-muted-audio-probe-1.mjs:30:428
+
+Node.js v24.21.0

@@ -1,0 +1,196 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:31228) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (40.067 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › requires member session and owned active device, rejects plaintext legacy subscriptions for E2EE
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › broadcasts committed native ciphertext via opaque Redis IDs and recovers the same DTO through REST
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › wakes only the addressed device through durable Redis metadata and keeps REST sync authoritative
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › recovers an offline device from REST after a missed wakeup and reconnects without replaying plaintext
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds pending bus deliveries during a burst while REST remains the recovery path
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › filters a delayed old event for a new member while retaining their subscription for new ciphertext
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › applies the same subscription quota across encrypted and legacy channels
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › stops delivery and rejects resubscription after device revocation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rejects an already subscribed banned session and permits a fresh subscription after unban
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › does not retain a disconnected socket whose subscription was waiting on a real epoch lock
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rechecks membership and durable logout on an already connected socket
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      60 |    const device=user==='alice'?'A':'B',machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId(user)),new sdk.DeviceId(device));machines.set(user,machine);
+      61 |    const upload=(await machine.outgoingRequests()).find(r=>r.type===sdk.RequestType.KeysUpload) as sdk.KeysUploadRequest;const data=JSON.parse(upload.body);
+    > 62 |    expect((await post('devices',{deviceId:device,deviceKeys:data.device_keys,oneTimeKeys:data.one_time_keys},user)).status).toBe(201);
+         |                                                                                                                             ^
+      63 |   }
+      64 |   bus=new Redis(env.REDIS_URL,{lazyConnect:true,maxRetriesPerRequest:1});await bus.connect();bus.on('message',(_channel,id)=>published.push(id));await bus.subscribe('fg:chat:'+createHash('sha256').update(url.href).digest('hex').slice(0,24));
+      65 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:62:125)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 11 total
+Snapshots:   0 total
+Time:        40.497 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

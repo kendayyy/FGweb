@@ -1,0 +1,40 @@
+The proposal files for the `CallsService` shared read-lock mode, integration concurrency regressions, real database principal security tests, and restored canonical native fixtures have been written exclusively to [`quality/evidence/T30/antigravity-call-read-lock-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1):
+
+### 1. Proposed Files & SHA-256 Hashes
+
+| Proposal Path | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts) | `eabe88b1597df4c85f9fc76e871f00213107e87b3a942ad546e0578846c410ea` | Implements `type LockMode = 'FOR UPDATE' \| 'FOR SHARE';`. Every mutation path (`create`, `join`, `leave`, `selfMic`, `withControlGroup`, `sessionDeleted`) retains default **`'FOR UPDATE'`** locks across rooms, users, and groups. Only [`list`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L62) and [`participants`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L83) pass **`'FOR SHARE'`** to internal helpers [`room`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L40) and [`controlsGroup`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L66). |
+| [`quality/evidence/T30/antigravity-call-read-lock-1/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/t30-signaling-throughput.integration.spec.ts) | `68d3c2fd68c0a4f1178d2a4c84263f0f3394931f31ccddf4f0f925d8a2018233` | Preserves all 15 existing test cases verbatim. Adds 2 concurrent real PG tests for [`CallsService.list`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L62) / [`participants`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L83) alongside gateway runtime locks and 4 negative principal authorization security tests (**21 total executed test cases**). |
+| [`quality/evidence/T30/antigravity-call-read-lock-1/private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/private-gateway-shaped-fixture.mjs) | `d891dbd9f976a5ea39de29dc842ae9826f782a57efa10a656bf1822d28d3696f` | Restored to canonical build mounting `apps/api/dist/modules/calls` rather than temporary observation copy. |
+| [`quality/evidence/T30/antigravity-call-read-lock-1/fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/fixture-server-shaped.mjs) | `bfd4c5fe5131ea69b4240858e1249bdfe9663e7142b65ede609ee9951f06b3a2` | Restored to canonical state with diagnostic observation hook imports and pool wrapper invocations removed. |
+| [`quality/evidence/T30/antigravity-call-read-lock-1/review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/review-notes.md) | `1138dcb815a4458f5a760e70723aa8298b09c61170746d2249468d990e2114f0` | Complete technical documentation of changes, call sites, invariants, and test coverage. |
+
+---
+
+### 2. Changed Call Sites in `calls.service.ts`
+
+- **Line 40 ([`room`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L40))**: Signature updated to `room(db: PoolClient, id: string, user: string, session: string, extra: string[] = [], mode: LockMode = 'FOR UPDATE')`. Executes `SELECT id FROM rooms WHERE id=ANY($1::text[]) ORDER BY id ${lockClause}` and `SELECT id FROM "user" WHERE id=$1 ${lockClause}` (`FOR UPDATE` by default, or `FOR SHARE` when specified).
+- **Line 62 ([`list`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L62))**: Calls `await this.room(db, roomId, user, session, [], 'FOR SHARE');`.
+- **Line 66 ([`controlsGroup`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L66))**: Signature updated to `controlsGroup(db: PoolClient, id: string, user: string, session: string, mode: LockMode = 'FOR UPDATE')`. Passes `mode` to `this.room(...)`, and executes `SELECT * FROM call_groups WHERE id=$1 ${lockClause}`.
+- **Line 83 ([`participants`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L83))**: Calls `await this.controlsGroup(db, id, user, session, 'FOR SHARE');`.
+- **Mutation & Admission Paths**: All other methods (`create`, `join`, `leave`, `selfMic`, `withControlGroup`, `sessionDeleted`) retain default exclusive `FOR UPDATE` locks unchanged.
+
+---
+
+### 3. Integration Test Additions in `t30-signaling-throughput.integration.spec.ts`
+
+1. **Concurrent Shared Read Lock Progress (2 Cases via `it.each(['list', 'participants'] as const)`)**:
+   - Two admissions in one call (`user1`, `user2`). Screen quota slot granted for `user1`. Both clients join gateway.
+   - Client 1 sends screen `addTrack`, holding room/group `FOR SHARE` and stalling at fake SFU `GetParticipant` barrier.
+   - While barrier is unreleased, [`CallsService.list`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L62) / [`participants`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-1/calls.service.ts#L83) completes in **<= 1500ms** with actual DTO counts verified and both sockets remaining open.
+   - Concurrently, an external canonical `FOR UPDATE` writer is proven blocked via `pg_blocking_pids`.
+   - RPC barrier released before 3s deadline; first track forwards, writer completes, and clean teardown releases resources.
+2. **Real PostgreSQL Negative Principal Security Tests (4 Cases via `it.each(['outsider', 'expired_session', 'banned', 'no_onboarding'] as const)`)**:
+   - Asserts real SQL authorization rejection on both read methods:
+     - Outsider (not in `room_members`) -> 403 `FORBIDDEN` (`Current room membership required`).
+     - Expired session (`expires_at < clock_timestamp()`) -> 401 `LOGIN_REQUIRED` (`Session expired or revoked`).
+     - Banned user (`admin_actions` BAN) -> 403 `FORBIDDEN` (`Account is banned`).
+     - Incomplete onboarding (lacks `game_interests`) -> 403 `FORBIDDEN` (`Onboarding required`).
+
+*No actual application code, production dist, tests, git ledger, or history files were altered. No build or test commands were executed. Ready for Codex gate review and build.*

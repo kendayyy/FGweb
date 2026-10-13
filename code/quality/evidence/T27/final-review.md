@@ -1,0 +1,17 @@
+# T27 — Codex review
+
+Implementation preserves the approved call/room/team boundaries. Explicit last leave commits the call-seat release, removes native authorization, closes the empty group and retains historical member rows, room chat and active play roster. Native disconnect has thirty-second grace; reconnect keeps opaque admission identity and a single seat. Pending reservations expire; closed groups cannot be revived by HTTP admission, gateway token replay or late signed events.
+
+Webhook authentication verifies the original raw payload/signature. Unique event IDs persist only minimal call/type metadata. A duplicate retry still reconciles authoritative native state if the first processing failed after persistence. Late/out-of-order native events cannot override a currently connected authorized participant. Scheduled reconciliation handles missing callbacks and persisted state after API restart. Native administration failure cannot erase valid participants.
+
+Additional review found two real missing transitions: membership FK cascade removed historical call-member rows before native participant removal, leaving a ghost OPEN group; native room expiration left an empty database group OPEN. Added behavioral RED cases, fixed callbacks and authoritative room absence, then retained all assertions. Newly created empty native groups remain available for their first join. CLOSED groups are no longer repeatedly deleted in every sweep; actual native leftovers are retried. Unknown DeleteRoom failures are accepted only after a successful native query proves absence.
+
+T26 regression cleanup originally assumed all historical groups had existing native rooms. Preserve all failed logs, including the hung teardown stopped by exact verified Jest PID. Pin the admission test and exact two new legacy runtime directories using persistent human broad-scope authorization. Cleanup now uses real native room presence, confirms absence after a deletion race and retains other errors. Both regression suites use the T27-owned private fixture. No assertions, SDK/grants, old PASS evidence, checker, baseline or local credentials were altered.
+
+Opening recorder deviation: two newly created T26 bootstrap paths are sealed in entry-seal.json; historical evidence remains unchanged. First resume cleanup correctly stopped when one fixture had already been removed by its successful afterAll; the next run checked actual existence and removed only exact validated owned containers/network/schema. Both executions are retained.
+
+Native headed two-browser transport verifies audio RTP, same-identity reconnect/single seat, explicit removal, unexpired token replay denial and fresh admission while another participant keeps the group open. Microphone source is synthetic; this verifies transport and authorization, not audible quality, production TURN/TLS or the 1,000 simultaneous media target (later checkpoints).
+
+Required final evidence is validated by close.mjs: complete lifecycle suite including restart, both admission/gateway suites, headed RTC, fresh build, types, lint, diff and scope/secrets/baseline audit. Task remains IN_PROGRESS until that script confirms every command and the unchanged T28 gate before persisting PASS.
+
+Final types1 caught the browser SDK global assertion. Types2 uses an explicit unknown boundary for the real UMD script; probe-types-proof.json confirms identical emitted JavaScript before/after. The fifteen-case lifecycle run therefore still tests the same executable behavior; assertions and fixtures were unchanged.

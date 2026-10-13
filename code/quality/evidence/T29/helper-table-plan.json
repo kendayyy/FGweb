@@ -1,0 +1,15 @@
+{
+  "reason": "API regression1 returned500 for helper because T29 query referenced nonexistent room_helper_permissions. Use existing permission_grants table and current HELPER membership, preserve MANAGE_CALLS checks/locks; no migration or changed assertions.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-moderation.service.ts",
+      "proposed": "quality/evidence/T29/helper-table-proposed.ts",
+      "beforeSha256": "978c0180b5b22f365f5d30c1c49f1a6f227b57d933d2f058eef185040407998b",
+      "afterSha256": "4f082760318744abefb392a271af3cde6992c7cd74d3737ad606f530eec0602c"
+    }
+  ],
+  "redEvidence": {
+    "path": "quality/evidence/T29/codex-t29-api-green-1.json",
+    "sha256": "2c9b6f67950fe68324c307a98f7b663ecd23e852b52c8fc3defc9c3a3a233b38"
+  }
+}

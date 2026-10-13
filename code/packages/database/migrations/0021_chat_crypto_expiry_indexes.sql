@@ -1,0 +1,2 @@
+CREATE INDEX "chat_crypto_to_device_expiry_idx" ON "chat_crypto_to_device_events" USING btree ("expires_at","id");--> statement-breakpoint
+CREATE INDEX "chat_crypto_protocol_expiry_idx" ON "chat_crypto_protocol_events" USING btree ("expires_at","id");

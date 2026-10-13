@@ -1,0 +1,3 @@
+# Private producer ownership review
+
+Pre-edit original snapshots and exact four-source scope retained. Actual native production UI between two browser devices passes bilateral SAS, unverified send denial/draft retention, committed lost-response exact ciphertext retry/dedup, private reply/mention, real database empty plaintext, no legacy private HTTP producers and360px no message/composer overlap. Current native SDK public completion stays conditional on current trusted key. Groups/images/recovery/report/legacy acceptance still unfinished. Pin only the four reviewed sources and current generated web index; prior PASS rows/proof stages/checker/main/production remain unchanged.

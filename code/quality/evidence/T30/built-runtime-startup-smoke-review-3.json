@@ -1,0 +1,79 @@
+{
+  "recordedAt": "2026-10-11T01:19:11.352Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-built-runtime-reviewed.mjs",
+    "sha256": "9516d2081afed3bc8c94e3c2a5778a9755638e40e494d6db23ed23724879904b"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T01:18:19.371Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T01:18:24.815Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T01:18:24.833Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T01:18:36.617Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T01:18:58.992Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "2409cad6d4d156a5f158750d63f56f178a386afdffe9c8459e94e02fa397056a"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-1ec07843-8f45-4c55-a358-6b84ccc794c5",
+    "temporary-built-smoke-c45e2571-aa91-4091-b103-02bcf50408b4"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

@@ -1,0 +1,120 @@
+{
+  "recordedAt": "2026-10-12T09:25:59.532Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-codex-gateway-trace-reviewed6.mjs",
+    "sha256": "c9e41e53ae53f9301300076ec19cc8b9d006241ac9ea11a0b7d4e1694885f9c6"
+  },
+  "phases": [
+    {
+      "at": "2026-10-12T09:25:17.109Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-12T09:25:22.852Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-12T09:25:22.870Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-12T09:25:33.844Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-12T09:25:37.963Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d",
+      "noDevRuntime": true,
+      "cspSha256": "155fbc71df8d821c47d50aba2ee5fceb74493e1bec062ff761826db5cc9d599d"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-7gj3Ug-S.js",
+      "status": 200,
+      "sha256": "1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-12T09:25:38.964Z",
+      "idleEndedAt": "2026-10-12T09:25:50.027Z",
+      "idleMs": 11063.445200000002,
+      "backendPid": 23198,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "actual canonical private gateway native JoinResponse and unchanged binary subscription",
+      "joined": true
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 23198,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-12T09:25:59.476Z",
+        "backendPid": 23198,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-d969468e-f379-4043-9dc4-8bf57b412d97",
+    "temporary-built-smoke-1ce916d8-8c79-4e24-bcd3-db2d01b34d7b"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

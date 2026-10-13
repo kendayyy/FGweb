@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {parseEnv} from 'node:util';
+import {randomUUID} from 'node:crypto';
+const env=parseEnv(fs.readFileSync('.env.local','utf8')),name=`fg-t26-probe-${randomUUID()}`,dir='.runtime/t26';
+const lan=process.env.FG_T26_NODE_IP,host=lan??'127.0.0.1',base=lan?57886:57883,state=lan?'isolated-sfu-lan':'isolated-sfu';
+if(lan&&!/^192\.168\.\d{1,3}\.\d{1,3}$/.test(lan))throw Error('Local private IPv4 required');
+fs.mkdirSync(dir,{recursive:true});
+const config=path.resolve(dir,`${state}.yaml`);
+fs.writeFileSync(config,`port: ${base}\nbind_addresses: ["0.0.0.0"]\nrtc:\n  tcp_port: ${base+1}\n  udp_port: ${base+2}\n  use_external_ip: false\n  enable_loopback_candidate: true\nkeys:\n  ${JSON.stringify(env.LIVEKIT_API_KEY)}: ${JSON.stringify(env.LIVEKIT_API_SECRET)}\n`);
+const image='livekit/livekit-server:v1.8.4@sha256:621fd87bd64a0c83e1f2418ee0323eb920d00acdd73e5f79b303c64f6cc532af';
+const container=execFileSync('docker',['run','-d','--name',name,'-p',`${host}:${base}:${base}`,'-p',`${host}:${base+1}:${base+1}`,'-p',`${host}:${base+2}:${base+2}/udp`,'--mount',`type=bind,source=${config},target=/etc/livekit.yaml,readonly`,image,'--config','/etc/livekit.yaml','--node-ip',host],{encoding:'utf8',windowsHide:true}).trim();
+fs.writeFileSync(`${dir}/${state}.json`,JSON.stringify({name,container,image,url:`ws://${host}:${base}`,createdAt:new Date().toISOString()},null,2)+'\n');
+console.log(JSON.stringify({name,image,url:`ws://${host}:${base}`,owned:true,keysLogged:false}));

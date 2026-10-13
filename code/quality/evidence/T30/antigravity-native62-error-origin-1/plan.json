@@ -1,0 +1,66 @@
+{
+  "task": "T30",
+  "agent": "Antigravity",
+  "model": "Gemini 3.6 Flash (High)",
+  "proposalType": "diagnostic-error-origin-observer",
+  "nativeAcceptance": false,
+  "scopeDirectory": "quality/evidence/T30/antigravity-native62-error-origin-1",
+  "sourcePins": {
+    "canonicalFixture": {
+      "path": "quality/evidence/T30/fixture-server-canonical-direct-reviewed1.mjs"
+    },
+    "compiledAppModule": {
+      "path": "apps/api/dist/app.module.js"
+    },
+    "compiledCallsService": {
+      "path": "apps/api/dist/modules/calls/calls.service.js"
+    },
+    "compiledPublishingService": {
+      "path": "apps/api/dist/modules/calls/publishing.service.js"
+    },
+    "compiledCallLifecycleService": {
+      "path": "apps/api/dist/modules/calls/call-lifecycle.service.js"
+    }
+  },
+  "deliveredFiles": [
+    "quality/evidence/T30/antigravity-native62-error-origin-1/api-error-origin-observer.mjs",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/fixture-server-native62-error-origin-reviewed1.mjs",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/error-origin-controls-reviewed1.mjs",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/source-review-and-anchors.md",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/diagnosis-notes.md",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/plan.json",
+    "quality/evidence/T30/antigravity-native62-error-origin-1/controls-plan.json"
+  ],
+  "diagnosticGoals": {
+    "targetFailures": [
+      "POST /api/v1/calls/:id/screen-share/claim returning 500",
+      "GET /api/v1/rooms/:id/play-sessions returning 500",
+      "GET /api/v1/rooms/:roomId/calls returning 500"
+    ],
+    "distinctionCapabilities": [
+      "PG code 57014 (statement timeout / lock queue contention)",
+      "PG code 53300 (connection limit exceeded)",
+      "PG connect timeout ('timeout exceeded when trying to connect')",
+      "LiveKit SDK 503 / Twirp unavailable / deadline exceeded"
+    ],
+    "timingMetrics": [
+      "Database connection acquire durationMs",
+      "In-transaction row lock hold durationMs (roomHoldMs, groupHoldMs)",
+      "LiveKit SDK RPC method durationMs"
+    ]
+  },
+  "invariantsHonored": {
+    "runCommandExecuted": false,
+    "dockerExecuted": false,
+    "browserExecuted": false,
+    "appSourceMutated": false,
+    "buildMutated": false,
+    "testsMutated": false,
+    "historyMutated": false,
+    "ledgerMutated": false,
+    "envMutated": false,
+    "readOnlyPreservation": true,
+    "exactErrorIdentityPreserved": true,
+    "directGatewayHelperPreserved": true
+  }
+}

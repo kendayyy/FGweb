@@ -25,3 +25,7 @@ description: "FG requires real tests and evidence before each task passes."
 - UI/E2E không mở được GUI/cửa sổ, CI hoặc host không GUI: báo rõ trước run, ghi kết quả thật và hạn chế quan sát; không coi headless/trace/video là đã đạt quan sát trực tiếp local. Các tests khác chạy nền không vi phạm tiêu chí này.
 - Không tự bật watch vô hạn, slow-motion làm đổi timeout, giảm tests hoặc chạy task song song. Thiếu quan sát UI/E2E phải ghi rõ trong review/evidence, không giả PASS tiêu chí này.
 
+
+## UI-TELEGRAM-REPORT-01 — tự gửi ảnh test UI
+
+- UI-TELEGRAM-REPORT-01 (10/10/2026, user đã xác nhận): mọi lần test UI/E2E Chrome/Chromium headed tiếp theo phải publish ảnh app viewport từng nhóm thao tác/assertion, đầu/cuối run và lỗi bằng code/tools/telegram-bridge/demo-stream.mjs captureUiStep; đọc tools/telegram-bridge/DEMO.md. Chỉ actual headed/synthetic fixtures/privacy review/mask secrets; giữ command/time/exit/assertions và evidence task thật, không ảnh cũ làm run mới/không đổi PASS. Helper stream auto gửi Telegram cho Ken, /demo lấy bước mới nhất; chọn ảnh đáp ứng ảnh hoặcvideo, chưa claim video. Tích hợp producer trong script task được phép trước UI run, không sửa frozen source/evidence. Không thể capture/send thì ghi rõ thiếu bằng chứng gửi; test result và Telegram receipt khác nhau. Áp dụng từ lần nối mới; các run đã đóng trước đó không backfill.

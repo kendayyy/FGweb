@@ -1,0 +1,137 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/call-admissions.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/call-admissions.test.ts (7 tests | 7 failed) 9123ms
+   ❯ T07-FIX2 durable SFU admission identity and session lease (7)
+     × additive migration preserves legacy room/call/seats and never invents admissions 54ms
+     × empty migration creates UTC lease timestamps with nullable lifecycle markers 8ms
+     × member and native session FKs prevent dangling grants 7ms
+     × one unrevoked identity per seat; a new admission never reuses revoked identity 7ms
+     × native logout removes the admission binding and preserves room/call/seats 8ms
+     × membership revocation cascades the seat/lease while keeping persistent room and call 8ms
+     × invalid expiry is rejected and valid expiry roundtrips across database timezones 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > additive migration preserves legacy room/call/seats and never invents admissions
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:38:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > empty migration creates UTC lease timestamps with nullable lifecycle markers
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:42:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > member and native session FKs prevent dangling grants
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:48:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > one unrevoked identity per seat; a new admission never reuses revoked identity
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:53:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > native logout removes the admission binding and preserves room/call/seats
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:59:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > membership revocation cascades the seat/lease while keeping persistent room and call
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:63:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > invalid expiry is rejected and valid expiry roundtrips across database timezones
+AssertionError: migration creates the admission table: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ exists test/call-admissions.test.ts:35:199
+
+ ❯ test/call-admissions.test.ts:67:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  12:26:43
+   Duration  11.37s (tests 83%, import 13%, transform 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/call-admissions.test.ts --maxWorkers=1

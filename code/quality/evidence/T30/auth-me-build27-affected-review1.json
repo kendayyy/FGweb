@@ -1,0 +1,218 @@
+{
+  "at": "2026-10-13T03:27:30.947Z",
+  "reviewer": "Codex",
+  "apiBuild": 27,
+  "source": {
+    "at": "2026-10-13T03:20:33.413Z",
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "T30 browser timing13 shows /me bootstrap delay; meaningful real PG RED9 verifies current DTO/identity/avatar/onboarding/fresh changes while eight successful reads each use four SQL roundtrips. Replace only getUserMe persisted-data reads with one typed Drizzle statement using scalar Discord and ordered game aggregates to avoid fanout. Preserve SessionGuard live session/ban, returned schema, missing user rejection, all auth mutations and other methods. Green/regressions/full native required; no PASS.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/auth/auth.service.ts",
+        "proposed": "quality/evidence/T30/auth-me-query-reviewed1.ts",
+        "beforeSha256": "4f830cae7c33afa6766215bfad09bbc4d681c8f25f66dff1dec8028b26de7fbd",
+        "afterSha256": "cdfa73044ea3bef68a39e6c2ea4f819d7c9fd76ab452fe9f0b1020622cbb998c"
+      }
+    ],
+    "reverseByteExact": true,
+    "edits": [
+      [
+        "import { eq, desc, and, inArray } from 'drizzle-orm';",
+        "import { eq, desc, and, inArray, sql } from 'drizzle-orm';"
+      ],
+      [
+        "    const [dbUser] = await this.db\n      .select()\n      .from(schema.user)\n      .where(eq(schema.user.id, userId));\n\n    if (!dbUser) {\n      throw new Error(`User not found: ${userId}`);\n    }\n\n    const [discordAccount] = await this.db\n      .select()\n      .from(schema.account)\n      .where(\n        and(\n          eq(schema.account.userId, userId),\n          eq(schema.account.providerId, 'discord')\n        )\n      );\n\n    const [profile] = await this.db\n      .select()\n      .from(schema.profiles)\n      .where(eq(schema.profiles.userId, userId));\n\n    const interests = await this.db\n      .select({ title: schema.games.title })\n      .from(schema.gameInterests)\n      .innerJoin(schema.games, eq(schema.gameInterests.gameId, schema.games.id))\n      .where(eq(schema.gameInterests.userId, userId))\n      .orderBy(schema.games.title);\n\n",
+        "    // One statement returns one coherent persisted profile snapshot. Session and\n    // live ban checks remain in SessionGuard for every request.\n    const [row] = await this.db.select({\n      user: schema.user,\n      profile: schema.profiles,\n      discordAccountId: sql<string | null>`(SELECT ${schema.account.accountId} FROM ${schema.account}\n        WHERE ${schema.account.userId}=${schema.user.id} AND ${schema.account.providerId}='discord' LIMIT 1)`,\n      interests: sql<string[]>`COALESCE((SELECT jsonb_agg(${schema.games.title} ORDER BY ${schema.games.title})\n        FROM ${schema.gameInterests} INNER JOIN ${schema.games} ON ${schema.gameInterests.gameId}=${schema.games.id}\n        WHERE ${schema.gameInterests.userId}=${schema.user.id}), '[]'::jsonb)`,\n    }).from(schema.user)\n      .leftJoin(schema.profiles, eq(schema.profiles.userId, schema.user.id))\n      .where(eq(schema.user.id, userId));\n\n    if (!row) {\n      throw new Error(`User not found: ${userId}`);\n    }\n    const {user: dbUser, profile, interests, discordAccountId} = row;\n\n"
+      ],
+      [
+        "discordId: discordAccount?.accountId??null,",
+        "discordId: discordAccountId??null,"
+      ],
+      [
+        "interestedGames: interests.map(interest => interest.title),",
+        "interestedGames: interests,"
+      ]
+    ],
+    "sessionGuardSha256": "b34672b26e46dc54d59a7d3feb3af6ceffc299f39af57f99de3a86633b3c6dde"
+  },
+  "build": {
+    "recordedAt": "2026-10-13T03:23:02.809Z",
+    "reviewer": "Codex",
+    "commandEvidence": "quality/evidence/T30/codex-t30-api-build-27.json",
+    "compiledChanges": [
+      {
+        "path": "apps/api/dist/modules/auth/auth.service.js",
+        "beforeSha256": "8fd9c9f222299a82aa8c32d3fcbe9fbe3e6e9ed9dca5dae2e961c4c509ea02d5",
+        "afterSha256": "4e31711477a18ab3de000c152ff42e7889ed4a0633e47ac191df84a1f96ec1d0"
+      },
+      {
+        "path": "apps/api/dist/modules/auth/auth.service.js.map",
+        "beforeSha256": "3285c67f6527dc04589f5cccbb78127b34fba5d5ed2be88d933eeff602a3d071",
+        "afterSha256": "efdf544ed9fe13803598ffaef9a2bda73168901e0dbafed8832d49ca38a422d7"
+      }
+    ],
+    "allOtherCompiledFilesUnchanged": true,
+    "nativeAcceptancePending": true
+  },
+  "compiledOthersUnchanged": 264,
+  "profileReadCases": 9,
+  "profileReadQueriesBefore": 4,
+  "profileReadQueriesAfter": 1,
+  "originalProfileCases": 21,
+  "originalAuthCases": 16,
+  "originalAdminCases": 14,
+  "originalEmailCasesPassed": 15,
+  "originalEmailGapRemaining": false,
+  "records": [
+    {
+      "command": "node quality/evidence/T30/adopt-exact.mjs auth-me-query-source1 quality/evidence/T30/auth-me-query-adoption-plan1.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:20:48.211Z",
+      "completedAt": "2026-10-13T03:21:30.504Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-me-query-source-adoption-1.txt",
+      "evidenceSha256": "4448c0dfe6c5c2a6e759bab5c7823e0fda5dfab63e1e57e06f5cb9549688022b"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --incremental false",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:22:29.361Z",
+      "completedAt": "2026-10-13T03:22:50.342Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-27.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T30/auth-me-query-control2.mjs green",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:22:50.486Z",
+      "completedAt": "2026-10-13T03:23:02.061Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-me-query-green-2.txt",
+      "evidenceSha256": "d284b9d5962ab60616af20473957325998fdfa38b387b0eee7a51b751132878c"
+    },
+    {
+      "command": "node quality/evidence/T30/adopt-api-build-27-reviewed1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:23:02.220Z",
+      "completedAt": "2026-10-13T03:23:23.471Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build27-adoption-1.txt",
+      "evidenceSha256": "a45fae45c82a7b6cc21010513aa3e6bbf1800114affefbc1bbb6a0d59d4dad79"
+    },
+    {
+      "command": "node quality/evidence/T30/run-build21-auth-root-regressions1.mjs profiles auth-profile-read",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:23:23.565Z",
+      "completedAt": "2026-10-13T03:24:39.249Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-profile-build27-regressions-1.txt",
+      "evidenceSha256": "a33c2de335b1e224b6b6767a246facc6eaf078f0eb8e7d76da034781e586e455"
+    },
+    {
+      "command": "node quality/evidence/T30/run-build21-auth-root-regressions1.mjs auth",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:24:39.414Z",
+      "completedAt": "2026-10-13T03:25:14.845Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-security-build27-alone-1.txt",
+      "evidenceSha256": "bfe99f8ef7baaecf13ec1e44ef5ca98af10ca2b052c83d1466b1a1eb506f006c"
+    },
+    {
+      "command": "node quality/evidence/T30/run-build21-auth-root-regressions1.mjs auth-admin",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:25:14.969Z",
+      "completedAt": "2026-10-13T03:25:55.306Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-admin-build27-alone-1.txt",
+      "evidenceSha256": "58039b09cc66dc34d7f04088495282bacd2fddd69f759c3f3cd63597c98dab1a"
+    },
+    {
+      "command": "node quality/evidence/T30/run-build21-auth-root-regressions1.mjs auth-email",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:25:55.421Z",
+      "completedAt": "2026-10-13T03:26:38.183Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-auth-email-build27-alone-1.txt",
+      "evidenceSha256": "f7ee13ab074012a3438bd27bedcf3d6c0f9ef52e3f9b7a7be6dbb06002ca42ab"
+    },
+    {
+      "command": "node quality/evidence/T30/supabase-test-resource143.mjs restore",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:26:38.382Z",
+      "completedAt": "2026-10-13T03:26:49.677Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-supabase-restore-143.txt",
+      "evidenceSha256": "7819d0570d5eba507ead86ccdae12820ae382e20e988443c769b5e0b9a5e6f2e"
+    }
+  ],
+  "cleanups": [
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-255d1f5c-0e71-46b8-8dce-63d1fbaf79ea.json",
+      "completedAt": "2026-10-13T03:24:39.224Z",
+      "names": [
+        "profiles",
+        "auth-profile-read"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-255d1f5c-0e71-46b8-8dce-63d1fbaf79ea"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-7810786f-91c8-43d8-bb72-a0166d6c36fb.json",
+      "completedAt": "2026-10-13T03:25:14.819Z",
+      "names": [
+        "auth"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-7810786f-91c8-43d8-bb72-a0166d6c36fb"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-a8006102-9f74-45fc-810c-6b0043121194.json",
+      "completedAt": "2026-10-13T03:25:55.275Z",
+      "names": [
+        "auth-admin"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-a8006102-9f74-45fc-810c-6b0043121194"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-a44283ff-3c7c-4357-9de4-ede4c09f3394.json",
+      "completedAt": "2026-10-13T03:26:38.153Z",
+      "names": [
+        "auth-email"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-a44283ff-3c7c-4357-9de4-ede4c09f3394"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    }
+  ],
+  "sessionGuardUnchanged": true,
+  "retainedCallLifecycleGatewaySourceAndCompiledUnchanged": true,
+  "supabaseRestored": true,
+  "nativeAcceptancePending": true
+}

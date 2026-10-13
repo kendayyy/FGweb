@@ -1,0 +1,23 @@
+The cleanup patch has been applied cleanly via [`quality/evidence/T30/copy-shared-lock-final.mjs`](file:///E:/FGweb/code/quality/evidence/T30/copy-shared-lock-final.mjs) into [`quality/evidence/T30/antigravity-shared-read-lock-final-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-final-1):
+
+### 1. Final Proposed Files & SHA-256 Hashes
+
+| Path | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`quality/evidence/T30/antigravity-shared-read-lock-final-1/signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-final-1/signaling-gateway.ts) | `dc7469277194c2f2fae3b6dd8b35f75d454f61c59f263daab8975e3cec95de67` | **Byte-identical to Round 1 & Round 2 source**. Narrowly typed runtime read-lock mode (`LeaseLockMode = 'FOR UPDATE' \| 'FOR SHARE'`). |
+| [`quality/evidence/T30/antigravity-shared-read-lock-final-1/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-final-1/t30-signaling-throughput.integration.spec.ts) | `f335b306968ee5dc9c90c573295684e46cffcf931941f11f9d609d1248760ebe` | Preserves all 12 existing executed test callbacks verbatim. Attaches immediate rejection handler to `writerPromise`, keeps original rejecting promise at asserted `await`, and settles pending writer before rollback/release in `finally`. |
+| [`quality/evidence/T30/antigravity-shared-read-lock-final-1/review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-final-1/review-notes.md) | `b83307eb4decffda592c557da10f87f758536d951c1327463000ae35853f2abd` | Summary of final bounded proposal and cleanup semantics. |
+| [`quality/evidence/T30/shared-lock-final-copy-provenance.json`](file:///E:/FGweb/code/quality/evidence/T30/shared-lock-final-copy-provenance.json) | `971431a678ec01e135755900b95cb1a08ad92726cdf72e5730003dd2b9f1c13a` | Machine-readable provenance verifying byte-identical source and test cleanup patch. |
+
+---
+
+### 2. Summary of Changes
+
+- **Source**: Verified 100% byte-identical to Round 1 and Round 2 proposals (`sourceByteIdentical: true`).
+- **Test Cleanup Patch**:
+  - Immediately attaches rejection handler (`void writerPromise.catch(() => {})`), eliminating unhandled rejection windows while retaining the original rejecting promise at its asserted `await`.
+  - In `finally`, explicitly awaits and settles any pending `writerPromise` before initiating connection rollback and pool release, preventing race conditions against released `pg` clients.
+- **Scope & Invariants**:
+  - All original 12 executed test cases and bounds remain untouched.
+  - Expected total executed test cases: **15**.
+  - No actual application source, tests, git ledger, or history files were edited. No test or build commands were executed. No claim of task PASS or native acceptance.

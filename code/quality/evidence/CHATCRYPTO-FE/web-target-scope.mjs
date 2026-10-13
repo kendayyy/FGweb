@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/CHATCRYPTO-FE', path = 'apps/web/vite.config.ts';
+const digest = value => createHash('sha256').update(value).digest('hex');
+const ledger = JSON.parse(fs.readFileSync('quality/tasks.json', 'utf8')), task = ledger.tasks.find(row => row.id === 'CHATCRYPTO-FE'); assert.equal(task.status, 'IN_PROGRESS');
+const source = fs.readFileSync(path, 'utf8');
+fs.writeFileSync(`${dir}/web-target-before.json`, JSON.stringify({ recordedAt: new Date().toISOString(), path, sha256: digest(source), rows: Object.fromEntries(ledger.tasks.filter(row => row.id !== task.id).map(row => [row.id, digest(JSON.stringify(row))])) }, null, 2) + '\n', { flag: 'wx' });
+fs.writeFileSync(`${dir}/web-target-original.ts`, source, { flag: 'wx' });
+fs.writeFileSync(`${dir}/web-target-scope-review.md`, '# Browser build target prerequisite\n\nDefault Vite build RED fails421 SDK destructuring transforms for legacy default targets. Explicit esnext build2 and ES2022 build3 exit0; ES2022 matches the existing web TypeScript target and supports the approved native WASM protocol without replacing/transpiling its cryptography. Persist only build.target es2022, leave plugins/proxy/origin/secrets unchanged. Web Locks/secure-context/IndexedDB capabilities remain checked at unlock; actual headed browser/native store evidence pending. Original config captured before mutation. Do not treat a successful bundle as native/browser proof.\n', { flag: 'wx' });
+task.approvedScopeAmendments.push({ source: `${dir}/web-target-scope-review.md`, reason: 'Actual default build RED; persist tested ES2022 target consistent with existing TS/native crypto runtime', paths: [path] });
+task.writeAllowlist.push(path); task.evidencePaths.push(`${dir}/web-target-before.json`, `${dir}/web-target-original.ts`, `${dir}/web-target-scope-review.md`);
+fs.writeFileSync('quality/tasks.json', JSON.stringify(ledger, null, 2) + '\n');
+assert.equal(source.split('  plugins:').length, 2); fs.writeFileSync(path, source.replace('  plugins:', "  build: { target: 'es2022' },\n  plugins:")); console.log(JSON.stringify({ target: 'es2022', originalRetained: true, mainMutation: false }));

@@ -1,0 +1,48 @@
+{
+  "reviewedAt": "2026-10-11T10:23:48.675Z",
+  "record": {
+    "command": "node quality/evidence/T30/run-publishing-policy1.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T10:22:05.768Z",
+    "completedAt": "2026-10-11T10:22:56.946Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-publishing-policy-red-1.txt",
+    "evidenceSha256": "47a90554a4f9919e5b9b58114516f412c5102316c41d90fa600b9125793f3d85"
+  },
+  "cleanup": {
+    "recordedAt": "2026-10-11T10:22:56.051Z",
+    "schemaRemoved": true,
+    "poolEnded": true,
+    "prototypesRestored": true,
+    "envRestored": true,
+    "appClosed": true,
+    "errorCount": 0
+  },
+  "plan": {
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "Actual real PostgreSQL publishing policy RED7: five parity controls pass, only two query-budget behaviors fail (one peer3 versus2 total queries, two peers2 versus1 query each). Existing full lease-policy helper11 guards unchanged. Final peer-loop now obtains fresh combined lease/policy per peer under original caller-held room/group locks; shared private exact original permission comparison/update, existing independent syncNativePermissions SDK lookup/not_found/error behavior preserved. No lifecycle admission batching/cache/native outside locks/slot/revoke/deadline/pool/assertion changes. All control cleanup actual; no latency/full native acceptance claim.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/calls.service.ts",
+        "proposed": "quality/evidence/T30/calls-publishing-policy-reviewed1.ts",
+        "beforeSha256": "71a9d1bf615b6b0bc213967b96a365f5d02ca0f49f0031138b2fc786149af227",
+        "afterSha256": "863872d0893ed30a65c3348b0877a618e46f1941010d3927126dc4761f5a3a94"
+      },
+      {
+        "path": "apps/api/src/modules/calls/publishing.service.ts",
+        "proposed": "quality/evidence/T30/publishing-policy-reviewed1.ts",
+        "beforeSha256": "06d3281a0b8b76f0f145f57650ac969405f27a0a7bef8ee47407a15084d57805",
+        "afterSha256": "4fc3ba73e9a371633826240073b2c338c8597a7999670004b9592af1a1596e49"
+      }
+    ]
+  },
+  "fullByteOutsideScopeUnchanged": true,
+  "corrections": [
+    "Restore extraneous SQL string quote",
+    "Derive permission type from existing publicationPermission"
+  ],
+  "latencyReductionMeasured": false,
+  "fullNativeAcceptance": false
+}

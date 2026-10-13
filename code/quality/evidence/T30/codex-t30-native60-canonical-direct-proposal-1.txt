@@ -1,0 +1,66 @@
+### T30 Proposal Delivery: Strictly Controlled Canonical Observer-Free Fixture & Direct Gateway Helper
+
+**Proposal Scope**: `quality/evidence/T30/antigravity-native60-canonical-direct-1/**`  
+**Execution Context**: Sequential proposal-only, Gemini 3.6 Flash (High), No Anti2.  
+**Acceptance Status**: `nativeAcceptance: false` (T30 remains in progress; all 80 prior checkpoints preserved).  
+**Runtime & Host Safety**: Zero commands executed (`run_command` unused); zero modifications to application source, builds, ledger, environments, mutable fixtures, or frozen tests.
+
+---
+
+### 1. Root Evidence & Boundary Context
+
+Following the Native60 execution (`t30-native-593b5b067ea6420b92904ba12cd24810` exiting with code 1):
+- **Milestones**: 3 joins succeeded, 2 live captures completed; line 52/66 failed with `expected 2 stream tabs, got 1`, with 0 completed capture/RTP measurement windows.
+- **Observed Failures**: 5 gateway room-lock statement timeouts (`57014`) on backend PIDs 6228, 6229, 6230, and 6231, accompanied by 15 PostgreSQL wait samples blocked by API PIDs (6254, 6295, 6349, 6355, 6429) during `CallsService.participants`, `CallsService.list`, `CallsService.withControlGroup`, `CallLifecycleService.reconcileGroup`, and `TeamsService.transaction`.
+- **Non-Causality & Baseline Role**: Removing diagnostic instrumentation, preload scripts, and diagnostic wrappers, or attaching the gateway directly to `fg-local_default`, does **not** cure transaction lock contention or prove a unique root cause. However, a strictly controlled, observer-free canonical baseline is an absolute requirement for baseline validation prior to any application fix.
+
+---
+
+### 2. Delivered Artifacts Summary
+
+All proposal artifacts have been created strictly within `quality/evidence/T30/antigravity-native60-canonical-direct-1/`:
+
+1. [private-gateway-canonical-direct-reviewed1.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/private-gateway-canonical-direct-reviewed1.mjs):
+   - Pure observer-free runtime launch: `node /gateway/app/gateway-main.js /gateway/input.json`.
+   - Zero preloads (`-r /gateway/preload.cjs` omitted), zero startup wrappers.
+   - Preflight verification of `fg-local-postgres-1` and `fg-local-redis-1` on `fg-local_default`.
+   - Direct network attachment before start via `createDirectGateway`.
+   - Cleanup verification asserting `result.mainServicesUnchanged && result.existingNetworkUnchanged`.
+
+2. [fixture-server-canonical-direct-reviewed1.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/fixture-server-canonical-direct-reviewed1.mjs):
+   - Canonical observer-free fixture server.
+   - Line 18 imports `./private-gateway-canonical-direct-reviewed1.mjs` (single counted anchor).
+   - Preserves all original assertions, build-2 asset hashes, CSP headers, and retained inspector client lifecycle.
+
+3. [gateway-direct-support-reviewed1.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/gateway-direct-support-reviewed1.mjs):
+   - Local proposal copy providing `prepareDirectDatabase`, `createDirectGateway`, and `inspectDirectCleanup`.
+
+4. [prepare-canonical-direct.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/prepare-canonical-direct.mjs):
+   - Verifies 4 counted exact anchors in the gateway helper and 1 counted exact anchor in the fixture server.
+   - Proves forward transformation matches canonical files exactly.
+   - Proves reverse transformation yields byte-for-byte identity with original sources (`Buffer.compare === 0`).
+   - Asserts zero-instrumentation invariant and computes SHA256 checksums.
+
+5. [plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/plan.json):
+   - Machine-readable specification containing background inspection, invariants, counted anchors, and artifact list.
+
+6. [shortplan.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/shortplan.md):
+   - Human-readable specification detailing rationale, anchor diffs, reverse byte equality proof, and safety invariants.
+
+7. [controls-plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native60-canonical-direct-1/controls-plan.json):
+   - Nine deterministic validation controls covering preflight verification, network attachment, zero instrumentation, gateway readiness polling, HTTP/CSP/asset digests, private native signaling, retained inspector client lifecycle, 3-actor state, and direct cleanup settlement.
+
+---
+
+### 3. Counted Exact Anchors & Reverse Equality
+
+- **Gateway Helper (`private-gateway-canonical-direct-reviewed1.mjs`)**:
+  - *Anchor 1 (Import)*: Imports `prepareDirectDatabase,createDirectGateway,inspectDirectCleanup` from `./gateway-direct-support-reviewed1.mjs`.
+  - *Anchor 2 (DB Preflight)*: Replaces host.docker.internal mapping with `prepareDirectDatabase(docker,databaseURL)`.
+  - *Anchor 3 (Cleanup Verification)*: Calls `inspectDirectCleanup(docker,directDatabase)` and asserts `mainServicesUnchanged` and `existingNetworkUnchanged`.
+  - *Anchor 4 (Direct Creation)*: Replaces `docker run -d` with `createDirectGateway({docker,containers,id,network,args:[...]})`.
+  - *Reverse Equality*: Exact 4-anchor reverse substitution reconstructs `quality/evidence/T30/private-gateway-shaped-fixture.mjs` byte-identically.
+
+- **Fixture Server (`fixture-server-canonical-direct-reviewed1.mjs`)**:
+  - *Anchor 1 (Import)*: Line 18 imports `./private-gateway-canonical-direct-reviewed1.mjs` instead of `./private-gateway-shaped-fixture.mjs`.
+  - *Reverse Equality*: Exact 1-anchor reverse substitution reconstructs `quality/evidence/T30/fixture-server-build2-inspector-reserved-reviewed1.mjs` byte-identically.

@@ -1,0 +1,169 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2444) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy-attestation.spec.ts (27.975 s)
+  ● Legacy receipt authentication with native Matrix WASM › accepts a native device signature bound to the complete prepared candidate
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      16 |  });
+      17 |  afterAll(()=>machine?.close());
+    > 18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+         |                                                                                                      ^
+      19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+
+      at Object.<anonymous> (test/chat-crypto-legacy-attestation.spec.ts:18:102)
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted candidateId even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted messageId even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted conversationId even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted cohortId even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted originalSha256 even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects substituted envelopeSha256 even when the attacker keeps the original signature
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      17 |  afterAll(()=>machine?.close());
+      18 |  it('accepts a native device signature bound to the complete prepared candidate',()=>{expect(verify).toBeDefined();expect(verify(receipt,device(),expected)).toEqual(receipt);});
+    > 19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+         |                                                                                                                                                                                                         ^
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+      21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+      22 |  });
+
+      at test/chat-crypto-legacy-attestation.spec.ts:19:201
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects a signed receipt against a different server candidate or image binding
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      19 |  it.each(['candidateId','messageId','conversationId','cohortId','originalSha256','envelopeSha256'])('rejects substituted %s even when the attacker keeps the original signature',field=>{expect(verify).toBeDefined();expect(()=>verify({...receipt,[field]:field.endsWith('Sha256')?b64(9):'other'},device(),expected)).toThrow();});
+      20 |  it('rejects a signed receipt against a different server candidate or image binding',()=>{
+    > 21 |   expect(verify).toBeDefined();for(const change of [{membershipRevision:4},{candidateId:'other'},{attachmentDigests:[]},{attachmentDigests:[{...expected.attachmentDigests[0],ciphertextSha256:b64(9)}]}])expect(()=>verify(receipt,device(),{...expected,...change})).toThrow();
+         |                  ^
+      22 |  });
+      23 |  it('rejects a different registered owner, device or public key',()=>{
+      24 |   expect(verify).toBeDefined();for(const change of [{userId:'outsider'},{deviceId:'foreign'},{ed25519Key:b64(9)}])expect(()=>verify(receipt,{...device(),...change},expected)).toThrow();
+
+      at Object.<anonymous> (test/chat-crypto-legacy-attestation.spec.ts:21:18)
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects a different registered owner, device or public key
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      22 |  });
+      23 |  it('rejects a different registered owner, device or public key',()=>{
+    > 24 |   expect(verify).toBeDefined();for(const change of [{userId:'outsider'},{deviceId:'foreign'},{ed25519Key:b64(9)}])expect(()=>verify(receipt,{...device(),...change},expected)).toThrow();
+         |                  ^
+      25 |  });
+      26 |  it('rejects private fields and unsigned or altered recipient claims',()=>{
+      27 |   expect(verify).toBeDefined();for(const change of [{privateKey:'forbidden'},{signatures:{}},{userId:'outsider'},{deviceId:'foreign'},{membershipRevision:4},{attachmentDigests:[{...expected.attachmentDigests[0],plaintextSha256:b64(9)}]}])expect(()=>verify({...receipt,...change},device(),expected)).toThrow();
+
+      at Object.<anonymous> (test/chat-crypto-legacy-attestation.spec.ts:24:18)
+
+  ● Legacy receipt authentication with native Matrix WASM › rejects private fields and unsigned or altered recipient claims
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      25 |  });
+      26 |  it('rejects private fields and unsigned or altered recipient claims',()=>{
+    > 27 |   expect(verify).toBeDefined();for(const change of [{privateKey:'forbidden'},{signatures:{}},{userId:'outsider'},{deviceId:'foreign'},{membershipRevision:4},{attachmentDigests:[{...expected.attachmentDigests[0],plaintextSha256:b64(9)}]}])expect(()=>verify({...receipt,...change},device(),expected)).toThrow();
+         |                  ^
+      28 |  });
+      29 | });
+      30 |
+
+      at Object.<anonymous> (test/chat-crypto-legacy-attestation.spec.ts:27:18)
+
+Test Suites: 1 failed, 1 total
+Tests:       10 failed, 10 total
+Snapshots:   0 total
+Time:        31.053 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy-attestation.spec.ts.

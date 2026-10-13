@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T00-REBASE-CHATCRYPTO01',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const recordPath='quality/evidence/T28/codex-open-crypto-rebase-1.json',record=JSON.parse(fs.readFileSync(recordPath)),ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T00-REBASE-CHATCRYPTO01');
+assert.equal(task.status,'IN_PROGRESS');assert.equal(record.exitCode,0);assert.equal(hash(record.evidencePath),record.evidenceSha256);
+const old=JSON.parse(fs.readFileSync(`${dir}/previous-ledger.json`));
+for(const path of [recordPath,record.evidencePath])assert(!old.tasks.some(t=>Object.hasOwn(t.outputsHash?.files??{},path)),'Never adopt or alter historical output');
+const readonly=JSON.parse(fs.readFileSync(`${dir}/readonly.json`));
+const originals=Object.fromEntries([recordPath,record.evidencePath].map(p=>[p,readonly[p]??null]));
+task.writeAllowlist.push(recordPath,record.evidencePath);task.bootstrapAttempts=[record];task.evidencePaths.push(recordPath,record.evidencePath,`${dir}/bootstrap-seal.json`);
+for(const p of [recordPath,record.evidencePath])delete readonly[p];
+fs.writeFileSync(`${dir}/readonly-after-bootstrap.json`,JSON.stringify(readonly,null,2)+'\n');
+fs.writeFileSync(`${dir}/bootstrap-seal.json`,JSON.stringify({recordedAt:new Date().toISOString(),reason:'Metadata prepare invoked using prior recorder by mistake; these two artifacts are new and not historical T28 outputs. Current owner pins exact paths and seals final real record. Original readonly snapshot remains immutable.',originals,files:Object.fromEntries([recordPath,record.evidencePath].map(p=>[p,hash(p)])),historicalPassAltered:false},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md','\n- Metadata bootstrap recorder deviation: prepare invoked qua recorder T28 sau closure, tạo đúng2 artifacts mới ngoài historical outputs. Pin2 exact paths cho rebase owner theo broad scope và seal final SHA/real exit0; giữ original readonly snapshot, chỉ loại2 paths qua reviewed readonly-after-bootstrap.json. Không sửa T28 PASS/output/commands hoặc checker; các runs sau dùng recorder owner.\n');
+console.log('Two new bootstrap artifacts sealed; immutable T28 outputs/records unchanged.');

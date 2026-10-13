@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClientConnectionPhaseRecord",
+  "description": "Safe, non-secret telemetry span recording observational connection phase milestones in PostgreSQL client establishment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "clientConnectionIndex",
+    "spanIndex",
+    "parentSpanIndex",
+    "owner",
+    "startedAt",
+    "tcpConnectedAt",
+    "tcpDurationMs",
+    "pgConnectedAt",
+    "pgDurationMs",
+    "socketClosedAt",
+    "socketCloseDurationMs",
+    "finalPhase",
+    "closeReason",
+    "backendPid",
+    "socketReadyState",
+    "socketDestroyed",
+    "bytesRead",
+    "bytesWritten"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "client-connection-phase"
+    },
+    "clientConnectionIndex": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "spanIndex": {
+      "type": ["integer", "null"]
+    },
+    "parentSpanIndex": {
+      "type": ["integer", "null"]
+    },
+    "owner": {
+      "type": "string",
+      "description": "Fixed approved owner enum string from AsyncLocalStorage context"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tcpConnectedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "tcpDurationMs": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "pgConnectedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "pgDurationMs": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "socketClosedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "socketCloseDurationMs": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "finalPhase": {
+      "type": "string",
+      "enum": [
+        "starting",
+        "tcp-connected",
+        "pg-ready",
+        "socket-closed"
+      ]
+    },
+    "closeReason": {
+      "type": "string",
+      "enum": [
+        "pg-ready",
+        "socket-closed",
+        "sync-error",
+        "stopped"
+      ]
+    },
+    "backendPid": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "socketReadyState": {
+      "type": "string",
+      "enum": [
+        "opening",
+        "open",
+        "readOnly",
+        "writeOnly",
+        "closed",
+        "other"
+      ]
+    },
+    "socketDestroyed": {
+      "type": "boolean"
+    },
+    "bytesRead": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "bytesWritten": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

@@ -1,0 +1,6 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync,spawn} from 'node:child_process';const d='quality/evidence/T30';
+const history=(label,code)=>{const r=JSON.parse(fs.readFileSync(d+'/codex-'+label+'.json'));assert.equal(r.exitCode,code);fs.appendFileSync('../.doc/history.md','\n- Coding and build 2 — T30 — CODEX-ONLY actual '+r.startedAt+'–'+r.completedAt+' exit'+code+': '+label+'; evidence code/'+d+'/codex-'+label+'.json. No Anti2/Antigravity/cockpit startup; originalnative result andreadonlydiagnostic are distinct; IN_PROGRESS/noT31.\n');};const run=(label,...args)=>{assert(!fs.existsSync(d+'/codex-'+label+'.json'));const code=spawnSync(process.execPath,[d+'/record.mjs',label,...args],{stdio:'inherit',windowsHide:true}).status??1;history(label,code);return code;};let result=0,observerPromise;
+try{for(const [label,args]of [['t30-supabase-temporary-stop-84',['node',d+'/supabase-test-resource84.mjs','stop']]]){result=run(label,...args);if(result!==0)break;}
+ if(result===0){result=run('headed-t30-auth-bootstrap-2','node',d+'/run-native-auth-bootstrap1-parent.mjs');}}
+finally{if(observerPromise)await observerPromise;if(fs.existsSync(d+'/supabase-test-resource84.json')){const code=run('t30-supabase-restore-84','node',d+'/supabase-test-resource84.mjs','restore');if(code!==0)result=code;}}
+process.exitCode=result;

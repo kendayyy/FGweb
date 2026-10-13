@@ -1,0 +1,46 @@
+{
+  "taskId": "T30",
+  "proposalId": "antigravity-native53-error-preservation-1",
+  "targetFiles": [
+    {
+      "sourcePath": "quality/evidence/T30/rtp-window-reviewed2/screen-share-diagnostic.spec.ts",
+      "proposalPath": "quality/evidence/T30/antigravity-native53-error-preservation-1/screen-share-diagnostic.spec.ts",
+      "changeSummary": "Call persistSanitizedFailure before observeFailure; do not reassign error inside catch(observationError)"
+    },
+    {
+      "sourcePath": "quality/evidence/T30/rtp-window-reviewed2/failure-observer.mjs",
+      "proposalPath": "quality/evidence/T30/antigravity-native53-error-preservation-1/failure-observer.mjs",
+      "changeSummary": "Export persistSanitizedFailure function to record structural location and matcher enum without raw message or secret strings"
+    }
+  ],
+  "invariants": {
+    "originalErrorPreserved": true,
+    "sanitizedBeforeObserver": true,
+    "rawMessageExcluded": true,
+    "secretsAndTokensExcluded": true,
+    "observerIncompleteStatusPreserved": true,
+    "telegramCheckpointPreserved": true,
+    "timeoutNotExtended": true,
+    "diagnosticDeadline5sNotExtended": true
+  },
+  "reconstructionProof": {
+    "script": "quality/evidence/T30/antigravity-native53-error-preservation-1/reconstruction.proof.mjs",
+    "canonicalFrozenHash": "8e126efd434516a6870e9f48029c4317cc2a427e78d3157e660b00ebdba10cc8"
+  },
+  "controlsRunner": {
+    "script": "quality/evidence/T30/antigravity-native53-error-preservation-1/test-controls.mjs",
+    "scenariosCovered": [
+      "observer_success",
+      "observer_evaluation_failure",
+      "observer_deadline_timeout",
+      "persistence_error_non_masking",
+      "error_identity_unmodified"
+    ]
+  },
+  "disclaimers": {
+    "executedInThisTurn": false,
+    "acceptanceClaimed": false,
+    "native53ErrorInferred": false,
+    "readyForCodexReview": true
+  }
+}

@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24292) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (37.054 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      109 |    else if(outgoing.type===sdk.RequestType.ToDevice){
+      110 |     const event=outgoing as sdk.ToDeviceRequest;expect(event.event_type).toBe('m.room.encrypted');const recipients=Object.entries(body.messages as Record<string,Record<string,unknown>>).flatMap(([owner,devices])=>Object.entries(devices).map(([deviceId,content])=>({userId:fg(owner),deviceId,content}))),payload={...context,deviceId:machine.deviceId.toString(),transactionId:event.txn_id,eventType:event.event_type,recipients};
+    > 111 |     const {cohortId:_context,...missing}=payload;expect(_context).toBe('available');expect((await write('to-device',missing,user)).status).toBe(403);expect((await write('to-device',payload,user)).status).toBe(201);expect((await write('to-device',payload,user)).status).toBe(201);expect((await write('to-device',{...payload,cohortId:'verified'},user)).status).toBe(409);
+          |                                                                                                                                            ^
+      112 |     const rows=(await pool.query('SELECT id,cohort_id FROM chat_crypto_to_device_events WHERE transaction_id=$1',[event.txn_id])).rows;expect(rows).toHaveLength(recipients.length);expect(rows.every(row=>row.cohort_id==='available')).toBe(true);
+      113 |    }else throw new Error(`Unexpected historical native request ${outgoing.type}`);
+      114 |    await machine.markRequestAsSent(outgoing.id,outgoing.type,JSON.stringify(response));
+
+      at relay (test/chat-crypto-legacy.integration.spec.ts:111:140)
+      at test/chat-crypto-legacy.integration.spec.ts:118:335
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:102:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        37.61 s, estimated 54 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

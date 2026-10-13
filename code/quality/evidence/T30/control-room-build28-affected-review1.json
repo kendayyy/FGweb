@@ -1,0 +1,235 @@
+{
+  "at": "2026-10-13T04:00:09.595Z",
+  "reviewer": "Codex",
+  "apiBuild": 28,
+  "source": {
+    "at": "2026-10-13T03:46:23.551Z",
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "T30 actual timing14 claim10822ms/controlsGroup9680ms plus meaningful real PG RED9 proves unnecessary room writer blocks on compatible room readers. controlsGroup now takes room SHARE with unchanged user/group lock mode; all other room callers default to previous identical modes. Room writers/session revokers/user writers and group readers remain blocked during controls, fresh ban/membership/session expiry/group closure enforced after actual waits. No mutation/actor/lease/permission/quota/deadline changed; original full regressions required, no PASS.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/calls.service.ts",
+        "proposed": "quality/evidence/T30/control-room-share-reviewed1.ts",
+        "beforeSha256": "789ddc55ecce7fa2aa1e207f45cb82cd6cf7341a618d5f29fdf379845d21fe61",
+        "afterSha256": "0540b03f2fe3581145bdd15056363184a2fea0134cd93cd4cf7e8fd86c633df2"
+      }
+    ],
+    "reverseByteExact": true,
+    "edits": [
+      [
+        "extra:string[]=[],mode:LockMode='FOR UPDATE'){",
+        "extra:string[]=[],mode:LockMode='FOR UPDATE',userMode:LockMode=mode){"
+      ],
+      [
+        "  await db.query(`SELECT id FROM \"user\" WHERE id=$1 ${lockClause}`,[user]);await this.actor(db,user,session);",
+        "  const userLockClause=userMode==='FOR SHARE'?'FOR SHARE':'FOR UPDATE';\n  await db.query(`SELECT id FROM \"user\" WHERE id=$1 ${userLockClause}`,[user]);await this.actor(db,user,session);"
+      ],
+      [
+        "  await this.room(db,group.room_id,user,session,[],mode);",
+        "  // Controls mutate the call group, while the parent room is only read.\n  // Keep the existing user/group write locks and block room membership writers.\n  await this.room(db,group.room_id,user,session,[],'FOR SHARE',mode);"
+      ]
+    ]
+  },
+  "build": {
+    "recordedAt": "2026-10-13T03:47:58.103Z",
+    "reviewer": "Codex",
+    "commandEvidence": "quality/evidence/T30/codex-t30-api-build-28.json",
+    "compiledChanges": [
+      {
+        "path": "apps/api/dist/modules/calls/calls.service.js",
+        "beforeSha256": "92b209d87d631e99e15ac2647b506b960cca336cf84a4d0b044969e3d97161dc",
+        "afterSha256": "b8679e3ab28fd5e77c49c658d79cea8b7078d5f980ec7c3f88d6841b709a4d41"
+      },
+      {
+        "path": "apps/api/dist/modules/calls/calls.service.js.map",
+        "beforeSha256": "79606b2f9a26aa61a2b244a60207e2aa8dfb95ecdf3007f0805bc16c591be311",
+        "afterSha256": "3aba9a4d238dc06c4054d58be64e43c128f133a834c81061a17fd30bc02ea7e3"
+      }
+    ],
+    "allOtherCompiledFilesUnchanged": true,
+    "nativeAcceptancePending": true
+  },
+  "realPgControlCases": 9,
+  "currentOriginalCallCases": 39,
+  "currentOriginalPublishingCases": 11,
+  "currentOriginalPublishingGatewayCases": 16,
+  "currentLeaseCases": 23,
+  "compiledOthersUnchanged": 264,
+  "records": [
+    {
+      "command": "node quality/evidence/T30/adopt-exact.mjs control-room-share-source1 quality/evidence/T30/control-room-share-adoption-plan1.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:46:23.700Z",
+      "completedAt": "2026-10-13T03:47:13.035Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-control-room-share-source-adoption-1.txt",
+      "evidenceSha256": "90265d1bcb972e22b59137b8873e4c80f033a4fc3d1719d45439c2d4b5e1b17c"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p apps/api/tsconfig.json --incremental false",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:47:32.363Z",
+      "completedAt": "2026-10-13T03:47:49.823Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-28.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node quality/evidence/T30/control-room-share2.mjs green",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:47:50.006Z",
+      "completedAt": "2026-10-13T03:47:57.235Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-control-room-share-green-2.txt",
+      "evidenceSha256": "bab17b26c47dd621a658cd2c8e882401ee053f5d3df0f25ccd9f49d627d032c7"
+    },
+    {
+      "command": "node quality/evidence/T30/adopt-api-build-28-reviewed1.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:47:57.419Z",
+      "completedAt": "2026-10-13T03:48:21.016Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build28-adoption-1.txt",
+      "evidenceSha256": "a45fae45c82a7b6cc21010513aa3e6bbf1800114affefbc1bbb6a0d59d4dad79"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux1.mjs call-admission call-gateway call-controls",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:54:10.468Z",
+      "completedAt": "2026-10-13T03:56:23.887Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-call-build28-regressions-2.txt",
+      "evidenceSha256": "38d7c1c78aa9237cbb7e139475070fd05926f7a2f52e39b25518bd7aff19cce5"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:56:24.082Z",
+      "completedAt": "2026-10-13T03:57:35.390Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-build28-alone-1.txt",
+      "evidenceSha256": "1a3efbf0e72870dbeb929cd75107fd9c864d079fe673a24f446195b52cdb9f6b"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux-with-team-play1.mjs publishing-gateway",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:57:35.586Z",
+      "completedAt": "2026-10-13T03:58:58.284Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-publishing-gateway-build28-alone-1.txt",
+      "evidenceSha256": "89796d6ec50453c03f47c407210915496a823502d31266e7e77b74a9f18474c0"
+    },
+    {
+      "command": "node quality/evidence/T30/run-call-participant-lease-batch2.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:58:58.439Z",
+      "completedAt": "2026-10-13T03:59:33.003Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-lease-guards-build28-green-1.txt",
+      "evidenceSha256": "45b693e4e71da199592f7725647a7994edf8cdc3c8dd09604c87fc27c06a2451"
+    },
+    {
+      "command": "node quality/evidence/T30/supabase-test-resource147.mjs restore",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:59:33.107Z",
+      "completedAt": "2026-10-13T03:59:44.685Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-supabase-restore-147.txt",
+      "evidenceSha256": "7819d0570d5eba507ead86ccdae12820ae382e20e988443c769b5e0b9a5e6f2e"
+    },
+    {
+      "command": "node quality/evidence/T30/run-backend-regressions-linux1.mjs call-admission call-gateway call-controls",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-13T03:48:21.129Z",
+      "completedAt": "2026-10-13T03:50:39.195Z",
+      "exitCode": 1,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-frozen-call-build28-regressions-1.txt",
+      "evidenceSha256": "ddcf211685e390890f7035f475828330869b4ff0f33ae2552ed74c42b412c4b7"
+    }
+  ],
+  "cleanups": [
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-f1130b51-2061-44e8-8d6e-cc62c79442ea.json",
+      "completedAt": "2026-10-13T03:56:23.851Z",
+      "names": [
+        "call-admission",
+        "call-gateway",
+        "call-controls"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-15bda6c7-2e1e-4db8-820f-e9527a1286f8",
+        "gateway-19d377d6-3ed9-4ff9-b993-e96a0d4f4944",
+        "gateway-e2787071-e994-4aa4-b0a2-c793a871b7bb",
+        "temporary-regression-f1130b51-2061-44e8-8d6e-cc62c79442ea"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-ac44e762-78aa-43fd-a436-fd762222b162.json",
+      "completedAt": "2026-10-13T03:57:35.364Z",
+      "names": [
+        "publishing"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-cc8eb04f-92ea-4ba3-aef1-9abe12694a44",
+        "temporary-regression-ac44e762-78aa-43fd-a436-fd762222b162"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-41958012-f1f2-44be-b157-515c873e1b51.json",
+      "completedAt": "2026-10-13T03:58:58.256Z",
+      "names": [
+        "publishing-gateway"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "gateway-c826b5fb-aff4-4cd8-a849-1c59a5c32f9e",
+        "temporary-regression-41958012-f1f2-44be-b157-515c873e1b51"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    },
+    {
+      "path": "quality/evidence/T30/regression-runtime-review-538338e8-4772-4bc4-b2b8-9534488b6df8.json",
+      "completedAt": "2026-10-13T03:59:32.979Z",
+      "names": [
+        "call-participant-lease-batch"
+      ],
+      "exitCode": 0,
+      "removed": [
+        "temporary-regression-538338e8-4772-4bc4-b2b8-9534488b6df8"
+      ],
+      "retained": [],
+      "privateRuntimeRemoved": true
+    }
+  ],
+  "initialFailedRunPreserved": true,
+  "initialFailureRootCauseEstablished": false,
+  "photosInspected": true,
+  "telegramSent": true,
+  "photosReview": {
+    "path": "quality/evidence/T30/publishing-regression-photo-review-21.json",
+    "sha256": "7919a070d0e26e119aceb55eec4bb43410260fb1b921c5966fe88af0de84a888"
+  },
+  "cleanupVerified": true,
+  "supabaseRestored": true,
+  "priorPassesUnchanged": 80,
+  "nativeAcceptancePending": true,
+  "noCockpitStartup": true
+}

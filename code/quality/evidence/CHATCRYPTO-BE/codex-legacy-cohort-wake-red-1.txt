@@ -1,0 +1,36 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:5868) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (42.485 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › wakes an original historical device through actual Socket.IO/Redis and closes invalid subscription contexts
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 3
+    + Received  + 1
+
+      Object {
+    -   "conversationId": "legacy",
+    -   "deviceId": "B",
+    -   "ok": true,
+    +   "ok": false,
+      }
+
+      108 |   const subscribe=(socket:Socket,deviceId:string,cohortId?:string)=>new Promise<unknown>((resolve,reject)=>socket.timeout(2000).emit(SocketEventNames.CRYPTO_SUBSCRIBE,{conversationId:'legacy',deviceId,...(cohortId?{cohortId}: {})},(error:Error|null,value:unknown)=>error?reject(error):resolve(value)));
+      109 |   try{const bob=await connect('bob'),late=await connect('outsider');bob.on(SocketEventNames.CRYPTO_SYNC_AVAILABLE,item=>hints.push(item));const lateHints:unknown[]=[];late.on(SocketEventNames.CRYPTO_SYNC_AVAILABLE,item=>lateHints.push(item));
+    > 110 |    expect(await subscribe(bob,'B')).toMatchObject({ok:false});expect(await subscribe(bob,'AFTER_BOB_COHORT','available')).toMatchObject({ok:false});expect(await subscribe(late,'C','available')).toMatchObject({ok:false});expect(await subscribe(bob,'B','missing')).toMatchObject({ok:false});expect(await subscribe(bob,'B','available')).toMatchObject({ok:true,conversationId:'legacy',deviceId:'B'});
+          |                                                                                                                                                                                                                                                                                                                                               ^
+      111 |    const revision=Number((await pool.query("SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].membership_revision),transactionId='historical-socket-wake';expect((await write('verification',{conversationId:'legacy',membershipRevision:revision,cohortId:'available',deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}})).status).toBe(201);
+      112 |    const end=Date.now()+5000;while(hints.length===0&&Date.now()<end)await new Promise(resolve=>setTimeout(resolve,20));expect(hints).toEqual([{conversationId:'legacy',deviceId:'B',membershipRevision:revision}]);expect(lateHints).toEqual([]);
+      113 |    const row=(await pool.query('SELECT id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows[0];expect((await pool.query('SELECT delivered_at FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[row.id])).rows[0].delivered_at).not.toBeNull();expect((await write('sync/ack',{deviceId:'B',eventIds:[row.id]},'bob')).status).toBe(201);
+
+      at test/chat-crypto-legacy.integration.spec.ts:110:335
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:89:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:106:125)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 16 passed, 17 total
+Snapshots:   0 total
+Time:        42.898 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

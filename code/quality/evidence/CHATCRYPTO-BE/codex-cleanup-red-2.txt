@@ -1,0 +1,39 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3616) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (42.704 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › cleans expired ciphertext drafts without deleting live or consumed objects, and tolerates a missing file
+
+    TypeError: app.get(...).cleanup is not a function
+
+      481 |   await pool.query(`UPDATE chat_crypto_upload_drafts SET created_at=now()-interval '2 days',expires_at=now()-interval '1 day',consumed_at=CASE WHEN consumed_at IS NULL THEN NULL ELSE now()-interval '36 hours' END WHERE id=ANY($1::text[])`,[[expired.id,missing.id,consumed.id]]);
+      482 |   fs.unlinkSync(path.join(objectRoot,missing.object_key));
+    > 483 |   const cleanup=()=> (app.get(CryptoRelayService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                              ^
+      484 |   await cleanup();await cleanup();
+      485 |   expect((await pool.query(`SELECT id FROM chat_crypto_upload_drafts WHERE id=ANY($1::text[])`,[[expired.id,missing.id]])).rowCount).toBe(0);
+      486 |   expect(fs.existsSync(path.join(objectRoot,expired.object_key))).toBe(false);
+
+      at cleanup (test/chat-crypto-devices.integration.spec.ts:483:94)
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:484:9)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › retains an expired draft after filesystem failure and skips a locked draft for retry
+
+    TypeError: app.get(...).cleanup is not a function
+
+      491 |   const row=(await pool.query(`SELECT * FROM chat_crypto_upload_drafts WHERE client_upload_id='cleanup-live'`)).rows[0];
+      492 |   await pool.query(`UPDATE chat_crypto_upload_drafts SET created_at=now()-interval '2 days',expires_at=now()-interval '1 day' WHERE id=$1`,[row.id]);
+    > 493 |   const cleanup=()=> (app.get(CryptoRelayService) as unknown as {cleanup:()=>Promise<void>}).cleanup();
+          |                                                                                              ^
+      494 |   const lock=await pool.connect();try{
+      495 |    await lock.query('BEGIN');await lock.query(`SELECT id FROM chat_crypto_upload_drafts WHERE id=$1 FOR UPDATE`,[row.id]);
+      496 |    await cleanup();expect(fs.existsSync(path.join(objectRoot,row.object_key))).toBe(true);
+
+      at cleanup (test/chat-crypto-devices.integration.spec.ts:493:94)
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:496:10)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 27 passed, 29 total
+Snapshots:   0 total
+Time:        43.339 s, estimated 45 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

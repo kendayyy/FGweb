@@ -1,0 +1,199 @@
+{
+  "runId": "t30-native-6fc2725b41ee46e59e6245002dbea9ac",
+  "nativeAcceptance": false,
+  "summary": "Reconstruction of lock-queue starvation and statement_timeout failure on PostgreSQL rooms row lock during Native 59 run",
+  "statementTimeoutLimitMs": 3000,
+  "timeline": [
+    {
+      "timestamp": "2026-10-11T17:33:02.159Z",
+      "actor": "api-service",
+      "pid": 13921,
+      "poolIndex": 3,
+      "service": "RoomsService.listRoomMembers",
+      "action": "Acquired rooms lock FOR SHARE",
+      "details": "Concurrent room member listing holds shared lock on target room row."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:03.252Z",
+      "actor": "signaling-gateway",
+      "pid": 13793,
+      "poolIndex": 0,
+      "service": "signaling-gateway.liveLease",
+      "action": "Acquired rooms lock FOR SHARE",
+      "details": "Gateway background lease verification holds shared lock on target room row."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:03.368Z",
+      "actor": "api-service",
+      "pid": 13843,
+      "poolIndex": 17,
+      "transactionIndex": 105,
+      "httpRoute": "POST /api/v1/calls/6c2c5727-815b-4df8-b2ab-2947b0f20c72/join",
+      "service": "CallsService.join",
+      "action": "BEGIN transaction",
+      "details": "Client initiates call admission; transaction begins UTC local configuration."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:03.461Z",
+      "actor": "api-service",
+      "pid": 13843,
+      "poolIndex": 17,
+      "transactionIndex": 105,
+      "service": "CallsService.join",
+      "action": "Request rooms FOR UPDATE (enqueued in lock wait queue)",
+      "details": "CallsService.room() requests SELECT id FROM rooms WHERE id=ANY(...) FOR UPDATE. Blocked by active FOR SHARE holders PID 13921 and PID 13793."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:03.536Z",
+      "actor": "signaling-gateway",
+      "pid": 13795,
+      "poolIndex": 0,
+      "service": "signaling-gateway.lockedLease",
+      "action": "Request rooms FOR SHARE (enqueued behind PID 13843)",
+      "details": "Gateway incoming WebSocket frame validates room membership with SELECT id FROM rooms WHERE id=$1 FOR SHARE. Queued behind PID 13843's FOR UPDATE request per PostgreSQL lock queue policy to prevent writer starvation."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:04.464Z",
+      "actor": "pg-wait-observer",
+      "sampleIndex": 47,
+      "observations": [
+        {
+          "pid": 13843,
+          "state": "active",
+          "queryShape": "selectRoomsUpdate",
+          "isWaiting": true,
+          "queryAgeMs": 992,
+          "blockerPids": [13921]
+        },
+        {
+          "pid": 13795,
+          "state": "active",
+          "queryShape": "selectRoomsShare",
+          "isWaiting": true,
+          "queryAgeMs": 925,
+          "blockerPids": [13843]
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-11T17:33:05.447Z",
+      "actor": "pg-wait-observer",
+      "sampleIndex": 48,
+      "observations": [
+        {
+          "pid": 13843,
+          "state": "idleInTransaction",
+          "queryShape": "selectRoomsUpdate",
+          "isWaiting": false,
+          "queryAgeMs": 1976,
+          "blockerPids": []
+        },
+        {
+          "pid": 13795,
+          "state": "active",
+          "queryShape": "selectRoomsShare",
+          "isWaiting": true,
+          "queryAgeMs": 1909,
+          "blockerPids": [13843]
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-11T17:33:05.480Z",
+      "actor": "api-service",
+      "pid": 13843,
+      "poolIndex": 17,
+      "transactionIndex": 105,
+      "service": "CallsService.join",
+      "action": "Acquired rooms FOR UPDATE after 2018.66ms wait",
+      "details": "Prior FOR SHARE locks released. PID 13843 acquires exclusive row lock on rooms table and begins holding it."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:05.480Z - 2026-10-11T17:33:07.295Z",
+      "actor": "api-service",
+      "pid": 13843,
+      "poolIndex": 17,
+      "transactionIndex": 105,
+      "service": "CallsService.join",
+      "action": "Executes 21 queries + LiveKit createRoom RPC + duplicate actor checks under lock",
+      "details": "Holding rooms FOR UPDATE for 1860.1ms and call_groups FOR UPDATE for 1043.1ms. Includes outbound HTTP network call to LiveKit server createRoom (line 130) and duplicate actor() verification queries (line 133)."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:06.408Z",
+      "actor": "pg-wait-observer",
+      "sampleIndex": 49,
+      "observations": [
+        {
+          "pid": 13843,
+          "state": "idleInTransaction",
+          "isWaiting": false,
+          "xactAgeMs": 3030,
+          "queryAgeMs": 27,
+          "blockerPids": []
+        },
+        {
+          "pid": 13795,
+          "state": "active",
+          "queryShape": "selectRoomsShare",
+          "isWaiting": true,
+          "queryAgeMs": 2870,
+          "blockerPids": [13843]
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-11T17:33:06.563Z",
+      "actor": "postgresql-server",
+      "pid": 13795,
+      "service": "signaling-gateway.lockedLease",
+      "action": "Cancels query due to statement_timeout (3000ms)",
+      "details": "PID 13795 has waited 3026.66ms (1944ms while 13843 was queued + 1083ms while 13843 held the lock). PostgreSQL fires SQLSTATE 57014 (canceling statement due to statement timeout)."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:06.563Z",
+      "actor": "signaling-gateway",
+      "pid": 13795,
+      "poolIndex": 0,
+      "service": "signaling-gateway.lockedLease",
+      "action": "ROLLBACK transaction",
+      "details": "Gateway query fails with SQLSTATE 57014; connection rolls back transaction in 18.49ms."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:06.589Z",
+      "actor": "signaling-gateway",
+      "service": "signaling-gateway.onError",
+      "action": "Invokes LiveKit removeParticipant RPC",
+      "details": "Gateway lease failure error handler terminates participant binding and calls RoomService.removeParticipant."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:06.624Z",
+      "actor": "livekit-server",
+      "service": "RoomService.removeParticipant",
+      "action": "SERVICE_REQUEST_REMOVE_PARTICIPANT executed",
+      "details": "LiveKit SFU disconnects participant admission_55d4607d-bff3-427f-83e4-55880449cbc8 (first receiver)."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:07.340Z",
+      "actor": "api-service",
+      "pid": 13843,
+      "poolIndex": 17,
+      "transactionIndex": 105,
+      "service": "CallsService.join",
+      "action": "COMMIT transaction",
+      "details": "PID 13843 commits transaction 105; releases rooms lock (hold time 1860.1ms) and call_groups lock (hold time 1043.1ms)."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:07.397Z",
+      "actor": "api-service",
+      "httpRoute": "POST /api/v1/calls/6c2c5727-815b-4df8-b2ab-2947b0f20c72/join",
+      "action": "HTTP 201 response sent",
+      "details": "Total HTTP endpoint latency ~4029ms."
+    },
+    {
+      "timestamp": "2026-10-11T17:33:45.000Z",
+      "actor": "test-runner",
+      "action": "Native 59 RED failure at 45000ms deadline",
+      "details": "Because receiver was evicted by SFU at 17:33:06.624Z following SQLSTATE 57014, track arrival was interrupted and original assertion timed out."
+    }
+  ]
+}

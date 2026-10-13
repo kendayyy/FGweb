@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25720) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (50.422 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › restores authenticated DB/object backup after separate-key rotation through actual app ACLs and native client decryption
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      67 |    const history=await request(restoredBase).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.alice);expect(history.status).toBe(200);const item=history.body.items.find((row:{id:string})=>row.id===sent.body.id);expect(item).toBeDefined();
+      68 |    const decrypted=await machine.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:machine.userId.toString(),event_id:'$'+item.id,origin_server_ts:Date.now(),content:item.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));expect(JSON.parse(decrypted.event).content.body).toBe('private-backup-image');
+    > 69 |    const fetched=await request(restoredBase).get(`/api/v1/crypto/conversations/dm/attachments/${uploaded.body.id}`).set('Cookie',cookies.alice);expect(fetched.status).toBe(200);expect(Buffer.from(sdk.Attachment.decrypt(new sdk.EncryptedAttachment(new Uint8Array(fetched.body)),info))).toEqual(png);
+         |                                                                                                                                                                                                                            ^
+      70 |    expect((await request(restoredBase).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.outsider)).status).toBe(403);expect((await request(restoredBase).get(`/api/v1/crypto/conversations/dm/attachments/${uploaded.body.id}`).set('Cookie',cookies.outsider)).status).toBe(403);
+      71 |    const selected=await request(restoredBase).post(`/api/v1/crypto/reports/${disclosed.body.id}/read`).set('Cookie',cookies.outsider).set('Origin',origin).send({});expect(selected.status).toBe(201);expect(selected.body.selectedMessages[0].text).toBe('explicitly-selected-backup-selected');
+      72 |    const publicHistory=await request(restoredBase).get(`/api/v1/conversations/${lobby}/messages`);expect(publicHistory.status).toBe(200);expect(publicHistory.body.items.some((row:{content:string})=>row.content==='public-configured-actual-configured')).toBe(true);
+
+      at passStringToWasm0 (../../node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:12051:19)
+      at new EncryptedAttachment (../../node_modules/@matrix-org/matrix-sdk-crypto-wasm/pkg/matrix_sdk_crypto_wasm_bg.js:2536:22)
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:69:220)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        50.895 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"1ff3df9eabfd43eca6e600c099dc3114","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

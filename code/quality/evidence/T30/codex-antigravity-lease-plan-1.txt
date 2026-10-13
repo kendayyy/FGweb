@@ -1,0 +1,19 @@
+The proposal files for the minimal named prepared `QueryConfig` optimization and corresponding integration behavior tests have been prepared exclusively under [`quality/evidence/T30/antigravity-lease-plan-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1):
+
+### 1. Proposed Files & SHA-256 Hashes
+
+| Relative Proposal Path | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts) | `de79098272f46678b703ad592cf3ab49993fc746f11ad017f42b97ada78a09f1` | Wraps [`liveLease`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts#L5-L22) query with `name: 'fg_live_call_admission_v1'`, preserving the exact SQL string verbatim, `values: [id]`, generic `Pool \| PoolClient` return, and leaving [`publicationSources`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts#L26-L29) and [`publicationPermission`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts#L30) completely untouched. |
+| [`quality/evidence/T30/antigravity-lease-plan-1/apps/api/test/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/test/t30-signaling-throughput.integration.spec.ts) | `d752f75d281be9c9221fbbd4814bd002cc6a2c077318b38c0a596ced10570939` | Preserves all 9 existing test cases, assertions, and timeouts. Imports [`liveLease`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/test/t30-signaling-throughput.integration.spec.ts#L24) and adds 3 real-owned-PG behavior tests verifying 25 warm reads on the same `PoolClient`, distinct parameter differentiation, immediate invalidation on independent commit (`revoke`, `ban`, `expire`), and numeric inspection of `pg_prepared_statements`. |
+| [`quality/evidence/T30/antigravity-lease-plan-1/implementation-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/implementation-notes.md) | `027338c0c4a72b21d022442c72b6b6ca3d6286de46af94d2ce2f3494b9df83e8` | Documents query plan diagnostic analysis, prepared statement reuse mechanics, zero result caching invariants, and test assertions. |
+
+---
+
+### 2. Summary of Implementation
+
+- **Optimization Mechanics**: Replaces dynamic text querying in [`liveLease`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lease-plan-1/apps/api/src/modules/calls/lease-store.ts#L5-L22) with node-postgres `QueryConfig` (`name: 'fg_live_call_admission_v1'`, `text: ...`, `values: [id]`). PostgreSQL plans the query once per backend connection, reusing the cached execution plan via parameter binding and eliminating the 15–27ms per-query planning latency observed in `codex-t30-query-plan-diagnostic-2.txt`.
+- **Zero Result / Authority Caching**: No query results or authorization state are cached in memory. Every frame still executes a real database query against the latest committed transaction state.
+- **Integration Test Coverage**: Added parameterized behavior tests for `['revoke', 'ban', 'expire']` confirming that after 25 warm reads on a single `PoolClient`, external mutations immediately cause the next read to return `undefined`, while other admissions remain valid. Only numeric `generic_plans`, `custom_plans`, and `cacheCount` metrics are logged from `pg_prepared_statements`.
+
+*No production source, dist, tests, git ledger, or history files were altered. No build or test commands were run. Ready for Codex review and adoption.*

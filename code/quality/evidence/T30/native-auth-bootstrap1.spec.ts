@@ -1,0 +1,68 @@
+import {test,expect,chromium,type Browser,type BrowserContext,type Page} from '@playwright/test';
+import {fork,type ChildProcess,type ForkOptions} from 'node:child_process';
+import fs from 'node:fs';
+import {randomUUID} from 'node:crypto';
+import {SignalRequest} from '@livekit/protocol';
+import {captureUiStep} from '../../../tools/telegram-bridge/demo-stream.mjs';
+type Actor={id:string;name:string;cookie:string};
+type Ready={origin:string;actors:Record<string,Actor>;roomId:string;turnPort:number};
+type CaptureWindow=Window&{t30Peers:RTCPeerConnection[];t30Captures:MediaStream[];t30CaptureCalls:Array<{active:boolean;requested:DisplayMediaStreamOptions}>;t30SubscriptionFrames:Array<{at:number;data:number[]}>};
+const runId='t30-auth-bootstrap-'+randomUUID().replaceAll('-',''),startedAt=new Date().toISOString(),evidence='quality/evidence/T30/'+runId;
+let fixture:ChildProcess,ready:Ready,step=0,activePage:Page|undefined;
+const browserTimings:Array<Record<string,unknown>>=[];
+const pending=new Map<string,(value:Record<string,unknown>)=>void>(),browsers:Browser[]=[],windows=new Map<string,{page:Page;source?:Page;context:BrowserContext}>();
+test.beforeAll(async()=>{
+ fs.mkdirSync(evidence,{recursive:true});
+ const options:ForkOptions&{windowsHide:boolean}={env:{...process.env,FG_T30_EVIDENCE_DIR:evidence},stdio:['ignore','ignore','ignore','ipc'],windowsHide:true};
+ fixture=fork('quality/evidence/T30/fixture-server-auth-bootstrap1.mjs',[],options);
+ fixture.on('message',(m:Record<string,unknown>)=>{if(typeof m.id==='string'){pending.get(m.id)?.(m);pending.delete(m.id);}if(m.kind==='phase')fs.appendFileSync(evidence+'/phases.txt',new Date().toISOString()+' '+m.name+'\n');if(m.kind==='failed')fs.writeFileSync(evidence+'/setup-failure.json',JSON.stringify(m,null,2)+'\n');});
+ await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture startup timeout')),110000);fixture.on('message',(m:Record<string,unknown>)=>{if(m.kind==='ready'){ready=m as unknown as Ready;clearTimeout(timer);resolve();}if(m.kind==='failed'){clearTimeout(timer);reject(Error('Fixture failed; inspect sanitized evidence'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(Error('Fixture exited before readiness'));});});
+});
+test.afterAll(async()=>{
+ fs.writeFileSync(evidence+'/bootstrap-browser-timing.json',JSON.stringify(browserTimings,null,2)+'\n',{flag:'wx'});
+ for(const browser of browsers)await browser.close();
+ if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timeout')),55000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+});
+async function ask(kind:string,extra:Record<string,unknown>={}){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native observation timeout'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native observation failed'));else resolve(value);});fixture.send({id,kind,...extra});});}
+async function checkpoint(page:Page,action:string,result:string,status:'RUNNING'|'SUCCEEDED'|'FAILED'='RUNNING'){
+ activePage=page;await page.bringToFront();await captureUiStep(page,{task:'T30',runId,step:++step,title:'T30 — chia sẻ màn hình thật',action,result,startedAt,headed:true,privacySafe:true,status,maskSelectors:['.fg-private-chat','.fg-crypto-sas','[data-demo-private]']});
+}
+async function openActor(key:string,capture=false,mobile=false){
+ const title=`FG T30 Capture ${key} ${runId}`;
+ const browser=await chromium.launch({headless:false,args:['--use-fake-device-for-media-stream','--disable-background-timer-throttling','--disable-renderer-backgrounding',...(capture?[`--auto-select-tab-capture-source-by-title=${title}`]:[])]});browsers.push(browser);
+ let source:Page|undefined;
+
+ const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:900},permissions:['microphone'],...(mobile?{isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/140.0.0.0 Mobile Safari/537.36'}:{})});
+ if(capture){source=await context.newPage();await source.setViewportSize({width:1280,height:720});await source.setContent(`<html lang="vi"><head><title>${title}</title><style>body{margin:0;background:#17334d;color:white;font:32px sans-serif;padding:40px;box-sizing:border-box}i{display:block;width:160px;height:160px;background:#7ac09b;animation:move 3s linear infinite alternate}@keyframes move{to{transform:translateX(600px)}}</style></head><body><h1>Nguồn capture kiểm thử ${ready.actors[key].name}</h1><p>Tab thuộc fixture T30 · dữ liệu tổng hợp</p><i></i></body></html>`);}
+ await context.addCookies([{name:'better-auth.session_token',value:ready.actors[key].cookie,url:ready.origin,httpOnly:true,sameSite:'Lax'}]);
+ await context.addInitScript(({turnPort})=>{
+  const own=window as unknown as CaptureWindow;own.t30Peers=[];own.t30Captures=[];own.t30CaptureCalls=[];own.t30SubscriptionFrames=[];
+  const send=WebSocket.prototype.send;
+  WebSocket.prototype.send=function(data){
+   const bytes=data instanceof ArrayBuffer?new Uint8Array(data):ArrayBuffer.isView(data)?new Uint8Array(data.buffer,data.byteOffset,data.byteLength):null;
+   // SignalRequest field6 (subscription), length-delimited. Retain only these
+   // small protocol frames; never tokens, SDP, ICE candidates or chat payloads.
+   if(bytes&&bytes[0]===50&&bytes.length<=8192&&own.t30SubscriptionFrames.length<256)own.t30SubscriptionFrames.push({at:Date.now(),data:Array.from(bytes)});
+   return send.call(this,data);
+  };
+  const Native=window.RTCPeerConnection,translate=(c:RTCConfiguration={}):RTCConfiguration=>({...c,iceServers:(c.iceServers??[]).filter(s=>[s.urls].flat().some(u=>u.startsWith('turn'))).map(s=>({...s,urls:`turn:127.0.0.1:${turnPort}?transport=tcp`})),iceTransportPolicy:'relay'});
+  window.RTCPeerConnection=class extends Native{constructor(c?:RTCConfiguration){super(translate(c));own.t30Peers.push(this);}setConfiguration(c:RTCConfiguration){super.setConfiguration(translate(c));}};
+  if(navigator.mediaDevices?.getDisplayMedia){const original=navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);navigator.mediaDevices.getDisplayMedia=async options=>{own.t30CaptureCalls.push({active:navigator.userActivation.isActive,requested:options??{}});const stream=await original(options);own.t30Captures.push(stream);return stream;};}
+ },{turnPort:ready.turnPort});
+ const page=await context.newPage();activePage=page;windows.set(key,{page,source,context});await page.bringToFront();const safe=(value:string)=>value.replace(/(?:wss?|https?):\/\/[^\s]+/g,'[URL REDACTED]').replace(/\beyJ[A-Za-z0-9_.-]+\b/g,'[JWT REDACTED]').replace(/\b[A-Za-z0-9_-]{43}\b/g,'[TOKEN REDACTED]');page.on('pageerror',error=>fs.appendFileSync(evidence+'/browser-errors.jsonl',JSON.stringify({at:new Date().toISOString(),kind:'pageerror',message:safe(error.message)})+'\n'));page.on('console',message=>{if(message.type()==='error'||message.type()==='warn')fs.appendFileSync(evidence+'/browser-errors.jsonl',JSON.stringify({at:new Date().toISOString(),kind:message.type(),message:safe(message.text())})+'\n');});page.on('response',r=>{const u=new URL(r.url());if(u.origin===ready.origin&&u.pathname.startsWith('/api/v1/'))fs.appendFileSync(evidence+'/api-statuses.jsonl',JSON.stringify({at:new Date().toISOString(),path:u.pathname,method:r.request().method(),status:r.status()})+'\n');});
+ const kind=(raw:string)=>{const p=new URL(raw).pathname;return p==='/api/v1/me'?'ME':p==='/api/v1/rooms/own'?'OWN_ROOMS':/^\/api\/v1\/rooms\/[^/]+$/.test(p)?'ROOM_DETAIL':null;};for(const event of ['request','requestfinished'] as const)page.on(event,request=>{const route=kind(request.url());if(route&&browserTimings.length<500)browserTimings.push({actor:key,route,event,at:new Date().toISOString(),timing:request.timing()});});browserTimings.push({actor:key,event:'GOTO_START',at:new Date().toISOString()});
+ await page.goto(`${ready.origin}/rooms/${ready.roomId}`);browserTimings.push({actor:key,event:'GOTO_COMPLETE',at:new Date().toISOString()});if(key==='sender')await checkpoint(page,'Bắt đầu tải FG','Mở ứng dụng thật trong browser headed; chưa có kết quả call/capture');await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toBeVisible();windows.set(key,{page,source,context});return page;
+}
+async function join(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Vào gọi',exact:true}).click();await expect(page.getByRole('button',{name:'Rời cuộc gọi',exact:true})).toBeVisible({timeout:25000});await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toContainText('Đã kết nối');fs.appendFileSync(evidence+'/connection-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');}
+async function share(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(page.getByRole('button',{name:'Dừng chia sẻ',exact:true})).toBeVisible({timeout:45000});fs.appendFileSync(evidence+'/publication-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');const capture=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;return {calls:w.t30CaptureCalls,tracks:w.t30Captures.flatMap(s=>s.getVideoTracks().map(t=>({state:t.readyState,settings:t.getSettings()})))};});expect(capture.calls.at(-1)?.active).toBe(true);expect(capture.tracks.at(-1)?.settings.displaySurface).toBe('browser');expect(capture.tracks.at(-1)?.state).toBe('live');expect(capture.tracks.at(-1)?.settings.height??0).toBeLessThanOrEqual(720);expect(capture.tracks.at(-1)?.settings.frameRate??0).toBeLessThanOrEqual(31);fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\n');}
+async function stats(page:Page){activePage=page;await page.bringToFront();await page.locator('.fg-live-stage').scrollIntoViewIfNeeded();return page.evaluate(async()=>{const own=window as unknown as CaptureWindow;const rows:Array<{id:string;kind:string;bytes:number;packets:number;lost:number;jitter:number;trackIdentifier:string;width:number;height:number}>=[];let relay=false;for(const pc of own.t30Peers){const report=await pc.getStats();for(const s of report.values()){if(s.type==='inbound-rtp'&&!s.isRemote)rows.push({id:s.id,kind:s.kind??s.mediaType,bytes:s.bytesReceived??0,packets:s.packetsReceived??0,lost:s.packetsLost??0,jitter:s.jitter??0,trackIdentifier:s.trackIdentifier??'',width:s.frameWidth??0,height:s.frameHeight??0});if(s.type==='candidate-pair'&&s.state==='succeeded'&&s.nominated){const local=report.get(s.localCandidateId);if(local?.candidateType==='relay')relay=true;}}}const video=document.querySelector('.fg-live-stage video') as HTMLVideoElement|null;const selected=document.querySelector('.fg-live-selector [aria-selected="true"]');return {at:Date.now(),rows,relay,peerCount:own.t30Peers.length,selectedId:selected?.id??'',videoTrackId:(video?.srcObject as MediaStream|null)?.getVideoTracks()[0]?.id??'',videoCount:document.querySelectorAll('.fg-live-stage video').length};});}
+type Stats=Awaited<ReturnType<typeof stats>>;
+async function subscriptionMessages(page:Page){const frames=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;const frames=w.t30SubscriptionFrames;w.t30SubscriptionFrames=[];return frames;});const rows=frames.flatMap(frame=>{const request=SignalRequest.fromBinary(Uint8Array.from(frame.data));if(request.message.case!=='subscription')return [];const s=request.message.value;return [{at:frame.at,subscribe:s.subscribe,trackSids:[...s.trackSids,...s.participantTracks.flatMap(p=>p.trackSids)]}];});fs.appendFileSync(evidence+'/native-subscription-messages.jsonl',JSON.stringify(rows)+'\n');return rows;}
+function delta(before:Stats,after:Stats){return after.rows.map(row=>{const old=before.rows.find(x=>x.id===row.id);return {...row,bytesDelta:row.bytes-(old?.bytes??0),packetsDelta:row.packets-(old?.packets??0),lostDelta:row.lost-(old?.lost??0)};});}
+async function receiveOne(page:Page){const before=await stats(page);await page.waitForTimeout(3000);const after=await stats(page),rows=delta(before,after);expect(after.relay).toBe(true);expect(after.videoCount).toBe(1);const videos=rows.filter(r=>r.kind==='video'&&r.bytesDelta>1000);expect(videos).toHaveLength(1);expect(videos[0].packetsDelta).toBeGreaterThan(0);fs.appendFileSync(evidence+'/subscriptions.jsonl',JSON.stringify({before,after,delta:rows})+'\n');return after;}
+test('T30 focused second actor bootstrap; original5s room deadline; not acceptance',async()=>{
+ try{
+  const sender=await openActor('sender',true);activePage=sender;await checkpoint(sender,'Mở phòng thật','DB/API và giao diện FG đã tải; chưa phát màn hình');await sender.getByRole('button',{name:'Tạo nhóm gọi',exact:true}).click();await join(sender);await sender.getByRole('button',{name:'Bật mic',exact:true}).click();await expect(sender.getByRole('button',{name:'Tắt mic',exact:true})).toBeVisible();
+  const linh=await openActor('receiver',true);await checkpoint(linh,'Đo tải phòng người thứ hai','Vùng gọi hiện trong deadline gốc; chẩn đoán bootstrap riêng','SUCCEEDED');
+ }catch(error){if(activePage&&!activePage.isClosed())await checkpoint(activePage,'Kiểm thử dừng tại assertion lỗi','Giữ bằng chứng thật; chưa nghiệm thu T30','FAILED');throw error;}
+});

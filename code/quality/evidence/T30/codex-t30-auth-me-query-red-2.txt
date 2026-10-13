@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "label": "email-only incomplete onboarding and provider avatar",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "Discord identity persisted",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "other account cannot leak into current DTO",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "explicit null profile avatar does not fall back to provider; empty interests incomplete",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "multiple persisted game interests sorted without duplicate rows",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "next read sees committed profile update",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "removed interests immediately revoke onboarding completion",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "removed Discord account is not cached",
+      "queries": 4,
+      "persistedDtoExact": true
+    },
+    {
+      "label": "missing user preserves rejection",
+      "rejected": true
+    }
+  ],
+  "cleanup": {
+    "schemaRemoved": true,
+    "clientEnded": true
+  },
+  "failure": {
+    "name": "AssertionError",
+    "message": "INTENDED_RED one persisted profile read statement instead of four sequential round trips"
+  }
+}

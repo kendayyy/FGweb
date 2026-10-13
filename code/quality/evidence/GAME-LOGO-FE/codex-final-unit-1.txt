@@ -1,0 +1,59 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (10 tests | 1 failed) 4145ms
+   ❯ T13 approved Lobby behavior (10)
+     × GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork 971ms
+ ❯ test/game-logos.test.tsx (7 tests | 1 failed) 439ms
+   ❯ GAME-LOGO-FE visual identity behavior (7)
+     × requires a complete approved seven-game asset set before task PASS 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/game-logos.test.tsx > GAME-LOGO-FE visual identity behavior > requires a complete approved seven-game asset set before task PASS
+AssertionError: expected [ 'Dota 2' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "Dota 2",
++ ]
+
+ ❯ test/game-logos.test.tsx:19:104
+     17|  });
+     18|  it('requires a complete approved seven-game asset set before task PAS…
+     19|   expect(Object.entries(GAME_LOGOS).filter(([,asset])=>!asset.light||!…
+       |                                                                                                        ^
+     20|  });
+     21|  it('keeps a single full accessible name when an image fails',()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork
+Error: expect(received).toHaveAttribute()
+
+received value must be an HTMLElement or an SVGElement.
+Received has type:  Null
+Received has value: null
+ ❯ test/lobby.test.tsx:76:50
+     74|             const control = screen.getByRole('button', { name: game.ti…
+     75|             expect(control).toHaveAttribute('title', game.title);
+     76|             expect(control.querySelector('img')).toHaveAttribute('src'…
+       |                                                  ^
+     77|         }
+     78|         expect(rail.querySelector('.fg-brand-mark')).toBeInTheDocument…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 15 passed (17)
+   Start at  02:16:38
+   Duration  12.65s (tests 38%, environment 31%, transform 14%, import 11%, setup 5%)
+
+Environment  jsdom was created 2 times · 3.77s total, 31% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

@@ -1,0 +1,20 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-QA',source=dir+'/headed-security.mjs',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+fs.copyFileSync(source,dir+'/headed-security-green-3-source.mjs',fs.constants.COPYFILE_EXCL);
+let text=fs.readFileSync(source,'utf8');
+text="import {createFgSecurityHeaders} from '../../../tests/security/chat-crypto/security-headers-proposed.mjs';\n"+text;
+const anchor="  const marker='qa-xss-'+owned;";assert(text.includes(anchor));
+// front HTTP callback uses a final trusted HTML response; retain actual API/PG/native behavior.
+const front=text.indexOf('const front = http.createServer');assert(front>=0);
+const end=text.indexOf('\n});',front);assert(end>front);
+const fragment=text.slice(front,end);assert(fragment.includes('res.end'));
+const insertion='  const originalEnd=res.end;res.end=function(chunk,encoding,callback){if(String(this.getHeader(\'Content-Type\')??\'\').startsWith(\'text/html\'))for(const [key,value]of Object.entries(createFgSecurityHeaders(Buffer.isBuffer(chunk)?chunk.toString(\'utf8\'):String(chunk))))this.setHeader(key,value);return originalEnd.call(this,chunk,encoding,callback);};\n';
+text=text.slice(0,front)+text.slice(front).replace(/http\.createServer\(\(req, res\) => \{/,match=>match+'\n'+insertion);
+assert(text.includes(insertion));
+text=text.replace(anchor,`  const cspResponse=await b.request.get(origin+'/');assert.equal(cspResponse.status(),200);assert(cspResponse.headers()['content-security-policy']);
+  await b.evaluate(()=>{window.__qaBlockedInline=0;window.__qaCspViolations=[];document.addEventListener('securitypolicyviolation',event=>window.__qaCspViolations.push(event.effectiveDirective));const script=document.createElement('script');script.textContent='window.__qaBlockedInline=1';document.body.append(script);});
+  await expect.poll(()=>b.evaluate(()=>window.__qaCspViolations.length)).toBeGreaterThan(0);assert.equal(await b.evaluate(()=>window.__qaBlockedInline),0);
+`+anchor);
+text=text.replaceAll('headed-security-proof-','headed-csp-proof-').replaceAll('nativeSasAndMegolm:true,','nativeSasAndMegolm:true,proposedCspEnforced:true,inlineInjectionBlocked:true,');
+fs.writeFileSync(dir+'/headed-csp-prototype.mjs',text,{flag:'wx'});
+fs.writeFileSync(dir+'/csp-prototype-source.json',JSON.stringify({recordedAt:new Date().toISOString(),source,sourceSha256:hash(source),prototype:dir+'/headed-csp-prototype.mjs',prototypeSha256:hash(dir+'/headed-csp-prototype.mjs'),proposal:'tests/security/chat-crypto/security-headers-proposed.mjs',proposalSha256:hash('tests/security/chat-crypto/security-headers-proposed.mjs'),applicationUnmodified:true},null,2)+'\n',{flag:'wx'});

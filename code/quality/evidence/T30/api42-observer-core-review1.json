@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-11T11:05:17.770Z",
+  "reviewer": "Codex",
+  "draft": {
+    "path": "quality/evidence/T30/antigravity-native42-api-spans-correction-1/api-lock-spans-observer.mjs",
+    "sha256": "9f796e02952121fde1e6242ea3aba677dadbaeaf8f72a68ecdffd6f844c3fe91"
+  },
+  "reviewed": {
+    "path": "quality/evidence/T30/api42-observer-reviewed1.mjs",
+    "sha256": "a6c9ebc538d5eb4bc4835b38751b397591638d7a84d72e7b7d6e86dad05471f1"
+  },
+  "actualRed": {
+    "recordedAt": "2026-10-11T11:03:20.701Z",
+    "checks": {
+      "httpOriginalErrorIdentity": true,
+      "httpNextCalledExactlyOnce": false,
+      "serviceOriginalPromiseArgsThis": true,
+      "serviceSyncErrorIdentity": true,
+      "serviceRejectedPromiseIdentity": true,
+      "serviceRejectedErrorIdentity": true,
+      "observerThenGetterCannotReplaceReturn": false,
+      "nestedInnerContextParent": true,
+      "rpcWithinTransactionActualPid": true,
+      "rpcAfterCommitDoesNotUseStalePid": false,
+      "duplicatePoolInstallRejectedBeforeMutation": false,
+      "observerAttachmentFailureReported": true
+    },
+    "failedChecks": [
+      "httpNextCalledExactlyOnce",
+      "observerThenGetterCannotReplaceReturn",
+      "rpcAfterCommitDoesNotUseStalePid",
+      "duplicatePoolInstallRejectedBeforeMutation"
+    ],
+    "cleanup": {
+      "schemaRemoved": true,
+      "poolEnded": true,
+      "httpClosed": true
+    },
+    "fatalControlFailure": false,
+    "nativeAcceptance": false
+  },
+  "corrections": [
+    "Actual next runs once outside observation catch",
+    "Safe side handlers preserve unusual then getter outcome",
+    "Successful transaction binding and clear after commit; RPC captures binding at start",
+    "Duplicate installers rejected before mutation",
+    "Pool metadata WeakMap and bounded partial-write loop",
+    "Callbacks/configcallbacks/submittables exact passthrough with explicitly excluded telemetry"
+  ],
+  "sourceApplicationUnchanged": true,
+  "controlsGreenPending": true,
+  "fixtureNotAdopted": true
+}

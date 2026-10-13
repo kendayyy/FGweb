@@ -1,0 +1,80 @@
+{
+  "checks": [
+    {
+      "kind": "actual observed gateway HTTP unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "actual observed gateway upgrade unauthenticated denied",
+      "status": 401
+    },
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "cd187c4990793aac75a0559115ffdc6a63a78954bd673c9827008474e5ca7126"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "actual guarded HTTP/upgrade error telemetry and real perf samples",
+      "errors": [
+        {
+          "type": "error",
+          "site": "httpHandler",
+          "at": "2026-10-11T02:29:12.479Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "headersSent": false
+        },
+        {
+          "type": "error",
+          "site": "upgrade",
+          "phase": "authorize",
+          "durationMs": 0,
+          "at": "2026-10-11T02:29:12.499Z",
+          "errorName": "Error",
+          "pgCode": "other",
+          "admissionStatus": 401,
+          "socketDestroyed": false
+        }
+      ],
+      "sampleCount": 6
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "retained": [],
+  "errors": [],
+  "nativeAcceptance": false
+}

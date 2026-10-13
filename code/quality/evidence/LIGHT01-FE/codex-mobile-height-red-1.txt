@@ -1,0 +1,31 @@
+
+Running 1 test using 1 worker
+
+(node:14360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\theme.spec.ts:42:1 › native authenticated session, actual Socket.IO connection and unsent composer survive theme changes
+  1) tests\e2e\theme.spec.ts:42:1 › native authenticated session, actual Socket.IO connection and unsent composer survive theme changes 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 108
+    Received:    164.8000030517578
+
+      47 |  for(const [width,height] of [[1440,900],[1280,800],[390,844],[360,800]]){
+      48 |   await page.setViewportSize({width,height});const header=page.locator('.fg-app-header');const boundary=await header.boundingBox();
+    > 49 |   if(width<1024){expect(boundary!.height).toBeLessThanOrEqual(108);const bottom=await page.getByRole('navigation',{name:'Điều hướng điện thoại'}).boundingBox();expect(bottom!.y+bottom!.height).toBeLessThanOrEqual(height);}
+         |                                           ^
+      50 |   for(const control of await header.locator('button,a').all()){if(!await control.isVisible())continue;const bounds=await control.boundingBox();expect(bounds!.x).toBeGreaterThanOrEqual(0);expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(width);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(boundary!.y+boundary!.height);}
+      51 |   await page.screenshot({path:`quality/evidence/LIGHT01-FE/screenshots/authenticated-system-${width}x${height}.png`,fullPage:true});
+      52 |  }
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:49:43
+
+    Error Context: .cache\theme\results\theme-native-authenticated-8cddb-poser-survive-theme-changes\error-context.md
+
+    Error Context: .cache\theme\results\theme-native-authenticated-8cddb-poser-survive-theme-changes\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:42:1 › native authenticated session, actual Socket.IO connection and unsent composer survive theme changes 

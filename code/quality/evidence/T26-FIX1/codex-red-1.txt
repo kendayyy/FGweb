@@ -1,0 +1,203 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-controls.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:9244) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-controls.integration.spec.ts (42.27 s)
+  ● T26-FIX1 real private SFU/PG call controls producer › authorized list maps FG viewer to the opaque native identity with safe profile and mute flags
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      43 |  async function admitted(){const room=await post('rooms','owner',{name:'Controls persistent room',gameId:game.id,gameTitle:game.title,visibility:'PRIVATE',playerCapacity:2});expect(room.status).toBe(200);await pool.query("INSERT INTO room_members(id,room_id,user_id,role) VALUES($1,$2,'viewer','MEMBER')",[randomUUID(),room.body.id]);await pool.query("INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,'viewer')",[randomUUID(),room.body.conversationId]);const call=await post(`rooms/${room.body.id}/calls`,'owner');expect(call.status).toBe(201);const join=await post(`calls/${call.body.id}/join`);expect(join.status).toBe(201);return {room:room.body,call:call.body,join:join.body};}
+      44 |  const mic=(id:string,muted:boolean,user='viewer')=>post(`calls/${id}/self-mic`,user,{muted});
+    > 45 |  it('authorized list maps FG viewer to the opaque native identity with safe profile and mute flags',async()=>{const {call,join}=await admitted(),res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toHaveLength(1);const dto=CallParticipantSchema.parse(res.body[0]);expect(dto.userId).toBe('viewer');expect(dto.user?.displayName).toBe('viewer');expect(dto.mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect(dto.isMuted).toBe(true);expect(dto.micRestricted).toBe(false);for(const key of ['token','sessionId','email','discordId','password'])expect(res.body[0]).not.toHaveProperty(key);});
+         |                                                                                                                                                                                            ^
+      46 |  it('viewer may unmute and mute independently of any play roster without changing seat or identity',async()=>{const {room,call,join}=await admitted(),before=(await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0];expect((await mic(call.id,false)).status).toBe(201);expect((await get(call.id)).body[0].isMuted).toBe(false);expect((await mic(call.id,true)).body.isMuted).toBe(true);expect((await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0]).toEqual(before);expect((await get(call.id)).body[0].mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT user_id FROM active_play_slots')).rowCount).toBe(0);});
+      47 |  it('a room owner outside this call cannot toggle a viewer microphone using the self action',async()=>{const {call}=await admitted();expect((await mic(call.id,false,'owner')).status).toBe(403);expect((await pool.query('SELECT is_muted FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].is_muted).toBe(true);});
+      48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:45:188)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › viewer may unmute and mute independently of any play roster without changing seat or identity
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      44 |  const mic=(id:string,muted:boolean,user='viewer')=>post(`calls/${id}/self-mic`,user,{muted});
+      45 |  it('authorized list maps FG viewer to the opaque native identity with safe profile and mute flags',async()=>{const {call,join}=await admitted(),res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toHaveLength(1);const dto=CallParticipantSchema.parse(res.body[0]);expect(dto.userId).toBe('viewer');expect(dto.user?.displayName).toBe('viewer');expect(dto.mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect(dto.isMuted).toBe(true);expect(dto.micRestricted).toBe(false);for(const key of ['token','sessionId','email','discordId','password'])expect(res.body[0]).not.toHaveProperty(key);});
+    > 46 |  it('viewer may unmute and mute independently of any play roster without changing seat or identity',async()=>{const {room,call,join}=await admitted(),before=(await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0];expect((await mic(call.id,false)).status).toBe(201);expect((await get(call.id)).body[0].isMuted).toBe(false);expect((await mic(call.id,true)).body.isMuted).toBe(true);expect((await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0]).toEqual(before);expect((await get(call.id)).body[0].mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT user_id FROM active_play_slots')).rowCount).toBe(0);});
+         |                                                                                                                                                                                                                                                                                                              ^
+      47 |  it('a room owner outside this call cannot toggle a viewer microphone using the self action',async()=>{const {call}=await admitted();expect((await mic(call.id,false,'owner')).status).toBe(403);expect((await pool.query('SELECT is_muted FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].is_muted).toBe(true);});
+      48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+      49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:46:302)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › a room owner outside this call cannot toggle a viewer microphone using the self action
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      45 |  it('authorized list maps FG viewer to the opaque native identity with safe profile and mute flags',async()=>{const {call,join}=await admitted(),res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toHaveLength(1);const dto=CallParticipantSchema.parse(res.body[0]);expect(dto.userId).toBe('viewer');expect(dto.user?.displayName).toBe('viewer');expect(dto.mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect(dto.isMuted).toBe(true);expect(dto.micRestricted).toBe(false);for(const key of ['token','sessionId','email','discordId','password'])expect(res.body[0]).not.toHaveProperty(key);});
+      46 |  it('viewer may unmute and mute independently of any play roster without changing seat or identity',async()=>{const {room,call,join}=await admitted(),before=(await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0];expect((await mic(call.id,false)).status).toBe(201);expect((await get(call.id)).body[0].isMuted).toBe(false);expect((await mic(call.id,true)).body.isMuted).toBe(true);expect((await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0]).toEqual(before);expect((await get(call.id)).body[0].mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT user_id FROM active_play_slots')).rowCount).toBe(0);});
+    > 47 |  it('a room owner outside this call cannot toggle a viewer microphone using the self action',async()=>{const {call}=await admitted();expect((await mic(call.id,false,'owner')).status).toBe(403);expect((await pool.query('SELECT is_muted FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].is_muted).toBe(true);});
+         |                                                                                                                                                                                        ^
+      48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+      49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+      50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:47:184)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › MIC_MUTED restriction is explicit and blocks self-unmute until removed
+
+    TypeError: Cannot read properties of undefined (reading 'micRestricted')
+
+      46 |  it('viewer may unmute and mute independently of any play roster without changing seat or identity',async()=>{const {room,call,join}=await admitted(),before=(await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0];expect((await mic(call.id,false)).status).toBe(201);expect((await get(call.id)).body[0].isMuted).toBe(false);expect((await mic(call.id,true)).body.isMuted).toBe(true);expect((await pool.query('SELECT id,seat_index FROM call_members WHERE call_group_id=$1',[call.id])).rows[0]).toEqual(before);expect((await get(call.id)).body[0].mediaIdentity).toBe((await new TokenVerifier(process.env.LIVEKIT_API_KEY!,process.env.LIVEKIT_API_SECRET!).verify(join.token)).sub);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT user_id FROM active_play_slots')).rowCount).toBe(0);});
+      47 |  it('a room owner outside this call cannot toggle a viewer microphone using the self action',async()=>{const {call}=await admitted();expect((await mic(call.id,false,'owner')).status).toBe(403);expect((await pool.query('SELECT is_muted FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].is_muted).toBe(true);});
+    > 48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+         |                                                                                                                                                                                                                                                                                                                                          ^
+      49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+      50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+      51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:48:330)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › guest and outsider cannot read participant data or change mic
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      47 |  it('a room owner outside this call cannot toggle a viewer microphone using the self action',async()=>{const {call}=await admitted();expect((await mic(call.id,false,'owner')).status).toBe(403);expect((await pool.query('SELECT is_muted FROM call_members WHERE call_group_id=$1',[call.id])).rows[0].is_muted).toBe(true);});
+      48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+    > 49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+         |                                                                                                                                                                                               ^
+      50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+      51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+      52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:49:191)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › membership revocation removes metadata access and microphone intent access immediately
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      48 |  it('MIC_MUTED restriction is explicit and blocks self-unmute until removed',async()=>{const {call}=await admitted();await pool.query("INSERT INTO call_restrictions(id,call_group_id,target_user_id,restriction_type,issued_by) VALUES($1,$2,'viewer','MIC_MUTED','owner')",[randomUUID(),call.id]);expect((await get(call.id)).body[0].micRestricted).toBe(true);expect((await mic(call.id,false)).status).toBe(403);expect((await mic(call.id,true)).status).toBe(201);await pool.query('DELETE FROM call_restrictions WHERE call_group_id=$1',[call.id]);expect((await mic(call.id,false)).status).toBe(201);});
+      49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+    > 50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+         |                                                                                                                                                                                                                                                                                     ^
+      51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+      52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:50:277)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › ban and expired session deny both producers
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      49 |  it('guest and outsider cannot read participant data or change mic',async()=>{const {call}=await admitted();expect((await request(base).get(`/api/v1/calls/${call.id}/participants`)).status).toBe(401);expect((await get(call.id,'outsider')).status).toBe(403);expect((await mic(call.id,false,'outsider')).status).toBe(403);});
+      50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+    > 51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+         |                                                                                                                                                                                                                                                                          ^
+      52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+      54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:51:266)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › another valid login for the same user cannot mutate the reserved session-bound microphone
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      50 |  it('membership revocation removes metadata access and microphone intent access immediately',async()=>{const {room,call}=await admitted();await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);});
+      51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+    > 52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+      54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+      55 |  it('expired/revoked admission has no participant metadata and cannot change microphone state',async()=>{const {call}=await admitted();await pool.query("UPDATE call_admissions SET created_at=now()-interval '2 minutes',expires_at=now()-interval '1 minute'");const res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toEqual([]);expect((await mic(call.id,false)).status).toBe(403);});
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:52:551)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › closed and missing groups return contracted errors instead of empty fake success
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 404
+
+      51 |  it('ban and expired session deny both producers',async()=>{const {call}=await admitted();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES($1,'owner','viewer','BAN')",[randomUUID()]);expect((await get(call.id,'viewer')).status).toBe(403);expect((await mic(call.id,false)).status).toBe(403);await pool.query('DELETE FROM admin_actions');await pool.query("UPDATE session SET expires_at=now()-interval '1 minute' WHERE user_id='viewer'");expect((await get(call.id,'viewer')).status).toBe(401);expect((await mic(call.id,false)).status).toBe(401);});
+      52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+    > 53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+         |                                                                                                                                                                                                                                    ^
+      54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+      55 |  it('expired/revoked admission has no participant metadata and cannot change microphone state',async()=>{const {call}=await admitted();await pool.query("UPDATE call_admissions SET created_at=now()-interval '2 minutes',expires_at=now()-interval '1 minute'");const res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toEqual([]);expect((await mic(call.id,false)).status).toBe(403);});
+      56 | });
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:53:228)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › path/query disagreement, extra body authority and invalid boolean are rejected
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      52 |  it('another valid login for the same user cannot mutate the reserved session-bound microphone',async()=>{const {call}=await admitted();const token=`different-${randomUUID()}`;await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookie).set('Origin',origin).send({muted:false})).status).toBe(403);});
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+    > 54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+         |                                                                                                                                                                                                ^
+      55 |  it('expired/revoked admission has no participant metadata and cannot change microphone state',async()=>{const {call}=await admitted();await pool.query("UPDATE call_admissions SET created_at=now()-interval '2 minutes',expires_at=now()-interval '1 minute'");const res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toEqual([]);expect((await mic(call.id,false)).status).toBe(403);});
+      56 | });
+      57 |
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:54:192)
+
+  ● T26-FIX1 real private SFU/PG call controls producer › expired/revoked admission has no participant metadata and cannot change microphone state
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      53 |  it('closed and missing groups return contracted errors instead of empty fake success',async()=>{const {call}=await admitted();expect((await post(`calls/${call.id}/leave`)).status).toBe(201);expect((await get(call.id)).status).toBe(409);expect((await mic(call.id,false)).status).toBe(409);expect((await get(randomUUID())).status).toBe(404);});
+      54 |  it('path/query disagreement, extra body authority and invalid boolean are rejected',async()=>{const {call}=await admitted();expect((await get(call.id,'owner',{callId:randomUUID()})).status).toBe(422);expect((await get(call.id,'owner',{callId:call.id})).status).toBe(200);for(const body of [{muted:false,userId:'owner'},{muted:false,micRestricted:false},{muted:'false'},{}])expect((await post(`calls/${call.id}/self-mic`,'viewer',body)).status).toBe(422);expect((await request(base).post(`/api/v1/calls/${call.id}/self-mic`).set('Cookie',cookies.viewer).set('Origin','https://foreign.invalid').send({muted:false})).status).toBe(403);});
+    > 55 |  it('expired/revoked admission has no participant metadata and cannot change microphone state',async()=>{const {call}=await admitted();await pool.query("UPDATE call_admissions SET created_at=now()-interval '2 minutes',expires_at=now()-interval '1 minute'");const res=await get(call.id);expect(res.status).toBe(200);expect(res.body).toEqual([]);expect((await mic(call.id,false)).status).toBe(403);});
+         |                                                                                                                                                                                                                                                                                                                  ^
+      56 | });
+      57 |
+
+      at Object.<anonymous> (test/call-controls.integration.spec.ts:55:306)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 11 total
+Snapshots:   0 total
+Time:        42.741 s
+Ran all test suites matching test/call-controls.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-controls.integration.spec.ts

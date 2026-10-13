@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-10-11T03:15:16.980Z",
+  "reviewer": "Codex",
+  "proposal": [
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-pg-wait-review-1/pg-wait-observation.mjs",
+      "sha256": "d55119651cb06cbf2130274362571feb452deab8cb1492642360543238d762e1"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-pg-wait-review-1/fixture-server-shaped.mjs",
+      "sha256": "a54031c06775a010535a0e02b0b6a06fb9626fa396b7d5312def330dab74dfa9"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-gateway-pg-wait-review-1/review-notes.md",
+      "sha256": "82ad87f1a98e664a60086d43fc2ab706f4ae3776f2b712fe8ab3f0bdc3181d26"
+    }
+  ],
+  "findings": [
+    "Final health write error swallowed; stop succeeds despite failureCount/truncated/poolEnded false; fixture never checks health.",
+    "Server AT TIME ZONE UTC is timestamp without timezone parsed by Windows local timezone; cannot use for correlation.",
+    "waitEvent regex is not strict constant allowlist.",
+    "Media diagnostic write failure skips fixture.close; Redis keys failure skips quit; schema DROP failure skips pool.end.",
+    "Cleanup retains only first error, not all failures."
+  ],
+  "adopted": false,
+  "executed": false,
+  "syntaxClaimsNotAcceptedAsRecordedExecution": true,
+  "nativeAcceptance": false
+}

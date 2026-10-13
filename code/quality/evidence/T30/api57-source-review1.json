@@ -1,0 +1,46 @@
+{
+  "reviewedAt": "2026-10-11T18:32:32.904Z",
+  "proposalInterruptedNoExitReceipt": true,
+  "proposalFilesAvailable": true,
+  "reconstructedMinimalSixAnchors": true,
+  "originalObserverReverseByteExact": true,
+  "fixtureOnlyObserverImportChanged": true,
+  "originalTcpPgReadyPhaseAndReturnWrappersUnchanged": true,
+  "source": {
+    "observer": {
+      "path": "quality/evidence/T30/api57-observer-reviewed1.mjs",
+      "sha256": "9dd092f8e3540e29f5fa998bbe64cea2b043ed9c5a97a51dfd637ec4749a639a"
+    },
+    "fixture": {
+      "path": "quality/evidence/T30/fixture-server-api57-db-bridge-reviewed1.mjs",
+      "sha256": "cf3cd4f2d9f17a4241664e1905d74cc0c768111881e0bbc2024b44b64015cdbf"
+    }
+  },
+  "changes": [
+    {
+      "before": "  'http-call-participants',",
+      "after": "  'http-call-participants',\n  'http-calls-join',\n  'http-calls-self-mic',"
+    },
+    {
+      "before": "  'CallsService.participants',",
+      "after": "  'CallsService.participants',\n  'CallsService.join',\n  'CallsService.selfMic',"
+    },
+    {
+      "before": "      if (req.method === 'GET') {",
+      "after": "      if (req.method === 'GET' || (req.method === 'POST' && /^\\/api\\/v1\\/calls\\/[^/]+\\/(?:join|self-mic)$/.test(typeof req.path === 'string' ? req.path : String(req.url ?? '').split('?')[0]))) {"
+    },
+    {
+      "before": "        if (rawPath === '/api/v1/me') route = 'http-me';",
+      "after": "        if (req.method === 'POST') route = rawPath.endsWith('/join') ? 'http-calls-join' : 'http-calls-self-mic';\n        else if (rawPath === '/api/v1/me') route = 'http-me';"
+    },
+    {
+      "before": "  'deleteRoom',",
+      "after": "  'deleteRoom',\n  'createRoom',"
+    },
+    {
+      "before": "['list', 'participants', 'withControlGroup']",
+      "after": "['list', 'participants', 'join', 'selfMic', 'withControlGroup']"
+    }
+  ],
+  "nativeAcceptance": false
+}

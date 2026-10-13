@@ -1,0 +1,2 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30';let run=fs.readFileSync(d+'/run-coalescing-green-resource3.mjs','utf8');assert(run.includes('quality/evidence/T31'));run=run.replaceAll('quality/evidence/T31','quality/evidence/T30').replaceAll('t30-coalescing-green-2','t30-coalescing-green-3');assert(!run.includes('T31')&&!run.includes('t31-'));fs.writeFileSync(d+'/run-coalescing-green-resource4.mjs',run,{flag:'wx'});

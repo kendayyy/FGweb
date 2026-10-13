@@ -1,0 +1,32 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |database| packages/database/test/chat-crypto.test.ts (14 tests | 2 failed) 13151ms
+   ❯ CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries (14)
+     × durably queues verification metadata with recipient FK, dedup and expiry 22ms
+     × encrypted upload drafts retain ownership/revision/cipher digest, never a private filename 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > durably queues verification metadata with recipient FK, dedup and expiry
+error: relation "chat_crypto_protocol_events" does not exist
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/chat-crypto.test.ts:102:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |database| packages/database/test/chat-crypto.test.ts > CHAT-CRYPTO-01 native PostgreSQL additive migration and boundaries > encrypted upload drafts retain ownership/revision/cipher digest, never a private filename
+error: relation "chat_crypto_upload_drafts" does not exist
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ packages/database/test/chat-crypto.test.ts:112:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 12 passed (14)
+   Start at  19:20:27
+   Duration  15.15s (tests 89%, import 9%, transform 2%)
+

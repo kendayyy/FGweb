@@ -1,0 +1,157 @@
+{
+  "reviewedAt": "2026-10-11T23:30:00.000+07:00",
+  "runId": "t30-native-cd237f0bce5440debaf19009b5475494",
+  "switchedTrackSid": "TR_VSciSJqs4supYX",
+  "causalTimeline": [
+    {
+      "timeIso": "2026-10-11T16:13:19.530Z",
+      "epochMs": 1791735199530,
+      "component": "Sender/SFU",
+      "event": "First capture (Linh) finishes publication (TR_VS8RdZTwPGz5m9), publication-times duration 7535ms."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:20.041Z",
+      "epochMs": 1791735200041,
+      "component": "API/Database",
+      "event": "Unassociated pool-query connection phase starts (clientConnectionIndex 36, poolIndex 17). TCP socket connects in 4.29ms at 16:13:20.046Z."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:25.064Z",
+      "epochMs": 1791735205064,
+      "component": "API/Database",
+      "event": "Unassociated pool-query CONNECTION_TIMEOUT after 5022.61ms. Socket destroyed at 16:13:25.062Z with bytesRead: 117, bytesWritten: 318, socketHadError: false."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:27.735Z",
+      "epochMs": 1791735207735,
+      "component": "SFU",
+      "event": "LiveKit SFU publishes video track TR_VSciSJqs4supYX for Hoang Nam (VP8 simulcast: 1280x698 high, 640x349 low)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:28.894Z",
+      "epochMs": 1791735208894,
+      "component": "SFU",
+      "event": "LiveKit SFU publishes screen audio track TR_AsXuag57ydWvJV."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:29.978Z",
+      "epochMs": 1791735209978,
+      "component": "Test/Sender",
+      "event": "Sender share(sender) completes in test runner (duration 10332ms), recorded to publication-times.jsonl."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:31.055Z",
+      "epochMs": 1791735211055,
+      "component": "SFU/Webhook",
+      "event": "SFU sends track_published webhook for TR_VSciSJqs4supYX to API with sendDuration: 3.319376398s (event EV_xFgPLkQesdG7)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:32.956Z",
+      "epochMs": 1791735212956,
+      "component": "SFU/Webhook",
+      "event": "SFU sends track_published webhook for TR_AsXuag57ydWvJV to API with sendDuration: 1.900600626s (event EV_GFbpGRyXdrkB)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:35.930Z",
+      "epochMs": 1791735215930,
+      "component": "Viewer/Test",
+      "event": "Viewer clicks Hoang Nam tab. LiveViewer handleSelect triggers selectScreen(TR_VSciSJqs4supYX), detaching previous video element and calling setSubscribed(true). Test starts receiveOne(viewer): Window 2 'before' sampled (selectedId: '_r_1_-tab-TR_VSciSJqs4supYX', videoTrackId: '', videoCount: 0)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:35.930Z–16:13:39.059Z",
+      "epochMs": 1791735215930,
+      "component": "Viewer/WebRTC",
+      "event": "Fixed 3.0s measurement window (3129ms actual). Viewer LiveKit client sends SignalRequest UpdateSubscription; SFU negotiates SDP offer/answer over subscriber peer connection. Video track arrives and attaches to DOM near window end."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:39.059Z",
+      "epochMs": 1791735219059,
+      "component": "Viewer/Test",
+      "event": "Window 2 'after' sampled. videoTrackId: 'TR_VSciSJqs4supYX', videoCount: 1. Video delta rows filtered for bytesDelta > 1000 yields 0 (toHaveLength 1 fails)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:39.114Z",
+      "epochMs": 1791735219114,
+      "component": "Test/Observer",
+      "event": "AssertionError thrown at screen-share-diagnostic.spec.ts:60. persistSanitizedFailure records matcher toHaveLength at line 60."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:39.545Z",
+      "epochMs": 1791735219545,
+      "component": "Viewer/Media",
+      "event": "post-failure-media-state.json samples viewer exactly 486ms after window end: inbound-rtp video shows 11459 bytesReceived, 12 packetsReceived, 4 framesDecoded at 640x349 (21 fps). Video element readyState is 4 (HAVE_ENOUGH_DATA)."
+    },
+    {
+      "timeIso": "2026-10-11T16:13:40.000Z",
+      "epochMs": 1791735220000,
+      "component": "Viewer/UI",
+      "event": "Photo step 4 captures live Hoang Nam video stream fully rendered in viewer DOM."
+    }
+  ],
+  "comparisonMatrix": {
+    "native54": {
+      "capture2PublicationEnd": "14:53:23.522Z",
+      "window2Start": "14:53:30.944Z",
+      "gapPublicationToWindowMs": 7422,
+      "window2DurationMs": 3246,
+      "window2VideoBytesDelta": 101567,
+      "window2VideoPacketsDelta": 104,
+      "status": "PASS (switched video arrived within window; failed later at Actor 3 bootstrap)"
+    },
+    "native55": {
+      "capture2PublicationEnd": "15:22:26.343Z",
+      "window2Start": "15:22:33.491Z",
+      "gapPublicationToWindowMs": 7148,
+      "window2DurationMs": 3130,
+      "window2VideoBytesDelta": 15520,
+      "window2VideoPacketsDelta": 19,
+      "status": "PASS (switched video arrived within window; failed later at Actor 3 bootstrap)"
+    },
+    "native58": {
+      "capture2PublicationEnd": "16:13:29.978Z",
+      "window2Start": "16:13:35.930Z",
+      "gapPublicationToWindowMs": 5952,
+      "window2DurationMs": 3129,
+      "window2VideoBytesDelta": 0,
+      "window2VideoPacketsDelta": 0,
+      "postWindowRtpArrivalMs": 486,
+      "postWindowVideoBytes": 11459,
+      "postWindowVideoPackets": 12,
+      "status": "FAIL (switched video packets arrived 486ms after 3.0s window; rendered live in Photo 4)"
+    }
+  },
+  "pgScramProtocolDeconstruction": {
+    "bytesRead": {
+      "value": 117,
+      "messages": [
+        "AuthenticationSASL (code 'R', length ~23 bytes, authType: 10, mechanism: 'SCRAM-SHA-256')",
+        "AuthenticationSASLContinue (code 'R', length ~94 bytes, authType: 11, data: server-first-message r=<nonce>,s=<salt>,i=<iterations>)"
+      ],
+      "proves": "PostgreSQL listening socket accepted connection; server process parsed client StartupMessage; server initiated SASL authentication and issued SCRAM salt/challenge.",
+      "cannotProve": "Does not prove server completed authentication or reached ReadyForQuery state."
+    },
+    "bytesWritten": {
+      "value": 318,
+      "messages": [
+        "StartupMessage (~125 bytes, protocol 3.0, user, database, client_encoding UTF8)",
+        "SASLInitialResponseMessage (code 'p', length ~57 bytes, mechanism: 'SCRAM-SHA-256', initialResponse: n,,n=*,r=<clientNonce>)",
+        "SCRAMClientFinalMessage (code 'p', length ~136 bytes, additionalData: c=biws,r=<nonce>,p=<clientProof>)"
+      ],
+      "proves": "Node.js client completed PBKDF2/HMAC calculation and successfully transmitted SCRAMClientFinalMessage over TCP socket.",
+      "cannotProve": "Does not prove server processed the proof."
+    },
+    "stallPoint": "Connection stalled inside PostgreSQL backend between receipt of SCRAMClientFinalMessage and emission of AuthenticationSASLFinal / AuthenticationOk / ReadyForQuery.",
+    "causalityToRtp": {
+      "correlationOnly": true,
+      "timeGapSeconds": 10.866,
+      "explanation": "PG timeout ended at 16:13:25.064Z; Window 2 began at 16:13:35.930Z. During Window 2, PostgreSQL was idle/healthy and audio RTP deltas were arriving normally (22.4KB, 36.8KB, 20.6KB). The PG timeout was an independent symptom of host scheduling pressure, not a direct blocker of WebRTC media."
+    }
+  },
+  "singleRecommendation": {
+    "type": "diagnostic-observation",
+    "targetFile": "quality/evidence/T30/rtp-window-reviewed3/screen-share-diagnostic.spec.ts",
+    "observationAnchor": "failure-observer.mjs and receiveOne failure handler",
+    "description": "Persist pending t30SubscriptionFrames upon receiveOne failure and record WebRTC ontrack/signalingState timestamps, eliminating the blind spot where test abort masks client subscription frames and sub-window arrival telemetry.",
+    "failingControlPlan": "Verify that if receiveOne throws an AssertionError, observeFailure flushes and writes all unretrieved subscription frames to sanitized-failure-record.json without requiring line 65 to be reached."
+  }
+}

@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const d='quality/evidence/T30';
+const proposal=d+'/antigravity-signaling-type-correction-1/signaling-gateway.ts';
+const review=JSON.parse(fs.readFileSync(d+'/signaling-type-correction-review.json','utf8'));
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+assert.equal(hash(proposal),review.afterSha256);
+const sandbox=d+'/signaling-type-sandbox-2';
+assert(path.resolve(sandbox).startsWith(path.resolve(d)+path.sep));
+fs.mkdirSync(sandbox);
+fs.cpSync('apps/api/src',sandbox+'/src',{recursive:true});
+fs.copyFileSync(proposal,sandbox+'/src/modules/calls/signaling-gateway.ts');
+fs.writeFileSync(sandbox+'/tsconfig.json',JSON.stringify({extends:path.resolve('apps/api/tsconfig.json'),compilerOptions:{noEmit:true,incremental:false,baseUrl:path.resolve('apps/api'),outDir:path.resolve(sandbox+'/dist')},include:['src/**/*']},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(d+'/signaling-validation-2-preparation.json',JSON.stringify({recordedAt:new Date().toISOString(),sandbox,proposalSha256:hash(proposal),actualSourceSha256:hash('apps/api/src/modules/calls/signaling-gateway.ts'),typePending:true},null,2)+'\n',{flag:'wx'});
+console.log('Prepared immutable sandbox2; actual gateway unchanged.');

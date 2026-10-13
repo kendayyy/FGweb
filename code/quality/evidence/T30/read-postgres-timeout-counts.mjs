@@ -1,0 +1,4 @@
+import {execFileSync} from 'node:child_process';
+const raw=execFileSync('docker',['logs','--since','2026-10-10T20:42:38Z','--until','2026-10-10T20:44:59Z','fg-local-postgres-1'],{encoding:'utf8',windowsHide:true,stdio:['ignore','pipe','pipe'],timeout:15000});
+const lines=raw.split(/\r?\n/);let count=0;const classes={};for(let i=0;i<lines.length;i++)if(lines[i].includes('canceling statement due to statement timeout')){count++;const statement=lines.slice(i+1,i+5).find(s=>s.includes('STATEMENT:'))??'';const kind=statement.includes('FOR UPDATE')?(statement.includes('rooms')?'lock-room':statement.includes('call_groups')?'lock-group':'other-lock'):statement.includes('call_admissions')?'admission':'other';classes[kind]=(classes[kind]??0)+1;}
+console.log(JSON.stringify({window:'native10',timeoutCount:count,classes,rawLogsSaved:false}));

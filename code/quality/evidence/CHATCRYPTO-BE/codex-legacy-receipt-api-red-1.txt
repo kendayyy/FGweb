@@ -1,0 +1,28 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:28908) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (53.193 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      154 |   const archive={msgtype:'org.fg.legacy_import.v1',fg:{version:1,candidateId:'native-original-roundtrip',cohortId:'available',conversationId:'legacy',membershipRevision:revision,originalSha256:digests.get('msg-a'),importerUserId:'alice',importerDeviceId:'A'},source:manifests.get('msg-a'),images:[]},event=JSON.parse(await alice.encryptRoomEvent(room,'m.room.message',JSON.stringify(archive))),prepared=await write('conversations/legacy/legacy/commit',{candidateId:archive.fg.candidateId,messageId:'msg-a',originalSha256:digests.get('msg-a'),deviceId:'A',membershipRevision:revision,cohortId:'available',envelope:{version:1,protocol:'MATRIX_MEGOLM',event}});expect(prepared.status).toBe(201);
+      155 |   for(const machine of [alice,bob]){const decrypted=await machine.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:alice.userId.toString(),event_id:'$'+prepared.body.candidateId,origin_server_ts:Date.now(),content:prepared.body.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));expect(decrypted.senderCurve25519Key).toBe(alice.identityKeys.curve25519.toBase64());expect(decrypted.senderClaimedEd25519Key).toBe(alice.identityKeys.ed25519.toBase64());expect(decrypted.senderDevice?.toString()).toBe('A');const actual=JSON.parse(decrypted.event);expect(actual.sender).toBe(alice.userId.toString());expect(actual.content).toEqual(archive);expect(sha(canonical(actual.content.source))).toBe(prepared.body.originalSha256);}
+    > 156 |   const candidateRead=(user='bob',deviceId=user==='alice'?'A':user==='bob'?'B':'C',cohortId='available')=>request(base).get('/api/v1/crypto/conversations/legacy/legacy/candidates/'+prepared.body.candidateId).set('Cookie',cookies.get(user)!).query({deviceId,cohortId});const read=await candidateRead();expect(read.status).toBe(200);expect(read.body).toEqual(prepared.body);expect(read.headers['cache-control']).toBe('no-store');expect((await candidateRead('outsider')).status).toBe(403);expect((await candidateRead('bob','AFTER_BOB_COHORT')).status).toBe(403);expect((await candidateRead('bob','B','verified')).status).toBe(404);
+          |                                                                                                                                                                                                                                                                                                                                  ^
+      157 |   async function receipt(machine:sdk.OlmMachine,changes:Record<string,unknown>={}){const unsigned={version:1,type:'org.fg.legacy_roundtrip.v1',candidateId:prepared.body.candidateId,messageId:prepared.body.messageId,conversationId:prepared.body.conversationId,cohortId:prepared.body.cohortId,membershipRevision:prepared.body.membershipRevision,originalSha256:prepared.body.originalSha256,envelopeSha256:prepared.body.envelopeSha256,attachmentDigests:[],userId:fg(machine.userId.toString()),deviceId:machine.deviceId.toString(),...changes};return {...unsigned,signatures:JSON.parse((await machine.sign(canonical(unsigned))).asJSON())};}
+      158 |   const bobReceipt=await receipt(bob),aliceReceipt=await receipt(alice),attest=(input:unknown,user='bob')=>write('conversations/legacy/legacy/attest',input,user);
+      159 |   expect((await attest(aliceReceipt)).status).toBe(403);expect((await attest({...bobReceipt,originalSha256:sha('wrong')})).status).toBe(403);expect((await attest(await receipt(bob,{envelopeSha256:sha('wrong')}))).status).toBe(403);expect((await attest(await receipt(bob,{attachmentDigests:[{attachmentId:'foreign',plaintextSha256:sha('wrong'),ciphertextSha256:sha('wrong')}]}))).status).toBe(403);expect((await attest({...bobReceipt,decryptedContent:'private'})).status).toBe(422);expect((await attest(await receipt(bob,{deviceId:'AFTER_BOB_COHORT'}))).status).toBe(403);expect((await attest(await receipt(bob,{candidateId:'missing'}))).status).toBe(404);expect((await attest(bobReceipt,'outsider')).status).toBe(403);
+
+      at test/chat-crypto-legacy.integration.spec.ts:156:322
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:89:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:130:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 16 passed, 17 total
+Snapshots:   0 total
+Time:        53.945 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

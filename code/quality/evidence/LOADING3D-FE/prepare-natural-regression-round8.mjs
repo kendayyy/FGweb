@@ -1,0 +1,8 @@
+import fs from 'node:fs';const dir='quality/evidence/LOADING3D-FE';let source=fs.readFileSync(dir+'/headed-natural-loading-round7.mjs','utf8');
+source=source.replace('let gamesDelay=2000,holdGames=false,releaseGames;', 'let gamesDelay=2000,holdGames=false;const gameReleases=[];const releaseGames=()=>{for(const release of gameReleases.splice(0))release();};');
+source=source.replace('new Promise(resolve=>{releaseGames=resolve;})','new Promise(resolve=>{gameReleases.push(resolve);})');
+source=source.replace("await a.goto(origin+'/');\n    await expect(a.getByRole('progressbar'", "holdGames=true;await a.goto(origin+'/');\n    await expect(a.getByRole('progressbar'");
+source=source.replace("    await expect(a.getByRole('heading',{name:/Lobby/,level:1})).toBeVisible();", "    holdGames=false;releaseGames();await expect(a.getByRole('heading',{name:/Lobby/,level:1})).toBeVisible();");
+source=source.replace("  await a.emulateMedia({reducedMotion:'reduce'});await a.goto", "  holdGames=true;await a.emulateMedia({reducedMotion:'reduce'});await a.goto");
+source=source.replace("  await expect(a.getByRole('heading',{name:/Lobby/,level:1})).toBeVisible();\n  await a.unroute('**/api/v1/me'", "  holdGames=false;releaseGames();await expect(a.getByRole('heading',{name:/Lobby/,level:1})).toBeVisible();\n  await a.unroute('**/api/v1/me'");
+fs.writeFileSync(dir+'/headed-natural-loading-round8.mjs',source,{flag:'wx'});console.log('RED7 preserved: screenshot outlasted fixed latency. Hold real game request until pending assertions/photo finish, release all held callbacks, then require actual API ready; unchanged timeouts/assertions and no success payload.');

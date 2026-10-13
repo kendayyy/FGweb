@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:23760) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (46.259 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › filters a delayed old event for a new member while retaining their subscription for new ciphertext
+
+    Native realtime condition timed out
+
+      32 |  const machines=new Map<string,sdk.OlmMachine>(),cookies=new Map<string,string>(),sockets:Socket[]=[],published:string[]=[];
+      33 |  const received=new Map<string,unknown[]>(),legacy:unknown[]=[];
+    > 34 |  const wait=async(condition:()=>boolean|Promise<boolean>)=>{const end=Date.now()+5000;while(!await condition()){if(Date.now()>end)throw new Error('Native realtime condition timed out');await new Promise(resolve=>setTimeout(resolve,20));}};
+         |                                                                                                                                         ^
+      35 |  const post=(route:string,body:unknown,user='alice')=>request(base).post('/api/v1/crypto/'+route).set('Origin',origin).set('Cookie',cookies.get(user)!).send(body);
+      36 |  async function connect(user?:string){
+      37 |   const socket=io(base,{path:'/socket.io',transports:['websocket'],reconnection:false,extraHeaders:{Origin:origin,...(user?{Cookie:cookies.get(user)!}:{})}});sockets.push(socket);
+
+      at wait (test/chat-crypto-realtime.integration.spec.ts:34:137)
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:95:52)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › applies the same subscription quota across encrypted and legacy channels
+
+    expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "ok": false,
+    +   "ok": true,
+      }
+
+      100 |   for(let i=0;i<32;i++){
+      101 |    await pool.query(`INSERT INTO conversations(id,kind) VALUES($1,'ROOM')`,['legacy-'+i]);await pool.query(`INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,'alice')`,['legacy-member-'+i,'legacy-'+i]);
+    > 102 |    expect(await ack(alice,SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId:'legacy-'+i})).toMatchObject({ok:i<31});
+          |                                                                                                  ^
+      103 |   }
+      104 |   expect(await ack(alice,SocketEventNames.CONVERSATION_SUBSCRIBE,{conversationId:'legacy-0'})).toMatchObject({ok:true});
+      105 |   }finally{for(let i=0;i<32;i++)expect(await ack(alice,SocketEventNames.CONVERSATION_UNSUBSCRIBE,{conversationId:'legacy-'+i})).toMatchObject({ok:true});}
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:102:98)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 6 passed, 8 total
+Snapshots:   0 total
+Time:        46.752 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

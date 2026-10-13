@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+const tag='ghcr.io/openbao/openbao:2.7.1';
+const info=JSON.parse(execFileSync('docker',['image','inspect',tag],{encoding:'utf8'}))[0];
+const image=info.RepoDigests.find(x=>x.startsWith('ghcr.io/openbao/openbao@sha256:'));
+assert(image,'Official registry digest missing');
+const version=execFileSync('docker',['run','--rm',image,'version'],{encoding:'utf8'});
+assert.match(version,/OpenBao v2\.7\.1\b/);
+fs.mkdirSync('infra/chat-crypto',{recursive:true});
+const result={tag,image,localImageId:info.Id,os:info.Os,architecture:info.Architecture,version:'2.7.1',versionProbe:version.trim(),recordedAt:new Date().toISOString(),source:'https://github.com/openbao/openbao/releases/tag/v2.7.1'};
+fs.writeFileSync('infra/chat-crypto/openbao-image.json',JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result));

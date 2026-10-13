@@ -1,0 +1,18 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30',green=JSON.parse(fs.readFileSync(d+'/api42-core-pool-green1/result.json','utf8'));assert.equal(green.failedChecks.length,0);assert(Object.values(green.cleanup).every(Boolean));
+let s=fs.readFileSync(d+'/probe-api42-full1.mjs','utf8').replaceAll('api42-observer-reviewed1.mjs','api42-observer-reviewed2.mjs').replaceAll('api42-full-controls1','api42-full-controls2');
+const anchor="    checks.push('observer stopped and returned health record');";assert(s.includes(anchor));s=s.replace(anchor,`    const spanFile=evidenceDir+'/api-lock-spans.jsonl';
+    const bytesBefore=fs.existsSync(spanFile)?fs.readFileSync(spanFile):null;
+    await client.query('SELECT 1');await sdk.listRooms(['synthetic']);await callsInst.list('synthetic','synthetic','synthetic');
+    await delay(1100);const stoppedAgain=await stopObserver();
+    const bytesAfter=fs.existsSync(spanFile)?fs.readFileSync(spanFile):null;
+    assert.deepEqual(bytesAfter,bytesBefore);assert.equal(stoppedAgain.sampleCount,health.sampleCount);
+    checks.push('actual PG SDK service after stop leave spans and sampler unchanged');
+`+anchor);
+assert(s.includes('const sdk =')||s.includes('const sdk='));fs.writeFileSync(d+'/probe-api42-full2.mjs',s,{flag:'wx'});
+s=fs.readFileSync(d+'/run-api42-full-controls1.mjs','utf8').replaceAll('probe-api42-full1','probe-api42-full2').replaceAll('api42-full-controls1','api42-full-controls2').replaceAll('api42-full-controls-review1','api42-full-controls-review2').replaceAll('api42-observer-reviewed1','api42-observer-reviewed2');
+s=s.replace('assert.equal(control.poolEnded,true);',"assert.equal(control.poolEnded,true);assert(control.checks.includes('actual PG SDK service after stop leave spans and sampler unchanged'));");fs.writeFileSync(d+'/run-api42-full-controls2.mjs',s,{flag:'wx'});
+s=fs.readFileSync(d+'/fixture-server-api42-reviewed1.mjs','utf8').replaceAll('api42-observer-reviewed1.mjs','api42-observer-reviewed2.mjs');
+const health="const health=await stopApiSpans();if(!health?.observationComplete)";assert(s.includes(health));s=s.replace(health,"const health=await stopApiSpans();fs.writeFileSync(evidence+'/api-observer-stop-status.json',JSON.stringify(health,null,2)+'\\n',{flag:'wx'});if(!health?.observationComplete)");
+fs.writeFileSync(d+'/fixture-server-api42-reviewed2.mjs',s,{flag:'wx'});
+console.log('Immutable full controls2 and fixture2 prepared; actual full controls required.');

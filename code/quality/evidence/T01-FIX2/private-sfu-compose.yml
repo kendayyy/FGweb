@@ -1,0 +1,13 @@
+# Checked local signaling topology. Run from code/ with --project-directory .
+# The secret file is generated locally by private-sfu-smoke.mjs; never commit it.
+# T26 supplies the gateway on this network before application use. This setup
+# checkpoint does not expose an unguarded signal endpoint or claim media works.
+services:
+  fg-sfu:
+    image: livekit/livekit-server:v1.8.4@sha256:621fd87bd64a0c83e1f2418ee0323eb920d00acdd73e5f79b303c64f6cc532af
+    command: ["--config", "/etc/livekit.yaml"]
+    volumes: ["./.runtime/t01-fix2/private-sfu.yaml:/etc/livekit.yaml:ro"]
+    networks: [media-private]
+networks:
+  media-private:
+    driver: bridge

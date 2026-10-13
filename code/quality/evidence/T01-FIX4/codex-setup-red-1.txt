@@ -1,0 +1,50 @@
+✖ SDK is exact in web manifest and lock with approved registry integrity (14.3323ms)
+✔ installation preserves every existing direct and locked dependency version (50.9285ms)
+✖ native WASM initializes independent device identities and signed outgoing requests (7.0229ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.6234
+
+✖ failing tests:
+
+test at quality\evidence\T01-FIX4\setup.test.mjs:6:1
+✖ SDK is exact in web manifest and lock with approved registry integrity (14.3323ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - '18.6.0'
+  
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T01-FIX4/setup.test.mjs:10:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: '18.6.0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T01-FIX4\setup.test.mjs:22:1
+✖ native WASM initializes independent device identities and signed outgoing requests (7.0229ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@matrix-org/matrix-sdk-crypto-wasm' imported from E:\FGweb\code\quality\evidence\T01-FIX4\setup.test.mjs
+      at Object.getPackageJSONURL (node:internal/modules/package_json_reader:331:9)
+      at packageResolve (node:internal/modules/esm/resolve:784:25)
+      at moduleResolve (node:internal/modules/esm/resolve:873:18)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+      at #resolve (node:internal/modules/esm/loader:687:17)
+      at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+      at node:internal/modules/esm/loader:636:32 {
+    code: 'ERR_MODULE_NOT_FOUND'
+  }

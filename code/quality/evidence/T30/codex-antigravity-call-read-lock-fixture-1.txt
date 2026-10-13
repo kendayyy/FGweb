@@ -1,0 +1,42 @@
+### FG T30 — CallsService Concurrency Fixture Proposal (`antigravity-call-read-lock-fixture-1`)
+
+A minimal, targeted integration test fixture patch has been prepared in [`quality/evidence/T30/antigravity-call-read-lock-fixture-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-fixture-1/) to fix the legacy fixture admission UUID format defect in the new `participants` concurrency test.
+
+---
+
+### 1. Diagnosis & Minimal Patch Details
+
+1. **Defect**:
+   - In the initial GREEN run (21/22 passed), `participants` failed on `CallParticipantSchema.parse()` because legacy test helper `seedCallAdmission` generates raw UUIDs, whereas the contract regex requires canonical IDs formatted as `admission_<uuid>`.
+2. **Implementation**:
+   - Added `canonicalDtoAdmission` near existing helpers without altering them:
+     ```ts
+     async function canonicalDtoAdmission<T extends { admissionId: string }>(seed: T) {
+       const admissionId = `admission_${randomUUID()}`;
+       const changed = await pool.query('UPDATE call_admissions SET id=$1 WHERE id=$2', [admissionId, seed.admissionId]);
+       expect(changed.rowCount).toBe(1);
+       return { ...seed, admissionId };
+     }
+     ```
+   - Wrapped only `user1` and `user2` in the new `CallsService` concurrency callback:
+     ```ts
+     const user1 = await canonicalDtoAdmission(await seedCallAdmission(pool, `calls-shared-${method}-user-1`, game.id));
+     const user2 = await canonicalDtoAdmission(await seedSecondMemberInCall(pool, user1, `calls-shared-${method}-user-2`, game.id));
+     ```
+   - Both PostgreSQL rows are updated to canonical format in the database before client tokens are generated and sockets connect.
+3. **Preservation Guarantees**:
+   - No changes to application code, contracts, validation schemas, or assertions.
+   - All 15 original callbacks and legacy helpers (`seedCallAdmission`, `seedSecondMemberInCall`) remain completely untouched.
+   - Real PostgreSQL authority remains intact (actual DB row updated, no mock objects).
+   - Preserves all 22 expected test callbacks (15 original + 2 concurrent reader + 5 negative principal authorization).
+
+---
+
+### 2. Verified File SHA-256 Hashes
+
+| File | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-fixture-1/t30-signaling-throughput.integration.spec.ts) | `7a381e5aeb20fbaf093a7257aa1055ca1862e4d231235b550d180f6586aa9eda` | Minimal fixture canonical admission patch |
+| [`review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-fixture-1/review-notes.md) | `869f1563e52784b2a0659c78899bcd34c030aa341a40392d0307917fce97e27a` | Documentation |
+
+*No production source, dist, tests, git ledger, or history files were altered. No build or test runs were executed. Ready for Codex to check callback preservation, lint, adopt, and run the GREEN gate.*

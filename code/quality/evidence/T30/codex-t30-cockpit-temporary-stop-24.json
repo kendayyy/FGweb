@@ -1,0 +1,10 @@
+{
+  "command": "pwsh -NoProfile -Command $items = @(Get-Process -Name cockpit-tools -ErrorAction SilentlyContinue); if ($items.Count -gt 1) { throw 'Ambiguous cockpit process identity' }; $present=($items.Count -eq 1); if ($present) { $p=$items[0]; if ($p.Path -ne 'C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe') { throw 'Unexpected cockpit identity' } }; [ordered]@{ at=[DateTime]::UtcNow.ToString('o'); processId=$(if ($present) {$p.Id} else {$null}); executable='C:\\Users\\PC\\AppData\\Local\\Cockpit Tools\\cockpit-tools.exe'; observedRunningBefore=$present; userAuthorizedTemporaryClose=$true; restorationRequired=$true } | ConvertTo-Json | Set-Content -LiteralPath 'quality/evidence/T30/cockpit-temporary-close24.json' -Encoding utf8NoBOM; if ($present) { $taskPid=$p.Id; Stop-Process -Id $taskPid -ErrorAction Stop; $p.WaitForExit(); if (Get-Process -Id $taskPid -ErrorAction SilentlyContinue) { throw 'Cockpit close not confirmed' }; Write-Output 'Authorized exact executable closed.' } else { Write-Output 'Cockpit absent before test; no close claimed; authorized restoration required.' }",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-12T03:02:58.314Z",
+  "completedAt": "2026-10-12T03:03:01.384Z",
+  "exitCode": 0,
+  "signal": null,
+  "evidencePath": "quality/evidence/T30/codex-t30-cockpit-temporary-stop-24.txt",
+  "evidenceSha256": "0be335a6e7986bab4cd7c63e4d0b3fd673c446e8ef6e9b670567f4898658eedb"
+}

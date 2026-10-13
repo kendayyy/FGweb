@@ -1,0 +1,102 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3168) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"fixture":"import-reader","errorClass":"Error","databaseCode":null}
+{"fixture":"import-reader-restore-error","errorClass":"error","databaseCode":"23514","constraint":null}
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (55.654 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 403
+
+      286 |      }catch(error){process.stderr.write(JSON.stringify({fixture:"import-reader-restore-error",errorClass:error instanceof Error?error.name:"unknown",databaseCode:(error as {code?:string}).code??null,constraint:(error as {constraint?:string}).constraint??null})+"\n");throw error;}}
+      287 |      expect((await pool.query('SELECT id,content,encryption_mode,created_at,updated_at FROM messages ORDER BY id')).rows).toEqual(before);expect((await pool.query("SELECT migration_state FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].migration_state).toBe('LEGACY_PENDING');expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);
+    > 288 |     }finally{for(const table of ['chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages'])await pool.query(`DELETE FROM ${table}`);await pool.query("DELETE FROM chat_crypto_legacy_candidates WHERE message_id='msg-c'");await pool.query("UPDATE chat_crypto_legacy_migrations SET cohort_id='available' WHERE message_id='msg-c'");for(const table of ['chat_crypto_to_device_events','chat_crypto_protocol_events'])await pool.query(`DELETE FROM ${table} WHERE cohort_id='available-second'`);await pool.query("DELETE FROM chat_crypto_cohort_members WHERE cohort_id='available-second'");await pool.query("DELETE FROM chat_crypto_history_cohorts WHERE id='available-second'");await alice.invalidateGroupSession(room);for(const outgoing of await alice.shareRoomKey(room,[bob.userId],settings)){expect(outgoing.type).toBe(sdk.RequestType.ToDevice);const event=outgoing as sdk.ToDeviceRequest;expect(event.event_type).toBe('m.room.encrypted');const body=JSON.parse(event.body),recipients=Object.entries(body.messages as Record<string,Record<string,unknown>>).flatMap(([owner,devices])=>Object.entries(devices).map(([deviceId,content])=>({userId:fg(owner),deviceId,content})));expect((await write('to-device',{...context,deviceId:'A',transactionId:event.txn_id,eventType:event.event_type,recipients})).status).toBe(201);await alice.markRequestAsSent(outgoing.id,outgoing.type,JSON.stringify({}));}const restored=await request(base).get('/api/v1/crypto/sync').set('Cookie',cookies.get('bob')!).query({deviceId:'B'});expect(restored.status).toBe(200);await bob.receiveSyncChanges(JSON.stringify(restored.body.encrypted.items.map((item:{senderUserId:string;content:unknown})=>({sender:matrixUserId(item.senderUserId),type:'m.room.encrypted',content:item.content}))),new sdk.DeviceLists(),new Map());}
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+      289 |    }finally{await pool.query("DELETE FROM chat_crypto_legacy_candidates WHERE message_id='msg-c'");await pool.query("DELETE FROM chat_crypto_legacy_migrations WHERE message_id='msg-c'");}
+      290 |    const changed=Buffer.from(imageBytes);changed[0]^=1;fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),changed);try{expect((await file()).status).toBe(409);}finally{fs.writeFileSync(path.join(root,'encrypted',String(imageDraft!.object_key)),imageBytes);}expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations WHERE message_id='msg-b'")).rows[0].state).toBe('PREPARED');
+      291 |   }finally{await pool.query("DELETE FROM chat_crypto_legacy_candidates WHERE message_id='msg-b'");if(imageDraft){await pool.query('DELETE FROM chat_crypto_upload_drafts WHERE id=$1',[imageDraft.id]);fs.unlinkSync(path.join(root,'encrypted',String(imageDraft.object_key)));}await pool.query("UPDATE chat_crypto_legacy_migrations SET cohort_id='verified' WHERE message_id='msg-b'");}
+
+      at test/chat-crypto-legacy.integration.spec.ts:288:1339
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rolls back candidate/session writes when an original recipient is banned after the real source read
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 404
+
+      315 |   const service=app.get(CryptoLegacyService) as unknown as {source:(...args:unknown[])=>Promise<unknown>},original=service.source.bind(service),before=(await pool.query('SELECT count(*)::int AS count FROM chat_crypto_outbound_sessions')).rows[0].count;
+      316 |   const spy=jest.spyOn(service,'source').mockImplementation(async(...args)=>{const result=await original(...args);await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES('candidate-late-ban','alice','bob','BAN','fixture')");return result;});
+    > 317 |   try{const result=await write('conversations/legacy/legacy/commit',await preparedInput('available','late-ban-candidate'));expect(result.status).toBe(409);expect(result.body.message).toBe('Historical recipient unavailable');expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_outbound_sessions')).rows[0].count).toBe(before);}finally{spy.mockRestore();await pool.query("DELETE FROM admin_actions WHERE id='candidate-late-ban'");}
+          |                                                                                                                                                  ^
+      318 |  });});
+      319 |  it('rolls back a real PostgreSQL candidate insert failure and retains the original plaintext source',async()=>{await availableSource(async()=>{
+      320 |   const before=(await pool.query('SELECT count(*)::int AS count FROM chat_crypto_outbound_sessions')).rows[0].count;await pool.query("CREATE FUNCTION reject_legacy_candidate() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'candidate fixture fault'; END $$");await pool.query('CREATE TRIGGER reject_legacy_candidate BEFORE INSERT ON chat_crypto_legacy_candidates FOR EACH ROW EXECUTE FUNCTION reject_legacy_candidate()');
+
+      at test/chat-crypto-legacy.integration.spec.ts:317:146
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:314:117)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › rolls back a real PostgreSQL candidate insert failure and retains the original plaintext source
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 404
+
+      319 |  it('rolls back a real PostgreSQL candidate insert failure and retains the original plaintext source',async()=>{await availableSource(async()=>{
+      320 |   const before=(await pool.query('SELECT count(*)::int AS count FROM chat_crypto_outbound_sessions')).rows[0].count;await pool.query("CREATE FUNCTION reject_legacy_candidate() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'candidate fixture fault'; END $$");await pool.query('CREATE TRIGGER reject_legacy_candidate BEFORE INSERT ON chat_crypto_legacy_candidates FOR EACH ROW EXECUTE FUNCTION reject_legacy_candidate()');
+    > 321 |   try{expect((await write('conversations/legacy/legacy/commit',await preparedInput('available','db-failure-candidate'))).status).toBe(500);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_outbound_sessions')).rows[0].count).toBe(before);expect((await pool.query("SELECT content FROM messages WHERE id='msg-a'")).rows[0].content).toBe('legacy-source-private');}finally{await pool.query('DROP TRIGGER reject_legacy_candidate ON chat_crypto_legacy_candidates');await pool.query('DROP FUNCTION reject_legacy_candidate()');}
+          |                                                                                                                                  ^
+      322 |  });});
+      323 |  it('refuses candidate preparation when a verified historical recipient is unavailable rather than shrinking the cohort',async()=>{
+      324 |   const input=await preparedInput('verified','unavailable-candidate'),result=await write('conversations/legacy/legacy/commit',input);expect(result.status).toBe(409);expect(result.body.message).toBe('Historical recipient unavailable');expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations WHERE message_id='msg-a'")).rows[0].state).toBe('PREPARED');
+
+      at test/chat-crypto-legacy.integration.spec.ts:321:130
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:319:113)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › refuses candidate preparation when a verified historical recipient is unavailable rather than shrinking the cohort
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "PREPARED"
+    Received: "RECONCILED"
+
+      322 |  });});
+      323 |  it('refuses candidate preparation when a verified historical recipient is unavailable rather than shrinking the cohort',async()=>{
+    > 324 |   const input=await preparedInput('verified','unavailable-candidate'),result=await write('conversations/legacy/legacy/commit',input);expect(result.status).toBe(409);expect(result.body.message).toBe('Historical recipient unavailable');expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations WHERE message_id='msg-a'")).rows[0].state).toBe('PREPARED');
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^
+      325 |  });
+      326 |  it('prepares native ciphertext idempotently and preserves source text/times without claiming reconciliation',async()=>{
+      327 |   await pool.query("INSERT INTO chat_crypto_history_cohorts(id,conversation_id,verified_at,verification_basis) SELECT 'available','legacy',verified_at,'EXPLICIT_RECONCILIATION' FROM chat_crypto_history_cohorts WHERE id='verified'");for(const user of ['alice','bob'])await pool.query("INSERT INTO chat_crypto_cohort_members(cohort_id,conversation_id,user_id) VALUES('available','legacy',$1)",[user]);await pool.query("UPDATE chat_crypto_legacy_migrations SET cohort_id='available' WHERE message_id='msg-a'");
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:324:469)
+
+  ● Verified legacy source API with actual auth/PG/native devices/files › prepares native ciphertext idempotently and preserves source text/times without claiming reconciliation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      327 |   await pool.query("INSERT INTO chat_crypto_history_cohorts(id,conversation_id,verified_at,verification_basis) SELECT 'available','legacy',verified_at,'EXPLICIT_RECONCILIATION' FROM chat_crypto_history_cohorts WHERE id='verified'");for(const user of ['alice','bob'])await pool.query("INSERT INTO chat_crypto_cohort_members(cohort_id,conversation_id,user_id) VALUES('available','legacy',$1)",[user]);await pool.query("UPDATE chat_crypto_legacy_migrations SET cohort_id='available' WHERE message_id='msg-a'");
+      328 |   try{
+    > 329 |    const input=await preparedInput('available','native-candidate');const result=await write('conversations/legacy/legacy/commit',input);expect(result.status).toBe(201);expect(result.body).toMatchObject({candidateId:input.candidateId,messageId:'msg-a',conversationId:'legacy',cohortId:'available',membershipRevision:input.membershipRevision,originalSha256:digests.get('msg-a'),importerUserId:'alice',importerDeviceId:'A',envelope:input.envelope,attachmentIds:[],state:'PREPARED'});expect(result.body.envelopeSha256).toBe(sha(canonical(input.envelope)));expect(JSON.stringify(result.body)).not.toContain('legacy-source-private');
+          |                                                                                                                                                               ^
+      330 |    const retry=await write('conversations/legacy/legacy/commit',input);expect(retry.status).toBe(201);expect(retry.body).toEqual(result.body);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(1);
+      331 |    expect((await write('conversations/legacy/legacy/commit',{...input,candidateId:'conflicting-candidate'})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',{...input,originalSha256:sha('changed')})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',{...input,membershipRevision:input.membershipRevision+1})).status).toBe(409);expect((await write('conversations/legacy/legacy/commit',input,'outsider')).status).toBe(403);
+      332 |    const state=(await pool.query("SELECT lm.state,m.content,to_char(m.created_at,'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') AS created FROM chat_crypto_legacy_migrations lm JOIN messages m ON m.id=lm.message_id WHERE m.id='msg-a'")).rows[0];expect(state).toEqual({state:'PREPARED',content:'legacy-source-private',created:'2026-01-01T00:00:00.123456Z'});expect((await pool.query("SELECT migration_state FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].migration_state).not.toBe('RECONCILED');expect(fs.readFileSync(path.join(images,imageId+'.webp'))).toEqual(image);
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:329:159)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 14 passed, 19 total
+Snapshots:   0 total
+Time:        56.13 s, estimated 57 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

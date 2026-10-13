@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T26-FIX1',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T26-FIX1'),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:baseline.hashes.specSha256});
+task.writeAllowlist.push('.runtime/t27/**');task.approvedScopeAmendments.push({source:'Persisted human broad-scope authorization',paths:['.runtime/t27/**'],reason:'Unchanged T27 native regression suite creates new isolated fixture directories. Freeze all existing runtime files and verify unchanged; only newly-created regression fixture writes/cleanup are authorized.'});
+const allowed=p=>task.writeAllowlist.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x),files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.runtime/')&&!p.startsWith('.cache/'));
+const frozen=new Map(files.filter(p=>!allowed(p)).map(p=>[p,hash(p)]));for(const old of ledger.tasks.filter(t=>t.status==='PASS'))for(const p of Object.keys(old.outputsHash?.files??{}))if(!allowed(p))frozen.set(p,hash(p));
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(`${p}/${e.name}`):[`${p}/${e.name}`]);
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.evidencePaths=[`${dir}/before.json`,`${dir}/plan.md`];
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify({recordedAt:task.startedAt,readonly:Object.fromEntries(frozen),historical:ledger.tasks.filter(t=>t.status==='PASS'),runtimeFrozen:Object.fromEntries(walk('.runtime/t27').map(p=>[p,hash(p)])),configuration:{env:hash('.env.local')},scope:task.writeAllowlist},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T27/record.mjs','utf8').replace("const dir = 'quality/evidence/T27';",`const dir = '${dir}';`),{flag:'wx'});
+fs.writeFileSync(`${dir}/private-gateway-fixture.mjs`,fs.readFileSync('quality/evidence/T27/private-gateway-fixture.mjs','utf8').replaceAll('.runtime/t27/','.runtime/t26-fix1/'),{flag:'wx'});
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date(task.startedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T26-FIX1 call controls API\n- Codex; T03-FIX15 PASS/outputs và stock owner gate đạt trước mở. Scope calls module/native controls test/build/evidence, own isolated runtime; freeze existing T27 runtime cho unchanged regression chỉ tạo dirs mới. GET participants và POST self-mic theo contracts, current session/member/ban/lease/restriction ACL, không DB migration hoặc UI/moderation actions T29. Tests RED trước implementation.\n`);
+console.log(JSON.stringify({task:task.id,status:task.status,gate:'PASS',scopePinned:true}));

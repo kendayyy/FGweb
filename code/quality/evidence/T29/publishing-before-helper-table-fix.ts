@@ -1,0 +1,59 @@
+import 'reflect-metadata';
+import {jest} from '@jest/globals';
+import {NestFactory} from '@nestjs/core';
+import type {INestApplication} from '@nestjs/common';
+import pg from 'pg';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import {parseEnv} from 'node:util';
+import {randomUUID} from 'node:crypto';
+import {drizzle} from 'drizzle-orm/node-postgres';
+import {migrate} from 'drizzle-orm/node-postgres/migrator';
+import request from 'supertest';
+import WebSocket from 'ws';
+import {SignalResponse} from '@livekit/protocol';
+import {RoomServiceClient,TokenVerifier,TrackSource} from 'livekit-server-sdk';
+import {CallParticipantSchema} from '@fg/contracts';
+import * as tables from '@fg/database';
+import {AppModule} from '../src/app.module.js';
+import {createSignedSessionCookie} from './test-cookie-helper.js';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..'),origin='http://localhost:5173',authSecret='t29-owned-cookie-secret-only-at-least-32';
+type Fixture={server:string;ws:string;close:()=>Promise<{containersRemoved:boolean;networkRemoved:boolean}>};
+jest.setTimeout(90000);
+describe('T29 actual API/PG/private SFU publishing and moderation',()=>{
+ let app:INestApplication,pool:pg.Pool,base:string,fixture:Fixture,sfu:RoomServiceClient,game:{id:string;title:string},created=false;
+ const owned=`t29_publishing_${randomUUID().replaceAll('-','')}`,saved={...process.env},cookies:Record<string,string>={},sockets:WebSocket[]=[];
+ beforeAll(async()=>{
+  const env=parseEnv(fs.readFileSync(path.join(root,'.env.local'),'utf8')),db=new URL(env.DATABASE_URL!);db.searchParams.set('options',`-c search_path=${owned}`);
+  pool=new pg.Pool({connectionString:db.href,max:20,connectionTimeoutMillis:5000,statement_timeout:15000});await pool.query(`CREATE SCHEMA "${owned}"`);created=true;
+  await migrate(drizzle(pool),{migrationsFolder:path.join(root,'packages/database/migrations'),migrationsSchema:owned});await tables.seedGames(drizzle(pool,{schema:tables}));game=(await pool.query("SELECT id,title FROM games WHERE title='Valorant'")).rows[0];
+  for(const id of ['owner','viewer','second','third','fourth','helper','outsider']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())',[id,`${id}@fixture.invalid`]);await pool.query('INSERT INTO profiles(user_id,display_name) VALUES($1,$1)',[id]);await pool.query('INSERT INTO game_interests(id,user_id,game_id) VALUES($1,$1,$2)',[id,game.id]);cookies[id]=await createSignedSessionCookie(authSecret,`tok-${id}`);}
+  const helper=await import(pathToFileURL(path.join(root,'quality/evidence/T29/private-gateway-fixture.mjs')).href) as {startGatewayFixture:(input:{databaseURL:string;key:string;secret:string;origin:string})=>Promise<Fixture>};
+  fixture=await helper.startGatewayFixture({databaseURL:db.href,key:env.LIVEKIT_API_KEY!,secret:env.LIVEKIT_API_SECRET!,origin});
+  Object.assign(process.env,env,{DATABASE_URL:db.href,PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:authSecret,LIVEKIT_SERVER_URL:fixture.server,LIVEKIT_ADMISSION_URL:fixture.ws});sfu=new RoomServiceClient(fixture.server,env.LIVEKIT_API_KEY!,env.LIVEKIT_API_SECRET!);
+  app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});await app.listen(0,'127.0.0.1');base=await app.getUrl();
+ });
+ afterAll(async()=>{try{for(const ws of sockets)ws.terminate();await app?.close();if(fixture){const c=await fixture.close();expect(c.containersRemoved).toBe(true);expect(c.networkRemoved).toBe(true);}if(created){expect(owned).toMatch(/^t29_publishing_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA "${owned}" CASCADE`);expect((await pool.query('SELECT nspname FROM pg_namespace WHERE nspname=$1',[owned])).rowCount).toBe(0);}}finally{await pool?.end();process.env=saved;}});
+ beforeEach(async()=>{for(const ws of sockets.splice(0))ws.terminate();for(const room of await sfu.listRooms())try{await sfu.deleteRoom(room.name);}catch(error){if((await sfu.listRooms([room.name])).length)throw error;}
+  await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");for(const id of ['owner','viewer','second','third','fourth','helper','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+ });
+ const post=(route:string,user='viewer',body:object={})=>request(base).post('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+ const get=(id:string,user='owner',query:object={})=>request(base).get(`/api/v1/calls/${id}/participants`).set('Cookie',cookies[user]).query(query);
+ async function admitted(){const room=await post('rooms','owner',{name:'Controls persistent room',gameId:game.id,gameTitle:game.title,visibility:'PRIVATE',playerCapacity:2});expect(room.status).toBe(200);await pool.query("INSERT INTO room_members(id,room_id,user_id,role) VALUES($1,$2,'viewer','MEMBER')",[randomUUID(),room.body.id]);await pool.query("INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,'viewer')",[randomUUID(),room.body.conversationId]);const call=await post(`rooms/${room.body.id}/calls`,'owner');expect(call.status).toBe(201);const join=await post(`calls/${call.body.id}/join`);expect(join.status).toBe(201);return {room:room.body,call:call.body,join:join.body};}
+
+ const claim=(id:string,user='viewer',body:object={})=>post('calls/'+id+'/screen-share/claim',user,body);
+ const release=(id:string,user='viewer',body:object={})=>post('calls/'+id+'/screen-share/release',user,body);
+ const moderate=(id:string,action:string,targetUserId='viewer',user='owner',extra:object={})=>post('calls/'+id+'/moderation',user,{action,targetUserId,...extra});
+ async function group(){const result=await admitted();for(const user of ['second','third','fourth','helper']){await pool.query('INSERT INTO room_members(id,room_id,user_id,role) VALUES($1,$2,$3,$4)',[randomUUID(),result.room.id,user,user==='helper'?'HELPER':'MEMBER']);await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) VALUES($1,$2,$3)',[randomUUID(),result.room.conversationId,user]);expect((await post('calls/'+result.call.id+'/join',user)).status).toBe(201);}return result;}
+ async function slots(id:string){return (await pool.query('SELECT user_id,ordinal FROM call_publish_slots WHERE call_group_id=$1 ORDER BY ordinal',[id])).rows;}
+ it('four concurrent publishers admit exactly three with ordinal constraints',async()=>{const {call}=await group();const replies=await Promise.all(['viewer','second','third','fourth'].map(user=>claim(call.id,user)));expect(replies.map(r=>r.status).sort()).toEqual([201,201,201,409]);const rows=await slots(call.id);expect(rows).toHaveLength(3);expect(rows.map(r=>r.ordinal)).toEqual([1,2,3]);for(const r of replies.filter(r=>r.status===201))expect(r.body.callId).toBe(call.id);});
+ it('a request burst/retry allocates one slot and release is idempotent',async()=>{const {call}=await group();const replies=await Promise.all(Array.from({length:12},()=>claim(call.id)));expect(replies.every(r=>r.status===201)).toBe(true);expect(await slots(call.id)).toHaveLength(1);expect((await release(call.id)).status).toBe(201);expect((await release(call.id)).status).toBe(201);expect(await slots(call.id)).toEqual([]);expect((await claim(call.id)).status).toBe(201);expect(await slots(call.id)).toHaveLength(1);});
+ it('screen quota never consumes or blocks viewer microphone admission',async()=>{const {call}=await group();for(const user of ['viewer','second','third'])expect((await claim(call.id,user)).status).toBe(201);expect((await claim(call.id,'fourth')).status).toBe(409);expect((await post('calls/'+call.id+'/self-mic','fourth',{muted:false})).status).toBe(201);expect((await get(call.id)).body.find((p:{userId:string})=>p.userId==='fourth').isMuted).toBe(false);});
+ it('claim/release require the current session-bound member and ignore no client authority',async()=>{const {call}=await group();expect((await claim(call.id,'outsider')).status).toBe(403);expect((await release(call.id,'outsider')).status).toBe(403);for(const body of [{userId:'owner'},{ordinal:4},{canPublish:true}])expect((await claim(call.id,'viewer',body)).status).toBe(422);const token='second-session-'+randomUUID();await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,'viewer',$2,now()+interval '1 day',now(),now())",[randomUUID(),token]);const cookie=await createSignedSessionCookie(authSecret,token);expect((await request(base).post('/api/v1/calls/'+call.id+'/screen-share/claim').set('Cookie',cookie).set('Origin',origin).send({})).status).toBe(403);});
+ it('helper without MANAGE_CALLS and ordinary member cannot moderate',async()=>{const {call,room}=await group();expect((await moderate(call.id,'MUTE_MIC','viewer','helper')).status).toBe(403);expect((await moderate(call.id,'MUTE_MIC','viewer','second')).status).toBe(403);await pool.query("INSERT INTO room_helper_permissions(id,room_id,user_id,permission,granted_by) VALUES($1,$2,'helper','MANAGE_CALLS','owner')",[randomUUID(),room.id]);expect((await moderate(call.id,'MUTE_MIC','viewer','helper')).status).toBe(201);await pool.query("DELETE FROM room_helper_permissions WHERE room_id=$1 AND user_id='helper'",[room.id]);expect((await moderate(call.id,'ALLOW_MIC','viewer','helper')).status).toBe(403);});
+ it('moderator microphone restriction survives retries until explicit allow',async()=>{const {call}=await group();expect((await moderate(call.id,'MUTE_MIC')).status).toBe(201);expect((await moderate(call.id,'MUTE_MIC')).status).toBe(201);expect((await post('calls/'+call.id+'/self-mic','viewer',{muted:false})).status).toBe(403);expect((await post('calls/'+call.id+'/self-mic','viewer',{muted:true})).status).toBe(201);expect((await moderate(call.id,'ALLOW_MIC')).status).toBe(201);expect((await post('calls/'+call.id+'/self-mic','viewer',{muted:false})).status).toBe(201);});
+ it('stop publishing frees quota and forbids self reclaim until allowed',async()=>{const {call}=await group();expect((await claim(call.id)).status).toBe(201);expect((await moderate(call.id,'STOP_SCREEN_SHARE')).status).toBe(201);expect(await slots(call.id)).toEqual([]);expect((await claim(call.id)).status).toBe(403);expect((await post('calls/'+call.id+'/self-mic','viewer',{muted:false})).status).toBe(201);expect((await moderate(call.id,'ALLOW_SCREEN_SHARE')).status).toBe(201);expect((await claim(call.id)).status).toBe(201);});
+ it('kick revokes old lease and slot while keeping persistent room/team separate',async()=>{const {call,room}=await group();expect((await claim(call.id)).status).toBe(201);expect((await moderate(call.id,'KICK')).status).toBe(201);expect(await slots(call.id)).toEqual([]);expect((await pool.query("SELECT a.id FROM call_admissions a JOIN call_members m ON m.id=a.call_member_id WHERE m.call_group_id=$1 AND m.user_id='viewer' AND a.revoked_at IS NULL",[call.id])).rowCount).toBe(0);expect((await pool.query("SELECT id FROM room_members WHERE room_id=$1 AND user_id='viewer'",[room.id])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[room.id])).rowCount).toBe(1);expect((await claim(call.id)).status).toBe(403);});
+ it('closed/missing target and malformed moderation fail without mutation',async()=>{const {call}=await group();for(const body of [{action:'UNBAN',targetUserId:'viewer'},{action:'KICK',targetUserId:'viewer',actorId:'owner'},{}])expect((await post('calls/'+call.id+'/moderation','owner',body)).status).toBe(422);expect((await moderate(call.id,'MUTE_MIC','outsider')).status).toBe(403);expect((await claim(randomUUID())).status).toBe(404);expect(await slots(call.id)).toEqual([]);});
+});

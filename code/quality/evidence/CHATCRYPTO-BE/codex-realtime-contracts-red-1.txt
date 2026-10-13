@@ -1,0 +1,100 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/chat-crypto-realtime.test.ts (8 tests | 8 failed) 28ms
+   ❯ Device-bound private realtime contracts (8)
+     × registers a distinct strict ciphertext event without changing legacy message.created 15ms
+     × rejects content in ciphertext events 1ms
+     × rejects privateKey in ciphertext events 1ms
+     × rejects recoveryCode in ciphertext events 1ms
+     × rejects fileName in ciphertext events 1ms
+     × rejects replyPreview in ciphertext events 1ms
+     × requires a device on private subscribe/unsubscribe and rejects client owner/trust claims 1ms
+     × acknowledges the bound device/revision and uses existing strict error semantics 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > registers a distinct strict ciphertext event without changing legacy message.created
+AssertionError: expected undefined to be 'crypto.message.created' // Object.is equality
+
+- Expected:
+"crypto.message.created"
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/chat-crypto-realtime.test.ts:8:53
+      6| describe('Device-bound private realtime contracts',()=>{
+      7|  it('registers a distinct strict ciphertext event without changing leg…
+      8|   expect(c.SocketEventNames.CRYPTO_MESSAGE_CREATED).toBe('crypto.messa…
+       |                                                     ^
+      9|   expect(c.SocketEventSchemaMap['crypto.message.created']?.parse(messa…
+     10|   expect(wire.SocketMessageCreatedPayloadSchema.safeParse(message).suc…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects content in ciphertext events
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects privateKey in ciphertext events
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects recoveryCode in ciphertext events
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects fileName in ciphertext events
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects replyPreview in ciphertext events
+AssertionError: expected undefined to be defined
+ ❯ packages/contracts/test/chat-crypto-realtime.test.ts:13:60
+     11|  });
+     12|  it.each(['content','privateKey','recoveryCode','fileName','replyPrevi…
+     13|   expect(c.SocketEventSchemaMap['crypto.message.created']).toBeDefined…
+       |                                                            ^
+     14|   expect(c.SocketEventSchemaMap['crypto.message.created'].safeParse({.…
+     15|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > requires a device on private subscribe/unsubscribe and rejects client owner/trust claims
+AssertionError: expected undefined to be 'crypto.subscribe' // Object.is equality
+
+- Expected:
+"crypto.subscribe"
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/chat-crypto-realtime.test.ts:18:47
+     16|  it('requires a device on private subscribe/unsubscribe and rejects cl…
+     17|   const input={conversationId:'private',deviceId:'A'};
+     18|   expect(c.SocketEventNames.CRYPTO_SUBSCRIBE).toBe('crypto.subscribe')…
+       |                                               ^
+     19|   expect(c.SocketEventSchemaMap['crypto.subscribe']?.parse(input)).toE…
+     20|   expect(c.SocketEventSchemaMap['crypto.unsubscribe']?.parse(input)).t…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > acknowledges the bound device/revision and uses existing strict error semantics
+AssertionError: expected undefined to deeply equal { ok: true, …(3) }
+
+- Expected:
+{
+  "conversationId": "private",
+  "deviceId": "A",
+  "membershipRevision": 2,
+  "ok": true,
+}
+
++ Received:
+undefined
+
+ ❯ packages/contracts/test/chat-crypto-realtime.test.ts:25:59
+     23|  it('acknowledges the bound device/revision and uses existing strict e…
+     24|   const ack={ok:true,conversationId:'private',deviceId:'A',membershipR…
+     25|   expect(c.SocketCryptoConversationAckSchema?.parse(ack)).toEqual(ack);
+       |                                                           ^
+     26|   expect(c.SocketCryptoConversationAckSchema.safeParse({...ack,members…
+     27|   expect(c.SocketCryptoConversationAckSchema.safeParse({ok:false,error…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  23:59:25
+   Duration  2.10s (transform 47%, import 40%, worker 10%, tests 3%)
+

@@ -1,0 +1,48 @@
+✖ approved SFU version is locked in local compose and dedicated media manifest (16.4868ms)
+✖ private media topology exposes gateway, never SFU signaling (0.5771ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 220.8102
+
+✖ failing tests:
+
+test at quality\evidence\T01-FIX3\setup.test.mjs:5:1
+✖ approved SFU version is locked in local compose and dedicated media manifest (16.4868ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(fs.readFileSync('infra/compose.local.yml','utf8').includes(`image: ${image}`))
+  
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T01-FIX3/setup.test.mjs:6:2)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at quality\evidence\T01-FIX3\setup.test.mjs:10:1
+✖ private media topology exposes gateway, never SFU signaling (0.5771ms)
+  Error: ENOENT: no such file or directory, open 'E:\FGweb\code\infra\media\private-sfu.compose.yml'
+      at Object.readFileSync (node:fs:483:20)
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T01-FIX3/setup.test.mjs:11:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'E:\\FGweb\\code\\infra\\media\\private-sfu.compose.yml'
+  }

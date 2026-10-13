@@ -76,6 +76,8 @@ export const CallParticipantSchema = z.object({
   callId: IdSchema,
   userId: IdSchema,
   user: UserSummarySchema.optional(),
+  mediaIdentity: z.string().regex(/^admission_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/).optional(),
+  micRestricted: z.boolean().optional(),
   isPublishing: z.boolean().default(false),
   isMuted: z.boolean().default(true),
   joinedAt: IsoDateTimeSchema,
@@ -120,6 +122,10 @@ export const CallJoinSchema = z.object({
 });
 export type CallJoinDTO = z.infer<typeof CallJoinSchema>;
 
+// Actor, room, capacity and SFU identity come from authenticated server state.
+export const CallActionRequestSchema = z.object({}).strict();
+export type CallActionRequest = z.infer<typeof CallActionRequestSchema>;
+
 export const SetExternalLiveRequestSchema = z
   .object({
     provider: ExternalLiveProviderSchema,
@@ -148,12 +154,12 @@ export type SetExternalLiveRequest = z.infer<typeof SetExternalLiveRequestSchema
 
 export const MuteParticipantRequestSchema = z.object({
   muted: z.boolean(),
-});
+}).strict();
 export type MuteParticipantRequest = z.infer<typeof MuteParticipantRequestSchema>;
 
 export const ToggleSelfMicRequestSchema = z.object({
   muted: z.boolean(),
-});
+}).strict();
 export type ToggleSelfMicRequest = z.infer<typeof ToggleSelfMicRequestSchema>;
 
 export const ListCallParticipantsQuerySchema = z.object({
@@ -163,10 +169,18 @@ export type ListCallParticipantsQuery = z.infer<typeof ListCallParticipantsQuery
 
 export const RefreshPublishTokenSchema = z.object({
   callId: IdSchema,
-});
+}).strict();
 export type RefreshPublishTokenRequest = z.infer<typeof RefreshPublishTokenSchema>;
 
 export const KickCallParticipantSchema = z.object({
   targetUserId: IdSchema,
-});
+}).strict();
 export type KickCallParticipantRequest = z.infer<typeof KickCallParticipantSchema>;
+
+
+// T29: actors/permissions/slot quotas always come from authenticated server state.
+export const CallModerationActionSchema=z.enum(['MUTE_MIC','ALLOW_MIC','STOP_SCREEN_SHARE','ALLOW_SCREEN_SHARE','KICK']);
+export const CallModerationRequestSchema=z.object({action:CallModerationActionSchema,targetUserId:IdSchema}).strict();
+export type CallModerationRequest=z.infer<typeof CallModerationRequestSchema>;
+export const CallControlSuccessSchema=z.object({success:z.literal(true)}).strict();
+export type CallControlSuccess=z.infer<typeof CallControlSuccessSchema>;

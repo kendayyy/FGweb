@@ -1,0 +1,254 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18060) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-admission.integration.spec.ts (54.399 s)
+  ● T26 native HTTP/PostgreSQL call admission › creates multiple member-only groups in one persistent room with independent capacities
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:69:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › eleven simultaneous spectators allocate exactly ten real seats and zero playing slots
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:75:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › same-user concurrent refresh is idempotent and cannot occupy two different calls
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:85:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › competing joins in different groups permit only one call per user
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:91:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › guest and outsider cannot obtain tokens; an unaccepted ROOM invitation grants no access
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:96:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › membership revoked after a grant never refreshes or creates a new token
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:103:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › logout and bans invalidate token issuance even for an already reserved user
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:108:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › tokens bind only the admitted identity/room, expire shortly and do not enable camera or screen publication
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:114:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › caller-supplied identity or capacity does not bypass authorization or the ten-person limit
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:122:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › explicit leave releases only a call seat, allowing a different group without deleting room membership
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:128:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › uses an opaque session-bound identity and gives a new identity after leaving
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:135:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › expires unconnected reservations before allocating the last available seat
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:148:26)
+
+  ● T26 native HTTP/PostgreSQL call admission › creates the actual SFU room with a server-side maximum of ten
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      64 |  }
+      65 |  async function call(roomId:string,user='owner'){
+    > 66 |   const res=await post(`rooms/${roomId}/calls`,user);expect(res.status).toBe(201);return CallGroupSchema.parse(res.body);
+         |                                                                         ^
+      67 |  }
+      68 |  it('creates multiple member-only groups in one persistent room with independent capacities',async()=>{
+      69 |   const r=await room(),a=await call(r.id),b=await call(r.id,'viewer-0');expect(a.id).not.toBe(b.id);
+
+      at call (test/call-admission.integration.spec.ts:66:73)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:156:26)
+
+Test Suites: 1 failed, 1 total
+Tests:       13 failed, 13 total
+Snapshots:   0 total
+Time:        56.423 s
+Ran all test suites matching test/call-admission.integration.spec.ts.
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts

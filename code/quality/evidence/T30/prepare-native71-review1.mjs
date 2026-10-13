@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30';let s=fs.readFileSync(d+'/review-native70-codex2.mjs','utf8');
+for(const[a,b]of [['e78a0d2b9afd4851b2194ee9e3b06e8a','c19d78144dea46d7972a9efc0d35e79d'],['native-70','native-71'],['native70','native71'],['Native70','Native71'],['restore-58','restore-62'],['resource58','resource62'],['Supabase58','Supabase62']])s=s.replaceAll(a,b);
+const start=s.indexOf("const joins=rows('connection-times.jsonl')"),end=s.indexOf('\nconst observer=',start);assert(start>0&&end>start);
+s=s.slice(0,start)+"const joins=rows('connection-times.jsonl'),captures=rows('real-capture.jsonl'),subscriptions=fs.existsSync(b+'/subscriptions.jsonl')?rows('subscriptions.jsonl'):[];assert.equal(joins.length,3);assert.equal(captures.length,2);assert.equal(subscriptions.length,0);"+s.slice(end);
+s=s.replaceAll('photos.length,5','photos.length,3').replaceAll('delivery.length,5','delivery.length,3');
+s=s.replace('assert.equal(pgFailures.length,0);',"assert(pgFailures.some(r=>r.kind==='room-lock'&&r.sqlState==='57014'));");
+s=s.replace("assert(controllerErrors.some(r=>r.status===500&&r.kind==='PG_CONNECT_TIMEOUT'));",'assert.equal(controllerErrors.length,0);');
+s=s.replace('apiBuild:14','apiBuild:15').replace('originalThreeSlotAssertionCompletedBeforeFailureLine66:true','originalThreeSlotAssertionCompletedBeforeFailureLine66:false').replace('realRtpSourceSwitchReached:true','realRtpSourceSwitchReached:false');
+s=s.replace(/diagnosticsLimitations:'[^']*'/,"diagnosticsLimitations:'No concurrent PG lock-owner observation; recorded timeout does not identify owner. SDK and gateway stop-health complete.'");
+s=s.replace(/failure:'[^']*'/,"failure:'Original line63 source tabs expected2 actual1 after three joins and two real captures; receiveOne and source switch not reached. Remaining native acceptance pending.'");
+s=s.replace(/sdkCorrection:'[^']*'/,"sdkCorrection:'Actual room-lock57014 followed by successful native removeParticipant from compiled processBatch catch site385. Shared gateway locks already present; owner and unique cause not established.'");
+s=s.replace("if(sdkHealth)assert",'assert(sdkHealth);if(sdkHealth)assert');
+const tail=s.indexOf("fs.appendFileSync('../.doc/history.md'");assert(tail>0);s=s.slice(0,tail)+"fs.appendFileSync('../.doc/history.md','\\n- Coding and build 2 — T30 — '+result.at+': Native71 Build15 actual3joins/2realcaptures; original source-tab count expected2 actual1 failed before RTP/source switch. ROOT viewed3fresh app photos and verified3Telegram sent receipts. Gateway room-lock57014 followed by successful native removeParticipant compiled processBatch catch385; shared locks already used, owner not observed. Healthy API/controller/gateway/SDK stop, all cleanup/inspector/private runtime/main FG network/Supabase62 restoration verified. Evidence code/quality/evidence/T30/native71-codex-result-review2.json; no cockpit startup/T30IN_PROGRESS/noT31.\\n');console.log('Native71 review verified; native acceptance remains RED.');\n";
+fs.writeFileSync(d+'/review-native71-codex1.mjs',s,{flag:'wx'});

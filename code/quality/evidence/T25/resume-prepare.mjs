@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T25',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),owner=ledger.tasks.find(t=>t.id==='T25');
+checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:owner.id,specHash:baseline.hashes.specSha256});assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,owner.id);assert.equal(owner.status,'BLOCKED');
+owner.writeAllowlist.push('apps/web/dist/**','.runtime/t25/**','.cache/t25/**','quality/spec-coverage.md');
+const allow=p=>owner.writeAllowlist.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.cache/')&&!p.startsWith('.runtime/'));
+const before={recordedAt:new Date().toISOString(),previousOwner:JSON.parse(JSON.stringify(owner)),baselines:baseline.hashes,readonly:Object.fromEntries(files.filter(p=>!allow(p)).map(p=>[p,hash(p)])),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},reason:'Resume after real prerequisite completion and stock gate; add derived build and isolated headed fixture artifacts under prior broaden-scope permission. Frozen source is not opened outside these exact frontend paths.'};
+fs.writeFileSync(`${dir}/resume-before.json`,JSON.stringify(before,null,2)+'\n',{flag:'wx'});
+owner.status='IN_PROGRESS';owner.resumedAt=new Date().toISOString();owner.blockers=[];owner.evidencePaths.push(`${dir}/resume-before.json`);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({task:owner.id,status:owner.status,strictGate:'PASS',readonly:Object.keys(before.readonly).length}));

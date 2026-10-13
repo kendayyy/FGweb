@@ -1,0 +1,37 @@
+# LOADING3D-FE — Codex acceptance review
+
+Reviewed 2026-10-10T15:22:23.746Z. Qualified for local task PASS after the closure gate; T29 may follow only after the ledger closes this task.
+
+The approved spec18/design14/task loader uses the existing canonical FGLogo paths, nine decorative CSS depth layers, rotateY360/6s, 8px float and 2s indeterminate bar. Real existing initial state controls the 150ms reveal; ready/error/cancel removes it immediately. No progress percentage, fake completion, extra dependency or new application API/DB/migration. Static branding and crypto/session/call components retain their existing identities.
+
+Integrated App/auth bootstrap, first Lobby/games/history, DM conversations, room list/detail and native E2EE history. Populated background fetches keep content/draft/scroll/socket/session and do not show the full loader. Locked, legacy migration and error/retry paths stay fail closed. Feed/live screens not yet implemented use the component when their owning task reaches them; no invented content.
+
+Component/auth/Lobby/rooms42/42; final full web240/240 across19files, no unhandled error, unchanged timeouts; app type/lint/build and added social-fixture lint exit0. The full-suite first attempt retained239/240 plus a missing provider error; a narrow reviewed fixture change adds the real CryptoDeviceProvider to the ProfilePage DM test and awaits locked state, preserving every prior assertion and adding a plaintext-negative assertion. Recruitments passes at its original timeout; no recruitment code/test change.
+
+Headed natural-loading9 uses actual owned PostgreSQL/Nest auth/API, current built app/CSP and native Matrix SDK18.6 SAS/Megolm. It verifies delayed initial requests, actual error/retry, requestfailed ERR_ABORTED on navigation cancel, reduced-motion static, native document.hidden pause/resume via minimized/restored Chromium with no Playwright forced-focus defaults, native encrypted history, XSS-as-text, CSP injection rejection, IDB/WebStorage marker absence, background draft DOM/session/socket preservation and logout401. The early boundary proof's cancelled-route diagnostic array is empty because written before later cancellation callbacks; the explicit cancellation assertion executes later in the same source/run.
+
+Eight current dark/light screenshots1440x900,1280x800,390x844,360x800 were visually inspected: canonical silhouette, depth/progress, no horizontal overflow or clipped loader. Skeleton uses responsive layout and decorative placeholders. One polite status, indeterminate progressbar without aria-valuenow, no focus trap; native call supplement verifies Enter/Tab and dark/light changes.
+
+Headed call-preservation9 independently connects to the real private local LiveKit gateway/SFU. Synthetic Chromium microphone avoids recording a real device; only local TURN advertisement addresses are translated as in the immutable T27 probe, preserving native credentials, RTCPeerConnection and DTLS/SRTP. Real room-settings PATCH triggers a held real GET; CallPanel stays the same connected DOM, mic control enabled and SFU identity unchanged without loader overlay. Explicit leave yields DB CLOSED and the native room absent. This proves one active local call preservation, not production/1,000-call capacity.
+
+Integrity audit compares12456 original files and preserves78 historical PASS row objects,8 baselines, checker/env/canonical logo/locked ADR and old evidence. Reviewed transitions cover only the approved sources/test/index/coverage. External Telegram tool changes are observed separately, not restored or adopted as application work. All command log hashes verified; configured private values scanned across60 asset/log files without disclosure. Owned schemas, Chromium profiles, fixture containers/networks/private runtime are absent; public main chat_crypto_state remains absent. No production migration/activation.
+
+All RED records and sources are retained. Early headed visibility diagnostics are diagnosticOnly, not task acceptance, despite their generic final caption. Natural9 retains a nonfatal late owned-Bob query after pool end; assertions and cleanup exit0, not an assertion success invented from the diagnostic. Call rounds1–8 expose fixture syntax/route/status/CSP/microphone/focus/labels/empty-lifecycle assumptions, corrected without app fallbacks, ignored errors or reduced checks. Type/lint first rounds overlapped about1s; the final type2/lint2/build2 ran sequentially.
+
+Telegram: current accepted loader26 + call4 events have durable sent journal entries after API send success; individual media IDs/video not claimed. Across the broader reviewed streams there are90 sent/1 uncertain. The final FAILED image of earlier call round7 (call-loader-loading_fe_63a18628d3044df08eb34ef91ec4bd17-step-00004) has uncertain delivery; do not claim received or automatically duplicate it. Actual local screenshot and its hash remain preserved. No replay/backfill of prior closed runs or missing final image after the aborted natural6 browser exited.
+
+QA's existing21 development dependency advisories and deferred production hosting policy/main migration/T37 BAN producer/1,000-media acceptance remain separate. T39/T42 must include loader regression.
+
+Acceptance command records:
+
+- quality/evidence/LOADING3D-FE/codex-loading-component-regression-2.json — 2026-10-10T13:58:53.520Z → 2026-10-10T13:59:19.652Z, exit0; log SHA256 97d55a770d20ceb29292b7c8c74addefdd8542d1980f0da551663f10c92d1381
+- quality/evidence/LOADING3D-FE/codex-loading-typecheck-2.json — 2026-10-10T14:14:33.282Z → 2026-10-10T14:14:44.722Z, exit0; log SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- quality/evidence/LOADING3D-FE/codex-loading-lint-2.json — 2026-10-10T14:15:50.571Z → 2026-10-10T14:15:54.702Z, exit0; log SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- quality/evidence/LOADING3D-FE/codex-loading-build-2.json — 2026-10-10T14:15:55.942Z → 2026-10-10T14:16:12.231Z, exit0; log SHA256 fc329a5485af500b6c3b24de0e679a01155a52aa575ce5ff963f8369245cbb0e
+- quality/evidence/LOADING3D-FE/codex-loading-full-web-regression-2.json — 2026-10-10T15:00:57.997Z → 2026-10-10T15:02:41.418Z, exit0; log SHA256 cda5d9700f063c3e4252c87233dd589dd5bfa471609c36fb2fcff6077bb3f2e6
+- quality/evidence/LOADING3D-FE/codex-headed-natural-loading-9.json — 2026-10-10T14:45:39.925Z → 2026-10-10T14:47:45.609Z, exit0; log SHA256 ccbdddaa3faf01259d297e8f38ba6708672a07b7f694dbd724dc45d60dfd338f
+- quality/evidence/LOADING3D-FE/codex-headed-call-preservation-9.json — 2026-10-10T15:17:08.488Z → 2026-10-10T15:17:51.072Z, exit0; log SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- quality/evidence/LOADING3D-FE/codex-loading-social-fixture-lint-1.json — 2026-10-10T15:18:15.112Z → 2026-10-10T15:18:19.149Z, exit0; log SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- quality/evidence/LOADING3D-FE/codex-loading-gateway-cleanup-1.json — 2026-10-10T15:18:03.311Z → 2026-10-10T15:18:09.284Z, exit0; log SHA256 447c6aee1eed33313ddc89bedb5b0893bcdd9158f757f11acbc3feee2adce343
+- quality/evidence/LOADING3D-FE/codex-loading-coverage-stage-1.json — 2026-10-10T15:18:25.245Z → 2026-10-10T15:18:58.788Z, exit0; log SHA256 8f7cfb58ed862050b755c561dac839af83edfd39c3f2f6f4888c8d704cae1349
+- quality/evidence/LOADING3D-FE/codex-loading-integrity-review-1.json — 2026-10-10T15:19:32.117Z → 2026-10-10T15:20:07.841Z, exit0; log SHA256 ace74da421cdae52c90462035abca17007bab76103a37e0e71373e9c27c87740

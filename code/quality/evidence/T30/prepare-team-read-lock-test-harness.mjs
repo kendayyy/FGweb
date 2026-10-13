@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T30',folder=process.argv[2]??'team-read-lock-final-patch2';assert(/^[a-z0-9-]+$/.test(folder));const proposal=dir+'/'+folder+'/t30-team-read-lock.integration.spec.ts',target=dir+'/team-read-lock-tests/t30-team-read-lock.integration.spec.ts';
+assert(fs.existsSync(proposal));assert(!fs.existsSync(target));
+let test=fs.readFileSync(proposal,'utf8');
+test=test.replaceAll("from '../src/modules/","from '../../../../apps/api/src/modules/");
+assert(test.includes("from '../../../../apps/api/src/modules/teams/teams.service.js'"));
+assert(test.includes("from '../../../../apps/api/src/modules/play-sessions/play-sessions.service.js'"));
+fs.mkdirSync(dir+'/team-read-lock-tests',{recursive:true});fs.writeFileSync(target,test,{flag:'wx'});
+const config=fs.readFileSync(dir+'/profile-query-jest.config.cjs','utf8').replaceAll('profile-query-tests','team-read-lock-tests').replaceAll('jest-profile-query','jest-team-read-lock');
+fs.writeFileSync(dir+'/team-read-lock-jest.config.cjs',config,{flag:'wx'});
+const runner=fs.readFileSync(dir+'/run-public-profile-query.mjs','utf8').replaceAll("['public-profile-query']","['team-read-lock']").replaceAll('profile-query-jest.config.cjs','team-read-lock-jest.config.cjs').replaceAll('profile-query-tests/t30-public-profile-query.integration.spec.ts','team-read-lock-tests/t30-team-read-lock.integration.spec.ts');
+fs.writeFileSync(dir+'/run-team-read-lock.mjs',runner,{flag:'wx'});
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+fs.writeFileSync(dir+'/team-read-lock-test-harness-review.json',JSON.stringify({recordedAt:new Date().toISOString(),reviewer:'Codex',proposal,proposalSha256:hash(proposal),target,targetSha256:hash(target),adaptation:'Only relocated two service import paths; assertions, fixture and timeouts retained. Runner copied existing redacted sequential owned-runtime runner.',sourceAdopted:false,testExecutionPending:true},null,2)+'\n',{flag:'wx'});
+console.log('Test harness prepared; source unchanged, fixture review and execution required.');

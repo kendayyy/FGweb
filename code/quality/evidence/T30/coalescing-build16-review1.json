@@ -1,0 +1,126 @@
+{
+  "recordedAt": "2026-10-12T08:00:28.046Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-coalescing-green-reviewed6.mjs",
+    "sha256": "16d9f5f8b8627c936a1b33e59b25d8c391c5cfeadec854533059431939ebe47e"
+  },
+  "phases": [
+    {
+      "at": "2026-10-12T07:59:44.021Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-12T07:59:49.461Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-12T07:59:49.477Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-12T08:00:00.301Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-12T08:00:04.897Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d",
+      "noDevRuntime": true,
+      "cspSha256": "02b52b49ea3628bd147d8cede42eb86872e9044005a2cb77990382c3e5f1de4c"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-7gj3Ug-S.js",
+      "status": 200,
+      "sha256": "1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-12T08:00:06.317Z",
+      "idleEndedAt": "2026-10-12T08:00:17.616Z",
+      "idleMs": 11299.429699999997,
+      "backendPid": 10754,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "actual canonical private gateway native JoinResponse and unchanged binary subscription",
+      "joined": true
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 10754,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-12T08:00:27.972Z",
+        "backendPid": 10754,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-034bb826-347e-4e7c-838a-63397fc00c40",
+    "temporary-built-smoke-62be3a64-ad17-4723-bc1f-0b6679dca34b"
+  ],
+  "retained": [],
+  "errors": [
+    {
+      "name": "Error",
+      "phase": "web",
+      "message": "Owned inspection failed Error/UNKNOWN reason=null actual=false expected=true types=boolean/boolean"
+    }
+  ],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

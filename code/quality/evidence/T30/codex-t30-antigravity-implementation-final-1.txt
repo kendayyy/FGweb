@@ -1,0 +1,81 @@
+# FG T30 — Hoàn thành đề xuất tinh chỉnh cuối cùng (`antigravity-implementation-final-1`)
+
+Đã hoàn thành toàn bộ các file đề xuất tinh chỉnh cuối cùng (Final Refinement Proposal) tại thư mục cô lập [`quality/evidence/T30/antigravity-implementation-final-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1) để khắc phục toàn diện các lỗi type (`codex-t30-proposal-type-1.txt`), linter source (`codex-t30-proposal-lint-2.txt`) và các yêu cầu kiến trúc/giao diện từ 1 đến 9.
+
+**Tuân thủ tuyệt đối quy trình và giới hạn:**
+- Chỉ ghi trong [`quality/evidence/T30/antigravity-implementation-final-1/**`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1).
+- Không sửa code/test thực tế tại `code/apps/web/...`, không can thiệp `.doc/history.md`, `tasks.json`, `.env`, script checker hay git.
+- Không chỉnh sửa file proposal E2E của Codex (`screen-share-native.proposed.ts`).
+- Không thực thi bất kỳ lệnh test/build/lint/UI nào trong lượt này; không tuyên bố PASS hay 0-error giả định khi test chưa được chạy trên môi trường thực tế.
+- Giữ nguyên vẹn toàn bộ 27 ca kiểm thử cơ sở trước đó, bổ sung các ca kiểm thử hành vi thực tế.
+
+---
+
+### Tóm tắt các thay đổi kỹ thuật cụ thể đã giải quyết
+
+1. **Khắc phục TS Narrowing & unpublish argument an toàn (Mục 1)**:
+   - Thêm helper [`isTrackEnded(track: MediaStreamTrack): boolean`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts#L43) và gọi hàm tươi trước/sau mọi `await` trong [`media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts) và [`LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx) để triệt tiêu lỗi `TS2367`.
+   - Bọc biến đích hủy publish: `const target = aPub?.track ?? aTrack; if (target) void room.localParticipant.unpublishTrack(target).catch(() => {});`, không bao giờ truyền `undefined` và luôn bắt rejection nền.
+
+2. **Dọn dẹp timer & listener khi await permission (Mục 2)**:
+   - Khai báo `const timer` trước khi gán callback để tránh lỗi `prefer-const`.
+   - Lưu trữ `closeHandler` trong `pendingPermissionCleanups: Set<() => void>`. Khi [`disconnect()`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts#L625) được gọi, toàn bộ timer và listener sự kiện LiveKit được gỡ bỏ ngay lập tức mà không bị rò rỉ chờ timeout.
+
+3. **Tính toán next trực tiếp, gom quyền sở hữu `ShareOperation` & báo lỗi giải phóng trung thực (Mục 3)**:
+   - Tính toán trực tiếp `const next = ...` trong [`onScreenPublishers`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx#L161), loại bỏ gán `null` ban đầu (`no-useless-assignment`).
+   - Rút gọn guard bắt đầu: `if (currentOperationRef.current) return;` sau nhánh dừng chủ động.
+   - Giữ nguyên ref tác vụ đến khi `cleanupOp` hoàn tất; chỉ cập nhật UI state nếu tác vụ hiện tại vẫn sở hữu ref.
+   - Báo lỗi trung thực khi gọi [`releaseScreenShare`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/api.ts#L22) thất bại bất kể dừng chủ động hay tự nhiên khi component còn mounted.
+   - Listener `ended` của track capture giữ chặt `op` trong closure và gỡ listener khi dọn dẹp.
+
+4. **Khớp chính xác SID/wrapper/track và giữ handle audio khi unpublish local video (Mục 4 & 5)**:
+   - Trong [`handleLocalTrackUnpublished`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts#L329), chỉ so khớp với SID hiện tại (bỏ qua `undefined`), wrapper hoặc raw track của video nội bộ; không cho phép sự kiện cũ của SID đã dừng làm hủy capture mới.
+   - Dừng track thô ngay lập tức nhưng **bảo toàn** handle `localAudioTrack` / `localAudioPub` để lệnh unpublish tiếp theo dọn dẹp sạch sẽ.
+   - Chỉ detach video sân khấu nếu video đang hiển thị là video nội bộ (`attachedRecord?.isLocal`); không detach video remote nếu đang xem màn hình người khác mà dừng phát của mình.
+   - Trong [`unpublishScreenTracks`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts#L532), bọc độc lập `try / catch` cho cả unpublish audio và video để đảm bảo cả hai đều được gọi rollback.
+
+5. **Loại bỏ preview giả lập & kiểm tra Native LocalTrackPublication (Mục 6)**:
+   - Kiểm tra `videoPub` trả về từ SDK phải có SID không rỗng và track wrapper hợp lệ, rollback nếu không hợp lệ.
+   - [`attachVideo`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts#L198) chỉ nhận `RemoteTrack | LocalVideoTrack` với `track.attach()` / `track.detach()`, thiết lập `muted` và `playsinline` cho local video; loại bỏ hoàn toàn fallback `new MediaStream`.
+
+6. **Cải tiến SDK Mock ngoài với `makeLocalPublication` (Mục 7 & 8)**:
+   - Xây dựng helper `makeLocalPublication(rawTrack, source)` trong mock với wrapper đầy đủ `mediaStreamTrack`, `kind`, `source`, `sid` duy nhất, `attach`, `detach`, và `stop`.
+   - `publishTrack` và `unpublishTrack` khớp theo wrapper hoặc raw track; track capture có `readyState: 'live'` chuyển sang `'ended'` khi `stop()`.
+   - Xuất `makeLocalPublication` trên `mockTransport` phục vụ test deferred promise.
+   - Giữ nguyên 27 ca kiểm thử cơ sở; bổ sung 6 ca kiểm thử chi tiết (tổng cộng 33 cases):
+     - Case 28: Raw capture kết thúc trong khi SDK publish đang pending (kiểm tra rollback và release đúng 1 lần).
+     - Case 29: Local preview gắn đúng 1 video tắt tiếng playsinline không subscribe remote.
+     - Case 30: Dừng chia sẻ nội bộ khi đang xem remote vẫn giữ nguyên remote video và subscription.
+     - Case 31: Unpublish screen tracks giữ và dọn dẹp đúng cả audio handle.
+     - Case 32: Sự kiện unpublish cũ với SID lỗi thời không hủy publication đang hoạt động.
+     - Case 33: Ngắt kết nối media session dọn dẹp sạch timer và listener đang chờ quyền.
+
+7. **Bố cục chuẩn Design 7 & Portal cho nút chia sẻ (Mục 9)**:
+   - Trong [`CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/CallPanel.tsx), chuyển mount [`LiveViewer`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx) lên **trước** danh sách người trong cuộc gọi (`ul.fg-call-people`) theo đúng thứ tự: selector → video → avatars → actions.
+   - Cung cấp prop tùy chọn `controlsTarget` trên [`LiveViewer`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx); [`CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/CallPanel.tsx) tạo slot `<div ref={setControlsTarget} className="fg-call-live-controls"/>` nằm giữa nút Bật mic và Rời cuộc gọi. Nếu không truyền `controlsTarget` (như unit test độc lập), nút chia sẻ tự động render inline.
+   - Thay thế token `--border-hover` chưa định nghĩa bằng `--color-focus` trong [`live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/live.css).
+
+---
+
+### Danh mục file đề xuất hoàn chỉnh trong `antigravity-implementation-final-1`
+
+| File đề xuất | Đường dẫn |
+|---|---|
+| API Client | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/api.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/api.ts) |
+| Feature Styles | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/live.css) |
+| LiveViewer Component | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/LiveViewer.tsx) |
+| Feature Barrel | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/index.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/live/index.ts) |
+| Media Session Core | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/media.ts) |
+| Call Panel Integration | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/src/features/calls/CallPanel.tsx) |
+| Test Proposal (33 cases) | [`quality/evidence/T30/antigravity-implementation-final-1/apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/apps/web/test/live-viewer.test.tsx) |
+| Detailed Review Document | [`quality/evidence/T30/antigravity-implementation-final-1/REVIEW.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1/REVIEW.md) |
+
+---
+
+### Các bước nghiệm thu tiếp theo dành cho Codex
+
+1. Review trực tiếp các file đề xuất so với mã nguồn thực tế.
+2. Áp dụng các file đề xuất vào `code/apps/web/...`.
+3. Khắc phục 2 lỗi linter riêng biệt trên file proposal E2E của Codex (`screen-share-native.proposed.ts`).
+4. Chạy kiểm thử DOM/Unit và kiểm thử headed E2E kèm truyền nhận ảnh Telegram bridge stream thực tế.
+5. Nghiệm thu và chốt task T30 dựa trên bằng chứng thật.

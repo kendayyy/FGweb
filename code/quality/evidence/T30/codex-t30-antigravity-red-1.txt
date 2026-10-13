@@ -1,0 +1,102 @@
+# FG T30 — Báo cáo đề xuất RED vòng 1 (Antigravity RED Proposal)
+
+Căn cứ quy trình theo [AGENTS.md](file:///E:/FGweb/AGENTS.md), [task.md](file:///E:/FGweb/.doc/task.md#L700-L708) T30, [product spec mục 6](file:///E:/FGweb/.doc/01-product-spec.md#L109-L134), [frontend design mục 7](file:///E:/FGweb/.doc/02-frontend-design.md#L116-L125), các quy tắc [04](file:///E:/FGweb/.agents/rules/04-frontend-design.md), [08](file:///E:/FGweb/.agents/rules/08-testing-and-evidence.md), [09](file:///E:/FGweb/.agents/rules/09-voice-and-live.md), [11](file:///E:/FGweb/.agents/rules/11-session-history.md) và [scope-review.json](file:///E:/FGweb/code/quality/evidence/T30/scope-review.json):
+
+Đây là **vòng đề xuất RED đầu tiên (RED proposal round 1)**, không phải triển khai mã nguồn hay kết thúc task. Toàn bộ phạm vi ghi trong vòng này được giới hạn tuyệt đối bên dưới `code/quality/evidence/T30/antigravity-red-1/**`. Không ghi đè source/test ứng dụng, không sửa `tasks.json`, `history.md`, `.env` hay checker, không chạy lệnh build/test/UI.
+
+---
+
+## 1. Đường dẫn tệp đề xuất
+
+Các tệp đề xuất đã được tạo hoàn chỉnh dưới thư mục bằng chứng:
+1. [live-viewer.test.tsx](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/apps/web/test/live-viewer.test.tsx): Đề xuất tệp kiểm thử DOM đầy đủ cho `apps/web/test/live-viewer.test.tsx`.
+2. [live-viewer.test.tsx (bản sao gốc thư mục)](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/live-viewer.test.tsx): Bản sao tại gốc `antigravity-red-1/` phục vụ tham chiếu trực tiếp.
+3. [PLAN.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/PLAN.md): Kế hoạch kiến trúc, giao diện tương lai và các mục tiêu mã nguồn chuyển tiếp.
+
+---
+
+## 2. Quyết định giao diện (Interface Decisions)
+
+### 2.1 Component [`LiveViewer`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/PLAN.md#L21-L36) (`apps/web/src/features/live/LiveViewer.tsx`)
+```tsx
+export interface LiveViewerProps {
+  callId: string;
+  actorId: string;
+  session: MediaSession;
+  participants: CallParticipantDTO[];
+  isMobile?: boolean; // Tự động phát hiện qua feature query hoặc override
+}
+
+export function LiveViewer(props: LiveViewerProps): React.JSX.Element;
+```
+
+### 2.2 Mở rộng [`MediaSession`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/PLAN.md#L38-L68) (`apps/web/src/features/calls/media.ts`)
+- **Bảo toàn nguyên tắc 1 Room duy nhất**: Kế thừa và mở rộng trên chính instance `Room` hiện có của cuộc gọi; tuyệt đối không tạo thêm Room thứ hai.
+- **Cấu hình Room**: Khởi tạo với `{ webAudioMix: false, adaptiveStream: true, dynacast: true }` để kích hoạt LiveKit dynacast (tạm dừng video layer khi không có người xem) và adaptive stream theo kích thước khung hình hiển thị.
+- **Phương thức bổ sung**:
+  - `startScreenShare(options?: ScreenShareCaptureOptions): Promise<LocalTrackPublication | undefined>`
+  - `stopScreenShare(): Promise<void>`
+  - `isScreenSharing(): boolean`
+  - `selectScreen(identity: string | null, targetElement?: HTMLMediaElement | null): Promise<void>`
+  - `getSelectedScreenIdentity(): string | null`
+  - `onScreenPublishers(listener: (publishers: ScreenPublisherInfo[]) => void): () => void`
+  - `getScreenPublishers(): ScreenPublisherInfo[]`
+
+### 2.3 Tái sử dụng hợp đồng T29 (`apps/web/src/features/calls/api.ts`)
+Không sửa backend hay thêm DTO mới. Sử dụng nghiêm ngặt các DTO T29 đã duyệt:
+- `claimScreenShare(callId)`: Gọi `POST /api/v1/calls/:id/screen-share/claim` với body rỗng, nhận `CallJoinDTO` hoặc `409 CAPACITY_FULL`.
+- `releaseScreenShare(callId)`: Gọi `POST /api/v1/calls/:id/screen-share/release` với body rỗng, nhận `CallControlSuccess`.
+
+---
+
+## 3. Các kịch bản kiểm thử & Assertions được bao phủ
+
+Tệp đề xuất kiểm thử [live-viewer.test.tsx](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-1/apps/web/test/live-viewer.test.tsx) bao phủ 11 nhóm kiểm tra hành vi độc lập:
+
+1. **Hủy đăng ký video cũ trước khi đăng ký video mới khi chuyển luồng (Switching un-subscribes old before new)**:
+   - Khi chuyển từ Luồng 1 (Linh) sang Luồng 2 (Huy), kiểm tra chuỗi gọi: `publicationLinh.setSubscribed(false)` hoàn tất **trước khi** `publicationHuy.setSubscribed(true)` được gọi.
+   - Sân khấu chính chỉ gắn đúng 1 thẻ `<video>`.
+   - Khung chọn luồng (stream selector) chỉ hiển thị thông tin tĩnh (tên người phát, avatar/icon), không khởi tạo video preview/thumbnail chạy ngầm.
+2. **Tự động chọn fallback khi luồng đang xem kết thúc (Ended stream fallback)**:
+   - Khi luồng đang chọn kết thúc (unpublish/rời nhóm), tự động chuyển sang luồng phát còn lại trong danh sách.
+   - Khi tất cả luồng kết thúc, chuyển về trạng thái chờ rỗng (*"Chưa có luồng chia sẻ màn hình nào trong nhóm gọi"*).
+3. **Gọi `getDisplayMedia` sau thao tác bấm và mặc định 720p30 (Capture after gesture)**:
+   - Gọi trực tiếp trong tick của click handler để giữ transient user activation của trình duyệt.
+   - Ràng buộc tham số video gửi vào `getDisplayMedia`: `{ video: { width: 1280, height: 720, frameRate: 30 } }`.
+   - Gửi yêu cầu claim và cập nhật nút sang trạng thái *"Dừng chia sẻ"*.
+4. **Giải phóng slot và dừng track khi người dùng hủy/từ chối cấp quyền (Denied/canceled capture)**:
+   - Xử lý `NotAllowedError` mượt mà, không văng lỗi unhandled; giải phóng slot đã đặt chỗ và dừng track. Nút bấm trở về trạng thái sẵn sàng.
+5. **Thông báo giới hạn 3 luồng khi người thứ 4 cố gắng phát (Fourth publisher limit)**:
+   - Server trả về `409 CAPACITY_FULL` (`'Screen publisher limit is three'`).
+   - Track vừa thu được bị dừng ngay lập tức (`track.stop()`), gửi release dọn dẹp.
+   - Hiển thị thông báo `role="alert"` giải thích rõ ràng về giới hạn tối đa 3 người chia sẻ đồng thời.
+6. **Ẩn nút phát và hiển thị hướng dẫn chỉ xem trên thiết bị di động (Mobile view-only guidance)**:
+   - Ẩn nút chia sẻ màn hình trên di động hoặc trình duyệt không hỗ trợ.
+   - Hiển thị dòng trạng thái: *"Thiết bị di động chỉ hỗ trợ xem màn hình và dùng mic, chưa hỗ trợ phát màn hình trực tiếp."*
+   - Vẫn cho phép xem luồng của người khác và dùng microphone bình thường.
+7. **Dọn dẹp track và quota khi rời cuộc gọi/đổi route mà không ảnh hưởng phòng/đội (Teardown & persistence)**:
+   - Dừng track cục bộ, gửi `POST .../screen-share/release`, ngắt session.
+   - Xác nhận không có bất kỳ request nào xóa phòng (`/rooms/:id/leave`), giải tán đội hay kết thúc lượt chơi (`play-sessions`).
+8. **Chuyển đổi luồng liên tục nhanh (Rapid switching)**:
+   - Chống race condition khi người dùng click liên tục các tab luồng phát khác nhau; duy trì đúng 1 luồng được subscribe cuối cùng.
+9. **Xử lý cấp quyền trễ sau khi unmount (Asynchronous late capture after unmount)**:
+   - Nếu dialog chia sẻ màn hình được đồng ý sau khi component đã unmount, track thu về lập tức bị `stop()`, không rò rỉ vào session chết.
+10. **Bắt sự kiện dừng chia sẻ từ thanh điều khiển native của trình duyệt (`track.onended`)**:
+    - Khi người dùng bấm *"Stop sharing"* nổi trên thanh trình duyệt, tự động kích hoạt release slot và đổi lại nút trong UI.
+11. **Khả năng tiếp cận & Touch target (Accessibility & a11y)**:
+    - Kiểm tra `role="region"`, `role="tablist"`, `role="tab"`, `aria-selected`, `aria-pressed`, focus outline và kích thước chạm tối thiểu 44px.
+
+---
+
+## 4. Rủi ro kỹ thuật cần kiểm chứng ở các vòng tiếp theo
+
+1. **Native SFU E2E (`tests/e2e/screen-share.spec.ts`)**:
+   - Bài test DOM trên thay thế transport qua mock Room. Acceptance hoàn chỉnh của T30 bắt buộc phải chạy E2E headed trên Chrome/Chromium thật kết nối LiveKit SFU cục bộ với 2 luồng màn hình thật và đo đạc subscriptions.
+2. **Bảo toàn Transient User Activation**:
+   - Cần đảm bảo thứ tự thực thi: `getDisplayMedia` được gọi ngay lập tức trong sự kiện click trước bất kỳ await bất đồng bộ nào, tránh bị trình duyệt chặn vì mất transient activation token.
+3. **Băng thông & Ưu tiên âm thanh (Network Shaping)**:
+   - Khi mạng yếu, dynacast/adaptiveStream sẽ hạ chất lượng video 720p30 nhưng tuyệt đối không được để nghẽn luồng âm thanh (audio packet loss < 2% theo chuẩn T41). Thiết kế 1 video subscription duy nhất là điều kiện tiên quyết để đảm bảo ngân sách băng thông này.
+
+---
+
+*Ghi chú: Antigravity không tuyên bố PASS, không thực thi kiểm thử và không bắt đầu T31 trong phiên này. Bàn giao kết quả đề xuất để Codex review và phê duyệt.*

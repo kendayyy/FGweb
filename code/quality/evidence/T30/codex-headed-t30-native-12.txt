@@ -1,0 +1,42 @@
+
+> test:e2e
+> playwright test tests/e2e/screen-share.spec.ts --config quality/evidence/T30/playwright.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:46116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.6m)
+
+
+  1) tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Dừng chia sẻ', exact: true })
+    Expected: visible
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Dừng chia sẻ', exact: true }) with timeout 45000ms
+      - waiting for getByRole('button', { name: 'Dừng chia sẻ', exact: true })
+
+
+      52 | }
+      53 | async function join(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Vào gọi',exact:true}).click();await expect(page.getByRole('button',{name:'Rời cuộc gọi',exact:true})).toBeVisible({timeout:25000});await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toContainText('Đã kết nối');fs.appendFileSync(evidence+'/connection-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');}
+    > 54 | async function share(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(page.getByRole('button',{name:'Dừng chia sẻ',exact:true})).toBeVisible({timeout:45000});fs.appendFileSync(evidence+'/publication-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');const capture=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;return {calls:w.t30CaptureCalls,tracks:w.t30Captures.flatMap(s=>s.getVideoTracks().map(t=>({state:t.readyState,settings:t.getSettings()})))};});expect(capture.calls.at(-1)?.active).toBe(true);expect(capture.tracks.at(-1)?.settings.displaySurface).toBe('browser');expect(capture.tracks.at(-1)?.state).toBe('live');expect(capture.tracks.at(-1)?.settings.height??0).toBeLessThanOrEqual(720);expect(capture.tracks.at(-1)?.settings.frameRate??0).toBeLessThanOrEqual(31);fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\n');}
+         |                                                                                                                                                                                                                                                      ^
+      55 | async function stats(page:Page){activePage=page;await page.bringToFront();await page.locator('.fg-live-stage').scrollIntoViewIfNeeded();return page.evaluate(async()=>{const own=window as unknown as CaptureWindow;const rows:Array<{id:string;kind:string;bytes:number;packets:number;lost:number;jitter:number;trackIdentifier:string;width:number;height:number}>=[];let relay=false;for(const pc of own.t30Peers){const report=await pc.getStats();for(const s of report.values()){if(s.type==='inbound-rtp'&&!s.isRemote)rows.push({id:s.id,kind:s.kind??s.mediaType,bytes:s.bytesReceived??0,packets:s.packetsReceived??0,lost:s.packetsLost??0,jitter:s.jitter??0,trackIdentifier:s.trackIdentifier??'',width:s.frameWidth??0,height:s.frameHeight??0});if(s.type==='candidate-pair'&&s.state==='succeeded'&&s.nominated){const local=report.get(s.localCandidateId);if(local?.candidateType==='relay')relay=true;}}}const video=document.querySelector('.fg-live-stage video') as HTMLVideoElement|null;const selected=document.querySelector('.fg-live-selector [aria-selected="true"]');return {at:Date.now(),rows,relay,peerCount:own.t30Peers.length,selectedId:selected?.id??'',videoTrackId:(video?.srcObject as MediaStream|null)?.getVideoTracks()[0]?.id??'',videoCount:document.querySelectorAll('.fg-live-stage video').length};});}
+      56 | type Stats=Awaited<ReturnType<typeof stats>>;
+      57 | async function subscriptionMessages(page:Page){const frames=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;const frames=w.t30SubscriptionFrames;w.t30SubscriptionFrames=[];return frames;});const rows=frames.flatMap(frame=>{const request=SignalRequest.fromBinary(Uint8Array.from(frame.data));if(request.message.case!=='subscription')return [];const s=request.message.value;return [{at:frame.at,subscribe:s.subscribe,trackSids:[...s.trackSids,...s.participantTracks.flatMap(p=>p.trackSids)]}];});fs.appendFileSync(evidence+'/native-subscription-messages.jsonl',JSON.stringify(rows)+'\n');return rows;}
+        at share (E:\FGweb\code\tests\e2e\screen-share.spec.ts:54:246)
+        at E:\FGweb\code\tests\e2e\screen-share.spec.ts:63:140
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\screen-share-T30-actual-ca-fed99-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    tests\e2e\screen-share.spec.ts:60:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

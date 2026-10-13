@@ -1,0 +1,590 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All original canonical bytes outside exact audited observation hooks must remain unchanged
++ actual - expected
+... Skipped lines
+
+  "import {instrumentOwnedApiPools,instrumentOwnedHttpTiming,getOwnedObservationFailures} from './api-room-owner-observation-reviewed.mjs';\n" +
+    "import 'reflect-metadata';\n" +
+    "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+...
+    " 'INIT_FAILED'\n" +
++   ' ]);\n' +
+-   ']);\n' +
+    'function sanitizeName(name){\n' +
+    " return ALLOWED_NAMES.has(name)?name:'Error';\n" +
+    '}\n' +
+    'function sanitizeCode(code){\n' +
+    " if(typeof code==='string'){\n" +
+...
+    ' mark(\'database\');pool=new pg.Pool({connectionString:scoped.href,max:20,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${schema}"`);created=true;\n' +
++   " await migrate(drizzle(pool),{migrationsFolder:path.resolve('packages/database/migrations'),migrationsSchema:schema});const games=await tables.seedGames(drizzle(pool,{schema:tables})),game=games.find(g=>g.title"... 9961 more characters
+-   " await migrate(drizzle(pool),{migrationsFolder:path.resolve('packages/database/migrations'),migrationsSchema:schema});const games=await tables.seedGames(drizzle(pool,{schema:tables})),game=games.find(g=>g.title="... 9960 more characters
+
+    at file:///E:/FGweb/code/quality/evidence/T30/review-native36-diagnostic-draft1.mjs:7:369
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import {instrumentOwnedApiPools,instrumentOwnedHttpTiming,getOwnedObservationFailures} from './api-room-owner-observation-reviewed.mjs';\n" +
+    "import 'reflect-metadata';\n" +
+    "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+    "import {randomUUID,createHash} from 'node:crypto';\n" +
+    "import {parseEnv} from 'node:util';\n" +
+    "import {createServer as reservePort} from 'node:net';\n" +
+    "import {pathToFileURL} from 'node:url';\n" +
+    "import pg from 'pg';\n" +
+    "import Redis from 'ioredis';\n" +
+    "import {drizzle} from 'drizzle-orm/node-postgres';\n" +
+    "import {migrate} from 'drizzle-orm/node-postgres/migrator';\n" +
+    "import * as tables from '@fg/database';\n" +
+    "import {NestFactory} from '@nestjs/core';\n" +
+    "import {makeSignature} from 'better-auth/crypto';\n" +
+    "import {raw} from 'express';\n" +
+    "import {RoomServiceClient} from 'livekit-server-sdk';\n" +
+    "import {startGatewayFixture} from './private-gateway-shaped-fixture.mjs';\n" +
+    "import {startOwnedPgWaitObservation} from './pg-wait-observation-reviewed2.mjs';\n" +
+    "const env=parseEnv(fs.readFileSync('.env.local','utf8')),schema=`t30_screen_${randomUUID().replaceAll('-','')}`,secret=randomUUID()+randomUUID();\n" +
+    'const evidence=process.env.FG_T30_EVIDENCE_DIR;\n' +
+    "assert(evidence?.startsWith('quality/evidence/T30/'));fs.mkdirSync(evidence,{recursive:true});\n" +
+    'instrumentOwnedApiPools(pg,evidence);\n' +
+    'const report={schemaRemoved:false,mediaRemoved:false,presenceRemoved:false,appClosed:false,webClosed:false};\n' +
+    "let pool,redis,app,web,fixture,created=false,namespace='',phase='port',sfu,stopPgWait;\n" +
+    'let inspectorClient,inspectorPid=null,inspectorReserved=false,inspectorReleased=false;\n' +
+    'let inspectorExpectedEnd=false,actualSocketEnded=false,poolEnded=false;\n' +
+    'let inspectorFailureCount=0,inspectorWriteFailureCount=0,inspectorHealthy=false;\n' +
+    'const sockets=new Set();\n' +
+    "const mark=name=>{phase=name;process.send?.({kind:'phase',name});};\n" +
+    "const ALLOWED_NAMES=new Set(['Error','TypeError','TimeoutError','SocketEndError']);\n" +
+    'const ALLOWED_CODES=new Set([\n' +
+    " 'EIO',\n" +
+    " 'ECONNRESET',\n" +
+    " 'EPIPE',\n" +
+    " 'ETIMEDOUT',\n" +
+    " 'UNKNOWN',\n" +
+    " 'UNEXPECTED_CLIENT_END',\n" +
+    " 'SOCKET_END_TIMEOUT',\n" +
+    " 'RELEASE_FAILED',\n" +
+    " 'CLEANUP_FAILED',\n" +
+    " 'INIT_FAILED'\n" +
+    ' ]);\n' +
+    'function sanitizeName(name){\n' +
+    " return ALLOWED_NAMES.has(name)?name:'Error';\n" +
+    '}\n' +
+    'function sanitizeCode(code){\n' +
+    " if(typeof code==='string'){\n" +
+    '  if(ALLOWED_CODES.has(code))return code;\n' +
+    '  if(/^[0-9A-Z]{5}$/.test(code))return code;\n' +
+    ' }\n' +
+    " return 'UNKNOWN';\n" +
+    '}\n' +
+    'function recordSafeFailure(err){\n' +
+    ' try{\n' +
+    '  const rec={\n' +
+    '   recordedAt:new Date().toISOString(),\n' +
+    '   backendPid:inspectorPid,\n' +
+    '   name:sanitizeName(err?.name),\n' +
+    '   code:sanitizeCode(err?.code)\n' +
+    '  };\n' +
+    "  fs.appendFileSync(`${evidence}/inspector-failures.jsonl`,JSON.stringify(rec)+'\\n');\n" +
+    ' }catch{\n' +
+    '  inspectorWriteFailureCount++;\n' +
+    '  inspectorHealthy=false;\n' +
+    ' }\n' +
+    '}\n' +
+    'async function cleanup(){\n' +
+    ' const errors=[];\n' +
+    ' async function attempt(name,fn){\n' +
+    '  try{await fn();}\n' +
+    '  catch{errors.push(new Error(`Cleanup failed: ${name}`));}\n' +
+    ' }\n' +
+    ' if(stopPgWait){\n' +
+    "  await attempt('pgWaitSampler',async()=>{await stopPgWait();});\n" +
+    ' }\n' +
+    ' if(app){\n' +
+    "  await attempt('apiApp',async()=>{await app.close();report.appClosed=true;});\n" +
+    ' }\n' +
+    ' if(web){\n' +
+    "  await attempt('webSockets',async()=>{for(const socket of sockets)socket.destroy();});\n" +
+    "  await attempt('webServer',async()=>{await web.close();report.webClosed=true;});\n" +
+    ' }\n' +
+    ' if(fixture){\n' +
+    "  await attempt('mediaDiagnostics',async()=>{\n" +
+    '   fs.writeFileSync(`${evidence}/media-diagnostics.txt`,fixture.diagnostics());\n' +
+    "   const response=await fetch(fixture.shaperControl+'/stats').catch(()=>null);\n" +
+    "   if(response?.ok)fs.writeFileSync(`${evidence}/final-shaper-stats.json`,JSON.stringify(await response.json(),null,2)+'\\n');\n" +
+    '  });\n' +
+    "  await attempt('mediaContainers',async()=>{\n" +
+    '   const state=await fixture.close();\n' +
+    '   report.mediaRemoved=Boolean(state.containersRemoved&&state.networkRemoved);\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(redis){\n' +
+    '  let presenceCleaned=false;\n' +
+    "  await attempt('redisKeys',async()=>{\n" +
+    '   const keys=await redis.keys(`fg:presence:${namespace}:*`);\n' +
+    '   if(keys.length)await redis.del(...keys);\n' +
+    '   presenceCleaned=true;\n' +
+    '  });\n' +
+    "  await attempt('redisQuit',async()=>{\n" +
+    '   await redis.quit();\n' +
+    '   report.presenceRemoved=presenceCleaned;\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(inspectorClient&&!inspectorReleased){\n' +
+    "  await attempt('inspectorRelease',async()=>{\n" +
+    '   inspectorExpectedEnd=true;\n' +
+    '   try{\n' +
+    '    inspectorClient.release(true);\n' +
+    '    inspectorReleased=true;\n' +
+    '   }catch(relErr){\n' +
+    '    inspectorReleased=false;\n' +
+    '    inspectorHealthy=false;\n' +
+    '    inspectorFailureCount++;\n' +
+    '    recordSafeFailure(relErr);\n' +
+    '    if(pool&&Array.isArray(pool._clients)&&pool._clients.includes(inspectorClient)){\n' +
+    '     try{\n' +
+    "      if(typeof pool._remove==='function'){\n" +
+    '       pool._remove(inspectorClient,()=>{\n' +
+    '        try{\n' +
+    "         if(typeof pool._pulseQueue==='function')pool._pulseQueue();\n" +
+    '        }catch(pulseErr){\n' +
+    '         inspectorFailureCount++;\n' +
+    '         inspectorHealthy=false;\n' +
+    '         recordSafeFailure(pulseErr);\n' +
+    '        }\n' +
+    '       });\n' +
+    '      }else{\n' +
+    '       inspectorFailureCount++;\n' +
+    '       inspectorHealthy=false;\n' +
+    "       recordSafeFailure({code:'RELEASE_FAILED',name:'Error'});\n" +
+    '      }\n' +
+    '     }catch(removeErr){\n' +
+    '      inspectorFailureCount++;\n' +
+    '      inspectorHealthy=false;\n' +
+    '      recordSafeFailure(removeErr);\n' +
+    '     }\n' +
+    '    }\n' +
+    '    try{\n' +
+    "     if(inspectorClient.connection?.stream&&typeof inspectorClient.connection.stream.destroy==='function'){\n" +
+    '      inspectorClient.connection.stream.destroy();\n' +
+    "     }else if(typeof inspectorClient.end==='function'){\n" +
+    '      inspectorClient.end();\n' +
+    '     }\n' +
+    '    }catch(streamErr){\n' +
+    '     inspectorFailureCount++;\n' +
+    '     inspectorHealthy=false;\n' +
+    '     recordSafeFailure(streamErr);\n' +
+    '    }\n' +
+    '    throw relErr;\n' +
+    '   }\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(inspectorClient){\n' +
+    "  await attempt('inspectorSocketEndWait',async()=>{\n" +
+    '   if(actualSocketEnded){\n' +
+    '    return;\n' +
+    '   }\n' +
+    '   await new Promise(resolve=>{\n' +
+    '    let timer=null;\n' +
+    '    const onEnd=()=>{\n' +
+    '     if(timer)clearTimeout(timer);\n' +
+    '     resolve();\n' +
+    '    };\n' +
+    '    timer=setTimeout(()=>{\n' +
+    "     inspectorClient.removeListener('end',onEnd);\n" +
+    '     inspectorFailureCount++;\n' +
+    '     inspectorHealthy=false;\n' +
+    "     recordSafeFailure({code:'SOCKET_END_TIMEOUT',name:'TimeoutError'});\n" +
+    '     resolve();\n' +
+    '    },5000);\n' +
+    '    if(timer.unref)timer.unref();\n' +
+    "    inspectorClient.once('end',onEnd);\n" +
+    '   });\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(pool){\n' +
+    '  if(created){\n' +
+    "   await attempt('dropSchema',async()=>{\n" +
+    '    assert(/^t30_screen_[a-f0-9]{32}$/.test(schema));\n' +
+    '    await pool.query(`DROP SCHEMA "${schema}" CASCADE`);\n' +
+    "    report.schemaRemoved=(await pool.query('SELECT 1 FROM pg_namespace WHERE nspname=$1',[schema])).rowCount===0;\n" +
+    '   });\n' +
+    '  }\n' +
+    "  await attempt('poolEnd',async()=>{\n" +
+    '   let endTimer;\n' +
+    '   try{\n' +
+    '    await Promise.race([\n' +
+    '     pool.end().then(()=>{\n' +
+    '      poolEnded=Boolean(pool.ended);\n' +
+    '     }),\n' +
+    '     new Promise((_,reject)=>{\n' +
+    '      endTimer=setTimeout(()=>{\n' +
+    '       inspectorFailureCount++;\n' +
+    '       inspectorHealthy=false;\n' +
+    "       recordSafeFailure({code:'ETIMEDOUT',name:'TimeoutError'});\n" +
+    "       reject(new Error('Pool end timed out'));\n" +
+    '      },5000);\n' +
+    '      if(endTimer.unref)endTimer.unref();\n' +
+    '     })\n' +
+    '    ]);\n' +
+    '   }finally{\n' +
+    '    clearTimeout(endTimer);\n' +
+    '   }\n' +
+    '  });\n' +
+    ' }\n' +
+    " await attempt('cleanupReport',async()=>{\n" +
+    "  fs.writeFileSync(`${evidence}/cleanup.json`,JSON.stringify(report,null,2)+'\\n');\n" +
+    ' });\n' +
+    " await attempt('inspectorLifecycleReport',async()=>{\n" +
+    '  const isHealthy=Boolean(\n' +
+    '   inspectorHealthy&&\n' +
+    '   inspectorFailureCount===0&&\n' +
+    '   inspectorWriteFailureCount===0&&\n' +
+    '   inspectorReserved&&\n' +
+    '   inspectorReleased&&\n' +
+    '   actualSocketEnded&&\n' +
+    '   poolEnded\n' +
+    '  );\n' +
+    '  const lifecycleEvidence={\n' +
+    '   recordedAt:new Date().toISOString(),\n' +
+    '   backendPid:inspectorPid,\n' +
+    '   reserved:inspectorReserved,\n' +
+    '   released:inspectorReleased,\n' +
+    '   actualSocketEnded,\n' +
+    '   poolEnded,\n' +
+    '   failureCount:inspectorFailureCount,\n' +
+    '   writeFailureCount:inspectorWriteFailureCount,\n' +
+    '   healthy:isHealthy,\n' +
+    '   poolTotalCount:pool?.totalCount??0,\n' +
+    '   poolIdleCount:pool?.idleCount??0,\n' +
+    '   poolWaitingCount:pool?.waitingCount??0\n' +
+    '  };\n' +
+    '  try{\n' +
+    "   fs.writeFileSync(`${evidence}/inspector-lifecycle.json`,JSON.stringify(lifecycleEvidence,null,2)+'\\n');\n" +
+    '  }catch(writeErr){\n' +
+    '   inspectorWriteFailureCount++;\n' +
+    '   inspectorHealthy=false;\n' +
+    '   throw writeErr;\n' +
+    '  }\n' +
+    ' });\n' +
+    ' let observationFailures=0;\n' +
+    " await attempt('apiOwnerHealth',async()=>{\n" +
+    '  observationFailures=getOwnedObservationFailures();\n' +
+    "  fs.writeFileSync(`${evidence}/api-owner-observation-health.json`,JSON.stringify({recordedAt:new Date().toISOString(),failureCount:observationFailures,observationComplete:observationFailures===0},null,2)+'\\n',{flag:'wx'});\n" +
+    ' });\n' +
+    ' if(observationFailures>0){\n' +
+    "  errors.push(new Error('Owned API observations unavailable'));\n" +
+    ' }\n' +
+    ' const settlementComplete=Boolean(\n' +
+    '  inspectorHealthy&&\n' +
+    '  inspectorFailureCount===0&&\n' +
+    '  inspectorWriteFailureCount===0&&\n' +
+    '  inspectorReleased&&\n' +
+    '  actualSocketEnded&&\n' +
+    '  poolEnded\n' +
+    ' );\n' +
+    ' if(inspectorReserved&&!settlementComplete){\n' +
+    '  errors.push(new Error(`Inspector settlement incomplete: healthy=${inspectorHealthy}, failures=${inspectorFailureCount}, writeFailures=${inspectorWriteFailureCount}, released=${inspectorReleased}, socketEnded=${actualSocketEnded}, poolEnded=${poolEnded}`));\n' +
+    ' }\n' +
+    ' if(errors.length===1){\n' +
+    '  throw errors[0];\n' +
+    ' }\n' +
+    ' if(errors.length>1){\n' +
+    '  throw new AggregateError(errors,`Multiple cleanup operations failed (${errors.length})`);\n' +
+    ' }\n' +
+    '}\n' +
+    'try{\n' +
+    " async function availablePort(){const reservation=reservePort();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));const port=reservation.address().port;await new Promise(r=>reservation.close(r));return port;}\n" +
+    ' const port=await availablePort(),apiPort=await availablePort(),origin=`http://127.0.0.1:${port}`;\n' +
+    " const scoped=new URL(env.DATABASE_URL);scoped.searchParams.set('options',`-c search_path=${schema}`);namespace=createHash('sha256').update(JSON.stringify([scoped.host,scoped.pathname,scoped.searchParams.get('options')])).digest('hex').slice(0,16);\n" +
+    ' mark(\'database\');pool=new pg.Pool({connectionString:scoped.href,max:20,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${schema}"`);created=true;\n' +
+    " await migrate(drizzle(pool),{migrationsFolder:path.resolve('packages/database/migrations'),migrationsSchema:schema});const games=await tables.seedGames(drizzle(pool,{schema:tables})),game=games.find(g=>g.title"... 9961 more characters,
+  expected: "import {instrumentOwnedApiPools,instrumentOwnedHttpTiming,getOwnedObservationFailures} from './api-room-owner-observation-reviewed.mjs';\n" +
+    "import 'reflect-metadata';\n" +
+    "import fs from 'node:fs';\n" +
+    "import path from 'node:path';\n" +
+    "import assert from 'node:assert/strict';\n" +
+    "import {randomUUID,createHash} from 'node:crypto';\n" +
+    "import {parseEnv} from 'node:util';\n" +
+    "import {createServer as reservePort} from 'node:net';\n" +
+    "import {pathToFileURL} from 'node:url';\n" +
+    "import pg from 'pg';\n" +
+    "import Redis from 'ioredis';\n" +
+    "import {drizzle} from 'drizzle-orm/node-postgres';\n" +
+    "import {migrate} from 'drizzle-orm/node-postgres/migrator';\n" +
+    "import * as tables from '@fg/database';\n" +
+    "import {NestFactory} from '@nestjs/core';\n" +
+    "import {makeSignature} from 'better-auth/crypto';\n" +
+    "import {raw} from 'express';\n" +
+    "import {RoomServiceClient} from 'livekit-server-sdk';\n" +
+    "import {startGatewayFixture} from './private-gateway-shaped-fixture.mjs';\n" +
+    "import {startOwnedPgWaitObservation} from './pg-wait-observation-reviewed2.mjs';\n" +
+    "const env=parseEnv(fs.readFileSync('.env.local','utf8')),schema=`t30_screen_${randomUUID().replaceAll('-','')}`,secret=randomUUID()+randomUUID();\n" +
+    'const evidence=process.env.FG_T30_EVIDENCE_DIR;\n' +
+    "assert(evidence?.startsWith('quality/evidence/T30/'));fs.mkdirSync(evidence,{recursive:true});\n" +
+    'instrumentOwnedApiPools(pg,evidence);\n' +
+    'const report={schemaRemoved:false,mediaRemoved:false,presenceRemoved:false,appClosed:false,webClosed:false};\n' +
+    "let pool,redis,app,web,fixture,created=false,namespace='',phase='port',sfu,stopPgWait;\n" +
+    'let inspectorClient,inspectorPid=null,inspectorReserved=false,inspectorReleased=false;\n' +
+    'let inspectorExpectedEnd=false,actualSocketEnded=false,poolEnded=false;\n' +
+    'let inspectorFailureCount=0,inspectorWriteFailureCount=0,inspectorHealthy=false;\n' +
+    'const sockets=new Set();\n' +
+    "const mark=name=>{phase=name;process.send?.({kind:'phase',name});};\n" +
+    "const ALLOWED_NAMES=new Set(['Error','TypeError','TimeoutError','SocketEndError']);\n" +
+    'const ALLOWED_CODES=new Set([\n' +
+    " 'EIO',\n" +
+    " 'ECONNRESET',\n" +
+    " 'EPIPE',\n" +
+    " 'ETIMEDOUT',\n" +
+    " 'UNKNOWN',\n" +
+    " 'UNEXPECTED_CLIENT_END',\n" +
+    " 'SOCKET_END_TIMEOUT',\n" +
+    " 'RELEASE_FAILED',\n" +
+    " 'CLEANUP_FAILED',\n" +
+    " 'INIT_FAILED'\n" +
+    ']);\n' +
+    'function sanitizeName(name){\n' +
+    " return ALLOWED_NAMES.has(name)?name:'Error';\n" +
+    '}\n' +
+    'function sanitizeCode(code){\n' +
+    " if(typeof code==='string'){\n" +
+    '  if(ALLOWED_CODES.has(code))return code;\n' +
+    '  if(/^[0-9A-Z]{5}$/.test(code))return code;\n' +
+    ' }\n' +
+    " return 'UNKNOWN';\n" +
+    '}\n' +
+    'function recordSafeFailure(err){\n' +
+    ' try{\n' +
+    '  const rec={\n' +
+    '   recordedAt:new Date().toISOString(),\n' +
+    '   backendPid:inspectorPid,\n' +
+    '   name:sanitizeName(err?.name),\n' +
+    '   code:sanitizeCode(err?.code)\n' +
+    '  };\n' +
+    "  fs.appendFileSync(`${evidence}/inspector-failures.jsonl`,JSON.stringify(rec)+'\\n');\n" +
+    ' }catch{\n' +
+    '  inspectorWriteFailureCount++;\n' +
+    '  inspectorHealthy=false;\n' +
+    ' }\n' +
+    '}\n' +
+    'async function cleanup(){\n' +
+    ' const errors=[];\n' +
+    ' async function attempt(name,fn){\n' +
+    '  try{await fn();}\n' +
+    '  catch{errors.push(new Error(`Cleanup failed: ${name}`));}\n' +
+    ' }\n' +
+    ' if(stopPgWait){\n' +
+    "  await attempt('pgWaitSampler',async()=>{await stopPgWait();});\n" +
+    ' }\n' +
+    ' if(app){\n' +
+    "  await attempt('apiApp',async()=>{await app.close();report.appClosed=true;});\n" +
+    ' }\n' +
+    ' if(web){\n' +
+    "  await attempt('webSockets',async()=>{for(const socket of sockets)socket.destroy();});\n" +
+    "  await attempt('webServer',async()=>{await web.close();report.webClosed=true;});\n" +
+    ' }\n' +
+    ' if(fixture){\n' +
+    "  await attempt('mediaDiagnostics',async()=>{\n" +
+    '   fs.writeFileSync(`${evidence}/media-diagnostics.txt`,fixture.diagnostics());\n' +
+    "   const response=await fetch(fixture.shaperControl+'/stats').catch(()=>null);\n" +
+    "   if(response?.ok)fs.writeFileSync(`${evidence}/final-shaper-stats.json`,JSON.stringify(await response.json(),null,2)+'\\n');\n" +
+    '  });\n' +
+    "  await attempt('mediaContainers',async()=>{\n" +
+    '   const state=await fixture.close();\n' +
+    '   report.mediaRemoved=Boolean(state.containersRemoved&&state.networkRemoved);\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(redis){\n' +
+    '  let presenceCleaned=false;\n' +
+    "  await attempt('redisKeys',async()=>{\n" +
+    '   const keys=await redis.keys(`fg:presence:${namespace}:*`);\n' +
+    '   if(keys.length)await redis.del(...keys);\n' +
+    '   presenceCleaned=true;\n' +
+    '  });\n' +
+    "  await attempt('redisQuit',async()=>{\n" +
+    '   await redis.quit();\n' +
+    '   report.presenceRemoved=presenceCleaned;\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(inspectorClient&&!inspectorReleased){\n' +
+    "  await attempt('inspectorRelease',async()=>{\n" +
+    '   inspectorExpectedEnd=true;\n' +
+    '   try{\n' +
+    '    inspectorClient.release(true);\n' +
+    '    inspectorReleased=true;\n' +
+    '   }catch(relErr){\n' +
+    '    inspectorReleased=false;\n' +
+    '    inspectorHealthy=false;\n' +
+    '    inspectorFailureCount++;\n' +
+    '    recordSafeFailure(relErr);\n' +
+    '    if(pool&&Array.isArray(pool._clients)&&pool._clients.includes(inspectorClient)){\n' +
+    '     try{\n' +
+    "      if(typeof pool._remove==='function'){\n" +
+    '       pool._remove(inspectorClient,()=>{\n' +
+    '        try{\n' +
+    "         if(typeof pool._pulseQueue==='function')pool._pulseQueue();\n" +
+    '        }catch(pulseErr){\n' +
+    '         inspectorFailureCount++;\n' +
+    '         inspectorHealthy=false;\n' +
+    '         recordSafeFailure(pulseErr);\n' +
+    '        }\n' +
+    '       });\n' +
+    '      }else{\n' +
+    '       inspectorFailureCount++;\n' +
+    '       inspectorHealthy=false;\n' +
+    "       recordSafeFailure({code:'RELEASE_FAILED',name:'Error'});\n" +
+    '      }\n' +
+    '     }catch(removeErr){\n' +
+    '      inspectorFailureCount++;\n' +
+    '      inspectorHealthy=false;\n' +
+    '      recordSafeFailure(removeErr);\n' +
+    '     }\n' +
+    '    }\n' +
+    '    try{\n' +
+    "     if(inspectorClient.connection?.stream&&typeof inspectorClient.connection.stream.destroy==='function'){\n" +
+    '      inspectorClient.connection.stream.destroy();\n' +
+    "     }else if(typeof inspectorClient.end==='function'){\n" +
+    '      inspectorClient.end();\n' +
+    '     }\n' +
+    '    }catch(streamErr){\n' +
+    '     inspectorFailureCount++;\n' +
+    '     inspectorHealthy=false;\n' +
+    '     recordSafeFailure(streamErr);\n' +
+    '    }\n' +
+    '    throw relErr;\n' +
+    '   }\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(inspectorClient){\n' +
+    "  await attempt('inspectorSocketEndWait',async()=>{\n" +
+    '   if(actualSocketEnded){\n' +
+    '    return;\n' +
+    '   }\n' +
+    '   await new Promise(resolve=>{\n' +
+    '    let timer=null;\n' +
+    '    const onEnd=()=>{\n' +
+    '     if(timer)clearTimeout(timer);\n' +
+    '     resolve();\n' +
+    '    };\n' +
+    '    timer=setTimeout(()=>{\n' +
+    "     inspectorClient.removeListener('end',onEnd);\n" +
+    '     inspectorFailureCount++;\n' +
+    '     inspectorHealthy=false;\n' +
+    "     recordSafeFailure({code:'SOCKET_END_TIMEOUT',name:'TimeoutError'});\n" +
+    '     resolve();\n' +
+    '    },5000);\n' +
+    '    if(timer.unref)timer.unref();\n' +
+    "    inspectorClient.once('end',onEnd);\n" +
+    '   });\n' +
+    '  });\n' +
+    ' }\n' +
+    ' if(pool){\n' +
+    '  if(created){\n' +
+    "   await attempt('dropSchema',async()=>{\n" +
+    '    assert(/^t30_screen_[a-f0-9]{32}$/.test(schema));\n' +
+    '    await pool.query(`DROP SCHEMA "${schema}" CASCADE`);\n' +
+    "    report.schemaRemoved=(await pool.query('SELECT 1 FROM pg_namespace WHERE nspname=$1',[schema])).rowCount===0;\n" +
+    '   });\n' +
+    '  }\n' +
+    "  await attempt('poolEnd',async()=>{\n" +
+    '   let endTimer;\n' +
+    '   try{\n' +
+    '    await Promise.race([\n' +
+    '     pool.end().then(()=>{\n' +
+    '      poolEnded=Boolean(pool.ended);\n' +
+    '     }),\n' +
+    '     new Promise((_,reject)=>{\n' +
+    '      endTimer=setTimeout(()=>{\n' +
+    '       inspectorFailureCount++;\n' +
+    '       inspectorHealthy=false;\n' +
+    "       recordSafeFailure({code:'ETIMEDOUT',name:'TimeoutError'});\n" +
+    "       reject(new Error('Pool end timed out'));\n" +
+    '      },5000);\n' +
+    '      if(endTimer.unref)endTimer.unref();\n' +
+    '     })\n' +
+    '    ]);\n' +
+    '   }finally{\n' +
+    '    clearTimeout(endTimer);\n' +
+    '   }\n' +
+    '  });\n' +
+    ' }\n' +
+    " await attempt('cleanupReport',async()=>{\n" +
+    "  fs.writeFileSync(`${evidence}/cleanup.json`,JSON.stringify(report,null,2)+'\\n');\n" +
+    ' });\n' +
+    " await attempt('inspectorLifecycleReport',async()=>{\n" +
+    '  const isHealthy=Boolean(\n' +
+    '   inspectorHealthy&&\n' +
+    '   inspectorFailureCount===0&&\n' +
+    '   inspectorWriteFailureCount===0&&\n' +
+    '   inspectorReserved&&\n' +
+    '   inspectorReleased&&\n' +
+    '   actualSocketEnded&&\n' +
+    '   poolEnded\n' +
+    '  );\n' +
+    '  const lifecycleEvidence={\n' +
+    '   recordedAt:new Date().toISOString(),\n' +
+    '   backendPid:inspectorPid,\n' +
+    '   reserved:inspectorReserved,\n' +
+    '   released:inspectorReleased,\n' +
+    '   actualSocketEnded,\n' +
+    '   poolEnded,\n' +
+    '   failureCount:inspectorFailureCount,\n' +
+    '   writeFailureCount:inspectorWriteFailureCount,\n' +
+    '   healthy:isHealthy,\n' +
+    '   poolTotalCount:pool?.totalCount??0,\n' +
+    '   poolIdleCount:pool?.idleCount??0,\n' +
+    '   poolWaitingCount:pool?.waitingCount??0\n' +
+    '  };\n' +
+    '  try{\n' +
+    "   fs.writeFileSync(`${evidence}/inspector-lifecycle.json`,JSON.stringify(lifecycleEvidence,null,2)+'\\n');\n" +
+    '  }catch(writeErr){\n' +
+    '   inspectorWriteFailureCount++;\n' +
+    '   inspectorHealthy=false;\n' +
+    '   throw writeErr;\n' +
+    '  }\n' +
+    ' });\n' +
+    ' let observationFailures=0;\n' +
+    " await attempt('apiOwnerHealth',async()=>{\n" +
+    '  observationFailures=getOwnedObservationFailures();\n' +
+    "  fs.writeFileSync(`${evidence}/api-owner-observation-health.json`,JSON.stringify({recordedAt:new Date().toISOString(),failureCount:observationFailures,observationComplete:observationFailures===0},null,2)+'\\n',{flag:'wx'});\n" +
+    ' });\n' +
+    ' if(observationFailures>0){\n' +
+    "  errors.push(new Error('Owned API observations unavailable'));\n" +
+    ' }\n' +
+    ' const settlementComplete=Boolean(\n' +
+    '  inspectorHealthy&&\n' +
+    '  inspectorFailureCount===0&&\n' +
+    '  inspectorWriteFailureCount===0&&\n' +
+    '  inspectorReleased&&\n' +
+    '  actualSocketEnded&&\n' +
+    '  poolEnded\n' +
+    ' );\n' +
+    ' if(inspectorReserved&&!settlementComplete){\n' +
+    '  errors.push(new Error(`Inspector settlement incomplete: healthy=${inspectorHealthy}, failures=${inspectorFailureCount}, writeFailures=${inspectorWriteFailureCount}, released=${inspectorReleased}, socketEnded=${actualSocketEnded}, poolEnded=${poolEnded}`));\n' +
+    ' }\n' +
+    ' if(errors.length===1){\n' +
+    '  throw errors[0];\n' +
+    ' }\n' +
+    ' if(errors.length>1){\n' +
+    '  throw new AggregateError(errors,`Multiple cleanup operations failed (${errors.length})`);\n' +
+    ' }\n' +
+    '}\n' +
+    'try{\n' +
+    " async function availablePort(){const reservation=reservePort();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));const port=reservation.address().port;await new Promise(r=>reservation.close(r));return port;}\n" +
+    ' const port=await availablePort(),apiPort=await availablePort(),origin=`http://127.0.0.1:${port}`;\n' +
+    " const scoped=new URL(env.DATABASE_URL);scoped.searchParams.set('options',`-c search_path=${schema}`);namespace=createHash('sha256').update(JSON.stringify([scoped.host,scoped.pathname,scoped.searchParams.get('options')])).digest('hex').slice(0,16);\n" +
+    ' mark(\'database\');pool=new pg.Pool({connectionString:scoped.href,max:20,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${schema}"`);created=true;\n' +
+    " await migrate(drizzle(pool),{migrationsFolder:path.resolve('packages/database/migrations'),migrationsSchema:schema});const games=await tables.seedGames(drizzle(pool,{schema:tables})),game=games.find(g=>g.title="... 9960 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const path='packages/database/src/schema/chat-crypto.ts';
+let source=fs.readFileSync(path,'utf8');
+const before="${t.state}='RECONCILED' AND ${t.reconciledAt}>=",after="${t.state}='RECONCILED' AND ${t.reconciledAt} IS NOT NULL AND ${t.reconciledAt}>=";
+assert(source.includes(before)||source.includes(after));source=source.replace(before,after);fs.writeFileSync(path,source);
+const test='packages/database/test/chat-crypto.test.ts';source=fs.readFileSync(test,'utf8');
+source=source.replace("signatures:{}}]);","signatures:{[`@${userId}:fg.invalid`]:{[`ed25519:${deviceId}`]:'A'.repeat(86)}}}]);");
+source=source.replace("signatures:{}}]);","signatures:{'@a:fg.invalid':{'ed25519:A':'A'.repeat(86)}}}]);");
+fs.writeFileSync(test,source);
+console.log('Require reconciled timestamp and valid public self-signatures in fixtures.');

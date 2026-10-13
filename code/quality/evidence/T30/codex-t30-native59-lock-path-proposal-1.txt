@@ -1,0 +1,72 @@
+### FG T30 — Báo cáo phân tích đường khóa (Lock-Path Analysis) & Đề xuất cách ly Native 59
+
+Đề xuất chẩn đoán và giải quyết hiện tượng nghẽn hàng đợi khóa (lock queue starvation) dẫn đến lỗi `statement_timeout = 3000ms` (SQLSTATE `57014`) trên bảng `rooms` trong lần chạy Native 59 (`t30-native-6fc2725b41ee46e59e6245002dbea9ac`) đã hoàn tất và được lưu trữ cách ly.
+
+- **Môi trường & Quy tắc**: Thực hiện tuần tự, Gemini 3.6 Flash (High), không dùng Anti2. Không chỉnh sửa mã nguồn ứng dụng, fixtures gốc, lockfiles, ledger, hay môi trường. Không chạy tests, Docker, hay browser.
+- **nativeAcceptance**: `false` (Bất biến; chờ root/Codex thẩm định và chạy kiểm thử độc lập).
+- **Trạng thái task**: `T30 IN_PROGRESS` (80 prior PASS).
+
+---
+
+### 1. Bằng chứng nguyên nhân gốc (Root Cause Boundary Attribution)
+
+Phân tích chéo giữa [`media-diagnostics.txt`](file:///E:/FGweb/code/quality/evidence/T30/t30-native-6fc2725b41ee46e59e6245002dbea9ac/media-diagnostics.txt), [`pg-wait-diagnostics.jsonl`](file:///E:/FGweb/code/quality/evidence/T30/t30-native-6fc2725b41ee46e59e6245002dbea9ac/pg-wait-diagnostics.jsonl), [`api-lock-spans.jsonl`](file:///E:/FGweb/code/quality/evidence/T30/t30-native-6fc2725b41ee46e59e6245002dbea9ac/api-lock-spans.jsonl) và [`api-statuses.jsonl`](file:///E:/FGweb/code/quality/evidence/T30/t30-native-6fc2725b41ee46e59e6245002dbea9ac/api-statuses.jsonl) xác lập chuỗi nhân quả:
+
+1. **Khóa chia sẻ ban đầu**:
+   - `17:33:02.159Z - 17:33:04.725Z`: PID `13921` (`RoomsService.listRoomMembers`, pool 3) giữ `rooms FOR SHARE`.
+   - `17:33:03.252Z - 17:33:05.324Z`: PID `13793` (`signaling-gateway` `liveLease`, pool 0) giữ `rooms FOR SHARE`.
+2. **Yêu cầu khóa độc quyền và nghẽn hàng đợi**:
+   - `17:33:03.368Z`: PID `13843` (API pool 17, `transactionIndex: 105`) bắt đầu xử lý `POST /api/v1/calls/6c2c5727-815b-4df8-b2ab-2947b0f20c72/join` ([`CallsService.join`](file:///E:/FGweb/code/apps/api/src/modules/calls/calls.service.ts#L103-L135)).
+   - `17:33:03.461Z`: PID `13843` yêu cầu `SELECT id FROM rooms WHERE id=ANY(...) FOR UPDATE` thông qua `this.room()`. Bị nghẽn bởi PID 13921 và 13793.
+   - `17:33:03.536Z`: PID `13795` (signaling-gateway `room-lock`, pool 0) gửi truy vấn `SELECT id FROM rooms WHERE id=$1 FOR SHARE`. Theo thuật toán FIFO lock queue có ưu tiên writer của PostgreSQL, truy vấn `FOR SHARE` đến sau phải xếp hàng **sau** yêu cầu `FOR UPDATE` của PID 13843.
+3. **Giữ khóa độc quyền & Timeout 57014**:
+   - `17:33:05.480Z`: Sau khi các share holders commit (sau 2018.66ms chờ), PID `13843` nhận khóa `rooms FOR UPDATE`.
+   - `17:33:05.480Z - 17:33:07.340Z`: PID `13843` giữ `rooms FOR UPDATE` trong **1860.1ms** (`roomHoldMs: 1860.1ms`), thực hiện 21 truy vấn, gọi RPC mạng `config.client.createRoom`, và lặp lại xác thực `actor()` lần 2.
+   - `17:33:06.563Z`: PID `13795` đã chờ tổng cộng **3026.66ms** (1944ms lúc 13843 chờ + 1083ms lúc 13843 giữ khóa). PostgreSQL ngắt câu lệnh với lỗi `statement_timeout = 3000ms` (SQLSTATE `57014`).
+   - `17:33:06.589Z`: Gateway xử lý lỗi bằng cách `ROLLBACK` (18.49ms) và kích hoạt LiveKit `RoomService.removeParticipant` (68.42ms).
+   - `17:33:06.624Z`: LiveKit SFU ghi nhận `SERVICE_REQUEST_REMOVE_PARTICIPANT`, ngắt kết nối participant receiver (`admission_55d4607d-bff3-427f-83e4-55880449cbc8`), dẫn đến việc track video dừng và test hết hạn ở mốc 45s.
+4. **Nguyên nhân tx 105 bị gán `owner: "unassociated"`**:
+   - Trong [`api56-observer-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/api56-observer-reviewed1.mjs#L30-L45), `SAFE_SERVICE_OWNERS` thiếu `'CallsService.join'` và `'http-calls-join'`.
+   - `instrumentHttpTimingMiddleware` chỉ kiểm tra `req.method === 'GET'`, bỏ qua HTTP `POST`.
+   - `instrumentOwnedApiServices` chỉ wrap `['list', 'participants', 'withControlGroup']`, bỏ qua `join`.
+   - `SAFE_RPC_METHODS` thiếu `'createRoom'`.
+
+---
+
+### 2. Các artifact đề xuất đã bàn giao
+
+Toàn bộ các tài liệu và đề xuất mã nguồn được lưu trữ tại thư mục:  
+[`code/quality/evidence/T30/antigravity-native59-lock-path-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/)
+
+| Tập tin | Mô tả nội dung |
+| :--- | :--- |
+| [`timeline.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/timeline.json) | Tái hiện đầy đủ tiến trình từng mili-giây với PID thực (13795, 13843, 13921, 13793), transaction 105, thời gian chờ/giữ khóa, và lệnh SFU eviction. Tuyệt đối không chứa secret hay raw SQL values. |
+| [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/shortplan.md) | Tài liệu phân tích chuyên sâu về hiện tượng nghẽn hàng đợi, giải phẫu đường găng, căn cứ cho 3 đề xuất giảm thiểu khóa, và thiết kế test hồi quy. |
+| [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/plan.json) | Bản cấu trúc JSON đối chiếu của kế hoạch phân tích và các đề xuất tối ưu. |
+| [`proposed-calls.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/proposed-calls.service.ts) | Bản sao đề xuất mã nguồn cô lập của [`CallsService`](file:///E:/FGweb/code/apps/api/src/modules/calls/calls.service.ts) thể hiện chính xác 3 thay đổi tối thiểu. |
+| [`proposed-api-observer.diff`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/proposed-api-observer.diff) | Patch tối thiểu cho [`api56-observer-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/api56-observer-reviewed1.mjs) để định danh chính xác các spans/transactions của `CallsService.join`. |
+| [`test-lock-regression.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-1/test-lock-regression.spec.ts) | Kịch bản kiểm thử RED trên PostgreSQL thật tái hiện đồng thời truy vấn lease của gateway (`statement_timeout = 3000ms`) và join in-flight, kiểm tra các bất biến bảo mật fail-closed. |
+| [`antigravity-native59-lock-path-completion.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native59-lock-path-completion.json) | Metadata hoàn thành đề xuất chẩn đoán với `implementationAcceptance: false`. |
+
+---
+
+### 3. Tối ưu khóa tối thiểu (Smallest Defensible Reductions)
+
+1. **Giảm cấp độ khóa `rooms` từ `FOR UPDATE` xuống `FOR SHARE`**:
+   - Trong `CallsService.join`, gọi: `await this.room(db, group.room_id, user, session, prior ? [prior.room_id] : [], 'FOR SHARE');`.
+   - `join` không bao giờ cập nhật dòng của `rooms`. Sử dụng `FOR SHARE` bảo vệ dòng không bị xóa nhưng cho phép các truy vấn `FOR SHARE` của gateway chạy song song mà không bị xếp hàng nghẽn.
+   - Hạn mức 10 người và 3 publisher vẫn được bảo vệ nghiêm ngặt bởi `call_groups FOR UPDATE` và `call_members FOR UPDATE`.
+2. **Đưa LiveKit RPC `createRoom` ra ngoài database transaction**:
+   - `config.client.createRoom` được chuyển xuống thực thi post-commit.
+   - Loại bỏ hoàn toàn độ trễ I/O mạng (~50–350ms) ra khỏi thời gian giữ khóa hàng cơ sở dữ liệu.
+3. **Loại bỏ truy vấn `actor()` lặp lại tại dòng 133**:
+   - Bỏ lệnh gọi `this.actor(db, user, session)` thứ 2 vì quyền tài khoản (session, ban, onboarding) đã được kiểm tra nghiêm ngặt tại dòng 45 ngay trong cùng transaction. Tiết kiệm 3 truy vấn SQL trong thời gian giữ khóa.
+4. **Bảo toàn toàn bộ bất biến nghiệp vụ**:
+   - Không nới lỏng ACL, kiểm tra session, tài khoản bị ban, onboarding, hạn mức 10 ghế / 3 pub.
+   - Không thêm cơ chế cache, retry loop, warmup hay tăng timeout.
+
+---
+
+### 4. Nhật ký phiên
+
+Đã cập nhật mục bàn giao chính xác thời gian thực tế vào [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2464) lúc `2026-10-12T00:52:12+07:00` đối chiếu đầy đủ bằng chứng và trạng thái `nativeAcceptance: false`.

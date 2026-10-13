@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-11T20:56:00.701Z",
+  "reviewer": "Codex",
+  "command": {
+    "command": "node quality/evidence/T30/probe-coalescing-green-reviewed6.mjs canonical",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T20:53:14.274Z",
+    "completedAt": "2026-10-11T20:54:17.570Z",
+    "exitCode": 0,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-coalescing-green-4.txt",
+    "evidenceSha256": "3976509f2e00e25cc67dd73eb18f23f41d5f9d66b472ea45d9bde76e79186f1c"
+  },
+  "normalControls": 9,
+  "originalBurstRedToGreen": true,
+  "burst": {
+    "kind": "original controlled burst RED to GREEN",
+    "requested": 4,
+    "completed": 4,
+    "failed": 0,
+    "actualListRoomsCalls": 2,
+    "actualListParticipantsCalls": 2,
+    "requestBurstDurationMs": 399.8174999999974,
+    "syntheticDelayMs": 40,
+    "firstReadGate": true,
+    "sqlOperations": [
+      "room-update-lock",
+      "group-update-lock",
+      "member-update-lock",
+      "live-lease-guard"
+    ],
+    "queries": [
+      {
+        "pid": 18061,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "live-lease-guard"
+      },
+      {
+        "pid": 18061,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 18061,
+        "operation": "live-lease-guard"
+      }
+    ],
+    "ownedPids": [
+      18061
+    ],
+    "blockingSamples": [],
+    "ownLockQueueObserved": false,
+    "rowsUnchanged": true,
+    "nativeAcceptance": false
+  },
+  "coalescingControls": [
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "fixed burst and fresh native participant trailing snapshot",
+      "requests": 4,
+      "nativeReads": 2,
+      "freshTrailingSnapshot": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "different groups independent actual native reads",
+      "nativeReads": 2
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "trigger during trailing read starts fresh third pass",
+      "nativeReads": 3
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "distinct ended payloads and actual stale-slot guard",
+      "distinctActualLeasePayloads": true,
+      "staleSlotRetained": true,
+      "freshEndedSlotReleased": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "exact synthetic SDK fault object and fresh recovery",
+      "failedCallers": 3,
+      "sameErrorObject": true,
+      "recoveryActualSDKRead": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "signed duplicate webhook persists once and reconciles twice",
+      "actualSignature": true,
+      "durableRows": 1,
+      "nativeReads": 2,
+      "unsignedDenied": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "shutdown drains accepted ordinary and ended work",
+      "acceptedCallers": 3,
+      "acceptedResolved": true,
+      "newRejected503": true,
+      "deferredPoolEndAfterDrain": true,
+      "syntheticPoolEndAdapter": true
+    }
+  ],
+  "meaningfulControls": 17,
+  "cleanupVerified": true,
+  "resourcesRestoredAtRecordedChecks": true,
+  "sourceAndCompiledPinsVerified": true,
+  "priorPassesUnchanged": true,
+  "syntheticFaultGatesAndDeferredPoolEnd": true,
+  "nativeAcceptancePending": true
+}

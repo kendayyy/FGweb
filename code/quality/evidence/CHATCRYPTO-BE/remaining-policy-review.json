@@ -1,0 +1,181 @@
+{
+  "recordedAt": "2026-10-10T02:36:11.861Z",
+  "task": "CHATCRYPTO-BE",
+  "kind": "read-only source and recorded-evidence review",
+  "runtimeTestExecuted": false,
+  "backendComplete": false,
+  "stockGateAccepted": false,
+  "stockGateReason": "spec baseline changed",
+  "documentHashesVerified": 8,
+  "historicalPassRowsUnchanged": 75,
+  "currentCheckpointSourcesVerified": 214,
+  "sourceHashes": {
+    "packages/contracts/src/chat-crypto.ts": "bba3b925468e11170635f089ac594ee448d269447e606ceaaa9f748a5af60a4d",
+    "apps/api/src/modules/chat-crypto/http-body-parsers.ts": "c5bdbe1e3bfdf015f774dd8b664cc1443a15f35a358ff99cadc0fd7058256bb9",
+    "apps/api/src/modules/chat-crypto/crypto-relay.service.ts": "9f5a1270babbfd3215a8300e190bab45f722e62476f3ce9f2092aa87aa64fd1f",
+    "apps/api/src/modules/chat-crypto/crypto-devices.service.ts": "61404880e0aba0d3c4fdcadd38f8191f1913e8eaa1a9ac80b38cad5b60fc5497",
+    "apps/api/src/modules/chat-crypto/crypto-sweep-loop.ts": "8b41186810ce9e1a3c218446e639498385298a27acffe372f3e138f9ecbb6cbc",
+    "apps/api/src/modules/chat-crypto/crypto-reports.service.ts": "e72d6c648be19b4d4e9a7c67c0dbdb281528b805e7c34d43bd6928a6e703da73",
+    "apps/api/src/modules/chat-crypto/crypto-custody.module.ts": "f62ecc1d6757359d657fd8fb20bf42b63759559be30de0a6b655f51cf2e8cdfb"
+  },
+  "controls": [
+    {
+      "scope": "normal JSON body",
+      "value": "100 KiB",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/http-body-parsers.ts",
+        "line": 11,
+        "needle": "json({limit:'100kb'})"
+      }
+    },
+    {
+      "scope": "crypto JSON body",
+      "value": "256 KiB",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/http-body-parsers.ts",
+        "line": 10,
+        "needle": "json({limit:'256kb'})"
+      }
+    },
+    {
+      "scope": "private message JSON body",
+      "value": "192 KiB",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/http-body-parsers.ts",
+        "line": 9,
+        "needle": "json({limit:'192kb'})"
+      }
+    },
+    {
+      "scope": "recovery JSON body",
+      "value": "17 MiB",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/http-body-parsers.ts",
+        "line": 6,
+        "needle": "json({limit:'17mb'})"
+      }
+    },
+    {
+      "scope": "private ciphertext image",
+      "value": "5 MiB per object",
+      "anchor": {
+        "file": "packages/contracts/src/chat-crypto.ts",
+        "line": 9,
+        "needle": "MAX_PRIVATE_CIPHERTEXT_IMAGE_BYTES=5*1024*1024"
+      }
+    },
+    {
+      "scope": "selected mention routing",
+      "value": "1000 distinct IDs per message, subject to body ceiling",
+      "anchor": {
+        "file": "packages/contracts/src/chat-crypto.ts",
+        "line": 12,
+        "needle": "z.array(opaque).max(1000)"
+      }
+    },
+    {
+      "scope": "registered devices",
+      "value": "100 total records per user, including revoked records",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-devices.service.ts",
+        "line": 56,
+        "needle": "if(count>=100)"
+      }
+    },
+    {
+      "scope": "available prekeys",
+      "value": "100 unclaimed keys per device",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-devices.service.ts",
+        "line": 44,
+        "needle": "if(available>100)"
+      }
+    },
+    {
+      "scope": "verification queue retention",
+      "value": "10 minutes",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-relay.service.ts",
+        "line": 135,
+        "needle": "now()+interval '10 minutes'"
+      }
+    },
+    {
+      "scope": "to-device queue retention",
+      "value": "1 day",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-relay.service.ts",
+        "line": 150,
+        "needle": "now()+interval '1 day'"
+      }
+    },
+    {
+      "scope": "queue expiry work",
+      "value": "at most 100 unlocked expired rows per queue per sweep",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-relay.service.ts",
+        "line": 48,
+        "needle": "WHERE expires_at<=now() ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED"
+      }
+    },
+    {
+      "scope": "sweep timer",
+      "value": "60000 ms default, no catch-up throughput guarantee",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-sweep-loop.ts",
+        "line": 6,
+        "needle": "intervalMs=60000"
+      }
+    },
+    {
+      "scope": "report retention",
+      "value": "explicit operator configuration required, no chosen default",
+      "anchor": {
+        "file": "apps/api/src/modules/chat-crypto/crypto-custody.module.ts",
+        "line": 16,
+        "needle": "FG_REPORT_RETENTION_SECONDS"
+      }
+    }
+  ],
+  "verifiedRecords": [
+    {
+      "label": "crypto-cache-regression-1",
+      "completedAt": "2026-10-10T02:07:16.585Z",
+      "evidencePath": "quality/evidence/CHATCRYPTO-BE/codex-crypto-cache-regression-1.txt",
+      "evidenceSha256": "a86e77d033a7e7815efa17ef08c3128a0a8cbf6b689956e7ad76a56deb45e507"
+    },
+    {
+      "label": "custody-deadline-regression-1",
+      "completedAt": "2026-10-10T01:55:50.969Z",
+      "evidencePath": "quality/evidence/CHATCRYPTO-BE/codex-custody-deadline-regression-1.txt",
+      "evidenceSha256": "29790d27dd60ae10b68b66c7caa4d729370898255e3f867494bfab3cfb79f320"
+    },
+    {
+      "label": "stock-spec-snapshot-review-1",
+      "completedAt": "2026-10-10T02:13:28.466Z",
+      "evidencePath": "quality/evidence/CHATCRYPTO-BE/codex-stock-spec-snapshot-review-1.txt",
+      "evidenceSha256": "83c5f7b163d97061d8739985cb67f7c142c7a9137f5b79460bf94ebf1419074d"
+    }
+  ],
+  "currentScopedRegression": "crypto-cache-regression-1",
+  "lastBroadRegression": "custody-deadline-regression-1",
+  "lastBroadRegressionCurrentForAllSource": false,
+  "aggregateIngressPolicyApproved": false,
+  "aggregateStorageQuotaVerified": false,
+  "periodicCleanupSloVerified": false,
+  "nominalQueueSweepCeilingRowsPerMinute": 100,
+  "nominalCeilingLimitations": "Per queue, default single loop; locks, failures and long runs can reduce throughput. Manual benchmark is not a periodic SLO.",
+  "requiredPolicyDecisions": [
+    "Fair aggregate pending rows and ciphertext bytes by authenticated sender and recipient; separate durable history from expiring transport.",
+    "Quota admission must be atomic across instances and retries; rejected requests leave no queue, outbox, object or dedup residue.",
+    "Define backlog and expiry objectives before changing timer/batch limits; retain one thousand selected mentions and one thousand call/live target.",
+    "Choose report retention and deploy separately scoped off-machine custody before production activation."
+  ],
+  "banProducer": {
+    "task": "T37",
+    "implemented": false,
+    "acceptanceSatisfied": false,
+    "gateWaived": false
+  },
+  "productionActivated": false
+}

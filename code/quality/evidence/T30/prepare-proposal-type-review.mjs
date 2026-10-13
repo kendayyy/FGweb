@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const [round,label]=process.argv.slice(2);assert(/^[a-z0-9-]+$/.test(round)&&/^[a-z0-9-]+$/.test(label));
+const dir='quality/evidence/T30',target=dir+'/type-review-'+label,proposal=dir+'/antigravity-'+round+'-1/apps/web/src';
+assert(!fs.existsSync(target));fs.mkdirSync(target,{recursive:true});
+fs.cpSync('apps/web/src',target+'/src',{recursive:true});
+const files=[];function overlay(source,relative=''){for(const entry of fs.readdirSync(source,{withFileTypes:true})){const name=relative+'/'+entry.name,p=source+'/'+entry.name;if(entry.isDirectory())overlay(p,name);else{const to=target+'/src'+name;fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(p,to);files.push({source:p,target:to,sha256:createHash('sha256').update(fs.readFileSync(p)).digest('hex')});}}}overlay(proposal);
+const config=JSON.parse(fs.readFileSync('apps/web/tsconfig.json','utf8'));config.include=['src'];fs.writeFileSync(target+'/tsconfig.json',JSON.stringify(config,null,2)+'\n');
+fs.writeFileSync(target+'/provenance.json',JSON.stringify({recordedAt:new Date().toISOString(),sourceBaseline:'Current original web source, unchanged production source',files,applicationAdopted:false},null,2)+'\n');
+console.log(target+'/tsconfig.json');

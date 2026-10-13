@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:8904) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (57.955 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › joins overlapping cleanup calls instead of opening competing directory cursors
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 2
+    Received array:  [{}, {}]
+
+      642 |  it('joins overlapping cleanup calls instead of opening competing directory cursors',async()=>{
+      643 |   const relay=app.get(CryptoRelayService) as unknown as {cleanup:()=>Promise<void>;objects:{closeScan:()=>Promise<void>}};await relay.objects.closeScan();const original=fs.promises.opendir.bind(fs.promises),opened:import('node:fs').Dir[]=[];const observer=jest.spyOn(fs.promises,'opendir').mockImplementation(async(...args:Parameters<typeof fs.promises.opendir>)=>{const dir=await original(...args);opened.push(dir);await new Promise(resolve=>setTimeout(resolve,30));return dir;});
+    > 644 |   try{const results=await Promise.allSettled([relay.cleanup(),relay.cleanup()]);expect(results.every(result=>result.status==='fulfilled')).toBe(true);expect(opened).toHaveLength(1);}finally{observer.mockRestore();await relay.objects.closeScan();for(const dir of opened)try{await dir.close();}catch(error){expect((error as NodeJS.ErrnoException).code).toBe('ERR_DIR_CLOSED');}}
+          |                                                                                                                                                                      ^
+      645 |  });
+      646 |  it('rechecks durable session and ban state on every operation',async()=>{
+      647 |   await pool.query(`DELETE FROM "session" WHERE user_id='alice'`);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:644:166)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 43 passed, 44 total
+Snapshots:   0 total
+Time:        58.686 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-11T04:31:45.202Z",
+  "reviewer": "Codex",
+  "original": {
+    "path": "quality/evidence/T30/cascade-empty-call-tests3/t30-cascade-empty-call.integration.spec.ts",
+    "sha256": "91200b45b7cbd5fd8b90fd6c545e0bb031605caf813e5f798c126364634ca39b"
+  },
+  "reviewed": {
+    "path": "quality/evidence/T30/cascade-empty-call-tests4/t30-cascade-empty-call.integration.spec.ts",
+    "sha256": "975b0809d1164fd48325ca217fb53eb265c89bf7792a0b0e5b63270b97d1c1ec"
+  },
+  "previousRun": {
+    "command": "node quality/evidence/T30/run-cascade-empty-call3.mjs",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-11T04:29:19.892Z",
+    "completedAt": "2026-10-11T04:31:19.277Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-cascade-empty-call-green-1.txt",
+    "evidenceSha256": "10ad2c85db3a28782ec36f4835e4a53e6a3b72f60ba0ead8b758d931adfe419a"
+  },
+  "previousGreenAccepted": false,
+  "fixtureError": "Fault hook matched SELECT user_id but actual original actor uses SELECT id FROM session ... FOR SHARE; no expiry applied and join201 was correct.",
+  "corrections": [
+    "Use actual original SELECT id actor SQL shape.",
+    "Actual session expiry UPDATE via same original PoolClient query inside canonical transaction; separate connection would block behind existing FOR SHARE session lock. This real DB mutation rolls back together with admission/fact and proves original final recheck."
+  ],
+  "original10AssertionsAndTimeoutsUnchanged": true,
+  "sourceUnchanged": true,
+  "parseDiagnostics": 0,
+  "actualRerunPending": true
+}

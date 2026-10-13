@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const report=JSON.parse(fs.readFileSync('quality/evidence/T28/baseline-drift.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),file='../.doc/01-product-spec.md',sha=value=>createHash('sha256').update(value).digest('hex');
+assert.deepEqual(report.mismatches,['specSha256']);assert.equal(report.originalDateRestorationMatchesApprovedSource,true);
+const current=fs.readFileSync(file),restored=current.toString('utf8').replace('Ngày cập nhật: 07/10/2026.','Ngày cập nhật: 04/10/2026.');
+assert.equal(sha(current),report.actual.specSha256);assert.equal(sha(restored),baseline.hashes.specSha256);
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T28');assert.equal(task.status,'IN_PROGRESS');
+task.metadataRestorations=[{path:'E:/FGweb/.doc/01-product-spec.md',field:'Ngày cập nhật',from:'07/10/2026',to:'04/10/2026',authorization:'Persisted explicit human answer: Khôi phục ngày gốc và tiếp tục; exact same date field. Only restore if whole approved source SHA is recovered.',beforeSha:sha(current),approvedAfterSha:sha(restored),source:'quality/evidence/T28/baseline-drift.json'}];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.mkdirSync('.cache/t28',{recursive:true});fs.writeFileSync('.cache/t28/spec-date-drift-before.md',current,{flag:'wx'});
+fs.writeFileSync(file,restored);assert.equal(sha(fs.readFileSync(file)),baseline.hashes.specSha256);
+fs.writeFileSync('quality/evidence/T28/baseline-date-restoration.json',JSON.stringify({recordedAt:new Date().toISOString(),onlyDateFieldRestored:true,wholeApprovedSourceRecovered:true,sourceUnchangedOtherwise:true,baselineAndCheckerNotEdited:true,authorization:task.metadataRestorations[0].authorization,beforeSha:sha(current),afterSha:sha(restored)},null,2)+'\n',{flag:'wx'});
+fs.appendFileSync('../.doc/history.md',`\n- T28 gate close1 bị chặn sau audit1 vì spec đổi duy nhất date04→07/10/2026; drift probe chứng minh đảo đúng field này khôi phục toàn bộ SHA baseline,7 nguồn khác nguyên. Khôi phục theo quyền explicit trước đó “Khôi phục ngày gốc và tiếp tục”, pin metadata restoration trước write, giữ bản trước trong own cache/bằng chứng fail. Không rebaseline/checker/logic/tests; task vẫn IN_PROGRESS để audit/gate lại.\n`);
+console.log(JSON.stringify({dateRestored:true,wholeApprovedSourceRecovered:true}));

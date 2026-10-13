@@ -1,0 +1,28 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:10380) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (32.806 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › requires explicit historical context for keys and excludes current late members or devices registered after verification
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      87 |  it('requires explicit historical context for keys and excludes current late members or devices registered after verification',async()=>{await availableSource(async()=>{
+      88 |   await register('bob','AFTER_BOB_COHORT');const revision=Number((await pool.query("SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].membership_revision),base={conversationId:'legacy',membershipRevision:revision};
+    > 89 |   expect((await write('keys/query',{...base,userIds:['bob']})).status).toBe(403);const qualified={...base,cohortId:'available'};
+         |                                                                        ^
+      90 |   const keys=await write('keys/query',{...qualified,userIds:['bob']});expect(keys.status).toBe(201);expect(keys.body.users[0].devices.map((device:{deviceId:string})=>device.deviceId)).toEqual(['B']);expect(keys.body.users[0].matrixUserId).toBe(matrixUserId('bob'));
+      91 |   expect((await write('keys/query',{...qualified,userIds:['outsider']})).status).toBe(403);expect((await write('keys/query',{...qualified,userIds:['bob']},'outsider')).status).toBe(403);expect((await write('keys/query',{...qualified,cohortId:'missing',userIds:['bob']})).status).toBe(403);
+      92 |   expect((await write('keys/claim',{...qualified,deviceId:'A',targets:[{userId:'bob',deviceId:'AFTER_BOB_COHORT'}]})).status).toBe(403);expect((await write('keys/claim',{...qualified,deviceId:'AFTER_COHORT',targets:[{userId:'bob',deviceId:'B'}]})).status).toBe(403);expect((await write('keys/claim',{...base,deviceId:'A',targets:[{userId:'bob',deviceId:'B'}]})).status).toBe(403);
+
+      at test/chat-crypto-legacy.integration.spec.ts:89:72
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:87:138)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 12 passed, 13 total
+Snapshots:   0 total
+Time:        33.281 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

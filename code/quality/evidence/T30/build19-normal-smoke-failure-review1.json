@@ -1,0 +1,129 @@
+{
+  "at": "2026-10-12T10:31:33.576Z",
+  "command": {
+    "command": "node quality/evidence/T30/probe-codex-gateway-trace12-normal.mjs canonical",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-12T10:29:24.702Z",
+    "completedAt": "2026-10-12T10:30:13.250Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-codex-gateway-normal-12.txt",
+    "evidenceSha256": "952a20eeb744f72290b90c3d2907a434dbe5fe4dd1b349d9279a562eee84e3dd"
+  },
+  "review": {
+    "recordedAt": "2026-10-12T10:30:13.213Z",
+    "reviewer": "Codex",
+    "fixture": {
+      "path": "quality/evidence/T30/fixture-server-codex-gateway-trace-reviewed6.mjs",
+      "sha256": "c9e41e53ae53f9301300076ec19cc8b9d006241ac9ea11a0b7d4e1694885f9c6"
+    },
+    "phases": [
+      {
+        "at": "2026-10-12T10:29:28.680Z",
+        "phase": "database"
+      },
+      {
+        "at": "2026-10-12T10:29:35.594Z",
+        "phase": "redis"
+      },
+      {
+        "at": "2026-10-12T10:29:35.615Z",
+        "phase": "media"
+      },
+      {
+        "at": "2026-10-12T10:29:47.225Z",
+        "phase": "api"
+      },
+      {
+        "at": "2026-10-12T10:29:51.394Z",
+        "phase": "web"
+      }
+    ],
+    "checks": [
+      {
+        "kind": "built SPA HTML and CSP",
+        "status": 200,
+        "htmlSha256": "f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d",
+        "noDevRuntime": true,
+        "cspSha256": "e765af06ba024b5daaeea80bd5f5c96242be871e9295c91c83cd517b0d3fa85f"
+      },
+      {
+        "kind": "built asset actual HTTP",
+        "path": "apps/web/dist/assets/index-7gj3Ug-S.js",
+        "status": 200,
+        "sha256": "1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7"
+      },
+      {
+        "kind": "built asset actual HTTP",
+        "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+        "status": 200,
+        "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+      },
+      {
+        "kind": "real authenticated owned API proxy",
+        "status": 200
+      },
+      {
+        "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+        "opened": true,
+        "namespaceAclNotClaimed": true
+      },
+      {
+        "kind": "real retained inspector after >driver idle 10000ms",
+        "idleStartedAt": "2026-10-12T10:29:52.545Z",
+        "idleEndedAt": "2026-10-12T10:30:03.658Z",
+        "idleMs": 11112.784300000003,
+        "backendPid": 5485,
+        "callers": 0,
+        "rooms": 1,
+        "publisherSlots": 0
+      },
+      {
+        "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+        "inspector": {
+          "recordedAt": "2026-10-12T10:30:13.143Z",
+          "backendPid": 5485,
+          "reserved": true,
+          "released": true,
+          "actualSocketEnded": true,
+          "poolEnded": true,
+          "failureCount": 0,
+          "writeFailureCount": 0,
+          "healthy": true,
+          "poolTotalCount": 0,
+          "poolIdleCount": 0,
+          "poolWaitingCount": 0
+        }
+      }
+    ],
+    "closed": {
+      "code": 0,
+      "signal": null
+    },
+    "cleanup": {
+      "schemaRemoved": true,
+      "mediaRemoved": true,
+      "presenceRemoved": true,
+      "appClosed": true,
+      "webClosed": true
+    },
+    "removed": [
+      "gateway-b8d33fdd-1033-461d-bd6d-f78c595e405d",
+      "temporary-built-smoke-63d27efb-8bad-44a5-a0e4-3e9fce5af59f"
+    ],
+    "retained": [],
+    "errors": [
+      {
+        "name": "AssertionError",
+        "phase": "web",
+        "message": "The expression evaluated to a falsy value:\n\n  assert([200,201].includes(response.status))\n"
+      }
+    ],
+    "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+    "nativeAcceptance": false
+  },
+  "actualController500Site116": "CallsService.create native.createRoom awaited",
+  "uniqueCauseUnproven": true,
+  "compiledCallsUnchangedSinceBuild17": true,
+  "nativeAcceptance": false
+}

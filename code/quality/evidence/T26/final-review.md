@@ -1,0 +1,20 @@
+# T26 — review for closure
+
+Approved prerequisites T07-FIX2, T01-FIX2, T03-FIX14 and T01-FIX3 completed in sequence. Version checkpoint pinned self-hosted SFU1.9.12 and retained client SDK2.22.3. T26 adopts verified setup outputs before resuming; historical PASS records and the task checker remain unchanged.
+
+## Acceptance evidence
+
+- `codex-admission-version-1.json`: 13 original HTTP/real PostgreSQL admission tests pass against the new private native SFU. Eleven simultaneous spectators allocate exactly ten seats, zero team slots; same-user refresh is idempotent; outsiders/unaccepted invitations/revoked members/client authority overrides fail. Multiple independent call groups persist within the room. Server-native room maximum is ten, token lifetime sixty seconds, microphone only.
+- `codex-gateway-version-1.json`: 13 native SFU signaling tests pass. Original and native refreshed tokens remain subject to session/member/ban/expiry checks; logout, self-leave, room removal/dissolve revoke native participants before returning. Invalid/foreign/outsider/admin misuse tokens fail and database outage denies admission. Parallel revokers handle only native not_found as idempotent.
+- `codex-gateway-webrtc-5.json`: real headed two-browser SDK audio transport passes with native track and receiver inbound RTP1255 bytes. Leaving disconnects the participant, replay of its original unexpired JWT fails, fresh admission connects. Isolated schema/containers/network cleanup succeeds.
+- `codex-types-version-1.json`: actual source/test typecheck passes. Verified build4 is retained because source and compiled runtime SHA are unchanged since that build; version configuration and fixtures do not change feature code.
+
+The local TURN mapping translates an isolated embedded TURN advertisement to loopback TCP in initial and updated RTCPeerConnection configuration. It preserves native credentials/DTLS/SRTP and does not patch SDK/grants/assertions. Synthetic audio proves transport; audible device quality, production TURN TLS and media1000 load remain later checkpoints. Main application DB/media are not activated by these fixtures.
+
+## Preserved failures and review limits
+
+The earlier native1.8.4 answers offered ID0 while SDK waited for2. Four headed failures are preserved; upgrade approval/setup checkpoint and two successful native1.9.12 probes resolve that compatibility failure. No assertion was weakened. Setup cwd/origin, helper lint/audit and generated-declaration deviations remain in their original evidence. Four generated declarations differ only in literal union order, proven by exact predecessor SHA permutation and unchanged source/runtime SHA; their exact owner scope was explicitly pinned using existing user authorization, without patching declaration text or old hashes.
+
+Combined auth regression1 had one default5s admin-provision timeout with73 other passes. The affected test passed standalone at its original timeout; that targeted diagnostic was not accepted as full coverage. Combined regression2 then had a default5s password-change timeout while admin passed. Observational PostgreSQL/HTTP instrumentation recorded variable local latency (maximum query1454ms), without secrets. This establishes timeout instability, not a proven feature defect or definitive root cause. Regression3 failed because Docker Desktop stopped and real PostgreSQL port55432 refused connections; its original per-suite results are retained. Recovery starts existing PG/Redis containers, without reset/recreation or restarting main media. Regression4 executes every unchanged auth/email/admin/profile/rooms suite sequentially in a fresh process, with original assertions/timeouts and no test selection. Its recorded results, scope audit and unchanged strict T27 gate are mandatory before closure; a combined-process stability limitation remains recorded.
+
+T27 owns signed/deduplicated/lost webhook reconciliation, thirty-second disconnect grace and last explicit leave closing the call while retaining room/team/chat. T26 does not claim those later behaviors.

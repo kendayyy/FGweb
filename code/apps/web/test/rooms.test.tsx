@@ -417,16 +417,12 @@ describe('T19 — Rooms, Private Group Chat, and Room Management', () => {
     });
   });
 
-  it('6. Key behavior: Uses canonical RoomDTO.conversationId for chat history and send', async () => {
-    renderAppAt('/rooms/room-1');
-    await waitFor(() => {
-      expect(screen.getAllByText('Đội LMHT Hàng Đấu')[0]).toBeInTheDocument();
-    });
 
-    await waitFor(() => {
-      const historyCall = fetchHistoryCalls.find(url => url.includes('/api/v1/conversations/conv-room-1/messages'));
-      expect(historyCall).toBeDefined();
-    });
+  it('6. Canonical private room loads while locked chat makes no plaintext history or send request',async()=>{
+    renderAppAt('/rooms/room-1');await screen.findByTestId('room-header-settings-btn');
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toHaveAttribute('href','/crypto');
+    expect(fetchHistoryCalls.filter(url=>url.includes('/conversations/conv-room-1/messages'))).toEqual([]);
+    expect(screen.queryByPlaceholderText('Nhắn vào phòng...')).not.toBeInTheDocument();
   });
 
   it('7. Incomplete onboarding routes to OnboardingPage when visiting /rooms', async () => {
@@ -622,33 +618,18 @@ describe('T19 — Rooms, Private Group Chat, and Room Management', () => {
     const dialog = await screen.findByRole('dialog', { name: /Cài đặt phòng & Thành viên/i });
     fireEvent.keyDown(dialog, { key: 'Escape' });
     fireEvent.click(screen.getByTestId('mobile-tab-chat'));
-    expect(screen.getByPlaceholderText('Nhắn vào phòng...')).toBeInTheDocument();
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toHaveAttribute('href','/crypto');
+    expect(screen.queryByPlaceholderText('Nhắn vào phòng...')).not.toBeInTheDocument();
   });
 
-  it('15. Reconnect recovers more than one page using the pre-disconnect anchor despite a new socket event', async () => {
-    const original = fetchSpy.getMockImplementation()!;
-    let offlineHistory = false;
-    const gap = Array.from({length: 75}, (_, i) => ({ ...mockChatMessage, id: `gap-${i+1}`, content: `Missing gap ${i+1}`, createdAt: new Date(Date.parse(mockChatMessage.createdAt)+1000*(i+1)).toISOString() }));
-    fetchSpy.mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
-      if (offlineHistory && url.includes('/conversations/conv-room-1/messages')) {
-        const items = url.includes('cursor=gap-page-2') ? [mockChatMessage, ...gap.slice(0,25)] : gap.slice(25);
-        return new Response(JSON.stringify({items, hasMore: !url.includes('cursor=gap-page-2'), nextCursor: url.includes('cursor=gap-page-2') ? undefined : 'gap-page-2'}), {status:200});
-      }
-      return original(input, init);
-    });
-    renderAppAt('/rooms/room-1');
-    await screen.findByText(mockChatMessage.content, {exact:true});
-    const socket = socketTransport.sockets.find(s => s.namespace === '/' && !s.closed)!;
-    await act(async () => socket.fire('disconnect'));
-    offlineHistory = true;
-    await act(async () => {
-      socket.fire('connect');
-      socket.fire(SocketEventNames.MESSAGE_CREATED, gap[74]);
-    });
-    await screen.findByText('Missing gap 1', {exact:true});
-    expect(screen.getAllByText('Missing gap 75', {exact:true})).toHaveLength(1);
-    expect(screen.getAllByText(mockChatMessage.content, {exact:true})).toHaveLength(1);
+
+  it('15. Reconnect and a plaintext group event cannot open locked encrypted history',async()=>{
+    renderAppAt('/rooms/room-1');await screen.findByTestId('room-header-settings-btn');
+    // No private subscription exists before the native device is unlocked.
+    expect(socketTransport.sockets.filter(s=>s.namespace==='/'&&!s.closed)).toEqual([]);
+    await act(async()=>{window.dispatchEvent(new Event('offline'));window.dispatchEvent(new Event('online'));for(const socket of socketTransport.sockets.filter(s=>!s.closed)){socket.fire('disconnect');socket.fire('connect');socket.fire(SocketEventNames.MESSAGE_CREATED,{...mockChatMessage,id:'injected-legacy',content:'Missing private gap plaintext'});}});
+    expect(screen.queryByText(mockChatMessage.content,{exact:true})).not.toBeInTheDocument();expect(screen.queryByText('Missing private gap plaintext',{exact:true})).not.toBeInTheDocument();
+    expect(screen.getByRole('link',{name:'Mở khóa thiết bị',exact:true})).toBeInTheDocument();expect(fetchHistoryCalls.filter(url=>url.includes('/conversations/conv-room-1/messages'))).toEqual([]);
   });
 
   it('16. Refreshing the games catalog does not erase the create-room draft', async () => {

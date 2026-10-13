@@ -1,0 +1,80 @@
+{
+  "reviewedAt": "2026-10-11T23:37:00.000+07:00",
+  "sourceRun": "t30-native-cd237f0bce5440debaf19009b5475494",
+  "windowStartSample": "2026-10-11T16:13:35.930Z",
+  "windowEndSample": "2026-10-11T16:13:39.059Z",
+  "postFailureSnapshot": "2026-10-11T16:13:39.545Z",
+  "rootGatewayTimeline": {
+    "socketpair": "4/5",
+    "unsubscribeReceivedGateway": {
+      "at": "2026-10-11T16:13:35.652Z",
+      "timestamp": 1791735215652,
+      "socketIndex": 5,
+      "case": "subscription",
+      "seq": 95,
+      "byteCount": 59
+    },
+    "subscribeReceivedGateway": {
+      "at": "2026-10-11T16:13:35.653Z",
+      "timestamp": 1791735215653,
+      "socketIndex": 5,
+      "case": "subscription",
+      "seq": 97,
+      "byteCount": 61
+    },
+    "offer1": {
+      "receivedFromUpstream": "2026-10-11T16:13:36.403Z",
+      "sentToClient": "2026-10-11T16:13:36.851Z",
+      "seq": 99,
+      "byteCount": 6485,
+      "clientAnswer": "2026-10-11T16:13:36.971Z",
+      "sentUpstream": "2026-10-11T16:13:37.521Z",
+      "answerByteCount": 5619
+    },
+    "offer2": {
+      "receivedFromUpstream": "2026-10-11T16:13:37.525Z",
+      "sentToClient": "2026-10-11T16:13:37.974Z",
+      "seq": 104,
+      "byteCount": 8980,
+      "clientAnswer": "2026-10-11T16:13:38.111Z",
+      "sentUpstream": "2026-10-11T16:13:38.707Z",
+      "answerByteCount": 7663
+    },
+    "upstreamAnswerMarginToWindowEndMs": 352,
+    "trackSetting27Upstream": {
+      "at": "2026-10-11T16:13:39.203Z",
+      "seq": 110,
+      "byteCount": 27,
+      "marginAfterWindowEndMs": 144
+    },
+    "sidAssociation": "Gateway frame log records class/byteCount/seq only; exact track SID association is missing from gateway telemetry."
+  },
+  "rootQueryCostSummary": {
+    "queryCount": 158,
+    "queryP50Ms": 41.64,
+    "queryP95Ms": 140.1,
+    "queryMaxMs": 287.46,
+    "failedQueries": 0,
+    "rpcCount": 0,
+    "gatewayLoopMaxMs": 33.85,
+    "interpretation": "Aggregate query metrics across switching window; queries not span-associated with individual frames. Demonstrates system workload, but no single unique cause inferred."
+  },
+  "factualCorrections": {
+    "beforeSampleVsActualClick": "16:13:35.930Z is the before-sample timestamp in stats(), NOT the click time. Gateway logs confirm the browser sent unsubscribe at 35.652Z and subscribe at 35.653Z (~278ms prior).",
+    "firstPacketTiming": "The 16:13:39.545Z post-failure snapshot proves packet arrival occurred BY that sample, not at an exact 486ms post-window mark.",
+    "pgSocketByteCounts": "bytesRead: 117 and bytesWritten: 318 are aggregate socket byte counters; they demonstrate socket progression through handshake and SCRAM exchange, but cannot prove exact protocol message receipts or pinpoint backend stall without server event logs.",
+    "webhookLatency": "Webhook latency (3.319s) cannot be declared as the causal source of keyframe delay; prior <100ms baseline was not verified across 54/55.",
+    "pgTimeoutTimeline": "PG timeout ended at 16:13:25.064Z, ~10.866s prior to window start. No contemporaneous overlap or direct link observed, but timeline separation does not rule out indirect resource contention.",
+    "workingTree": "Working tree is dirty with diagnostic and test output artifacts."
+  },
+  "diagnosticProposal": {
+    "type": "post-failure-pending-frames-preservation",
+    "target": "quality/evidence/T30/antigravity-native58-pending-frames-1/failure-observer.mjs",
+    "outputFile": "pending-subscription-frames.json",
+    "nonDestructiveRead": true,
+    "inMemoryProtobufDecode": true,
+    "strictSidRegex": "^TR_[A-Za-z0-9]+$",
+    "participantIdentitiesExcluded": true,
+    "nativeAcceptance": false
+  }
+}

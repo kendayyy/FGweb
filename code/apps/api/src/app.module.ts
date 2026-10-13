@@ -1,3 +1,6 @@
+import {PrivateNotificationsModule} from './modules/notifications/private-notifications.module.js';
+import {CryptoCustodyModule} from './modules/chat-crypto/crypto-custody.module.js';
+import {ChatCryptoModule} from './modules/chat-crypto/chat-crypto.module.js';
 import {UploadsModule} from './modules/uploads/uploads.module.js';
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module.js';
@@ -11,8 +14,9 @@ import { RecruitmentsModule } from './modules/recruitments/recruitments.module.j
 import { TeamsModule } from './modules/teams/teams.module.js';
 import { InvitationsModule } from './modules/invitations/invitations.module.js';
 import { PlaySessionsModule } from './modules/play-sessions/play-sessions.module.js';
+import { CallsModule } from './modules/calls/calls.module.js';
 
 @Module({
-  imports: [AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule, PlaySessionsModule],
+  imports: [PrivateNotificationsModule,CryptoCustodyModule, ChatCryptoModule, AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule, PlaySessionsModule, CallsModule],
 })
 export class AppModule {}

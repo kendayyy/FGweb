@@ -1,0 +1,68 @@
+### FG T30 — Implementation Proposal (Round 1)
+
+In accordance with the workflow rules (`AGENTS.md`, `02-task-sequence.md`, `08-testing-and-evidence.md`) and following verified business RED confirmation in [`codex-t30-live-red-2.json`](file:///E:/FGweb/code/quality/evidence/T30/codex-t30-live-red-2.json) (exit code 1: missing `LiveViewer.js`), all proposed implementation files have been authored strictly under:
+`E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/**`
+
+No direct production or test source writes, ledger/history updates, or command executions have occurred in this round.
+
+---
+
+### 1. Proposed Source Files
+
+1. **[`apps/web/src/features/live/LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/live/LiveViewer.tsx)**
+   - **Capture-First Flow**: Synchronous `navigator.mediaDevices.getDisplayMedia({ video: { width: 1280, height: 720, frameRate: 30 } })` execution within the click handler tick before any `await` to maintain transient user activation.
+   - **Strict Quota & Slot Boundaries**:
+     - Denied/cancelled capture (`NotAllowedError`) dispatches zero claim and zero release (zero quota leak).
+     - Deferred capture unmounting before user resolution stops acquired tracks with zero claim and zero release.
+     - 409 `CAPACITY_FULL` stops acquired track, dispatches zero release, and presents the 3-slot capacity alert (*"Đã có 3 người chia sẻ màn hình. Giới hạn tối đa là 3 luồng chia sẻ đồng thời trong một nhóm gọi."*).
+     - Late claim after unmount or publish failure after successful claim stops acquired tracks and dispatches release once.
+     - Native browser floating stop button (`track.onended`) and moderator stop (`LocalTrackUnpublished`) trigger clean release and reset the button.
+   - **Platform Detection**:
+     - Mobile browser (`/Android|iPhone|iPad|iPod|Mobile/i`) hides capture button and displays view-only guidance (*"Thiết bị di động chỉ hỗ trợ xem luồng chia sẻ và dùng mic, chưa hỗ trợ phát màn hình trực tiếp."*) while preserving viewing and microphone participation.
+     - Unsupported desktop browser (`!getDisplayMedia`) hides capture button and displays guidance (*"Trình duyệt này chưa hỗ trợ phát màn hình trực tiếp."*).
+     - Narrow desktop viewports (e.g. 360px) retain capture capabilities.
+   - **Accessible Stream Selector**:
+     - WAI-ARIA `role="tablist"` labeled `"Danh sách luồng phát"` with `role="tab"` buttons displaying participant names and `aria-selected` status.
+     - Exactly 0 `<video>` elements in selector tabs (static metadata only).
+     - Full keyboard navigation across tabs via `ArrowRight`, `ArrowLeft`, `Home`, and `End` with focus retention.
+   - **Single-Stream Stage**:
+     - `role="region"` labeled `"Màn hình đang xem"` containing exactly 1 active `<video>` element when subscribed.
+     - Automatic standby fallback message (*"Chưa có luồng chia sẻ màn hình nào trong nhóm gọi."*) when all screen publishers terminate.
+
+2. **[`apps/web/src/features/live/api.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/live/api.ts)**
+   - `claimScreenShare(callId, signal)`: Dispatches `POST /api/v1/calls/:id/screen-share/claim` with `{}` body, validated by `CallActionRequestSchema` and parsed by `CallJoinSchema`.
+   - `releaseScreenShare(callId)`: Dispatches `POST /api/v1/calls/:id/screen-share/release` with `{}` body and `keepalive: true`.
+
+3. **[`apps/web/src/features/live/live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/live/live.css)**
+   - Responsive 16:9 stage layout, accessible focus states, alert banners, and integration with FG design system tokens.
+
+4. **[`apps/web/src/features/live/index.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/live/index.ts)**
+   - Feature barrel exporting `LiveViewer`, `LiveViewerProps`, `claimScreenShare`, and `releaseScreenShare`.
+
+5. **[`apps/web/src/features/calls/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/calls/media.ts)**
+   - Configures `adaptiveStream: true, dynacast: true` on the single `Room` instance.
+   - Microphone audio on `audioRoot` remains auto-subscribed and isolated from video subscription state.
+   - Enforces single screen video subscription: synchronous `oldPub.setSubscribed(false)` before `newPub.setSubscribed(true)`.
+   - Guards against stale `TrackSubscribed` events for previously selected tracks.
+   - Distinguishes stream termination vs intentional switching:
+     - `TrackUnsubscribed`: Detaches video element without removing the publication from the selector.
+     - `TrackUnpublished`: Deletes publication and triggers automatic fallback.
+     - `ParticipantDisconnected`: Cleans all publications for that participant and falls back.
+   - Implements `publishScreenTrack` and `unpublishScreenTrack` with `LocalTrackUnpublished` listener.
+
+6. **[`apps/web/src/features/calls/CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/src/features/calls/CallPanel.tsx)**
+   - Embeds `<LiveViewer callId={active} actorId={actorId} session={media.current} participants={participants} />` into the active call stage between the participant roster and call actions.
+   - Cleans up screen tracks and quota cleanly on call leave or disconnection.
+
+7. **[`apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/apps/web/test/live-viewer.test.tsx)**
+   - Corrected test proposal resolving the 5 unused mock parameters flagged in [`codex-t30-proposal-lint-1.txt`](file:///E:/FGweb/code/quality/evidence/T30/codex-t30-proposal-lint-1.txt) (`unpublishTrack`, `setMicrophoneEnabled`, `connect`).
+   - All 19 test cases, assertions, and shared schema fixtures remain 100% intact.
+
+8. **[`REVIEW.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-1/REVIEW.md)**
+   - Detailed architecture, transition mapping, and review checklist for Codex.
+
+---
+
+### 2. Ready for Codex Adoption
+
+The proposal is ready for Codex review. Once approved, Codex can apply the proposed files to `code/apps/web/...` and run Vitest headed verification for T30.

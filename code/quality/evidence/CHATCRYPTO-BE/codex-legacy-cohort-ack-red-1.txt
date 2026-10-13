@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:9584) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (39.176 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › authorizes historical ACK from authoritative context and preserves idempotence without acknowledging denied rows
+
+    error: new row for relation "chat_crypto_protocol_events" violates check constraint "chat_crypto_protocol_expiry_check"
+
+      102 |  it('authorizes historical ACK from authoritative context and preserves idempotence without acknowledging denied rows',async()=>{await availableSource(async()=>{
+      103 |   const revision=Number((await pool.query("SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].membership_revision);
+    > 104 |   async function seed(tag:string,cohort:string|null='available',sender='A',recipient='B',epoch=revision,expired=false){const id=randomUUID();await pool.query(`INSERT INTO chat_crypto_protocol_events(id,conversation_id,membership_revision,sender_user_id,sender_device_id,recipient_user_id,recipient_device_id,transaction_id,event,expires_at,cohort_id) VALUES($1,'legacy',$2,'alice',$3,'bob',$4,$5,$6,clock_timestamp()+CASE WHEN $7 THEN interval '-1 second' ELSE interval '10 minutes' END,$8)`,[id,epoch,sender,recipient,tag,{eventType:'m.key.verification.request',content:{transaction_id:tag,from_device:sender,methods:['m.sas.v1'],timestamp:Date.now()}},expired,cohort]);return id;}
+          |                                                                                                                                              ^
+      105 |   const good=await seed('ack-good'),invalid=[await seed('ack-null',null),await seed('ack-new-sender','available','AFTER_COHORT'),await seed('ack-old-epoch','available','A','B',revision-1),await seed('ack-expired','available','A','B',revision,true)],newDevice=await seed('ack-new-recipient','available','A','AFTER_BOB_COHORT');
+      106 |   for(const id of invalid)expect((await write('sync/ack',{deviceId:'B',eventIds:[id]},'bob')).status).toBe(403);
+      107 |   expect((await write('sync/ack',{deviceId:'AFTER_BOB_COHORT',eventIds:[newDevice]},'bob')).status).toBe(403);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at seed (test/chat-crypto-legacy.integration.spec.ts:104:142)
+      at test/chat-crypto-legacy.integration.spec.ts:105:189
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:102:130)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 15 passed, 16 total
+Snapshots:   0 total
+Time:        39.595 s, estimated 49 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

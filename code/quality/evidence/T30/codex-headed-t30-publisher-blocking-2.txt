@@ -1,0 +1,36 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-publisher-blocking1.spec.ts --config quality/evidence/T30/playwright-publisher-blocking1.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:69544) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-publisher-blocking1.spec.ts:60:1 › T30 focused third publisher lock blocking; original prefix/deadlines; not acceptance (1.2m)
+
+
+  1) quality\evidence\T30\native-publisher-blocking1.spec.ts:60:1 › T30 focused third publisher lock blocking; original prefix/deadlines; not acceptance 
+
+    Error: EPERM: operation not permitted, rename 'E:\FGweb\code\quality\evidence\TELEGRAM-BRIDGE-01\demo-latest.json.06200638-3b7e-40d3-b4b4-6c1f3c4b727f.tmp' -> 'E:\FGweb\code\quality\evidence\TELEGRAM-BRIDGE-01\demo-latest.json'
+
+       at ..\..\..\tools\telegram-bridge\demo-stream.mjs:10
+
+       8 | async function atomic(file, bytes) {
+       9 |   const temp = `${file}.${randomUUID()}.tmp`;
+    > 10 |   await writeFile(temp, bytes, {flag:'wx'}); await rename(temp, file);
+         |                                              ^
+      11 | }
+      12 | // Call from the actual headed test after each meaningful assertion/action.
+      13 | // The producer must use synthetic fixtures and explicitly confirm privacy.
+        at atomic (E:\FGweb\code\tools\telegram-bridge\demo-stream.mjs:10:46)
+        at captureUiStep (E:\FGweb\code\tools\telegram-bridge\demo-stream.mjs:38:3)
+        at checkpoint (E:\FGweb\code\quality\evidence\T30\native-publisher-blocking1.spec.ts:26:44)
+        at E:\FGweb\code\quality\evidence\T30\native-publisher-blocking1.spec.ts:63:558
+
+    Error Context: .cache\t30\playwright-results\native-publisher-blocking1-b1e08-ix-deadlines-not-acceptance\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-publisher-blocking1-b1e08-ix-deadlines-not-acceptance\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-publisher-blocking1.spec.ts:60:1 › T30 focused third publisher lock blocking; original prefix/deadlines; not acceptance 

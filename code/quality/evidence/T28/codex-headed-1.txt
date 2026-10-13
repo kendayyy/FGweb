@@ -1,0 +1,29 @@
+
+Running 1 test using 1 worker
+
+(node:20660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup
+  1) tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup 
+
+    Error: Native inspection failed
+
+      19 |  if(fixture?.exitCode===null&&fixture.connected)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Owned fixture cleanup timed out')),55000);fixture.once('exit',code=>{clearTimeout(timer);code===0?resolve():reject(Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});
+      20 | });
+    > 21 | async function inspect(){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error('Native inspection timed out'));},15000);pending.set(id,value=>{clearTimeout(timer);if(value.failed)reject(Error('Native inspection failed'));else resolve(value);});fixture.send({kind:'inspect',id});});}
+         |                                                                                                                                                                                                                                                                                     ^
+      22 | async function open(context:BrowserContext,key:string,denied=false){
+      23 |  await context.addCookies([{name:'better-auth.session_token',value:ready.actors[key].cookie,url:ready.origin,httpOnly:true,sameSite:'Lax'}]);
+      24 |  await context.addInitScript(({turnPort,denied})=>{
+        at _pending$get (E:\FGweb\code\tests\e2e\voice.spec.ts:21:277)
+        at ChildProcess.<anonymous> (E:\FGweb\code\tests\e2e\voice.spec.ts:14:91)
+
+    Error Context: .cache\t28\headed-1\voice-actual-FG-UI-native--ff99f-solated-leave-route-cleanup\error-context.md
+
+    Error Context: .cache\t28\headed-1\voice-actual-FG-UI-native--ff99f-solated-leave-route-cleanup\error-context.md
+
+
+  1 failed
+    tests\e2e\voice.spec.ts:39:1 › actual FG UI: native audio, viewer mic, local volume, denied permission and isolated leave/route cleanup 

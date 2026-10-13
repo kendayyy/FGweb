@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const d='quality/evidence/T30';
+let s=fs.readFileSync(d+'/review-native67-codex1.mjs','utf8');
+for(const [a,b] of [['65acf79f7e484dc98687bba41fa85c4a','60bdc59217f848499b052f59e53cff60'],['native-67','native-68'],['native67','native68'],['restore-51','restore-53'],['resource51','resource53'],['Supabase51','Supabase53'],['Native67','Native68']]) s=s.replaceAll(a,b);
+s=s.replace('assert.equal(joins.length,4);assert.equal(captures.length,3);','assert.equal(joins.length,3);assert.equal(captures.length,2);');
+s=s.replace("assert(pgFailures.some(r=>r.kind==='room-lock'&&r.sqlState==='57014'));",'assert.equal(pgFailures.length,0);');
+s=s.replace('originalThreeSlotAssertionCompletedBeforeFailureLine66:true','originalThreeSlotAssertionCompletedBeforeFailureLine66:false');
+s=s.replace('faultWindowNotCovered:true','faultWindowNotCovered:false');
+s=s.replace('Original fourthactor call-region5000ms failed at line66; fourjoined/three realcaptures/three-slot originalassertion completed. Quota fourthdenial/audio/mobile/layout/ended stillpending.','Original third actor call-region5000ms failed at line65; three joins/two real captures/source switch completed. Screenshot after failure shows region rendered with call data loading.');
+s=s.replace('Current CJS trace bound; gatewayroomlock andlivelease57014 actual. Controller1 OTHER may include wrapped ORM or HTTP errors, not a specificrootcause. Late read-only lock probe does not cover faultwindow.','Current CJS trace bound. No failed gateway query or controller exception observed in this run; owned cause observer healthy. Slow successful HTTP requests exist, including 7.46s. Loading deadline failure is not proof of a server exception.');
+s=s.replaceAll('actual4joins/3captures/2realRTP','actual3joins/2captures/2realRTP').replace('fourthactor original5s','thirdactor original5s').replace('lastviewport skeleton','last viewport region rendered with call data loading').replace('Actual gateway room-lock57014 observed;','No gateway query failure or controller exception observed;');
+fs.writeFileSync(d+'/review-native68-codex1.mjs',s,{flag:'wx'});

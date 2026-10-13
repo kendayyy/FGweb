@@ -1,0 +1,42 @@
+### FG T30 — CallsService Shared Read-Lock Proposal Round 2 (`antigravity-call-read-lock-review-1`)
+
+The Round 2 proposal has been prepared strictly within [`quality/evidence/T30/antigravity-call-read-lock-review-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/). No application code, compiled files, ledger, history, or actual tests were modified, and no test or build executions were run.
+
+---
+
+### 1. Key Corrections Applied in Round 2
+
+1. **Byte-Identical Source & Canonical Fixtures**:
+   - [`calls.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/calls.service.ts), [`fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/fixture-server-shaped.mjs), and [`private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/private-gateway-shaped-fixture.mjs) are byte-identical to Round 1.
+2. **Concurrent Read Deadline & Bounded Settle**:
+   - `Promise.race` enforces a strict 1500ms timeout on `callsService.list` and `callsService.participants` reads while the gateway holds `FOR SHARE` at the SFU barrier.
+   - An immediate rejection handler (`void originalApiPromise.catch(() => {})`) is attached to avoid unhandled rejections.
+   - The timeout timer is cleared in `finally`.
+   - The pending original API promise is retained and settled (`await originalApiPromise.catch(() => {})`) in test cleanup `finally` **after** releasing the RPC barrier and terminating client sockets, and **before** dropping the database schema in `afterAll`.
+3. **Exact DTO Assertions**:
+   - `list`: verifies exact `id` (`user1.callGroupId`), `roomId` (`user1.roomId`), `participantCount: 2`, and `publisherCount: 1`.
+   - `participants`: verifies exactly 2 distinct user IDs (`user1.userId`, `user2.userId`), 2 distinct `mediaIdentity` admission IDs, matching `callId`, `user1.isPublishing === true`, and `user2.isPublishing === false`.
+   - Asserts both client sockets remain open and barrier unreleased after read and after writer probe; releases native barrier before 3s deadline, forwards screen `addTrack`, and verifies writer commits.
+4. **Negative Principal Authorization (5 Cases)**:
+   - Real database checks for `['outsider', 'expired_session', 'deleted_session', 'banned', 'no_onboarding']`.
+   - `deleted_session` verifies explicit database row deletion (`DELETE FROM session WHERE id = ...`).
+   - Asserts both `list` and `participants` throw `HttpException` with exact `getStatus()` and `getResponse()` code and message (`LOGIN_REQUIRED` 401, `FORBIDDEN` 403).
+5. **Database Teardown Safety**:
+   - `process.env.DATABASE_URL` is saved in `beforeAll` and restored in `afterAll` `finally`.
+   - `callsService.onModuleDestroy()` is wrapped in a `try/catch` in `afterAll` to guarantee schema drop (`DROP SCHEMA ... CASCADE`) is always executed even if destroy fails.
+6. **Total Executed Test Callbacks**:
+   - **22 total executed test callbacks**: 15 original + 2 concurrent reader + 5 principal security.
+
+---
+
+### 2. File Verification & SHA-256 Hashes
+
+| File | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`calls.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/calls.service.ts) | `eabe88b1597df4c85f9fc76e871f00213107e87b3a942ad546e0578846c410ea` | Byte-identical source proposal (`FOR SHARE` for list/participants) |
+| [`t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/t30-signaling-throughput.integration.spec.ts) | `6a5a51adaee6e50bb6aceec42ed39880668182842942503b3625206716ede002` | 22 executed integration test callbacks with 1500ms deadline & exact DTOs |
+| [`fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/fixture-server-shaped.mjs) | `bfd4c5fe5131ea69b4240858e1249bdfe9663e7142b65ede609ee9951f06b3a2` | Byte-identical restored canonical fixture server |
+| [`private-gateway-shaped-fixture.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/private-gateway-shaped-fixture.mjs) | `d891dbd9f976a5ea39de29dc842ae9826f782a57efa10a656bf1822d28d3696f` | Byte-identical restored canonical gateway mount fixture |
+| [`review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-call-read-lock-review-1/review-notes.md) | `e3707ca1f27c90fbe5a2a3d30de6209667ecd12cd9a65707aeda6f928e5a5a39` | Round 2 review notes with hypothesis notes & risk analysis |
+
+*Ready for Codex review and verification. No claim of task PASS or native acceptance.*

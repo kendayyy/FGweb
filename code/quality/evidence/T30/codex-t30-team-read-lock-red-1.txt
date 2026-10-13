@@ -1,0 +1,43 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:48712) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/team-read-lock-tests/t30-team-read-lock.integration.spec.ts (33.855 s)
+  ● FG T30 - TeamsService & PlaySessionsService Read-Lock Concurrency & Authority Integration › Read-Only Concurrency under held external FOR SHARE locks › teamsService.snapshot succeeds within 1500ms while external transaction holds room and play FOR SHARE
+
+    Timeout waiting for teamsService.snapshot under external FOR SHARE after 1500ms
+
+      60 |   let timer: NodeJS.Timeout;
+      61 |   const timeoutPromise = new Promise<never>((_, reject) => {
+    > 62 |     timer = setTimeout(() => reject(new Error(`Timeout waiting for ${label} after ${ms}ms`)), ms);
+         |                                     ^
+      63 |   });
+      64 |   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
+      65 | }
+
+      at Timeout.<anonymous> (quality/evidence/T30/team-read-lock-tests/t30-team-read-lock.integration.spec.ts:62:37)
+
+  ● FG T30 - TeamsService & PlaySessionsService Read-Lock Concurrency & Authority Integration › Read-Only Concurrency under held external FOR SHARE locks › playSessionsService.requests succeeds within 1500ms while external transaction holds room, actor user, and play FOR SHARE
+
+    Timeout waiting for playSessionsService.requests under external FOR SHARE after 1500ms
+
+      60 |   let timer: NodeJS.Timeout;
+      61 |   const timeoutPromise = new Promise<never>((_, reject) => {
+    > 62 |     timer = setTimeout(() => reject(new Error(`Timeout waiting for ${label} after ${ms}ms`)), ms);
+         |                                     ^
+      63 |   });
+      64 |   return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timer));
+      65 | }
+
+      at Timeout.<anonymous> (quality/evidence/T30/team-read-lock-tests/t30-team-read-lock.integration.spec.ts:62:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 19 passed, 21 total
+Snapshots:   0 total
+Time:        34.301 s
+Ran all test suites within paths "quality/evidence/T30/team-read-lock-tests/t30-team-read-lock.integration.spec.ts".

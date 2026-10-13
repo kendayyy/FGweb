@@ -1,0 +1,36 @@
+{"eventType":"m.room_key.withheld","contentFields":[["algorithm","code","from_device","reason","room_id","sender_key","session_id"]]}
+{"eventType":"m.key.verification.request","contentFields":[["from_device","methods","timestamp","transaction_id"]]}
+{"eventType":"m.key.verification.ready","contentFields":[["from_device","methods","transaction_id"]]}
+{"eventType":"m.key.verification.start","contentFields":[["from_device","hashes","key_agreement_protocols","message_authentication_codes","method","short_authentication_string","transaction_id"]]}
+{"eventType":"m.key.verification.accept","contentFields":[["commitment","hash","key_agreement_protocol","message_authentication_code","short_authentication_string","transaction_id"]]}
+{"eventType":"m.key.verification.key","contentFields":[["key","transaction_id"]]}
+{"eventType":"m.key.verification.key","contentFields":[["key","transaction_id"]]}
+{"eventType":"m.key.verification.mac","contentFields":[["keys","mac","transaction_id"]]}
+{"eventType":"m.key.verification.mac","contentFields":[["keys","mac","transaction_id"]]}
+{"eventType":"m.key.verification.done","contentFields":[["transaction_id"]]}
+{"eventType":"m.key.verification.done","contentFields":[["transaction_id"]]}
+{"eventType":"m.room.encrypted","contentFields":[["algorithm","ciphertext","org.matrix.msgid","sender_key"]]}
+{"sdk":"18.6.0","nativeTwoParty":false,"ciphertextTamperDenied":false,"crossRoomDenied":false,"unverifiedNotShared":true,"joinNoOldHistory":false,"leaveRotatesAndRevokes":false,"encryptedRecovery":false,"wrongRecoveryDenied":false,"newRecoveryDeviceIdentity":false,"sasVerificationVerified":true,"browserVerified":false,"productionAdapter":false}
+file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-DATA/native-interop.mjs:16
+ if(r.type===sdk.RequestType.ToDevice)for(const [user,ds]of Object.entries(body.messages))for(const [device,content]of Object.entries(ds)){if(r.event_type==="m.room.encrypted")contracts.SendCryptoToDeviceSchema.parse({conversationId:"interop",membershipRevision:1,deviceId:m.deviceId.toString(),transactionId:"native-tx",eventType:r.event_type,recipients:[{userId:user,deviceId:device,content}]});else contracts.SendCryptoVerificationSchema.parse({conversationId:"interop",membershipRevision:1,deviceId:m.deviceId.toString(),transactionId:content.transaction_id??r.txn_id,recipientUserId:user,recipientDeviceId:device,eventType:r.event_type,content});}
+                                                                                                                                                                                                                   ^
+
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "org.matrix.msgid"
+    ],
+    "path": [
+      "recipients",
+      0,
+      "content"
+    ],
+    "message": "Unrecognized key: \"org.matrix.msgid\""
+  }
+]
+    at send (file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-DATA/native-interop.mjs:16:212)
+    at share (file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-DATA/native-interop.mjs:63:263)
+    at async file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-DATA/native-interop.mjs:74:60
+
+Node.js v24.21.0

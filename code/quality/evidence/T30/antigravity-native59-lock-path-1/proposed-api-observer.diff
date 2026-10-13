@@ -1,0 +1,41 @@
+--- quality/evidence/T30/api56-observer-reviewed1.mjs
++++ quality/evidence/T30/api56-observer-reviewed1.mjs
+@@ -37,8 +37,10 @@
+   'http-room-play-sessions',
+   'http-call-participants',
++  'http-calls-join',
+   'CallsService.list',
+   'CallsService.participants',
++  'CallsService.join',
+   'CallsService.withControlGroup',
+   'CallLifecycleService.reconcileGroup',
+   'RoomsService.getRoomDetail','RoomsService.listRoomMembers','RoomsService.listOwnRooms','TeamsService.transaction','TeamsService.snapshot','PlaySessionsService.listRoom',
+@@ -130,7 +132,7 @@
+   app.use((req, res, next) => {
+     let continueInContext=null;
+     try {
+-      if (req.method === 'GET') {
++      if (req.method === 'GET' || req.method === 'POST') {
+         const rawPath = typeof req.path === 'string' ? req.path : String(req.url ?? '').split('?')[0];
+         let route = null;
+         if (rawPath === '/api/v1/me') route = 'http-me';
+@@ -141,6 +143,7 @@
+         else if (/^\/api\/v1\/rooms\/[^/]+\/play-sessions$/.test(rawPath)) route = 'http-room-play-sessions';
+         else if (/^\/api\/v1\/rooms\/[^/]+$/.test(rawPath)) route = 'http-rooms-detail';
+         else if (/^\/api\/v1\/calls\/[^/]+\/participants$/.test(rawPath)) route = 'http-call-participants';
++        else if (req.method === 'POST' && /^\/api\/v1\/calls\/[^/]+\/join$/.test(rawPath)) route = 'http-calls-join';
+ 
+         if (route !== null) {
+           const ctx = createSpanContext(route);
+@@ -386,6 +389,7 @@
+   'updateParticipant',
+   'removeParticipant',
+   'deleteRoom',
++  'createRoom',
+ ]);
+ 
+ const TWIRP_CODES = new Set([
+@@ -515,3 +519,3 @@
+-    for (const methodName of ['list', 'participants', 'withControlGroup']) {
++    for (const methodName of ['list', 'participants', 'join', 'withControlGroup']) {
+       const orig = CallsService.prototype[methodName];

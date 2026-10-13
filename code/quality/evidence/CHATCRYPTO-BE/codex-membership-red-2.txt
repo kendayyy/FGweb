@@ -1,0 +1,43 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12476) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (35.389 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › bootstraps only empty private conversations and leaves existing plaintext history pending reconciliation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+      314 |   await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id) VALUES('legacy-old','old-group','bob','legacy-private-fixture','legacy-old')`);
+      315 |   const get=(id:string)=>request(base).get(`/api/v1/crypto/conversations/${id}/state`).set('Cookie',otherCookie);
+    > 316 |   const fresh=await get('empty-group');expect(fresh.status).toBe(200);expect(fresh.body).toMatchObject({migrationState:'RECONCILED',historyStatus:'KNOWN',membershipRevision:1});
+          |                                                             ^
+      317 |   expect((await get('empty-group')).body).toEqual(fresh.body);
+      318 |   expect((await pool.query(`SELECT start_revision,end_revision FROM chat_crypto_membership_intervals WHERE conversation_id='empty-group'`)).rows).toEqual([{start_revision:'1',end_revision:null}]);
+      319 |   const old=await get('old-group');expect(old.status).toBe(200);expect(old.body).toMatchObject({migrationState:'LEGACY_PENDING',historyStatus:'UNKNOWN'});
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:316:61)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › atomically rotates membership epochs through actual team admission, HTTP kick and rejoin, hiding each history gap
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 1
+
+      339 |   const before=await message('before-join',1);
+      340 |   const teams=app.get(TeamsService),admit=async(play:string,user='alice',rollback=false)=>teams.transaction(async db=>{await db.query(`SELECT id FROM rooms WHERE id='membership-room' FOR UPDATE`);await db.query(`SELECT id FROM "user" WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE`,[['bob',user]]);await teams.admit(db,{id:'membership-room',owner_id:'bob',visibility:'PUBLIC',conversation_id:'membership-group'},play,user);if(rollback)throw new Error('Fixture forced transaction rollback');});
+    > 341 |   await admit('membership-play-1');expect(await revision()).toBe(2);const joined=await message('after-join',2);
+          |                                                             ^
+      342 |   const history=async()=>request(base).get('/api/v1/crypto/conversations/membership-group/messages').set('Cookie',cookie);
+      343 |   expect((await history()).body.items.map((item:{id:string})=>item.id)).toEqual([joined]);
+      344 |   const outsider=await createSignedSessionCookie(secret,'outsider-session');expect((await request(base).delete('/api/v1/rooms/membership-room/members/alice').set('Cookie',outsider).set('Origin',origin)).status).toBe(403);expect(await revision()).toBe(2);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:341:61)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 19 passed, 21 total
+Snapshots:   0 total
+Time:        35.816 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

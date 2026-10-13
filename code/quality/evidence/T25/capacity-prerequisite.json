@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-08T03:35:09.398Z",
+  "task": "T25",
+  "status": "BLOCKED",
+  "reason": "Stored play_sessions.player_capacity is the actual admission capacity; room settings updates only rooms.player_capacity. Existing PlaySessionSchema/dto/snapshot omit stored capacity, so private/CLOSED session UI cannot truthfully display capacity from the public card or room configuration.",
+  "authorization": "Prior human permission to broaden Write Scope or touch locked files; ordinary required producer/contract completion, no new product policy, source paths pinned in separate owner tasks.",
+  "proofFiles": {
+    "packages/contracts/src/teams.ts": "6d8e6ffbc043c16aa025a3c0474450e177000f8c6e61d21b7abe2c7d3ae2092f",
+    "apps/api/src/modules/play-sessions/play-sessions.service.ts": "06da2b9c077ab4bfd4b31ddde0622321cd73dea59f401791214ecb673b7e3df3",
+    "apps/api/src/modules/teams/teams.service.ts": "1e6714f81c84be3511905f9f131358efb0d05d9c498550f260b879780259ab4c",
+    "apps/api/src/modules/rooms/rooms.service.ts": "c1feebbe48dd9086f5e276c6ff40e66401ea522b71ccee790f2a790dcc709951"
+  },
+  "solution": "Backward-compatible optional playerCapacity in existing PlaySessionDTO with strict1–10 bounds; current producers always send stored session capacity. Frontend must fail visibly if omitted, never substitute room capacity. No DB/settings/admission policy changes.",
+  "tasks": [
+    "T03-FIX13",
+    "T24-FIX2",
+    "T25"
+  ]
+}

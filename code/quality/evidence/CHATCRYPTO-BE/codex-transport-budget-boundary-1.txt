@@ -1,0 +1,309 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:41424) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-transport-budget.integration.spec.ts (27.914 s)
+  ● actual two-instance HTTP transport aggregate budget › serializes a sender budget across two API instances and different conversation locks
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces recipient budget across different senders
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › does not charge an identical retry or create another outbox row
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › ACK does not free retained dedup storage
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › expiry alone does not free retained storage, actual deletion does
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces PostgreSQL jsonb payload byte boundary without row/outbox residue
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › fails closed for new ingestion without explicit operator configuration
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › shares the retained budget across encrypted and public verification queues
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rolls back an entire opaque batch, then admits it at the exact row boundary
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RC default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RC default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RC default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks sender after budget lock under instance RR default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks recipient after budget lock under instance RR default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+  ● actual two-instance HTTP transport aggregate budget › rechecks expired session after budget lock under instance RR default
+
+    ServiceUnavailableException: Chat crypto schema unavailable
+
+      4 | export async function cryptoSchemaAvailable(db:Pool){
+      5 |  const tables=['chat_crypto_cohort_members','chat_crypto_devices','chat_crypto_history_cohorts','chat_crypto_identity_keys','chat_crypto_legacy_attestations','chat_crypto_legacy_candidate_images','chat_crypto_legacy_candidates','chat_crypto_legacy_migrations','chat_crypto_legacy_stage_objects','chat_crypto_legacy_stage_sources','chat_crypto_legacy_stages','chat_crypto_membership_intervals','chat_crypto_one_time_keys','chat_crypto_outbound_sessions','chat_crypto_protocol_events','chat_crypto_protocol_outbox','chat_crypto_recovery_backups','chat_crypto_report_audit','chat_crypto_report_evidence','chat_crypto_report_upload_sources','chat_crypto_state','chat_crypto_to_device_events','chat_crypto_upload_drafts'];
+    > 6 |  try{return (await db.query('SELECT bool_and(to_regclass(name) IS NOT NULL) AS available FROM unnest($1::text[]) AS names(name)',[tables])).rows[0]?.available===true;}catch{throw new ServiceUnavailableException('Chat crypto schema unavailable');}
+        |                                                                                                                                                                                    ^
+      7 | }
+      8 |
+
+      at cryptoSchemaAvailable (src/modules/chat-crypto/crypto-schema-readiness.ts:6:180)
+      at PrivateNotificationsService.onModuleInit (src/modules/notifications/private-notifications.service.ts:18:157)
+          at async Promise.all (index 0)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:9)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:34:302)
+
+Test Suites: 1 failed, 1 total
+Tests:       15 failed, 15 total
+Snapshots:   0 total
+Time:        28.321 s, estimated 33 s
+Ran all test suites matching apps/api/test/chat-crypto-transport-budget.integration.spec.ts.

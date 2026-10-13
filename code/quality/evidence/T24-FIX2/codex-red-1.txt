@@ -1,0 +1,69 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:16376) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/play-session-capacity.integration.spec.ts (27.864 s)
+  ● T24-FIX2 real stored session capacity › member private/CLOSED discovery and snapshot preserve each stored capacity
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Object {
+    -   "160239f2-4187-4f44-bb03-78a0226a083c": 3,
+    -   "history-000": 1,
+    -   "history-001": 2,
+    +   "160239f2-4187-4f44-bb03-78a0226a083c": undefined,
+    +   "history-000": undefined,
+    +   "history-001": undefined,
+      }
+
+      64 |   await pool.query("UPDATE play_sessions SET player_capacity=CASE id WHEN 'history-000' THEN 1 WHEN 'history-001' THEN 2 ELSE 3 END WHERE room_id=$1",[t.roomId]);
+      65 |   const result=await list(t.roomId);expect(result.status).toBe(200);const page=pageSchema.parse(result.body);
+    > 66 |   expect(Object.fromEntries(page.items.map(p=>[p.id,p.playerCapacity]))).toEqual({[t.play]:3,'history-000':1,'history-001':2});
+         |                                                                          ^
+      67 |   const snapshot=await request(base).get('/api/v1/play-sessions/'+t.play).set('Cookie',cookies.member);expect(snapshot.status).toBe(200);expect(snapshot.body.playSession.playerCapacity).toBe(3);
+      68 |   expect((await list(t.roomId,'outsider')).status).toBe(403);
+      69 |  });
+
+      at Object.<anonymous> (test/play-session-capacity.integration.spec.ts:66:74)
+
+  ● T24-FIX2 real stored session capacity › changing mutable room settings never misreports or replaces the existing session admission limit
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: undefined
+
+      72 |   for(const capacity of [10,1]){
+      73 |    const changed=await request(base).patch('/api/v1/rooms/'+t.roomId+'/settings').set('Cookie',cookies.owner).set('Origin',origin).send({playerCapacity:capacity});expect(changed.status).toBe(200);expect(changed.body.settings.playerCapacity).toBe(capacity);
+    > 74 |    const snapshot=await request(base).get('/api/v1/play-sessions/'+t.play).set('Cookie',cookies.member);expect(snapshot.status).toBe(200);expect(snapshot.body.playSession.playerCapacity).toBe(3);
+         |                                                                                                                                                                                            ^
+      75 |    expect((await list(t.roomId)).body.items[0].playerCapacity).toBe(3);
+      76 |   }
+      77 |   const joined=await request(base).post('/api/v1/play-sessions/'+t.play+'/join').set('Cookie',cookies.member).set('Origin',origin).send({});expect(joined.status).toBe(201);
+
+      at Object.<anonymous> (test/play-session-capacity.integration.spec.ts:74:188)
+
+  ● T24-FIX2 real stored session capacity › start/end responses expose the actual capacity while room/chat membership persists
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: undefined
+
+      82 |   const t=await room();
+      83 |   for(const action of ['start','end']){
+    > 84 |    const response=await request(base).post('/api/v1/play-sessions/'+t.play+'/'+action).set('Cookie',cookies.owner).set('Origin',origin).send({});expect(response.status).toBe(201);expect(PlaySessionSchema.parse(response.body).playerCapacity).toBe(3);
+         |                                                                                                                                                                                                                                                  ^
+      85 |    expect((await pool.query('SELECT id FROM rooms WHERE id=$1',[t.roomId])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM room_members WHERE room_id=$1',[t.roomId])).rowCount).toBe(2);
+      86 |   }
+      87 |  });
+
+      at Object.<anonymous> (test/play-session-capacity.integration.spec.ts:84:242)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        28.472 s
+Ran all test suites matching apps/api/test/play-session-capacity.integration.spec.ts.

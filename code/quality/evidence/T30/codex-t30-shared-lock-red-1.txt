@@ -1,0 +1,41 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:43156) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/t30-signaling-throughput.integration.spec.ts (32.836 s)
+  ● T30 signaling gateway throughput and guard batching › concurrent runtime read locks (FOR SHARE) allow other admissions in same call to progress while blocking rooms writer
+
+    eventually timed out after 1500ms
+
+      402 |     await new Promise((r) => setTimeout(r, interval));
+      403 |   }
+    > 404 |   throw new Error(`eventually timed out after ${timeout}ms`);
+          |         ^
+      405 | }
+      406 |
+      407 | jest.setTimeout(60000);
+
+      at eventually (test/t30-signaling-throughput.integration.spec.ts:404:9)
+      at test/t30-signaling-throughput.integration.spec.ts:1022:9
+
+  ● T30 signaling gateway throughput and guard batching › concurrent runtime read locks (FOR SHARE) allow other admissions in same call to progress while blocking call_groups writer
+
+    eventually timed out after 1500ms
+
+      402 |     await new Promise((r) => setTimeout(r, interval));
+      403 |   }
+    > 404 |   throw new Error(`eventually timed out after ${timeout}ms`);
+          |         ^
+      405 | }
+      406 |
+      407 | jest.setTimeout(60000);
+
+      at eventually (test/t30-signaling-throughput.integration.spec.ts:404:9)
+      at test/t30-signaling-throughput.integration.spec.ts:1022:9
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 12 skipped, 1 passed, 15 total
+Snapshots:   0 total
+Time:        33.302 s
+Ran all test suites within paths "apps/api/test/t30-signaling-throughput.integration.spec.ts".

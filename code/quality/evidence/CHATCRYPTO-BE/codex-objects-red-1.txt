@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:7076) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (32.395 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › stores opaque encrypted images, enforces draft ownership and atomically claims them in native Megolm messages
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      265 |   const metadata={clientUploadId:'encrypted-image-fixture',deviceId:'B',membershipRevision:revision,ciphertextSize:bytes.length,ciphertextSha256:createHash('sha256').update(bytes).digest('base64').replace(/=+$/,'')};
+      266 |   const upload=(data:unknown,auth=otherCookie,body=bytes)=>request(base).post('/api/v1/crypto/conversations/dm/attachments').set('Cookie',auth).set('Origin',origin).field('metadata',JSON.stringify(data)).attach('file',body,{filename:'private-name.png',contentType:'application/octet-stream'});
+    > 267 |   const created=await upload(metadata);expect(created.status).toBe(201);
+          |                                                               ^
+      268 |   expect(Object.keys(created.body).sort()).toEqual(['ciphertextSha256','ciphertextSize','conversationId','expiresAt','id']);
+      269 |   expect((await upload(metadata)).body).toEqual(created.body);
+      270 |   expect((await upload({...metadata,ciphertextSha256:Buffer.alloc(32).toString('base64')})).status).toBe(422);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:267:63)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 17 passed, 18 total
+Snapshots:   0 total
+Time:        32.908 s, estimated 38 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

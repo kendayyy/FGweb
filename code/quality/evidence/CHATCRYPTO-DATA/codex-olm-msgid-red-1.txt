@@ -1,0 +1,34 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/chat-crypto-transport.test.ts (8 tests | 1 failed) 69ms
+   ❯ crypto transport ownership and native SAS support (8)
+     × preserves bounded native Olm message IDs while rejecting plaintext extension fields 35ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > preserves bounded native Olm message IDs while rejecting plaintext extension fields
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:8:59
+      6|   const content={algorithm:'m.olm.v1.curve25519-aes-sha2',sender_key:k…
+      7|   const v={conversationId:'room',membershipRevision:1,deviceId:'A',tra…
+      8|   expect(c.SendCryptoToDeviceSchema.safeParse(v).success).toBe(true);
+       |                                                           ^
+      9|   expect(c.SendCryptoToDeviceSchema.safeParse({...v,recipients:[{...v.…
+     10|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  19:17:29
+   Duration  1.14s (transform 49%, import 42%, tests 8%, worker 1%)
+

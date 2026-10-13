@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const before=JSON.parse(fs.readFileSync('quality/evidence/T07-FIX2/before.json'));
+const journal=JSON.parse(fs.readFileSync('packages/database/migrations/meta/_journal.json'));
+assert.deepEqual(journal.entries.slice(0,-1),before.journal.entries);assert.equal(journal.entries.length,before.journal.entries.length+1);
+assert.equal(journal.entries.at(-1).tag,'0007_call_admissions');
+const old=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0006_snapshot.json')),current=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0007_snapshot.json'));
+for(const [name,table]of Object.entries(old.tables))assert.deepEqual(current.tables[name],table,`Previous table changed: ${name}`);
+assert.equal(Object.keys(current.tables).length,Object.keys(old.tables).length+1);assert(current.tables['public.call_admissions']);
+const sql=fs.readFileSync('packages/database/migrations/0007_call_admissions.sql','utf8');assert(!/^\s*(DROP|TRUNCATE|DELETE|UPDATE)\b/im.test(sql));
+assert.match(sql,/CREATE TABLE "call_admissions"/);assert.match(sql,/REFERENCES "session"\("id"\) ON DELETE cascade/);assert.match(sql,/REFERENCES "call_members"\("id"\) ON DELETE cascade/);
+console.log(JSON.stringify({oldTablesPreserved:Object.keys(old.tables).length,newTables:1,oldJournalEntriesPreserved:before.journal.entries.length,destructiveStatements:false,sessionAndMemberCascade:true}));

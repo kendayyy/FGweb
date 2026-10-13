@@ -1,0 +1,22 @@
+{"headed":true,"nativeSasAndMegolm":true,"proposedCspEnforced":true,"inlineInjectionBlocked":true,"actualEncryptedMarkupAsText":true,"noMarkupExecution":true,"noPlaintextTransportDbOrWebStorage":true,"indexedDbMarkerAbsent":true,"logoutSessionRevokedAndPrivateUiAbsent":true,"mainMutation":false}
+DrizzleQueryError: Failed query: select "id", "name", "email", "email_verified", "image", "created_at", "updated_at" from "user" where "user"."id" = $1
+params: loading_fe_d4f164f67af24875a0a682527c2676d8-bob
+    at NodePgPreparedQuery.queryWithCache (E:\FGweb\code\node_modules\src\pg-core\session.ts:73:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async <anonymous> (E:\FGweb\code\node_modules\src\node-postgres\session.ts:154:19)
+    at async Object.findOne (E:\FGweb\code\node_modules\@better-auth\drizzle-adapter\dist\index.mjs:358:17)
+    at async handleFallbackJoin (E:\FGweb\code\node_modules\@better-auth\core\dist\db\adapter\factory.mjs:367:55)
+    at async <anonymous> (E:\FGweb\code\node_modules\@better-auth\core\dist\db\adapter\factory.mjs:196:12)
+    at async transformOutput (E:\FGweb\code\node_modules\@better-auth\core\dist\db\adapter\factory.mjs:192:21)
+    at async Object.findOne (E:\FGweb\code\node_modules\@better-auth\core\dist\db\adapter\factory.mjs:593:54)
+    at async Object.findSession (E:\FGweb\code\node_modules\better-auth\dist\db\internal-adapter.mjs:343:19)
+    at async <anonymous> (E:\FGweb\code\node_modules\better-auth\dist\api\routes\session.mjs:153:19) {
+  query: 'select "id", "name", "email", "email_verified", "image", "created_at", "updated_at" from "user" where "user"."id" = $1',
+  params: [ 'loading_fe_d4f164f67af24875a0a682527c2676d8-bob' ],
+  cause: Error: Cannot use a pool after calling end on the pool
+      at E:\FGweb\code\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async <anonymous> (E:\FGweb\code\node_modules\src\node-postgres\session.ts:161:13)
+      at async NodePgPreparedQuery.queryWithCache (E:\FGweb\code\node_modules\src\pg-core\session.ts:71:12)
+      at async <anonymous> (E:\FGweb\code\node_modules\src\node-postgres\session.ts:154:19)
+}

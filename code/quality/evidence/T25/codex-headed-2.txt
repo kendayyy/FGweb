@@ -1,0 +1,69 @@
+
+Running 2 tests using 1 worker
+
+(node:1112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/2] quality\evidence\T25\roster.spec.ts:26:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room
+  1) quality\evidence\T25\roster.spec.ts:26:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room 
+
+    Error: PUT rooms/room_89d4f27d-e73f-4a07-b1a5-c0c3fbffd963/members/51808b95-0853-4ac9-98e8-91ec4fb20753/permissions
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 300
+    Received:   404
+
+      19 | async function inspect(){const id=randomUUID();return new Promise<Record<string,unknown>>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Fixture inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message);});fixture.send({kind:'inspect',id,roomId,playId});});}
+      20 | async function identity(context:BrowserContext,key:string){await context.addCookies([{name:'better-auth.session_token',value:actors[key].cookie,url:base,httpOnly:true,sameSite:'Lax'}]);}
+    > 21 | async function api(request:APIRequestContext,path:string,method='GET',body?:unknown){const result=await request.fetch(base+'/api/v1/'+path,{method,headers:{Origin:base},...(body===undefined?{}:{data:body})});expect(result.status(),`${method} ${path}`).toBeLessThan(300);return result.json();}
+         |                                                                                                                                                                                                                                                             ^
+      22 | async function inviteSetup(sender:APIRequestContext,recipient:APIRequestContext,receiverId:string){const invite=await api(sender,'invitations','POST',{targetType:'ROOM',roomId,receiverId});await api(recipient,`invitations/${invite.id}/respond`,'PATCH',{action:'ACCEPT'});}
+      23 | async function room(page:Page){await page.goto(base+`/rooms/${roomId}`);await expect(page.getByRole('region',{name:'Đội chơi trong phòng'})).toBeVisible();}
+      24 | async function refreshTeam(page:Page){await page.getByRole('button',{name:'Tải lại đội'}).click();}
+        at api (E:\FGweb\code\quality\evidence\T25\roster.spec.ts:21:253)
+        at E:\FGweb\code\quality\evidence\T25\roster.spec.ts:35:3
+
+    Error Context: .cache\t25\results\roster-native-public-apply-4b16c-ve-end-with-persistent-room\error-context.md
+
+    Error Context: .cache\t25\results\roster-native-public-apply-4b16c-ve-end-with-persistent-room\error-context.md
+
+
+(node:17880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[2/2] quality\evidence\T25\roster.spec.ts:77:1 › headed light/dark desktop/mobile preserve actual chat draft and exact native session
+  2) quality\evidence\T25\roster.spec.ts:77:1 › headed light/dark desktop/mobile preserve actual chat draft and exact native session 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Đội chơi trong phòng' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Đội chơi trong phòng' }) with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Đội chơi trong phòng' })
+
+
+      21 | async function api(request:APIRequestContext,path:string,method='GET',body?:unknown){const result=await request.fetch(base+'/api/v1/'+path,{method,headers:{Origin:base},...(body===undefined?{}:{data:body})});expect(result.status(),`${method} ${path}`).toBeLessThan(300);return result.json();}
+      22 | async function inviteSetup(sender:APIRequestContext,recipient:APIRequestContext,receiverId:string){const invite=await api(sender,'invitations','POST',{targetType:'ROOM',roomId,receiverId});await api(recipient,`invitations/${invite.id}/respond`,'PATCH',{action:'ACCEPT'});}
+    > 23 | async function room(page:Page){await page.goto(base+`/rooms/${roomId}`);await expect(page.getByRole('region',{name:'Đội chơi trong phòng'})).toBeVisible();}
+         |                                                                                                                                              ^
+      24 | async function refreshTeam(page:Page){await page.getByRole('button',{name:'Tải lại đội'}).click();}
+      25 |
+      26 | test('native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room',async({browser})=>{
+        at room (E:\FGweb\code\quality\evidence\T25\roster.spec.ts:23:142)
+        at E:\FGweb\code\quality\evidence\T25\roster.spec.ts:80:3
+
+    Error Context: .cache\t25\results\roster-headed-light-dark-d-0aa2e-ft-and-exact-native-session\error-context.md
+
+    Error Context: .cache\t25\results\roster-headed-light-dark-d-0aa2e-ft-and-exact-native-session\error-context.md
+
+
+  2 failed
+    quality\evidence\T25\roster.spec.ts:26:1 › native public apply, exact permissions, private roster, consent, 409, start/leave/end with persistent room 
+    quality\evidence\T25\roster.spec.ts:77:1 › headed light/dark desktop/mobile preserve actual chat draft and exact native session 

@@ -1,0 +1,54 @@
+{
+  "taskId": "T30",
+  "proposalId": "antigravity-native54-api500-attribution-1",
+  "targetFiles": [
+    {
+      "sourcePath": "quality/evidence/T30/api43-observer-reviewed1.mjs",
+      "proposalPath": "quality/evidence/T30/antigravity-native54-api500-attribution-1/api-observer-attributed1.mjs",
+      "changeSummary": "Wrap Promise-based Pool.prototype.connect to attribute poolIndex, backendPid, duration, and sanitized error enum; expand SAFE_SERVICE_OWNERS and wrap RoomsService, TeamsService, PlaySessionsService"
+    },
+    {
+      "sourcePath": "quality/evidence/T30/fixture-server-build2-api53-reviewed1.mjs",
+      "proposalPath": "quality/evidence/T30/antigravity-native54-api500-attribution-1/fixture-server-build2-api54-reviewed1.mjs",
+      "changeSummary": "Import api-observer-attributed1 and pass RoomsService, TeamsService, PlaySessionsService to instrumentOwnedApiServices"
+    }
+  ],
+  "invariants": {
+    "promiseBasedPoolConnectObserved": true,
+    "callbackConnectUnchanged": true,
+    "fixedErrorEnumsEnforced": true,
+    "rawErrorMessageAndStackExcluded": true,
+    "serviceContextChainedToHttp": true,
+    "boundedBufferEnforced": true,
+    "appSourceUntouched": true,
+    "timeoutsUnmodified": true,
+    "locksAndAuthorityUnweakened": true
+  },
+  "reconstructionProof": {
+    "script": "quality/evidence/T30/antigravity-native54-api500-attribution-1/reconstruction.proof.mjs",
+    "baselineObserver": "quality/evidence/T30/api43-observer-reviewed1.mjs",
+    "baselineFixture": "quality/evidence/T30/fixture-server-build2-api53-reviewed1.mjs"
+  },
+  "controlsRunner": {
+    "script": "quality/evidence/T30/antigravity-native54-api500-attribution-1/test-controls.mjs",
+    "scenariosCovered": [
+      "classifyPoolAcquireTimeout",
+      "classifyConnectionTimeout",
+      "classifyConnectionRefused",
+      "classifyConnectionReset",
+      "classifyPoolEnded",
+      "classifySqlState",
+      "classifyGenericFallback",
+      "normalPoolConnectUnderService",
+      "poolAcquireTimeoutExhaustionUnderService",
+      "callbackPathPreservedUnchanged",
+      "teamsServiceTransactionContext"
+    ]
+  },
+  "disclaimers": {
+    "executedInThisTurn": false,
+    "acceptanceClaimed": false,
+    "hardwareCauseInferred": false,
+    "readyForCodexReview": true
+  }
+}

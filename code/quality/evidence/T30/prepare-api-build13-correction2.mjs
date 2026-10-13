@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',old=JSON.parse(fs.readFileSync(d+'/api-build-before-13.json','utf8')),declaration='apps/api/dist/modules/calls/call-lifecycle.service.d.ts';
+const current=fs.readFileSync(declaration,'utf8'),added=new Set(['private readonly coalescers;','private readonly inFlight;','private runGroup;','private reconcilePass;']);
+let removed=0;const previous=current.split(/(?<=\n)/).filter(line=>{if(added.has(line.trim())){removed++;return false;}return true;}).join('');assert.equal(removed,4);assert.equal(createHash('sha256').update(previous).digest('hex'),old.files[declaration],'Public declaration changed beyond four private members');
+let script=fs.readFileSync(d+'/adopt-api-build-13-reviewed1.mjs','utf8').replaceAll('before-12','before-13');
+const original="allowed=['apps/api/dist/modules/calls/call-lifecycle.service.js','apps/api/dist/modules/calls/call-lifecycle.service.js.map']";assert(script.includes(original));script=script.replace(original,"allowed=['apps/api/dist/modules/calls/call-lifecycle.service.js','apps/api/dist/modules/calls/call-lifecycle.service.js.map','apps/api/dist/modules/calls/call-lifecycle.service.d.ts']");
+script=script.replace('API two build files','API three build files');
+script=script.replace('only reviewed call-lifecycle.service.js/.map changed','only reviewed call-lifecycle.service.js/.map and four private .d.ts members changed');
+fs.writeFileSync(d+'/adopt-api-build-13-reviewed2.mjs',script,{flag:'wx'});
+fs.writeFileSync(d+'/api-build13-declaration-review2.json',JSON.stringify({at:new Date().toISOString(),reviewer:'Codex',privateMembersAdded:Array.from(added),publicDeclarationReverseExact:true,beforeSnapshot:d+'/api-build-before-13.json',onlyThreeCompiledChanges:['call-lifecycle.service.js','call-lifecycle.service.js.map','call-lifecycle.service.d.ts'],firstAdoptionFailedBeforeAnyLedgerWrite:true},null,2)+'\n',{flag:'wx'});

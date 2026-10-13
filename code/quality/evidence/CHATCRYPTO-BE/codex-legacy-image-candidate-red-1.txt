@@ -1,0 +1,56 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:26184) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (43.513 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    ZodError: [
+      {
+        "code": "invalid_value",
+        "values": [
+          "encrypt"
+        ],
+        "path": [
+          "images",
+          0,
+          "secret",
+          "key",
+          "key_ops",
+          0
+        ],
+        "message": "Invalid input: expected \"encrypt\""
+      },
+      {
+        "code": "invalid_value",
+        "values": [
+          "decrypt"
+        ],
+        "path": [
+          "images",
+          0,
+          "secret",
+          "key",
+          "key_ops",
+          1
+        ],
+        "message": "Invalid input: expected \"decrypt\""
+      }
+    ]
+
+      191 |   try{
+      192 |    const upload=await request(base).post('/api/v1/crypto/conversations/legacy/legacy/uploads').set('Cookie',cookies.get('alice')!).set('Origin',origin).field('metadata',JSON.stringify({clientUploadId:'native-image-candidate',deviceId:'A',membershipRevision:revision,cohortId:'available',ciphertextSize:imageBytes.length,ciphertextSha256:sha(imageBytes)})).attach('file',imageBytes,{filename:'opaque.bin',contentType:'application/octet-stream'});expect(upload.status).toBe(201);imageDraft=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[upload.body.id])).rows[0];
+    > 193 |    const imageArchive=LegacyImportedContentSchema.parse({...archive,fg:{...archive.fg,candidateId:'native-image-roundtrip',originalSha256:digests.get('msg-b')},source:manifests.get('msg-b'),images:[{attachmentId:imageId,secret:JSON.parse(imageInfo)}]}),imageEvent=JSON.parse(await alice.encryptRoomEvent(room,'m.room.message',JSON.stringify(imageArchive))),mapping={attachmentId:imageId,draftId:upload.body.id,plaintextSha256:sha(image),ciphertextSha256:sha(imageBytes)},imageInput={candidateId:imageArchive.fg.candidateId,messageId:'msg-b',originalSha256:digests.get('msg-b'),deviceId:'A',membershipRevision:revision,cohortId:'available',envelope:{version:1,protocol:'MATRIX_MEGOLM',event:imageEvent},attachmentMappings:[mapping]},imageCandidate=await write('conversations/legacy/legacy/commit',imageInput);expect(imageCandidate.status).toBe(201);expect(imageCandidate.body.attachmentIds).toEqual([imageId]);expect((await write('conversations/legacy/legacy/commit',imageInput)).body).toEqual(imageCandidate.body);
+          |                                                   ^
+      194 |    const file=(user='bob',deviceId=user==='alice'?'A':user==='bob'?'B':'C',cohortId='available')=>request(base).get('/api/v1/crypto/conversations/legacy/legacy/candidates/'+imageCandidate.body.candidateId+'/attachments/'+imageId).set('Cookie',cookies.get(user)!).query({deviceId,cohortId});
+      195 |    for(const machine of [alice,bob]){const user=fg(machine.userId.toString()),outer=await request(base).get('/api/v1/crypto/conversations/legacy/legacy/candidates/'+imageCandidate.body.candidateId).set('Cookie',cookies.get(user)!).query({deviceId:machine.deviceId.toString(),cohortId:'available'});expect(outer.status).toBe(200);expect(outer.body).toEqual(imageCandidate.body);const decoded=await machine.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:alice.userId.toString(),event_id:'$native-image-roundtrip',origin_server_ts:Date.now(),content:outer.body.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));expect(decoded.senderCurve25519Key).toBe(alice.identityKeys.curve25519.toBase64());const actual=JSON.parse(decoded.event).content;expect(actual).toEqual(imageArchive);const ciphertext=await file(user);expect(ciphertext.status).toBe(200);expect(ciphertext.headers['cache-control']).toBe('no-store');expect(ciphertext.headers['content-type']).toBe('application/octet-stream');expect(ciphertext.body).toEqual(imageBytes);expect(Buffer.from(sdk.Attachment.decrypt(new sdk.EncryptedAttachment(new Uint8Array(ciphertext.body),JSON.stringify(actual.images[0].secret))))).toEqual(image);const bindings={candidateId:outer.body.candidateId,messageId:outer.body.messageId,originalSha256:outer.body.originalSha256,envelopeSha256:outer.body.envelopeSha256,attachmentDigests:[{attachmentId:imageId,plaintextSha256:sha(image),ciphertextSha256:sha(imageBytes)}]};expect((await attest(await receipt(machine,bindings),user)).status).toBe(201);}
+      196 |    expect((await file('outsider')).status).toBe(403);expect((await file('bob','AFTER_BOB_COHORT')).status).toBe(403);expect((await file('bob','B','verified')).status).toBe(404);expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_attestations WHERE candidate_id=$1',[imageCandidate.body.candidateId])).rows[0].count).toBe(2);
+
+      at test/chat-crypto-legacy.integration.spec.ts:193:51
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:154:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        44.076 s, estimated 51 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

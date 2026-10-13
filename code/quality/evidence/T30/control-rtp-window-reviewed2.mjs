@@ -1,0 +1,17 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';import ts from 'typescript';
+import {actorSnapshot,observeFailure} from './rtp-window-reviewed2/failure-observer.mjs';
+const d='quality/evidence/T30',review=JSON.parse(fs.readFileSync(d+'/rtp-window-source-review2.json'));
+const results=[];
+const stats={type:'outbound-rtp',kind:'video',bytesSent:24000,packetsSent:50,framesEncoded:40,framesSent:40,frameWidth:640,frameHeight:349,framesPerSecond:12,qualityLimitationReason:'cpu',privatePayload:'CONTROL_SECRET_DO_NOT_PERSIST'};
+const browser=(fail=false)=>({window:{t30Peers:[{getStats:async()=>{if(fail)throw Error('CONTROL_SECRET_DO_NOT_PERSIST');return new Map([['r',stats]]);}}],t30Captures:[]},document:{querySelectorAll:()=>[],visibilityState:'visible'},MediaStream:class{},Date});
+const page=ctx=>({isClosed:()=>false,evaluate:fn=>vm.runInNewContext('('+fn.toString()+')()',ctx),bringToFront:()=>{throw Error('foreground mutation forbidden');}});
+async function control(name,win,options={},expected=true){const evidence=d+'/t30-native-'+randomUUID().replaceAll('-','');fs.mkdirSync(evidence);let threw=false;try{await observeFailure(evidence,new Map([['viewer',win]]),options);}catch{threw=true;}const raw=fs.readFileSync(evidence+'/post-failure-media-state.json','utf8'),proof=JSON.parse(raw);assert.equal(proof.observationComplete,expected);assert.equal(threw,!expected);assert(!raw.includes('CONTROL_SECRET_DO_NOT_PERSIST'));results.push({name,evidence,expectedComplete:expected,actualComplete:proof.observationComplete,threw});return proof;}
+const healthy=await control('actual browser snapshot function whitelist', {page:page(browser())});assert.equal(healthy.actors[0].rows[0].framesEncoded,40);assert.equal(healthy.actors[0].rows[0].qualityLimitationReason,'cpu');
+await control('getStats rejection never complete',{page:page(browser(true))},{},false);
+await control('total deadline never complete',{page:{isClosed:()=>false,evaluate:()=>new Promise(()=>{})}},{timeoutMs:5},false);
+await control('closed actor never silently skipped',{page:{isClosed:()=>true}},{},false);
+const missing=browser();delete missing.window.t30Peers;await control('missing observation never complete',{page:page(missing)},{},false);
+const io=d+'/t30-native-'+randomUUID().replaceAll('-','');fs.mkdirSync(io);fs.mkdirSync(io+'/post-failure-media-state.json');await assert.rejects(observeFailure(io,new Map([['viewer',{page:page(browser())}]])));results.push({name:'persistence failure propagates',evidence:io,threw:true});
+for(const file of Object.keys(review.files).filter(n=>n.endsWith('.ts'))){const parsed=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,reportDiagnostics:true,compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}});assert.equal((parsed.diagnostics??[]).filter(x=>x.category===ts.DiagnosticCategory.Error).length,0);}
+assert.equal(fs.readFileSync('tests/e2e/screen-share.spec.ts','utf8').includes('observeFailure'),false);
+const proof={recordedAt:new Date().toISOString(),results,controls:6,controlsOnly:true,notNativeOrGuiProof:true,exactSourceReview:review,nativeAcceptance:false};fs.writeFileSync(d+'/rtp-window-controls-review2.json',JSON.stringify(proof,null,2)+'\n',{flag:'wx'});console.log('6 observation controls passed; TS parsing passed; no native acceptance claim.');

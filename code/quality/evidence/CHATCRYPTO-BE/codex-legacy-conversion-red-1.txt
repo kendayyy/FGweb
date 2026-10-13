@@ -1,0 +1,30 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:18276) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (74.648 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      276 |      await withReaderClone(async(pool,base,readerApp)=>{
+      277 |       type Converted={operationId:string;conversationId:string;phase:'DB_CONVERTED';membershipRevision:number;nextLiveRevision:number;sourceCount:number;attachmentCount:number};type Converter=CryptoLegacyService&{convertStagedReconciliation:(actor:{userId:string;sessionId:string},id:string,input:unknown)=>Promise<Converted>};const converter=readerApp.get(CryptoLegacyService) as Converter,actor={userId:'alice',sessionId:'alice-session'},convert=()=>converter.convertStagedReconciliation(actor,'legacy',gateInput);
+    > 278 |       expect(typeof converter.convertStagedReconciliation).toBe('function');const originalMessages=(await pool.query('SELECT * FROM messages ORDER BY id')).rows,originalAttachment=(await pool.query('SELECT * FROM attachments WHERE id=$1',[imageId])).rows[0],originalDraft=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[imageDraft!.id])).rows[0];
+          |                                                            ^
+      279 |       await pool.query(`CREATE FUNCTION conversion_update_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.id='msg-b' AND NEW.encryption_mode='E2EE' THEN RAISE EXCEPTION 'fixture conversion update fault'; END IF; RETURN NEW; END $$`);await pool.query(`CREATE TRIGGER conversion_update_fault BEFORE UPDATE ON messages FOR EACH ROW EXECUTE FUNCTION conversion_update_fault()`);
+      280 |       try{await expect(convert()).rejects.toThrow('fixture conversion update fault');expect((await pool.query('SELECT * FROM messages ORDER BY id')).rows).toEqual(originalMessages);expect((await pool.query('SELECT * FROM attachments WHERE id=$1',[imageId])).rows[0]).toEqual(originalAttachment);expect((await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[imageDraft!.id])).rows[0]).toEqual(originalDraft);expect((await pool.query("SELECT phase FROM chat_crypto_legacy_stages WHERE id=$1",[staged.operationId])).rows[0].phase).toBe('STAGED');expect((await pool.query("SELECT migration_state FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].migration_state).toBe('LEGACY_PENDING');}finally{await pool.query('DROP TRIGGER conversion_update_fault ON messages');await pool.query('DROP FUNCTION conversion_update_fault()');}
+      281 |       const [converted,retry]=await Promise.all([convert(),convert()]);expect(converted).toEqual(retry);expect(converted).toMatchObject({operationId:staged.operationId,conversationId:'legacy',phase:'DB_CONVERTED',membershipRevision:revision,nextLiveRevision:revision+1,sourceCount:3,attachmentCount:1});
+
+      at test/chat-crypto-legacy.integration.spec.ts:278:60
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:45:218)
+      at test/chat-crypto-legacy.integration.spec.ts:276:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:99:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:163:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        75.188 s, estimated 82 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

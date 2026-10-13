@@ -1,0 +1,25 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24160) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (91.886 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rejects a ban committed during an actual epoch wait with connection default repeatable read
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      685 |   try{
+      686 |    await holder.query('BEGIN');const identity=(await holder.query('SELECT current_schema() AS schema,pg_backend_pid() AS pid')).rows[0];expect(identity.schema).toBe(owned);await holder.query('SELECT conversation_id FROM chat_crypto_state WHERE conversation_id=$1 FOR UPDATE',[conversation]);pending=relay.sendMessage(actor,conversation,payload).then(value=>({value}),error=>({error}));const deadline=Date.now()+3000;while(!(await pool.query('SELECT 1 FROM pg_stat_activity WHERE $1=ANY(pg_blocking_pids(pid))',[identity.pid])).rowCount){if(Date.now()>deadline)throw new Error('Expected native late-ban epoch wait');await new Promise(resolve=>setTimeout(resolve,20));}
+    > 687 |    await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason,created_at) VALUES($1,'alice','bob','BAN','owned final actor authority',clock_timestamp())",[ban]);expect((await pool.query("SELECT action FROM admin_actions WHERE target_user_id='bob' AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1")).rows[0].action).toBe('BAN');await holder.query('ROLLBACK');const response=await pending;expect(response.error).toBeDefined();const error=response.error as {getStatus:()=>number};expect(error.getStatus()).toBe(403);expect((await pool.query('SELECT id FROM messages WHERE conversation_id=$1 AND client_message_id=$2',[conversation,tag])).rowCount).toBe(0);expect((await pool.query('SELECT session_id FROM chat_crypto_outbound_sessions WHERE session_id=$1',[String(event.session_id).replace(/=+$/,'')])).rowCount).toBe(0);expect((await pool.query(`SELECT count(*) AS count FROM notifications WHERE data::jsonb->>'conversationId'=$1`,[conversation])).rows[0].count).toBe(noticesBefore);
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+      688 |   }finally{await holder.query('ROLLBACK');holder.release();await pending?.catch(()=>{});observer.mockRestore();for(const [client,setting]of previous)await client.query("SELECT set_config('default_transaction_isolation',$1,false)",[setting]);await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);}
+      689 |  });
+      690 |
+
+      at test/chat-crypto-devices.integration.spec.ts:687:459
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 48 passed, 49 total
+Snapshots:   0 total
+Time:        92.332 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

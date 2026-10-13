@@ -1,0 +1,96 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/chat-crypto-legacy-candidate.test.ts (11 tests | 11 failed) 38ms
+   ❯ Native legacy candidate and attestation boundary (11)
+     × separates prepared ciphertext from reconciliation and retains actual importer identity 10ms
+     × requires all source/candidate/device/image bindings and native signature structure on roundtrip attestations 2ms
+     × rejects verified in recipient attestations 1ms
+     × rejects privateKey in recipient attestations 1ms
+     × rejects recoveryCode in recipient attestations 1ms
+     × rejects decryptedText in recipient attestations 1ms
+     × rejects adminOverride in recipient attestations 1ms
+     × rejects absent signatures, duplicate source image digests and malformed ciphertext/source hashes 1ms
+     × accepts only original-to-candidate attachment mappings in preparation, never plaintext descriptors 13ms
+     × requires server-checked source counts and revision rather than client reconciliation claims 1ms
+     × requires importer provenance for imported messages and rejects importer claims on live messages 3ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > separates prepared ciphertext from reconciliation and retains actual importer identity
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-candidate.test.ts:9:137
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > requires all source/candidate/device/image bindings and native signature structure on roundtrip attestations
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-candidate.test.ts:10:170
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects verified in recipient attestations
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects privateKey in recipient attestations
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects recoveryCode in recipient attestations
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects decryptedText in recipient attestations
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects adminOverride in recipient attestations
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-candidate.test.ts:11:178
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > rejects absent signatures, duplicate source image digests and malformed ciphertext/source hashes
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-candidate.test.ts:12:158
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > accepts only original-to-candidate attachment mappings in preparation, never plaintext descriptors
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "attachmentMappings"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"attachmentMappings\""
+  }
+]
+ ❯ test/chat-crypto-legacy-candidate.test.ts:14:313
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > requires server-checked source counts and revision rather than client reconciliation claims
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-candidate.test.ts:17:149
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > requires importer provenance for imported messages and rejects importer claims on live messages
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "importProvenance"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"importProvenance\""
+  }
+]
+ ❯ test/chat-crypto-legacy-candidate.test.ts:20:38
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed (11)
+   Start at  04:50:40
+   Duration  1.17s (transform 52%, import 40%, tests 5%, worker 3%)
+

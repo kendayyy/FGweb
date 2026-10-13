@@ -1,0 +1,27 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17072) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (70.498 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    error: cannot insert a non-DEFAULT value into column "call_state"
+
+      42 |    expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);expect(clone).toMatch(/^crypto_be_[a-f0-9]{32}$/);expect(clone).not.toBe(owned);await readerPool.query(`CREATE SCHEMA "${clone}"`);const client=await readerPool.connect();try{await migrate(drizzle(client),{migrationsFolder:'packages/database/migrations',migrationsSchema:clone});}finally{client.release();}
+      43 |    const tables=(await pool.query("SELECT tablename FROM pg_tables WHERE schemaname=$1 AND tablename<>'__drizzle_migrations' ORDER BY tablename",[owned])).rows.map((row:{tablename:string})=>row.tablename);let pending=[...tables];
+    > 44 |    while(pending.length){const retry:string[]=[];for(const table of pending){expect(table).toMatch(/^[a-z_][a-z0-9_]*$/);try{await readerPool.query(`INSERT INTO "${clone}"."${table}" SELECT * FROM "${owned}"."${table}"`);}catch(error){if(['23503','23514'].includes((error as {code?:string}).code??''))retry.push(table);else throw error;}}if(retry.length===pending.length)throw new Error('Owned reader clone dependency copy failed');pending=retry;}
+         |                                                                                                                              ^
+      45 |    process.env.DATABASE_URL=url.href;readerApp=await NestFactory.create(FixtureApp,{logger:false,bodyParser:false,abortOnError:false});configureFgHttpBodyParsers(readerApp);await readerApp.listen(0,'127.0.0.1');await action(readerPool,await readerApp.getUrl());
+      46 |   }finally{try{await readerApp?.close();}finally{try{expect(clone).toMatch(/^crypto_be_[a-f0-9]{32}$/);await readerPool.query(`DROP SCHEMA IF EXISTS "${clone}" CASCADE`);}finally{await readerPool.end();process.env=priorEnv;}}}
+      47 |  }
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:44:126)
+      at test/chat-crypto-legacy.integration.spec.ts:277:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:99:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:163:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        71.061 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

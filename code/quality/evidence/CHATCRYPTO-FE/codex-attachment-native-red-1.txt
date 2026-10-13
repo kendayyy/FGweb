@@ -1,0 +1,41 @@
+✖ native Matrix attachment roundtrip with v2 secret; ciphertext has no source bytes (59.1419ms)
+✖ same bytes have independent native encryption keys and IVs (3.255ms)
+✖ native integrity rejects changed or truncated encrypted bytes (0.6557ms)
+✔ attachment limits and strict descriptor reject empty, oversized, plaintext and unknown fields (12.0324ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1051.5595
+
+✖ failing tests:
+
+test at apps\web\test\crypto-attachments.native.ts:1:422
+✖ native Matrix attachment roundtrip with v2 secret; ciphertext has no source bytes (59.1419ms)
+  Error [PrivateAttachmentError]: PRIVATE_ATTACHMENT_INVALID
+      at encryptAttachmentBytes (E:\FGweb\code\apps\web\src\features\crypto\attachments.ts:9:9)
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-attachments.native.ts:8:21)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at apps\web\test\crypto-attachments.native.ts:1:785
+✖ same bytes have independent native encryption keys and IVs (3.255ms)
+  Error [PrivateAttachmentError]: PRIVATE_ATTACHMENT_INVALID
+      at encryptAttachmentBytes (E:\FGweb\code\apps\web\src\features\crypto\attachments.ts:9:9)
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-attachments.native.ts:14:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at apps\web\test\crypto-attachments.native.ts:1:1099
+✖ native integrity rejects changed or truncated encrypted bytes (0.6557ms)
+  Error [PrivateAttachmentError]: PRIVATE_ATTACHMENT_INVALID
+      at encryptAttachmentBytes (E:\FGweb\code\apps\web\src\features\crypto\attachments.ts:9:9)
+      at TestContext.<anonymous> (E:\FGweb\code\apps\web\test\crypto-attachments.native.ts:19:21)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:29144) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (90.053 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › restores authenticated DB/object backup after separate-key rotation through actual app ACLs and native client decryption
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 422
+
+      127 |    const targetUrl=new URL(originalUrl);targetUrl.searchParams.set('options','-c search_path='+target);Object.assign(process.env,{DATABASE_URL:targetUrl.href,FG_CRYPTO_OBJECTS_DIR:path.join(targetStorage,'encrypted'),FG_UPLOADS_DIR:path.join(targetStorage,'legacy-images')});
+      128 |    restoredApp=await NestFactory.create(AppModule,{logger:false,bodyParser:false,abortOnError:false});configureFgHttpBodyParsers(restoredApp);await restoredApp.listen(0,'127.0.0.1');const restoredBase=await restoredApp.getUrl();
+    > 129 |    let item:ReturnType<typeof EncryptedMessageSchema.parse>|undefined,cursor:string|null=null;const restoredIds=new Set<string>();for(let page=0;page<10;page++){const history=await request(restoredBase).get('/api/v1/crypto/conversations/dm/messages').query({limit:50,...(cursor?{cursor}:{})}).set('Cookie',cookies.alice);expect(history.status).toBe(200);const decoded=createPageSchema(EncryptedMessageSchema).parse(history.body);for(const row of decoded.items){expect(restoredIds.has(row.id)).toBe(false);restoredIds.add(row.id);}item=decoded.items.find(row=>row.id===sent.body.id);if(item||!decoded.hasMore)break;expect(decoded.nextCursor).toBeTruthy();expect(decoded.nextCursor).not.toBe(cursor);cursor=decoded.nextCursor;}expect(item).toBeDefined();if(!item)throw new Error('Restored native message absent across bounded pages');
+          |                                                                                                                                                                                                                                                                                                                                                         ^
+      130 |
+      131 |    const decrypted=await machine.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:machine.userId.toString(),event_id:'$'+item.id,origin_server_ts:Date.now(),content:item.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));expect(JSON.parse(decrypted.event).content.body).toBe('private-backup-image');
+      132 |    const lost=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('alice')),new sdk.DeviceId('BACKUP_WITHOUT_CLIENT_KEYS'));try{await expect(lost.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:machine.userId.toString(),event_id:'$'+item.id,origin_server_ts:Date.now(),content:item.envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted))).rejects.toMatchObject({code:sdk.DecryptionErrorCode.MissingRoomKey});}finally{lost.close();}
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:129:345)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        90.527 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"519c6d56c8824430808c231800cd7c12","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

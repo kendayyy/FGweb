@@ -1,0 +1,60 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:38784) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-transit-rejection.integration.spec.ts (21.21 s)
+  ● native TLS negative Transit decode buffer lifecycle › zeroes rejected decoded bytes for wrong binding
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      30 |    observer=jest.spyOn(Buffer,'from');observer.mockImplementation(((...args:unknown[]):Buffer=>{const bytes:Buffer=Reflect.apply(original,Buffer,args);if(args[0]===encoded&&args[1]==='base64')captured.push(bytes);return bytes;}) as typeof Buffer.from);
+      31 |    await expect(transit.decrypt({version:1,protocol:'OPENBAO_TRANSIT_AES256GCM',keyId:'fg-lobby',keyVersion:1,ciphertext:'vault:v1:YQ=='},binding)).rejects.toMatchObject({reason:fault==='wrong binding'?'INTEGRITY':'INVALID_ENVELOPE'});
+    > 32 |    expect(captured).toHaveLength(1);expect(captured[0].every(byte=>byte===0)).toBe(true);
+         |                                                                               ^
+      33 |   }finally{observer?.mockRestore();for(const socket of sockets)socket.destroy();if(server)await new Promise<void>((resolve,reject)=>server!.close(error=>error?reject(error):resolve()));expect(root.startsWith(owner+path.sep)).toBe(true);expect(fs.realpathSync(root)).toBe(root);fs.rmSync(root,{recursive:true});}
+      34 |  });
+      35 | });
+
+      at test/chat-crypto-transit-rejection.integration.spec.ts:32:79
+
+  ● native TLS negative Transit decode buffer lifecycle › zeroes rejected decoded bytes for wrong header
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      30 |    observer=jest.spyOn(Buffer,'from');observer.mockImplementation(((...args:unknown[]):Buffer=>{const bytes:Buffer=Reflect.apply(original,Buffer,args);if(args[0]===encoded&&args[1]==='base64')captured.push(bytes);return bytes;}) as typeof Buffer.from);
+      31 |    await expect(transit.decrypt({version:1,protocol:'OPENBAO_TRANSIT_AES256GCM',keyId:'fg-lobby',keyVersion:1,ciphertext:'vault:v1:YQ=='},binding)).rejects.toMatchObject({reason:fault==='wrong binding'?'INTEGRITY':'INVALID_ENVELOPE'});
+    > 32 |    expect(captured).toHaveLength(1);expect(captured[0].every(byte=>byte===0)).toBe(true);
+         |                                                                               ^
+      33 |   }finally{observer?.mockRestore();for(const socket of sockets)socket.destroy();if(server)await new Promise<void>((resolve,reject)=>server!.close(error=>error?reject(error):resolve()));expect(root.startsWith(owner+path.sep)).toBe(true);expect(fs.realpathSync(root)).toBe(root);fs.rmSync(root,{recursive:true});}
+      34 |  });
+      35 | });
+
+      at test/chat-crypto-transit-rejection.integration.spec.ts:32:79
+
+  ● native TLS negative Transit decode buffer lifecycle › zeroes rejected decoded bytes for oversized body
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      30 |    observer=jest.spyOn(Buffer,'from');observer.mockImplementation(((...args:unknown[]):Buffer=>{const bytes:Buffer=Reflect.apply(original,Buffer,args);if(args[0]===encoded&&args[1]==='base64')captured.push(bytes);return bytes;}) as typeof Buffer.from);
+      31 |    await expect(transit.decrypt({version:1,protocol:'OPENBAO_TRANSIT_AES256GCM',keyId:'fg-lobby',keyVersion:1,ciphertext:'vault:v1:YQ=='},binding)).rejects.toMatchObject({reason:fault==='wrong binding'?'INTEGRITY':'INVALID_ENVELOPE'});
+    > 32 |    expect(captured).toHaveLength(1);expect(captured[0].every(byte=>byte===0)).toBe(true);
+         |                                                                               ^
+      33 |   }finally{observer?.mockRestore();for(const socket of sockets)socket.destroy();if(server)await new Promise<void>((resolve,reject)=>server!.close(error=>error?reject(error):resolve()));expect(root.startsWith(owner+path.sep)).toBe(true);expect(fs.realpathSync(root)).toBe(root);fs.rmSync(root,{recursive:true});}
+      34 |  });
+      35 | });
+
+      at test/chat-crypto-transit-rejection.integration.spec.ts:32:79
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        21.674 s
+Ran all test suites matching apps/api/test/chat-crypto-transit-rejection.integration.spec.ts.

@@ -1,0 +1,29 @@
+The Round 2 proposal has been prepared strictly under [`quality/evidence/T30/antigravity-shared-read-lock-review-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1):
+
+### 1. Proposed Files & SHA-256 Hashes
+
+| Proposal Path | SHA-256 | Description |
+| :--- | :--- | :--- |
+| [`quality/evidence/T30/antigravity-shared-read-lock-review-1/signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/signaling-gateway.ts) | `dc7469277194c2f2fae3b6dd8b35f75d454f61c59f263daab8975e3cec95de67` | **Byte-identical copy of Round 1 source proposal**. Implements `type LeaseLockMode = 'FOR UPDATE' \| 'FOR SHARE';`, retaining canonical `'FOR UPDATE'` for `authorize` and connected admission upgrade, and `'FOR SHARE'` for runtime [`live()`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/signaling-gateway.ts#L163) and [`processBatch()`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/signaling-gateway.ts#L322). |
+| [`quality/evidence/T30/antigravity-shared-read-lock-review-1/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/t30-signaling-throughput.integration.spec.ts) | `89d1f3a3a5ebf5b4dbda993e71ed0dc3c2584e20bb240f1cb5c22fe3d4efe809` | Preserves all 12 original executed test callbacks verbatim. Corrects the added tests to address all Codex reviewer findings; yields **15 total executed test cases**. |
+| [`quality/evidence/T30/antigravity-shared-read-lock-review-1/review-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/review-notes.md) | `a8c671b11001a437ecb3a86fc2c48a7a5ddbad0281b47e6dfc673354780d3e09` | Documents the pre-run rejection of Round 1 tests, Round 2 corrections, lock invariants, and expected test accounting. |
+
+---
+
+### 2. Summary of Round 2 Test Corrections
+
+1. **Bounded Concurrency Assertion (<= 1500ms vs 3000ms Native RPC Deadline)**:
+   - In [`it.each(['rooms', 'call_groups'] as const)`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-shared-read-lock-review-1/t30-signaling-throughput.integration.spec.ts#L880-L1031), both clients are fully connected before Client 1's `addTrack` reaches the fake SFU `GetParticipant` barrier.
+   - Client 2's PING/PONG is required to arrive within **<= 1500ms** while explicitly verifying that `barrierReleased === false` and `client1.closed === false`.
+2. **Room & Call Group Writer Probes with Canonical Hierarchy**:
+   - Covers both `'rooms'` and `'call_groups'` variants with distinct synthetic user IDs per variant.
+   - For `call_groups`, the external writer acquires `rooms FOR SHARE` followed by `call_groups FOR UPDATE`, isolating contention specifically on the call group row.
+   - Real `pg_blocking_pids` confirms the writer is blocked while Client 1 remains open and the barrier is unreleased.
+   - Upon barrier release, Client 1's track is verified forwarded to the upstream SFU, Client 1 remains open, and the writer unblocks and completes.
+3. **Canonical Permission Check Alignment in External Writer Test**:
+   - In the separate external-writer test, revoking `call_publish_slots` removes `SCREEN_SHARE` from `publicationSources`.
+   - In `processClientFrame`, `!permission.canPublishSources.includes(track.source)` evaluates to `true` first, correctly returning `RequestResponse_Reason.NOT_ALLOWED` with `'Current publication source denied'`.
+4. **Leak-Proof Resource Cleanup**:
+   - The `finally` blocks explicitly release the RPC barrier first (`rpcReleaseFn?.()`), terminate client WebSockets, catch/settle any pending `writerPromise`, rollback and release writer connections, and close the gateway and SFU instances.
+
+*No production source, dist, tests, git ledger, or history files were altered. No build or test commands were run. Ready for Codex review and test execution.*

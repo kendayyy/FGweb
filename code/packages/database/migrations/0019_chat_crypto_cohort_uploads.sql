@@ -1,0 +1,2 @@
+ALTER TABLE "chat_crypto_upload_drafts" ADD COLUMN "cohort_id" text;--> statement-breakpoint
+ALTER TABLE "chat_crypto_upload_drafts" ADD CONSTRAINT "chat_crypto_upload_drafts_cohort_id_conversation_id_chat_crypto_history_cohorts_id_conversation_id_fk" FOREIGN KEY ("cohort_id","conversation_id") REFERENCES "chat_crypto_history_cohorts"("id","conversation_id") ON DELETE restrict ON UPDATE no action;

@@ -1,0 +1,285 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts test/call-gateway.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:13184) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL test/call-admission.integration.spec.ts (45.308 s)
+  ● T26 native HTTP/PostgreSQL call admission › uses an opaque session-bound identity and gives a new identity after leaving
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);}
+         |                                                                                                                            ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:124)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › expires unconnected reservations before allocating the last available seat
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);}
+         |                                                                                                                            ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:124)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+  ● T26 native HTTP/PostgreSQL call admission › creates the actual SFU room with a server-side maximum of ten
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);}
+         |                                                                                                                            ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:124)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:51:3)
+
+
+  ● Test suite failed to run
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      54 |   for(const id of actors)await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      55 |  });
+    > 56 |  async function cleanupSfu(){if(!sfu||!created)return;for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);}
+         |                                                                                                                            ^
+      57 |  const post=(url:string,user='owner',body:object={})=>request(base).post('/api/v1/'+url).set('Cookie',cookies[user]).set('Origin',origin).send(body);
+      58 |  const get=(url:string,user='owner')=>request(base).get('/api/v1/'+url).set('Cookie',cookies[user]);
+      59 |  async function room(){
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at cleanupSfu (test/call-admission.integration.spec.ts:56:124)
+      at Object.<anonymous> (test/call-admission.integration.spec.ts:47:7)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL test/call-gateway.integration.spec.ts (21.827 s)
+  ● T26 private native SFU gateway authorization › native room removal revokes an existing participant and replay without deleting the room
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › bans deny before SFU handshake and permanently invalidate the old lease even after unban
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › accepts a native SFU-refreshed token while authorized and rejects it after revocation
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › new admission never revives the previous opaque token
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › rejects validly signed outsider identities, expired tokens, invalid signatures and foreign origins
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › never permits a media token to use SFU administration APIs
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › fails closed during a database outage before permitting SFU traffic
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › two independent revokers race safely without reporting a failed room operation
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › the bound native session must belong to the admitted member
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › server expiry denies an otherwise unexpired signed token and never resurrects the lease
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+  ● T26 private native SFU gateway authorization › self-leave and owner dissolve remove active SFU participants before returning
+
+    Not Found: twirp error unknown: requested room does not exist
+
+      44 |  });
+      45 |  beforeEach(async()=>{
+    > 46 |   for(const ws of sockets.splice(0))ws.terminate();for(const c of (await pool.query('SELECT id FROM call_groups')).rows)await sfu.deleteRoom(`fg-call_${c.id}`);
+         |                                                                                                                         ^
+      47 |   await pool.query('DELETE FROM rooms;DELETE FROM admin_actions;DELETE FROM session');await pool.query("DELETE FROM conversations WHERE kind='ROOM'");
+      48 |   for(const id of ['owner','viewer','outsider'])await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 day',now(),now())",[`sess-${id}`,id,`tok-${id}`]);
+      49 |  });
+
+      at toTwirpError (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:282:10)
+      at TwirpRpc.request (../../node_modules/livekit-server-sdk/src/TwirpRPC.ts:239:17)
+      at RoomServiceClient.deleteRoom (../../node_modules/livekit-server-sdk/src/RoomServiceClient.ts:175:5)
+      at Object.<anonymous> (test/call-gateway.integration.spec.ts:46:121)
+
+Test Suites: 2 failed, 2 total
+Tests:       14 failed, 12 passed, 26 total
+Snapshots:   0 total
+Time:        67.703 s, estimated 103 s
+Ran all test suites matching test/call-admission.integration.spec.ts|test/call-gateway.integration.spec.ts.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
+npm error Lifecycle script `test` failed with error:
+npm error code 4294967295
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand test/call-admission.integration.spec.ts test/call-gateway.integration.spec.ts

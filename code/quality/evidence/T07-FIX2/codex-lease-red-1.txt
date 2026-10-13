@@ -1,0 +1,37 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/call-admissions.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/call-admissions.test.ts (7 tests | 7 skipped) 5412ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease
+error: insert or update on table "rooms" violates foreign key constraint "rooms_owner_membership_fk"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/call-admissions.test.ts:22:3
+     20|   await client.query("INSERT INTO session(id,user_id,token,expires_at,…
+     21|   await client.query("INSERT INTO conversations(id,kind) VALUES('chat'…
+     22|   await client.query("INSERT INTO rooms(id,name,game_id,owner_id,conve…
+       |   ^
+     23|   await client.query("INSERT INTO room_members(id,room_id,user_id,role…
+     24|   await client.query("INSERT INTO call_groups(id,room_id) VALUES('call…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 skipped (7)
+   Start at  12:26:03
+   Duration  7.96s (tests 71%, import 21%, transform 8%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/call-admissions.test.ts --maxWorkers=1

@@ -1,0 +1,54 @@
+# FG T30 — Thực thi sao chép hiệu chỉnh được Codex duyệt (`antigravity-corrections-1`)
+
+Đã thực hiện duy nhất lệnh được người dùng và quy trình ủy quyền tại thư mục làm việc `E:/FGweb/code`:
+
+```powershell
+node quality/evidence/T30/copy-reviewed-corrections.mjs
+```
+
+### 1. Kết quả thực thi lệnh
+
+- **Exit code**: `0`
+- **Output JSON**:
+  ```json
+  {"proposal":"quality/evidence/T30/antigravity-corrections-1","files":7,"productionSourceWritten":false,"assertionsChanged":false}
+  ```
+
+---
+
+### 2. Chi tiết xác thực băm trước và sau hiệu chỉnh
+
+Toàn bộ băm SHA-256 của các file nguồn ban đầu trong [`antigravity-implementation-final-1`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-implementation-final-1) và các file hiệu chỉnh được duyệt trong [`codex-reviewed-corrections-1`](file:///E:/FGweb/code/quality/evidence/T30/codex-reviewed-corrections-1) đã được kiểm chứng khớp tuyệt đối:
+
+1. [`LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/LiveViewer.tsx) (theo [`review.json`](file:///E:/FGweb/code/quality/evidence/T30/codex-reviewed-corrections-1/review.json)):
+   - **Before SHA-256**: `0964394eb2c75a589cbd3823c8a29d5ad8c76ce1008312cd994c160dd48c3a04`
+   - **After SHA-256**: `cccd9a1ec9af983b5f8e2740e8bc926de286c4e8eecb8938a91771971c74e5ac`
+   - **Nội dung hiệu chỉnh**: Đợi `startSettledPromise` trước khi cleanup từ unmount/ended ngoài; giải phóng remote subscription khi teardown viewer; giữ nguyên nhãn aria cố định trên vùng stage; biểu tượng chia sẻ tách bạch.
+
+2. [`media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/calls/media.ts) (theo [`media-review.json`](file:///E:/FGweb/code/quality/evidence/T30/codex-reviewed-corrections-1/media-review.json)):
+   - **Before SHA-256**: `7f7b8f6759b7fc29a32ea4e0894d8d00319d7b9415cb237ee20d3309db3c6836`
+   - **After SHA-256**: `4bcfa566ce5d1407ebe42bfe5839e9491a3e30bb263f0e9394d6923b43e8fdf1`
+   - **Nội dung hiệu chỉnh**: Dùng `screenShareEncoding` chuẩn `ScreenSharePresets.h720fps30.encoding` thay vì `videoEncoding` để tránh bị SDK giới hạn 15fps; so khớp `mediaStreamTrack` của wrapper native khi publish in-flight và giữ guard SID lỗi thời.
+
+3. **Toàn bộ 33 ca kiểm thử và assertions** trong [`apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/test/live-viewer.test.tsx) được giữ nguyên vẹn 100% (SHA-256: `a3b0d92c9ada95d0edb58f9e9ff24e820727d77f10528a4556d77e1b635b0799`).
+
+---
+
+### 3. Danh mục đường dẫn các file proposal trong `antigravity-corrections-1`
+
+- Bằng chứng sao chép: [`quality/evidence/T30/antigravity-corrections-1/exact-copy-proof.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/exact-copy-proof.json)
+- Tài liệu review: [`quality/evidence/T30/antigravity-corrections-1/REVIEW.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/REVIEW.md)
+- CallPanel: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/calls/CallPanel.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/calls/CallPanel.tsx)
+- Media Session: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/calls/media.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/calls/media.ts)
+- API Client: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/api.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/api.ts)
+- Feature Barrel: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/index.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/index.ts)
+- Stylesheet: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/live.css`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/live.css)
+- LiveViewer: [`quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/LiveViewer.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/src/features/live/LiveViewer.tsx)
+- Test Suite (33 cases): [`quality/evidence/T30/antigravity-corrections-1/apps/web/test/live-viewer.test.tsx`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-corrections-1/apps/web/test/live-viewer.test.tsx)
+
+---
+
+### 4. Trạng thái nghiệm thu
+
+- **Mã nguồn thực tế**: Chưa áp dụng vào `code/apps/web/...`.
+- **Kiểm thử thực tế**: Kiểm thử Native, kiểm thử Headed UI / E2E với Telegram bridge stream, kiểm thử tải/benchmark và nghiệm thu ứng dụng thực tế vẫn đang chờ Codex thực hiện ở các bước tiếp theo. Không có bất kỳ tuyên bố PASS sớm nào.

@@ -1,0 +1,2 @@
+import fs from 'node:fs';
+fs.appendFileSync('quality/spec-coverage.md','\n| T28 final amendment: pending device leave and StrictMode single polling generation | T28 |24 task cases;84 final frontend cases;headed8 complete native FG/API/PG/SFU scenario,4viewport×2theme,cleanup | Supersedes the intermediate23/83 counts above only; final completion is confirmed by closure.json/strict T29 gate, no media-load/quality deployment claim. |\n');

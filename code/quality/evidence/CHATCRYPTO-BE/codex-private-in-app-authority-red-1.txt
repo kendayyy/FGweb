@@ -1,0 +1,58 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24044) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (52.327 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 30
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "body": "Bạn có tin nhắn mới.",
+    +     "createdAt": "2026-10-09T12:17:40.387322Z",
+    +     "data": Object {
+    +       "conversationId": "notice-dm",
+    +       "messageId": "a6980ae3-e2b3-4250-9bdb-13ef3b84099f",
+    +       "senderId": "alice",
+    +     },
+    +     "id": "31a32020-e9a5-4f86-bcb4-10b5539ec020",
+    +     "isRead": false,
+    +     "title": "Tin nhắn mới",
+    +     "type": "DM",
+    +     "userId": "outsider",
+    +   },
+    +   Object {
+    +     "body": "Bạn có tin nhắn mới.",
+    +     "createdAt": "2026-10-09T12:17:39.449377Z",
+    +     "data": Object {
+    +       "conversationId": "notice-dm",
+    +       "messageId": "c4ca1c67-ef38-424e-baec-722a414f40e2",
+    +       "senderId": "alice",
+    +     },
+    +     "id": "204c751e-9204-4bc8-afcf-6bc538cefc11",
+    +     "isRead": false,
+    +     "title": "Tin nhắn mới",
+    +     "type": "DM",
+    +     "userId": "outsider",
+    +   },
+    + ]
+
+      158 |   const originalData=(await pool.query('SELECT data FROM notifications WHERE id=$1',[offlineNotice.id])).rows[0].data;try{await pool.query('UPDATE notifications SET data=$2,title=$3,body=$3 WHERE id=$1',[offlineNotice.id,'{private-invalid','never-trust-private-row-preview']);const recovered=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(recovered.status).toBe(200);expect(recovered.body.items).toHaveLength(1);expect(JSON.stringify(recovered.body)).not.toContain('never-trust-private-row-preview');await quiet();}finally{await pool.query('UPDATE notifications SET data=$2 WHERE id=$1',[offlineNotice.id,originalData]);}
+      159 |   await bus.publish(busChannel,'N:'+offlineNotice.id);await wait(()=>items.length===2);expect(items[1]).toEqual(expect.objectContaining({id:offlineNotice.id,title:'Tin nhắn mới',body:'Bạn có tin nhắn mới.'}));expect(JSON.stringify(items)).not.toContain('never-trust-private-row-preview');expect((await request(base).get('/api/v1/notifications?limit=invalid').set('Cookie',cookies.get('outsider')!)).status).toBe(422);
+    > 160 |   await wait(()=>(app.get(RealtimeGateway) as unknown as {deliveries:Set<Promise<void>>}).deliveries.size===0);const notices=app.get(PrivateNotificationsService) as unknown as {actor:(db:pg.Pool|pg.PoolClient,actor:{userId:string;sessionId:string}|null)=>Promise<{userId:string;sessionId:string}>},originalActor=notices.actor.bind(notices);let checks=0;const lateActor=jest.spyOn(notices,'actor').mockImplementation(async(db,actor)=>{const result=await originalActor(db,actor);if(++checks===2)await pool.query("UPDATE chat_crypto_membership_intervals SET start_revision=2 WHERE conversation_id='notice-dm' AND user_id='outsider'");return result;});try{const late=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(late.status).toBe(200);expect(checks).toBe(2);expect(late.body.items).toEqual([]);}finally{lateActor.mockRestore();for(const row of intervals)await pool.query('UPDATE chat_crypto_membership_intervals SET start_revision=$2 WHERE id=$1',[row.id,row.start_revision]);}target.disconnect();
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+      161 |  });
+      162 |  it('does not retain a disconnected socket whose subscription was waiting on a real epoch lock',async()=>{
+      163 |   const socket=await connect('outsider'),socketId=socket.id!,db=await pool.connect();let pending:Promise<unknown>|undefined;
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:160:829)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 11 passed, 12 total
+Snapshots:   0 total
+Time:        52.742 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

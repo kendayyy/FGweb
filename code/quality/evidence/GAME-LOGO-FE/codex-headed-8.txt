@@ -1,0 +1,46 @@
+
+Running 7 tests using 1 worker
+
+(node:18124) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/7] tests\e2e\game-logos.spec.ts:23:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint
+  1) tests\e2e\game-logos.spec.ts:23:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint 
+
+    Error: Real API/PG/Redis fixture startup timed out
+
+      13 |  fixture=spawn(process.execPath,['quality/evidence/GAME-LOGO-FE/fixture-server.mjs'],{cwd:process.cwd(),env:{...process.env,FG_THEME_WEB_PORT:String(port)},stdio:['ignore','ignore','ignore','ipc'],windowsHide:true});
+      14 |  fixture.on('message',(message:Record<string,unknown>)=>{if(typeof message.id==='string'){pending.get(message.id)?.(message);pending.delete(message.id);}});
+    > 15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real API/PG/Redis fixture startup timed out')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){identity=message.identity as typeof identity;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Real fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Real fixture exited during startup'));});});
+         |                                                                               ^
+      16 | });
+      17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema/Redis cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+      18 | async function socketState(){const id=randomUUID();return await new Promise<{socketIds:string[];events:unknown[]}>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Socket inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message as unknown as {socketIds:string[];events:unknown[]});});fixture.send({id,kind:'sockets'});});}
+        at Timeout._onTimeout (E:\FGweb\code\tests\e2e\game-logos.spec.ts:15:79)
+
+    Error: Owned schema/Redis cleanup timed out
+
+      15 |  await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Real API/PG/Redis fixture startup timed out')),30000);fixture.on('message',(message:Record<string,unknown>)=>{if(message.kind==='ready'){identity=message.identity as typeof identity;clearTimeout(timer);resolve();}if(message.kind==='failed'){clearTimeout(timer);reject(new Error('Real fixture failed; secrets omitted'));}});fixture.once('exit',()=>{clearTimeout(timer);reject(new Error('Real fixture exited during startup'));});});
+      16 | });
+    > 17 | test.afterAll(async()=>{if(fixture&&fixture.exitCode===null)await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{fixture.kill();reject(new Error('Owned schema/Redis cleanup timed out'));},10000);fixture.once('exit',code=>{clearTimeout(timer);if(code===0)resolve();else reject(new Error('Owned fixture cleanup failed'));});fixture.send({kind:'stop'});});});
+         |                                                                                                                                                          ^
+      18 | async function socketState(){const id=randomUUID();return await new Promise<{socketIds:string[];events:unknown[]}>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Socket inspection timeout')),5000);pending.set(id,message=>{clearTimeout(timer);resolve(message as unknown as {socketIds:string[];events:unknown[]});});fixture.send({id,kind:'sockets'});});}
+      19 | async function sockets(){return(await socketState()).socketIds;}
+      20 | async function theme(page:Page,mode:string){if(await page.locator('html').getAttribute('data-theme')!==mode)await page.getByRole('button',{name:/Chuyển sang/}).click();await expect(page.locator('html')).toHaveAttribute('data-theme',mode);}
+        at Timeout._onTimeout (E:\FGweb\code\tests\e2e\game-logos.spec.ts:17:154)
+
+    Error Context: .cache\game-logos\results\game-logos-fixed-72px-rail-48e84-y-desktop-tablet-breakpoint\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-fixed-72px-rail-48e84-y-desktop-tablet-breakpoint\error-context.md
+
+
+[2/7] tests\e2e\game-logos.spec.ts:36:1 › mouse and keyboard choose all seven real catalogue games and focus shows full tooltip
+[3/7] tests\e2e\game-logos.spec.ts:44:1 › mobile drawer retains full names, native focus and bounded layout at 360/390px
+[4/7] tests\e2e\game-logos.spec.ts:58:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize
+[5/7] tests\e2e\game-logos.spec.ts:68:1 › FG logo, favicon and complete manifest icon URLs serve real images with correct sizes/MIME
+[6/7] tests\e2e\game-logos.spec.ts:77:1 › a broken game image keeps an accessible clickable fallback and does not hotlink
+[7/7] tests\e2e\game-logos.spec.ts:80:1 › all seven game buttons have decoded local images in light/dark before task completion
+  1 failed
+    tests\e2e\game-logos.spec.ts:23:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint 
+  6 did not run

@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21724) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (43.058 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds pending bus deliveries during a burst while REST remains the recovery path
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+    Expected number of calls: 64
+    Received number of calls: 100
+
+      106 |   const relay=app.get(CryptoRelayService),original=relay.committedProtocolConversation.bind(relay);let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;}),spy=jest.spyOn(relay,'committedProtocolConversation').mockImplementation(async signal=>{await gate;return original(signal);});
+      107 |   const row=(await pool.query("SELECT id FROM chat_crypto_protocol_events WHERE transaction_id='socket-offline'")).rows[0],signal=JSON.stringify({kind:'PROTOCOL_WAKE',queue:'VERIFICATION',eventId:row.id}),channel='fg:chat:'+createHash('sha256').update(process.env.DATABASE_URL!).digest('hex').slice(0,24),before=published.filter(item=>item===signal).length;
+    > 108 |   try{for(let i=0;i<100;i++)await bus.publish(channel,signal);await wait(()=>published.filter(item=>item===signal).length>=before+100);await new Promise(resolve=>setTimeout(resolve,100));expect(spy).toHaveBeenCalledTimes(64);}finally{release();await new Promise(resolve=>setTimeout(resolve,200));spy.mockRestore();}
+          |                                                                                                                                                                                                        ^
+      109 |  });
+      110 |  it('filters a delayed old event for a new member while retaining their subscription for new ciphertext',async()=>{
+      111 |   const machine=await sdk.OlmMachine.initialize(new sdk.UserId(matrixUserId('outsider')),new sdk.DeviceId('C'));machines.set('outsider',machine);
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:108:200)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 10 passed, 11 total
+Snapshots:   0 total
+Time:        43.517 s, estimated 46 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

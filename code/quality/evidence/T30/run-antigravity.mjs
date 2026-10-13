@@ -1,0 +1,10 @@
+import fs from 'node:fs';import {spawn} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+const round=process.argv[2];assert(round&&/^[a-z0-9-]+$/.test(round));
+const dir='quality/evidence/T30',file=dir+'/antigravity-'+round+'-prompt.txt';
+const prompt=fs.readFileSync(file,'utf8'),executable='C:/Users/PC/AppData/Local/agy/bin/agy.exe',model='Gemini 3.6 Flash (High)';
+fs.mkdirSync('.runtime/t30',{recursive:true});
+const args=[...(round==='red'?[]:['--conversation','49ac5ff7-742d-4347-a1f6-f5098dc8af12']),'--model',model,'--dangerously-skip-permissions','--print',prompt,'--print-timeout','20m','--log-file',process.cwd()+'/.runtime/t30/antigravity-'+round+'.log'];
+fs.writeFileSync(dir+'/antigravity-'+round+'-invocation.json',JSON.stringify({startedAt:new Date().toISOString(),executable,requestedModel:model,freshConversation:round==='red',promptPath:file,promptSha256:createHash('sha256').update(prompt).digest('hex'),writeScope:dir+'/antigravity-'+round+'-1/**',mode:'sequential-proposals-only',reviewer:'Codex',monitor:'disabled by user NO-ANTI2-01',automaticCloseout:false},null,2)+'\n',{flag:'wx'});
+const child=spawn(executable,args,{cwd:process.cwd(),windowsHide:true,stdio:['ignore','inherit','inherit']});
+const result=await new Promise(resolve=>{child.once('error',()=>resolve({exitCode:1,signal:null}));child.once('close',(code,signal)=>resolve({exitCode:code??1,signal}));});
+fs.writeFileSync(dir+'/antigravity-'+round+'-completion.json',JSON.stringify({completedAt:new Date().toISOString(),...result,implementationAcceptance:false},null,2)+'\n',{flag:'wx'});process.exitCode=result.exitCode;

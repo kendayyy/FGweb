@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {checkGate,checkBaselines} from '../../../scripts/verify-task.mjs';
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json'));
+const task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-BE');assert.equal(task.status,'IN_PROGRESS');
+checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:task.specSha256});
+const path='apps/api/src/main.ts',evidence='quality/evidence/CHATCRYPTO-BE/scope-main.json';
+assert(!task.writeAllowlist.includes(path));
+const change={adoptedAt:new Date().toISOString(),source:'Persisted human Permission to broaden Write Scope or touch locked files',paths:[path],reason:'Install bounded JSON parsers in actual bootstrap. Native recovery RED gives 413 above old 100 KiB default; crypto messages/backups require approved larger bounds, general endpoints retain default limits.',beforeSha256:createHash('sha256').update(fs.readFileSync(path)).digest('hex'),evidence};
+fs.writeFileSync(evidence,JSON.stringify(change,null,2)+'\n',{flag:'wx'});
+task.writeAllowlist.push(path);task.approvedScopeAmendments.push(change);
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('Pinned one bootstrap file under already-approved broad scope; prior PASS/checker/baseline unchanged.');

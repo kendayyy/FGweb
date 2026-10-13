@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T01-FIX2',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),task=ledger.tasks.find(t=>t.id==='T01-FIX2');
+checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:baseline.hashes.specSha256});assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);assert.equal(task.status,'NOT_STARTED');
+const allow=p=>task.writeAllowlist.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.cache/')&&!p.startsWith('.runtime/'));
+const before={recordedAt:new Date().toISOString(),readonly:Object.fromEntries(files.filter(p=>!allow(p)).map(p=>[p,hash(p)])),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},manifest:JSON.parse(fs.readFileSync('apps/api/package.json')),lock:JSON.parse(fs.readFileSync('package-lock.json'))};
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify(before,null,2)+'\n',{flag:'wx'});fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T25/record.mjs','utf8').replaceAll('T25','T01-FIX2'),{flag:'wx'});
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.inputsHash=hash(`${dir}/before.json`);task.evidencePaths=[`${dir}/before.json`];fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify({task:task.id,status:task.status,strictGate:'PASS',readonly:Object.keys(before.readonly).length}));

@@ -1,0 +1,11 @@
+# T26-FIX1 — Codex review
+
+Registered participant and self-mic endpoints use the same room/user/group locks and current session/onboarding/ban/membership authority as call admission. Participant reads return a safe profile summary and current opaque admission identity only after liveLease succeeds; no credentials/session/email fields. Group closure/missing calls return contracted errors. Query path disagreement/unknown query fields are rejected. Self-mic is an actor-only strict boolean action, bound to the reserved session's active admission; room ownership does not grant control over another participant through it. MIC_MUTED restrictions deny self-unmute while allowing self-mute; removal permits normal viewer self-unmute.
+
+This API persists microphone intent. T28 owns actual device permission, local microphone track activation and per-listener volume. T29 owns native moderator publication enforcement/actions; this checkpoint does not claim those are complete. No local mute is sent to the server, no play/team/room lifecycle is coupled with a microphone action.
+
+Initial native RED run: eleven HTTP behavior failures from missing endpoints, with real isolated PostgreSQL/private SFU setup. Preserve every run. Required closure: complete controls suite and unchanged admission/gateway/lifecycle regressions, API build/types, lint/diff and frozen scope/runtime/baseline/secret audit plus unchanged strict T28 gate. Do not label PASS from method existence or metadata alone.
+
+GREEN1: ten passed, one expired-lease fixture returned CALL_CLOSED409 between participant read and microphone action because the real lifecycle sweep correctly closed the last invalid seat. Fix the fixture by reserving a second valid caller; preserve the strict403 denial and assert that expired/revoked viewer metadata is absent while the valid owner remains. Add separate revoked-lease and actual native JoinResponse mapping checks. GREEN2: all13 controls pass. Production logic was unchanged by that fixture correction.
+
+Frozen regressions: all41 admission/gateway/lifecycle cases pass. Owned copies change only relative imports and fixture/screenshot paths, with reversible source/hash proof in regression-provenance.json. Assertions, schemas, timers and behaviors remain unchanged. New screenshots/runtime stay in this task; original T27 tests/evidence/runtime remain frozen.

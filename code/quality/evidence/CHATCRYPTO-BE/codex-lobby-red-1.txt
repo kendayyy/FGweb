@@ -1,0 +1,80 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:12344) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (70.642 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › stores Lobby text as native fg-lobby AEAD while preserving actual public history and metadata-only outbox
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 500
+
+      327 |  const postLobby=(tag:string,content='lobby-visible-after-decrypt',extra:Record<string,unknown>={})=>request(base).post(`/api/v1/conversations/${lobby}/messages`).set('Cookie',cookies.alice).set('Origin',origin).send({clientMessageId:tag,content,...extra});
+      328 |  it('stores Lobby text as native fg-lobby AEAD while preserving actual public history and metadata-only outbox',async()=>{
+    > 329 |   const sent=await postLobby('lobby-native-text');expect(sent.status).toBe(201);expect(sent.body.content).toBe('lobby-visible-after-decrypt');
+          |                                                                       ^
+      330 |   const row=(await pool.query('SELECT * FROM messages WHERE id=$1',[sent.body.id])).rows[0];expect(row.encryption_mode).toBe('LOBBY_AEAD');expect(row.content).toBe('');expect(row.crypto_envelope.keyId).toBe('fg-lobby');expect(row.crypto_revision).toBe('1');
+      331 |   const outbox=(await pool.query('SELECT * FROM realtime_outbox WHERE message_id=$1',[sent.body.id])).rows;expect(outbox).toHaveLength(1);expect(JSON.stringify({row,outbox})).not.toContain('lobby-visible-after-decrypt');
+      332 |   const history=await request(base).get(`/api/v1/conversations/${lobby}/messages`);expect(history.status).toBe(200);expect(history.body.items.some((m:{id:string;content:string})=>m.id===sent.body.id&&m.content==='lobby-visible-after-decrypt')).toBe(true);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:329:71)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › keeps public replies, explicit mentions and idempotent retry without plaintext persistence
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 500
+
+      334 |  });
+      335 |  it('keeps public replies, explicit mentions and idempotent retry without plaintext persistence',async()=>{
+    > 336 |   const parent=await postLobby('lobby-parent','lobby-parent-text');expect(parent.status).toBe(201);const body={replyToId:parent.body.id,mentionedUserIds:['bob']};
+          |                                                                                          ^
+      337 |   const sent=await postLobby('lobby-reply','lobby-reply-text',body),retry=await postLobby('lobby-reply','lobby-reply-text',body);expect(sent.status).toBe(201);expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);expect(sent.body.replyToMessage.content).toBe('lobby-parent-text');expect(sent.body.mentionedUserIds).toEqual(['bob']);
+      338 |   const rows=(await pool.query('SELECT content,encryption_mode FROM messages WHERE id=ANY($1::text[])',[[parent.body.id,sent.body.id]])).rows;expect(rows.every(r=>r.content===''&&r.encryption_mode==='LOBBY_AEAD')).toBe(true);expect((await pool.query('SELECT id FROM realtime_outbox WHERE message_id=$1',[sent.body.id])).rowCount).toBe(1);
+      339 |  });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:336:90)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › fails closed with absent/wrong Lobby custody or unreconciled state instead of plaintext fallback
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 500
+
+      340 |  it('fails closed with absent/wrong Lobby custody or unreconciled state instead of plaintext fallback',async()=>{
+      341 |   const before=(await pool.query('SELECT count(*) FROM messages WHERE conversation_id=$1',[lobby])).rows[0].count,saved=lobbyOptions.transit;
+    > 342 |   lobbyOptions.transit=undefined as unknown as OpenBaoTransit;try{expect((await postLobby('lobby-no-custody')).status).toBe(503);}finally{lobbyOptions.transit=saved;}
+          |                                                                                                                        ^
+      343 |   lobbyToken=process.env.FG_REPORT_TEST_WRITER!;try{expect((await postLobby('lobby-denied-role')).status).toBe(503);}finally{lobbyToken=process.env.FG_REPORT_TEST_DENIED!;}
+      344 |   await pool.query("UPDATE chat_crypto_state SET migration_state='MIGRATING' WHERE conversation_id=$1",[lobby]);try{expect((await postLobby('lobby-migrating')).status).toBe(409);expect((await request(base).get(`/api/v1/conversations/${lobby}/messages`)).status).toBe(409);}finally{await pool.query("UPDATE chat_crypto_state SET migration_state='RECONCILED' WHERE conversation_id=$1",[lobby]);}
+      345 |   expect((await pool.query('SELECT count(*) FROM messages WHERE conversation_id=$1',[lobby])).rows[0].count).toBe(before);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:342:120)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 27 passed, 30 total
+Snapshots:   0 total
+Time:        71.217 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"81c4aaa3ad944eb9ad8d8fb2cb052651","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {parseEnv} from 'node:util';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const file='quality/evidence/LIGHT01-FE/smoke/previous-baseline.json';
+const address=parseEnv(fs.readFileSync('.runtime/auth-admin/admin-input.env','utf8')).FG_ADMIN_EMAIL;
+const raw=fs.readFileSync(file,'utf8');
+assert(address&&raw.includes(address));
+const cleaned=raw.replaceAll(address,'[redacted local address]');
+JSON.parse(cleaned);
+const hash=text=>createHash('sha256').update(text).digest('hex');
+fs.writeFileSync(file,cleaned);
+fs.writeFileSync('quality/evidence/LIGHT01-FE/smoke/copy-redaction.json',JSON.stringify({recordedAt:new Date().toISOString(),file,beforeSha256:hash(raw),afterSha256:hash(cleaned),reason:'New evidence backup duplicated configured private admin email in historical test-email metadata. Removed only from this newly created backup; source baseline and private configuration unchanged. Required audit failure preserved; no credential value logged.'},null,2)+'\n',{flag:'wx'});
+console.log('Private address removed from newly created baseline evidence copy; application configuration preserved.');

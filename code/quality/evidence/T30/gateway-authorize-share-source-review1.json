@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-12T18:34:34.136Z",
+  "red": {
+    "command": "node quality/evidence/T30/run-gateway-authorize-share1.mjs call-gateway",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-12T18:32:43.207Z",
+    "completedAt": "2026-10-12T18:33:50.261Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-gateway-authorize-share-red-1.txt",
+    "evidenceSha256": "b4244cec256be4e455da912f4d9dd645d1c1d5100382c1fdc628054aed0b989f"
+  },
+  "originalGatewayCases": 13,
+  "addedActualPgCases": 2,
+  "reverseByteExact": true,
+  "plan": {
+    "reviewer": "Codex",
+    "unresolvedSourceFindings": [],
+    "reason": "Actual gateway/PG/native SFU additive RED14/15 only read-only authorization held behind SHARE readers returns503; revoke-after-room-wait control and all13 original tests pass. Authorize callback only reads current lease/publication policy and signs current JWT; explicit FOR SHARE for canonical room/group locks preserves room/group writer exclusion and fresh postlock reread, token/signature/origin/expiry/banned/session/member/profile policies and outside failclosed invalidation. Existing gatewaylive already uses SHARE. Every publishing/dedupe/quota write retains default UPDATE; source reverseexact except one argument. Build24+GREEN15/fresh locks/regressions/native required before any PASS.",
+    "files": [
+      {
+        "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+        "proposed": "quality/evidence/T30/gateway-authorize-share-reviewed1.ts",
+        "beforeSha256": "a51fde9f7bf3a632ac06ecf510449404451fa44a77a5500c27fe6759edf58d41",
+        "afterSha256": "d44cf0e2ca9bfa2e0038a4414cbd4dc2afb61b218bf2701f44dedc6401bb293a"
+      }
+    ]
+  }
+}

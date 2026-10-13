@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-10-10T15:00:02.923Z",
+  "path": "apps/web/test/social.test.tsx",
+  "beforeSha256": "338b1ff27194c4602521f087b355acc6a0ddb87da274db550a3bde53a2c540bf",
+  "afterSha256": "3c0bd6bd889c9e04e0d55c843044c3d08d8b8074c48c8cb7da64a2bd8de7dc7a",
+  "reason": "Full regression exposed a ProfilePage DM fixture that omitted the real crypto provider. Match the actual App provider boundary and await fail-closed locked UI so late errors cannot escape after panel-only assertions. All prior assertions and test timeouts preserved; no app fallback, mocked crypto success or ignored unhandled errors.",
+  "diagnostics": [
+    "codex-loading-full-web-regression-1.json",
+    "codex-loading-social-recruitment-diagnostic-1.json"
+  ],
+  "recruitmentUnchanged": "The separate test passed at unchanged timeout; no recruitment source/assertion/timeout change."
+}

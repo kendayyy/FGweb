@@ -1,0 +1,260 @@
+{
+  "recordedAt": "2026-10-11T00:00:21.327Z",
+  "run": "t30-native-fac028cda61448e0994af3f851ea63e2",
+  "sources": [
+    {
+      "path": "quality/evidence/T30/t30-native-fac028cda61448e0994af3f851ea63e2/media-diagnostics.txt",
+      "sha256": "0e95176d1ec8a8b8a9fbc84a46676fb551ed2ff254d0e55f9d788c0213ad7b61"
+    },
+    {
+      "path": "quality/evidence/T30/t30-native-fac028cda61448e0994af3f851ea63e2/api-lock-diagnostics.jsonl",
+      "sha256": "526d0c74afa6ba18b33c4733d2dda04ba4cd592430cfe9d5688f053a17848149"
+    },
+    {
+      "path": "quality/evidence/T30/t30-native-fac028cda61448e0994af3f851ea63e2/api-pool-owners.jsonl",
+      "sha256": "f1c839f05a04323f2620f66572d411e9103b8a7f5886eac52af74029e609fc43"
+    }
+  ],
+  "apiLockClassification": "FOR SHARE and FOR UPDATE classified; held ages do not by themselves identify the specific query/endpoint, or prove sole cause. Observer preserves original options/results/errors.",
+  "summary": {
+    "db-query:begin": {
+      "count": 303,
+      "p50": 17,
+      "p95": 69,
+      "max": 392
+    },
+    "db-query:timezone": {
+      "count": 303,
+      "p50": 16,
+      "p95": 73,
+      "max": 189
+    },
+    "db-query:lease": {
+      "count": 903,
+      "p50": 17,
+      "p95": 87,
+      "max": 737
+    },
+    "db-query:lock-room": {
+      "count": 302,
+      "p50": 22,
+      "p95": 589,
+      "max": 3135
+    },
+    "db-query:lock-group": {
+      "count": 300,
+      "p50": 16,
+      "p95": 65,
+      "max": 182
+    },
+    "db-query:policy": {
+      "count": 438,
+      "p50": 17,
+      "p95": 73,
+      "max": 397
+    },
+    "db-query:commit": {
+      "count": 300,
+      "p50": 39,
+      "p95": 298,
+      "max": 796
+    },
+    "lease-duration": {
+      "count": 303,
+      "p50": 242,
+      "p95": 1337,
+      "max": 4227
+    },
+    "native-rpc": {
+      "count": 6,
+      "p50": 19,
+      "p95": 33,
+      "max": 82
+    },
+    "db-query:other": {
+      "count": 5,
+      "p50": 12,
+      "p95": 13,
+      "max": 16
+    },
+    "signal-queue:outbound": {
+      "count": 127,
+      "p50": 275,
+      "p95": 1424,
+      "max": 3431
+    },
+    "signal-queue:inbound": {
+      "count": 171,
+      "p50": 288,
+      "p95": 1537,
+      "max": 2932
+    },
+    "db-query:rollback": {
+      "count": 3,
+      "p50": 30,
+      "p95": 30,
+      "max": 63
+    },
+    "tick-error": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    }
+  },
+  "errors": [
+    {
+      "t30Diagnostic8": "db-query",
+      "kind": "lock-room",
+      "durationMs": 3135,
+      "ok": false,
+      "code": "57014",
+      "name": "error",
+      "connectTimeout": false,
+      "connectionClosed": false,
+      "queryTimeout": true,
+      "socketFailure": false
+    },
+    {
+      "t30Diagnostic8": "db-query",
+      "kind": "lock-room",
+      "durationMs": 3087,
+      "ok": false,
+      "code": "57014",
+      "name": "error",
+      "connectTimeout": false,
+      "connectionClosed": false,
+      "queryTimeout": true,
+      "socketFailure": false
+    }
+  ],
+  "apiPoolOwners": [
+    {
+      "poolIndex": 1,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 2,
+      "owner": "rooms.service.js"
+    },
+    {
+      "poolIndex": 3,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 4,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 5,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 6,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 7,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 8,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 9,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 10,
+      "owner": "profiles.service.js"
+    },
+    {
+      "poolIndex": 11,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 12,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 13,
+      "owner": "other"
+    },
+    {
+      "poolIndex": 14,
+      "owner": "recruitments.service.js"
+    },
+    {
+      "poolIndex": 15,
+      "owner": "teams.service.js"
+    },
+    {
+      "poolIndex": 16,
+      "owner": "calls.service.js"
+    },
+    {
+      "poolIndex": 17,
+      "owner": "call-lifecycle.service.js"
+    }
+  ],
+  "apiSummary": [
+    {
+      "poolIndex": 14,
+      "owner": "recruitments.service.js",
+      "maxRoomWaitMs": 0,
+      "maxRoomHeldMs": 0,
+      "maxGroupHeldMs": 0,
+      "errors": []
+    },
+    {
+      "poolIndex": 15,
+      "owner": "teams.service.js",
+      "maxRoomWaitMs": 4019,
+      "maxRoomHeldMs": 1547,
+      "maxGroupHeldMs": 0,
+      "errors": []
+    },
+    {
+      "poolIndex": 2,
+      "owner": "rooms.service.js",
+      "maxRoomWaitMs": 469,
+      "maxRoomHeldMs": 4182,
+      "maxGroupHeldMs": 0,
+      "errors": []
+    },
+    {
+      "poolIndex": 16,
+      "owner": "calls.service.js",
+      "maxRoomWaitMs": 4538,
+      "maxRoomHeldMs": 1366,
+      "maxGroupHeldMs": 1175,
+      "errors": []
+    },
+    {
+      "poolIndex": 17,
+      "owner": "call-lifecycle.service.js",
+      "maxRoomWaitMs": 5133,
+      "maxRoomHeldMs": 1851,
+      "maxGroupHeldMs": 1553,
+      "errors": []
+    },
+    {
+      "poolIndex": 9,
+      "owner": "other",
+      "maxRoomWaitMs": 0,
+      "maxRoomHeldMs": 0,
+      "maxGroupHeldMs": 0,
+      "errors": []
+    },
+    {
+      "poolIndex": 7,
+      "owner": "other",
+      "maxRoomWaitMs": 0,
+      "maxRoomHeldMs": 0,
+      "maxGroupHeldMs": 0,
+      "errors": []
+    }
+  ],
+  "nativeAcceptance": false
+}

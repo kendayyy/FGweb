@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {checkGate} from '../../../scripts/verify-task.mjs';
+const [stage,sourceName,labelsJson]=process.argv.slice(2);assert.match(stage,/^[a-z0-9-]+$/);assert.match(sourceName,/^[a-z0-9-]+\.mjs$/);const labels=JSON.parse(labelsJson);assert(Array.isArray(labels)&&labels.length>0&&labels.every(l=>/^[a-z0-9-]+$/.test(l)));
+const dir='quality/evidence/CHATCRYPTO-FE',digest=x=>createHash('sha256').update(x).digest('hex'),hash=p=>digest(fs.readFileSync(p));
+const bytes=fs.readFileSync('quality/tasks.json','utf8'),ledger=JSON.parse(bytes),task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-FE');assert.equal(task.status,'IN_PROGRESS');
+const before=JSON.parse(fs.readFileSync(`${dir}/active-membership-before.json`,'utf8'));for(const row of ledger.tasks.filter(t=>t.id!==task.id))assert.equal(digest(JSON.stringify(row)),before.rows[row.id]);
+const review=`${dir}/${stage}-ownership-review.md`;assert(fs.existsSync(review));const proofs=[review];
+for(const label of labels){const p=`${dir}/codex-${label}.json`,r=JSON.parse(fs.readFileSync(p,'utf8'));assert.equal(r.exitCode,0);assert.equal(hash(r.evidencePath),r.evidenceSha256);proofs.push(p,r.evidencePath);}
+const proofPath=fs.readdirSync(dir).filter(n=>/^headed-(chat|group|report)-proof-crypto_fe_[a-f0-9]{32}\.json$/.test(n)).map(n=>`${dir}/${n}`).find(p=>Object.entries(JSON.parse(fs.readFileSync(p,'utf8')).buildHashes).every(([file,sha])=>hash(file)===sha));assert(proofPath);proofs.push(proofPath);
+const snapshot=`${dir}/${stage}-headed-source.mjs`;fs.writeFileSync(snapshot,fs.readFileSync(`${dir}/${sourceName}`),{flag:'wx'});proofs.push(snapshot);
+const paths=['apps/web/dist/index.html'],amendment={source:review,reason:`Reviewed generated index after actual native/headed ${stage} proof`,paths};task.approvedScopeAmendments.push(amendment);
+const manifest=JSON.parse(fs.readFileSync(task.gateRebaseline.manifestPath,'utf8'));for(const p of paths){const t=manifest.outputTransitions.find(t=>t.path===p);assert(t);t.afterSha256=hash(p);t.scopeSha256=digest(JSON.stringify(amendment));t.requiredEvidence.push(...proofs.map(p=>({path:p,sha256:hash(p)})));}
+const manifestPath=`${dir}/${stage}-gate-manifest.json`;fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});task.gateRebaseline={version:1,manifestPath,manifestSha256:hash(manifestPath)};
+checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:task.specSha256,requestedPaths:paths});
+const adoption={recordedAt:new Date().toISOString(),paths,proofPath,manifestPath,historicalRowsUnchanged:true,frontendComplete:false,mainMutation:false},out=`${dir}/${stage}-adoption.json`;fs.writeFileSync(out,JSON.stringify(adoption,null,2)+'\n',{flag:'wx'});
+task.evidencePaths=[...new Set([...task.evidencePaths,...proofs,manifestPath,out])];assert.equal(fs.readFileSync('quality/tasks.json','utf8'),bytes);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify(adoption));

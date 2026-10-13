@@ -1,0 +1,57 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/chat-crypto-realtime.test.ts (17 tests | 9 failed) 65ms
+   ❯ Device-bound private realtime contracts (17)
+     × registers a metadata-only sync wakeup for the currently bound device and revision 18ms
+     × rejects content in sync wakeups 2ms
+     × rejects privateKey in sync wakeups 5ms
+     × rejects recoveryCode in sync wakeups 2ms
+     × rejects ciphertext in sync wakeups 2ms
+     × rejects eventId in sync wakeups 1ms
+     × rejects recipientUserId in sync wakeups 1ms
+     × rejects verificationEvent in sync wakeups 2ms
+     × rejects missing device, invalid epoch and client transport overrides in sync wakeups 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > registers a metadata-only sync wakeup for the currently bound device and revision
+AssertionError: expected undefined to be 'crypto.sync.available' // Object.is equality
+
+- Expected:
+"crypto.sync.available"
+
++ Received:
+undefined
+
+ ❯ test/chat-crypto-realtime.test.ts:31:52
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects content in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects privateKey in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects recoveryCode in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects ciphertext in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects eventId in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects recipientUserId in sync wakeups
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects verificationEvent in sync wakeups
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-realtime.test.ts:34:79
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  test/chat-crypto-realtime.test.ts > Device-bound private realtime contracts > rejects missing device, invalid epoch and client transport overrides in sync wakeups
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-realtime.test.ts:37:79
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 8 passed (17)
+   Start at  04:00:05
+   Duration  1.21s (import 47%, transform 42%, tests 8%, worker 3%)
+

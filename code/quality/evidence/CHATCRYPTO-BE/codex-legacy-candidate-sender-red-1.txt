@@ -1,0 +1,28 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22836) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (43.862 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › rejects public sender metadata belonging to another native registered device
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      86 |  }
+      87 |  it('rejects public sender metadata belonging to another native registered device',async()=>{await availableSource(async()=>{
+    > 88 |   const input=await preparedInput('available','foreign-metadata');for(const change of [{sender_key:machines[1].identityKeys.curve25519.toBase64()},{device_id:'B'}]){const result=await write('conversations/legacy/legacy/commit',{...input,envelope:{...input.envelope,event:{...input.envelope.event,...change}}});expect(result.status).toBe(403);}expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);
+         |                                                                                                                                                                                                                                                                                                                                             ^
+      89 |  });});
+      90 |  it('refuses candidate preparation when a verified historical recipient is unavailable rather than shrinking the cohort',async()=>{
+      91 |   const input=await preparedInput('verified','unavailable-candidate'),result=await write('conversations/legacy/legacy/commit',input);expect(result.status).toBe(409);expect(result.body.message).toBe('Historical recipient unavailable');expect((await pool.query('SELECT count(*)::int AS count FROM chat_crypto_legacy_candidates')).rows[0].count).toBe(0);expect((await pool.query("SELECT state FROM chat_crypto_legacy_migrations WHERE message_id='msg-a'")).rows[0].state).toBe('PREPARED');
+
+      at test/chat-crypto-legacy.integration.spec.ts:88:333
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:87:94)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 8 passed, 9 total
+Snapshots:   0 total
+Time:        44.456 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

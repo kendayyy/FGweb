@@ -1,0 +1,42 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-browser-timing10.spec.ts --config quality/evidence/T30/playwright-browser-timing10.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:21720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-browser-timing10.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.4m)
+
+
+  1) quality\evidence\T30\native-browser-timing10.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Rời cuộc gọi', exact: true })
+    Expected: visible
+    Timeout: 25000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Rời cuộc gọi', exact: true }) with timeout 25000ms
+      - waiting for getByRole('button', { name: 'Rời cuộc gọi', exact: true })
+
+
+      52 |  await installBrowserRoomTiming(page);await page.goto(`${ready.origin}/rooms/${ready.roomId}`);if(key==='sender')await checkpoint(page,'Bắt đầu tải FG','Mở ứng dụng thật trong browser headed; chưa có kết quả call/capture');try{await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toBeVisible();}finally{await captureBrowserRoomTiming(page,evidence,key);}windows.set(key,{page,source,context});return page;
+      53 | }
+    > 54 | async function join(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Vào gọi',exact:true}).click();await expect(page.getByRole('button',{name:'Rời cuộc gọi',exact:true})).toBeVisible({timeout:25000});await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toContainText('Đã kết nối');fs.appendFileSync(evidence+'/connection-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');}
+         |                                                                                                                                                                                                                                            ^
+      55 | async function share(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(page.getByRole('button',{name:'Dừng chia sẻ',exact:true})).toBeVisible({timeout:45000});fs.appendFileSync(evidence+'/publication-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');const capture=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;return {calls:w.t30CaptureCalls,tracks:w.t30Captures.flatMap(s=>s.getVideoTracks().map(t=>({state:t.readyState,settings:t.getSettings()})))};});expect(capture.calls.at(-1)?.active).toBe(true);expect(capture.tracks.at(-1)?.settings.displaySurface).toBe('browser');expect(capture.tracks.at(-1)?.state).toBe('live');expect(capture.tracks.at(-1)?.settings.height??0).toBeLessThanOrEqual(720);expect(capture.tracks.at(-1)?.settings.frameRate??0).toBeLessThanOrEqual(31);fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\n');}
+      56 | async function stats(page:Page){activePage=page;await page.bringToFront();await page.locator('.fg-live-stage').scrollIntoViewIfNeeded();return page.evaluate(async()=>{const own=window as unknown as CaptureWindow;const rows:Array<{id:string;kind:string;bytes:number;packets:number;lost:number;jitter:number;trackIdentifier:string;width:number;height:number}>=[];let relay=false;for(const pc of own.t30Peers){const report=await pc.getStats();for(const s of report.values()){if(s.type==='inbound-rtp'&&!s.isRemote)rows.push({id:s.id,kind:s.kind??s.mediaType,bytes:s.bytesReceived??0,packets:s.packetsReceived??0,lost:s.packetsLost??0,jitter:s.jitter??0,trackIdentifier:s.trackIdentifier??'',width:s.frameWidth??0,height:s.frameHeight??0});if(s.type==='candidate-pair'&&s.state==='succeeded'&&s.nominated){const local=report.get(s.localCandidateId);if(local?.candidateType==='relay')relay=true;}}}const video=document.querySelector('.fg-live-stage video') as HTMLVideoElement|null;const selected=document.querySelector('.fg-live-selector [aria-selected="true"]');return {at:Date.now(),rows,relay,peerCount:own.t30Peers.length,selectedId:selected?.id??'',videoTrackId:(video?.srcObject as MediaStream|null)?.getVideoTracks()[0]?.id??'',videoCount:document.querySelectorAll('.fg-live-stage video').length};});}
+      57 | type Stats=Awaited<ReturnType<typeof stats>>;
+        at join (E:\FGweb\code\quality\evidence\T30\native-browser-timing10.spec.ts:54:236)
+        at E:\FGweb\code\quality\evidence\T30\native-browser-timing10.spec.ts:66:45
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing10-T3-9cb34-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing10-T3-9cb34-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-browser-timing10.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

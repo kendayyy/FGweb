@@ -1,0 +1,40 @@
+
+Running 1 test using 1 worker
+
+(node:28140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\theme.spec.ts:22:1 › Classic follows effective FG theme rather than device-only dark mode and honors reduced motion
+  1) tests\e2e\theme.spec.ts:22:1 › Classic follows effective FG theme rather than device-only dark mode and honors reduced motion 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('button', { name: /Chế độ màu:/ }).locator('svg').first().locator('clipPath')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('button', { name: /Chế độ màu:/ }).locator('svg').first().locator('clipPath') with timeout 5000ms
+      - waiting for getByRole('button', { name: /Chế độ màu:/ }).locator('svg').first().locator('clipPath')
+        13 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      25 |  const icon=page.getByRole('button',{name:/Chế độ màu:/}).locator('svg').first();
+      26 |  const circle=icon.locator('circle');
+    > 27 |  await expect(icon.locator('clipPath')).toHaveCount(1);
+         |                                         ^
+      28 |  const clip=await icon.locator('clipPath').getAttribute('id');
+      29 |  const scale=()=>circle.evaluate(node=>new DOMMatrix(getComputedStyle(node).transform).a);
+      30 |  await expect.poll(scale).toBeCloseTo(1.7,2);
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:27:41
+
+    Error Context: .cache\theme\results\theme-Classic-follows-effe-db94a-e-and-honors-reduced-motion\error-context.md
+
+    Error Context: .cache\theme\results\theme-Classic-follows-effe-db94a-e-and-honors-reduced-motion\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:22:1 › Classic follows effective FG theme rather than device-only dark mode and honors reduced motion 

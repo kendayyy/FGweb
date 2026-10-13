@@ -1,0 +1,171 @@
+{
+  "poolSummary": [
+    {
+      "service": "RoomsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 4,
+      "pids": [
+        1337,
+        1338,
+        1339,
+        1340
+      ]
+    },
+    {
+      "service": "TeamsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 4,
+      "pids": [
+        1354,
+        1355,
+        1356,
+        1357
+      ]
+    },
+    {
+      "service": "CallsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 5,
+      "pids": [
+        1363,
+        1364,
+        1365,
+        1366,
+        1430,
+        1471,
+        1488
+      ]
+    },
+    {
+      "service": "CallLifecycleService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 2,
+      "pids": [
+        1370,
+        1393,
+        1422,
+        1480
+      ]
+    }
+  ],
+  "hostSummary": {
+    "path": "quality/evidence/T30/native-host-observation-27711f25-3c35-443a-842f-748d12fea2ac.json",
+    "minFreeGB": 0.46814727783203125,
+    "maxCpu": 100,
+    "dropped": 0
+  },
+  "controllerErrors": [],
+  "slowMethods": [
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 565,
+      "ok": true,
+      "at": "2026-10-12T18:28:47.558Z",
+      "durationMs": 2163
+    },
+    {
+      "type": "finish",
+      "service": "TeamsService",
+      "method": "transaction",
+      "id": 689,
+      "ok": true,
+      "at": "2026-10-12T18:28:54.863Z",
+      "durationMs": 2239.28
+    },
+    {
+      "type": "finish",
+      "service": "PlaySessionsService",
+      "method": "listRoom",
+      "id": 688,
+      "ok": true,
+      "at": "2026-10-12T18:28:54.863Z",
+      "durationMs": 2239.34
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 793,
+      "ok": true,
+      "at": "2026-10-12T18:29:01.711Z",
+      "durationMs": 2302.88
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 792,
+      "ok": true,
+      "at": "2026-10-12T18:29:01.712Z",
+      "durationMs": 2303.06
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 804,
+      "ok": true,
+      "at": "2026-10-12T18:29:09.331Z",
+      "durationMs": 8038.17
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1016,
+      "ok": true,
+      "at": "2026-10-12T18:29:18.988Z",
+      "durationMs": 3221.63
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1302,
+      "ok": true,
+      "at": "2026-10-12T18:29:33.180Z",
+      "durationMs": 3204.07
+    }
+  ],
+  "sdkRemovals": [
+    {
+      "type": "owned-compiled-cjs-sdk",
+      "method": "removeParticipant",
+      "at": "2026-10-12T18:29:21.411Z",
+      "completedAt": "2026-10-12T18:29:21.449Z",
+      "durationMs": 38.09,
+      "ok": false,
+      "status": 404,
+      "code": "not_found",
+      "sites": [
+        {
+          "line": 99,
+          "column": 26
+        },
+        {
+          "line": 590,
+          "column": 23
+        }
+      ]
+    }
+  ],
+  "pgFailures": [
+    {
+      "type": "query",
+      "kind": "room-lock",
+      "startedAt": "2026-10-12T18:29:18.406Z",
+      "completedAt": "2026-10-12T18:29:21.409Z",
+      "durationMs": 3002.67,
+      "poolIndex": 0,
+      "backendPid": 1325,
+      "ok": false,
+      "sqlState": "57014"
+    }
+  ]
+}

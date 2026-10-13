@@ -1,0 +1,4 @@
+import fs from 'node:fs';const dir='quality/evidence/LOADING3D-FE';let source=fs.readFileSync(dir+'/headed-natural-loading-round8.mjs','utf8');
+source="import {RoomSchema} from '@fg/contracts';\n"+source;
+source=source.replace('assert.equal(createdRoom.status(),201);const room=await createdRoom.json();',"assert.equal(createdRoom.status(),200);const room=RoomSchema.parse(await createdRoom.json());assert.equal(room.ownerId,users[0]);assert.equal((await pool.query('SELECT owner_id FROM rooms WHERE id=$1',[room.id])).rows[0].owner_id,users[0]);");
+fs.writeFileSync(dir+'/headed-natural-loading-round9.mjs',source,{flag:'wx'});console.log('RED8 preserved. RoomsController explicitly @HttpCode(200), existing rooms integration expects200; fixture now exact200 plus RoomSchema and persisted owner assertion.');

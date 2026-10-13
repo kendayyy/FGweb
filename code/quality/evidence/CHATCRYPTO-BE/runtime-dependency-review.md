@@ -1,0 +1,7 @@
+# Current runtime dependency security evidence
+
+Non-mutating npm audit --omit=dev --json throughactualinstalledNode/npmcli ended2026-10-10 02:19:30.250 +07 exit0 SHAce1cba415374457fafcabda993b75c8b885887d7d1075c5b32c78998426fe675. Returnedregistryknownadvisories0/allseverity0, prodmetadata340/totalmetadata1185 (metadata total includesdev/optional/peer; notclaimall1185 auditedruntime). Rootlock f36f7dab8fa29302a04d898ef430f9c37dc3cdffcc7256e7f365cad16bd67661 unchanged. Initialnpm.cmd wrapperfailedWindowsEINVAL beforeauditinvoked; truthfullaunchfailure+partial evidence retained, no fabricatedcommand starttimestamp.
+
+Actualinstalledproductiongraph npm ls --omit=dev --json ended2026-10-10 02:20:49.768 +07 exit0 SHA3f2503aae124b2e2b4e7a8d24b054a537228bc64671663c1edfa652ff065cf07, rootfg-root/fiveworkspaces/no reported missing-invalid-peerMissing-extraneous-problems. Matrix WASM18.6.0(web), BetterAuth1.7.7, pg8.23.1, Sharp0.35.5 matchactualinstalledpackage manifests androotlock. Sevenreadonlymanifest/lockhashes andcommand/resultgraphs pinned inJSON. No dependencyfix/packagechange/privatekeys added.
+
+Knownadvisory lookup andinstalledgraph consistency arelimiteddependency evidence, notproofallcode/protocol/supplychain risks absent orfullbackend/securityPASS. Current301/17 nativeapp regression remainsvalid; app/tests/buildsource unchanged. Futuremoderation epochproducer/aggregatequota policy/operational activation/fullsecurityacceptance remainpending; sameCHATCRYPTO-BE IN_PROGRESS.

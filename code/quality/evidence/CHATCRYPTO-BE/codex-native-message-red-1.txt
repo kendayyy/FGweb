@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17432) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (35.42 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › relays real Olm room keys and Megolm messages without plaintext persistence, with tamper/replay rejection
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      159 |   const content=JSON.parse(await alice.encryptRoomEvent(room,'m.room.message',JSON.stringify({msgtype:'m.text',body:'native-private-message-fixture'})));
+      160 |   const payload={clientMessageId:'native-message',deviceId:'A',membershipRevision:3,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:content}};
+    > 161 |   const sent=await post('conversations/dm/messages',payload);expect(sent.status).toBe(201);expect(sent.body.envelope).toEqual(payload.envelope);
+          |                                                                                  ^
+      162 |   const retry=await post('conversations/dm/messages',payload);expect(retry.status).toBe(201);expect(retry.body.id).toBe(sent.body.id);
+      163 |   const history=await request(base).get('/api/v1/crypto/conversations/dm/messages').set('Cookie',otherCookie);expect(history.status).toBe(200);expect(history.body.items).toHaveLength(1);
+      164 |   const decrypted=await bob.decryptRoomEvent(JSON.stringify({type:'m.room.encrypted',sender:alice.userId.toString(),event_id:'$'+sent.body.id,origin_server_ts:Date.now(),content:history.body.items[0].envelope.event}),room,new sdk.DecryptionSettings(sdk.TrustRequirement.Untrusted));
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:161:82)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        36.056 s, estimated 40 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

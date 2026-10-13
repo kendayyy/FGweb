@@ -1,6 +1,6 @@
 # FG — Đặc tả sản phẩm
 
-Ngày cập nhật: 07/10/2026.
+Ngày cập nhật: 09/10/2026 (LOADING3D-CHANGE-01; giữ các baseline và amendment lịch sử).
 Trạng thái: Đã phê duyệt chính thức (T00 Baseline). Người dùng đã chốt toàn bộ gói đề xuất kỹ thuật và nghiệp vụ vào ngày 04/10/2026.
 
 Tên website đã chốt: **FG**. Người dùng đã duyệt phong cách ba mockup: giữ màu sắc, typography và bố cục khi build frontend. Hướng dẫn triển khai hình thức ở [02-frontend-design.md](./02-frontend-design.md); đây là tài liệu thiết kế đi cùng spec.
@@ -26,6 +26,12 @@ Danh mục 7 game chính thức đã được phê duyệt:
 - Free Fire.
 
 Mỗi game có một phòng chat chung tên **Lobby**, là nơi trung tâm để cộng đồng gặp nhau, tìm bạn chơi, bàn luận về game và tán gẫu. Phiên bản đầu không chia thêm các kênh theo chủ đề hoặc chế độ.
+
+SIDEBAR-CHANGE-01 cập nhật (07/10/2026): người dùng bỏ yêu cầu toggle; danh mục bên trái luôn hẹp72px trên desktop/tablet, chỉ logo và tooltip tên, không nút mở rộng/thu gọn hoặc lưu lựa chọn rộng/hẹp. Giữ truy cập cả7 game; mobile dùng drawer. Không làm mất game/chat/dữ liệu nhập/session khi điều chỉnh bố cục; chi tiết và ảnh tham chiếu08 ở frontend-design mục6.
+
+Người dùng chốt [mockup sidebar hẹp cố định — SIDEBAR-COMPACT-APPROVED](./mockups/08-sidebar-fixed-compact-preview.png) ngày07/10/2026. Đây là baseline bố cục sidebar mới, thay phương án toggle trước đó; chưa là bằng chứng code/kiểm thử hoàn thành.
+
+GAME-LOGO-01 (07/10/2026): bổ sung logo chính thức tại điều hướng/chọn game và header Lobby theo yêu cầu người dùng, giữ tên game và thiết kế FG. Danh mục nguồn/trạng thái ảnh ở [game-logos/README.md](./game-logos/README.md); không đổi danh mục7 game hoặc contracts. Assets chưa tải được/chưa đủ điều kiện sử dụng dùng fallback có tên, không báo tích hợp thành công giả.
 
 “+1 flex” chỉ là ví dụ tin nhắn tự do, không phải cú pháp hệ thống hoặc tên chức năng.
 
@@ -251,15 +257,19 @@ Các mục dưới là mặc định kỹ thuật cho bản đầu, không phả
 - Không tự ghép identities vì trùng email. Người dùng đăng nhập tài khoản Discord hiện có, xác minh quyền sở hữu email rồi thêm mật khẩu, giữ userId/hồ sơ/bạn bè/phòng. Đăng ký email đã có trả thông báo chung không tiết lộ tài khoản. Flow thêm mật khẩu cần xác minh mới gắn với session/user hiện tại, không chỉ dựa emailVerified cũ.
 - Đổi mật khẩu yêu cầu mật khẩu hiện tại; reset thành công thu hồi phiên cũ. Token hết hạn/đã dùng không được tái sử dụng. Ban và quyền session áp dụng cả hai phương thức.
 - DTO riêng của chủ tài khoản cho phép discordId=null; bỏ yêu cầu mọi user có Discord. Email chỉ trả chủ tài khoản qua API bảo vệ, public profile không lộ email/provider IDs/tokens/hash.
-- Thông tin cần đọc lại không hash một chiều: dùng HTTPS, kiểm quyền, mã hóa lưu trữ/backup và che thông tin nhạy cảm khỏi log/API công khai. Bản này không mã hóa riêng từng trường trong DB. T40 cần evidence mã hóa disk/backup và restore, không coi cấu hình văn bản là đã bảo mật thực tế.
+- Thông tin cần đọc lại không hash một chiều: dùng HTTPS, kiểm quyền, mã hóa lưu trữ/backup và che thông tin nhạy cảm khỏi log/API công khai. Ngoại lệ nội dung chat/attachment theo CHAT-CRYPTO-01 mục17: DM/nhóm E2EE và Lobby mã hóa nội dung với khóa server; các trường user khác không tự mã hóa riêng trong DB. T40 cần evidence mã hóa disk/backup và restore, không coi cấu hình văn bản là đã bảo mật thực tế.
 - Email xác minh/reset dùng SMTP thật; thiếu SMTP hoặc địa chỉ test được người dùng chỉ định thì báo blocker phần delivery, không fake sent. Mail auth bắt buộc không phụ thuộc opt-out email thông báo cộng đồng.
 - Giao diện gồm đăng ký, xác minh/gửi lại, quên/reset/đổi mật khẩu và thêm mật khẩu cho Discord. Các CTA đăng nhập mở trang chọn phương thức; giữ phong cách FG. Mockup04 được người dùng chốt ngày07/10/2026, là baseline bố cục đăng nhập desktop/mobile cho coding/build.
 - Acceptance: API/DB thật kiểm luồng chính, email trùng, token replay/expired, sai mật khẩu/rate limit, ban/revoke và chống chiếm tài khoản; kiểm DB chứa salted hash (hai user cùng mật khẩu hash khác), không mật khẩu gốc; migration giữ dữ liệu Discord. UI/E2E local headed, mọi test có evidence/exit code thật. T39/T42 kiểm cả hai phương thức.
 
 ## 15. Sáng / Tối / Hệ thống — THEME-CHANGE-01
 
+**THEME-COMPACT-02 — yêu cầu mới08/10/2026, thay yêu cầu ba chế độ bên dưới:** chỉ giữ Sáng/Tối, bỏ Hệ thống. Một nút chỉ icon đổi trực tiếp hai chế độ, không menu/chevron/nhãn chữ. Người dùng yêu cầu mockup trước; hình thức mới chưa duyệt, runtime hiện có chưa thay đổi. Việc migration giá trị `system` cũ và mặc định sẽ được pin/review cùng bước triển khai, không suy diễn đã kiểm thử từ ảnh.
+
+- Cùng ngày, người dùng duyệt mockup và yêu cầu “đúng như vậy đấy làm đi”. Triển khai trong LIGHT01-FE: giữ lựa chọn light/dark cũ; `system` cũ chốt màu máy tại lần khởi tạo và lưu light/dark, không tiếp tục theo OS. Thiếu/giá trị sai/storage bị chặn mặc định dark; vẫn đổi màu trong phiên được. Bootstrap trước paint và provider/cross-tab dùng cùng quy tắc. Duyệt ảnh không thay kiểm thử hoặc PASS.
+
 - Áp dụng app FG hiện có và các màn mới khi triển khai, gồm header/login/Lobby/phòng. Bộ chọn ba giá trị `light`/`dark`/`system`, mặc định system, lưu trên trình duyệt, không đồng bộ tài khoản hoặc thêm API/migration.
-- Theme tối giữ baseline; light giữ layout/Inter/CTA xanh, nền xám xanh nhạt/panel trắng/chữ navy. Hình thức light chờ review ảnh thật và app hoạt động, không tự đánh đã duyệt mockup05.
+- THEME-VISUAL-02 (07/10/2026): người dùng chốt [light Xám khói](./mockups/fg-light-smoke-approved.png), thay phương án trắng kem sau review app quá chói. Giữ Inter, CTA xanh tiết chế, sidebar hẹp đã chốt và bố cục chat/tuyển đội. Người dùng cũng chốt [Dark Xám khói](./mockups/fg-dark-smoke-approved.png) ngày07/10/2026; cả hai theme trở thành hướng hình thức đã duyệt. Bộ chọn giao diện đang được thiết kế thêm theo yêu cầu mới, phải giữ đủ Sáng/Tối/Hệ thống. Runtime chỉ cập nhật qua checkpoint/migration có review và kiểm thử thật. Duyệt ảnh không thay review/kiểm thử app thật hoặc task PASS.
 - Chọn light/dark cố định; system theo prefers-color-scheme và thay đổi thiết bị trong phiên. Lưu key `fg.theme`; chỉ nhận ba giá trị. Storage bị chặn/giá trị sai thì khởi tạo system; vẫn đổi được trong phiên. Storage event đồng bộ tabs, xóa key trở về system. Áp dụng data-theme và color-scheme trước paint để tránh flash sai màu.
 - Nút header và trang login mở bộ chọn nhãn tiếng Việt, thể hiện lựa chọn đã lưu, dùng keyboard/Escape/focus/44px. Đổi màu không remount app, mất composer, auth session hoặc ngắt socket/call.
 - Preview dùng API/DB thật hiện có; chưa có Bảng tin hoặc email auth thì không dựng success/data giả. Thiếu service/credential hoặc quan sát UI không được phải ghi rõ; không coi UI đổi màu là mọi tính năng FG đã PASS.
@@ -276,3 +286,36 @@ Các mục dưới là mặc định kỹ thuật cho bản đầu, không phả
 - Policy mới8–128/chữ hoa/ký tự đặc biệt áp dụng cả kingame. Ngoại lệ độ dài được duyệt trước đó không cho phép thiếu ký tự đặc biệt; mật khẩu khởi tạo đã chỉ định chưa đáp ứng composition mới, cần người dùng đặt mật khẩu đáp ứng qua cấu hình local bảo mật trước provision. Email sở hữu/khôi phục admin đã được cung cấp riêng; cấu hình server-only, không ghi trong docs/logs/repo. Không dùng email giả hoặc tự đặt emailVerified=true để vượt xác minh; chưa có provisioning evidence thì chưa có tài khoản hoạt động.
 - Sau triển khai, kingame đăng nhập → menu Quản trị → /admin. Menu chỉ hiện admin; URL có thể được biết nhưng server từ chối khách/user/helper trên mọi API và realtime. Không cache dữ liệu admin ra guest/user. Đăng xuất, ban hoặc thu hồi quyền phải ngắt subscription, chặn request kế tiếp và clear dữ liệu nhạy cảm ở client.
 - Acceptance: admin login có thể thao tác; guest/user/helper/direct URL/cross-user requests bị từ chối, client sửa role/name không nâng quyền; user chỉ xem yêu cầu của mình, ghi chú nội bộ private; nhiều ID hoặc Discord allowlist không cấp thêm admin. UI/E2E headed và API/DB thật; chưa có trang/tài khoản/provision evidence thì không tuyên bố đăng nhập admin dùng được.
+
+## 17. Mã hóa tin nhắn — CHAT-CRYPTO-01, duyệt08/10/2026
+
+### Phạm vi và hai phương pháp
+
+- Người dùng chốt: DM và chat phòng nhóm dùng mã hóa đầu cuối (E2EE), gồm chữ, ảnh đính kèm và nội dung reply. Phòng PUBLIC vẫn chỉ thành viên đọc chat và cũng dùng E2EE; trạng thái tìm thấy phòng không đổi quyền chat. Lobby không dùng E2EE, vẫn cho khách xem theo quyền hiện có.
+- DM/nhóm: mã hóa trên thiết bị gửi, giải mã trên thiết bị người nhận được cấp khóa; API/realtime/DB/object storage chỉ giữ ciphertext và metadata tối thiểu cần routing/ACL. Server/admin không giữ khóa giải mã E2EE, không có master key/backdoor hoặc tự đăng ký thiết bị admin để đọc chat.
+- Lobby: mã hóa nội dung DB và ảnh/object storage bằng cơ chế mã hóa có xác thực (AEAD, mặc định AES-256-GCM), server giải mã cho người có quyền xem và moderation. Dùng nonce duy nhất theo khóa, phiên bản envelope/key ID và rotation; master keys nằm trong secret manager/KMS tách DB/backup/repo/frontend. Quyền đọc Lobby công khai không thay đổi; mã hóa lưu trữ không ngăn người xem sao chép nội dung.
+- HTTPS/TLS, ACL, bảo vệ disk/backup và che log áp dụng cả hai. CHAT-CRYPTO-01 thay ngoại lệ “không mã hóa riêng từng trường” ở mục14 riêng đối với nội dung chat/attachment; không mở rộng thành mã hóa một chiều hoặc E2EE mọi dữ liệu user. Không hash nội dung cần đọc lại.
+
+### Khóa, thiết bị, lịch sử và báo cáo
+
+- Dùng protocol/thư viện E2EE đã được đánh giá, có tài liệu bảo mật và phù hợp web/nhóm/nhiều thiết bị; không tự xây protocol bằng AES đơn lẻ. Checkpoint contracts phải khóa lựa chọn/version/threat model và review trước backend/frontend. Không đổi stack/dịch vụ trả phí ngầm.
+- Khóa thiết bị được tạo client-side; xác minh thiết bị và cảnh báo thay khóa/người nhận. Thiết bị mới nhận khóa từ thiết bị tin cậy hoặc backup khóa đã mã hóa bằng mã khôi phục riêng người dùng giữ. Mã khôi phục không là password đăng nhập, không gửi cho server/admin/log; reset password không tự mở lịch sử E2EE.
+- Mất tất cả thiết bị và mã khôi phục thì không đọc lại lịch sử E2EE cũ; phải thông báo rõ khi thiết lập. Không giả khôi phục thành công hoặc âm thầm chuyển sang plaintext.
+- Thành viên mới chỉ được đọc tin từ thời điểm tham gia, không cấp khóa lịch sử cũ. Khi rời/bị kick/ban hoặc thu hồi thiết bị, đổi khóa/epoch cho tin mới và chặn mọi pathway xin khóa/subscription. Bản tin đã được người nhận giải mã/lưu không thể thu hồi từ thiết bị của họ.
+- Báo cáo vi phạm: người báo chọn các tin/ảnh đã giải mã, xem trước nội dung và xác nhận gửi cho admin. Server chỉ đọc bằng chứng chủ động gửi, bảo vệ bằng mã hóa lưu trữ và ACL/audit; không mở toàn bộ chat. Tin bị sửa/xóa và khả năng xác minh tính xác thực bằng chứng được khóa trong contracts/protocol review, không coi mọi plaintext gửi lên là chứng cứ mật mã đã xác minh.
+- Reply preview/filename/thumbnail và nội dung push/log/cache không được vô tình lộ plaintext ngoài thiết bị hoặc người nhận được phép. Push private mặc định chỉ báo có tin mới, không chứa nội dung. Mention/notification phải giữ quyền, không parse plaintext E2EE trên server.
+
+### Migration và nghiệm thu
+
+- Review dữ liệu cũ và rebaseline trước build. Không tuyên bố tin cũ đã E2EE chỉ vì server mã hóa bằng khóa server; lịch sử plaintext cũ cần migration có thiết bị người tham gia và kế hoạch đối soát/backfill rõ. Không cấp tin cũ cho thành viên mới qua API legacy/cache/backup. Không xóa DB/backup thật hoặc destructive migration để che plaintext cũ; checkpoint contracts phải khóa kế hoạch và báo blocker nếu không đủ điều kiện.
+- Test API/DB/object storage/realtime thật xác nhận không có plaintext/private keys E2EE; Lobby ciphertext/khóa tách biệt, sửa ciphertext/nonce sai phải bị từ chối. Hai người/nhóm/nhiều thiết bị, recovery đúng/sai/mất mã, membership mới/kick/ban/thu hồi thiết bị, khóa đổi, offline/reconnect, dedup, ảnh/reply/mention/report và migration/backup restore phải có evidence.
+- E2EE không bao gồm media gọi thoại/screen share trong thay đổi này, không làm giảm mục tiêu1.000 người gọi/live. T39/T42 thêm hồi quy chat mã hóa; T40 kiểm restore key separation/rotation và giới hạn khôi phục; T41 giữ media target và đo overhead chat. UI/E2E local headed, logs/evidence thực ở code/, mọi phiên ghi history.md.
+
+## 18. Logo FG3D và skeleton đang tải — LOADING3D-CHANGE-01
+
+- Người dùng chốt đưa demo chỉnh09/10/2026 vào kế hoạch triển khai: logo FG ghép khối có chiều sâu, xoay360 độ quanh trục dọc, nổi nhẹ; bên dưới là thanh progress xanh thay dòng “Đang tải FG”. Giữ silhouette thương hiệu, bố cục/Inter và palette light/dark đã duyệt. Logo sidebar/header/favicon vẫn giữ thiết kế tĩnh.
+- Dùng cho app bootstrap và lần tải đầu vùng nội dung tại các trang đã triển khai. Skeleton mô phỏng đúng bố cục trang, không chứa nội dung mẫu như dữ liệu thật. Pending kéo dài150ms mới hiện; sẵn sàng/lỗi/hủy thì bỏ loader ngay, không bắt người dùng chờ hết animation. Refetch nền và thao tác trên dữ liệu đã có giữ nội dung/draft/session/scroll/socket/call/live, không phủ màn chờ toàn trang.
+- Thanh progress mặc định vô định (vệt xanh chạy lặp), không phần trăm hoặc tăng0–100 theo timer. Hiện đúng trạng thái pending hiện có; lỗi đi vào error/retry thật, không quay vô hạn che lỗi. Không thêm API tiến độ tải, DB hoặc migration trong thay đổi này.
+- Chuyển động nhẹ, chu kỳ xoay6giây, có depth khi nhìn cạnh và bóng mềm. Respect prefers-reduced-motion bằng logo/thanh tĩnh; dừng animation khi tab ẩn. Loading có accessible status/progressbar, không trap focus, không đọc thông báo lặp theo vòng xoay. Mobile360px không tràn, light/dark đủ tương phản; không dùng WebGL hoặc thêm thư viện nặng cho loader.
+- Coding and build 2 làm checkpoint **LOADING3D-FE**, sau toàn chuỗi CHATCRYPTO review PASS và trước T29, dựa trên GAME-LOGO-FE/LIGHT01-FE đã PASS. Rebaseline/scope review có evidence trước code; không chen task hiện tại, sửa PASS cũ hoặc nới checker. Demo tại code/scratch/fg-3d-loading-preview là minh họa riêng, không chứng minh loader app đã hoàn thành.
+- Nghiệm thu: loading/ready/error/retry/cancel thật, reduced-motion/tab visibility/keyboard/theme/reload, không mất draft/session/call và ảnh desktop/mobile; UI/E2E local headed, command/time/exit/log/hash/evidence thật trong code/ và từng phiên ghi history.md. T39/T42 bao phủ hồi quy loader.

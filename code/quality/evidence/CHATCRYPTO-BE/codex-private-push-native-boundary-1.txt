@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6156) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (51.896 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › delivers real encrypted Web Push over trusted TLS with generic content and durable replay dedup
+
+    error: invalid input syntax for type json
+
+      80 |    const notice=(await pool.query("SELECT * FROM notifications WHERE user_id='bob' AND type='DM' AND data::jsonb->>'messageId'=$1",[sent.body.id])).rows[0];expect(notice).toBeDefined();const job=(await pool.query("SELECT * FROM notification_outbox WHERE notification_id=$1 AND channel='PUSH'",[notice.id])).rows[0];expect(job).toBeDefined();
+      81 |    const dispatcher=new PrivatePushDispatcher(pool,{allowedOrigins:[origin],vapid:{...vapid,subject:'https://fg.invalid/push'},ca:fs.readFileSync(previous.FG_REPORT_TEST_CA!)});expect(await dispatcher.dispatchOne(job.id)).toBe(true);expect(received).toHaveLength(1);expect(received[0].encrypted).toBe(true);expect(received[0].vapid).toBe(true);expect(received[0].payload).toEqual(expect.objectContaining({id:notice.id,userId:'bob',type:'DM',title:'Tin nhắn mới',body:'Bạn có tin nhắn mới.',data:{conversationId:'dm',messageId:sent.body.id,senderId:'alice'}}));expect(JSON.stringify(received[0].payload)).not.toContain('never-worker-private-preview');expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[job.id])).rows[0].status).toBe('SENT');expect(await dispatcher.dispatchOne(job.id)).toBe(false);expect(received).toHaveLength(1);
+    > 82 |    const queue=async(tag:string)=>{const revision=(await request(base).get('/api/v1/crypto/conversations/dm/state').set('Cookie',cookies.alice)).body.membershipRevision,cipher=JSON.parse(await machine.encryptRoomEvent(new sdk.RoomId(matrixRoomId('dm')),'m.room.message',JSON.stringify({msgtype:'m.text',body:'never-worker-private-preview'}))),message=await request(base).post('/api/v1/crypto/conversations/dm/messages').set('Cookie',cookies.alice).set('Origin','http://localhost:5173').send({clientMessageId:tag,deviceId:'CUSTODY',membershipRevision:revision,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:cipher}});expect(message.status).toBe(201);const notice=(await pool.query("SELECT id FROM notifications WHERE user_id='bob' AND data::jsonb->>'messageId'=$1",[message.body.id])).rows[0],job=(await pool.query("SELECT * FROM notification_outbox WHERE notification_id=$1 AND channel='PUSH'",[notice.id])).rows[0];return {job,revision};};
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+      83 |    const disabled=await queue('worker-pref-revoked');await pool.query('UPDATE notification_preferences SET push=false WHERE id=$1',[preferenceId]);expect(await dispatcher.dispatchOne(disabled.job.id)).toBe(false);expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[disabled.job.id])).rows[0].status).toBe('FAILED');expect(received).toHaveLength(1);await pool.query('UPDATE notification_preferences SET push=true WHERE id=$1',[preferenceId]);
+      84 |    const banned=await queue('worker-banned'),banId=randomUUID();try{await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'outsider','bob','BAN','owned worker ban')",[banId]);expect(await dispatcher.dispatchOne(banned.job.id)).toBe(false);expect(received).toHaveLength(1);}finally{await pool.query('DELETE FROM admin_actions WHERE id=$1',[banId]);}
+      85 |    const interval=await queue('worker-interval-revoked'),originalIntervals=(await pool.query("SELECT id,start_revision FROM chat_crypto_membership_intervals WHERE conversation_id='dm' AND user_id='bob'")).rows;try{await pool.query("UPDATE chat_crypto_membership_intervals SET start_revision=$1 WHERE conversation_id='dm' AND user_id='bob'",[Number(interval.revision)+1]);expect(await dispatcher.dispatchOne(interval.job.id)).toBe(false);expect(received).toHaveLength(1);}finally{for(const row of originalIntervals)await pool.query('UPDATE chat_crypto_membership_intervals SET start_revision=$2 WHERE id=$1',[row.id,row.start_revision]);}
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at queue (test/chat-crypto-custody.integration.spec.ts:82:668)
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:87:18)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        52.34 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"b5fd7df6ec3a452ab7b0358a8b23df0a","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,79 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toContainText(expected) failed
+
+Locator: getByRole('status')
+Expected substring: "đăng ký với FG"
+Timeout: 30000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" getByRole('status') with timeout 30000ms
+  - waiting for getByRole('status')
+    2 × locator resolved to <p role="status" class="fg-crypto-help">Đang mở khóa thiết bị…</p>
+      - unexpected value "Đang mở khóa thiết bị…"
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toContainText (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at <anonymous> (E:\FGweb\code\quality\evidence\CHATCRYPTO-FE\headed-device.mjs:70:42) {
+  matcherResult: {
+    name: 'toContainText',
+    expected: 'đăng ký với FG',
+    message: 'expect(locator).toContainText(expected) failed\n' +
+      '\n' +
+      "Locator: getByRole('status')\n" +
+      'Expected substring: "đăng ký với FG"\n' +
+      'Timeout: 30000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toContainText" getByRole('status') with timeout 30000ms\n` +
+      "  - waiting for getByRole('status')\n" +
+      '    2 × locator resolved to <p role="status" class="fg-crypto-help">Đang mở khóa thiết bị…</p>\n' +
+      '      - unexpected value "Đang mở khóa thiết bị…"\n',
+    pass: false,
+    actual: undefined,
+    log: [
+      `  - Expect "toContainText" getByRole('status') with timeout 30000ms`,
+      "  - waiting for getByRole('status')",
+      '    2 × locator resolved to <p role="status" class="fg-crypto-help">Đang mở khóa thiết bị…</p>',
+      '      - unexpected value "Đang mở khóa thiết bị…"'
+    ],
+    timeout: 30000,
+    ariaSnapshot: '- banner:\n' +
+      '  - link "FG":\n' +
+      '    - /url: /\n' +
+      '  - navigation:\n' +
+      '    - link "Lobby":\n' +
+      '      - /url: /\n' +
+      '    - link "Phòng của tôi":\n' +
+      '      - /url: /rooms\n' +
+      '    - link "Lời mời":\n' +
+      '      - /url: /team-activity\n' +
+      '    - link "Thiết bị mã hóa":\n' +
+      '      - /url: /crypto\n' +
+      '  - button "Chuyển sang Sáng"\n' +
+      '  - link "B browser-alice":\n' +
+      '    - /url: /users/browser-alice\n' +
+      '  - link "Mật khẩu":\n' +
+      '    - /url: /auth/password\n' +
+      '  - button "Đăng xuất"\n' +
+      '- main:\n' +
+      '  - region "Mở khóa thiết bị":\n' +
+      '    - heading "Mở khóa thiết bị" [level=2]\n' +
+      '    - paragraph: Mã khôi phục riêng bảo vệ khóa trên thiết bị này. Mật khẩu đăng nhập không mở được lịch sử mã hóa.\n' +
+      '    - text: Mã khôi phục\n' +
+      '    - textbox "Mã khôi phục": [REDACTED_43_CHAR_TOKEN]\n' +
+      '    - button "Ẩn mã" [pressed]\n' +
+      '    - paragraph: Mã gồm 43 ký tự. FG không lưu mã này và không thể cấp lại khóa đã mất nếu không có bản khôi phục.\n' +
+      '    - button "Sao chép mã"\n' +
+      '    - alert: Dịch vụ mã hóa chưa sẵn sàng. Giữ mã của bạn và thử lại khi dịch vụ hoạt động.\n' +
+      '    - button "Mở khóa thiết bị"\n' +
+      '    - button "Hủy"'
+  }
+}
+
+Node.js v24.21.0

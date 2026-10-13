@@ -19,27 +19,27 @@ export const Alert: React.FC<AlertProps> = ({
     switch (type) {
       case 'error':
         return {
-          bg: 'rgba(229, 72, 77, 0.12)',
-          border: 'rgba(229, 72, 77, 0.4)',
+          bg: 'var(--bg-alert-error)',
+          border: 'var(--border-alert-error)',
           color: 'var(--text-main)',
         };
       case 'warning':
         return {
-          bg: 'rgba(245, 198, 106, 0.12)',
-          border: 'rgba(245, 198, 106, 0.4)',
+          bg: 'var(--bg-alert-warning)',
+          border: 'var(--border-alert-warning)',
           color: 'var(--text-main)',
         };
       case 'success':
         return {
-          bg: 'rgba(57, 217, 138, 0.12)',
-          border: 'rgba(57, 217, 138, 0.4)',
+          bg: 'var(--bg-alert-success)',
+          border: 'var(--border-alert-success)',
           color: 'var(--text-main)',
         };
       case 'info':
       default:
         return {
-          bg: 'rgba(62, 127, 253, 0.12)',
-          border: 'rgba(62, 127, 253, 0.4)',
+          bg: 'var(--bg-alert-info)',
+          border: 'var(--border-alert-info)',
           color: 'var(--text-main)',
         };
     }

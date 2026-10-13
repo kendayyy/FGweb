@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:30004) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (72.033 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › delivers real encrypted Web Push over trusted TLS with generic content and durable replay dedup
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       98 |    const gone=await queue('worker-subscription-gone');responseStatus=410;expect(await dispatcher.dispatchOne(gone.job.id)).toBe(false);expect((await pool.query('SELECT id FROM push_subscriptions WHERE id=$1',[subscriptionId])).rowCount).toBe(0);expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[gone.job.id])).rows[0].status).toBe('FAILED');expect(received).toHaveLength(7);expect(received.every(item=>item.encrypted&&item.vapid)).toBe(true);expect(JSON.stringify(received)).not.toContain('never-worker-private-preview');
+       99 |    responseStatus=201;await pool.query("INSERT INTO push_subscriptions(id,user_id,endpoint,p256dh,auth) VALUES($1,'bob',$2,$3,$4)",[subscriptionId,origin+'/push/'+subscriptionId,p256dh,auth.toString('base64url')]);await pool.query("INSERT INTO notification_preferences(id,user_id,notification_type,in_app,push,email) VALUES($1,'bob','MENTION',false,true,false)",[mentionPreferenceId]);
+    > 100 |    const mention=await queue('worker-mention-native',true);expect(await dispatcher.dispatchOne(mention.job.id)).toBe(true);expect(received).toHaveLength(8);expect(received[7].payload).toEqual(expect.objectContaining({id:mention.job.notification_id,userId:'bob',type:'MENTION',title:'Tin nhắn mới',body:'Bạn có tin nhắn mới.',data:{conversationId:'dm',messageId:mention.messageId,mentionerId:'alice'}}));expect(received[7].encrypted&&received[7].vapid).toBe(true);
+          |                                                                                                                 ^
+      101 |    const revokedMention=await queue('worker-mention-selection-revoked',true),relation=(await pool.query("DELETE FROM mentions WHERE message_id=(SELECT data::jsonb->>'messageId' FROM notifications WHERE id=$1) RETURNING *",[revokedMention.job.notification_id])).rows;try{expect(await dispatcher.dispatchOne(revokedMention.job.id)).toBe(false);expect(received).toHaveLength(8);expect((await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[revokedMention.job.id])).rows[0].status).toBe('FAILED');}finally{for(const row of relation)await pool.query('INSERT INTO mentions(id,message_id,mentioned_user_id,created_at) VALUES($1,$2,$3,$4)',[row.id,row.message_id,row.mentioned_user_id,row.created_at]);}
+      102 |   }finally{if(fs.existsSync(configurationFile))fs.unlinkSync(configurationFile);await pool.query('DELETE FROM push_subscriptions WHERE id=$1',[subscriptionId]);await pool.query('DELETE FROM notification_preferences WHERE id=$1',[preferenceId]);await pool.query('DELETE FROM notification_preferences WHERE id=$1',[mentionPreferenceId]);if(server)await new Promise<void>(resolve=>server!.close(()=>resolve()));auth.fill(0);}
+      103 |  });
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:100:113)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        72.462 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"13c54c38c9a5421e95b70933ae6b9cf2","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,100 @@
+{
+  "version": "1.0.0",
+  "task": "T30",
+  "proposalScope": "quality/evidence/T30/antigravity-native62-error-origin-1",
+  "controlsHarness": "error-origin-controls-reviewed1.mjs",
+  "nativeAcceptanceClaim": false,
+  "preflight": {
+    "fixtureForkIntegrity": true,
+    "compiledOwnersValidated": true,
+    "cleanEnvironment": true
+  },
+  "syntheticControls": {
+    "syntheticFaultLabel": "SYNTHETIC_DIAGNOSTIC_CONTROL_FAULT",
+    "actualE2eDisclaimer": "Actual UI/E2E runs may NOT use fault gates, synthetic delays, or SDK fallbacks. All hooks remain strictly passive read-only telemetry."
+  },
+  "controls": [
+    {
+      "id": "CTL1",
+      "name": "scopeExcludesUnrelated",
+      "description": "Operations on unmanaged objects or uninstrumented services proceed unmodified without polluting telemetry or throwing",
+      "assertions": [
+        "unmanaged operation returns original value",
+        "zero unassociated error records emitted"
+      ]
+    },
+    {
+      "id": "CTL2",
+      "name": "recordsWithoutPrivatePayloads",
+      "description": "Captured errors contain sanitized route and SQL state without exposing JWT tokens, passwords, emails, query params, or raw SQL text",
+      "assertions": [
+        "!content.includes('secret_jwt_123')",
+        "!content.includes('mypassword')",
+        "!content.includes('SELECT * FROM users')"
+      ]
+    },
+    {
+      "id": "CTL3",
+      "name": "preservesExactErrorIdentityAndReturns",
+      "description": "Injected synthetic error instance is rethrown with strict object identity equality (caughtErr === syntheticFault) and custom properties intact; successful returns remain identical",
+      "assertions": [
+        "caughtErr === syntheticFault",
+        "caughtErr.customMarker === 'PRESERVED_OBJECT_MARKER'",
+        "actualReturn === expectedReturn"
+      ]
+    },
+    {
+      "id": "CTL4",
+      "name": "survivesFileWriteFailureWithoutAppChange",
+      "description": "Simulated disk full or EIO in observer file writer increments failureCount without crashing application or altering return values",
+      "assertions": [
+        "app operation succeeds despite writer error",
+        "observer logs failure internally without unhandled throw"
+      ]
+    },
+    {
+      "id": "CTL5",
+      "name": "restorationOnNormalCloseAndStartupFailure",
+      "description": "Invoking stop function cleanly restores all prototypes (pg.Pool, pg.Client, RoomServiceClient, Services), removes event listeners, stops timers, and is idempotent",
+      "assertions": [
+        "health.timerStopped === true",
+        "health.histogramDisabled === true",
+        "typeof pg.Pool.prototype.connect === 'function'",
+        "typeof pg.Client.prototype.query === 'function'",
+        "typeof RoomServiceClient.prototype.listRooms === 'function'",
+        "second stop call succeeds cleanly"
+      ]
+    },
+    {
+      "id": "CTL6",
+      "name": "actualCompiledOwnersBinding",
+      "description": "Binds cleanly to current Build 13 compiled classes and methods (CallsService, PublishingService, CallLifecycleService, RoomsService, PlaySessionsService)",
+      "assertions": [
+        "CallsService.join and withControlGroup exist",
+        "PublishingService.claim and release exist",
+        "CallLifecycleService.reconcileGroup and reconcilePass exist",
+        "RoomsService.getRoomDetail exists",
+        "PlaySessionsService.listRoom exists"
+      ]
+    },
+    {
+      "id": "CTL7",
+      "name": "errorOriginDistinctionPgVsSdk",
+      "description": "Correctly categorizes and distinguishes PG statement timeout (57014), PG connection limit (53300), PG pool acquire timeout, and LiveKit SDK 503 / Twirp unavailable",
+      "assertions": [
+        "parsedStmtTimeout.origin === 'pg-statement-timeout' && parsedStmtTimeout.sqlState === '57014'",
+        "parsedTooManyConn.origin === 'pg-too-many-connections' && parsedTooManyConn.sqlState === '53300'",
+        "parsedPoolTimeout.origin === 'pg-pool-acquire-timeout'",
+        "parsedSdk.origin === 'livekit-sdk-rpc' && parsedSdk.rpcCode === 'unavailable'"
+      ]
+    }
+  ],
+  "teardown": {
+    "restorePgPrototypes": true,
+    "restoreSdkPrototypes": true,
+    "restoreServicePrototypes": true,
+    "stopIntervalTimer": true,
+    "disableHistogram": true,
+    "flushRemainingBuffer": true
+  }
+}

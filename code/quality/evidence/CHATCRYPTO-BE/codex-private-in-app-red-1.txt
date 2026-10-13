@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:3664) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (47.342 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      144 |   const target=await connect('outsider'),items:unknown[]=[],other:unknown[]=[];target.on(SocketEventNames.NOTIFICATION_CREATED,item=>items.push(item));for(const socket of sockets.filter(socket=>socket!==target&&socket!==sockets[1]))socket.on(SocketEventNames.NOTIFICATION_CREATED,item=>other.push(item));
+      145 |   const state=await request(base).get('/api/v1/crypto/conversations/notice-dm/state').set('Cookie',cookies.get('alice')!);expect(state.status).toBe(200);const machine=machines.get('alice')!,room=new sdk.RoomId(matrixRoomId('notice-dm')),settings=new sdk.EncryptionSettings();settings.historyVisibility=sdk.HistoryVisibility.Joined;settings.sharingStrategy=sdk.CollectStrategy.onlyTrustedDevices();await machine.shareRoomKey(room,[],settings);const event=JSON.parse(await machine.encryptRoomEvent(room,'m.room.message',JSON.stringify({msgtype:'m.text',body:'private-in-app-original'}))),payload={clientMessageId:'notice-dm-first',deviceId:'A',membershipRevision:state.body.membershipRevision,envelope:{version:1,protocol:'MATRIX_MEGOLM',event}},sent=await post('conversations/notice-dm/messages',payload);expect(sent.status).toBe(201);
+    > 146 |   const history=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(history.status).toBe(200);const page=createPageSchema(NotificationSchema).parse(history.body);expect(page.items).toHaveLength(1);expect(page.items[0]).toEqual(expect.objectContaining({userId:'outsider',type:'DM',title:'Tin nhắn mới',body:'Bạn có tin nhắn mới.',data:{conversationId:'notice-dm',messageId:sent.body.id,senderId:'alice'}}));expect(JSON.stringify(page)).not.toContain('private-in-app-original');
+          |                                                                                                                                ^
+      147 |   await wait(()=>items.length===1);expect(items[0]).toEqual(page.items[0]);expect(other).toEqual([]);expect((await request(base).get('/api/v1/notifications')).status).toBe(401);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('bob')!)).body.items).toEqual([]);
+      148 |   const job=(await pool.query("SELECT * FROM notification_outbox WHERE notification_id=$1 AND channel='IN_APP'",[page.items[0].id])).rows[0];await wait(async()=>(await pool.query('SELECT status FROM notification_outbox WHERE id=$1',[job.id])).rows[0].status==='SENT');expect((await post('conversations/notice-dm/messages',payload)).status).toBe(201);await new Promise(resolve=>setTimeout(resolve,200));expect(items).toHaveLength(1);expect((await pool.query('SELECT id FROM notifications WHERE dedup_key=$1',['crypto-dm:'+sent.body.id])).rowCount).toBe(1);target.disconnect();
+      149 |  });
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:146:128)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 11 passed, 12 total
+Snapshots:   0 total
+Time:        47.989 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

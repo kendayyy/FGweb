@@ -1,0 +1,46 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByRole('heading', { name: /Lobby/ })
+Expected: visible
+Error: strict mode violation: getByRole('heading', { name: /Lobby/ }) resolved to 2 elements:
+    1) <h1>Lobby · Liên Minh Huyền Thoại — FG</h1> aka getByRole('heading', { name: 'Lobby · Liên Minh Huyền Thoại' })
+    2) <h2>Chào mừng đến Lobby</h2> aka getByRole('heading', { name: 'Chào mừng đến Lobby' })
+
+Call log:
+  - Expect "toBeVisible" getByRole('heading', { name: /Lobby/ }) with timeout 30000ms
+  - waiting for getByRole('heading', { name: /Lobby/ })
+
+    at captureRawStack (E:\FGweb\code\node_modules\playwright-core\lib\coreBundle.js:8588:17)
+    at callMatcherAsStep (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toBeVisible (E:\FGweb\code\node_modules\playwright\lib\matchers\expect.js:13302:23)
+    at <anonymous> (E:\FGweb\code\quality\evidence\LOADING3D-FE\headed-loading.mjs:127:57) {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByRole('heading', { name: /Lobby/ })\n" +
+      'Expected: visible\n' +
+      "Error: strict mode violation: getByRole('heading', { name: /Lobby/ }) resolved to 2 elements:\n" +
+      "    1) <h1>Lobby · Liên Minh Huyền Thoại — FG</h1> aka getByRole('heading', { name: 'Lobby · Liên Minh Huyền Thoại' })\n" +
+      "    2) <h2>Chào mừng đến Lobby</h2> aka getByRole('heading', { name: 'Chào mừng đến Lobby' })\n" +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" getByRole('heading', { name: /Lobby/ }) with timeout 30000ms\n` +
+      "  - waiting for getByRole('heading', { name: /Lobby/ })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" getByRole('heading', { name: /Lobby/ }) with timeout 30000ms`,
+      "  - waiting for getByRole('heading', { name: /Lobby/ })"
+    ],
+    timeout: undefined,
+    ariaSnapshot: undefined
+  }
+}
+
+Node.js v24.21.0

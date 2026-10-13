@@ -1,0 +1,258 @@
+{
+  "recordedAt": "2026-10-12T13:54:18.120Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-coalescing-green-reviewed8.mjs",
+    "sha256": "497ae08ff6150be05bccfffcd3f305e5d4a3eef736716952ecab76b4a1ccec3a"
+  },
+  "phases": [
+    {
+      "at": "2026-10-12T13:53:20.172Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-12T13:53:26.273Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-12T13:53:26.302Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-12T13:53:35.771Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-12T13:53:47.584Z",
+      "phase": "web"
+    },
+    {
+      "at": "2026-10-12T13:54:08.486Z",
+      "phase": "coalescing-controls-setup"
+    },
+    {
+      "at": "2026-10-12T13:54:08.509Z",
+      "phase": "coalescing-control-1"
+    },
+    {
+      "at": "2026-10-12T13:54:08.872Z",
+      "phase": "coalescing-control-2"
+    },
+    {
+      "at": "2026-10-12T13:54:09.091Z",
+      "phase": "coalescing-control-3"
+    },
+    {
+      "at": "2026-10-12T13:54:09.616Z",
+      "phase": "coalescing-control-4"
+    },
+    {
+      "at": "2026-10-12T13:54:09.980Z",
+      "phase": "coalescing-control-5"
+    },
+    {
+      "at": "2026-10-12T13:54:10.103Z",
+      "phase": "coalescing-control-6"
+    },
+    {
+      "at": "2026-10-12T13:54:10.221Z",
+      "phase": "coalescing-control-7"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d",
+      "noDevRuntime": true,
+      "cspSha256": "271468af1f0ed0d3c06d91a9bc0b71e7f0fb0fc72c1d320eaf83b04ab3f28884"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-7gj3Ug-S.js",
+      "status": 200,
+      "sha256": "1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-12T13:53:55.474Z",
+      "idleEndedAt": "2026-10-12T13:54:06.557Z",
+      "idleMs": 11083.5112,
+      "backendPid": 12714,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "actual canonical private gateway native JoinResponse and unchanged binary subscription",
+      "joined": true
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 12714,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "original controlled burst RED to GREEN",
+      "requested": 4,
+      "completed": 4,
+      "failed": 0,
+      "actualListRoomsCalls": 2,
+      "actualListParticipantsCalls": 2,
+      "requestBurstDurationMs": 389.8049000000028,
+      "syntheticDelayMs": 40,
+      "firstReadGate": true,
+      "sqlOperations": [
+        "room-share-lock",
+        "group-update-lock",
+        "member-update-lock",
+        "live-lease-guard"
+      ],
+      "queries": [
+        {
+          "pid": 12844,
+          "operation": "room-share-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "live-lease-guard"
+        },
+        {
+          "pid": 12844,
+          "operation": "room-share-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12844,
+          "operation": "live-lease-guard"
+        }
+      ],
+      "ownedPids": [
+        12844
+      ],
+      "blockingSamples": [],
+      "ownLockQueueObserved": false,
+      "rowsUnchanged": true,
+      "nativeAcceptance": false
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "fixed burst and fresh native participant trailing snapshot",
+      "requests": 4,
+      "nativeReads": 2,
+      "freshTrailingSnapshot": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "different groups independent actual native reads",
+      "nativeReads": 2
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "trigger during trailing read starts fresh third pass",
+      "nativeReads": 3
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "distinct ended payloads and actual stale-slot guard",
+      "distinctActualLeasePayloads": true,
+      "staleSlotRetained": true,
+      "freshEndedSlotReleased": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "exact synthetic SDK fault object and fresh recovery",
+      "failedCallers": 3,
+      "sameErrorObject": true,
+      "recoveryActualSDKRead": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "signed duplicate webhook persists once and reconciles twice",
+      "actualSignature": true,
+      "durableRows": 1,
+      "nativeReads": 2,
+      "unsignedDenied": true
+    },
+    {
+      "kind": "actual compiled coalescing control",
+      "name": "shutdown drains accepted ordinary and ended work",
+      "acceptedCallers": 3,
+      "acceptedResolved": true,
+      "newRejected503": true,
+      "deferredPoolEndAfterDrain": true,
+      "syntheticPoolEndAdapter": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-12T13:54:18.066Z",
+        "backendPid": 12714,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-e81592fc-3593-4da6-a16a-b62f9f9640eb",
+    "temporary-built-smoke-f831ecab-544e-451a-b5c7-513b107791e4"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

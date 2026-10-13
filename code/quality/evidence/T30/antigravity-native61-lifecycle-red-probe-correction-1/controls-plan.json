@@ -1,0 +1,103 @@
+{
+  "planId": "antigravity-native61-lifecycle-red-probe-correction-1-controls",
+  "targetTask": "T30",
+  "phase": "TEST_AND_DESIGN_PROPOSAL_ONLY",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:08:10.000Z",
+  "controls": [
+    {
+      "controlId": "CTL-01-PREFLIGHT-GATEWAY",
+      "name": "Owned Private Gateway and SFU Startup",
+      "description": "Verifies that the probe starts the real private LiveKit SFU and gateway containers via startGatewayFixture with credentials from .env.local; zero fallback to localhost/devkey.",
+      "assertions": [
+        "assert(fixture.server.startsWith('http://127.0.0.1:'))",
+        "assert(fixture.ws.startsWith('ws://127.0.0.1:'))",
+        "assert(fixture.turnPort > 0)"
+      ]
+    },
+    {
+      "controlId": "CTL-02-ANCHOR-A-ISOLATION",
+      "name": "Service Resolution and Sweep Timer Isolation",
+      "description": "Ensures that CallLifecycleService is obtained via FG_CALL_LIFECYCLE token, its periodic timer is cleared, and any in-flight sweep is awaited before marking fixture ready.",
+      "assertions": [
+        "assert(actualLifecycle)",
+        "assert(actualLifecycle.timer === undefined)",
+        "assert(sweepAwaited)"
+      ]
+    },
+    {
+      "controlId": "CTL-03-HTTP-API-FLOW",
+      "name": "Canonical HTTP Call Creation and Admission",
+      "description": "Executes real HTTP call creation and user join via official endpoints to produce legitimate database records in call_groups, call_members, and call_admissions.",
+      "assertions": [
+        "assert.equal(callRes.status, 201)",
+        "assert.equal(joinRes.status, 200)",
+        "assert(callGroupId)"
+      ]
+    },
+    {
+      "controlId": "CTL-04-REAL-SDK-DELAYED-WRAPPER",
+      "name": "Real LiveKit SDK Calls with Controlled Synthetic Delay",
+      "description": "Confirms that the native adapter calls real client listRooms and listParticipants with a 40ms synthetic delay, returning or rethrowing original results/errors with zero invented fallback.",
+      "assertions": [
+        "assert(probeReply.actualListRoomsCalls > 0)",
+        "assert.equal(typeof origListRooms, 'function')",
+        "assert.equal(typeof origListParticipants, 'function')"
+      ]
+    },
+    {
+      "controlId": "CTL-05-PG-BLOCKING-TELEMETRY",
+      "name": "Real Database Contention Sampling",
+      "description": "Samples pg_stat_activity and pg_blocking_pids from the retained inspector client during concurrent reconciliation to observe genuine PostgreSQL wait events.",
+      "assertions": [
+        "assert(Array.isArray(probeReply.blockingSamples))",
+        "assert(samplingActiveDuringConcurrentTriggers)"
+      ]
+    },
+    {
+      "controlId": "CTL-06-INTENDED-RED-ASSERTION",
+      "name": "Expected Bounded Native Read RED Assertion",
+      "description": "Asserts that actualListRoomsCalls <= 2 for a fixed burst of 4 concurrent triggers. On current un-coalesced source, this fails with exit code 1 because 4 redundant passes execute sequentially.",
+      "assertions": [
+        "assert(actualListRoomsCalls <= 2, '[RED REPRODUCTION CONFIRMED] ...')",
+        "assert.equal(probeReply.requestedCount, 4)",
+        "assert.equal(probeReply.completedCount, 4)",
+        "assert.equal(executionReport.testResult, 'EXPECTED_RED_CONFIRMED')"
+      ]
+    },
+    {
+      "controlId": "CTL-07-DATABASE-ROW-INTEGRITY",
+      "name": "Canonical Database Row Integrity Post-Conditions",
+      "description": "Verifies that genuine actor and row-locking SQL executed and that call group, room, and member rows remain intact in PostgreSQL.",
+      "assertions": [
+        "assert.equal(inspectReply.open_calls, 1)",
+        "assert(inspectReply.callers >= 1)",
+        "assert(inspectReply.rooms >= 1)"
+      ]
+    },
+    {
+      "controlId": "CTL-08-CLEANUP-OVERRIDE",
+      "name": "Strict Cleanup Settlement Verification and RED Override",
+      "description": "Enforces that cleanup settlement is verified; if schema, media, redis, or inspector cleanup fails, exit code 2 strictly overrides any assertion RED.",
+      "assertions": [
+        "assert(executionReport.cleanupSettlement.schemaRemoved)",
+        "assert(executionReport.cleanupSettlement.mediaRemoved)",
+        "assert(executionReport.cleanupSettlement.presenceRemoved)",
+        "assert(executionReport.cleanupSettlement.appClosed)",
+        "assert(executionReport.cleanupSettlement.webClosed)",
+        "assert(executionReport.cleanupSettlement.inspectorHealthy)",
+        "assert.equal(executionReport.exitCode, cleanupClean ? (intendedRed ? 1 : 0) : 2)"
+      ]
+    },
+    {
+      "controlId": "CTL-09-OUTPUT-SAFETY",
+      "name": "Sanitized Evidence Reporting Without Overwrites",
+      "description": "Ensures that probe reports are written with flag wx without overwriting previous runs, and that errors are sanitized without stack traces, credentials, or tokens.",
+      "assertions": [
+        "assert(fs.existsSync(reportPath))",
+        "assert(!reportContent.includes(process.env.LIVEKIT_API_SECRET))",
+        "assert(!reportContent.includes(process.env.DATABASE_URL))"
+      ]
+    }
+  ]
+}

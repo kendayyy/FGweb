@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:21204) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-custody.integration.spec.ts (58.521 s)
+  ● Actual AppModule custody configuration over native TLS and isolated PG › restores authenticated DB/object backup after separate-key rotation through actual app ACLs and native client decryption
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 403
+
+      71 |    const selected=await request(restoredBase).post(`/api/v1/crypto/reports/${disclosed.body.id}/read`).set('Cookie',cookies.outsider).set('Origin',origin).send({});expect(selected.status).toBe(201);expect(selected.body.selectedMessages[0].text).toBe('explicitly-selected-backup-selected');
+      72 |    const publicHistory=await request(restoredBase).get(`/api/v1/conversations/${lobby}/messages`);expect(publicHistory.status).toBe(200);expect(publicHistory.body.items.some((row:{content:string})=>row.content==='public-configured-actual-configured')).toBe(true);
+    > 73 |    const file=path.join(targetStorage,'encrypted',uploaded.body.id+'.bin'),corrupt=Buffer.from(bytes);corrupt[0]^=1;fs.writeFileSync(file,corrupt);expect((await request(restoredBase).get(`/api/v1/crypto/conversations/dm/attachments/${uploaded.body.id}`).set('Cookie',cookies.alice)).status).toBe(409);expect(fs.readFileSync(path.join(storage,'encrypted',uploaded.body.id+'.bin'))).toEqual(bytes);
+         |                                                                                                                                                                                                                                                                                                    ^
+      74 |   }finally{
+      75 |    await restoredApp?.close();expect(target).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${target}" CASCADE`);if(fs.existsSync(targetStorage)){expect(fs.realpathSync(targetStorage)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),target));fs.rmSync(targetStorage,{recursive:true});}Object.assign(process.env,{DATABASE_URL:originalUrl,FG_CRYPTO_OBJECTS_DIR:originalObjects,FG_UPLOADS_DIR:originalSources});app=await NestFactory.create(AppModule,{logger:false,bodyParser:false,abortOnError:false});configureFgHttpBodyParsers(app);await app.listen(0,'127.0.0.1');base=await app.getUrl();
+      76 |   }
+
+      at Object.<anonymous> (test/chat-crypto-custody.integration.spec.ts:73:292)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        58.991 s
+Ran all test suites matching apps/api/test/chat-crypto-custody.integration.spec.ts.
+{"run":"ba0e8d12e69644db847dad04381ecc2d","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true,"backupKeySeparation":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:84:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir='quality/evidence/CHATCRYPTO-QA';
+let source=fs.readFileSync(dir+'/integrity-audit.mjs','utf8');
+source=source.replace("assert(file.startsWith('tools/telegram-bridge/')||file.includes('/node_modules/.vite/'),'Unexpected frozen app/evidence change: '+file);", "if(file==='apps/web/vite.config.ts'){const proposal=JSON.parse(fs.readFileSync(dir+'/csp-scope-proposal.json','utf8'));assert.equal(sha,proposal.paths[0].beforeSha256);assert.equal(hash(file),proposal.paths[0].proposedSha256);}else assert(file.startsWith('tools/telegram-bridge/')||file.includes('/node_modules/.vite/'),'Unexpected frozen app/evidence change: '+file);");
+source=source.replace('externalOrMutableToolObservation:true',"approvedCspTransition:file==='apps/web/vite.config.ts',externalOrMutableToolObservation:file!=='apps/web/vite.config.ts'");
+source=source.replace("if(file.beforeSha256)assert.equal(hash(file.path),file.beforeSha256);else assert(!fs.existsSync(file.path));",'assert.equal(hash(file.path),file.proposedSha256);');
+source=source.replace('exactCspProposalNotApplied:true','exactCspProposalApplied:true').replace("remainingBlocker:'CSP-SCOPE'",'remainingBlocker:null').replace('integrity-audit-proof.json','applied-integrity-audit-proof.json');
+assert(!source.includes('exactCspProposalNotApplied'));
+fs.writeFileSync(dir+'/applied-integrity-audit.mjs',source,{flag:'wx'});
+console.log('Preserved original audit; new audit permits only exact approved Vite transition plus explicit existing external/mutable observations.');

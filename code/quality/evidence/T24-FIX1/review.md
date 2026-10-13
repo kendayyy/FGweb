@@ -1,0 +1,11 @@
+# T24-FIX1 — Codex review08/10/2026
+
+Member-only GET /api/v1/rooms/:id/play-sessions implements the frozen T03-FIX12 contract. An ordinary current member can discover scheduled/active/ended history even in PRIVATE rooms with CLOSED recruitment. PUBLIC visibility grants no extra access. Responses contain only existing PlaySessionDTO fields, not roster, pending requests or media membership.
+
+Strict transport query validation, bounded20(default)/50(max) limits, canonical room-bound cursors and descending createdAt/id comparisons preserve microsecond ties without duplicate/missing results. Authorization runs after the room SHARE lock and again before returning; native session expiry, ban, onboarding and current membership are checked. This read neither admits players nor mutates slots/requests/outbox. Existing play-session mutation URLs are preserved when moving the controller prefix to api/v1.
+
+10 genuine endpoint RED failures were observed before implementation. Final26/26 real HTTP/PostgreSQL cases include10 new checks and all16 original T24 lifecycle tests, whose source/assertions remain unchanged. New tests cover private/closed history, all states, pagination, invalid/foreign cursors, guest/nonmember PUBLIC ACL, removal/ban/expiry/missing-room/empty-history and three live revocation races while waiting for the room lock. Better Auth deletes expired sessions on read; first green attempt exposed fixture carryover. Each new test now recreates its real session during setup; no assertion or production authentication behavior was weakened.
+
+API/test typecheck, TypeScript build, scoped lint and whitespace check pass. Original RED and failed green logs retained separately. Scoped derived controller/service outputs and compiler metadata are pinned before writes under prior broad write authorization. Final closure requires unchanged baselines, all5853 captured read-only files,60 historical PASS records, private local configuration and the unmodified strict T25 next gate. No AppModule, database, contract or frontend source changed in this task.
+
+Evidence: before.json, codex-red-1, codex-green-1/2, api-types/test-types/build/lint/diff records and closure.json. No media/load/PWA completion claim.

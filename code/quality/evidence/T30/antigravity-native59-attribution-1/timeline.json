@@ -1,0 +1,239 @@
+{
+  "runId": "t30-native-6fc2725b41ee46e59e6245002dbea9ac",
+  "nativeAcceptance": false,
+  "reviewedAt": "2026-10-11T17:41:14.959Z",
+  "statementTimeoutLimitMs": 3000,
+  "timeout": {
+    "type": "query",
+    "kind": "room-lock",
+    "startedAt": "2026-10-11T17:33:03.536Z",
+    "completedAt": "2026-10-11T17:33:06.563Z",
+    "durationMs": 3026.66,
+    "poolIndex": 0,
+    "backendPid": 13795,
+    "ok": false,
+    "sqlState": "57014",
+    "hostWaitBounds": {
+      "queuedWhileBlockerWaitingMs": 1944,
+      "queuedWhileBlockerHoldingMs": 1083,
+      "note": "Host-observed boundary arithmetic (03.536Z->05.480Z=1944ms, 05.480Z->06.563Z=1083ms); not exact internal PostgreSQL server wait phases."
+    }
+  },
+  "samples": [
+    {
+      "sampleIndex": 47,
+      "at": "2026-10-11T17:33:04.464Z",
+      "pid": 13795,
+      "blockerPids": [
+        13843
+      ],
+      "waitEventType": "Lock",
+      "queryShape": "selectRoomsShare",
+      "queryAgeMs": 925
+    },
+    {
+      "sampleIndex": 48,
+      "at": "2026-10-11T17:33:05.447Z",
+      "pid": 13795,
+      "blockerPids": [
+        13843
+      ],
+      "waitEventType": "Lock",
+      "queryShape": "selectRoomsShare",
+      "queryAgeMs": 1909,
+      "note": "Sample 48 shows blocker PID 13843 already in idleInTransaction (queryAgeMs: 1976), indicating host-observed query return at 05.480Z is host timestamp, not server acquisition moment."
+    },
+    {
+      "sampleIndex": 49,
+      "at": "2026-10-11T17:33:06.408Z",
+      "pid": 13795,
+      "blockerPids": [
+        13843
+      ],
+      "waitEventType": "Lock",
+      "queryShape": "selectRoomsShare",
+      "queryAgeMs": 2870
+    }
+  ],
+  "blocker": {
+    "backendPid": 13843,
+    "transactionIndex": 105,
+    "observedOwner": "unassociated",
+    "candidateServiceAttributions": [
+      "CallsService.join (candidate based on query sequence and temporal proximity to HTTP join response)",
+      "CallsService.selfMic (candidate with withControlGroup lock order)",
+      "Other unassociated internal transaction"
+    ],
+    "summary": [
+      {
+        "kind": "begin",
+        "startedAt": "2026-10-11T17:33:03.368Z",
+        "completedAt": "2026-10-11T17:33:03.396Z",
+        "durationMs": 27.88
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:03.396Z",
+        "completedAt": "2026-10-11T17:33:03.410Z",
+        "durationMs": 13.79
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:03.410Z",
+        "completedAt": "2026-10-11T17:33:03.440Z",
+        "durationMs": 30.11
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:03.440Z",
+        "completedAt": "2026-10-11T17:33:03.461Z",
+        "durationMs": 20.76
+      },
+      {
+        "kind": "lock-room",
+        "startedAt": "2026-10-11T17:33:03.461Z",
+        "completedAt": "2026-10-11T17:33:05.480Z",
+        "durationMs": 2018.66
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:05.480Z",
+        "completedAt": "2026-10-11T17:33:05.556Z",
+        "durationMs": 75.64
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:05.556Z",
+        "completedAt": "2026-10-11T17:33:05.567Z",
+        "durationMs": 11.19
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:05.567Z",
+        "completedAt": "2026-10-11T17:33:05.618Z",
+        "durationMs": 51.15
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:05.618Z",
+        "completedAt": "2026-10-11T17:33:05.967Z",
+        "durationMs": 348.98
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:05.967Z",
+        "completedAt": "2026-10-11T17:33:06.176Z",
+        "durationMs": 209.01
+      },
+      {
+        "kind": "lock-group",
+        "startedAt": "2026-10-11T17:33:06.177Z",
+        "completedAt": "2026-10-11T17:33:06.297Z",
+        "durationMs": 119.97
+      },
+      {
+        "kind": "live-lease",
+        "startedAt": "2026-10-11T17:33:06.304Z",
+        "completedAt": "2026-10-11T17:33:06.370Z",
+        "durationMs": 66.17
+      },
+      {
+        "kind": "lock-member",
+        "startedAt": "2026-10-11T17:33:06.370Z",
+        "completedAt": "2026-10-11T17:33:06.471Z",
+        "durationMs": 100.64
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:06.471Z",
+        "completedAt": "2026-10-11T17:33:06.544Z",
+        "durationMs": 72.73
+      },
+      {
+        "kind": "lock-member",
+        "startedAt": "2026-10-11T17:33:06.544Z",
+        "completedAt": "2026-10-11T17:33:06.578Z",
+        "durationMs": 34.2
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:06.595Z",
+        "completedAt": "2026-10-11T17:33:06.679Z",
+        "durationMs": 84.19
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:06.679Z",
+        "completedAt": "2026-10-11T17:33:06.818Z",
+        "durationMs": 139.47
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:06.819Z",
+        "completedAt": "2026-10-11T17:33:07.040Z",
+        "durationMs": 220.89
+      },
+      {
+        "kind": "policy",
+        "startedAt": "2026-10-11T17:33:07.196Z",
+        "completedAt": "2026-10-11T17:33:07.220Z",
+        "durationMs": 23.6
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:07.220Z",
+        "completedAt": "2026-10-11T17:33:07.234Z",
+        "durationMs": 14.02
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:07.234Z",
+        "completedAt": "2026-10-11T17:33:07.270Z",
+        "durationMs": 36.43
+      },
+      {
+        "kind": "other",
+        "startedAt": "2026-10-11T17:33:07.271Z",
+        "completedAt": "2026-10-11T17:33:07.294Z",
+        "durationMs": 22.98
+      },
+      {
+        "kind": "commit",
+        "startedAt": "2026-10-11T17:33:07.295Z",
+        "completedAt": "2026-10-11T17:33:07.340Z",
+        "durationMs": 45.4,
+        "roomHoldMs": 1860.1,
+        "groupHoldMs": 1043.1
+      }
+    ]
+  },
+  "sfuRemoval": {
+    "at": "2026-10-11T17:33:06.624Z",
+    "reason": "SERVICE_REQUEST_REMOVE_PARTICIPANT"
+  },
+  "sourceBranches": [
+    "signaling-gateway.ts timer live catch terminates peers then removes native participant on exception",
+    "signaling-gateway.ts scheduleDrain catch closes/removes on non403 exception"
+  ],
+  "temporalCorrelations": {
+    "httpJoinResponse": {
+      "at": "2026-10-11T17:33:07.397Z",
+      "path": "/api/v1/calls/6c2c5727-815b-4df8-b2ab-2947b0f20c72/join",
+      "status": 201,
+      "correlationNote": "Suggestive temporal correlation to transaction 105 commit (17:33:07.340Z); unique causality not established without HTTP-to-transaction span context propagation."
+    },
+    "testCompletion": {
+      "runStartedAt": "2026-10-11T17:31:37.524Z",
+      "firstShareFailureRecordedAt": "~2026-10-11T17:34:00Z",
+      "runExitedAt": "2026-10-11T17:34:22.361Z",
+      "exitCode": 1
+    }
+  },
+  "exactUnknowns": [
+    "Specific gateway binding / catch path (timer live catch vs scheduleDrain catch) is not present in safe query metadata.",
+    "API transaction 105 method identity is not established; observed owner was unassociated in api-lock-spans.jsonl.",
+    "Actual createRoom RPC was not wrapped in original observer; presence of createRoom in tx 105 cannot be proven from listRooms metadata alone.",
+    "Direct route impact on switched RTP was not measured in native 59 run.",
+    "HTTP join start timestamp and PID mapping not established due to GET-only HTTP middleware in original observer."
+  ]
+}

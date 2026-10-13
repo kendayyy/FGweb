@@ -1,0 +1,43 @@
+### T30 Isolated Read-Only DB Route Latency Diagnostic Control Proposal
+
+Delivered isolated proposal files under [`code/quality/evidence/T30/antigravity-native58-db-route-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-db-route-1) and appended the truthful delivery record to [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2433).
+
+---
+
+### Delivered Artifacts
+
+1. [`bench-child.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-db-route-1/bench-child.mjs):
+   - Executed inside an unprivileged read-only Docker container with pinned image `node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd` and a read-only `node_modules` mount (using pre-installed `pg`, no downloads or installs).
+   - Alternating **A-B-A-B** sequential schedule:
+     - **Route A**: `host.docker.internal:<publishedPort>` via host gateway and Windows port forwarding loopback.
+     - **Route B**: `fg-local-postgres-1:5432` via direct container-to-container connection on `fg-local_default`.
+   - Per-cycle: fresh `pg.Pool({ max: 1, connectionTimeoutMillis: 5000, statement_timeout: 3000 })`.
+   - **Measurements**: Measures connection duration and positive backend PID; executes 3 explicit warmup `SELECT 1` queries (diagnostic control only, never acceptance wait); executes 20 measured sequential `SELECT 1` queries on reused connection; verifies `res === 1` with zero data/schema writes; settles and terminates pool.
+   - Computes statistical summary (min, p50, p95, max, mean) and delta comparisons (`p50DeltaMs`, `p95DeltaMs`, `connectDeltaMs`).
+   - Fixed allowlisted error classifications (`CONNECTION_TIMEOUT`, `POOL_ACQUIRE_TIMEOUT`, `SQLSTATE`, `REFUSED`, `RESET`, `UNKNOWN`); never serializes raw queries, URLs, credentials, or error text.
+
+2. [`runner.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-db-route-1/runner.mjs):
+   - Host orchestrator designed for root execution; agent executed zero tests or Docker commands.
+   - Pre-flight validation: Privately parses authorized `.env.local` using `parseEnv` with zero logging of values; asserts protocol `postgres:`/`postgresql:`, host `localhost`/`127.0.0.1`, and published port integer.
+   - Safe container validation: Inspects `fg-local-postgres-1`, asserting container is running, healthy, attached to `fg-local_default`, has alias `postgres`, and published port matches; snapshots container ID and network endpoints.
+   - Secure credential passing: Writes `input.json` with file mode `0600` inside private temporary runtime directory `.runtime/t30/db-route-<UUID>/`; credentials never passed via CLI arguments, environment variables, or console.
+   - Unprivileged container execution: Spawns single container with `--cap-drop ALL`, `--security-opt no-new-privileges`, `--user node`, `--read-only`, `--network fg-local_default`, and `--add-host host.docker.internal:host-gateway`.
+   - Strict `finally` checked cleanup: Removes owned container and asserts removal; asserts `fg-local-postgres-1` ID and network attachments remain byte-unchanged; recursively deletes owned temporary runtime directory.
+
+3. [`proposal.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-db-route-1/proposal.json):
+   - Machine-readable specification outlining route topology definitions, container security constraints, schema requirements, and safety invariants.
+   - Preserves `nativeAcceptance: false`, `executedInThisTurn: false`, and `readyForRootExecution: true`.
+
+4. [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native58-db-route-1/shortplan.md):
+   - Detailed plan explaining the database route latency hypothesis in the context of the 158 switching queries observed in Native58, isolation boundaries, privacy controls, and protocol execution flow.
+
+5. [`.doc/history.md`](file:///E:/FGweb/.doc/history.md#L2433):
+   - Appended truthful actual-time delivery entry (`2026-10-11T16:52:16.000Z`) recording delivered components, hypothesis scope, and verification boundaries.
+
+---
+
+### Invariants & Boundaries Maintained
+- **Zero Process / Test Execution**: No test suites, Docker containers, or background processes were executed by the assistant.
+- **File Boundaries**: Writes strictly limited to `quality/evidence/T30/antigravity-native58-db-route-1/**` and `.doc/history.md`.
+- **Integrity**: Zero modifications to application source, tests, mutable fixtures, ledger, environment variables, or checker rules.
+- **Acceptance Status**: `nativeAcceptance: false` preserved; T30 remains `IN_PROGRESS`.

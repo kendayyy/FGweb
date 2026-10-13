@@ -1,0 +1,42 @@
+
+> test:e2e
+> playwright test quality/evidence/T30/native-browser-timing13.spec.ts --config quality/evidence/T30/playwright-browser-timing13.config.ts --headed --workers=1
+
+
+Running 1 test using 1 worker
+
+(node:16248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 quality\evidence\T30\native-browser-timing13.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports (1.7m)
+
+
+  1) quality\evidence\T30\native-browser-timing13.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Nhóm gọi', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Nhóm gọi', exact: true }) with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Nhóm gọi', exact: true })
+
+
+      50 |  },{turnPort:ready.turnPort});
+      51 |  const page=await context.newPage();activePage=page;windows.set(key,{page,source,context});await page.bringToFront();const safe=(value:string)=>value.replace(/(?:wss?|https?):\/\/[^\s]+/g,'[URL REDACTED]').replace(/\beyJ[A-Za-z0-9_.-]+\b/g,'[JWT REDACTED]').replace(/\b[A-Za-z0-9_-]{43}\b/g,'[TOKEN REDACTED]');page.on('pageerror',error=>fs.appendFileSync(evidence+'/browser-errors.jsonl',JSON.stringify({at:new Date().toISOString(),kind:'pageerror',message:safe(error.message)})+'\n'));page.on('console',message=>{if(message.type()==='error'||message.type()==='warn')fs.appendFileSync(evidence+'/browser-errors.jsonl',JSON.stringify({at:new Date().toISOString(),kind:message.type(),message:safe(message.text())})+'\n');});page.on('response',r=>{const u=new URL(r.url());if(u.origin===ready.origin&&u.pathname.startsWith('/api/v1/'))fs.appendFileSync(evidence+'/api-statuses.jsonl',JSON.stringify({at:new Date().toISOString(),path:u.pathname,method:r.request().method(),status:r.status()})+'\n');});
+    > 52 |  await installBrowserRoomTiming(page);await page.goto(`${ready.origin}/rooms/${ready.roomId}`);if(key==='sender')await checkpoint(page,'Bắt đầu tải FG','Mở ứng dụng thật trong browser headed; chưa có kết quả call/capture');try{await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toBeVisible();}finally{await captureBrowserRoomTiming(page,evidence,key);}windows.set(key,{page,source,context});return page;
+         |                                                                                                                                                                                                                                                                                                        ^
+      53 | }
+      54 | async function join(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Vào gọi',exact:true}).click();await expect(page.getByRole('button',{name:'Rời cuộc gọi',exact:true})).toBeVisible({timeout:25000});await expect(page.getByRole('region',{name:'Nhóm gọi',exact:true})).toContainText('Đã kết nối');fs.appendFileSync(evidence+'/connection-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');}
+      55 | async function share(page:Page){activePage=page;await page.bringToFront();const start=Date.now();await page.getByRole('button',{name:'Chia sẻ màn hình',exact:true}).click();await expect(page.getByRole('button',{name:'Dừng chia sẻ',exact:true})).toBeVisible({timeout:45000});fs.appendFileSync(evidence+'/publication-times.jsonl',JSON.stringify({at:new Date().toISOString(),durationMs:Date.now()-start})+'\n');const capture=await page.evaluate(()=>{const w=window as unknown as CaptureWindow;return {calls:w.t30CaptureCalls,tracks:w.t30Captures.flatMap(s=>s.getVideoTracks().map(t=>({state:t.readyState,settings:t.getSettings()})))};});expect(capture.calls.at(-1)?.active).toBe(true);expect(capture.tracks.at(-1)?.settings.displaySurface).toBe('browser');expect(capture.tracks.at(-1)?.state).toBe('live');expect(capture.tracks.at(-1)?.settings.height??0).toBeLessThanOrEqual(720);expect(capture.tracks.at(-1)?.settings.frameRate??0).toBeLessThanOrEqual(31);fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\n');}
+        at openActor (E:\FGweb\code\quality\evidence\T30\native-browser-timing13.spec.ts:52:296)
+        at E:\FGweb\code\quality\evidence\T30\native-browser-timing13.spec.ts:67:16
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing13-T3-9a035-udio-and-approved-viewports\error-context.md
+
+    Error Context: .cache\t30\playwright-results\native-browser-timing13-T3-9a035-udio-and-approved-viewports\error-context.md
+
+  1 failed
+    quality\evidence\T30\native-browser-timing13.spec.ts:61:1 › T30 actual capture, one video switch, three slots, native ended, shaped audio and approved viewports 

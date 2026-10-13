@@ -1,0 +1,61 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/chat-crypto-legacy-read.test.ts (7 tests | 7 failed) 39ms
+   ❯ Verified-cohort canonical legacy source boundary (7)
+     × requires the original identifiers, content, metadata and physical image digests 15ms
+     × rejects caller privateKey claims in a source manifest 2ms
+     × rejects caller recoveryCode claims in a source manifest 1ms
+     × rejects caller cohortVerified claims in a source manifest 1ms
+     × rejects caller deletedOriginal claims in a source manifest 1ms
+     × rejects duplicate images, excessive size and missing physical digest 1ms
+     × binds the migration item to the exact source identity and attachment selection 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > requires the original identifiers, content, metadata and physical image digests
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-read.test.ts:7:135
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > rejects caller privateKey claims in a source manifest
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > rejects caller recoveryCode claims in a source manifest
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > rejects caller cohortVerified claims in a source manifest
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > rejects caller deletedOriginal claims in a source manifest
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-read.test.ts:8:173
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > rejects duplicate images, excessive size and missing physical digest
+AssertionError: expected undefined to be defined
+ ❯ test/chat-crypto-legacy-read.test.ts:9:124
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/chat-crypto-legacy-read.test.ts > Verified-cohort canonical legacy source boundary > binds the migration item to the exact source identity and attachment selection
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "sourceManifest"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"sourceManifest\""
+  }
+]
+ ❯ test/chat-crypto-legacy-read.test.ts:11:276
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  04:30:20
+   Duration  2.19s (transform 48%, import 46%, tests 3%, worker 2%)
+

@@ -1,0 +1,13 @@
+# CHATCRYPTO-BE — additive durable legacy staging prerequisite
+
+This is the current backend task, after native multi-cohort readiness234/234 and progress save20. It does not activate the future loader or crypto frontend. Internal readiness has authenticated original client claims; it is not server decryption proof.
+
+Persist one operation per conversation, with reviewed seed cohort, actor/device, original revision, next LIVE revision exactly original+1, exact source/image/claim counts and public manifest SHA256. Lifecycle STAGED → DB_CONVERTED → CLEANING → RECONCILED uses durable conversion/completion clocks. The SQL prerequisite creates metadata only; no producer, conversion or cleanup is authorized by merely inserting a stage.
+
+Normalize source snapshots into stage_sources, binding stage conversation/revision and each candidate's original message/conversation/cohort/revision. Normalize image cleanup progress into stage_objects, binding that exact staged candidate/source and original image/ciphertext draft mapping. Public source/envelope/plaintext-image/ciphertext SHA256 are bindings, not keys or decryption claims. No decoded source, filenames, recovery/device/session keys or encrypted-file secret descriptors enter stage metadata.
+
+Add only these three tables and two redundant composite candidate/image unique keys needed for exact FK binding. Pin current owner source/dist/index hashes and all0000–0019 SQL/snapshot/journal bytes before writes. Real generator0020 must preserve every prior table definition except those two unique keys; no UPDATE/DELETE/DROP or main migration. Keep75 historical PASS/checker/env frozen.
+
+First native PostgreSQL RED: missing staging tables; then minimal schema/generator review and GREEN rejecting mixed conversations, candidates, cohorts, epochs and image/draft mappings, duplicate stages, invalid counts/revision/phase clocks, and deletion of retained candidate archives or encrypted image bindings. Test only newly owned disposable schemas, migrate real full sequence, always clean fixture. Database typebuild/full regression follows sequentially.
+
+Subsequent API staging must rerun all-source readiness in the authoritative transaction, serialize an immutable canonical public manifest, snapshot every required claim, and demonstrate restart and database fault rollback without modifying original source. Destructive conversion/cleanup remains later work with actual native SDK parity/recovery and original-cohort imported-history authorization; only owned isolated fixture bytes may be removed in acceptance. Production originals/backup/custody and actual moderation/notification/production graph/performance/security remain open.

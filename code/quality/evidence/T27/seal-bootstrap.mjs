@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T27',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex'),p='quality/evidence/T26/codex-open-t27-1.json',r=JSON.parse(fs.readFileSync(p));
+if(r.exitCode!==0||hash(r.evidencePath)!==r.evidenceSha256)throw Error('Opening gate failed');
+const paths={[p]:hash(p),[r.evidencePath]:hash(r.evidencePath)};
+fs.writeFileSync(dir+'/entry-seal.json',JSON.stringify({recordedAt:new Date().toISOString(),deviation:'Opening used previous task recorder by mistake; only these two newly created bootstrap paths sealed after completion, no historical PASS artifact changed',paths},null,2)+'\n',{flag:'wx'});
+const l=JSON.parse(fs.readFileSync('quality/tasks.json')),t=l.tasks.find(t=>t.id==='T27');t.writeAllowlist.push(...Object.keys(paths));t.approvedScopeAmendments.push({source:'Persisted broad write scope permission; exact bootstrap deviation',paths:Object.keys(paths),evidence:dir+'/entry-seal.json'});
+fs.writeFileSync('quality/tasks.json',JSON.stringify(l,null,2)+'\n');
+fs.writeFileSync(dir+'/record.mjs',fs.readFileSync('quality/evidence/T26/record.mjs','utf8').replace("const dir = 'quality/evidence/T26'","const dir = 'quality/evidence/T27'"));
+fs.appendFileSync('../.doc/history.md','\n- T27 bootstrap deviation: mở task dùng nhầm recorder T26; chỉ hai artifacts newly-created codex-open-t27-1 txt/json được seal SHA sau exit0. Shell bootstrap repair trước bị quoting SyntaxError và chưa thực thi mutations; chuyển helper lưu file. Không sửa bằng chứng hoặc ledger PASS cũ; pin chính xác hai paths theo broad permission và dùng recorder T27 cho các run tiếp theo.\n');
+console.log('Opening artifact seal verified; current task recorder created');

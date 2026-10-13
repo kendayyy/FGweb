@@ -1,0 +1,62 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |database| packages/database/test/social-chat.test.ts (10 tests | 1 failed) 12463ms
+   ❯ T05 - Chat, Social Relations, and Forward Migration Schema (10)
+     × should preserve T04 data when applying T05 forward migration over old T04 migration and seed 5021ms
+ ❯ |database| packages/database/test/call-outbox.test.ts (13 tests | 1 failed) 20413ms
+   ❯ T07 - Call, Notification, Moderation & Outbox Constraints (13)
+     × should stage prefix 0000-0002, seed populated data, apply 0003 twice idempotently, and preserve private room data 7742ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |database| packages/database/test/call-outbox.test.ts > T07 - Call, Notification, Moderation & Outbox Constraints > should stage prefix 0000-0002, seed populated data, apply 0003 twice idempotently, and preserve private room data
+AssertionError: expected [ { id: 'msg_dm_1', …(11) } ] to deeply equal [ { id: 'msg_dm_1', …(8) } ]
+
+- Expected
++ Received
+
+@@ -2,10 +2,13 @@
+    {
+      "client_message_id": "client_1",
+      "content": "Secret DM",
+      "conversation_id": "conv_dm_1",
+      "created_at": 2026-10-08T12:52:15.753Z,
++     "crypto_envelope": null,
++     "crypto_revision": null,
++     "encryption_mode": "LEGACY_PENDING",
+      "id": "msg_dm_1",
+      "reply_to_id": null,
+      "sender_id": "u_seed_a",
+      "type": "TEXT",
+      "updated_at": 2026-10-08T05:52:15.789Z,
+
+ ❯ packages/database/test/call-outbox.test.ts:1253:31
+    1251|         const orderCol = t === 'active_play_slots' ? 'user_id' : 'id';
+    1252|         const snapshotAfter = (await testClient.query(`SELECT * FROM "…
+    1253|         expect(snapshotAfter).toEqual(snapshotBefore[t]);
+       |                               ^
+    1254|       }
+    1255|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |database| packages/database/test/social-chat.test.ts > T05 - Chat, Social Relations, and Forward Migration Schema > should preserve T04 data when applying T05 forward migration over old T04 migration and seed
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ packages/database/test/social-chat.test.ts:464:3
+    462|   });
+    463|
+    464|   it('should preserve T04 data when applying T05 forward migration ove…
+       |   ^
+    465|     const migSchemaName = `test_t05_mig_${Date.now()}_${Math.random().…
+    466|     const migClient = new pg.Client({ connectionString: env.DATABASE_U…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 7 passed (9)
+      Tests  2 failed | 75 passed (77)
+   Start at  19:51:03
+   Duration  140.71s (tests 88%, import 11%, transform 1%)
+

@@ -1,0 +1,3 @@
+# Browser build target prerequisite
+
+Default Vite build RED fails421 SDK destructuring transforms for legacy default targets. Explicit esnext build2 and ES2022 build3 exit0; ES2022 matches the existing web TypeScript target and supports the approved native WASM protocol without replacing/transpiling its cryptography. Persist only build.target es2022, leave plugins/proxy/origin/secrets unchanged. Web Locks/secure-context/IndexedDB capabilities remain checked at unlock; actual headed browser/native store evidence pending. Original config captured before mutation. Do not treat a successful bundle as native/browser proof.

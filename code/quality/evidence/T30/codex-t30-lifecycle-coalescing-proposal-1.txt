@@ -1,0 +1,112 @@
+### T30 Proposal Delivery: CallLifecycleService Coalescing Implementation & Regression Plan
+
+**Proposal Scope**: `quality/evidence/T30/antigravity-lifecycle-coalescing-1/**`  
+**Execution Context**: Sequential proposal-only, Gemini 3.6 Flash (High), No Anti2.  
+**TDD Discipline**: Follows confirmed root execution of the intended RED probe (`lifecycle-red-probe-result-review1.json`); delivers proposed source implementation and regression harness strictly within proposal directory. Zero changes applied to product/app source, builds, tests, ledger, mutable fixtures, or frozen tests.  
+**Acceptance Status**: `nativeAcceptance: false` (T30 remains in progress; all 80 prior checkpoints preserved; no T31 claim).
+
+---
+
+### 1. Concrete Telemetry & Review Evidence
+
+Root executed `probe-lifecycle-red-reviewed1.mjs canonical` between 20:11:42.821Z and 20:12:46.169Z, producing concrete evidence in `lifecycle-red-probe-result-review1.json`:
+- **Result**: Exit code `1`, `intendedRedConfirmed = true`, 10 normal plus probe checks verified.
+- **Contention Signature**: 4 requested / 4 completed reconcile calls, 4 `listRooms` + 4 `listParticipants` native reads, 31 own PostgreSQL lock blocking samples observed across backend PIDs during delayed concurrent work.
+- **Baseline Truth**: All cleanup and FG resources were verified clean and restored. The 40ms SDK delay and first-read gate are synthetic diagnostics; historical 5s loading and gateway statement timeouts (`57014`) remain historical, and original frozen acceptance remains mandatory.
+
+---
+
+### 2. Exact Source Pins & Byte-Reversal Proof
+
+- **Source Pins**:
+  - Original Source: `apps/api/src/modules/calls/call-lifecycle.service.ts`  
+    SHA256: `425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865`
+  - Compiled Source: `apps/api/dist/modules/calls/call-lifecycle.service.js`  
+    SHA256: `7440b21cf469f64fbc188525d6deda2401b74e7a3f5942e082a3971b69972260`
+- **Byte Reversal Proof**:
+  - The proposed replacement [call-lifecycle.service.ts](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/call-lifecycle.service.ts) preserves the original `reconcileGroup` body as an unchanged helper `private async reconcilePass(id: string, ended?: { identity: string; at: number })`.
+  - Replacing `reconcilePass` back to `reconcileGroup` yields the exact original lines 74–104 character-for-character.
+  - Programmatically verified by [prepare-coalescing-proposal.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/prepare-coalescing-proposal.mjs).
+
+---
+
+### 3. Coalescing Mechanism & Lifecycle Concurrency
+
+1. **Per-Group Ordinary Trigger Coalescing**:
+   - Ordinary triggers (`ended === undefined`) are managed via `this.coalescers = new Map<string, GroupRunner>()` scoped strictly per call group `id`.
+   - For a fixed concurrent burst arriving while an active pass is running: work is bounded to at most **2 passes** (the in-flight pass + 1 fresh trailing pass).
+   - If triggers continue to arrive during the trailing pass, subsequent passes run fresh (no lost wakeups; no false global $\le 2$ claim for indefinite event streams).
+   - All callers resolve **after** a pass covering their trigger finishes, or reject with the exact same error if that pass fails.
+2. **Screen-Ended Event Preservation**:
+   - Webhook `track_unpublished` events deliver `ended: { identity, at }`.
+   - Existing `PublishingService.reconcileWithin` accepts only a single `ended` object.
+   - **Rule**: Each distinct screen-ended event is queued in `pendingEnded` and runs its own canonical `await this.reconcilePass(id, ended)`. None are batched, dropped, or deduplicated away.
+3. **Multi-Group Independence**:
+   - Triggers for call group 1 and call group 2 operate on independent runners without cross-group interference. Where groups touch the same room, database row locks serialize safely.
+4. **Error Identity & Map Recovery**:
+   - If `reconcilePass` fails, all callers in that pass's batch reject with the exact same error instance.
+   - Failures do not permanently pin the map; if queues empty, the runner is deleted so subsequent sweeps or retried signed webhooks run fresh. Older `finally` checks `this.coalescers.get(id) === runner` to avoid deleting newer map entries.
+5. **Shutdown & Drain (`onModuleDestroy`)**:
+   - Sets `this.closing = true`, stops the sweep timer, and awaits `this.running`.
+   - Drains all active in-flight passes and queued ended-event jobs (`while (this.inFlight.size > 0) await Promise.allSettled(...)`) before calling `this.pool?.end()`.
+   - Requests arriving after shutdown begins reject immediately with 503 (`HttpException: Service shutting down`), preventing unbounded work against a closing pool.
+6. **Strict Invariants Preserved**:
+   - Lock modes: `SELECT id FROM rooms WHERE id=$1 FOR UPDATE`, `call_groups FOR UPDATE`, and `FOR UPDATE OF m` remain strictly exclusive (no `SHARE` relaxation).
+   - Media RPCs remain inside canonical transaction; `requestTimeout: 3`, pool (max 8, 5s timeout, 15s statement timeout), 1000ms sweep interval, and `actor()` / `liveLease()` validations remain unchanged.
+
+---
+
+### 4. Delivered Artifacts Summary
+
+All artifacts reside strictly in `quality/evidence/T30/antigravity-lifecycle-coalescing-1/`:
+
+1. [call-lifecycle.service.ts](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/call-lifecycle.service.ts):
+   - Proposed replacement for `apps/api/src/modules/calls/call-lifecycle.service.ts`.
+   - Implements per-group ordinary coalescing, distinct ended event passes, and shutdown drain, retaining `reconcilePass` byte-identically.
+
+2. [prepare-coalescing-proposal.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/prepare-coalescing-proposal.mjs):
+   - Verification script proving exact source pins (`425de19...`, `7440b21...`), invariant preservation, and byte reversal of `reconcilePass` against original `reconcileGroup`.
+
+3. [test-lifecycle-coalescing.mjs](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/test-lifecycle-coalescing.mjs):
+   - Additive regression test harness validating all 7 controls against the actual compiled service class on real PostgreSQL with full ephemeral migrations and authentic actors.
+   - Proposed future target after root review/apply: `apps/api/test/call-lifecycle.coalescing.spec.ts`.
+
+4. [plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/plan.json):
+   - Machine-readable specification with source pins, reversal proof, invariants, and control definitions.
+
+5. [shortplan.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/shortplan.md):
+   - Human-readable specification detailing the coalescing design, edge-case analysis, byte reversal proof, and review instructions.
+
+6. [controls-plan.json](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-1/controls-plan.json):
+   - Nine deterministic controls defining validation assertions for the 7 regression controls plus byte reversal and cleanup settlement.
+
+---
+
+### 5. Regression Controls Matrix
+
+| Control | Description | Verification Criterion |
+|---|---|---|
+| **CTL-01** | Fixed Ordinary Burst Bounded | 4 concurrent ordinary triggers on group 1 execute $\le 2$ native reads (`listRooms`); all 4 callers resolve. |
+| **CTL-02** | Multi-Group Independence | Concurrent triggers on group 1 and group 2 run independent passes without cross-suppression ($\ge 2$ total reads). |
+| **CTL-03** | No Lost Wakeup During Trailing | Trigger arriving during trailing pass triggers a third fresh pass; all callers resolve. |
+| **CTL-04** | Distinct Ended Event Runs | Two distinct screen-ended events each execute their own canonical reconciliation pass ($\ge 2$ passes). |
+| **CTL-05** | Error Identity & Recovery | Native SDK failure rejects all concurrent callers with exact error; subsequent call recovers cleanly. |
+| **CTL-06** | Signed Duplicate Webhooks | Duplicate signed webhooks both trigger reconciliation cleanly (`receive()` durable insert pipeline intact). |
+| **CTL-07** | Shutdown Drain Integrity | `onModuleDestroy` drains in-flight and queued passes cleanly; requests during shutdown rejected without pool errors. |
+
+---
+
+### 6. Root Review & Verification Instructions
+
+Root can review and verify the proposed implementation using:
+```powershell
+# 1. Verify source pins, invariants, and byte reversal
+node quality/evidence/T30/antigravity-lifecycle-coalescing-1/prepare-coalescing-proposal.mjs
+
+# 2. Run the 7 additive regression controls
+node quality/evidence/T30/antigravity-lifecycle-coalescing-1/test-lifecycle-coalescing.mjs
+```
+
+Following root review and scope rebaseline:
+- Proposed backend target: `apps/api/src/modules/calls/call-lifecycle.service.ts`
+- Proposed regression test target: `apps/api/test/call-lifecycle.coalescing.spec.ts`

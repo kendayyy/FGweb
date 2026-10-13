@@ -1,0 +1,33 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:24608) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (48.775 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › uploads only cohort-owned native image ciphertext with immutable retry and post-write authorization
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+      110 |   try{
+      111 |    const native=await preparedInput('available','live-claim-denied');await pool.query("UPDATE chat_crypto_state SET migration_state='RECONCILED' WHERE conversation_id='legacy'");
+    > 112 |    try{expect((await upload({...metadata,clientUploadId:'closed-migration-upload'})).status).toBe(403);const {cohortId:_cohort,...liveMetadata}=metadata;expect(_cohort).toBe('available');expect((await request(base).post('/api/v1/crypto/conversations/legacy/attachments').set('Origin',origin).set('Cookie',cookies.get('alice')!).field('metadata',JSON.stringify(liveMetadata)).attach('file',bytes,{filename:'opaque.bin',contentType:'application/octet-stream'})).status).toBe(409);expect((await request(base).get('/api/v1/crypto/conversations/legacy/attachments/'+row.id).set('Cookie',cookies.get('alice')!)).status).toBe(403);expect((await write('conversations/legacy/messages',{clientMessageId:'historical-draft-live-claim',deviceId:'A',membershipRevision:revision,envelope:native.envelope,attachmentIds:[row.id]})).status).toBe(403);expect((await pool.query('SELECT consumed_at,message_id FROM chat_crypto_upload_drafts WHERE id=$1',[row.id])).rows[0]).toEqual({consumed_at:null,message_id:null});expect((await pool.query("SELECT id FROM messages WHERE client_message_id='historical-draft-live-claim'")).rowCount).toBe(0);expect(fs.readFileSync(path.join(root,'encrypted',row.object_key))).toEqual(bytes);}finally{await pool.query("UPDATE chat_crypto_state SET migration_state='LEGACY_PENDING' WHERE conversation_id='legacy'");}
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      113 |    expect((await upload({...metadata,clientUploadId:'image-upload-ban'})).status).toBe(403);expect((await pool.query("SELECT id FROM chat_crypto_upload_drafts WHERE client_upload_id='image-upload-ban'")).rowCount).toBe(0);expect((await pool.query("SELECT id FROM admin_actions WHERE id='image-upload-trigger-ban'")).rowCount).toBe(0);expect(fs.readdirSync(path.join(root,'encrypted')).sort()).toEqual(before);}finally{await pool.query('DROP TRIGGER image_upload_late_ban ON chat_crypto_upload_drafts');await pool.query('DROP FUNCTION image_upload_late_ban()');await pool.query('DELETE FROM chat_crypto_upload_drafts WHERE id=$1',[row.id]);fs.unlinkSync(path.join(root,'encrypted',row.object_key));}
+      114 |  });});
+      115 |  it('requires explicit historical context for keys and excludes current late members or devices registered after verification',async()=>{await availableSource(async()=>{
+
+      at test/chat-crypto-legacy.integration.spec.ts:112:615
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:90:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:104:117)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        49.32 s, estimated 51 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

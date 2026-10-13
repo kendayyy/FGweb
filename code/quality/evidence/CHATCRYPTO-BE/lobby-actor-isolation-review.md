@@ -1,0 +1,7 @@
+# Native Lobby write actor isolation review
+
+ActualHTTPcookie/nativeTLSKMS/externalcommittedBAN verified viafreshPG: message/upload callerRR returned201 (RED1 42/44), RC403. Own taggedrows/response-ID bound unused draft/canonicalfile underphysical ownedroot cleaned, nativewrappercleanuptrue; no postwrapper success claim for RED. Only2owningBEGIN explicitRC, reverseoneeach exactbeforefullsourceSHA, unrelatedBEGIN/globaldefault/schema/DTO unchanged. NativeGREEN1 ended2026-10-10 01:05:56.579 +07 exit0,44/44 SHA946d7f5bf64b3cd667c51c33fac0c18b3009397e4e9f7fc9a1835a927654df9f. BothRC/RR403/no new msg/outbox/drafts/files; original40report/Lobby cases retained, allnativeTLS/rotation/rewrap/restart/seal/outage/credential liveness/explicitrevocation/cleanup true.
+
+Actualaudit46 snapshot pinsbefore3sources and earlierreader reporttestafter→currentLobbybefore, native record/result/time chains bound. Fresh APIbuild/lint/full17/diff/audit/save pending. Ban/unban epoch futureproducer/aggregateingestion/operational/security remain; IN_PROGRESS/no overallPASS/productionclaim.
+
+Current full custody-lobby-actor-isolation-regression-1 ended2026-10-10 01:18:26.411 +07 exit0,294/294/17 suites,559.748s Jest SHA923462403c389ac7a4bcf59133ac25f31a504dea816ba7b4633702a26ace4279. ActualnativeTLS/custody/backuprestore/HTTPSPUSH/SDK/PG/Redis/credentialliveness+revocation/cleanuptrue/mainunchanged/prodfalse. Fresh APIbuild1/lint64 exit0. Diff47/audit47/save41 next; no backendPASS.

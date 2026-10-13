@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-11T10:49:45.131Z",
+  "source": [
+    {
+      "path": "apps/web/src/features/calls/CallPanel.tsx",
+      "sha256": "c9e0ab0aa920e738e5cf5fef10c6a7ce2d9f483f3723b4e33c65062298055f0d"
+    },
+    {
+      "path": "apps/web/src/features/rooms/RoomsPage.tsx",
+      "sha256": "38f9c7116bcb3221f1d63bbdd136b4847508609f8774f47c4f0fb520e8635e51"
+    }
+  ],
+  "finding": "CallPanel unconditionally renders the named region even while groups are loading. Initial region timeout may occur before app/auth/room detail permits mount; final error screenshot is later than the failed visibility assertion. Call/play loading in final screenshot alone does not prove list request caused region absence. Need same-run initial HTTP/auth/room-detail timing plus actual mount/render boundary and service/native/PG context; no unique cause inferred.",
+  "applicationChanged": false
+}

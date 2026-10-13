@@ -1,0 +1,14 @@
+file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-FE/report-custody-fixture.mjs:37
+      const deadline=setTimeout(()=>req.destroy(),10000);req.on('close',()=>clearTimeout(deadline));req.on('error',()=>reject(new Error('Isolated custody TLS/transport failed; details redacted')));if(payload)req.write(payload);req.end();
+                                                                                                                              ^
+
+Error: Isolated custody TLS/transport failed; details redacted
+    at ClientRequest.<anonymous> (file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-FE/report-custody-fixture.mjs:37:127)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at TLSSocket.socketCloseListener (node:_http_client:739:7)
+    at TLSSocket.emit (node:events:526:24)
+    at node:net:362:12
+    at TCP.done (node:internal/tls/wrap:770:7)
+
+Node.js v24.21.0

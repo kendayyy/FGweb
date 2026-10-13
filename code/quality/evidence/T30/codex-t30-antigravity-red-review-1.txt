@@ -1,0 +1,78 @@
+# FG T30 — Báo cáo hoàn thiện đề xuất RED vòng 2 (Refactored RED Proposal)
+
+Thực hiện theo chỉ đạo refactor từ Codex review, toàn bộ các tệp trong thư mục `antigravity-red-1` được giữ nguyên vẹn. Đề xuất RED hoàn chỉnh mới được khởi tạo độc lập tại thư mục `code/quality/evidence/T30/antigravity-red-review-1/**`.
+
+---
+
+## 1. Đường dẫn các tệp đề xuất thay thế
+
+1. [apps/web/test/live-viewer.test.tsx](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-review-1/apps/web/test/live-viewer.test.tsx): Bộ kiểm thử DOM Vitest hoàn chỉnh thay thế.
+2. [live-viewer.test.tsx (bản sao gốc thư mục)](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-review-1/live-viewer.test.tsx): Bản sao trực tiếp tại gốc `antigravity-red-review-1/`.
+3. [PLAN.md](file:///E:/FGweb/code/quality/evidence/T30/antigravity-red-review-1/PLAN.md): Kế hoạch kiến trúc và giao diện chi tiết đã được hiệu chỉnh theo các điểm phản biện.
+
+---
+
+## 2. Các điểm xử lý theo phản biện của Codex (Exact Findings Addressed)
+
+### 2.1 Sử dụng `createMediaSession` thực tế và mock transport SDK ở ranh giới
+- Loại bỏ hoàn toàn mock nội bộ `createMockMediaSession().selectScreen` trong bài test.
+- Sử dụng trực tiếp hàm thực tế [`createMediaSession`](file:///E:/FGweb/code/apps/web/src/features/calls/media.ts#L12) từ `apps/web/src/features/calls/media.js`, chỉ mock lớp transport LiveKit `Room` ở ranh giới SDK bên ngoài.
+- Dẫn dắt media session qua `await session.connect(validJoinGrant)` và bắn các sự kiện `RoomEvent.TrackPublished`, `RoomEvent.TrackSubscribed`, `RoomEvent.TrackUnsubscribed` thực tế.
+- Logic quyết định đăng ký/hủy đăng ký, fallback và gắn track thuộc về code ứng dụng thực tế. Kiểm tra các spy `publication.setSubscribed` và trạng thái subscription thực tế cuối cùng (`pubLinh.isSubscribed === false`, `pubHuy.isSubscribed === true`).
+- Giao diện `ScreenPublisherInfo` chỉ truyền `{ identity, trackSid }` gọn nhẹ; UI tự ánh xạ tên hiển thị từ danh sách `participants`.
+
+### 2.2 Quy trình capture-first an toàn, thứ tự claim và dọn dẹp khi từ chối
+- `navigator.mediaDevices.getDisplayMedia` được gọi **đồng bộ ngay trong sự kiện click** của nút chia sẻ trước bất kỳ `await` nào để bảo toàn transient user activation của trình duyệt.
+- **Khi người dùng hủy/từ chối cấp quyền**: Chưa có bất kỳ request claim nào được gửi, do đó **không gửi release thừa** và không gây thất thoát quota trên server.
+- **Thất bại publish sau khi claim thành công**: Nếu claim 201 thành công nhưng publish LiveKit thất bại, track vừa thu được lập tức bị dừng (`track.stop()`) và gửi `POST .../screen-share/release` đúng 1 lần.
+- **Claim trễ sau khi unmount**: Nếu component unmount khi claim HTTP đang trên đường truyền, khi claim 201 trả về, hệ thống phát hiện đã unmount, lập tức dừng track và gửi release đúng 1 lần, không publish vào Room đã hủy.
+
+### 2.3 Ràng buộc kiểu SDK: `RemoteTrackPublication.setSubscribed` đồng bộ
+- Mock SDK được chuẩn hóa theo kiểu thực tế: `setSubscribed(subscribed: boolean)` là phương thức đồng bộ.
+- Xử lý chuyển luồng nhanh: Đảm bảo luồng chọn cuối cùng là `true`, các luồng khác là `false`. Thêm cơ chế bảo vệ ngăn sự kiện `TrackSubscribed` trễ từ luồng cũ gắn nhầm video vào sân khấu chính.
+
+### 2.4 Fixtures hợp lệ theo Shared Contracts Schemas
+- Khởi tạo toàn bộ dữ liệu mẫu qua hàm `parse` của contracts:
+  - [`CallParticipantSchema.parse`](file:///E:/FGweb/code/packages/contracts/src/calls.ts#L75): Sử dụng `mediaIdentity` đúng định dạng UUID v4 `admission_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`.
+  - [`UserSummarySchema.parse`](file:///E:/FGweb/code/packages/contracts/src/profiles.ts#L4): Sử dụng các giá trị enum `customStatus` hợp lệ (`'PLAYING'`, `'LOOKING_FOR_TEAM'`, `'JUST_CHATTING'`).
+  - [`CallJoinSchema.parse`](file:///E:/FGweb/code/packages/contracts/src/calls.ts#L117) cho phản hồi claim slot.
+
+### 2.5 Phát hiện khả năng thiết bị nội bộ, loại bỏ prop `isMobile`
+- Component `LiveViewer` nhận giao diện thống nhất:
+  ```tsx
+  export interface LiveViewerProps {
+    callId: string;
+    actorId: string;
+    session: MediaSession;
+    participants: CallParticipantDTO[];
+  }
+  ```
+- Không nhận prop `isMobile` từ bên ngoài. Khả năng phát hiện thực hiện nội bộ:
+  - Thiết bị di động thực sự (Mobile UA / touch không hỗ trợ capture): Ẩn nút phát, hiện thông báo chỉ xem (*"Thiết bị di động chỉ hỗ trợ xem luồng chia sẻ và dùng mic, chưa hỗ trợ phát màn hình trực tiếp."*).
+  - Desktop không hỗ trợ API `getDisplayMedia`: Hiện thông báo trình duyệt không hỗ trợ.
+  - Trình duyệt desktop thu nhỏ kích thước cửa sổ (viewport hẹp 360px): Vẫn duy trì nút phát màn hình, không bị chặn nhầm chỉ vì độ rộng CSS.
+
+### 2.6 Điều hướng bàn phím trợ năng (Accessibility Keyboard Navigation)
+- Thêm kiểm tra điều hướng phím thực tế trên các tab chọn luồng (`role="tablist"` / `role="tab"`):
+  - Phím `ArrowRight` / `ArrowDown`: Di chuyển focus và chọn tab kế tiếp (`aria-selected="true"`).
+  - Phím `ArrowLeft` / `ArrowUp`: Di chuyển focus và chọn tab phía trước.
+  - Phím `Home` / `End`: Di chuyển focus về tab đầu tiên hoặc tab cuối cùng.
+  - Không dựa vào màu sắc đơn thuần, giữ ngữ nghĩa focus rõ ràng.
+
+### 2.7 Bắt sự kiện Native SDK và dọn dẹp tự động
+- **Native browser stop bar (`track.onended`)**: Bắt sự kiện khi người dùng bấm nút dừng trên thanh nổi của trình duyệt -> tự động kích hoạt release quota và đổi lại nút UI.
+- **Moderator thu hồi quyền (`LocalTrackUnpublished`)**: Tự động giải phóng trạng thái local share và chuyển nút về trạng thái sẵn sàng.
+- **Âm thanh độc lập**: Luồng âm thanh cuộc gọi trên `audioRoot` hoàn toàn độc lập, không bị gián đoạn hay phụ thuộc vào việc bật/tắt/chuyển video màn hình.
+
+---
+
+## 3. Rủi ro kỹ thuật kiểm chứng tiếp theo
+
+1. **Kiểm thử E2E headed với SFU thật (`tests/e2e/screen-share.spec.ts`)**:
+   - Vòng RED hiện tại giả lập transport ở biên LiveKit SDK. Kiểm thử nghiệm thu sau triển khai bắt buộc phải chạy Chromium/WebKit headed với LiveKit SFU cục bộ và đo đạc gói tin video/audio thực tế.
+2. **Ưu tiên âm thanh khi nghẽn mạng (T41)**:
+   - Cơ chế 1 video subscription duy nhất kết hợp dynacast đảm bảo khi băng thông suy giảm, chất lượng hình ảnh tự hạ tầng nhưng luồng âm thanh luôn được bảo toàn (packet loss < 2%).
+
+---
+
+*Ghi chú: Đề xuất đã sẵn sàng để Codex áp dụng, chạy RED kiểm chứng trước khi triển khai mã nguồn.*

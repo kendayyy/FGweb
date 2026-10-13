@@ -1,0 +1,44 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:15232) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (51.888 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › accepts explicitly disclosed imported text/image only for the original cohort and completed bindings
+
+    error: duplicate key value violates unique constraint "dm_pair_unique"
+
+       98 |   // Public imported-state ACL fixture; conversion/cleanup are proved separately.
+       99 |   const conversation='report-import',cohort='report-import-cohort',stage=randomUUID(),message=randomUUID(),candidate=randomUUID(),attachment=randomUUID(),draft=randomUUID(),digest=(value:Buffer|string)=>createHash('sha256').update(value).digest('base64').replace(/=+$/,'');
+    > 100 |   await pool.query("INSERT INTO conversations(id,kind,user1_id,user2_id) VALUES($1,'DM','alice','bob')",[conversation]);await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status,membership_revision) VALUES($1,'E2EE','RECONCILED','KNOWN',2)",[conversation]);
+          |   ^
+      101 |   for(const user of ['alice','bob'])await pool.query('INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,$2,$3,1,clock_timestamp())',[randomUUID(),conversation,user]);
+      102 |   await pool.query("INSERT INTO chat_crypto_history_cohorts(id,conversation_id,verified_at,verification_basis) VALUES($1,$2,clock_timestamp(),'EXPLICIT_RECONCILIATION')",[cohort,conversation]);await pool.query("INSERT INTO chat_crypto_cohort_members(cohort_id,conversation_id,user_id) VALUES($1,$2,'alice')",[cohort,conversation]);
+      103 |   const image=sdk.Attachment.encrypt(new Uint8Array(picture)),ciphertext=Buffer.from(image.encryptedData),secretInfo=image.mediaEncryptionInfo!;image.free();fs.writeFileSync(path.join(objectRoot,draft+'.bin'),ciphertext);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:100:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 37 passed, 38 total
+Snapshots:   0 total
+Time:        52.437 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"08ea43d51c5243c28aa308157316cb0f","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

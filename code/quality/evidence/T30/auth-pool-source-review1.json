@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-12T13:04:17.070Z",
+  "reviewer": "Codex",
+  "reason": "Actual native-read-probe1 has SessionGuard6049.89ms, browser roomdetail5597ms but room method393ms/getMe69ms, Authpool3idle→1 then cold connections withoutPIDs belowmax10/waiting0. RealPG RED startup0/idle4to0after11s/newfourPIDs. Await/release four real Authstartup connections and retain min4; default max10/deadlines unchanged, setDb/noPool path retained. Only init hooks/pool option change; all BetterAuth/session/cache-disabled/ban/password/email/admin/hooks/query/DTO/security bodies byteexact. Required T30 startup performance scope amendment, no auth feature or acceptance change.",
+  "path": "apps/api/src/modules/auth/auth.service.ts",
+  "beforeSha256": "5ede5d9688ebb64a4cb7b0251c3992be2e51f5450187ca7ea76dfad7a7fc13a2",
+  "afterSha256": "945c40853a3f8a6c80044a609d4efc29caed830bf4354043f57a5801fda7a6e3",
+  "red": {
+    "command": "node quality/evidence/T30/auth-pool-reuse-control1.mjs red",
+    "cwd": "E:\\FGweb\\code",
+    "startedAt": "2026-10-12T13:01:21.360Z",
+    "completedAt": "2026-10-12T13:01:42.970Z",
+    "exitCode": 1,
+    "signal": null,
+    "evidencePath": "quality/evidence/T30/codex-t30-auth-pool-reuse-red-1.txt",
+    "evidenceSha256": "22ca5f38e8459b9257ee4657f48c88b4fde77d6af0600cdf03a750a9d13f2978"
+  },
+  "observation": {
+    "at": "2026-10-12T13:01:42.940Z",
+    "mode": "red",
+    "actualPg": true,
+    "startupReady": 0,
+    "before": 4,
+    "after": 0,
+    "pids": [
+      6181,
+      6183,
+      6184,
+      6185
+    ],
+    "afterPids": [
+      6214,
+      6215,
+      6216,
+      6217
+    ],
+    "max": 10
+  },
+  "cleanup": {
+    "at": "2026-10-12T13:01:42.943Z",
+    "poolEnded": true,
+    "total": 0
+  },
+  "causeEvidence": "quality/evidence/T30/native-read-probe1-result-review.json",
+  "onlyTwoInitializationAnchorsChanged": true,
+  "allSecurityAndDomainBytesExact": true,
+  "nativeAcceptance": false
+}

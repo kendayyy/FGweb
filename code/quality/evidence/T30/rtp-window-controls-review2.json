@@ -1,0 +1,71 @@
+{
+  "recordedAt": "2026-10-11T13:20:35.236Z",
+  "results": [
+    {
+      "name": "actual browser snapshot function whitelist",
+      "evidence": "quality/evidence/T30/t30-native-8e5f2694d0bd40029af348b08f16f9d9",
+      "expectedComplete": true,
+      "actualComplete": true,
+      "threw": false
+    },
+    {
+      "name": "getStats rejection never complete",
+      "evidence": "quality/evidence/T30/t30-native-864e82b5c64542dbbb9ff08748fc2783",
+      "expectedComplete": false,
+      "actualComplete": false,
+      "threw": true
+    },
+    {
+      "name": "total deadline never complete",
+      "evidence": "quality/evidence/T30/t30-native-18313274867548288ff7dc4057557610",
+      "expectedComplete": false,
+      "actualComplete": false,
+      "threw": true
+    },
+    {
+      "name": "closed actor never silently skipped",
+      "evidence": "quality/evidence/T30/t30-native-890c6db3a43a4b7eab55b0ff69b2cd31",
+      "expectedComplete": false,
+      "actualComplete": false,
+      "threw": true
+    },
+    {
+      "name": "missing observation never complete",
+      "evidence": "quality/evidence/T30/t30-native-81a7b936ed90443a89b365b529733fc6",
+      "expectedComplete": false,
+      "actualComplete": false,
+      "threw": true
+    },
+    {
+      "name": "persistence failure propagates",
+      "evidence": "quality/evidence/T30/t30-native-e65440341b6d4ed38846a8b6160b05ca",
+      "threw": true
+    }
+  ],
+  "controls": 6,
+  "controlsOnly": true,
+  "notNativeOrGuiProof": true,
+  "exactSourceReview": {
+    "recordedAt": "2026-10-11T13:20:34.020Z",
+    "originalSha256": "8e126efd434516a6870e9f48029c4317cc2a427e78d3157e660b00ebdba10cc8",
+    "exactReconstruction": true,
+    "assertionsAndDeadlinesPreserved": true,
+    "detailOnlyAfterFailure": true,
+    "errorScreenshotPreservedOnObserverFailure": true,
+    "runnerOnlyPathChanges": true,
+    "files": {
+      "quality/evidence/T30/rtp-window-reviewed2/failure-observer.mjs": "612518a1f4b47809bccbba2469d7fca35a7eaf5a57927c1a7cb07655d09fd2d2",
+      "quality/evidence/T30/rtp-window-reviewed2/playwright.config.ts": "019a2603a315b285e4f02ddf39272b16407a01dab7a8231a75364c1654211050",
+      "quality/evidence/T30/rtp-window-reviewed2/run-parent.mjs": "70da5f74e21a518a8c894e5b2fa584eb86d2464cc2a772f4a39f83f391e1c5db",
+      "quality/evidence/T30/rtp-window-reviewed2/screen-share-diagnostic.spec.ts": "dbe54cf521645ea627519f7fbaea5c6256d23a22f2bc2f89f1094f61d7bd5edb"
+    },
+    "rejectProposal": [
+      "swallowed getStats errors",
+      "raw error strings",
+      "expensive allactor inspection before original assertions",
+      "duplicate original subscriptions records"
+    ],
+    "nativeAcceptance": false
+  },
+  "nativeAcceptance": false
+}

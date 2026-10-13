@@ -1,3 +1,4 @@
+import {GameLogo} from '../../components/ui/GameLogo.js';
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -438,7 +439,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({
                         disabled={isSubmitting}
                         style={{ accentColor: 'var(--color-action)' }}
                       />
-                      <span>{game}</span>
+                      <GameLogo game={game} decorative/><span>{game}</span>
                     </label>
                   );
                 })}

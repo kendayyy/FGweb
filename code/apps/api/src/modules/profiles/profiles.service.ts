@@ -36,8 +36,13 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
   private db!: NodePgDatabase<typeof schema>;
   private pool?: Pool;
 
-  onModuleInit() {
+  async onModuleInit() {
     this.initDatabase();
+    if (!this.pool) return;
+    const ready = await Promise.allSettled(Array.from({ length: 4 }, () => this.pool!.connect()));
+    for (const result of ready) if (result.status === 'fulfilled') result.value.release();
+    const failed = ready.find(result => result.status === 'rejected');
+    if (failed?.status === 'rejected') throw failed.reason;
   }
 
   async onModuleDestroy() {
@@ -64,41 +69,53 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
     this.pool = new Pool({
       connectionString,
       max: 5,
+      min: 4,
     });
-    this.db = drizzle(this.pool, { schema });
+    // Exclude TypeScript's synthetic require(ESM) default namespace alias.
+    const databaseSchema = { ...schema };
+    Reflect.deleteProperty(databaseSchema, 'default');
+    this.db = drizzle(this.pool, { schema: databaseSchema });
   }
 
-  async getPublicProfile(userId: string): Promise<ProfileDTO> {
-    const [dbUser] = await this.db
-      .select()
-      .from(schema.user)
-      .where(eq(schema.user.id, userId));
+  private buildPublicProfileDto(userRows: Array<{
+    user: typeof schema.user.$inferSelect;
+    profile: typeof schema.profiles.$inferSelect | null;
+    gameProfile: {
+      gameId: string | null;
+      gameTitle: string | null;
+      inGameName: string | null;
+      rank: string | null;
+      role: string | null;
+      playHours: number | null;
+      playStyle: string | null;
+    };
+  }>): ProfileDTO {
+    const dbUser = userRows[0].user;
+    const profile = userRows[0].profile;
 
-    if (!dbUser) {
-      throw new NotFoundException({
-        code: ErrorCode.NOT_FOUND,
-        message: `User profile not found: ${userId}`,
-      });
+    const rawGameProfiles: Array<{
+      gameId: string;
+      gameTitle: string;
+      inGameName: string | null;
+      rank: string | null;
+      role: string | null;
+      playHours: number | null;
+      playStyle: string | null;
+    }> = [];
+
+    for (const r of userRows) {
+      if (r.gameProfile.gameId !== null && r.gameProfile.gameTitle !== null) {
+        rawGameProfiles.push({
+          gameId: r.gameProfile.gameId,
+          gameTitle: r.gameProfile.gameTitle,
+          inGameName: r.gameProfile.inGameName,
+          rank: r.gameProfile.rank,
+          role: r.gameProfile.role,
+          playHours: r.gameProfile.playHours,
+          playStyle: r.gameProfile.playStyle,
+        });
+      }
     }
-
-    const [profile] = await this.db
-      .select()
-      .from(schema.profiles)
-      .where(eq(schema.profiles.userId, userId));
-
-    const rawGameProfiles = await this.db
-      .select({
-        gameId: schema.gameProfiles.gameId,
-        gameTitle: schema.games.title,
-        inGameName: schema.gameProfiles.inGameName,
-        rank: schema.gameProfiles.rank,
-        role: schema.gameProfiles.role,
-        playHours: schema.gameProfiles.playHours,
-        playStyle: schema.gameProfiles.playStyle,
-      })
-      .from(schema.gameProfiles)
-      .innerJoin(schema.games, eq(schema.gameProfiles.gameId, schema.games.id))
-      .where(eq(schema.gameProfiles.userId, userId));
 
     const gameProfiles = rawGameProfiles.map((gp) => ({
       gameId: gp.gameId,
@@ -125,6 +142,64 @@ export class ProfilesService implements OnModuleInit, OnModuleDestroy {
     };
 
     return PublicProfileSchema.parse(publicProfile);
+  }
+
+  async getPublicProfiles(userIds: string[]): Promise<ProfileDTO[]> {
+    if (!userIds.length) return [];
+
+    const uniqueIds = [...new Set(userIds)];
+    const rows = await this.db
+      .select({
+        user: schema.user,
+        profile: schema.profiles,
+        gameProfile: {
+          gameId: schema.gameProfiles.gameId,
+          gameTitle: schema.games.title,
+          inGameName: schema.gameProfiles.inGameName,
+          rank: schema.gameProfiles.rank,
+          role: schema.gameProfiles.role,
+          playHours: schema.gameProfiles.playHours,
+          playStyle: schema.gameProfiles.playStyle,
+        },
+      })
+      .from(schema.user)
+      .leftJoin(schema.profiles, eq(schema.profiles.userId, schema.user.id))
+      .leftJoin(schema.gameProfiles, eq(schema.gameProfiles.userId, schema.user.id))
+      .leftJoin(schema.games, eq(schema.gameProfiles.gameId, schema.games.id))
+      .where(inArray(schema.user.id, uniqueIds));
+
+    const rowsByUser = new Map<string, typeof rows>();
+    for (const r of rows) {
+      if (!r.user) continue;
+      const uid = r.user.id;
+      let list = rowsByUser.get(uid);
+      if (!list) {
+        list = [];
+        rowsByUser.set(uid, list);
+      }
+      list.push(r);
+    }
+
+    for (const id of userIds) {
+      if (!rowsByUser.has(id)) {
+        throw new NotFoundException({
+          code: ErrorCode.NOT_FOUND,
+          message: `User profile not found: ${id}`,
+        });
+      }
+    }
+
+    const profileById = new Map<string, ProfileDTO>();
+    for (const [id, userRows] of rowsByUser.entries()) {
+      profileById.set(id, this.buildPublicProfileDto(userRows));
+    }
+
+    return userIds.map((id) => profileById.get(id)!);
+  }
+
+  async getPublicProfile(userId: string): Promise<ProfileDTO> {
+    const [profile] = await this.getPublicProfiles([userId]);
+    return profile;
   }
 
   async getPrivateProfile(userId: string): Promise<PrivateProfileDTO> {

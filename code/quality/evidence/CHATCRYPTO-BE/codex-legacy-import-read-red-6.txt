@@ -1,0 +1,30 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22156) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (71.708 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 500
+
+      280 |       await pool.query("UPDATE chat_crypto_legacy_stages SET phase='RECONCILED',converted_at=clock_timestamp(),completed_at=clock_timestamp() WHERE id=$1",[staged.operationId]);await pool.query("UPDATE chat_crypto_state SET migration_state='RECONCILED',membership_revision=$1 WHERE conversation_id='legacy'",[revision+1]);
+      281 |       for(const user of ['alice','bob','outsider'])await pool.query("INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,'legacy',$2,1,clock_timestamp())",['import-reader-'+user,user]);
+    > 282 |       const importedHistory=(user:string)=>request(base).get('/api/v1/crypto/conversations/legacy/messages').set('Cookie',cookies.get(user)!),all=await importedHistory('alice');expect(all.status).toBe(200);expect(all.body.items.map((item:{id:string})=>item.id)).toEqual(['msg-a','msg-b','msg-c']);
+          |                                                                                                                                                                                                     ^
+      283 |       for(const selected of recoveryEvents){const dto=all.body.items.find((item:{id:string})=>item.id===selected.candidate.messageId);expect(dto.origin).toBe('LEGACY_IMPORT');expect(dto.createdAt).toBe(selected.archive.source!.createdAt);expect(dto.importProvenance).toEqual({candidateId:selected.candidate.candidateId,cohortId:selected.candidate.cohortId,originalSha256:selected.candidate.originalSha256,importerUserId:'alice',importerDeviceId:'A'});expect(dto.attachmentIds).toEqual(selected.candidate.messageId==='msg-b'?[imageId]:[]);}
+      284 |       const bobHistory=await importedHistory('bob'),thirdHistory=await importedHistory('outsider');expect(bobHistory.status).toBe(200);expect(bobHistory.body.items.map((item:{id:string})=>item.id)).toEqual(['msg-a','msg-b']);expect(thirdHistory.status).toBe(200);expect(thirdHistory.body.items.map((item:{id:string})=>item.id)).toEqual(['msg-c']);
+      285 |       const importedFile=(user:string)=>request(base).get('/api/v1/crypto/conversations/legacy/attachments/'+imageId).set('Cookie',cookies.get(user)!);const recoveredImage=await importedFile('bob');expect(recoveredImage.status).toBe(200);expect(Buffer.from(recoveredImage.body).equals(imageBytes)).toBe(true);expect(recoveredImage.headers['cache-control']).toBe('no-store');expect((await importedFile('outsider')).status).toBe(403);
+
+      at test/chat-crypto-legacy.integration.spec.ts:282:197
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:45:212)
+      at test/chat-crypto-legacy.integration.spec.ts:277:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:99:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:163:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        72.09 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

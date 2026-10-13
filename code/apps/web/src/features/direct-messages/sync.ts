@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IdSchema, MessageDTO, MessageSchema } from '@fg/contracts';
+import { IdSchema, MessageDTO, MessageSchema, EncryptedMessageSchema, type EncryptedMessageDTO } from '@fg/contracts';
 import { registerAuthCleanup } from '../auth/lifecycle.js';
 
 export interface UnreadSyncEvent {
@@ -139,7 +139,17 @@ export class UnreadSyncManager {
     if (!parsed.success) {
       return { isDuplicate: true, isUnreadIncrement: false, isActiveConversation: false };
     }
-    const message = parsed.data;
+    return this.ingestMetadata(parsed.data, activeConversationId);
+  }
+
+  public ingestEncryptedMessage(payload: unknown, activeConversationId: string | null): Omit<IngestionResult, 'message'> & { message?: EncryptedMessageDTO } {
+    const parsed = EncryptedMessageSchema.safeParse(payload);
+    if (!this.actorId || !parsed.success) return { isDuplicate: true, isUnreadIncrement: false, isActiveConversation: false };
+    return this.ingestMetadata(parsed.data, activeConversationId);
+  }
+
+  private ingestMetadata<T extends { id: string; senderId: string; conversationId: string; createdAt: string }>(message: T, activeConversationId: string | null): Omit<IngestionResult, 'message'> & { message?: T } {
+    if (!this.actorId) return { isDuplicate: true, isUnreadIncrement: false, isActiveConversation: false };
 
     const msgTime = new Date(message.createdAt).getTime();
     if (isNaN(msgTime)) {

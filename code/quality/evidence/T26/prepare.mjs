@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T26',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),owner=ledger.tasks.find(t=>t.id==='T26');
+checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:owner.id,specHash:baseline.hashes.specSha256});
+assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,owner.id);assert.equal(owner.status,'NOT_STARTED');
+owner.writeAllowlist=['apps/api/src/modules/calls/**','apps/api/test/call-admission.integration.spec.ts',`${dir}/**`,'.runtime/t26/**','.cache/t26/**'];
+const allow=p=>owner.writeAllowlist.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x);
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.cache/')&&!p.startsWith('.runtime/'));
+const before={recordedAt:new Date().toISOString(),readonly:Object.fromEntries(files.filter(p=>!allow(p)).map(p=>[p,hash(p)])),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},scope:owner.writeAllowlist,baselines:baseline.hashes};
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify(before,null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T25/record.mjs','utf8').replaceAll('T25','T26'),{flag:'wx'});
+owner.status='IN_PROGRESS';owner.startedAt=new Date().toISOString();owner.inputsHash=hash(`${dir}/before.json`);owner.evidencePaths=[`${dir}/before.json`];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');console.log(JSON.stringify({task:owner.id,status:owner.status,strictGate:'PASS',readonly:files.filter(p=>!allow(p)).length}));

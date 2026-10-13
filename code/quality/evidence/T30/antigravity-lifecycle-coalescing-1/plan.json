@@ -1,0 +1,72 @@
+{
+  "planId": "antigravity-lifecycle-coalescing-1",
+  "targetTask": "T30",
+  "phase": "BOUNDED_PERFORMANCE_FIX_AND_REGRESSION_CONTROLS_PROPOSAL",
+  "status": "PROPOSAL_AWAITING_ROOT_REVIEW",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:17:50.000Z",
+  "sourcePins": {
+    "originalTs": {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "sha256": "425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865"
+    },
+    "compiledJs": {
+      "path": "apps/api/dist/modules/calls/call-lifecycle.service.js",
+      "sha256": "7440b21cf469f64fbc188525d6deda2401b74e7a3f5942e082a3971b69972260"
+    }
+  },
+  "proposedChanges": {
+    "backendSourceFile": {
+      "targetPath": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposalPath": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/call-lifecycle.service.ts",
+      "coreMechanism": "Preserves original reconcileGroup body as an unchanged reconcilePass helper (verified byte-exact); wraps in per-group coalescer for ordinary triggers while preserving distinct canonical passes for screen-ended events."
+    },
+    "proposedFutureRegressionTestFile": {
+      "targetPath": "apps/api/test/call-lifecycle.coalescing.spec.ts",
+      "proposalPath": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/test-lifecycle-coalescing.mjs"
+    }
+  },
+  "reversalProof": {
+    "helper": "reconcilePass",
+    "original": "reconcileGroup",
+    "byteExactMatch": true,
+    "diffScope": "reconcileGroup signature and coalescing wrapper added; reconcilePass body is byte-for-byte identical to original lines 75-104."
+  },
+  "invariantsPreserved": {
+    "sqlLockModes": "SELECT id FROM rooms WHERE id=$1 FOR UPDATE, call_groups FOR UPDATE, and call_members FOR UPDATE OF m remain strictly exclusive",
+    "transactionBoundaries": "LiveKit SFU network RPCs and database mutations remain strictly inside canonical transaction",
+    "poolConfiguration": "max 8, connectionTimeoutMillis 5000, statement_timeout 15000",
+    "sweepInterval": "1000ms periodic sweep unchanged",
+    "nativeClientOptions": "requestTimeout: 3 unchanged",
+    "validations": "actor() and liveLease() checks fully preserved",
+    "deadlines": "45000ms deadline and 5s assertion deadlines immutable",
+    "endedEventIntegrity": "Distinct screen-ended {identity, at} events are each processed under their own canonical run (not batched into existing PublishingService API)",
+    "noAppModificationsOutsideProposal": true
+  },
+  "deliveredArtifacts": [
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/call-lifecycle.service.ts",
+      "description": "Proposed replacement for apps/api/src/modules/calls/call-lifecycle.service.ts with per-group ordinary coalescing."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/prepare-coalescing-proposal.mjs",
+      "description": "Verification script proving exact source pins, body byte-reversal, and invariant preservation."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/test-lifecycle-coalescing.mjs",
+      "description": "Regression test harness verifying all 7 additive controls against actual service class."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/plan.json",
+      "description": "Structured proposal plan."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/shortplan.md",
+      "description": "Human-readable design explanation, diff, byte reversal proof, and review instructions."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-lifecycle-coalescing-1/controls-plan.json",
+      "description": "Controls plan defining validation assertions for the 7 regression controls."
+    }
+  ]
+}

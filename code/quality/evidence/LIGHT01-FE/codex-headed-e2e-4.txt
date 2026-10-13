@@ -1,0 +1,36 @@
+
+Running 5 tests using 1 worker
+
+(node:28168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/5] tests\e2e\theme.spec.ts:21:1 › three choices, reload, device changes, keyboard focus and cross-tab clear
+[2/5] tests\e2e\theme.spec.ts:31:1 › stored preference is applied in the head before React and styles paint
+[3/5] tests\e2e\theme.spec.ts:37:1 › blocked storage remains usable and invalid values default to system
+[4/5] tests\e2e\theme.spec.ts:42:1 › native authenticated session, actual Socket.IO connection and unsent composer survive theme changes
+[5/5] tests\e2e\theme.spec.ts:69:1 › actual light/dark login and Lobby screenshots, text/control contrast and 360px layout
+  1) tests\e2e\theme.spec.ts:69:1 › actual light/dark login and Lobby screenshots, text/control contrast and 360px layout 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 44
+    Received:    43.999999046325684
+
+      74 |    await page.setViewportSize({width,height});await page.evaluate(()=>document.fonts.ready);await assertTheme(page,mode);
+      75 |    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);
+    > 76 |    const trigger=page.getByRole('button',{name:/Chế độ màu:/});const bounds=await trigger.boundingBox();expect(bounds!.height).toBeGreaterThanOrEqual(44);expect(bounds!.width).toBeGreaterThanOrEqual(44);
+         |                                                                                                                                ^
+      77 |    await trigger.click();for(const option of await page.getByRole('menuitemradio').all()){const box=await option.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual(width);}
+      78 |    const result=await contrast(page);expect(result.measured).toBeGreaterThan(5);expect(result.failures).toEqual([]);for(const control of result.controls){expect(control.focus).toBeGreaterThanOrEqual(3);if(mode==='light')expect(control.border).toBeGreaterThanOrEqual(3);}measurements.push({mode,route:route||'lobby',width,...result});
+      79 |    await page.keyboard.press('Escape');await page.screenshot({path:`quality/evidence/LIGHT01-FE/screenshots/${mode}-${route||'lobby'}-${width}x${height}.png`,fullPage:true});
+        at E:\FGweb\code\tests\e2e\theme.spec.ts:76:128
+
+    Error Context: .cache\theme\results\theme-actual-light-dark-lo-3ccd5-l-contrast-and-360px-layout\error-context.md
+
+    Error Context: .cache\theme\results\theme-actual-light-dark-lo-3ccd5-l-contrast-and-360px-layout\error-context.md
+
+
+  1 failed
+    tests\e2e\theme.spec.ts:69:1 › actual light/dark login and Lobby screenshots, text/control contrast and 360px layout 
+  4 passed (32.8s)

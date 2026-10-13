@@ -1,0 +1,107 @@
+{
+  "taskId": "T30",
+  "proposalId": "antigravity-native58-db-route-1",
+  "controlType": "isolated-read-only-db-route-latency",
+  "hypothesis": "Investigate whether gateway database connection route via host.docker.internal over Docker bridge and Windows port forwarding adds significant latency to the 158 queries in the switching window (Native58 p50 41.64ms, p95 140.1ms, max 287.46ms) compared to direct container-to-container connection (fg-local-postgres-1:5432 on fg-local_default). This is a diagnostic measurement only, not an app fix or route reconfiguration.",
+  "files": {
+    "benchChild": "quality/evidence/T30/antigravity-native58-db-route-1/bench-child.mjs",
+    "runner": "quality/evidence/T30/antigravity-native58-db-route-1/runner.mjs",
+    "shortplan": "quality/evidence/T30/antigravity-native58-db-route-1/shortplan.md",
+    "proposal": "quality/evidence/T30/antigravity-native58-db-route-1/proposal.json"
+  },
+  "routes": {
+    "routeA": {
+      "name": "host.docker.internal",
+      "description": "Host gateway with published port over Docker bridge and Windows port forwarding loopback",
+      "targetHost": "host.docker.internal",
+      "portSource": "DATABASE_URL published port (e.g. 55432)"
+    },
+    "routeB": {
+      "name": "fg-local-postgres-1",
+      "description": "Direct container-to-container bridge connection on existing fg-local_default network",
+      "targetHost": "fg-local-postgres-1",
+      "port": 5432
+    }
+  },
+  "protocol": {
+    "type": "A-B-A-B sequential",
+    "warmupQueriesPerCycle": 3,
+    "measuredQueriesPerCycle": 20,
+    "cyclesPerRoute": 2,
+    "totalMeasuredQueriesPerRoute": 40,
+    "poolOptions": {
+      "max": 1,
+      "connectionTimeoutMillis": 5000,
+      "statement_timeout": 3000
+    },
+    "query": "SELECT 1",
+    "warmupPurpose": "Diagnostic control only, never acceptance wait"
+  },
+  "containerConfiguration": {
+    "image": "node:24.21.0-bookworm-slim@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+    "network": "fg-local_default",
+    "readOnly": true,
+    "capabilitiesDropped": ["ALL"],
+    "securityOpts": ["no-new-privileges"],
+    "user": "node",
+    "addHost": "host.docker.internal:host-gateway",
+    "mounts": [
+      {
+        "type": "bind",
+        "source": "bench-child.mjs",
+        "target": "/app/bench.mjs",
+        "readonly": true
+      },
+      {
+        "type": "bind",
+        "source": "input.json (mode 0600)",
+        "target": "/app/input.json",
+        "readonly": true
+      },
+      {
+        "type": "bind",
+        "source": "node_modules",
+        "target": "/app/node_modules",
+        "readonly": true
+      },
+      {
+        "type": "bind",
+        "source": "runDir/output",
+        "target": "/app/output",
+        "readonly": false
+      }
+    ]
+  },
+  "safetyInvariants": {
+    "appSourceUntouched": true,
+    "testsUntouched": true,
+    "mutableFixturesUntouched": true,
+    "ledgerUntouched": true,
+    "checkerUntouched": true,
+    "envUntouched": true,
+    "mainPgContainerUnmodified": true,
+    "existingNetworksUnmodified": true,
+    "noNewPackagesInstalled": true,
+    "credentialsNeverInArgvOrEnv": true,
+    "credentialsNeverInConsoleOrLogs": true,
+    "inputJsonMode0600": true,
+    "checkedCleanupInFinally": true,
+    "errorEnumAllowlistedOnly": true
+  },
+  "errorClassificationEnum": [
+    "CONNECTION_TIMEOUT",
+    "POOL_ACQUIRE_TIMEOUT",
+    "SQLSTATE",
+    "REFUSED",
+    "RESET",
+    "UNKNOWN"
+  ],
+  "disclaimers": {
+    "executedInThisTurn": false,
+    "acceptanceClaimed": false,
+    "hardwareCauseInferred": false,
+    "appFixOrRouteMutation": false,
+    "readyForRootExecution": true,
+    "nativeAcceptance": false
+  }
+}

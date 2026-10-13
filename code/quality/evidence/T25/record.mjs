@@ -12,7 +12,7 @@ assert(!fs.existsSync(evidencePath), `Preserve previous execution; use a new lab
 
 const startedAt = new Date().toISOString();
 const stream = fs.createWriteStream(evidencePath);
-const child = spawn(command, args, { cwd: process.cwd(), shell: false, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
+const child = spawn(command, args, { cwd: process.cwd(), shell: false, windowsHide: true, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
 child.stdout.pipe(stream, { end: false });
 child.stderr.pipe(stream, { end: false });
 

@@ -1,0 +1,1 @@
+import fs from'node:fs';let s=fs.readFileSync('quality/evidence/T30/inspect-native32-safe-aggregates.mjs','utf8');s=s.replace("q.waitType==='Lock'","q.waitEventType==='Lock'");fs.writeFileSync('quality/evidence/T30/inspect-native32-safe-aggregates2.mjs',s,{flag:'wx'});

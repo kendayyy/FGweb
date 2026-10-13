@@ -1,0 +1,80 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/call-admissions.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/call-admissions.test.ts (8 tests | 5 failed) 15520ms
+   ❯ T07-FIX2 durable SFU admission identity and session lease (8)
+     × admission FKs bind to the active schema instead of another deployment schema 43ms
+     × one unrevoked identity per seat; a new admission never reuses revoked identity 12ms
+     × native logout removes the admission binding and preserves room/call/seats 12ms
+     × membership revocation cascades the seat/lease while keeping persistent room and call 10ms
+     × invalid expiry is rejected and valid expiry roundtrips across database timezones 17ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > admission FKs bind to the active schema instead of another deployment schema
+AssertionError: expected [ 'public', 'public' ] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+  [
+-   "t07_lease_3fc716fd1b764598aa3e7660d5e6110c",
+-   "t07_lease_3fc716fd1b764598aa3e7660d5e6110c",
++   "public",
++   "public",
+  ]
+
+ ❯ test/call-admissions.test.ts:54:75
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > one unrevoked identity per seat; a new admission never reuses revoked identity
+error: insert or update on table "call_admissions" violates foreign key constraint "call_admissions_call_member_id_call_members_id_fk"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/call-admissions.test.ts:57:18
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > native logout removes the admission binding and preserves room/call/seats
+error: insert or update on table "call_admissions" violates foreign key constraint "call_admissions_call_member_id_call_members_id_fk"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/call-admissions.test.ts:63:18
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > membership revocation cascades the seat/lease while keeping persistent room and call
+error: insert or update on table "call_admissions" violates foreign key constraint "call_admissions_call_member_id_call_members_id_fk"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/call-admissions.test.ts:67:18
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/call-admissions.test.ts > T07-FIX2 durable SFU admission identity and session lease > invalid expiry is rejected and valid expiry roundtrips across database timezones
+error: insert or update on table "call_admissions" violates foreign key constraint "call_admissions_call_member_id_call_members_id_fk"
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/call-admissions.test.ts:72:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 3 passed (8)
+   Start at  12:29:00
+   Duration  18.81s (tests 85%, import 11%, transform 4%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/call-admissions.test.ts --maxWorkers=1

@@ -45,8 +45,11 @@ export const PlaySessionSchema = z
   .object({
     id: IdSchema,
     roomId: IdSchema,
-    hostUserId: IdSchema,
-    timingType: z.enum(['now', 'scheduledAt']),
+      hostUserId: IdSchema,
+      // Current producers send the stored session capacity. Older payloads may
+      // omit it; consumers must not substitute the room's mutable configuration.
+      playerCapacity: PlayerCapacitySchema.optional(),
+      timingType: z.enum(['now', 'scheduledAt']),
     scheduledAt: IsoDateTimeSchema.optional(),
     state: PlaySessionStateSchema,
     createdAt: IsoDateTimeSchema,

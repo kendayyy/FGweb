@@ -1,0 +1,52 @@
+### T30 Sequential Diagnostic Proposal: `antigravity-native62-error-origin-1`
+
+In accordance with root instructions (fixed Gemini 3.6 Flash High, NO Anti2, proposal-only sequential mode, zero execution of commands/Docker/UI/tests, zero mutation of application source, build outputs, environment, tests, ledger, or `.doc/history.md`), the minimal read-only owned API/PG/SDK error-origin observer, canonical fixture fork, deterministic controls suite, and source-backed diagnosis notes have been delivered exclusively to:
+
+`quality/evidence/T30/antigravity-native62-error-origin-1/**`
+
+---
+
+### Delivered Proposal Artifacts
+
+1. [`api-error-origin-observer.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/api-error-origin-observer.mjs)
+   - **Minimal Read-Only Hooking**: Hooks only owned `app` (Express before-guard middleware), `pg.Pool`, `pg.Client`, `RoomServiceClient`, and Build 13 services (`CallsService`, `PublishingService`, `CallLifecycleService`, `RoomsService`, `PlaySessionsService`).
+   - **Exact Error Identity**: Preserves original arguments, return values, and thrown error instances (`err === thrownError`). Never swallows, reclassifies, or substitutes errors.
+   - **Sanitized Telemetry**: Captures fixed enum routes (`http-calls-claim`, `http-room-play-sessions`, `http-rooms-calls`), service owner tags, SQL states (`57014`, `53300`, etc.), Twirp codes, and positive integer PIDs. **Zero** tokens, cookies, passwords, emails, URLs, query params, or raw SQL queries.
+   - **Timing & Lock Holds**: Tracks connection acquisition durations, query durations, and in-transaction lock holds (`roomHoldMs`, `groupHoldMs`) across `BEGIN`/`COMMIT`/`ROLLBACK`.
+   - **Resilience & Restoration**: Bounded in-memory buffer with short-write handling; writer errors increment `failureCount` without crashing the application. Fully restores all original prototypes and removes listeners on normal close and startup-failure paths.
+
+2. [`fixture-server-native62-error-origin-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/fixture-server-native62-error-origin-reviewed1.mjs)
+   - Exact canonical fixture fork of `fixture-server-canonical-direct-reviewed1.mjs`.
+   - Contains only 5 explicitly counted, small observer anchors (import, state variable, cleanup hook, app initialization attachment, and startup catch block).
+   - Preserves all canonical direct gateway helpers (`gateway-direct-support-reviewed1.mjs` / `private-gateway-canonical-direct-reviewed1.mjs`), inspector settlements, port allocations, migrations, seed actors, and web preview configs 100% byte-for-byte.
+
+3. [`error-origin-controls-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/error-origin-controls-reviewed1.mjs)
+   - Deterministic controls suite verifying all 7 mandatory invariants:
+     - **CTL 1**: Scope excludes unmanaged objects and uninstrumented services.
+     - **CTL 2**: Records real errors without leaking sensitive payload data (verifies zero tokens/passwords/SQL in telemetry).
+     - **CTL 3**: Strict object reference preservation (`caughtErr === syntheticFault`) and identical successful returns.
+     - **CTL 4**: Survives observer file-write failure without affecting application return values.
+     - **CTL 5**: Complete prototype restoration on normal stop and startup-failure paths (idempotent).
+     - **CTL 6**: Verifies binding against actual compiled Build 13 classes and methods.
+     - **CTL 7**: Distinctly categorizes PG statement timeout (`57014`), PG connection limit (`53300`), PG pool acquire timeout (`POOL_ACQUIRE_TIMEOUT`), and LiveKit SDK 503 (`unavailable`).
+   - Synthetic faults are explicitly labeled with `SYNTHETIC_DIAGNOSTIC_CONTROL_FAULT`.
+
+4. [`source-review-and-anchors.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/source-review-and-anchors.md)
+   - Detailed anchor breakdown and line-by-line diff review comparing the canonical fixture against the proposed fixture fork.
+   - Proves full reversibility.
+
+5. [`diagnosis-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/diagnosis-notes.md)
+   - Source-backed breakdown of native62 timeline and why `NestFactory.create(AppModule, { logger: false })` suppressed the root error behind the HTTP 500s.
+   - Traces the interaction between `CallControlsController.claim` / `PublishingService.claim` holding `FOR UPDATE` on `rooms` during LiveKit SDK network calls, and concurrent `GET calls` (`FOR SHARE`) and `GET play-sessions` waiting in PostgreSQL lock queues.
+
+6. [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/plan.json)
+   - Machine-readable proposal specification detailing source pins, diagnostic goals, delivered files, and prohibition confirmations.
+
+7. [`controls-plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native62-error-origin-1/controls-plan.json)
+   - Machine-readable matrix detailing preflight checks, synthetic fault disclaimers, assertions, and teardown cleanup for Controls 1 through 7.
+
+---
+
+### Invariants & Status
+- `nativeAcceptance: false` (strictly maintained; diagnostic proposal only).
+- Zero commands executed by agent; ready for root review, application, and test execution.

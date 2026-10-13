@@ -1,0 +1,45 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:45076) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts (24.046 s)
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › fetches normal profile with two game profiles in a single query and returns exact DTO shape
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "2026-10-10T23:10:27.686Z"
+    Received: "2026-10-11T06:10:27.686Z"
+
+      143 |     expect(parsed.bio).toBe('Competitive FPS player');
+      144 |     expect(parsed.customStatus).toBe('PLAYING');
+    > 145 |     expect(parsed.createdAt).toBe(now.toISOString());
+          |                              ^
+      146 |     expect(parsed.gameProfiles).toHaveLength(2);
+      147 |
+      148 |     const valProfile = parsed.gameProfiles.find((gp) => gp.gameId === valorantGame.id);
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:145:30)
+
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › fetches user without profile or games in a single query with fallback values
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "2026-10-10T23:10:28.022Z"
+    Received: "2026-10-11T06:10:28.022Z"
+
+      187 |     expect(parsed.customStatus).toBe('JUST_CHATTING'); // Default status
+      188 |     expect(parsed.gameProfiles).toEqual([]);
+    > 189 |     expect(parsed.createdAt).toBe(now.toISOString());
+          |                              ^
+      190 |   });
+      191 |
+      192 |   it('falls back to user image when profile avatarUrl is empty string', async () => {
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:189:30)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 4 passed, 6 total
+Snapshots:   0 total
+Time:        24.5 s
+Ran all test suites within paths "quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts".

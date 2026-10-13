@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const digest=bytes=>createHash('sha256').update(bytes).digest('hex'),before=JSON.parse(fs.readFileSync('quality/evidence/CHATCRYPTO-BE/before.json'));
+const journalPath='packages/database/migrations/meta/_journal.json',journal=JSON.parse(fs.readFileSync(journalPath));
+assert.equal(journal.entries.length,15);assert.equal(journal.entries.at(-1).idx,14);assert.equal(journal.entries.at(-1).tag,'0014_chat_crypto_report_uploads');
+const prior=JSON.stringify({...journal,entries:journal.entries.slice(0,-1)},null,2);
+assert([prior,prior+'\n'].some(text=>digest(text)===before.readonly[journalPath]),'Original journal prefix changed');
+const old=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0013_snapshot.json')),latest=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0014_snapshot.json'));
+assert.equal(latest.prevId,old.id);assert.equal(Object.keys(latest.tables).length,Object.keys(old.tables).length+1);
+for(const [name,table]of Object.entries(old.tables))assert.deepEqual(latest.tables[name],table,`Prior table snapshot changed: ${name}`);
+for(const key of ['enums','schemas','sequences','roles','policies','views'])assert.deepEqual(latest[key],old[key],key);
+for(const [p,hash]of Object.entries(before.readonly))if(/^packages\/database\/migrations\/(00(?:0[0-9]|1[0-3])[^/]*\.sql|meta\/00(?:0[0-9]|1[0-3])_snapshot\.json)$/.test(p))assert.equal(digest(fs.readFileSync(p)),hash,p);
+const sql=fs.readFileSync('packages/database/migrations/0014_chat_crypto_report_uploads.sql','utf8');assert(!sql.includes('"public".'));assert(sql.includes('CREATE TRIGGER chat_crypto_report_upload_binding_guard'));
+console.log(JSON.stringify({journalEntries:15,oldJournalPrefixUnchanged:true,oldSnapshotsAndMigrationsUnchanged:true,priorTableDefinitionsUnchanged:true,onlyAdditiveReportBinding:true,mainDatabaseMigration:false}));

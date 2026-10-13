@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-13T03:46:23.551Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 actual timing14 claim10822ms/controlsGroup9680ms plus meaningful real PG RED9 proves unnecessary room writer blocks on compatible room readers. controlsGroup now takes room SHARE with unchanged user/group lock mode; all other room callers default to previous identical modes. Room writers/session revokers/user writers and group readers remain blocked during controls, fresh ban/membership/session expiry/group closure enforced after actual waits. No mutation/actor/lease/permission/quota/deadline changed; original full regressions required, no PASS.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "proposed": "quality/evidence/T30/control-room-share-reviewed1.ts",
+      "beforeSha256": "789ddc55ecce7fa2aa1e207f45cb82cd6cf7341a618d5f29fdf379845d21fe61",
+      "afterSha256": "0540b03f2fe3581145bdd15056363184a2fea0134cd93cd4cf7e8fd86c633df2"
+    }
+  ],
+  "reverseByteExact": true,
+  "edits": [
+    [
+      "extra:string[]=[],mode:LockMode='FOR UPDATE'){",
+      "extra:string[]=[],mode:LockMode='FOR UPDATE',userMode:LockMode=mode){"
+    ],
+    [
+      "  await db.query(`SELECT id FROM \"user\" WHERE id=$1 ${lockClause}`,[user]);await this.actor(db,user,session);",
+      "  const userLockClause=userMode==='FOR SHARE'?'FOR SHARE':'FOR UPDATE';\n  await db.query(`SELECT id FROM \"user\" WHERE id=$1 ${userLockClause}`,[user]);await this.actor(db,user,session);"
+    ],
+    [
+      "  await this.room(db,group.room_id,user,session,[],mode);",
+      "  // Controls mutate the call group, while the parent room is only read.\n  // Keep the existing user/group write locks and block room membership writers.\n  await this.room(db,group.room_id,user,session,[],'FOR SHARE',mode);"
+    ]
+  ]
+}

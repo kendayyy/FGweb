@@ -1,0 +1,74 @@
+{
+  "task": "T30",
+  "proposalId": "antigravity-native59-lock-path-1",
+  "nativeAcceptance": false,
+  "analysis": {
+    "runId": "t30-native-6fc2725b41ee46e59e6245002dbea9ac",
+    "failureMechanism": "Lock queue starvation on PostgreSQL rooms table leading to query cancellation (SQLSTATE 57014) on PID 13795 at 17:33:06.563Z, subsequent LiveKit participant eviction at 17:33:06.624Z, and receiver test timeout at 45000ms.",
+    "causalParticipants": {
+      "gatewayPid": 13795,
+      "apiPid": 13843,
+      "apiTransactionIndex": 105,
+      "priorShareHolders": [13921, 13793]
+    },
+    "criticalPathMetrics": {
+      "gatewayWaitMs": 3026.66,
+      "statementTimeoutMs": 3000,
+      "apiRoomWaitMs": 2018.66,
+      "apiRoomHoldMs": 1860.1,
+      "apiGroupHoldMs": 1043.1,
+      "totalHttpJoinLatencyMs": 4029
+    }
+  },
+  "defensibleReductions": [
+    {
+      "id": "REDUCE-1",
+      "target": "apps/api/src/modules/calls/calls.service.ts",
+      "method": "join",
+      "line": 106,
+      "change": "Pass 'FOR SHARE' to this.room() invocation",
+      "rationale": "CallsService.join never mutates rooms table. Using FOR SHARE prevents exclusive lock queue starvation against concurrent gateway and API lease readers while maintaining row integrity against deletions. call_groups and call_members remain locked FOR UPDATE."
+    },
+    {
+      "id": "REDUCE-2",
+      "target": "apps/api/src/modules/calls/calls.service.ts",
+      "method": "join",
+      "line": 130,
+      "change": "Move config.client.createRoom outside the database transaction to post-commit",
+      "rationale": "Eliminates network HTTP Twirp RPC latency (50-350ms) from the database row lock window. LiveKit room creation is idempotent."
+    },
+    {
+      "id": "REDUCE-3",
+      "target": "apps/api/src/modules/calls/calls.service.ts",
+      "method": "join",
+      "line": 133,
+      "change": "Remove redundant duplicate call to this.actor(db, user, session)",
+      "rationale": "Actor authorization (session, ban, onboarding) is already strictly verified with row lock in the same transaction at line 45. Removing duplicate saves 3 database queries under lock."
+    }
+  ],
+  "observerAttributionEnhancement": {
+    "file": "quality/evidence/T30/api56-observer-reviewed1.mjs",
+    "changes": [
+      "Add 'CallsService.join' and 'http-calls-join' to SAFE_SERVICE_OWNERS",
+      "Add 'createRoom' to SAFE_RPC_METHODS",
+      "Wrap CallsService.prototype.join in instrumentOwnedApiServices",
+      "Add POST /api/v1/calls/:id/join route detection in instrumentHttpTimingMiddleware"
+    ]
+  },
+  "regressionTestDesign": {
+    "name": "calls-lock-contention.spec.ts",
+    "runner": "Real PostgreSQL against fg-local-postgres-1",
+    "scenarios": [
+      {
+        "name": "Concurrent gateway lease under in-flight join",
+        "description": "Continuously executes SELECT id FROM rooms WHERE id=$1 FOR SHARE every 100ms with statement_timeout=3000ms while concurrent CallsService.join executes.",
+        "expected": "All lease queries succeed with duration < 200ms; zero 57014 cancellations."
+      },
+      {
+        "name": "Fail-closed security invariants",
+        "description": "Validates that banned user, expired session, unauthorized room member, and 11th participant strictly fail closed.",
+        "expected": "Proper ErrorCode exceptions thrown; no unauthorized row mutations."
+      }
+    ]
+  }
+}

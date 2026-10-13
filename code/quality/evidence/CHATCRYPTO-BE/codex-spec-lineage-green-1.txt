@@ -1,0 +1,80 @@
+✔ approved spec lineage and exact output ownership preserve old PASS and permit active gate (70.92ms)
+✔ manifest digest tamper rejects (14.694ms)
+✔ missing lineage cannot accept old snapshots (6.7963ms)
+✔ changed historical PASS row rejects even with original spec (16.9096ms)
+✔ changed historical command evidence rejects (30.0797ms)
+✔ unapproved after-spec bytes reject (20.8181ms)
+✔ wrong original hash rejects (23.108ms)
+✔ incomplete or reordered chain rejects (14.8818ms)
+✔ unrelated affected-task declaration rejects (24.561ms)
+✔ missing required transition evidence rejects (28.51ms)
+✔ missing required output evidence rejects (27.6314ms)
+✔ new unreviewed output mutation rejects (32.6017ms)
+✔ output transition without approved ownership rejects (80.2617ms)
+✔ wrong prior output owner rejects (149.1437ms)
+✔ scope still rejects unapproved writes (40.7785ms)
+✔ dependency gate still rejects incomplete predecessors (65.3307ms)
+✔ cross-task reuse of approval rejects (100.0212ms)
+✖ seven approved baseline sources validate together (50.1087ms)
+✔ modified specSha256 is rejected (9.5134ms)
+✔ modified designSha256 is rejected (12.9199ms)
+✔ modified taskSha256 is rejected (13.6732ms)
+✔ modified mockupLobbySha256 is rejected (17.0691ms)
+✔ modified mockupCallSha256 is rejected (19.0954ms)
+✔ modified mockupFeedSha256 is rejected (65.4997ms)
+✔ modified mockupAuthSha256 is rejected (22.6111ms)
+✔ missing feed mockup hash cannot silently bypass the added source (21.6313ms)
+✔ existing gate still rejects failures, changed output, changed spec and broadened files (107.8593ms)
+✔ missing auth mockup hash cannot bypass new approved source (292.6018ms)
+✖ six approved baseline sources validate together (57.0827ms)
+✔ modified specSha256 is rejected (9.8329ms)
+✔ modified designSha256 is rejected (12.9236ms)
+✔ modified taskSha256 is rejected (12.2926ms)
+✔ modified mockupLobbySha256 is rejected (17.6293ms)
+✔ modified mockupCallSha256 is rejected (18.9334ms)
+✔ modified mockupFeedSha256 is rejected (21.6703ms)
+✔ missing feed mockup hash cannot silently bypass the added source (13.864ms)
+✔ existing gate still rejects failures, changed output, changed spec and broadened files (35.2627ms)
+✔ eight approved baseline sources validate together (83.0723ms)
+✔ modified specSha256 is rejected (13.2372ms)
+✔ modified designSha256 is rejected (14.0221ms)
+✔ modified taskSha256 is rejected (13.0654ms)
+✔ modified mockupLobbySha256 is rejected (14.5112ms)
+✔ modified mockupCallSha256 is rejected (29.1274ms)
+✔ modified mockupFeedSha256 is rejected (21.5283ms)
+✔ modified mockupAuthSha256 is rejected (26.9287ms)
+✔ modified mockupAdminSha256 is rejected (58.8418ms)
+✔ missing feed mockup hash cannot silently bypass the added source (371.6951ms)
+✔ existing gate still rejects failures, changed output, changed spec and broadened files (121.2593ms)
+✔ missing auth mockup hash cannot bypass new approved source (45.8887ms)
+✔ missing admin mockup hash cannot bypass the eighth source (37.6102ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 48
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1226.2891
+
+✖ failing tests:
+
+test at quality\evidence\T00-REBASE-AUTH02\baseline-gate.test.mjs:11:1
+✖ seven approved baseline sources validate together (50.1087ms)
+  Error: baseline changed or missing approved source
+      at Module.checkBaselines (file:///E:/FGweb/code/scripts/verify-task.mjs:55:144)
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-AUTH02/baseline-gate.test.mjs:11:99)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at quality\evidence\T00-REBASE-FEED\baseline-gate.test.mjs:11:1
+✖ six approved baseline sources validate together (57.0827ms)
+  Error: baseline changed or missing approved source
+      at Module.checkBaselines (file:///E:/FGweb/code/scripts/verify-task.mjs:55:144)
+      at TestContext.<anonymous> (file:///E:/FGweb/code/quality/evidence/T00-REBASE-FEED/baseline-gate.test.mjs:11:97)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)

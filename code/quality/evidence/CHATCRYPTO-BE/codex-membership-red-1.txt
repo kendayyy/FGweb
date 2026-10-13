@@ -1,0 +1,41 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:20524) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (34.636 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › bootstraps only empty private conversations and leaves existing plaintext history pending reconciliation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+      314 |   await pool.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id) VALUES('legacy-old','old-group','bob','legacy-private-fixture','legacy-old')`);
+      315 |   const get=(id:string)=>request(base).get(`/api/v1/crypto/conversations/${id}/state`).set('Cookie',otherCookie);
+    > 316 |   const fresh=await get('empty-group');expect(fresh.status).toBe(200);expect(fresh.body).toMatchObject({migrationState:'RECONCILED',historyStatus:'KNOWN',membershipRevision:1});
+          |                                                             ^
+      317 |   expect((await get('empty-group')).body).toEqual(fresh.body);
+      318 |   expect((await pool.query(`SELECT start_revision,end_revision FROM chat_crypto_membership_intervals WHERE conversation_id='empty-group'`)).rows).toEqual([{start_revision:'1',end_revision:null}]);
+      319 |   const old=await get('old-group');expect(old.status).toBe(200);expect(old.body).toMatchObject({migrationState:'LEGACY_PENDING',historyStatus:'UNKNOWN'});
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:316:61)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › atomically rotates membership epochs through actual team admission, HTTP kick and rejoin, hiding each history gap
+
+    error: insert or update on table "rooms" violates foreign key constraint "rooms_owner_membership_fk"
+
+      324 |  it('atomically rotates membership epochs through actual team admission, HTTP kick and rejoin, hiding each history gap',async()=>{
+      325 |   await pool.query(`INSERT INTO conversations(id,kind) VALUES('membership-group','ROOM')`);
+    > 326 |   await pool.query(`INSERT INTO rooms(id,name,game_id,owner_id,conversation_id) VALUES('membership-room','Group','fixture-game','bob','membership-group')`);
+          |   ^
+      327 |   await pool.query(`INSERT INTO room_members(id,room_id,user_id,role) VALUES('membership-owner','membership-room','bob','OWNER')`);
+      328 |   await pool.query(`INSERT INTO conversation_members(id,conversation_id,user_id) VALUES('membership-owner','membership-group','bob')`);
+      329 |   await pool.query(`INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES('membership-group','E2EE','RECONCILED','KNOWN')`);
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:326:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 19 passed, 21 total
+Snapshots:   0 total
+Time:        35.088 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

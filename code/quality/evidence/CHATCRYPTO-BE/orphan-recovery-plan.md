@@ -1,0 +1,7 @@
+# Crash orphan recovery plan (no implementation yet)
+
+One current task CHATCRYPTO-BE; source hashes pinned in orphan-recovery-source-review.json to already owned files. Existing expired metadata sweep cannot discover opaque files left when process dies after put/before commit. Private relay, encrypted Lobby upload and selected-report image all put before draft metadata commit. Legacy import reuses drafts and backup restore populates metadata before startup; no client/legacy source deletion or new schema/endpoint.
+
+Proposed native RED: real unreferenced UUID.bin in owned crypto root survives existing cleanup; real writer transaction lock prevents an in-flight uncommitted object being removed; after actual owned process/transaction loss unreferenced object reclaimed, referenced LIVE/Lobby/report/candidate objects retained. Review all writer paths before shared per-object transaction lock and bounded filesystem scan; recheck current DB reference only after acquired lock. Directory enumeration must bound allocation/work per sweep and advance across sweeps, not restart a starving fixed prefix. Stop closes scan handle; renamed/junction root/path/object rejected. Never delete noncanonical names/source directories or infer references from plaintext/keys.
+
+Implementation/native recovery, expiry/orphan scale plans and stronger concurrency review remain pending. No production activation, task PASS or successful crash-recovery claim from this plan.

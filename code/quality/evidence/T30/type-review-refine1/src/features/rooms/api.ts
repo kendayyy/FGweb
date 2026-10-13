@@ -1,0 +1,275 @@
+import {
+  RoomDTO,
+  RoomSchema,
+  RoomMemberDTO,
+  RoomMemberSchema,
+  CreateRoomRequest,
+  UpdateRoomSettingsRequest,
+  HelperPermissionType,
+  MessageDTO,
+  MessageSchema,
+  CreateMessageRequest,
+  Page,
+  createPageSchema,
+} from '@fg/contracts';
+import { z } from 'zod';
+
+const RoomPageSchema = createPageSchema(RoomSchema);
+const MessagePageSchema = createPageSchema(MessageSchema);
+const SuccessSchema = z.object({ success: z.literal(true) });
+
+export class ApiError extends Error {
+  status: number;
+  code?: string;
+
+  constructor(message: string, status: number, code?: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.code = code;
+  }
+}
+
+export async function fetchOwnRooms(cursor?: string, limit = 50, signal?: AbortSignal): Promise<Page<RoomDTO>> {
+  const params = new URLSearchParams();
+  if (cursor) params.set('cursor', cursor);
+  params.set('limit', String(limit));
+
+  const res = await fetch(`/api/v1/rooms/own?${params.toString()}`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    throw new ApiError(`Không tải được danh sách phòng (HTTP ${res.status}).`, res.status);
+  }
+
+  const data = await res.json();
+  return RoomPageSchema.parse(data);
+}
+
+export async function fetchRoomDetail(roomId: string, signal?: AbortSignal): Promise<RoomDTO> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    if (res.status === 403) {
+      throw new ApiError('Bạn không có quyền truy cập phòng riêng tư này.', 403);
+    }
+    if (res.status === 404) {
+      throw new ApiError('Phòng không tồn tại hoặc đã bị giải thể.', 404);
+    }
+    throw new ApiError(`Không tải được thông tin phòng (HTTP ${res.status}).`, res.status);
+  }
+
+  const data = await res.json();
+  return RoomSchema.parse(data);
+}
+
+export async function createRoom(payload: CreateRoomRequest, signal?: AbortSignal): Promise<RoomDTO> {
+  const res = await fetch('/api/v1/rooms', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(payload),
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Tạo phòng thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  const data = await res.json();
+  return RoomSchema.parse(data);
+}
+
+export async function updateRoomSettings(
+  roomId: string,
+  payload: UpdateRoomSettingsRequest,
+  signal?: AbortSignal
+): Promise<RoomDTO> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}/settings`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(payload),
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Cập nhật cài đặt thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  const data = await res.json();
+  return RoomSchema.parse(data);
+}
+
+export async function fetchRoomMembers(roomId: string, signal?: AbortSignal): Promise<RoomMemberDTO[]> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}/members`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    throw new ApiError(`Không tải được danh sách thành viên (HTTP ${res.status}).`, res.status);
+  }
+
+  const data = await res.json();
+  return z.array(RoomMemberSchema).parse(data);
+}
+
+export async function updateHelperPermissions(
+  roomId: string,
+  userId: string,
+  permissions: HelperPermissionType[],
+  signal?: AbortSignal
+): Promise<RoomMemberDTO> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}/helpers/${encodeURIComponent(userId)}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ permissions }),
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Cập nhật quyền trợ lý thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  const data = await res.json();
+  return RoomMemberSchema.parse(data);
+}
+
+export async function removeRoomMember(
+  roomId: string,
+  userId: string,
+  signal?: AbortSignal
+): Promise<{ success: boolean }> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}/members/${encodeURIComponent(userId)}`, {
+    method: 'DELETE',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Xóa thành viên thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  return SuccessSchema.parse(await res.json());
+}
+
+export async function transferRoomOwner(
+  roomId: string,
+  newOwnerId: string,
+  signal?: AbortSignal
+): Promise<RoomDTO> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}/transfer-owner`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ newOwnerId }),
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Chuyển quyền chủ phòng thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  const data = await res.json();
+  return RoomSchema.parse(data);
+}
+
+export async function dissolveRoom(roomId: string, signal?: AbortSignal): Promise<{ success: boolean }> {
+  const res = await fetch(`/api/v1/rooms/${encodeURIComponent(roomId)}`, {
+    method: 'DELETE',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Giải thể phòng thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  return SuccessSchema.parse(await res.json());
+}
+
+export async function fetchRoomMessages(
+  conversationId: string,
+  cursor?: string,
+  limit = 50,
+  signal?: AbortSignal
+): Promise<Page<MessageDTO>> {
+  const params = new URLSearchParams();
+  if (cursor) params.set('cursor', cursor);
+  params.set('limit', String(limit));
+
+  const res = await fetch(`/api/v1/conversations/${encodeURIComponent(conversationId)}/messages?${params.toString()}`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    credentials: 'include',
+    signal,
+  });
+
+  if (!res.ok) {
+    if (res.status === 403) {
+      throw new ApiError('Bạn không có quyền xem cuộc trò chuyện này.', 403);
+    }
+    throw new ApiError(`Không tải được tin nhắn (HTTP ${res.status}).`, res.status);
+  }
+
+  const data = await res.json();
+  return MessagePageSchema.parse(data);
+}
+
+export async function sendRoomMessage(
+  conversationId: string,
+  request: CreateMessageRequest,
+  signal?: AbortSignal
+): Promise<MessageDTO> {
+  const res = await fetch(`/api/v1/conversations/${encodeURIComponent(conversationId)}/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(request),
+    signal,
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiError(errorData?.message || `Gửi tin nhắn thất bại (HTTP ${res.status}).`, res.status, errorData?.code);
+  }
+
+  const data = await res.json();
+  return MessageSchema.parse(data);
+}

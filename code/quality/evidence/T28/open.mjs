@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T28',ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.tasks.find(t=>t.id==='T28'),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+assert.equal(task.status,'NOT_STARTED');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,task.id);checkBaselines({root:process.cwd(),baseline});checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:baseline.hashes.specSha256});
+const scope=['apps/web/src/features/calls/**','apps/web/src/features/rooms/RoomsPage.tsx','apps/web/src/features/rooms/rooms.css','apps/web/test/call-controls.test.tsx','tests/e2e/voice.spec.ts','apps/web/dist/**',`${dir}/**`,'.runtime/t28/**','.cache/t28/**','quality/spec-coverage.md'];
+task.writeAllowlist=scope;task.approvedScopeAmendments=[{source:'Persisted human Permission to broaden Write Scope or touch locked files',paths:scope,reason:'Wire approved call controls into persistent RoomsPage and mobile call tab without remounting chat/team/auth; own headed native media fixture and derived web build. No backend/contracts/DB or T29 screen/moderation actions.'}];
+const allowed=p=>scope.some(x=>x.endsWith('/**')?p.startsWith(x.slice(0,-2)):p===x),files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&p!=='quality/tasks.json'&&!p.startsWith('.runtime/')&&!p.startsWith('.cache/'));
+const frozen=new Map(files.filter(p=>!allowed(p)).map(p=>[p,hash(p)]));for(const old of ledger.tasks.filter(t=>t.status==='PASS'))for(const p of Object.keys(old.outputsHash?.files??{}))if(!allowed(p))frozen.set(p,hash(p));
+task.status='IN_PROGRESS';task.startedAt=new Date().toISOString();task.commands=[];task.evidencePaths=[`${dir}/before.json`,`${dir}/plan.md`];
+fs.writeFileSync(`${dir}/before.json`,JSON.stringify({recordedAt:task.startedAt,readonly:Object.fromEntries(frozen),historical:ledger.tasks.filter(t=>t.status==='PASS'),configuration:{env:hash('.env.local')},scope},null,2)+'\n',{flag:'wx'});fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T27/record.mjs','utf8').replace("const dir = 'quality/evidence/T27';",`const dir = '${dir}';`),{flag:'wx'});
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date(task.startedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T28 frontend cuộc gọi\n- Codex; T27/T03-FIX15/T26-FIX1 PASS và unchanged strict T28 gate trước mở; pin exact calls feature, RoomsPage/mobile tab, rooms CSS và own native headed E2E scope theo broad permission đã có. Đọc mockup02/design/rule04; giữ light/dark/Inter/FG hiện có. Dùng ui-ux-pro-max cho accessibility/status/controls, không redesign. RED DOM trước code; native two-context actualUI/media/E2E headed trước PASS; room/team/chat/auth giữ riêng.\n`);
+console.log(JSON.stringify({task:task.id,status:task.status,gate:'PASS',scopePinned:true}));

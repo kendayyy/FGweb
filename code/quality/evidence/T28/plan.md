@@ -1,0 +1,9 @@
+# T28 — frontend call controls
+
+1. Gate and freeze prior owner outputs/credentials/baselines. Reuse the approved mockup02 hierarchy and the existing smoke-light/dark semantic tokens. No new palette, font, product decision or backend logic.
+2. Behavioral DOM tests first: no device prompt before user join; denied permission still allows authorized listening with guidance; normal viewer may unmute except explicit server restriction; per-user volume/mute is local; explicit leave/route/auth cleanup disconnects tracks and releases only the call; stale pending join cannot mount media in another room; API denial/full/closed/error states reflect real results; joining is serialized.
+3. Typed API adapters consume real existing contracts and approved producer checkpoint. Native SDK adapter handles microphone permission after click, initial self-mute, audio-only subscription, per-remote-participant local volume/mute, track attach/detach/stop and connection/reconnect state. No production SDK mock or screen/camera controls ahead of their tasks.
+4. Render call-group cards, separate participant avatars/controls, user microphone status and a red leave-call action within RoomsPage; mobile call tab with44px controls. Preserve chat/team DOM/state and leave/end semantics; no room/chat auth remount on theme/tab changes.
+5. Run DOM suite and affected room/team/theme regressions, types/lint/web build; owned actual API/isolated PG/private SFU/Vite UI fixture, headed two-browser-context native audio track/RTP, viewer mic/local mute+volume, permission denial and route/leave cleanup. Capture desktop/mobile light/dark actual screenshots. Audit frozen files/secrets/cleanup and unchanged T29 gate before PASS.
+
+Native TURN loopback endpoint translation remains test-only and preserves SFU credentials/DTLS/SRTP. No audible-quality/production TURN/TLS/media-load1000 claim from this fixture.

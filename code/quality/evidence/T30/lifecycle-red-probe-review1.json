@@ -1,0 +1,808 @@
+{
+  "recordedAt": "2026-10-11T20:12:46.109Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-lifecycle-red-probe-reviewed1.mjs",
+    "sha256": "f42495eb54c15dd06423635bf03fab326d0cab7f6162909a0064cc3c0777000a"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T20:11:48.698Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T20:11:56.357Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T20:11:56.395Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T20:12:09.288Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T20:12:15.834Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d",
+      "noDevRuntime": true,
+      "cspSha256": "711d2a31b3f14bd3e072f04576052c42e29acdb151f38cd26396e2d0b5c23e64"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-7gj3Ug-S.js",
+      "status": 200,
+      "sha256": "1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-11T20:12:17.318Z",
+      "idleEndedAt": "2026-10-11T20:12:28.439Z",
+      "idleMs": 11120.5098,
+      "backendPid": 12599,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "actual canonical private gateway native JoinResponse and unchanged binary subscription",
+      "joined": true
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 12599,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual compiled lifecycle controlled burst and own SQL guards",
+      "requested": 4,
+      "completed": 4,
+      "failed": 0,
+      "actualListRoomsCalls": 4,
+      "actualListParticipantsCalls": 4,
+      "requestBurstDurationMs": 970.8678999999975,
+      "syntheticDelayMs": 40,
+      "firstReadGate": true,
+      "sqlOperations": [
+        "room-update-lock",
+        "group-update-lock",
+        "member-update-lock",
+        "live-lease-guard"
+      ],
+      "queries": [
+        {
+          "pid": 12721,
+          "operation": "room-update-lock"
+        },
+        {
+          "pid": 12721,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12721,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12721,
+          "operation": "live-lease-guard"
+        },
+        {
+          "pid": 12723,
+          "operation": "room-update-lock"
+        },
+        {
+          "pid": 12722,
+          "operation": "room-update-lock"
+        },
+        {
+          "pid": 12724,
+          "operation": "room-update-lock"
+        },
+        {
+          "pid": 12723,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12723,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12723,
+          "operation": "live-lease-guard"
+        },
+        {
+          "pid": 12722,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12722,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12722,
+          "operation": "live-lease-guard"
+        },
+        {
+          "pid": 12724,
+          "operation": "group-update-lock"
+        },
+        {
+          "pid": 12724,
+          "operation": "member-update-lock"
+        },
+        {
+          "pid": 12724,
+          "operation": "live-lease-guard"
+        }
+      ],
+      "ownedPids": [
+        12721,
+        12723,
+        12722,
+        12724
+      ],
+      "blockingSamples": [
+        {
+          "at": "2026-10-11T20:12:30.094Z",
+          "pid": 12722,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.094Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12723,
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.094Z",
+          "pid": 12723,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12721
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.124Z",
+          "pid": 12722,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.124Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12723,
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.124Z",
+          "pid": 12723,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12721
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.157Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.157Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.187Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.188Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.220Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.220Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.252Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.252Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.276Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.276Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.295Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.295Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.324Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.324Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.357Z",
+          "pid": 12722,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12723
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.357Z",
+          "pid": 12724,
+          "waitEvent": "tuple",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.385Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.421Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.449Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.480Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.505Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.526Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.558Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.579Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        },
+        {
+          "at": "2026-10-11T20:12:30.606Z",
+          "pid": 12724,
+          "waitEvent": "transactionid",
+          "ownBlockingPids": [
+            12722
+          ]
+        }
+      ],
+      "ownLockQueueObserved": true,
+      "rowsUnchanged": true,
+      "nativeAcceptance": false
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-11T20:12:46.012Z",
+        "backendPid": 12599,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-fd0decf8-ce9b-461a-bdce-6e3d84f6bbb8",
+    "temporary-built-smoke-4f189546-d5ff-49a4-8001-123e992ba201"
+  ],
+  "retained": [],
+  "errors": [],
+  "expectedRed": true,
+  "probeResult": {
+    "requested": 4,
+    "completed": 4,
+    "failed": 0,
+    "actualListRoomsCalls": 4,
+    "actualListParticipantsCalls": 4,
+    "requestBurstDurationMs": 970.8678999999975,
+    "syntheticDelayMs": 40,
+    "firstReadGate": true,
+    "sqlOperations": [
+      "room-update-lock",
+      "group-update-lock",
+      "member-update-lock",
+      "live-lease-guard"
+    ],
+    "queries": [
+      {
+        "pid": 12721,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 12721,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 12721,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 12721,
+        "operation": "live-lease-guard"
+      },
+      {
+        "pid": 12723,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 12722,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 12724,
+        "operation": "room-update-lock"
+      },
+      {
+        "pid": 12723,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 12723,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 12723,
+        "operation": "live-lease-guard"
+      },
+      {
+        "pid": 12722,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 12722,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 12722,
+        "operation": "live-lease-guard"
+      },
+      {
+        "pid": 12724,
+        "operation": "group-update-lock"
+      },
+      {
+        "pid": 12724,
+        "operation": "member-update-lock"
+      },
+      {
+        "pid": 12724,
+        "operation": "live-lease-guard"
+      }
+    ],
+    "ownedPids": [
+      12721,
+      12723,
+      12722,
+      12724
+    ],
+    "blockingSamples": [
+      {
+        "at": "2026-10-11T20:12:30.094Z",
+        "pid": 12722,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.094Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12723,
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.094Z",
+        "pid": 12723,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12721
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.124Z",
+        "pid": 12722,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.124Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12723,
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.124Z",
+        "pid": 12723,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12721
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.157Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.157Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.187Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.188Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.220Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.220Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.252Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.252Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.276Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.276Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.295Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.295Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.324Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.324Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.357Z",
+        "pid": 12722,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12723
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.357Z",
+        "pid": 12724,
+        "waitEvent": "tuple",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.385Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.421Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.449Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.480Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.505Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.526Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.558Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.579Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      },
+      {
+        "at": "2026-10-11T20:12:30.606Z",
+        "pid": 12724,
+        "waitEvent": "transactionid",
+        "ownBlockingPids": [
+          12722
+        ]
+      }
+    ],
+    "ownLockQueueObserved": true,
+    "rowsUnchanged": true,
+    "nativeAcceptance": false
+  },
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

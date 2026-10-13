@@ -148,7 +148,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'var(--bg-overlay)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -172,7 +172,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+          boxShadow: 'var(--shadow-modal)',
         }}
       >
         {/* Header */}
@@ -292,7 +292,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
         {/* Content */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
           {actionError && (
-            <div role="alert" style={{ color: 'var(--color-danger)', fontSize: '13px', marginBottom: '12px', textAlign: 'center' }}>
+            <div role="alert" style={{ color: 'var(--text-danger)', fontSize: '13px', marginBottom: '12px', textAlign: 'center' }}>
               {actionError}
             </div>
           )}
@@ -302,7 +302,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
               {friendsQuery.isLoading ? (
                 <p style={{ color: 'var(--text-quiet)', textAlign: 'center', padding: '24px' }}>Đang tải danh sách bạn bè...</p>
               ) : friendsQuery.isError ? (
-                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--color-danger)' }}>
+                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-danger)' }}>
                   <p style={{ marginBottom: '8px' }}>Không thể tải danh sách bạn bè.</p>
                   <button
                     type="button"
@@ -443,7 +443,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
               {friendRequestsQuery.isLoading ? (
                 <p style={{ color: 'var(--text-quiet)', textAlign: 'center', padding: '24px' }}>Đang tải danh sách lời mời...</p>
               ) : friendRequestsQuery.isError ? (
-                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--color-danger)' }}>
+                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-danger)' }}>
                   <p style={{ marginBottom: '8px' }}>Không thể tải danh sách lời mời.</p>
                   <button
                     type="button"
@@ -498,7 +498,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
                                 borderRadius: '6px',
                                 border: 'none',
                                 backgroundColor: 'var(--color-online)',
-                                color: '#000000',
+                                color: 'var(--on-online)',
                                 fontWeight: 600,
                                 fontSize: '12px',
                                 cursor: isPending ? 'not-allowed' : 'pointer',
@@ -580,7 +580,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({ isOpen, onClose, onO
               {blocksQuery.isLoading ? (
                 <p style={{ color: 'var(--text-quiet)', textAlign: 'center', padding: '24px' }}>Đang tải danh sách chặn...</p>
               ) : blocksQuery.isError ? (
-                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--color-danger)' }}>
+                <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-danger)' }}>
                   <p style={{ marginBottom: '8px' }}>Không thể tải danh sách chặn.</p>
                   <button
                     type="button"

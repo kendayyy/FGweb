@@ -1,0 +1,92 @@
+{
+  "planId": "antigravity-lifecycle-coalescing-1-controls",
+  "targetTask": "T30",
+  "phase": "BOUNDED_PERFORMANCE_FIX_AND_REGRESSION_CONTROLS_PROPOSAL",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:18:25.000Z",
+  "controls": [
+    {
+      "controlId": "CTL-01-ORDINARY-BURST",
+      "name": "Fixed Ordinary Burst Bounded Native Reads",
+      "description": "Verifies that a fixed burst of 4 concurrent ordinary reconcileGroup triggers on the same group results in <= 2 actual listRooms calls, while all 4 callers resolve successfully.",
+      "assertions": [
+        "assert(ctl1ActualReads <= 2)",
+        "assert.equal(ctl1ResolvedCount, 4)"
+      ]
+    },
+    {
+      "controlId": "CTL-02-MULTIGROUP-INDEPENDENCE",
+      "name": "Multi-Group Isolation Without Cross-Coalescing",
+      "description": "Confirms that concurrent triggers on distinct call groups (group 1 and group 2) execute independent passes without suppressing each other.",
+      "assertions": [
+        "assert(ctl2Reads >= 2)",
+        "assert(group1Passed && group2Passed)"
+      ]
+    },
+    {
+      "controlId": "CTL-03-TRAILING-FRESH-PASS",
+      "name": "Trigger During Trailing Pass Leads to Fresh Pass",
+      "description": "Ensures that a trigger arriving while a trailing pass is already active schedules a subsequent fresh pass, preventing lost wakeups.",
+      "assertions": [
+        "assert(ctl3Reads >= 3)",
+        "assert(allCallersResolved)"
+      ]
+    },
+    {
+      "controlId": "CTL-04-DISTINCT-ENDED-EVENTS",
+      "name": "Distinct Ended Events Processed Individually",
+      "description": "Guarantees that distinct screen-ended {identity, at} events are each processed under their own canonical reconciliation pass and are never batched or dropped.",
+      "assertions": [
+        "assert(ctl4Reads >= 2)",
+        "assert(endedEventAProcessed)",
+        "assert(endedEventBProcessed)"
+      ]
+    },
+    {
+      "controlId": "CTL-05-ERROR-PROPAGATION",
+      "name": "Native SDK Error Identity and Recovery",
+      "description": "Verifies that when a native media pass fails, all concurrent callers waiting on that pass reject with the exact same error instance, and that subsequent retries succeed cleanly.",
+      "assertions": [
+        "assert.equal(rejectedCount, 2)",
+        "assert(failureError.message.includes('NATIVE_SFU_TRANSIENT_RPC_FAILURE'))",
+        "assert(recoveryCallSucceeded)"
+      ]
+    },
+    {
+      "controlId": "CTL-06-DUPLICATE-WEBHOOKS",
+      "name": "Signed Duplicate Webhook Still Reconciles",
+      "description": "Verifies that duplicate signed webhooks still initiate reconciliation after durable deduplication in webhook_events table.",
+      "assertions": [
+        "assert(rec1.success)",
+        "assert(rec2.success && rec2.duplicate)"
+      ]
+    },
+    {
+      "controlId": "CTL-07-SHUTDOWN-DRAIN",
+      "name": "Clean Shutdown Drain and Rejection",
+      "description": "Validates that onModuleDestroy drains all in-flight passes and queued ended-event jobs before pool.end(), and that requests arriving after shutdown begins are rejected without pool-closed errors.",
+      "assertions": [
+        "assert(inFlightWorkCompletedBeforePoolEnd)",
+        "assert(requestsDuringShutdownRejectedWith503)"
+      ]
+    },
+    {
+      "controlId": "CTL-08-BYTE-REVERSAL",
+      "name": "reconcilePass Exact Byte Reversal Proof",
+      "description": "Proves that the reconcilePass helper body is 100% byte-for-byte identical to the original reconcileGroup body lines 75-104 of apps/api/src/modules/calls/call-lifecycle.service.ts.",
+      "assertions": [
+        "assert.equal(proposedBody, originalBody)"
+      ]
+    },
+    {
+      "controlId": "CTL-09-CLEANUP-SETTLEMENT",
+      "name": "Deterministic Cleanup Settlement",
+      "description": "Verifies that the ephemeral test schema is dropped CASCADE, Redis connections closed, app closed, and pg pool ended cleanly.",
+      "assertions": [
+        "assert(report.schemaRemoved)",
+        "assert(report.appClosed)",
+        "assert(report.poolClosed)"
+      ]
+    }
+  ]
+}

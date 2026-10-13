@@ -1,3 +1,4 @@
+import {CallModerationRequestSchema,CallControlSuccessSchema} from './calls.js';
 import { z } from 'zod';
 import {
   SocketEventNames,
@@ -15,10 +16,12 @@ import { MessageSchema, CreateMessageRequestSchema, ListMessagesQuerySchema, Att
 import { RoomSchema, RoomSettingsSchema, RoomMemberSchema, CreateRoomRequestSchema, UpdateRoomSettingsRequestSchema, UpdateHelperPermissionsRequestSchema, ListOwnRoomsQuerySchema, TransferRoomOwnerSchema } from './rooms.js';
 import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequestSchema, InvitationSchema, CreateInvitationRequestSchema, RespondJoinRequestSchema, RespondInvitationSchema, CreateRecruitmentSchema, PublicRecruitmentSchema, PublicRecruitmentQuerySchema, CancelJoinRequestSchema, ApproveInvitationSchema } from './teams.js';
 import {PlaySessionActionRequestSchema,PlaySessionRequestDecisionSchema,ListRoomPlaySessionsQuerySchema} from './teams.js';
+import {CallActionRequestSchema} from './calls.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
 import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
 import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, ListFriendRequestsQuerySchema, PendingFriendRequestSchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
 import { ListGameOnlineUsersQuerySchema, UpdateCustomStatusRequestSchema, UpdateCustomStatusResponseSchema, SocketPresenceRequestSchema, SocketScopedPresenceChangedPayloadSchema } from './presence.js';
+import {CryptoApiEndpointRegistry,SocketCryptoConversationRequestSchema,EncryptedMessageSchema,SocketCryptoSyncAvailableSchema} from './chat-crypto.js';
 
 export * from './common.js';
 export * from './auth.js';
@@ -31,6 +34,7 @@ export * from './teams.js';
 export * from './calls.js';
 export * from './notifications.js';
 export * from './moderation.js';
+export * from './chat-crypto.js';
 
 export const SocketMessageCreatedPayloadSchema = MessageSchema;
 export const SocketConversationRequestSchema=z.object({conversationId:IdSchema}).strict();
@@ -59,6 +63,10 @@ export const SocketNotificationReadPayloadSchema = z.object({
 });
 
 export const SocketEventSchemaMap = {
+  [SocketEventNames.CRYPTO_SUBSCRIBE]: SocketCryptoConversationRequestSchema,
+  [SocketEventNames.CRYPTO_UNSUBSCRIBE]: SocketCryptoConversationRequestSchema,
+  [SocketEventNames.CRYPTO_MESSAGE_CREATED]: EncryptedMessageSchema,
+  [SocketEventNames.CRYPTO_SYNC_AVAILABLE]: SocketCryptoSyncAvailableSchema,
   [SocketEventNames.MESSAGE_CREATED]: SocketMessageCreatedPayloadSchema,
   [SocketEventNames.MESSAGE_DELETED]: SocketMessageDeletedPayloadSchema,
   [SocketEventNames.PRESENCE_SUBSCRIBE]: SocketPresenceRequestSchema,
@@ -98,6 +106,7 @@ export interface ApiEndpointDefinition {
 }
 
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
+  ...CryptoApiEndpointRegistry,
   {method:'POST',path:'/api/auth/sign-up/email',auth:'Public',requestSchema:SignUpEmailRequestSchema,responseSchema:SignUpEmailResponseSchema},
   {method:'POST',path:'/api/auth/sign-in/email',auth:'Public',requestSchema:SignInEmailRequestSchema,responseSchema:SignInEmailResponseSchema},
   {method:'POST',path:'/api/auth/fg/sign-in/admin',auth:'Public',requestSchema:SignInAdminRequestSchema,responseSchema:SignInEmailResponseSchema},
@@ -187,15 +196,18 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/play-sessions/:id/end', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_RECRUITMENT', requestSchema: PlaySessionActionRequestSchema, responseSchema: PlaySessionSchema },
   { method: 'POST', path: '/api/v1/play-sessions/:id/leave', auth: 'Authenticated', requestSchema: PlaySessionActionRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
 
-  { method: 'POST', path: '/api/v1/rooms/:roomId/calls', auth: 'RoomMember', responseSchema: CallGroupSchema },
+  { method: 'POST', path: '/api/v1/rooms/:roomId/calls', auth: 'RoomMember', requestSchema: CallActionRequestSchema, responseSchema: CallGroupSchema },
   { method: 'GET', path: '/api/v1/rooms/:roomId/calls', auth: 'RoomMember', responseSchema: z.array(CallGroupSchema) },
-  { method: 'POST', path: '/api/v1/calls/:id/join', auth: 'RoomMember', responseSchema: CallJoinSchema },
-  { method: 'POST', path: '/api/v1/calls/:id/leave', auth: 'CallParticipant', responseSchema: z.object({ success: z.boolean() }) },
+  { method: 'POST', path: '/api/v1/calls/:id/join', auth: 'RoomMember', requestSchema: CallActionRequestSchema, responseSchema: CallJoinSchema },
+  { method: 'POST', path: '/api/v1/calls/:id/leave', auth: 'CallParticipant', requestSchema: CallActionRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'GET', path: '/api/v1/calls/:id/participants', auth: 'RoomMember', requestSchema: ListCallParticipantsQuerySchema, responseSchema: z.array(CallParticipantSchema) },
   { method: 'POST', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', requestSchema: SetExternalLiveRequestSchema, responseSchema: ExternalLiveSchema },
   { method: 'DELETE', path: '/api/v1/calls/:id/external-live', auth: 'CallParticipant', responseSchema: z.object({ success: z.boolean() }) },
   { method: 'PATCH', path: '/api/v1/calls/:id/participants/:userId/mute', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_CALLS', requestSchema: MuteParticipantRequestSchema, responseSchema: CallParticipantSchema },
   { method: 'POST', path: '/api/v1/calls/:id/self-mic', auth: 'CallParticipant', requestSchema: ToggleSelfMicRequestSchema, responseSchema: CallParticipantSchema },
+  {method:'POST',path:'/api/v1/calls/:id/screen-share/claim',auth:'CallParticipant',requestSchema:CallActionRequestSchema,responseSchema:CallJoinSchema},
+  {method:'POST',path:'/api/v1/calls/:id/screen-share/release',auth:'CallParticipant',requestSchema:CallActionRequestSchema,responseSchema:CallControlSuccessSchema},
+  {method:'POST',path:'/api/v1/calls/:id/moderation',auth:'RoomHelperOrOwner',requiredPermission:'MANAGE_CALLS',requestSchema:CallModerationRequestSchema,responseSchema:CallControlSuccessSchema},
   { method: 'POST', path: '/api/v1/calls/:id/publish-token', auth: 'CallParticipant', requestSchema: RefreshPublishTokenSchema, responseSchema: CallJoinSchema },
   { method: 'POST', path: '/api/v1/calls/:id/participants/:userId/kick', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_CALLS', requestSchema: KickCallParticipantSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'POST', path: '/api/v1/calls/:id/participants/:userId/stop-publish', auth: 'RoomHelperOrOwner', requiredPermission: 'MANAGE_CALLS', responseSchema: CallParticipantSchema },

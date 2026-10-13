@@ -1,0 +1,121 @@
+{
+  "planId": "antigravity-native61-lifecycle-red-probe-1",
+  "targetTask": "T30",
+  "phase": "TEST_AND_DESIGN_PROPOSAL_ONLY",
+  "status": "RED_PROBE_DELIVERED",
+  "nativeAcceptance": false,
+  "createdAt": "2026-10-12T03:03:00.000Z",
+  "purpose": "Provide a meaningful, strictly controlled RED reproduction probe for redundant overlapping CallLifecycleService reconciliation causing actual room-lock queue pressure and PG statement timeouts (57014), prior to any bounded performance sourcefix.",
+  "tddStage": "FAILING_TEST_BEFORE_PRODUCT_CODE",
+  "productCodeChangesProposedNow": false,
+  "backgroundInspection": {
+    "native60": {
+      "runId": "t30-native-593b5b067ea6420b92904ba12cd24810",
+      "exitCode": 1,
+      "gatewayRoomLockTimeouts": 5,
+      "sqlState": "57014",
+      "gatewayPids": [6228, 6229, 6230, 6231],
+      "pgWaitSamples": 15,
+      "blockerPids": [6254, 6295, 6349, 6355, 6429],
+      "blockerServices": [
+        "CallLifecycleService.reconcileGroup",
+        "CallsService.participants",
+        "CallsService.list",
+        "CallsService.withControlGroup",
+        "TeamsService.transaction"
+      ],
+      "lifecycleHoldDurations": "~1.0s to ~2.2s"
+    },
+    "native61": {
+      "runId": "t30-native-8806b92cd0204328b999f46af74b6aa4",
+      "exitCode": 1,
+      "milestones": {
+        "joins": 2,
+        "liveCaptures": 0,
+        "completedWindows": 0
+      },
+      "failure": "Third actor Ha stayed in initial room-loading; original 5s region visibility failed. Observers removed did NOT remedy contention."
+    }
+  },
+  "candidateInternalDesign": {
+    "concept": "Per-group coalescing of ordinary reconcile triggers only",
+    "mechanism": "While a reconciliation pass is in-flight for call group G, subsequent triggers for group G set a pending flag and accumulate screen-ended events, scheduling exactly ONE trailing pass upon completion.",
+    "boundedWorkGuarantee": "For N concurrent triggers on group G, at most 2 reconciliation passes occur (1 in-flight + 1 trailing pass), reducing room-lock queue pressure from O(N) to O(1).",
+    "freshReadGuarantee": "Trailing pass executes fresh LiveKit SFU listRooms/listParticipants RPCs and fresh PostgreSQL transaction, guaranteeing eventual fresh state evaluation after all triggers.",
+    "screenShareSafety": "All screen-ended {identity, at} event pairs are accumulated and passed to publishing.reconcileWithin, ensuring no track unpublish event is dropped.",
+    "invariants": {
+      "roomLockMode": "SELECT id FROM rooms WHERE id=$1 FOR UPDATE (strictly unchanged)",
+      "groupLockMode": "SELECT id,room_id,state FROM call_groups WHERE id=$1 FOR UPDATE (strictly unchanged)",
+      "memberLockMode": "FOR UPDATE OF m (strictly unchanged)",
+      "transactionBoundary": "Network RPCs and database mutations remain within canonical transaction boundaries",
+      "actorValidation": "actor() and liveLease() checks strictly preserved",
+      "deadlines": "45000ms deadline and 5s assertion deadlines immutable",
+      "sweepInterval": "1000ms periodic sweep unchanged",
+      "eventProcessing": "No event is ignored or dropped"
+    }
+  },
+  "testProbeSpecification": {
+    "file": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/probe-harness.mjs",
+    "invokesActualCompiledCode": true,
+    "compiledServicePath": "apps/api/dist/modules/calls/call-lifecycle.service.js",
+    "database": {
+      "mode": "Real PostgreSQL ephemeral migrated schema",
+      "migrationsSource": "packages/database/migrations",
+      "seedData": "seedGames, 6 genuine actors, valid auth sessions, recruitment card, active play session"
+    },
+    "countedInsertions": [
+      {
+        "index": 1,
+        "name": "PeriodicTimerIsolation",
+        "description": "Clears lifecycleService.timer to prevent unmetered background sweep interference during concurrent load measurement."
+      },
+      {
+        "index": 2,
+        "name": "TestOnlyLocalAdapter",
+        "description": "Wraps native LiveKit RPCs with a measured 40ms delay representing realistic network latency; clearly marked as test-only synthetic delay, preserving actual SDK return/error types."
+      },
+      {
+        "index": 3,
+        "name": "ReconciliationPassTracker",
+        "description": "Instruments reconcileGroup to measure invocations, completed passes, and cumulative lock hold durations."
+      }
+    ],
+    "workload": "4 concurrent reconcileGroup invocations on the same open call group",
+    "intendedRedAssertion": {
+      "expression": "assert(actualPasses <= 2)",
+      "originalSourceActual": "4 passes executed sequentially",
+      "expectedExitCode": 1,
+      "errorSignature": "AssertionError: [RED REPRODUCTION CONFIRMED]"
+    },
+    "controls": {
+      "callGroupRemainsOpen": true,
+      "roomRowIntact": true,
+      "memberRowsIntact": true,
+      "genuineSqlExecuted": true
+    },
+    "cleanupEnforcement": {
+      "cascadeSchemaDrop": true,
+      "appClosed": true,
+      "poolEnded": true,
+      "reportPath": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/probe-report.json"
+    }
+  },
+  "deliveredArtifacts": [
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/probe-harness.mjs",
+      "description": "Executable probe reproducing redundant overlapping reconciliation RED on current compiled source."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/plan.json",
+      "description": "Structured proposal plan."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/shortplan.md",
+      "description": "Comprehensive design analysis, uncertainty review, and root execution instructions."
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-native61-lifecycle-red-probe-1/controls-plan.json",
+      "description": "Controls plan validating probe integrity, test transparency, and cleanup settlement."
+    }
+  ]
+}

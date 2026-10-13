@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-13T04:08:27.251Z",
+  "reviewer": "Codex",
+  "apiBuild": 28,
+  "webBuild": 3,
+  "diagnosticOnly": true,
+  "reverseByteExact": true,
+  "assertionsDeadlinesUnchanged": true,
+  "encoderSanitizerControls": 4,
+  "extraMethodPgObservers": false,
+  "pins": [
+    {
+      "path": "quality/evidence/T30/browser-encoder-observer1.mjs",
+      "sha256": "d44c98950daf0ee02388a8d9e36159decb133c8b604063de862d56e1a0f1000f"
+    },
+    {
+      "path": "quality/evidence/T30/browser-room-timing2.mjs",
+      "sha256": "ab05bcae2d4159c4501890c71958f568328c4a23b922c863fbe9025e491e72b3"
+    },
+    {
+      "path": "quality/evidence/T30/native-encoder-diagnostic1.spec.ts",
+      "sha256": "c73dfc34731e633c3cf6ada35f15c0f59ada933438fce9932e533187aeab21ef"
+    },
+    {
+      "path": "quality/evidence/T30/fixture-server-shaped.mjs",
+      "sha256": "74b40e7d68ffb0d484ad4055781705ee3a0370ccb7a271ee1789b6d46911ca35"
+    },
+    {
+      "path": "quality/evidence/T30/playwright-encoder-diagnostic1.config.ts",
+      "sha256": "b01d0fe1f45053524f92d6fc9f5d7a9ee322e3481635e8c300e0bc9bd7c4797e"
+    },
+    {
+      "path": "quality/evidence/T30/run-native-encoder-diagnostic1-parent.mjs",
+      "sha256": "373db144dd91b6e21870390284862109b0819d8bb23db1d8fdb5f0ce9edf142a"
+    }
+  ],
+  "changes": [
+    [
+      "import {installBrowserRoomTiming,captureBrowserRoomTiming} from './browser-room-timing1.mjs';",
+      "import {installBrowserRoomTiming,captureBrowserRoomTiming} from './browser-room-timing2.mjs';\nimport {captureEncoderStats} from './browser-encoder-observer1.mjs';"
+    ],
+    [
+      "fixture-server-blocking9.mjs",
+      "fixture-server-shaped.mjs"
+    ],
+    [
+      "fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\\n');}",
+      "fs.appendFileSync(evidence+'/real-capture.jsonl',JSON.stringify(capture)+'\\n');await captureEncoderStats(windows,evidence,'share');}"
+    ],
+    [
+      "}catch(error){if(activePage&&!activePage.isClosed())",
+      "}catch(error){await captureEncoderStats(windows,evidence,'failure');if(activePage&&!activePage.isClosed())"
+    ]
+  ]
+}

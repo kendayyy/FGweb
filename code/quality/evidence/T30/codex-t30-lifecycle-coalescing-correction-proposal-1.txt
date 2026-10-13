@@ -1,0 +1,46 @@
+### T30 Sequential Proposal Correction: `antigravity-lifecycle-coalescing-correction-1`
+
+In accordance with root review findings and strict sequential instructions (Gemini 3.6 Flash High, NO Anti2, proposal-only mode, zero execution of commands/Docker/UI/tests, zero mutation of application source, build outputs, environment, tests, ledger, or `.doc/history.md`), the corrected ordinary reconcile coalescing proposal and regression support harness have been written exclusively to:
+
+`quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/**`
+
+---
+
+### Delivered Proposal Artifacts
+
+1. [`call-lifecycle.service.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/call-lifecycle.service.ts)
+   - **Shutdown Drain**: Removed `!this.closing` from the `runGroup` worker loop. Workers now drain all already accepted ordinary and ended jobs to completion. New incoming calls after shutdown are rejected with `HttpException(503)`. `onModuleDestroy` awaits `this.running` (active sweep) and all worker promises in `this.inFlight` before invoking `this.pool.end()`. Distinct ended events all execute canonical `reconcilePass` once each with no lost ack.
+   - **Settled Promise Cleanup**: Promise tracking uses settled handlers `job.then(() => inFlight.delete(job), () => inFlight.delete(job))` instead of `.finally()`, preventing derivative unhandled rejection events when callers handle their deferred promises independently.
+   - **Private Visibility**: `reconcileGroup` strictly retains `private` visibility.
+   - **Byte-Exact Body**: Preserves original `reconcileGroup` lines 74–104 body byte-for-byte as `reconcilePass` with exactly three counted insertion points.
+   - **Comments & Formatting**: Preserves all existing comments and structure.
+
+2. [`prepare-coalescing-proposal.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/prepare-coalescing-proposal.mjs)
+   - Validates source pins:
+     - TypeScript: `apps/api/src/modules/calls/call-lifecycle.service.ts` (`425de19a1f3c14f9da6c17e2fd6781f8d5bca310a80566d6311e370d8682a865`)
+     - Compiled JS: `apps/api/dist/modules/calls/call-lifecycle.service.js` (`7440b21cf469f64fbc188525d6deda2401b74e7a3f5942e082a3971b69972260`)
+   - Dynamically detects and handles CRLF/LF line endings.
+   - Verifies byte-exact equivalence of `reconcilePass` against lines 74–104 of the original source.
+   - Verifies private visibility and invariant preservation.
+
+3. [`lifecycle-coalescing-support-reviewed1.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/lifecycle-coalescing-support-reviewed1.mjs)
+   - Standalone test harness supporting seven deterministic regression controls via root IPC runner.
+   - Replaced all heuristic sleeps with deterministic promise barriers (`enteredPromise`/`gatePromise` and `trailingEnteredPromise`/`trailingGatePromise`).
+   - Uses `AsyncLocalStorage` to isolate test calls from unrelated background sweeps and webhooks.
+   - Preserves exact synthetic error object identity (`err === syntheticFault`).
+   - Intercepts `pool.end` safely during the shutdown drain control without terminating the client connection before test cleanup.
+
+4. [`plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/plan.json)
+   - Machine-readable specification mapping the 7 concrete review findings to implemented corrections, source pins, and regression controls.
+
+5. [`shortplan.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/shortplan.md)
+   - Human-readable review documentation covering anchor diffs, CRLF handling, reversal verification, and root review/application steps.
+
+6. [`controls-plan.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-lifecycle-coalescing-correction-1/controls-plan.json)
+   - Machine-readable matrix specifying assertions, deterministic synchronization mechanisms, disclaimers, and cleanup invariants for Controls 1 through 7.
+
+---
+
+### Status & Invariants
+- `nativeAcceptance: false` (all proposals remain unapplied diagnostic/support artifacts).
+- Zero commands executed by agent; ready for root review, application, and test execution.

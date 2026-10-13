@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-QA',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const original=fs.readFileSync('apps/web/vite.config.ts','utf8');
+let proposed="import {fgSecurityHeadersPlugin} from './security-headers.mjs';\n"+original;
+proposed=proposed.replace('// Read only the public origin. Keep private local credentials out of config','// Read only public browser connection origins. Keep private credentials out of config');
+proposed=proposed.replace("['PUBLIC_ORIGIN']);","['PUBLIC_ORIGIN','LIVEKIT_URL']);");
+proposed=proposed.replace('plugins: [react(), tailwindcss()],',"plugins: [react(), tailwindcss(), fgSecurityHeadersPlugin([new URL(env.PUBLIC_ORIGIN||'http://localhost:5173').origin,...(env.LIVEKIT_URL?[new URL(env.LIVEKIT_URL).origin]:[])])],");
+assert(proposed.includes('fgSecurityHeadersPlugin(['));assert(proposed.includes("['PUBLIC_ORIGIN','LIVEKIT_URL']"));
+fs.writeFileSync(dir+'/vite.config.proposed.ts',proposed,{flag:'wx'});
+fs.writeFileSync(dir+'/vite.config.original.ts',original,{flag:'wx'});
+fs.copyFileSync('tests/security/chat-crypto/security-headers-proposed.mjs',dir+'/security-headers.mjs',fs.constants.COPYFILE_EXCL);
+fs.writeFileSync(dir+'/security-headers.d.mts',"import type {Plugin} from 'vite';\nexport function createFgSecurityHeaders(html:string,connectOrigins?:readonly string[]):Record<string,string>;\nexport function fgSecurityHeadersPlugin(connectOrigins?:readonly string[]):Plugin;\n",{flag:'wx'});
+const paths=[{path:'apps/web/vite.config.ts',original:dir+'/vite.config.original.ts',beforeSha256:hash('apps/web/vite.config.ts'),proposed:dir+'/vite.config.proposed.ts',proposedSha256:hash(dir+'/vite.config.proposed.ts')},...['security-headers.mjs','security-headers.d.mts'].map(name=>{assert(!fs.existsSync('apps/web/'+name));return{path:'apps/web/'+name,beforeSha256:null,proposed:dir+'/'+name,proposedSha256:hash(dir+'/'+name)};})];
+fs.writeFileSync(dir+'/csp-scope-proposal.json',JSON.stringify({recordedAt:new Date().toISOString(),reason:'Actual Vite preview response lacks enforced CSP required by locked ADR001; tested native browser and actual dev/preview policy prototype',paths,scopeApprovalRequired:true,applicationApplied:false,themeSourceUnmodified:true,privateEnvValuesExcluded:true,productionDeploymentNotPerformed:true},null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({proposalReady:true,paths:paths.map(p=>p.path),applicationApplied:false}));

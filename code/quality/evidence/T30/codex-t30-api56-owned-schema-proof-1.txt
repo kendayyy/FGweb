@@ -1,0 +1,17 @@
+file:///E:/FGweb/code/quality/evidence/T30/prove-api56-owned-schema1.mjs:1
+import fs from 'node:fs';import assert from'node:assert/strict';import pg from'pg';import{parseEnv}from'node:util';const pool=new pg.Pool({connectionString:parseEnv(fs.readFileSync('.env.local','utf8')).DATABASE_URL,connectionTimeoutMillis:5000}),schema='t30_screen_591ed50d63f44bd89cae2ec5d5460ca1';assert(/^t30_screen_[a-f0-9]{32}$/.test(schema));try{const meta=(await pool.query('SELECT count(*)::int AS rooms,to_char(min(created_at),'YYYY-MM-DD HH24:MI:SS.US') AS first_created,to_char(max(created_at),'YYYY-MM-DD HH24:MI:SS.US') AS last_created FROM "'+schema+'".rooms')).rows[0];const sessions=(await pool.query('SELECT to_char(min(created_at),'YYYY-MM-DD HH24:MI:SS.US') AS first_created FROM "'+schema+'"."session"')).rows[0];fs.writeFileSync('quality/evidence/T30/api56-owned-schema-proof1.json',JSON.stringify({recordedAt:new Date().toISOString(),schema,meta,sessions,ownedFixtureCreatedWithinActualControlInterval:meta.first_created?.startsWith('2026-10-11 15:44:')&&meta.last_created?.startsWith('2026-10-11 15:44:'),noMutation:true},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({schema,meta,sessions}));}finally{await pool.end();}
+                                                                                                                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at compileSourceTextModule (node:internal/modules/esm/utils:319:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:89:18)
+    at #translate (node:internal/modules/esm/loader:438:20)
+    at afterLoad (node:internal/modules/esm/loader:506:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:511:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:564:36)
+    at afterResolve (node:internal/modules/esm/loader:611:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:617:12)
+    at node:internal/modules/esm/loader:636:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14)
+
+Node.js v24.21.0

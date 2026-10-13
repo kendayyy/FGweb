@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-10T21:39:21.718Z",
+  "reviewer": "Codex",
+  "approval": "Persistent human continue until completion, necessary narrowly reviewed current T30 integration repair",
+  "reason": "Necessary current T30 integration repair: native14 both real captures published10492/15733ms but only one viewer tab after ticker room-lock57014 at3068ms. Numeric owner trace proves CallsService pool16 and CallLifecycleService pool17: API CallsService readonly list/participants currently acquire exclusive room/user/group locks, p95 wait2464ms and maxheld1036ms, adding writer pressure against fresh signaling reads. Only list/participants use typed FOR SHARE room/user/(participants group), keep canonical sorted room→user→group order and every current session/ban/onboarding/membership/OPEN/liveLease/DTO predicate unchanged. All mutation/claim/moderation/admission paths retain default FOR UPDATE. Add real PG concurrent-reader/writer and current authority negative tests, preserve prior15 test callbacks. No lifecycle/source/SDK/database options/timeouts/schema/DTO/feature changes or native PASS.",
+  "requestedPaths": [
+    "apps/api/src/modules/calls/calls.service.ts",
+    "apps/api/dist/modules/calls/calls.service.js",
+    "apps/api/dist/modules/calls/calls.service.js.map"
+  ],
+  "originals": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "sha256": "79275b74ed052d3bc1eb99a6ac71e1b08c547d82c5fd4b251f485d31a2698e12"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/calls.service.js",
+      "sha256": "e99f816a898eeb2688c05194f65c829056b8aa4266b93c554c3d92faf4ded36e"
+    },
+    {
+      "path": "apps/api/dist/modules/calls/calls.service.js.map",
+      "sha256": "bd439f1c01222bad048ba542b97fe0a79dc6a26a84f2bfffb9f21f83c79d4c61"
+    }
+  ],
+  "evidence": [
+    "quality/evidence/T30/gateway-api-timing-summary-6.json",
+    "quality/evidence/T30/codex-headed-t30-native-14.json"
+  ],
+  "references": [
+    "https://www.postgresql.org/docs/17/explicit-locking.html#LOCKING-ROWS"
+  ],
+  "sourceAdoptionPending": true
+}

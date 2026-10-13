@@ -1,0 +1,81 @@
+{
+  "recordedAt": "2026-10-10T22:08:05.994Z",
+  "reviewer": "Codex",
+  "commands": [
+    {
+      "label": "antigravity-call-read-lock-fixture-1",
+      "command": "node quality/evidence/T30/run-antigravity.mjs call-read-lock-fixture",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:01:19.673Z",
+      "completedAt": "2026-10-10T22:03:09.834Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-antigravity-call-read-lock-fixture-1.txt",
+      "evidenceSha256": "b999098f56db839db269989a2aa9bad0860261bb4236162fbaf3b96f53197fac"
+    },
+    {
+      "label": "t30-call-read-lock-fixture-lint-1",
+      "command": "node node_modules/eslint/bin/eslint.js quality/evidence/T30/antigravity-call-read-lock-fixture-1/t30-signaling-throughput.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:05:17.486Z",
+      "completedAt": "2026-10-10T22:05:21.623Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-fixture-lint-1.txt",
+      "evidenceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "t30-call-read-lock-fixture-adoption-1",
+      "command": "node quality/evidence/T30/adopt-exact.mjs call-read-lock-fixture quality/evidence/T30/call-read-lock-fixture-adoption-plan.json",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:05:23.049Z",
+      "completedAt": "2026-10-10T22:06:09.979Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-fixture-adoption-1.txt",
+      "evidenceSha256": "fcdb603020ef8ebfbc773a20cfce8367fe8489953544119093c659dc43f39f6c"
+    },
+    {
+      "label": "t30-call-read-lock-green-2",
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand --no-cache --cacheDirectory .cache/t30/call-read-lock-green-2 --runTestsByPath apps/api/test/t30-signaling-throughput.integration.spec.ts",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:06:11.613Z",
+      "completedAt": "2026-10-10T22:07:03.491Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-call-read-lock-green-2.txt",
+      "evidenceSha256": "9270bd8bade5b96cab5993c66ccb3f5db0d8c3888f75fd3e515aab06ce7f2fa9"
+    },
+    {
+      "label": "t30-api-build-adoption-4",
+      "command": "node quality/evidence/T30/adopt-api-build-4.mjs",
+      "cwd": "E:\\FGweb\\code",
+      "startedAt": "2026-10-10T22:01:54.446Z",
+      "completedAt": "2026-10-10T22:02:17.048Z",
+      "exitCode": 0,
+      "signal": null,
+      "evidencePath": "quality/evidence/T30/codex-t30-api-build-adoption-4.txt",
+      "evidenceSha256": "b6bbe590c44652d52eb9bbce0f7e71de2f9c0e1130a8b51612112c99c1cb372a"
+    }
+  ],
+  "guards": [
+    "Prior15 tests/helpers preserved",
+    "Actual concurrent list/participants DTO2 members at1500ms while signaling room/group shared lock remains held",
+    "Canonical exclusive writer really blocked via pg_blocking_pids",
+    "Source actor/session/membership/DTO methods byte identical; mutation defaults FOR UPDATE",
+    "Expired/deleted session401, outsider/BAN/no onboarding403 exact code and message",
+    "Actual schema DROP/absence asserted and calls pool close/env restore"
+  ],
+  "actualSource": {
+    "path": "apps/api/src/modules/calls/calls.service.ts",
+    "sha256": "eabe88b1597df4c85f9fc76e871f00213107e87b3a942ad546e0578846c410ea"
+  },
+  "actualTest": {
+    "path": "apps/api/test/t30-signaling-throughput.integration.spec.ts",
+    "sha256": "7a381e5aeb20fbaf093a7257aa1055ca1862e4d231235b550d180f6586aa9eda"
+  },
+  "compiledReview": "quality/evidence/T30/api-build-4-review.json",
+  "native15Failed": true,
+  "taskStatus": "IN_PROGRESS",
+  "taskPass": false
+}

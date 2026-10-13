@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE/mockups-v2';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const old=JSON.parse(fs.readFileSync('quality/evidence/LIGHT01-FE/warm-verification.json'));
+const source=Object.entries(old.currentFiles).filter(([file])=>file.startsWith('apps/web/src/')||file==='apps/web/index.html'||file==='apps/web/test/theme.test.tsx'||file==='tests/e2e/theme.spec.ts');
+for(const [file,sha] of source)assert.equal(hash(file),sha,`Unexpected runtime/test modification: ${file}`);
+const files=['01-smoke-gray.png','02-sage-gray.png','03-warm-stone.png','design-brief.md','review.md','prompts.md'].map(file=>`${dir}/${file}`);
+const report={recordedAt:new Date().toISOString(),generator:'Built-in image_gen;3 fresh generations +1 targeted edit',previewOnly:true,userApproval:'PENDING',runtimeSourceAndTestsPreserved:source.length,files:Object.fromEntries(files.map(file=>[file,hash(file)])),imageDimensions:files.filter(file=>file.endsWith('.png')).map(file=>{const data=fs.readFileSync(file);return {file,width:data.readUInt32BE(16),height:data.readUInt32BE(20)};}),taskPassClaimed:false};
+assert(!fs.existsSync(`${dir}/manifest.json`));
+fs.writeFileSync(`${dir}/manifest.json`,JSON.stringify(report,null,2)+'\n');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const task=ledger.tasks.find(task=>task.id==='LIGHT01-FE');assert.equal(task.status,'BLOCKED');
+task.blockers[0]='User rejected actual ivory app as too bright; three newly requested redesign concepts (mockups-v2) await choice before implementation and actual app review.';
+task.evidencePaths=[...new Set([...task.evidencePaths,`${dir}/manifest.json`,...files])];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log(JSON.stringify({previewOnly:true,finalImages:3,runtimeAndTestFilesPreserved:source.length,approvalPending:true,taskStatus:task.status}));

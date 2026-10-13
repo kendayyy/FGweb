@@ -1,0 +1,63 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:28448) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (43.826 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › queues native SAS metadata to the addressed member device, rejects dedup conflicts and foreign ACKs
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+      115 |   expect((await post('sync/ack',{deviceId:'B',eventIds:[id]},otherCookie)).status).toBe(201);
+      116 |   expect((await request(base).get('/api/v1/crypto/sync?deviceId=B').set('Cookie',otherCookie)).body.verification).toEqual([]);
+    > 117 |   const jobs=(await pool.query('SELECT w.* FROM chat_crypto_protocol_outbox w JOIN chat_crypto_protocol_events e ON e.id=w.verification_event_id WHERE e.transaction_id=$1',[event.transactionId])).rows;expect(jobs).toHaveLength(1);expect(Object.keys(jobs[0]).sort()).toEqual(['created_at','delivered_at','id','to_device_event_id','verification_event_id']);expect(jobs[0].to_device_event_id).toBeNull();
+          |                                                                                                                                                                                                                       ^
+      118 |  });
+      119 |  it('paginates verification metadata without duplicates at sub-millisecond database timestamps',async()=>{
+      120 |   for(const id of ['page-a','page-b']){
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:117:215)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › rolls back verification and its wakeup together when PostgreSQL outbox insertion fails, then retries once
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 201
+
+      132 |   const event={conversationId:'dm',membershipRevision:3,deviceId:'A',transactionId:'wake-atomic',recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:'wake-atomic',from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}};
+      133 |   await pool.query("CREATE FUNCTION wake_insert_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'fixture wake insert fault'; END $$");await pool.query('CREATE TRIGGER wake_insert_fault BEFORE INSERT ON chat_crypto_protocol_outbox FOR EACH ROW EXECUTE FUNCTION wake_insert_fault()');
+    > 134 |   try{expect((await post('verification',event)).status).toBe(500);expect((await pool.query("SELECT id FROM chat_crypto_protocol_events WHERE transaction_id='wake-atomic'")).rowCount).toBe(0);}finally{await pool.query('DROP TRIGGER wake_insert_fault ON chat_crypto_protocol_outbox');await pool.query('DROP FUNCTION wake_insert_fault()');}
+          |                                                         ^
+      135 |   expect((await post('verification',event)).status).toBe(201);expect((await post('verification',event)).status).toBe(201);expect((await pool.query("SELECT w.id FROM chat_crypto_protocol_outbox w JOIN chat_crypto_protocol_events e ON e.id=w.verification_event_id WHERE e.transaction_id='wake-atomic'")).rowCount).toBe(1);
+      136 |   const sync=await request(base).get('/api/v1/crypto/sync?deviceId=B').set('Cookie',otherCookie),item=sync.body.verification.find((r:{event:{content:{transaction_id:string}}})=>r.event.content.transaction_id==='wake-atomic');expect(item).toBeDefined();expect((await post('sync/ack',{deviceId:'B',eventIds:[item.id]},otherCookie)).status).toBe(201);
+      137 |  });
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:134:57)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › relays real Olm room keys and Megolm messages without plaintext persistence, with tamper/replay rejection
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+      158 |     const payload={conversationId:'dm',membershipRevision:3,deviceId:m.deviceId.toString(),transactionId:event.txn_id,eventType:event.event_type,recipients};
+      159 |     expect((await post('to-device',payload,authFor(m))).status).toBe(201);expect((await post('to-device',payload,authFor(m))).status).toBe(201);
+    > 160 |     const jobs=(await pool.query('SELECT w.* FROM chat_crypto_protocol_outbox w JOIN chat_crypto_to_device_events e ON e.id=w.to_device_event_id WHERE e.transaction_id=$1',[event.txn_id])).rows;expect(jobs).toHaveLength(recipients.length);for(const job of jobs){expect(Object.keys(job).sort()).toEqual(['created_at','delivered_at','id','to_device_event_id','verification_event_id']);expect(job.verification_event_id).toBeNull();expect(JSON.stringify(job)).not.toContain(JSON.stringify(body.messages));}
+          |                                                                                                                                                                                                                ^
+      161 |     const changed=structuredClone(payload) as typeof payload & {recipients:{content:{ciphertext:Record<string,{body:string}>}}[]};
+      162 |     const first=changed.recipients[0].content.ciphertext;first[Object.keys(first)[0]].body=Buffer.alloc(96,3).toString('base64');
+      163 |     expect((await post('to-device',changed,authFor(m))).status).toBe(409);
+
+      at sendNative (test/chat-crypto-devices.integration.spec.ts:160:208)
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:173:71)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 33 passed, 36 total
+Snapshots:   0 total
+Time:        44.432 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

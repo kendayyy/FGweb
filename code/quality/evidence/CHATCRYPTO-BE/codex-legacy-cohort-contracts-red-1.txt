@@ -1,0 +1,54 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/chat-crypto-legacy-candidate.test.ts (19 tests | 5 failed) 110ms
+   ❯ Native legacy candidate and attestation boundary (19)
+     × preserves explicit migration cohort routing while keeping LIVE request compatibility 0 20ms
+     × preserves explicit migration cohort routing while keeping LIVE request compatibility 1 6ms
+     × preserves explicit migration cohort routing while keeping LIVE request compatibility 2 11ms
+     × preserves explicit migration cohort routing while keeping LIVE request compatibility 3 6ms
+     × returns historical queue context separately from encrypted/public SDK event payloads 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > preserves explicit migration cohort routing while keeping LIVE request compatibility 0
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > preserves explicit migration cohort routing while keeping LIVE request compatibility 1
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > preserves explicit migration cohort routing while keeping LIVE request compatibility 2
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > preserves explicit migration cohort routing while keeping LIVE request compatibility 3
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "cohortId"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"cohortId\""
+  }
+]
+ ❯ test/chat-crypto-legacy-candidate.test.ts:16:106
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/chat-crypto-legacy-candidate.test.ts > Native legacy candidate and attestation boundary > returns historical queue context separately from encrypted/public SDK event payloads
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "cohortId"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"cohortId\""
+  }
+]
+ ❯ test/chat-crypto-legacy-candidate.test.ts:20:41
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 14 passed (19)
+   Start at  09:55:46
+   Duration  1.39s (transform 48%, import 41%, tests 10%, worker 1%)
+

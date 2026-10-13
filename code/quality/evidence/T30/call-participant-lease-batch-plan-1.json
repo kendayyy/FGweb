@@ -1,0 +1,86 @@
+{
+  "recordedAt": "2026-10-11T03:34:40.619Z",
+  "reviewer": "Codex",
+  "task": "T30",
+  "status": "TEST_FIRST_PROPOSAL_ONLY",
+  "causeEvidence": {
+    "path": "quality/evidence/T30/pg-wait-native31-summary-1.json",
+    "sha256": "3fb247593f555aafe134b2e81cca324638d508313fd5e90e14ef96e0df9ae805"
+  },
+  "hypothesis": "Reduce actual Calls read transaction room/group SHARE duration by replacing serial per-participant liveLease queries with one fresh readonly guarded lease SQL using same predicates. Server evidence shows continuous rotating SHARE holders delay UPDATE acquisition and then gateway SHARE, not a single14s lifecycle hold. This targets one measured read owner and is not presumed sufficient for native acceptance.",
+  "plannedProductionScope": [
+    "apps/api/src/modules/calls/calls.service.ts participantDtos/import only",
+    "apps/api/src/modules/calls/lease-store.ts new internal readonly liveLeases helper only; original function/policy methods remain byte-identical"
+  ],
+  "verificationSequence": [
+    "Agy tests-only proposal and Codex fixture/security review",
+    "Actual owned PG RED: three current lease reads vs one required and missing bulk helper assertions, verify cleanup and guard passing cases",
+    "Agy isolated minimal source proposal after real RED",
+    "Exact source/predicate parity review and stock gate rebaseline/adoption; retain pool/guards/order/errors/TTL/native behavior",
+    "Same actual owned PG GREEN; frozen original call/admission/gateway/control/publishing and relevant lifecycle guards sequentially",
+    "Compile API build9 nonincremental, pin actual changed artifacts via exact gate",
+    "Actual headed32+Telegram and new server waits; canonical final acceptance still required"
+  ],
+  "pins": [
+    {
+      "path": "apps/api/src/modules/calls/calls.service.ts",
+      "sha256": "eabe88b1597df4c85f9fc76e871f00213107e87b3a942ad546e0578846c410ea"
+    },
+    {
+      "path": "apps/api/src/modules/calls/lease-store.ts",
+      "sha256": "de79098272f46678b703ad592cf3ab49993fc746f11ad017f42b97ada78a09f1"
+    },
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "sha256": "a973561c611e35a8fd4e5cfb575923ceb5ad880a74ce0540afa3bfcb355c90fa"
+    },
+    {
+      "path": "apps/api/src/modules/calls/publishing.service.ts",
+      "sha256": "06d3281a0b8b76f0f145f57650ac969405f27a0a7bef8ee47407a15084d57805"
+    },
+    {
+      "path": "apps/api/src/modules/calls/signaling-gateway.ts",
+      "sha256": "495e98f043f051c58f50442c86ff5837487dfa3aa928bbff4001398bc88bee1a"
+    },
+    {
+      "path": "apps/api/src/modules/teams/teams.service.ts",
+      "sha256": "b16d6ba271d33e9531f25169c019a52f779a8ae615ae9f441b3270567965cf0a"
+    },
+    {
+      "path": "tests/e2e/screen-share.spec.ts",
+      "sha256": "8e126efd434516a6870e9f48029c4317cc2a427e78d3157e660b00ebdba10cc8"
+    },
+    {
+      "path": "apps/api/test/call-controls.integration.spec.ts",
+      "sha256": "ae717984122e050611629be2e8850984673709b88b5dbe3cb92790765805fbdd"
+    },
+    {
+      "path": "apps/api/test/call-admission.integration.spec.ts",
+      "sha256": "9689278e264bb846cac21ffcf749c659cbe23410719b2ccf12b356a75aac8c8c"
+    },
+    {
+      "path": "apps/api/test/call-gateway.integration.spec.ts",
+      "sha256": "8e2b5d6d15bf1854020e0804b55a9374555fbb7c2b6f6da452b2a6526570daf6"
+    },
+    {
+      "path": "apps/api/test/call-lifecycle.integration.spec.ts",
+      "sha256": "c2d89659e53f7b712d6b289986658d181e9fc0e90835b06d3edfc9d8fe210e31"
+    },
+    {
+      "path": "apps/web/dist/index.html",
+      "sha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90"
+    },
+    {
+      "path": "scripts/verify-task.mjs",
+      "sha256": "21280218b35f77fd48097615a65e679e801ac4d6b8f183782854a42eb36f1391"
+    },
+    {
+      "path": ".env.local",
+      "sha256": "c085045a92b1699a519f4297bff10b2c1dc0bb9bfb0ad22e470cefdabe64c3b1"
+    }
+  ],
+  "priorPassUnchanged": 80,
+  "noAnti2": true,
+  "noParallelTasks": true,
+  "nativeAcceptance": false
+}

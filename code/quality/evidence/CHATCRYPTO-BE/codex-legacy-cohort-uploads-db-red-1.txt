@@ -1,0 +1,61 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/chat-crypto-cohort-uploads.test.ts (4 tests | 4 failed) 7057ms
+   ❯ Historical encrypted draft context on actual PostgreSQL (4)
+     × keeps existing LIVE encrypted drafts compatible with null cohort 231ms
+     × binds a historical draft to a verified cohort in the same conversation 36ms
+     × refuses nonexistent or foreign conversation cohort on a draft 45ms
+     × retains referenced cohort metadata until the owning draft is released 28ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/chat-crypto-cohort-uploads.test.ts > Historical encrypted draft context on actual PostgreSQL > keeps existing LIVE encrypted drafts compatible with null cohort
+error: column "cohort_id" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-cohort-uploads.test.ts:23:93
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  test/chat-crypto-cohort-uploads.test.ts > Historical encrypted draft context on actual PostgreSQL > binds a historical draft to a verified cohort in the same conversation
+error: column "cohort_id" of relation "chat_crypto_upload_drafts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-cohort-uploads.test.ts:24:88
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  test/chat-crypto-cohort-uploads.test.ts > Historical encrypted draft context on actual PostgreSQL > refuses nonexistent or foreign conversation cohort on a draft
+AssertionError: expected error: column "cohort_id" of relation "ch… { …(15) } to match object { code: '23503' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23503",
++ DatabaseError {
++   "code": "42703",
+  }
+
+ ❯ rejects test/chat-crypto-cohort-uploads.test.ts:22:128
+
+ ❯ test/chat-crypto-cohort-uploads.test.ts:25:117
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  test/chat-crypto-cohort-uploads.test.ts > Historical encrypted draft context on actual PostgreSQL > retains referenced cohort metadata until the owning draft is released
+error: column "cohort_id" of relation "chat_crypto_upload_drafts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/chat-crypto-cohort-uploads.test.ts:26:87
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  11:30:54
+   Duration  9.54s (tests 82%, import 14%, worker 2%, transform 2%)
+

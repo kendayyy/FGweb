@@ -1,0 +1,24 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:31128) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (47.24 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds database roundtrips for a thousand selected mentions while preserving prefs retry ACL and rollback
+
+    error: new row for relation "notification_preferences" violates check constraint "notification_pref_email_forbidden_check"
+
+      183 |   await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) SELECT id,id,id||'@example.invalid',true,now(),now() FROM unnest($1::text[]) AS t(id)`,[targets]);await pool.query("INSERT INTO conversations(id,kind) VALUES($1,'ROOM')",[conversation]);
+      184 |   await pool.query('INSERT INTO conversation_members(id,conversation_id,user_id) SELECT $1||id,$1,id FROM unnest($2::text[]) AS t(id)',[conversation,['alice',...targets]]);
+    > 185 |   await pool.query("INSERT INTO notification_preferences(id,user_id,notification_type,in_app,push,email) SELECT $1||id,id,'MENTION',false,false,true FROM unnest($2::text[]) AS t(id)",[conversation,targets.slice(0,10)]);
+          |   ^
+      186 |   const state=await request(base).get('/api/v1/crypto/conversations/'+conversation+'/state').set('Cookie',cookies.get('alice')!);expect(state.status).toBe(200);const room=new sdk.RoomId(matrixRoomId(conversation)),machine=machines.get('alice')!,settings=new sdk.EncryptionSettings();settings.historyVisibility=sdk.HistoryVisibility.Joined;settings.sharingStrategy=sdk.CollectStrategy.onlyTrustedDevices();await machine.shareRoomKey(room,[],settings);
+      187 |   const make=async(tag:string,selected=targets)=>({clientMessageId:conversation+'-'+tag,deviceId:'A',membershipRevision:state.body.membershipRevision,mentionedUserIds:selected,envelope:{version:1,protocol:'MATRIX_MEGOLM',event:JSON.parse(await machine.encryptRoomEvent(room,'m.room.message',JSON.stringify({msgtype:'m.text',body:'native-private-fanout-fixture',binding:{version:1,conversationId:conversation,clientMessageId:conversation+'-'+tag,senderId:'alice',senderDeviceId:'A',membershipRevision:state.body.membershipRevision,mentionedUserIds:selected}})))}});
+      188 |   const actualConnect=relay.pool.connect.bind(relay.pool),observedPool=relay.pool as unknown as {connect:()=>Promise<pg.PoolClient>},seenClients=new Set<pg.PoolClient>(),restores:Array<()=>void>=[];let measuring=false,queries=0;
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:185:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        47.635 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

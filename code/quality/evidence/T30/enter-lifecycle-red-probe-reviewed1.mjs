@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const d='quality/evidence/T30',h=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex'),j=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const source=j(d+'/lifecycle-red-probe-source-review1.json');
+for(const [p,sha]of Object.entries(source.pins))assert.equal(h(p),sha);
+for(const [name,field]of [['fixture-server-lifecycle-red-probe-reviewed1.mjs','fixtureHash'],['probe-lifecycle-red-reviewed1.mjs','parentHash'],['lifecycle-red-probe-support-reviewed1.mjs','supportHash']])assert.equal(h(d+'/'+name),source[field]);
+assert.equal(h(d+'/fixture-server-shaped.mjs'),source.canonicalFixtureHash);
+assert.equal(h('.env.local'),'c085045a92b1699a519f4297bff10b2c1dc0bb9bfb0ad22e470cefdabe64c3b1');
+const ledger=j('quality/tasks.json');assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,'T30');for(const row of j(d+'/before.json').historical)assert.deepEqual(ledger.tasks.find(t=>t.id===row.id),row);
+const health=j(d+'/codex-t30-lifecycle-probe-service-health-1.json');assert.equal(health.exitCode,0);assert.equal(h(health.evidencePath),health.evidenceSha256);assert(Date.now()-Date.parse(health.completedAt)<120000);const output=fs.readFileSync(health.evidencePath,'utf8');assert(output.includes('/fg-local-postgres-1 running healthy')&&output.includes('/fg-local-redis-1 running healthy'));
+fs.writeFileSync(d+'/lifecycle-red-probe-entry-review1.json',JSON.stringify({at:new Date().toISOString(),sourceReviewed:true,sourcePinsUnchanged:true,canonicalMutableUnchanged:true,historicalPassesUnchanged:true,healthFresh:true,nativeAcceptance:false},null,2)+'\n',{flag:'wx'});

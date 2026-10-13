@@ -1,0 +1,39 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6932) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (49.231 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › retains wakeups after publish or database delivery faults and exposes only current recipient metadata
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      140 |   const transactionId='wake-dispatch',event={conversationId:'dm',membershipRevision:3,deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}};
+      141 |   expect((await post('verification',event)).status).toBe(201);const source=(await pool.query('SELECT id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows[0].id;
+    > 142 |   expect(relay.dispatchProtocol).toBeDefined();const signal={kind:'PROTOCOL_WAKE',queue:'VERIFICATION',eventId:source};
+          |                                  ^
+      143 |   await expect(relay.dispatchProtocol(async()=>{throw new Error('fixture publish unavailable');})).rejects.toThrow();expect((await pool.query('SELECT delivered_at FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[source])).rows[0].delivered_at).toBeNull();
+      144 |   await pool.query("CREATE FUNCTION wake_delivery_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'fixture delivery fault'; END $$");await pool.query('CREATE TRIGGER wake_delivery_fault BEFORE UPDATE ON chat_crypto_protocol_outbox FOR EACH ROW EXECUTE FUNCTION wake_delivery_fault()');
+      145 |   try{await expect(relay.dispatchProtocol(async()=>{})).rejects.toThrow();expect((await pool.query('SELECT delivered_at FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[source])).rows[0].delivered_at).toBeNull();}finally{await pool.query('DROP TRIGGER wake_delivery_fault ON chat_crypto_protocol_outbox');await pool.query('DROP FUNCTION wake_delivery_fault()');}
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:142:34)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › bounds protocol dispatch to 25 unlocked jobs, skips locked rows and recovers the remainder
+
+    TypeError: relay.dispatchProtocol is not a function
+
+      152 |   const relay=app.get(CryptoRelayService) as unknown as {dispatchProtocol:(publish:(signal:{eventId:string})=>Promise<void>)=>Promise<void>};const ids:string[]=[];
+      153 |   for(let i=0;i<28;i++){const transactionId=`wake-batch-${i}`;expect((await post('verification',{conversationId:'dm',membershipRevision:3,deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}})).status).toBe(201);ids.push((await pool.query('SELECT id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows[0].id);}
+    > 154 |   const lock=await pool.connect(),signals:string[]=[];try{await lock.query('BEGIN');await lock.query('SELECT id FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1 FOR UPDATE',[ids[0]]);await relay.dispatchProtocol(async signal=>{signals.push(signal.eventId);});expect(signals).toHaveLength(25);expect(signals).not.toContain(ids[0]);await lock.query('ROLLBACK');}finally{await lock.query('ROLLBACK');lock.release();}
+          |                                                                                                                                                                                                                   ^
+      155 |   await relay.dispatchProtocol(async signal=>{signals.push(signal.eventId);});expect(new Set(signals).size).toBe(28);expect(signals).toHaveLength(28);expect((await post('sync/ack',{deviceId:'B',eventIds:ids},otherCookie)).status).toBe(201);
+      156 |  });
+      157 |  it('relays real Olm room keys and Megolm messages without plaintext persistence, with tamper/replay rejection',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:154:211)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 36 passed, 38 total
+Snapshots:   0 total
+Time:        49.637 s, estimated 50 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

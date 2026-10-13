@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6104) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (54.509 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › sees a writer commit after scanning even when the connection default is repeatable read
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      646 |  it('sees a writer commit after scanning even when the connection default is repeatable read',async()=>{
+      647 |   const relay=app.get(CryptoRelayService) as unknown as {cleanup:()=>Promise<void>;pool:pg.Pool;objects:{closeScan:()=>Promise<void>;scanCandidates:()=>Promise<string[]>}};await relay.objects.closeScan();const id=randomUUID(),key=id+'.bin',target=path.join(objectRoot,key),bytes=randomBytes(32),revision=Number((await pool.query("SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='dm'")).rows[0].membership_revision),writer=await pool.connect(),reader=await relay.pool.connect();await reader.query("SET default_transaction_isolation TO 'repeatable read'");expect((await reader.query('SHOW default_transaction_isolation')).rows[0].default_transaction_isolation).toBe('repeatable read');reader.release();let committed=false;const actual=relay.objects.scanCandidates.bind(relay.objects),observer=jest.spyOn(relay.objects,'scanCandidates').mockImplementation(async()=>{const candidates=await actual();expect(candidates).toContain(key);await writer.query('COMMIT');committed=true;return candidates;});
+    > 648 |   try{await writer.query('BEGIN');await lockCryptoObjectWrite(writer,key);fs.writeFileSync(target,bytes,{flag:'wx',mode:0o600});await writer.query("INSERT INTO chat_crypto_upload_drafts(id,uploader_id,conversation_id,device_id,client_upload_id,membership_revision,encryption_mode,object_key,ciphertext_size,ciphertext_sha256,expires_at) VALUES($1,'bob','dm','CLEAN',$1,$2,'E2EE',$3,$4,$5,now()+interval '1 hour')",[id,revision,key,bytes.length,createHash('sha256').update(bytes).digest('base64')]);await relay.cleanup();expect(committed).toBe(true);expect((await pool.query('SELECT 1 FROM chat_crypto_upload_drafts WHERE id=$1',[id])).rowCount).toBe(1);expect(fs.existsSync(target)).toBe(true);expect(fs.readFileSync(target)).toEqual(bytes);}finally{observer.mockRestore();await writer.query('ROLLBACK');writer.release();const restore=await relay.pool.connect();try{await restore.query("SET default_transaction_isolation TO 'read committed'");}finally{restore.release();}await relay.objects.closeScan();await pool.query('DELETE FROM chat_crypto_upload_drafts WHERE id=$1',[id]);bytes.fill(0);if(fs.existsSync(target))fs.unlinkSync(target);}
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+      649 |  });
+      650 |  it('rechecks durable session and ban state on every operation',async()=>{
+      651 |   await pool.query(`DELETE FROM "session" WHERE user_id='alice'`);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:648:684)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 44 passed, 45 total
+Snapshots:   0 total
+Time:        54.909 s, estimated 56 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

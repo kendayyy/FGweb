@@ -2,6 +2,7 @@ import React from 'react';
 import {Users,Clock,Gamepad2} from 'lucide-react';
 import type {RecruitmentDTO} from '@fg/contracts';
 import {displayBangkok} from './time.js';
+import {JoinCardAction} from '../team-roster/JoinCardAction.js';
 export function RecruitmentCard({card}:{card:RecruitmentDTO}) {
  const full=card.currentPlayers>=card.playerCapacity;
  // List/create API clients validate Roblox URLs through the shared contract.
@@ -13,5 +14,6 @@ export function RecruitmentCard({card}:{card:RecruitmentDTO}) {
   {card.scheduledAt&&<p className="fg-recruit-meta"><Clock size={16} aria-hidden="true"/><time dateTime={card.scheduledAt}>{displayBangkok(card.scheduledAt)} · Bangkok</time></p>}
   {card.requirementText&&<p className="fg-recruit-note">{card.requirementText}</p>}
   {card.experienceName&&<p className="fg-recruit-note">Experience: {card.experienceName}{experienceLink&&<> · <a href={experienceLink} target="_blank" rel="noopener noreferrer">Mở Roblox</a></>}</p>}
+  <JoinCardAction card={card}/>
  </article>;
 }

@@ -1,0 +1,33 @@
+The signaling gateway throughput optimization proposal and its companion integration test suite have been prepared under [`quality/evidence/T30/antigravity-signaling-batch-1/`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-batch-1/).
+
+### Proposed Files
+1. [`apps/api/src/modules/calls/signaling-gateway.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-batch-1/apps/api/src/modules/calls/signaling-gateway.ts)
+   - **Unified bounded queue**: Single queue per `Binding` for both inbound and outbound frames, enforcing max 256 queued frames and max 1 MiB payload capacity (terminates immediately on overflow to prevent memory leaks).
+   - **Transaction batching (max 16 frames)**: Drains batches up to 16 frames within a single canonical `lockedLease` transaction (coalescing per-frame transactions down by ~10–16x during WebRTC negotiation bursts).
+   - **Canonical lock ordering**: Enforces strict `SELECT FOR UPDATE` on `rooms` followed by `call_groups`, re-verifying `liveLease` both before and after lock acquisition.
+   - **Derived publication permission**: Computes `publicationPermission` once per batch under lock, synchronizing with the SFU participant policy key and pruning revoked screen tracks from `pendingPublications`.
+   - **Non-nesting `processClientFrame`**: Refactored helper consumes existing transaction client `db`, lease, and permissions, eliminating nested transactions and deadlocks.
+   - **Exact guard preservation**: Retains exact CID length, track type, track source, max 1 native screen track per quota/source, secondary codec verification on matching SID, pending publication resolution, `observePublication`, handshake frame protection, and 1s `live()` polling revalidation.
+   - **Zero production leaks**: Zero credential or payload logging, zero database migration/schema changes, and zero LiveKit protocol modifications.
+   - **Test observer**: Exposes optional non-intrusive hook (`testObserver?: { onBatch?: (size: number) => void; onTransaction?: () => void; }`) in `GatewayOptions`.
+
+2. [`apps/api/test/t30-signaling-throughput.integration.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-batch-1/apps/api/test/t30-signaling-throughput.integration.spec.ts)
+   - Operates against a dedicated PostgreSQL schema (`t30_throughput_<uuid>`) with real Drizzle migrations and seed data.
+   - Implements an in-process fake-SFU HTTP/WebSocket adapter handling `/rtc` handshake, Twirp RPC calls (`GetParticipant`, `UpdateParticipant`, `RemoveParticipant`), and frame recording.
+   - **Throughput & batch assertion**: Verifies a burst of 16 frames executes in strictly fewer transactions than the 16 unbatched baseline, with exact sequential frame ordering preserved.
+   - **Quota denial**: Asserts `SCREEN_SHARE` is denied with `RequestResponse_Reason.NOT_ALLOWED` (`'Current screen quota required'`) and never forwarded upstream when quota slot is missing.
+   - **Quota granted & pending CID**: Asserts `SCREEN_SHARE` is forwarded and pending CID registered when `call_publish_slots` exists.
+   - **Duplicate screen denial**: Asserts second screen track with different CID is denied with `LIMIT_EXCEEDED` (`'One native track per screen quota/source'`).
+   - **Secondary codec extension**: Confirms track with matching native SID is permitted.
+   - **Revocation / ban while queued**: Asserts administrative ban or admission revocation during batch processing invalidates lease, drops frames, and terminates connection.
+   - **Queue overflow & malformed cleanup**: Asserts connection closes cleanly on >256 queued frames and invalid protobuf bytes (400).
+
+3. [`implementation-notes.md`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-signaling-batch-1/implementation-notes.md)
+   - Documents root-cause analysis (`gateway-timing-summary-1.json`), architectural invariants, fixture design assumptions, and verification boundaries.
+
+---
+
+### Verification Status
+- **Proposed-only confinement**: Zero changes made to actual `apps/api/` production source, existing tests, compiled distribution files, or git ledger.
+- **No commands executed**: No tests, builds, or browser runs were executed during this turn.
+- Awaiting Codex review and adoption ahead of native E2E execution.

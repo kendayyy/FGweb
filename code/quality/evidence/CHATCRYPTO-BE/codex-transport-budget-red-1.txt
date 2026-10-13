@@ -1,0 +1,126 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:41172) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-transport-budget.integration.spec.ts (52.813 s)
+  ● actual two-instance HTTP transport aggregate budget › serializes a sender budget across two API instances and different conversation locks
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 7
+    + Received  + 7
+
+      Array [
+        201,
+    -   429,
+    -   429,
+    -   429,
+    -   429,
+    -   429,
+    -   429,
+    -   429,
+    +   201,
+    +   201,
+    +   201,
+    +   201,
+    +   201,
+    +   201,
+    +   201,
+      ]
+
+      41 |  it('serializes a sender budget across two API instances and different conversation locks',async()=>{
+      42 |   const bodies=await Promise.all(Array.from({length:8},(_,i)=>event(i%2?'budget-ab':'budget-ac','budget-a',i%2?'budget-b':'budget-c')));
+    > 43 |   const responses=await Promise.all(bodies.map((body,i)=>send(body,i%2)));expect(responses.map(r=>r.status).sort()).toEqual([201,429,429,429,429,429,429,429]);expect(await counts()).toEqual({events:1,outbox:1});
+         |                                                                                                                     ^
+      44 |  });
+      45 |  it('enforces recipient budget across different senders',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);expect((await send(await event('budget-bc','budget-c','budget-b'),1,'budget-c')).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+      46 |  it('does not charge an identical retry or create another outbox row',async()=>{const body=await event('budget-ab');expect((await send(body)).status).toBe(201);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:43:117)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces recipient budget across different senders
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 429
+    Received: 201
+
+      43 |   const responses=await Promise.all(bodies.map((body,i)=>send(body,i%2)));expect(responses.map(r=>r.status).sort()).toEqual([201,429,429,429,429,429,429,429]);expect(await counts()).toEqual({events:1,outbox:1});
+      44 |  });
+    > 45 |  it('enforces recipient budget across different senders',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);expect((await send(await event('budget-bc','budget-c','budget-b'),1,'budget-c')).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+         |                                                                                                                                                                                                                             ^
+      46 |  it('does not charge an identical retry or create another outbox row',async()=>{const body=await event('budget-ab');expect((await send(body)).status).toBe(201);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      47 |  it('ACK does not free retained dedup storage',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query('UPDATE chat_crypto_protocol_events SET acknowledged_at=now()');expect((await send(await event('budget-ab'),1)).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+      48 |  it('expiry alone does not free retained storage, actual deletion does',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query("UPDATE chat_crypto_protocol_events SET expires_at=now()-interval '1 second'");expect((await send(await event('budget-ab'),1)).status).toBe(429);await pool.query('DELETE FROM chat_crypto_protocol_events');expect((await send(await event('budget-ab'),1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:45:221)
+
+  ● actual two-instance HTTP transport aggregate budget › ACK does not free retained dedup storage
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 429
+    Received: 201
+
+      45 |  it('enforces recipient budget across different senders',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);expect((await send(await event('budget-bc','budget-c','budget-b'),1,'budget-c')).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+      46 |  it('does not charge an identical retry or create another outbox row',async()=>{const body=await event('budget-ab');expect((await send(body)).status).toBe(201);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+    > 47 |  it('ACK does not free retained dedup storage',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query('UPDATE chat_crypto_protocol_events SET acknowledged_at=now()');expect((await send(await event('budget-ab'),1)).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+         |                                                                                                                                                                                                                                                                   ^
+      48 |  it('expiry alone does not free retained storage, actual deletion does',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query("UPDATE chat_crypto_protocol_events SET expires_at=now()-interval '1 second'");expect((await send(await event('budget-ab'),1)).status).toBe(429);await pool.query('DELETE FROM chat_crypto_protocol_events');expect((await send(await event('budget-ab'),1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      49 |  it('enforces PostgreSQL jsonb payload byte boundary without row/outbox residue',async()=>{const body=await event('budget-ab'),payload={eventType:body.eventType,content:body.content},bytes=Number((await pool.query('SELECT octet_length($1::jsonb::text) AS bytes',[JSON.stringify(payload)])).rows[0].bytes);process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='100';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes-1);expect((await send(body)).status).toBe(429);expect(await counts()).toEqual({events:0,outbox:0});process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      50 |  it('fails closed for new ingestion without explicit operator configuration',async()=>{delete process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER;expect((await send(await event('budget-ab'))).status).toBe(503);expect(await counts()).toEqual({events:0,outbox:0});});
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:47:259)
+
+  ● actual two-instance HTTP transport aggregate budget › expiry alone does not free retained storage, actual deletion does
+
+    error: new row for relation "chat_crypto_protocol_events" violates check constraint "chat_crypto_protocol_expiry_check"
+
+      46 |  it('does not charge an identical retry or create another outbox row',async()=>{const body=await event('budget-ab');expect((await send(body)).status).toBe(201);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      47 |  it('ACK does not free retained dedup storage',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query('UPDATE chat_crypto_protocol_events SET acknowledged_at=now()');expect((await send(await event('budget-ab'),1)).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+    > 48 |  it('expiry alone does not free retained storage, actual deletion does',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query("UPDATE chat_crypto_protocol_events SET expires_at=now()-interval '1 second'");expect((await send(await event('budget-ab'),1)).status).toBe(429);await pool.query('DELETE FROM chat_crypto_protocol_events');expect((await send(await event('budget-ab'),1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+         |                                                                                                                                                   ^
+      49 |  it('enforces PostgreSQL jsonb payload byte boundary without row/outbox residue',async()=>{const body=await event('budget-ab'),payload={eventType:body.eventType,content:body.content},bytes=Number((await pool.query('SELECT octet_length($1::jsonb::text) AS bytes',[JSON.stringify(payload)])).rows[0].bytes);process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='100';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes-1);expect((await send(body)).status).toBe(429);expect(await counts()).toEqual({events:0,outbox:0});process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      50 |  it('fails closed for new ingestion without explicit operator configuration',async()=>{delete process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER;expect((await send(await event('budget-ab'))).status).toBe(503);expect(await counts()).toEqual({events:0,outbox:0});});
+      51 | });
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:48:147)
+
+  ● actual two-instance HTTP transport aggregate budget › enforces PostgreSQL jsonb payload byte boundary without row/outbox residue
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 429
+    Received: 201
+
+      47 |  it('ACK does not free retained dedup storage',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query('UPDATE chat_crypto_protocol_events SET acknowledged_at=now()');expect((await send(await event('budget-ab'),1)).status).toBe(429);expect(await counts()).toEqual({events:1,outbox:1});});
+      48 |  it('expiry alone does not free retained storage, actual deletion does',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query("UPDATE chat_crypto_protocol_events SET expires_at=now()-interval '1 second'");expect((await send(await event('budget-ab'),1)).status).toBe(429);await pool.query('DELETE FROM chat_crypto_protocol_events');expect((await send(await event('budget-ab'),1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+    > 49 |  it('enforces PostgreSQL jsonb payload byte boundary without row/outbox residue',async()=>{const body=await event('budget-ab'),payload={eventType:body.eventType,content:body.content},bytes=Number((await pool.query('SELECT octet_length($1::jsonb::text) AS bytes',[JSON.stringify(payload)])).rows[0].bytes);process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='100';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes-1);expect((await send(body)).status).toBe(429);expect(await counts()).toEqual({events:0,outbox:0});process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      50 |  it('fails closed for new ingestion without explicit operator configuration',async()=>{delete process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER;expect((await send(await event('budget-ab'))).status).toBe(503);expect(await counts()).toEqual({events:0,outbox:0});});
+      51 | });
+      52 |
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:49:471)
+
+  ● actual two-instance HTTP transport aggregate budget › fails closed for new ingestion without explicit operator configuration
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 201
+
+      48 |  it('expiry alone does not free retained storage, actual deletion does',async()=>{expect((await send(await event('budget-ab'))).status).toBe(201);await pool.query("UPDATE chat_crypto_protocol_events SET expires_at=now()-interval '1 second'");expect((await send(await event('budget-ab'),1)).status).toBe(429);await pool.query('DELETE FROM chat_crypto_protocol_events');expect((await send(await event('budget-ab'),1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+      49 |  it('enforces PostgreSQL jsonb payload byte boundary without row/outbox residue',async()=>{const body=await event('budget-ab'),payload={eventType:body.eventType,content:body.content},bytes=Number((await pool.query('SELECT octet_length($1::jsonb::text) AS bytes',[JSON.stringify(payload)])).rows[0].bytes);process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER='100';process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes-1);expect((await send(body)).status).toBe(429);expect(await counts()).toEqual({events:0,outbox:0});process.env.FG_CRYPTO_TRANSPORT_MAX_PAYLOAD_BYTES_PER_USER=String(bytes);expect((await send(body,1)).status).toBe(201);expect(await counts()).toEqual({events:1,outbox:1});});
+    > 50 |  it('fails closed for new ingestion without explicit operator configuration',async()=>{delete process.env.FG_CRYPTO_TRANSPORT_MAX_ROWS_PER_USER;expect((await send(await event('budget-ab'))).status).toBe(503);expect(await counts()).toEqual({events:0,outbox:0});});
+         |                                                                                                                                                                                                       ^
+      51 | });
+      52 |
+
+      at Object.<anonymous> (test/chat-crypto-transport-budget.integration.spec.ts:50:199)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 1 passed, 7 total
+Snapshots:   0 total
+Time:        53.589 s
+Ran all test suites matching apps/api/test/chat-crypto-transport-budget.integration.spec.ts.

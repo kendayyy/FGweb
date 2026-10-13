@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/LIGHT01-FE';
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const prior=JSON.parse(fs.readFileSync(`${dir}/warm-verification.json`));
+for(const [file,sha] of Object.entries(prior.currentFiles))assert.equal(hash(file),sha,file);
+const failure=JSON.parse(fs.readFileSync(`${dir}/codex-warm-final-audit-1.json`));assert.equal(failure.exitCode,1);
+const documents=['../.doc/01-product-spec.md','../.doc/02-frontend-design.md','../.doc/task.md'];
+const report={recordedAt:new Date().toISOString(),status:'BLOCKED',technicalResultsUnchanged:true,ownedSourceAndScreenshotsPreserved:true,finalMetadataAudit:failure,documents:Object.fromEntries(documents.map(file=>[file,hash(file)])),reason:'Concurrent Idea sidebar metadata superseded its earlier toggle proposal after reviewed audit2. Preserve final audit failure and historical baseline; review/adopt latest approved requirements before closure. Warm appearance remains subject to actual app review.',nextTaskOpened:false};
+fs.writeFileSync(`${dir}/warm-handoff.json`,JSON.stringify(report,null,2)+'\n');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json'));const task=ledger.tasks.find(task=>task.id==='LIGHT01-FE');
+task.blockers[1]=report.reason;
+task.commands=fs.readdirSync(dir).filter(file=>/^codex-.*\.json$/.test(file)).map(file=>JSON.parse(fs.readFileSync(`${dir}/${file}`))).sort((a,b)=>a.startedAt.localeCompare(b.startedAt));
+task.evidencePaths=[...new Set([...task.evidencePaths,`${dir}/warm-handoff.json`,...task.commands.map(command=>command.evidencePath)])];
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+console.log('Owned warm source/screenshots unchanged; latest metadata audit failure and BLOCKED handoff retained.');

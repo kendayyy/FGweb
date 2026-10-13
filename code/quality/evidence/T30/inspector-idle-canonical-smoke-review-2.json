@@ -1,0 +1,116 @@
+{
+  "recordedAt": "2026-10-11T06:04:56.286Z",
+  "reviewer": "Codex",
+  "fixture": {
+    "path": "quality/evidence/T30/fixture-server-canonical-startup-reviewed.mjs",
+    "sha256": "0fe7035708e27ea7e174ab0bd3c89654717f87c328c125fde75c255ca54c998d"
+  },
+  "phases": [
+    {
+      "at": "2026-10-11T06:04:18.012Z",
+      "phase": "database"
+    },
+    {
+      "at": "2026-10-11T06:04:23.599Z",
+      "phase": "redis"
+    },
+    {
+      "at": "2026-10-11T06:04:23.619Z",
+      "phase": "media"
+    },
+    {
+      "at": "2026-10-11T06:04:32.297Z",
+      "phase": "api"
+    },
+    {
+      "at": "2026-10-11T06:04:36.531Z",
+      "phase": "web"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "built SPA HTML and CSP",
+      "status": 200,
+      "htmlSha256": "cb9d6e4d41a834467b8bc01d920ac5f77128c144290be95c02bbab12a233bd90",
+      "noDevRuntime": true,
+      "cspSha256": "d42b3b42ed78f9ac14e5dc6a6f25e36e12114da2d9e9b69861bad7bc6257f459"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-D6aTQDz5.js",
+      "status": 200,
+      "sha256": "4c2027b054ad531524c481b4a2166bb9cac4a5ab2ea6686739c2cd70967aee7f"
+    },
+    {
+      "kind": "built asset actual HTTP",
+      "path": "apps/web/dist/assets/index-Dr0NL-IN.css",
+      "status": 200,
+      "sha256": "4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b"
+    },
+    {
+      "kind": "real authenticated owned API proxy",
+      "status": 200
+    },
+    {
+      "kind": "actual Socket.IO Engine.IO websocket proxy handshake",
+      "opened": true,
+      "namespaceAclNotClaimed": true
+    },
+    {
+      "kind": "real retained inspector after >driver idle 10000ms",
+      "idleStartedAt": "2026-10-11T06:04:37.636Z",
+      "idleEndedAt": "2026-10-11T06:04:48.711Z",
+      "idleMs": 11075.303600000003,
+      "backendPid": 31731,
+      "callers": 0,
+      "rooms": 1,
+      "publisherSlots": 0
+    },
+    {
+      "kind": "same real inspector reads newly committed real API admission",
+      "backendPid": 31731,
+      "beforeCallers": 0,
+      "afterCallers": 1,
+      "currentUserMatched": true,
+      "openCalls": 1,
+      "publisherSlots": 0,
+      "nativeTracksRead": true
+    },
+    {
+      "kind": "actual owned inspector release/socket-end/pool-end lifecycle",
+      "inspector": {
+        "recordedAt": "2026-10-11T06:04:56.228Z",
+        "backendPid": 31731,
+        "reserved": true,
+        "released": true,
+        "actualSocketEnded": true,
+        "poolEnded": true,
+        "failureCount": 0,
+        "writeFailureCount": 0,
+        "healthy": true,
+        "poolTotalCount": 0,
+        "poolIdleCount": 0,
+        "poolWaitingCount": 0
+      }
+    }
+  ],
+  "closed": {
+    "code": 0,
+    "signal": null
+  },
+  "cleanup": {
+    "schemaRemoved": true,
+    "mediaRemoved": true,
+    "presenceRemoved": true,
+    "appClosed": true,
+    "webClosed": true
+  },
+  "removed": [
+    "gateway-cd6cd2d4-434b-4de7-a41f-0b12d1ab328c",
+    "temporary-built-smoke-5b4b912f-ca7f-46fe-aef9-b1886a02959b"
+  ],
+  "retained": [],
+  "errors": [],
+  "scope": "Real built frontend HTTP/CSP/assets and owned API/WS/cleanup startup only, no UI or capture acceptance",
+  "nativeAcceptance": false
+}

@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T30';
+const original=fs.readFileSync(d+'/enter-native47-reviewed1.mjs','utf8');
+let entry=original.replaceAll('codex-t30-native47-service-health-1.json','codex-t30-native48-service-health-1.json').replaceAll('native47-entry-review1.json','native48-entry-review1.json').replaceAll('headed47 entry','headed48 RTP diagnostic entry').replaceAll('Combined diagnostic47 entry verified','RTP diagnostic48 entry verified');
+const anchor="const recordedAt=new Date().toISOString();";
+const extra="const controls=j('codex-t30-rtp-window-controls-2.json'),gate=j('codex-t30-rtp-window-taskcheck-1.json');for(const r of [controls,gate]){assert.equal(r.exitCode,0);assert.equal(h(r.evidencePath),r.evidenceSha256);}const diag=j('rtp-window-source-review2.json');assert(diag.exactReconstruction&&diag.assertionsAndDeadlinesPreserved&&diag.errorScreenshotPreservedOnObserverFailure);for(const [p,sha]of Object.entries(diag.files))assert.equal(h(p),sha);assert.equal(j('rtp-window-controls-review2.json').controls,6);";
+assert(entry.includes(anchor));entry=entry.replace(anchor,extra+anchor).replace('telegramProducer:true,nativeAcceptance:false','telegramProducer:true,isolatedDiagnosticTest:true,failureOnlyMediaSnapshot:true,originalTestByteExact:true,nativeAcceptance:false');
+entry=entry.replace('Same-run gateway waitPID/SQLSTATE/WS, API actualCJS transactionPID/nativeRPC and PG blocker correlations needed; no uniquecause inferred.','Diagnostic test clone preserves exact original measurement/assertions, persists failed RTP window before assertion, snapshots safe PC/capture/video/source state only after failure; six error/IO/deadline controls GREEN. Original test byte-exact, no unique cause inferred.');
+fs.writeFileSync(d+'/enter-native48-reviewed1.mjs',entry,{flag:'wx'});
+console.log('Native48 entry prepared; fresh service health and passed gate required before test.');

@@ -1,0 +1,43 @@
+# FG T30 — Thực thi sao chép chẩn đoán Native (`antigravity-native-diagnostics-1`)
+
+Đã thực hiện duy nhất lệnh được chỉ định tại thư mục làm việc `E:/FGweb/code`:
+
+```powershell
+node quality/evidence/T30/copy-native-diagnostics.mjs
+```
+
+### 1. Kết quả thực thi lệnh
+
+- **Exit code**: `0`
+- **Output**:
+  ```text
+  Copied bounded diagnostic proposals only.
+  ```
+
+---
+
+### 2. Xác thực băm SHA-256
+
+Các băm trước và sau hiệu chỉnh trong [`native-diagnostics-review.json`](file:///E:/FGweb/code/quality/evidence/T30/native-diagnostics-review.json) đã được kiểm chứng khớp tuyệt đối:
+
+1. **`screen-share.spec.ts`**:
+   - Before SHA-256: `b3a0baa8f01835bad9a1e09204de9374ab424c4c0098de007820250eab6f8f17`
+   - After SHA-256: `2b6590624dd51a6c7de23e4d19aff85249f8bbf7789547671d78a71fc8209eb3`
+2. **`fixture-server-shaped.mjs`**:
+   - Before SHA-256: `7f46145d8c5cf6db52c2dffeeca2db71ba86d11eefbf4891460f3da16c778a2e`
+   - After SHA-256: `1ca209151002e4d85824faf3813aaafbe9595788d5fe673d3189033c2084efdf`
+
+---
+
+### 3. Danh mục file tại `antigravity-native-diagnostics-1`
+
+- Proof sao chép: [`quality/evidence/T30/antigravity-native-diagnostics-1/exact-copy-proof.json`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native-diagnostics-1/exact-copy-proof.json)
+- Proposal chẩn đoán test E2E: [`quality/evidence/T30/antigravity-native-diagnostics-1/screen-share.spec.ts`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native-diagnostics-1/screen-share.spec.ts)
+- Proposal server fixture: [`quality/evidence/T30/antigravity-native-diagnostics-1/fixture-server-shaped.mjs`](file:///E:/FGweb/code/quality/evidence/T30/antigravity-native-diagnostics-1/fixture-server-shaped.mjs)
+
+---
+
+### 4. Trạng thái
+
+- Không can thiệp mã nguồn ứng dụng hay sửa đổi assertions.
+- Không chạy kiểm thử hay mở browser; chuyển giao cho Codex review, áp dụng và thực thi kiểm thử.

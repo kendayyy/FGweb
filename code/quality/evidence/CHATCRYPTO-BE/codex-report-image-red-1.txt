@@ -1,0 +1,128 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:4700) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (39.516 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › rejects absent consent, duplicate selections, foreign conversation, outsiders and unsupported image/source claims
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 422
+
+       98 |   expect((await post({...disclosure(),selectedMessages:[{...item,messageId:ids[3]}]})).status).toBe(403);
+       99 |   expect((await post(disclosure(),cookies.outsider)).status).toBe(403);
+    > 100 |   expect((await post({...disclosure(),selectedMessages:[{...item,reportAttachmentIds:['unowned-image']}]})).status).toBe(403);
+          |                                                                                                                     ^
+      101 |   expect((await post({...disclosure(),selectedMessages:[{...item,source:'LEGACY_IMPORT'}]})).status).toBe(422);
+      102 |  });
+      103 |  it('enforces historical intervals instead of granting old messages to a current participant',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:100:117)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › requires image consent/source access and rejects invalid format, oversized pixels/bytes and text-only sources
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      137 |  const uploadImage=(tag:string,bytes=picture,metadata:Record<string,unknown>={},auth=cookies.alice,contentType='image/png')=>request(base).post('/api/v1/crypto/reports/attachments').set('Cookie',auth).set('Origin',origin).field('metadata',JSON.stringify({consent:true,conversationId:'dm',messageId:ids[0],clientUploadId:tag,plaintextSize:bytes.length,...metadata})).attach('file',bytes,{filename:'private-report-name.png',contentType});
+      138 |  it('requires image consent/source access and rejects invalid format, oversized pixels/bytes and text-only sources',async()=>{
+    > 139 |   expect((await uploadImage('image-no-consent',picture,{consent:false})).status).toBe(422);
+          |                                                                                  ^
+      140 |   expect((await uploadImage('image-outsider',picture,{},cookies.outsider)).status).toBe(403);
+      141 |   expect((await uploadImage('image-other',picture,{messageId:ids[3]})).status).toBe(403);
+      142 |   expect((await uploadImage('image-text',picture,{messageId:ids[1]})).status).toBe(422);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:139:82)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › normalizes and encrypts disclosed images, binds source/owner and preserves retry identity without filenames/plaintext
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      148 |  });
+      149 |  it('normalizes and encrypts disclosed images, binds source/owner and preserves retry identity without filenames/plaintext',async()=>{
+    > 150 |   const sent=await uploadImage('image-owned');expect(sent.status).toBe(201);expect(Object.keys(sent.body).sort()).toEqual(['expiresAt','id']);imageReceipt=sent.body;
+          |                                                                   ^
+      151 |   const retry=await uploadImage('image-owned');expect(retry.status).toBe(201);expect(retry.body).toEqual(sent.body);
+      152 |   const changed=await sharp({create:{width:2,height:3,channels:3,background:'blue'}}).png().toBuffer();expect((await uploadImage('image-owned',changed)).status).toBe(409);
+      153 |   const row=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[sent.body.id])).rows[0],source=(await pool.query('SELECT * FROM chat_crypto_report_upload_sources WHERE upload_id=$1',[sent.body.id])).rows[0];
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:150:67)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › claims report images only for their reporter/selected source, atomically, and denies reuse
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      160 |  });
+      161 |  it('claims report images only for their reporter/selected source, atomically, and denies reuse',async()=>{
+    > 162 |   const item={messageId:ids[0],text:'selected image',source:'USER_DISCLOSED',reportAttachmentIds:[imageReceipt.id]},body={consent:true,conversationId:'dm',reason:'image disclosure',selectedMessages:[item]};
+          |                                                                                                                ^
+      163 |   expect((await post(body,cookies.bob)).status).toBe(403);expect((await post({...body,selectedMessages:[{...item,messageId:ids[1]}]})).status).toBe(403);
+      164 |   expect((await post({...body,selectedMessages:[{...item,reportAttachmentIds:[imageReceipt.id,imageReceipt.id]}]})).status).toBe(422);
+      165 |   const sent=await post(body);expect(sent.status).toBe(201);const evidence=(await pool.query('SELECT * FROM chat_crypto_report_evidence WHERE report_id=$1',[sent.body.id])).rows[0],draft=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[imageReceipt.id])).rows[0];expect(draft.report_evidence_id).toBe(evidence.id);expect(draft.consumed_at).not.toBeNull();expect(draft.message_id).toBeNull();
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:162:112)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › denies tampered or expired report drafts without creating evidence
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      169 |  });
+      170 |  it('denies tampered or expired report drafts without creating evidence',async()=>{
+    > 171 |   const sent=await uploadImage('image-tamper');expect(sent.status).toBe(201);const row=(await pool.query('SELECT * FROM chat_crypto_upload_drafts WHERE id=$1',[sent.body.id])).rows[0],target=path.join(objectRoot,row.object_key),original=fs.readFileSync(target),before=(await pool.query('SELECT count(*) FROM reports')).rows[0].count;
+          |                                                                    ^
+      172 |   const body={...disclosure(),selectedMessages:[{...disclosure().selectedMessages[0],reportAttachmentIds:[sent.body.id]}]};
+      173 |   fs.writeFileSync(target,Buffer.from('invalid ciphertext'));try{expect((await post(body)).status).toBe(403);}finally{fs.writeFileSync(target,original);}
+      174 |   await pool.query(`UPDATE chat_crypto_upload_drafts SET created_at=now()-interval '2 days',expires_at=now()-interval '1 day' WHERE id=$1`,[sent.body.id]);expect((await post(body)).status).toBe(403);expect((await pool.query('SELECT count(*) FROM reports')).rows[0].count).toBe(before);
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:171:68)
+
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › leaves no draft or object when report-image source persistence or native writer permission fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: 404
+
+      177 |   const files=fs.readdirSync(objectRoot).sort(),before=(await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count;
+      178 |   await pool.query(`CREATE FUNCTION image_source_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'fixture source fault'; END $$`);await pool.query('CREATE TRIGGER image_source_fault BEFORE INSERT ON chat_crypto_report_upload_sources FOR EACH ROW EXECUTE FUNCTION image_source_fault()');
+    > 179 |   try{expect((await uploadImage('image-db-fault')).status).toBe(500);expect((await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count).toBe(before);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);}finally{await pool.query('DROP TRIGGER image_source_fault ON chat_crypto_report_upload_sources');await pool.query('DROP FUNCTION image_source_fault()');}
+          |                                                            ^
+      180 |   writerToken=process.env.FG_REPORT_TEST_DENIED!;try{expect((await uploadImage('image-kms-fault')).status).toBe(503);}finally{writerToken=process.env.FG_REPORT_TEST_WRITER!;}
+      181 |   expect((await pool.query('SELECT count(*) FROM chat_crypto_upload_drafts')).rows[0].count).toBe(before);expect(fs.readdirSync(objectRoot).sort()).toEqual(files);
+      182 |  });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:179:60)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 7 passed, 13 total
+Snapshots:   0 total
+Time:        40.144 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"bd1d98cca0774ba8a57052260635e7a2","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,11 @@
+# T24-FIX2 — stored capacity producer review
+
+Current member discovery, snapshot and start/end DTO producers return playerCapacity from the play_sessions row. No fallback to room settings, public recruitment, roster length or call capacity. Only the two existing DTO-building expressions change; admission/settings/storage policy is preserved.
+
+Three genuine HTTP/PostgreSQL RED cases observed omitted capacity before implementation. Final29/29 real API/PG cases include all26 frozen lifecycle/discovery tests plus three new checks: private/CLOSED per-session capacities1/2/3 and membership ACL; room settings10/1 while existing session remains3 and admits a second player; start/end capacity with persistent room membership. Frozen tests/assertions unchanged. Native fixtures are isolated, migrated and cleaned; no production mocks.
+
+API/test typecheck, production TypeScript build, scoped lint/diff and unchanged strict T25 gate are required for closure. Scope includes the two service sources/generated files, inferred controller declarations affected by the shared return type, compiler metadata, new test and evidence. Prepare's copied scopeAddition summary lists the prior helper's derived set; the actual ledger writeAllowlist is authoritative and explicitly pins both service sets and controller declarations before writes. No controller runtime, database, contracts or frontend source changes. Historical PASS and read-only files must match before closure.
+
+Evidence: before.json, write-tests/red/green commands, API/test types/build/lint/diff records and closure.json. T25 resumes after this PASS; frontend capacity handling remains unimplemented here.
+
+Closing correction: incremental TypeScript output reordered equivalent literal union members in four unrelated declarations. Independent nonincremental compilation reproduces all four exact frozen predecessor SHA256 digests. Restore only these independently generated original bytes after checking unchanged source and exact hashes; do not adopt changed bytes, edit union text manually or rewrite historic hashes. The unexpected generated writes and failed first comparison are retained as process deviations in declaration-restoration.json and command logs. Future API builds should avoid incremental emit when freezing deterministic declaration artifacts.

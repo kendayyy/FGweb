@@ -1,0 +1,179 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:25792) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/room-play-sessions.integration.spec.ts (66.144 s)
+  ● T24-FIX1 real member-only room session discovery › current ordinary member discovers private sessions despite closed recruitment, without roster or manager queue fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      57 |  }
+      58 |  it('current ordinary member discovers private sessions despite closed recruitment, without roster or manager queue fields',async()=>{
+    > 59 |   const t=await room();await history(t.roomId,3);const result=await list(t.roomId);expect(result.status).toBe(200);
+         |                                                                                                          ^
+      60 |   const page=pageSchema.parse(result.body);expect(page.items).toHaveLength(4);expect(new Set(page.items.map(p=>p.state))).toEqual(new Set(['SCHEDULED','ACTIVE','ENDED']));
+      61 |   expect(page.items[0].id).toBe(t.play);for(const item of result.body.items)expect(Object.keys(item).sort()).toEqual(Object.keys(PlaySessionSchema.parse(item)).sort());
+      62 |   expect((await request(base).get('/api/v1/recruitments')).body.items).toHaveLength(0);
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:59:106)
+
+  ● T24-FIX1 real member-only room session discovery › default20/max50 and newest createdAt/id pagination retain all microsecond ties without duplicates
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      63 |  });
+      64 |  it('default20/max50 and newest createdAt/id pagination retain all microsecond ties without duplicates',async()=>{
+    > 65 |   const t=await room();await history(t.roomId,52);const first=await list(t.roomId);expect(first.status).toBe(200);expect(first.body.items).toHaveLength(20);expect(first.body.hasMore).toBe(true);
+         |                                                                                                         ^
+      66 |   expect((await list(t.roomId,'member','?limit=50')).body.items).toHaveLength(50);
+      67 |   const ids:string[]=[];let cursor:string|undefined;
+      68 |   do{const r=await list(t.roomId,'member',`?limit=7${cursor?`&cursor=${encodeURIComponent(cursor)}`:''}`);expect(r.status).toBe(200);const page=pageSchema.parse(r.body);ids.push(...page.items.map(p=>p.id));cursor=page.hasMore?page.nextCursor??undefined:undefined;if(page.hasMore)expect(cursor).toBeTruthy();else expect(page.nextCursor??null).toBeNull();}while(cursor);
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:65:105)
+
+  ● T24-FIX1 real member-only room session discovery › rejects malformed/unknown/duplicate query values and cross-room cursors with422
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      70 |  });
+      71 |  it('rejects malformed/unknown/duplicate query values and cross-room cursors with422',async()=>{
+    > 72 |   const a=await room(),b=await room();await history(a.roomId,2);const first=await list(a.roomId,'member','?limit=1');expect(first.status).toBe(200);
+         |                                                                                                                                           ^
+      73 |   for(const query of ['?limit=0','?limit=51','?limit=1.5','?limit=NaN','?limit=','?limit=1&limit=2','?userId=owner','?roomId=other','?state=PUBLIC','?cursor=','?cursor=@@@',`?cursor=${Buffer.from(JSON.stringify({id:'x',createdAt:'bad',roomId:a.roomId})).toString('base64url')}`])expect((await list(a.roomId,'member',query)).status).toBe(422);
+      74 |   expect((await list(b.roomId,'member',`?cursor=${encodeURIComponent(first.body.nextCursor)}`)).status).toBe(422);
+      75 |  });
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:72:139)
+
+  ● T24-FIX1 real member-only room session discovery › never grants guest/nonmember access even when the room becomesPUBLIC
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      75 |  });
+      76 |  it('never grants guest/nonmember access even when the room becomesPUBLIC',async()=>{
+    > 77 |   const t=await room();for(const visibility of ['PRIVATE','PUBLIC']){await pool.query('UPDATE rooms SET visibility=$2 WHERE id=$1',[t.roomId,visibility]);expect((await list(t.roomId,'outsider')).status).toBe(403);expect((await request(base).get(`/api/v1/rooms/${t.roomId}/play-sessions`)).status).toBe(401);}
+         |                                                                                                                                                                                                            ^
+      78 |  });
+      79 |  it('removal and missing onboarding immediately revoke discovery',async()=>{
+      80 |   const t=await room();expect((await list(t.roomId)).status).toBe(200);await pool.query("DELETE FROM game_interests WHERE user_id='member'");expect((await list(t.roomId)).status).toBe(403);
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:77:204)
+
+  ● T24-FIX1 real member-only room session discovery › removal and missing onboarding immediately revoke discovery
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      78 |  });
+      79 |  it('removal and missing onboarding immediately revoke discovery',async()=>{
+    > 80 |   const t=await room();expect((await list(t.roomId)).status).toBe(200);await pool.query("DELETE FROM game_interests WHERE user_id='member'");expect((await list(t.roomId)).status).toBe(403);
+         |                                                              ^
+      81 |   await pool.query('INSERT INTO game_interests(id,user_id,game_id) VALUES($1,$1,$2)',['member',game.id]);await pool.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);expect((await list(t.roomId)).status).toBe(403);
+      82 |  });
+      83 |  it('ban, expired session and missing room return real403/401/404',async()=>{
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:80:62)
+
+  ● T24-FIX1 real member-only room session discovery › ban, expired session and missing room return real403/401/404
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      83 |  it('ban, expired session and missing room return real403/401/404',async()=>{
+      84 |   const t=await room();expect((await list('missing-room')).status).toBe(404);
+    > 85 |   await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('ban','owner','member','BAN')");expect((await list(t.roomId)).status).toBe(403);await pool.query('DELETE FROM admin_actions');
+         |                                                                                                                                                               ^
+      86 |   await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");expect((await list(t.roomId)).status).toBe(401);
+      87 |  });
+      88 |  it('returns empty history without recreating a session or altering slots, requests or outbox',async()=>{
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:85:159)
+
+  ● T24-FIX1 real member-only room session discovery › returns empty history without recreating a session or altering slots, requests or outbox
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      88 |  it('returns empty history without recreating a session or altering slots, requests or outbox',async()=>{
+      89 |   const t=await room();await pool.query('DELETE FROM recruitments WHERE room_id=$1',[t.roomId]);await pool.query('DELETE FROM team_members WHERE play_session_id=$1',[t.play]);await pool.query('DELETE FROM play_sessions WHERE room_id=$1',[t.roomId]);
+    > 90 |   const result=await list(t.roomId);expect(result.status).toBe(200);expect(pageSchema.parse(result.body)).toEqual({items:[],hasMore:false});
+         |                                                           ^
+      91 |   for(const table of ['play_sessions','active_play_slots','join_requests','notifications','notification_outbox'])expect((await pool.query(`SELECT count(*)::integer AS count FROM ${table}`)).rows[0].count).toBe(0);
+      92 |  });
+      93 |  it.each(['session','membership','ban'])('rechecks %s after waiting on room mutation instead of trusting the HTTP guard',async change=>{
+
+      at Object.<anonymous> (test/room-play-sessions.integration.spec.ts:90:59)
+
+  ● T24-FIX1 real member-only room session discovery › rechecks session after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+  ● T24-FIX1 real member-only room session discovery › rechecks membership after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+  ● T24-FIX1 real member-only room session discovery › rechecks ban after waiting on room mutation instead of trusting the HTTP guard
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       97 |    const deadline=Date.now()+8000;let waiting=false;
+       98 |    while(Date.now()<deadline){if((await pool.query("SELECT pid FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id,visibility,conversation_id FROM rooms%' AND query LIKE '%FOR SHARE%'")).rowCount){waiting=true;break;}await new Promise(resolve=>setTimeout(resolve,25));}
+    >  99 |    expect(waiting).toBe(true);
+          |                    ^
+      100 |    if(change==='session')await pool.query("UPDATE session SET expires_at=clock_timestamp()-interval '1 second' WHERE user_id='member'");
+      101 |    else if(change==='membership')await blocker.query("DELETE FROM room_members WHERE room_id=$1 AND user_id='member'",[t.roomId]);
+      102 |    else await blocker.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action) VALUES('late-ban','owner','member','BAN')");
+
+      at test/room-play-sessions.integration.spec.ts:99:20
+
+Test Suites: 1 failed, 1 total
+Tests:       10 failed, 10 total
+Snapshots:   0 total
+Time:        68.271 s
+Ran all test suites matching apps/api/test/room-play-sessions.integration.spec.ts.

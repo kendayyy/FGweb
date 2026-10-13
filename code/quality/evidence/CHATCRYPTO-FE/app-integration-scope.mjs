@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const dir = 'quality/evidence/CHATCRYPTO-FE', path = 'apps/web/src/App.tsx';
+const digest = value => createHash('sha256').update(value).digest('hex');
+const ledger = JSON.parse(fs.readFileSync('quality/tasks.json', 'utf8')), task = ledger.tasks.find(row => row.id === 'CHATCRYPTO-FE');
+assert.equal(task.status, 'IN_PROGRESS'); assert(task.writeAllowlist.includes(path));
+const before = { recordedAt: new Date().toISOString(), path, sha256: digest(fs.readFileSync(path)), rows: Object.fromEntries(ledger.tasks.filter(row => row.id !== task.id).map(row => [row.id, digest(JSON.stringify(row))])) };
+fs.writeFileSync(`${dir}/app-integration-before.json`, JSON.stringify(before, null, 2) + '\n', { flag: 'wx' });
+fs.copyFileSync(path, `${dir}/app-integration-original.tsx`, fs.constants.COPYFILE_EXCL);
+fs.writeFileSync(`${dir}/app-integration-scope-review.md`, '# FE application integration review\n\nExisting approved App.tsx scope: wrap the authenticated application in CryptoDeviceProvider, add protected /crypto device controls and authenticated navigation entry. Preserve existing routes/auth/theme/sidebar/session/call behavior. Ready requires native encrypted store and actual signed API registration with matching identity; no server trust flag or service-ready mock. Logout/account changes immediately clear published session and abort requests before native close. Headed actual browser/isolated API DB proof remains required. Capture original source before edit; ownership transition must pass stock gate before closure.\n', { flag: 'wx' });
+task.approvedScopeAmendments.push({ source: `${dir}/app-integration-scope-review.md`, reason: 'Explicit review of approved App provider/protected route integration, preserve prior source evidence', paths: [path] });
+task.evidencePaths.push(`${dir}/app-integration-before.json`, `${dir}/app-integration-original.tsx`, `${dir}/app-integration-scope-review.md`);
+fs.writeFileSync('quality/tasks.json', JSON.stringify(ledger, null, 2) + '\n'); console.log(JSON.stringify(before));

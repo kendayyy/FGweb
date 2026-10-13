@@ -1,0 +1,23 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:32576) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (45.606 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    ReferenceError: second is not defined
+
+      152 |   const quiet=async()=>{await bus.publish(busChannel,'N:'+offlineNotice.id);await new Promise(resolve=>setTimeout(resolve,200));expect(items).toHaveLength(1);};
+      153 |   const ban=randomUUID();try{await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'alice','outsider','BAN','owned notice ban')",[ban]);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).status).toBe(403);await quiet();}finally{await pool.query('DELETE FROM admin_actions WHERE id=$1',[ban]);}
+    > 154 |   const expires=(await pool.query('SELECT expires_at FROM "session" WHERE id=$1',['outsider-session'])).rows[0].expires_at;try{await pool.query('UPDATE "session" SET expires_at=clock_timestamp()-interval '1 second' WHERE id=$1',['outsider-session']);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).status).toBe(401);await quiet();}finally{await pool.query('UPDATE "session" SET expires_at=$2 WHERE id=$1',['outsider-session',expires]);}
+          |                                                                                                                                                                                                                ^
+      155 |   const preference=randomUUID();try{await pool.query("INSERT INTO notification_preferences(id,user_id,notification_type,in_app,push,email) VALUES($1,'outsider','DM',false,false,false)",[preference]);expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).body.items).toEqual([]);await quiet();}finally{await pool.query('DELETE FROM notification_preferences WHERE id=$1',[preference]);}
+      156 |   const intervals=(await pool.query("SELECT id,start_revision FROM chat_crypto_membership_intervals WHERE conversation_id='notice-dm' AND user_id='outsider'")).rows;try{await pool.query("UPDATE chat_crypto_membership_intervals SET start_revision=2 WHERE conversation_id='notice-dm' AND user_id='outsider'");expect((await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!)).body.items).toEqual([]);await quiet();}finally{for(const row of intervals)await pool.query('UPDATE chat_crypto_membership_intervals SET start_revision=$2 WHERE id=$1',[row.id,row.start_revision]);}
+      157 |   const originalData=(await pool.query('SELECT data FROM notifications WHERE id=$1',[offlineNotice.id])).rows[0].data;try{await pool.query('UPDATE notifications SET data=$2,title=$3,body=$3 WHERE id=$1',[offlineNotice.id,'{private-invalid','never-trust-private-row-preview']);const recovered=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(recovered.status).toBe(200);expect(recovered.body.items).toHaveLength(1);expect(JSON.stringify(recovered.body)).not.toContain('never-trust-private-row-preview');await quiet();}finally{await pool.query('UPDATE notifications SET data=$2 WHERE id=$1',[offlineNotice.id,originalData]);}
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:154:208)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 11 passed, 12 total
+Snapshots:   0 total
+Time:        46.102 s, estimated 50 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

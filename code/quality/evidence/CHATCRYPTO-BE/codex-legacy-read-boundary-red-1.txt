@@ -1,0 +1,26 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:28308) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (30.586 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › initializes the read-only source boundary without creating a missing legacy directory
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      50 |  afterAll(async()=>{for(const machine of machines)machine.close();try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(root)){expect(fs.realpathSync(root)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),owned));fs.rmSync(root,{recursive:true});}}finally{await pool?.end();process.env=saved;}}});
+      51 |  it('initializes the read-only source boundary without creating a missing legacy directory',async()=>{
+    > 52 |   const original=process.env.FG_UPLOADS_DIR,missing=path.join(root,'not-created'),service=new CryptoLegacyService(app.get(ChatService));process.env.FG_UPLOADS_DIR=missing;try{await service.onModuleInit();expect(fs.existsSync(missing)).toBe(false);}finally{await service.onModuleDestroy();process.env.FG_UPLOADS_DIR=original;}
+         |                                                                                                                                                                                                                                            ^
+      53 |  });
+      54 |  it('requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed',async()=>{
+      55 |   expect((await request(base).get('/api/v1/crypto/conversations/legacy/legacy/batch').query({deviceId:'A',cohortId:'verified'})).status).toBe(401);expect((await batch('outsider')).status).toBe(403);expect((await batch('leaver')).status).toBe(403);expect((await batch('bob',{deviceId:'A'})).status).toBe(403);expect((await batch('alice',{cohortId:'missing'})).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:52:236)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 5 passed, 6 total
+Snapshots:   0 total
+Time:        31.08 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

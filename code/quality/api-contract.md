@@ -202,10 +202,11 @@ Below is the complete listing of API endpoints bound in `ApiEndpointRegistry`:
 - Producer authorization/cursor enforcement is verified by T24-FIX1, while T25 imports shared response/query contracts. This contract checkpoint adds no database migration, runtime producer, public card field or product feature.
 
 ### 5.8 Voice / Screen Share Calls
-- **POST `/api/v1/rooms/:roomId/calls`** [Auth: RoomMember] -> Response: `CallGroupSchema`
+- **POST `/api/v1/rooms/:roomId/calls`** [Auth: RoomMember] -> Request: `CallActionRequestSchema` | Response: `CallGroupSchema`
 - **GET `/api/v1/rooms/:roomId/calls`** [Auth: RoomMember] -> Response: `z.array(CallGroupSchema)`
-- **POST `/api/v1/calls/:id/join`** [Auth: RoomMember] -> Response: `CallJoinSchema`
-- **POST `/api/v1/calls/:id/leave`** [Auth: Authenticated] -> Response: `{ success: boolean }`
+- **POST `/api/v1/calls/:id/join`** [Auth: RoomMember] -> Request: `CallActionRequestSchema` | Response: `CallJoinSchema`
+- **POST `/api/v1/calls/:id/leave`** [Auth: CallParticipant] -> Request: `CallActionRequestSchema` | Response: `{ success: boolean }`
+- T03-FIX14: all three actions send explicit `{}` and reject unknown fields (422). Actor/session, room membership, call capacity and SFU identity are resolved server-side; viewers use the same admission and count toward 10. Request contracts grant no permission. T26 owns live ACL, opaque server leases and self-hosted gateway `sfuUrl`; existing response DTOs are unchanged. No credential or original session identifier is returned.
 - **GET `/api/v1/calls/:id/participants`** [Auth: Authenticated] -> Request: `ListCallParticipantsQuerySchema` | Response: `z.array(CallParticipantSchema)`
 - **POST `/api/v1/calls/:id/external-live`** [Auth: Authenticated] -> Request: `SetExternalLiveRequestSchema` | Response: `ExternalLiveSchema`
 - **DELETE `/api/v1/calls/:id/external-live`** [Auth: Authenticated] -> Response: `{ success: boolean }`
@@ -266,3 +267,192 @@ GET /api/v1/play-sessions/:id requires current room membership and returns TeamS
 The strict reserved alias request cannot select userId/email/role. Server resolves only the single fixed ADMIN_USER_IDS identity and delegates to the installed native email/password producer for credential, verification, session, ban and cookie behavior. Empty/multiple IDs fail closed; ADMIN_DISCORD_IDS grants are removed. Admin authorization also checks the stored kingame identity, email verification, credential ownership and current ban. Public signup/OAuth, native name update and profile/onboarding cannot claim the reserved name. No admin role from display names, email coincidence, helper grants or client payloads.
 
 Server-only provisioning is serialized and binds a single immutable owner via a protected fg-admin-provision:v1 marker (identity digest only, not a login token). Collision in existing user/email/reserved profile causes refusal; no linking/takeover/default password. First prepare stores a pending unverified salted credential; only native real email verification permits activation. Retry preserves the stored password and userId; a different binding refuses. Config/input email/password remain local ignored files and are absent from public DTOs/logs/repository. Script status/activate never create or repair an identity; activation requires the fixed owner marker and verification. Admin/support pages remain their scheduled later checkpoints.
+
+## T03-FIX13 — Stored play-session capacity
+
+PlaySessionDTO carries optional playerCapacity, validated as an integer1–10. Omission preserves legacy transport compatibility without a fabricated default. Current T24-FIX2 producers must always return the session's stored player_capacity in snapshots, member discovery and mutation responses. Room settings are independently mutable and cannot substitute this value; private/CLOSED sessions do not require public recruitment access. A roster consumer receiving an omitted capacity must show an incomplete-data error rather than infer a room limit. No admission, room-settings, database or invitation policy changes.
+
+## CHAT-CRYPTO-01 — DATA protocol contract
+
+Shared Zod source: packages/contracts/src/chat-crypto.ts. ADR and migration/cutoff
+plan: quality/crypto/adr-001-chat-encryption.md. Endpoints are locked for subsequent
+CHATCRYPTO-BE/FE implementation; registry presence is not an implemented API claim.
+
+| Method | Route | Authorization | Format |
+| --- | --- | --- | --- |
+| POST | `/api/v1/crypto/devices` | Authenticated | json → json |
+| POST | `/api/v1/crypto/devices/:deviceId/one-time-keys` | Authenticated | json → json |
+| GET | `/api/v1/crypto/devices` | Authenticated | json → json |
+| DELETE | `/api/v1/crypto/devices/:deviceId` | Authenticated | json → json |
+| PUT | `/api/v1/crypto/identity` | Authenticated | json → json |
+| POST | `/api/v1/crypto/signatures` | Authenticated | json → json |
+| GET | `/api/v1/crypto/conversations/:id/state` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/keys/query` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/keys/claim` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/to-device` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/verification` | ConversationMember | json → json |
+| GET | `/api/v1/crypto/sync` | Authenticated | json → json |
+| POST | `/api/v1/crypto/sync/ack` | Authenticated | json → json |
+| POST | `/api/v1/crypto/conversations/:id/messages` | ConversationMember | json → json |
+| GET | `/api/v1/crypto/conversations/:id/messages` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/conversations/:id/attachments` | ConversationMember | multipart → json |
+| GET | `/api/v1/crypto/conversations/:id/attachments/:attachmentId` | ConversationMember | json → binary |
+| PUT | `/api/v1/crypto/recovery` | Authenticated | json → json |
+| GET | `/api/v1/crypto/recovery` | Authenticated | json → json |
+| DELETE | `/api/v1/crypto/recovery` | Authenticated | json → json |
+| GET | `/api/v1/crypto/conversations/:id/legacy/batch` | ConversationMember | json → json |
+| GET | `/api/v1/crypto/conversations/:id/legacy/attachments/:attachmentId` | ConversationMember | json → binary |
+| POST | `/api/v1/crypto/conversations/:id/legacy/commit` | ConversationMember | json → json |
+| POST | `/api/v1/crypto/reports` | Authenticated | json → json |
+| POST | `/api/v1/crypto/reports/attachments` | Authenticated | multipart → json |
+
+Current membership/revision, device ownership/revocation, verified historical cohort
+and single-admin consented-report ACL are additional server checks. Auth labels
+alone do not grant these rights. Actor comes from the authenticated session.
+Native SDK device/signature additions must match stored canonical public payloads;
+no server verified flag/private device or recovery key. Prekey claims, session
+bindings, revision updates and draft consumption require atomic transactions.
+
+Private uploads: ciphertext only, 5 MiB actual byte quota, digest/ownership/revision;
+attachment JWK/IV/private filename/MIME/dimensions stay inside decoded content.
+Decoded content: 2,000-character body, existing 10,000px/20MP image policy, bounded
+90 KiB UTF8 aggregate. Megolm ciphertext ≤131,072 base64 characters; crypto message
+HTTP/socket envelopes need a separate bounded 192 KiB budget in BE. Keep existing
+plaintext route limits, no broad unbounded socket/JSON parser. Olm batches ≤256 KiB,
+public verification events ≤8 KiB, recovery ASCII export ≤16 MiB through its own
+authenticated route. Validate decoded content before rendering; reject identity,
+conversation, device, clientMessageId or membership revision mismatches.
+
+Encrypted sync and public verification sync use independent cursors. Acknowledgment
+IDs are recipient/device-owned, deduplicated and do not bypass current ACL. Legacy
+plaintext is available exclusively to a verified migration cohort through the
+legacy routes; regular history/object/cache/socket routes have no plaintext
+fallback. Unknown historical access blocks reconciliation. Normal consumers do
+not import the legacy plaintext DTO. Report text/images cross the E2EE boundary
+only after selected evidence preview and explicit consent; encrypt under fg-report.
+Recovery restores possessed room keys, not cloned device identity or server trust.
+
+Producer/consumer ownership: API chat/realtime/social/rooms/uploads/moderation/
+notifications, worker notifications; web direct-messages/lobby/rooms and shared
+chat components/crypto client. The upcoming BE/FE checkpoints cover these paths.
+No change to media admission, voice/live target, support/feed or approved themes.
+
+CHATCRYPTO-BE additive realtime prerequisite: `crypto.subscribe` and
+`crypto.unsubscribe` use strict `{conversationId, deviceId}`. Successful ACK binds
+the conversation, device and current membershipRevision; denied ACK uses the
+existing strict ApiErrorResponse. `crypto.message.created` carries only the
+EncryptedMessageSchema; legacy `message.created` retains its MessageSchema.
+Every delivery must recheck session/ban/membership/device and history interval;
+subscription alone is not authorization. REST history/sync remains reconnect
+recovery, with no private keys or plaintext in Redis/outbox/push.
+
+CHATCRYPTO-BE additive report-reader prerequisite: POST
+`/api/v1/crypto/reports/:reportId/read` accepts strict `{}` for the sole server
+admin and returns DisclosedReportSchema only after successful metadata audit.
+GET `/api/v1/crypto/reports/:reportId/attachments/:attachmentId` returns binary
+WebP only for IDs selected inside the authenticated report payload. Independent
+fg-report reader custody, fresh session/ban/grant/expiry rechecks and shared
+evidence locks are mandatory. Responses use no-store; unavailable custody/audit
+never returns plaintext. Disclosure authenticity remains USER_SUPPLIED_UNVERIFIED.
+These routes give no private conversation/key/history access.
+
+CHATCRYPTO-BE Lobby storage prerequisite: existing public message/upload/image
+routes retain their DTOs. Activated Lobby state must be RECONCILED and use
+separate fg-lobby native AEAD custody; absent/denied custody fails503 without
+plaintext fallback. LobbyStoredMessageSchema is an internal authenticated
+storage payload bound to conversation/message IDs, never a client crypto request.
+Normalized image metadata uses fixed image.webp/image/webp and source size≤5MiB;
+original filenames are not persisted. Drafts are uploader-only, consumed images
+public through the existing no-store image route and authenticated parent selection.
+Ciphertext representation≤8MiB does not change source5MiB/20MP restrictions.
+Conflicting clientMessageId retry returns409. Lobby storage encryption is not E2EE.
+
+CHATCRYPTO-BE protocol wakeup prerequisite: `crypto.sync.available` carries strict
+SocketCryptoSyncAvailableSchema `{conversationId,deviceId,membershipRevision}`.
+Only an authorized current conversation/device subscription receives it. No
+ciphertext, keys, event ID, recipient identity or verification payload is sent.
+It signals a REST sync using the existing independent encrypted/verification
+cursors and recipient-owned ACK. Durable metadata-only outbox references exactly
+one authoritative queue event; duplicate/missed wakeups do not replace queue
+state, grant access or claim key delivery. Recheck session/ban/member/device/epoch
+and queue expiry/ACK on actual emission; Redis routing stays server internal.
+
+CHATCRYPTO-BE protocol wakeups: Redis routing contains only strict kind=PROTOCOL_WAKE, queue=ENCRYPTED|VERIFICATION and opaque eventId. The public crypto.sync.available hint is conversationId/deviceId/membershipRevision only. Dispatch uses at most25 unlocked jobs/transaction; bus delivery has at most64 pending operations and512-character messages. Hints do not ACK queues; clients recover missed hints with existing independent REST sync cursors on reconnect and periodic catch-up while active. Actual PostgreSQL source expiry, ACK and current session/device/member/epoch checks apply before emission. No key/ciphertext/verification body in hints. No production activation claim.
+
+CHATCRYPTO-BE verified legacy source reads: legacy/batch now requires a strict sourceManifest binding original IDs/client ID/type/text/reply/mentions, exact UTC source timestamps and sorted original image metadata with physical plaintext SHA256. The item fields must agree with the manifest. Cohort and per-message PREPARED mapping must already exist; current membership alone or caller claims do not establish old entitlement. KNOWN private unreconciled history, active owned device registered before cohort verification, current session/member/ban and post-I/O checks are mandatory. after is an original mapped message ID in the same cohort/conversation; responses are no-store/nosniff. Images are original bounded WebP bytes without normalization. These reads do not reconcile or delete sources.
+
+CHATCRYPTO-BE candidate prerequisites: LegacyCandidateSchema represents PREPARED ciphertext only, binding source/cohort/revision/hash and actual importer identity. Optional commit attachmentMappings bind original attachment ID to a ciphertext draft and source/ciphertext digests, without file secrets. LegacyRoundtripAttestationSchema is strict Matrix signed JSON with registered recipient and complete candidate/image bindings; a native signature authenticates a client claim, not server decryption. LegacyReconcileRequestSchema contains cohort/revision/device and expected source count, with no force/verified/delete override. Imported message DTOs require separate importProvenance; LIVE messages reject it. LegacyImportedContentSchema is client-only, inside Megolm, retaining exact source manifest and native v2 image secrets. Candidate preparation/receipt/reconcile routes remain unimplemented at this prerequisite checkpoint.
+
+CHATCRYPTO-BE legacy text preparation now implements POST /api/v1/crypto/conversations/:id/legacy/commit, returning strict LegacyCandidateSchema (PREPARED), not generic success. Optional candidateId is chosen before client archive encryption; omission retains old six-field request compatibility by server allocation, with no verified-archive claim. The server checks source/cohort/current revision, pre-verification owned device and optional native sender metadata, canonical public encodings, all original recipients still eligible, session/cohort binding and immutable retry identity. Digest/source/time remain intact and no RECONCILED transition occurs. Image preparation remains explicitly unavailable until native file/retention proofs; receipt/reconcile/upload and archive restore remain pending.
+
+CHATCRYPTO-BE historical protocol amendment (current implementation; IN_PROGRESS): keys/query, keys/claim, verification and to-device accept an optional strict cohortId. It is mandatory for KNOWN unreconciled private history and must name a verified original cohort with mapped PREPARED sources; RECONCILED LIVE requests omit it. Keys/devices are filtered or rejected at the original verification cutoff. Authoritative encrypted/verification queues persist the context and retries compare it immutably. Sync returns cohortId only for historical events and rechecks current epoch/member/session/ban, sender/recipient devices and expiry. ACK validates every addressed authoritative row before and after updating, preserves eligible repeat timestamps, and rolls back mixed requests. Socket crypto subscribe/unsubscribe accept the same context, bind it to the subscription, and reauthorize delivery; CRYPTO_SYNC_AVAILABLE and Redis/outbox signals remain metadata-only. Native text archive roundtrip does not assert image/all-source migration or production readiness.
+
+CHATCRYPTO-BE recipient-claim amendment (IN_PROGRESS): GET /api/v1/crypto/conversations/:id/legacy/candidates/:candidateId accepts strict deviceId/cohortId and returns the existing PREPARED ciphertext/public provenance DTO with no-store after revalidating current epoch, original mapped source, canonical hashes, importer device/session and recipient availability. POST /api/v1/crypto/conversations/:id/legacy/attest accepts LegacyRoundtripAttestationSchema, authenticates the session owner and required actual device Ed25519 signature against server-derived bindings, bounds JSONB16KiB, persists an immutable public claim and preserves exact retry time using canonical signature maps. All source/recipient authorization is rechecked after writes. Native decryption is separate evidence; no decrypted archive/private key, images, reconciliation or cleanup is exposed by these endpoints.
+
+
+### CHATCRYPTO-BE historical image candidate preparation (current IN_PROGRESS subset)
+
+`POST /api/v1/crypto/conversations/:id/legacy/uploads` uses one metadata JSON multipart field and one opaque file, max5MiB. LegacyEncryptedUploadRequestSchema requires the original cohort, current epoch, clientUploadId and registered preverification device. Only ciphertext size/SHA and opaque IDs enter storage; immutable retry and post-write authorization apply. Ordinary LIVE attachment reads/claims refuse nonNULL historical cohort drafts.
+
+CommitLegacyCiphertextSchema attachmentMappings now requires the complete ordered original attachment set, physical original digest and owned historical encrypted drafts with exact context/hash/size. New expired drafts are denied. Prepared mappings retain their ciphertext after expiry and cannot change on retry. Candidate GET returns original attachmentIds. `GET /api/v1/crypto/conversations/:id/legacy/candidates/:candidateId/attachments/:attachmentId` requires strict device/cohort query and returns verified ciphertext as application/octet-stream/no-store/nosniff; source, epoch, importer/session and all original recipient availability are rechecked. Receipt attachmentDigests are derived from actual ordered mappings. Descriptor secrets remain exclusively in native client Megolm archives. Native v2 key_ops requires both encrypt/decrypt as distinct operations without a positional order. No source reconciliation/cutover/production claim is made.
+
+Historical cutoff prerequisite (internal only): CryptoLegacyService.reviewReconciliation validates existing LegacyReconcileRequestSchema without exposing a reconcile REST producer or mutating source/state. It requires whole-conversation LEGACY_PENDING counts including unmapped rows, current native candidates/physical source/objects, and matching signed claims from every active preverification original device. Count/claim/object/context mismatch fails; a second source/object pass precedes final checks. Complete source conversion, staged maintenance/cleanup/encrypted restore and mixed-cohort cutoff remain unimplemented. See legacy-cutoff-readiness-review.md for native proof and resource/atomicity limits.
+
+Internal readiness multi-cohort amendment: derive cohorts from each authoritative source mapping, authorize reviewing actor/device against each original cohort before reading that source, and derive/verify required native claims separately per cohort. The request cohort cannot replace source entitlement. Complete multi-cohort snapshots add sorted cohortIds; single-cohort shape remains unchanged. Native Alice/Bob versus Alice/C contexts prove distinct room-key/session/claims and deny cross-history plus actors outside any original cohort; Alice-only second claim does not suffice. This supersedes the prior single-cohort rejection limitation for the tested internal gate. REST cutoff/maintenance/source removal/restore remain open.
+
+### CHATCRYPTO-BE internal durable legacy staging subset —09/10/2026
+
+Internal stageReconciliation uses the existing strict LegacyReconcileRequest in the verified original-cohort transaction; no new REST endpoint or successful cutoff response. Public operation/manifest/source-image metadata are durable under0020, with exact candidate/cohort/epoch and original-image/draft references. Native SDK/PG subset verifies rollback/retry/service-restart/actor denial while every source remains LEGACY_PENDING. Stage is not conversion, server decryption proof or production activation. Full lifecycle and imported-history/restore remain open.
+
+
+### CHATCRYPTO-BE imported-history consumers —09/10/2026 (subset)
+
+Existing private messages/attachment GET paths support reconciled imported ciphertext with exact original IDs/time/client ID, strict importProvenance and original per-source cohort authorization. LIVE intervals cannot grant old history; a revoked importer public tombstone remains readable by eligible originals. Candidate/source/stage/session-envelope/image bindings and completed cleanup markers must match or fail closed. Actual native clone fixture verifies mixed-cohort REST reads, owner-bound microsecond pagination, staged metadata/object tampering, current bans/post-I/O bans and buffer clearing, MIGRATING denial and realtime null. Native recovery independently restores client-side encrypted text/image archives with wrong-code/tamper/expired-session rejection. These are prerequisites; the cutoff producer, actual source cleanup, production activation and authenticated database/object backup restore remain open. See evidence/CHATCRYPTO-BE/legacy-import-read-review.md and legacy-archive-recovery-review.md.
+
+
+### CHATCRYPTO-BE atomic staged DB conversion —09/10/2026 (internal subset)
+
+Internal convertStagedReconciliation reuses complete native all-source receipt/candidate/source/object/stage gate, commits only exact ciphertext/original IDs/public mappings and marks DB_CONVERTED with conversation MIGRATING at old epoch. It never deletes source files, exposes plaintext fallback, publishes the nextLIVE epoch or adds a REST cutoff endpoint. Converted retry/restart revalidates retained public bindings/opaque ciphertext/native claims without server key recovery. Native PG source/attachment faults and a recipient BAN introduced during writes prove full rollback including consumed draft/TTL; concurrent retries converge. Existing candidate-bound expired images use actual atomic claim clock with minimal expiry extension solely to preserve the unchanged lifecycle constraint, never a LIVE expiry bypass. Reader follow-ups prove post-I/O changed-source409/zeroed buffers and exact microsecond UTC-convention timestamps/cursors under nonUTC connection timezone. Physical cleanup/resume/cutoff, imported report selection, authenticated DB/object backup restore, production graph/custody/performance/security remain open. Evidence: evidence/CHATCRYPTO-BE/legacy-conversion-review.md and legacy-import-read-review.md.
+
+### CHATCRYPTO-BE internal cleanup and imported reports — 2026-10-09
+Native legacy-cleanup-boundary-1 19/19: source-directory pin, exact owned unlink, PG marker/finalization failures, ENOENT/restart, next LIVE epoch/send and completed retry. Native legacy-report-boundary-1 38/38: original-cohort explicit USER_DISCLOSED selected text/image on existing report routes, exact completed imported binding, late KMS ban rollback, sole-admin selected evidence reads/audits; no full private-history access. Cleanup remains internal/default disabled and no new REST contract/schema/main migration/production activation. See code/quality/evidence/CHATCRYPTO-BE/legacy-cleanup-review.md and legacy-report-review.md. Task IN_PROGRESS; operational backup/restore/custody/wiring/notifications/moderation/security/performance remain open.
+
+
+CHATCRYPTO-BE native backup/restore + LIVE object authority (09/10/2026): UUID-only encrypted DB/object archive under separate nonexportable fg-backup key, operation/tamper/role separation, rotation/rewrap and actual AppModule/SDK restore preserve ACL/history/public Lobby/selected report. Fresh client without keys remains MissingRoomKey. LIVE attachment rechecks actor/session clock/current membership/state/draft binding after filesystem I/O; real late BAN/interval/digest changes return403 with rejected buffer zero. Evidence backup-restore-review.md/live-object-authority-review.md, boundary2 five native cases; no production/off-machine, general backup CLI or full BE PASS claim.
+
+
+CHATCRYPTO-BE private DM notification subset (09/10/2026): existing GET /api/v1/notifications and notification.created DTO remain unchanged. Crypto namespace emits fixed generic DM text and ID-only data; inbox is authenticated/no-store, bounded by existing PaginationQuery limit1–50 with opaque notice-ID cursor. Owner/current source visibility/session clock rechecked before response/emission; malformed/changed metadata and revoked access filtered. Only private crypto-dm IN_APP jobs handled here; other notification endpoints/types remain owned by their later tasks. This records scoped backend behavior, not production/PWA or general notification completion.
+
+Client-selected private mentions codec prerequisite (09/10/2026): SendEncryptedMessageSchema and LIVE EncryptedMessageSchema allow optional mentionedUserIds (distinct opaque IDs≤128 chars, list≤1000). Omitted remains compatible; LEGACY_IMPORT DTO rejects the new LIVE-only routing field. IDs are routing claims selected by the client, with actual mention semantics in encrypted binding; server cannot verify/decrypt mention text. Existing HTTP total body quota still applies. Producer must reject self/unknown/outsider/banned targets atomically, bind retry selection in existing mentions table, and enforce current member/source visibility/preferences in generic MENTION delivery; backend producer/transport integration not yet verified at this codec milestone.
+
+
+### CHATCRYPTO-FE native SAS transport IDs
+
+`SendCryptoVerificationSchema.transactionId` is the unchanged native SDK to-device HTTP transport transaction ID, used for relay idempotency and content-conflict detection. `content.transaction_id` is the separate unchanged native SAS verification flow ID, shared across request/ready/start/key/mac/done steps. They need not be equal. The client and relay never rewrite either ID to the other. Strict public event schemas and sender `from_device` ownership remain enforced; native SAS cryptographically binds the flow and authenticates keys before the client grants trust. This correction follows ADR001 and changes neither protocol nor database uniqueness. Original source/test/document bytes and the actual native RED remain in CHATCRYPTO-FE evidence; earlier PASS records are historical.
+
+
+### CHATCRYPTO-FE native sync context and depletion
+
+Authenticated crypto sync returns `oneTimeKeyCounts.signed_curve25519`, the actual unclaimed key count for the requesting user/device (0–100, matching admission), and original `conversationId`/`membershipRevision` on verification events. Counts are read before final device/session/membership rechecks. They never grant trust or allow a foreign-device query. Native upload acknowledgements use this count; recipients feed it into native sync to replenish signed keys on depletion. The client does not guess missing counts or incoming verification conversation context.
+
+CHATCRYPTO-FE historical context discovery: GET /api/v1/crypto/conversations/:id/state optionally includes legacyCohorts: [{cohortId,sourceCount,members:[{userId,deviceIds}]}]. Only verified cohorts containing the authenticated actor with PREPARED source rows appear while history is KNOWN and E2EE migration is pending. Device IDs are nonrevoked and created no later than cohort verified_at; a new device has no historical entitlement. Empty deviceIds means unavailable, never verified/trusted. No source plaintext/private keys or automatic migration is returned. Reconciled/unknown/Lobby states return an empty array. Maximum1000 cohorts,1000 members per cohort,10000 members total,100 devices per member; overflow fails closed without truncating recipients. Existing batch/query/share/attest ACLs still enforce actual cohort and current authorization on every operation.
+
+
+### T29 — screen publishing and call moderation transport
+
+POST /api/v1/calls/:id/screen-share/claim requires the current session-bound call participant and strict empty body. A server-allocated ordinal1–3 is atomic per call and idempotent per user. It returns the existing CallJoinDTO using the current admission identity; source permissions are derived from current membership/restrictions/slot server state, not stale token claims. Quota does not limit microphone viewers.
+
+POST /api/v1/calls/:id/screen-share/release accepts strict empty body, releases only the actor's slot idempotently and returns strict {success:true}. Moderation endpoint POST /api/v1/calls/:id/moderation accepts strict {action,targetUserId}; actions MUTE_MIC, ALLOW_MIC, STOP_SCREEN_SHARE, ALLOW_SCREEN_SHARE, KICK. Current room owner or current helper with MANAGE_CALLS only; no client actor/role/permission. Mute/stream restrictions prevent self re-enable until allowed. Kick revokes the current admission and publication, preserving persistent room membership/chat/team; it is not a room ban.
+
+The existing publish-token and participant mute/kick/stop-publish registry entries remain preserved as compatible service aliases, with their strict existing path/body semantics. Screen and microphone grants are separately restricted; camera/data publication remain unavailable. Token replay or direct native SDK publication does not bypass the current gateway/SFU policy. Producer/native evidence is required before implementation PASS; contract declarations alone do not prove enforcement.
+
+
+### T29 native publication policy review
+
+Canonical screen claim/release and moderation routes use the shared strict contracts; legacy publish-token/mute/kick/stop-publish aliases preserve their DTO/statuses and reject extra authority fields/path mismatches. Actor/session, current room membership, owner or current HELPER + permission_grants.MANAGE_CALLS, target admission and slot quota are server state.
+
+Screen claims allocate exactly one of ordinals1–3 per user atomically and idempotently. The private signaling gateway rewrites original/SFU-refreshed grants from current DB policy, checks native JoinResponse before forwarding bytes, and serializes AddTrack with room/group controls. A screen quota permits one native video track and optional one native screen-audio track; only an existing verified native SID may add another codec. Duplicate/unknown/camera/source-type violations receive protocol NOT_ALLOWED/LIMIT_EXCEEDED; no fabricated publication success. No data or own-metadata publication grants.
+
+Moderator MIC_MUTED suppresses outgoing MICROPHONE and SCREEN_SHARE_AUDIO to prevent a microphone re-labeled as screen audio from bypassing mute. Screen video/quota and incoming subscriptions remain available. ALLOW_MIC restores allowed audio sources without automatically starting a device. User self-mic intent remains separate. STOP_SCREEN_SHARE frees quota and blocks reclaim until allow; KICK revokes admission/seat/slot/native peer without removing persistent room/chat/team membership.
+
+Verified signed native track_unpublished events and reconciliation return quota; unused reservations expire at30s, and admission disconnect grace remains30s. Late event identity/time/slot generation cannot restore stale grants. Evidence: quality/evidence/T29/; local tests only, closure.json controls completion. No main migration, production activation, physical/audible-quality or1,000-media claim.

@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {checkBaselines,checkGate} from '../../../scripts/verify-task.mjs';
+const dir='quality/evidence/T00-REBASE-CHATCRYPTO01',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),baseline=JSON.parse(fs.readFileSync('quality/spec-baseline.json')),pending=JSON.parse(fs.readFileSync('quality/evidence/T28/pending-amendment.json'));
+assert.equal(ledger.tasks.find(t=>t.status!=='PASS').id,'T29');assert.equal(ledger.tasks.find(t=>t.id==='T28').status,'PASS');assert(!ledger.tasks.some(t=>t.id==='T00-REBASE-CHATCRYPTO01'));
+assert.equal(checkBaselines({root:pending.frozenRoot,baseline}),8);
+checkGate({root:process.cwd(),tasks:ledger.tasks,id:'T29',specHash:baseline.hashes.specSha256});
+for(const s of Object.values(pending.sources)){assert.equal(hash(s.livePath),s.liveSha256);assert.equal(hash(s.frozenPath),s.frozenSha256);}
+fs.copyFileSync('quality/tasks.json',`${dir}/previous-ledger.json`);fs.copyFileSync('quality/spec-baseline.json',`${dir}/previous-baseline.json`);
+fs.writeFileSync(`${dir}/authorization.json`,JSON.stringify({...pending.authorization,pendingEvidence:'quality/evidence/T28/pending-amendment.json',broadScope:'Persisted human Permission to broaden Write Scope or touch locked files',featureImplementation:false},null,2)+'\n');
+for(const [name,file]of Object.entries({spec:'../.doc/01-product-spec.md',task:'../.doc/task.md',rootAgents:'../AGENTS.md',backendRule:'../.agents/rules/05-backend-services.md',contractsRule:'../.agents/rules/07-contracts.md'}))fs.copyFileSync(file,`${dir}/${name}.md`);
+fs.writeFileSync(`${dir}/record.mjs`,fs.readFileSync('quality/evidence/T28/record.mjs','utf8').replaceAll('T28','T00-REBASE-CHATCRYPTO01'));
+const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(p=>p&&!p.startsWith('../')&&fs.existsSync(p)&&!p.startsWith(`${dir}/`)&&!['quality/tasks.json','quality/spec-baseline.json','quality/spec-coverage.md'].includes(p));
+const frozen=new Map(files.map(p=>[p,hash(p)]));for(const old of ledger.tasks.filter(t=>t.status==='PASS'))for(const p of Object.keys(old.outputsHash?.files??{}))if(p!=='quality/spec-baseline.json')frozen.set(p,hash(p));frozen.set('.env.local',hash('.env.local'));
+fs.writeFileSync(`${dir}/readonly.json`,JSON.stringify(Object.fromEntries(frozen),null,2)+'\n');
+const owner={id:'T00-REBASE-CHATCRYPTO01',title:'Adopt approved chat encryption requirements',area:'METADATA',status:'IN_PROGRESS',dependencies:['T28'],specSha256:baseline.hashes.specSha256,startedAt:new Date().toISOString(),writeAllowlist:['quality/spec-baseline.json',`${dir}/**`],commands:[],evidencePaths:[`${dir}/authorization.json`,`${dir}/previous-ledger.json`,`${dir}/previous-baseline.json`,`${dir}/readonly.json`],outputsHash:null,blockers:[]};
+const at=ledger.tasks.findIndex(t=>t.id==='T29');ledger.tasks.splice(at,0,owner);fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.writeFileSync(`${dir}/plan.md`,'# CHAT-CRYPTO-01 metadata migration\n\nT28 has reviewed PASS at its original voice baseline. Its exact eight original source snapshots pass unchanged baseline validation, and actual latest outputs/commands pass original T29 gate. Adopt only the two approved live source hashes; retain six other sources, entire application and checker byte-identical. Preserve historical PASS/outputs/commands/evidence/timestamps; only active spec provenance gets explicit baselineAdoptions. Add sequential DATA/BE/FE/QA, then T29. Protocol/library/dependency setup and client-assisted migration remain decisions to resolve in DATA, not implemented here. Stock gate must validate candidate owner PASS and reject skipping new checkpoints.\n');
+fs.appendFileSync('../.doc/history.md',`\n## ${new Date(owner.startedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00 — T00-REBASE-CHATCRYPTO01\n- Codex; T28 reviewed PASS, original8 sources và actual T29 gate kiểm qua unchanged checker; live2 source amendment đã duyệt giữ nguyên. Mở metadata owner riêng, freeze all code/env/PASS trước adopt. Pin4 crypto checkpoints trước T29, không E2EE implementation/secret/new dependencies ở bước này.\n`);
+console.log(JSON.stringify({task:owner.id,status:owner.status,originalPreflight:'PASS',readonly:frozen.size}));

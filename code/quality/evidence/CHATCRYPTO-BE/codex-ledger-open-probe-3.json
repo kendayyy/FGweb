@@ -1,0 +1,10 @@
+{
+  "command": "node --input-type=module -e import fs from \"node:fs\";import path from \"node:path\";import assert from \"node:assert/strict\";import {createHash} from \"node:crypto\";const p=path.resolve(\"quality/tasks.json\");assert.equal(fs.realpathSync(p),p);const hash=()=>createHash(\"sha256\").update(fs.readFileSync(p)).digest(\"hex\"),before=hash(),fd=fs.openSync(p,\"r+\");let bytes;try{assert(fs.fstatSync(fd).isFile());bytes=fs.readSync(fd,Buffer.alloc(16),0,16,0);}finally{fs.closeSync(fd);}assert.equal(hash(),before);const ledger=JSON.parse(fs.readFileSync(p,\"utf8\"));assert.equal(ledger.tasks.find(t=>t.id===\"CHATCRYPTO-BE\").status,\"IN_PROGRESS\");console.log(JSON.stringify({ownedLedger:true,readBytes:bytes,noBytesWritten:true,hashUnchangedDuringProbe:true,ledgerSha256:before,status:\"IN_PROGRESS\"}));",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-09T20:21:52.240Z",
+  "completedAt": "2026-10-09T20:21:52.393Z",
+  "exitCode": 0,
+  "signal": null,
+  "evidencePath": "quality/evidence/CHATCRYPTO-BE/codex-ledger-open-probe-3.txt",
+  "evidenceSha256": "b4de452d927f4e64f5948cc8393f2f42c22e13075dbbc3adc79ceb86aa2e7d59"
+}

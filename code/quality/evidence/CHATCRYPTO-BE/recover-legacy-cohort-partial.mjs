@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-BE',scope=JSON.parse(fs.readFileSync(`${dir}/scope-legacy-cohort-protocol.json`)),hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+for(const [p,digest]of Object.entries(scope.priorHashes))assert.equal(hash(p),digest,p);
+assert(!fs.existsSync('packages/database/migrations/0018_chat_crypto_cohort_protocol.sql'));
+const source='packages/database/migrations/meta/0018_snapshot.json',destination=`${dir}/legacy-cohort-partial-0018_snapshot.json`;
+assert.equal(path.resolve(source),path.join(process.cwd(),'packages/database/migrations/meta/0018_snapshot.json'));assert(!fs.existsSync(destination));
+const old=JSON.parse(fs.readFileSync('packages/database/migrations/meta/0017_snapshot.json')),partial=JSON.parse(fs.readFileSync(source));
+const changed=Object.keys(old.tables).filter(key=>JSON.stringify(old.tables[key])!==JSON.stringify(partial.tables[key])).sort();assert.deepEqual(changed,['public.chat_crypto_protocol_events','public.chat_crypto_to_device_events']);assert.equal(Object.keys(old.tables).length,Object.keys(partial.tables).length);
+const digest=hash(source);fs.renameSync(source,destination);assert.equal(hash(destination),digest);
+const result={recordedAt:new Date().toISOString(),priorArtifactsUnchanged:true,journalHasNo0018:true,partialSnapshotPreserved:destination,partialSha256:digest,sqlMissing:true,reason:'Generator caught a filesystem open UNKNOWN while writing journal and exited zero; subsequent invocation saw the orphan snapshot and reported no schema changes. Preserve partial evidence and regenerate from intact0017.'};fs.writeFileSync(`${dir}/legacy-cohort-partial-recovery.json`,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

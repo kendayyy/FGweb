@@ -1,0 +1,79 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:45272) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts (23.717 s)
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › fetches normal profile with two game profiles in a single query and returns exact DTO shape
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      133 |
+      134 |     // Consolidates 3 separate queries into exactly 1
+    > 135 |     expect(count).toBe(1);
+          |                   ^
+      136 |
+      137 |     // Conforms strictly to contract schema
+      138 |     const parsed: ProfileDTO = PublicProfileSchema.parse(result);
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:135:19)
+
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › fetches user without profile or games in a single query with fallback values
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      177 |
+      178 |     // Consolidated into 1 query
+    > 179 |     expect(count).toBe(1);
+          |                   ^
+      180 |
+      181 |     const parsed: ProfileDTO = PublicProfileSchema.parse(result);
+      182 |     expect(result).toStrictEqual(parsed);
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:179:19)
+
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › falls back to user image when profile avatarUrl is empty string
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      205 |
+      206 |     const { result, count } = await countQueriesDuring(() => service.getPublicProfile(userId));
+    > 207 |     expect(count).toBe(1);
+          |                   ^
+      208 |     expect(result.avatarUrl).toBe('https://cdn.invalid/provider-img.png');
+      209 |   });
+      210 |
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:207:19)
+
+  ● ProfilesService.getPublicProfile query consolidation and contract baseline › preserves explicit null avatar when profile avatarUrl is null even if user has image
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 3
+
+      224 |
+      225 |     const { result, count } = await countQueriesDuring(() => service.getPublicProfile(userId));
+    > 226 |     expect(count).toBe(1);
+          |                   ^
+      227 |     expect(result.avatarUrl).toBeNull();
+      228 |   });
+      229 |
+
+      at Object.<anonymous> (quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts:226:19)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 2 passed, 6 total
+Snapshots:   0 total
+Time:        24.128 s
+Ran all test suites within paths "quality/evidence/T30/profile-query-tests/t30-public-profile-query.integration.spec.ts".

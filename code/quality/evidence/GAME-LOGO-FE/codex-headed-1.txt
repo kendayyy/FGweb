@@ -1,0 +1,139 @@
+
+Running 7 tests using 1 worker
+
+(node:23496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/7] tests\e2e\game-logos.spec.ts:22:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint
+  1) tests\e2e\game-logos.spec.ts:22:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 24
+    Received: 24.000001907348633
+
+      26 |   const rail=page.getByRole('complementary',{name:'Game và điều hướng'});expect((await rail.boundingBox())!.width).toBe(72);
+      27 |   const controls=rail.getByRole('navigation',{name:'Chọn game Lobby'}).getByRole('button');await expect(controls).toHaveCount(7);
+    > 28 |   for(const button of await controls.all()){expect((await button.boundingBox())!.height).toBe(46);expect((await button.locator('.fg-game-logo').boundingBox())!.width).toBe(24);}
+         |                                                                                                                                                                        ^
+      29 |   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+      30 |   await expect(page.getByRole('button',{name:/mở rộng|thu gọn sidebar/i})).toHaveCount(0);
+      31 |   await page.screenshot({path:`${evidenceDir}/screenshots/${mode}-rail-${width}.png`,fullPage:true});
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:28:168
+
+    Error Context: .cache\game-logos\results\game-logos-fixed-72px-rail-48e84-y-desktop-tablet-breakpoint\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-fixed-72px-rail-48e84-y-desktop-tablet-breakpoint\error-context.md
+
+
+(node:25912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[2/7] tests\e2e\game-logos.spec.ts:35:1 › mouse and keyboard choose all seven real catalogue games and focus shows full tooltip
+  2) tests\e2e\game-logos.spec.ts:35:1 › mouse and keyboard choose all seven real catalogue games and focus shows full tooltip 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('tooltip')
+    Expected: "Valorant"
+    Error: strict mode violation: getByRole('tooltip') resolved to 2 elements:
+        1) <span id="_r_1_" role="tooltip" class="fg-game-tooltip">Liên Minh Huyền Thoại</span> aka getByRole('tooltip', { name: 'Liên Minh Huyền Thoại' })
+        2) <span id="_r_2_" role="tooltip" class="fg-game-tooltip">Valorant</span> aka getByRole('tooltip', { name: 'Valorant' })
+
+    Call log:
+      - Expect "toHaveText" getByRole('tooltip') with timeout 5000ms
+      - waiting for getByRole('tooltip')
+
+
+      37 |  for(const [index,game]of catalogue.entries()){
+      38 |   const button=page.getByRole('navigation',{name:'Chọn game Lobby'}).getByRole('button',{name:game.title,exact:true});
+    > 39 |   if(index%2){await button.focus();await expect(page.getByRole('tooltip')).toHaveText(game.title);await page.keyboard.press('Enter');}else await button.click();
+         |                                                                            ^
+      40 |   await expect(button).toHaveAttribute('aria-current','page');await expect(page.getByRole('combobox',{name:'Chọn game'})).toHaveValue(game.id);await expect(page.getByRole('heading',{name:`Lobby · ${game.title} — FG`,exact:true})).toBeVisible();
+      41 |  }
+      42 | });
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:39:76
+
+    Error Context: .cache\game-logos\results\game-logos-mouse-and-keybo-04f55-nd-focus-shows-full-tooltip\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-mouse-and-keybo-04f55-nd-focus-shows-full-tooltip\error-context.md
+
+
+(node:5112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[3/7] tests\e2e\game-logos.spec.ts:43:1 › mobile drawer retains full names, native focus and bounded layout at 360/390px
+[4/7] tests\e2e\game-logos.spec.ts:57:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize
+  3) tests\e2e\game-logos.spec.ts:57:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 0
+
+      Array [
+        "a0HmhV7H5U0lZb23AAAF",
+    -   "zdME4M-obe2QWPR4AAAH",
+      ]
+
+      59 |  const composer=page.getByRole('textbox',{name:'Tin nhắn Lobby'});await expect(composer).toBeEditable();await composer.fill('Bản nháp chưa gửi');await composer.evaluate(node=>node.setAttribute('data-logo-draft-witness','original'));
+      60 |  await expect.poll(async()=>(await sockets()).length).toBeGreaterThan(0);const before=await sockets();
+    > 61 |  for(const width of [1440,1024,360,390,1280]){await page.setViewportSize({width,height:900});for(const mode of ['light','dark']){await theme(page,mode);await expect(composer).toHaveValue('Bản nháp chưa gửi');await expect(composer).toHaveAttribute('data-logo-draft-witness','original');expect(await sockets()).toEqual(before);const me=await page.request.get(base+'/api/v1/me');expect(me.status()).toBe(200);expect((await me.json()).id).toBe(identity.id);}}
+         |                                                                                                                                                                                                                                                                                                                      ^
+      62 | });
+      63 | test('FG logo, favicon and complete manifest icon URLs serve real images with correct sizes/MIME',async({page})=>{
+      64 |  await page.goto(base+'/login');await expect(page.getByRole('link',{name:'FG',exact:true})).toHaveCount(1);await expect(page.locator('.fg-auth-header .fg-brand-mark path')).toHaveCount(2);
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:61:310
+
+    Error Context: .cache\game-logos\results\game-logos-real-native-ses-4eae4-emes-and-rail-drawer-resize\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-real-native-ses-4eae4-emes-and-rail-drawer-resize\error-context.md
+
+
+(node:23016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[5/7] tests\e2e\game-logos.spec.ts:63:1 › FG logo, favicon and complete manifest icon URLs serve real images with correct sizes/MIME
+[6/7] tests\e2e\game-logos.spec.ts:72:1 › a broken game image keeps an accessible clickable fallback and does not hotlink
+[7/7] tests\e2e\game-logos.spec.ts:75:1 › all seven game buttons have decoded local images in light/dark before task completion
+  4) tests\e2e\game-logos.spec.ts:75:1 › all seven game buttons have decoded local images in light/dark before task completion 
+
+    Error: Dota 2
+
+    expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Dota 2 getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible') with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Chọn game Lobby' }).getByRole('button', { name: 'Dota 2', exact: true }).locator('img:visible')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      75 | test('all seven game buttons have decoded local images in light/dark before task completion',async({page})=>{
+      76 |  await page.goto(base);const catalogue=await games(page);
+    > 77 |  for(const mode of ['light','dark']){await theme(page,mode);for(const game of catalogue){const button=page.getByRole('navigation',{name:'Chọn game Lobby'}).getByRole('button',{name:game.title,exact:true});const image=button.locator('img:visible');await expect(image,game.title).toHaveCount(1);await expect.poll(()=>image.evaluate(node=>(node as HTMLImageElement).complete&&(node as HTMLImageElement).naturalWidth>0)).toBe(true);}}
+         |                                                                                                                                                                                                                                                                                       ^
+      78 | });
+      79 |
+        at E:\FGweb\code\tests\e2e\game-logos.spec.ts:77:279
+
+    Error Context: .cache\game-logos\results\game-logos-all-seven-game--b8aaf-dark-before-task-completion\error-context.md
+
+    Error Context: .cache\game-logos\results\game-logos-all-seven-game--b8aaf-dark-before-task-completion\error-context.md
+
+
+  4 failed
+    tests\e2e\game-logos.spec.ts:22:1 › fixed 72px rail, 46px rows and 24px logos at every desktop/tablet breakpoint 
+    tests\e2e\game-logos.spec.ts:35:1 › mouse and keyboard choose all seven real catalogue games and focus shows full tooltip 
+    tests\e2e\game-logos.spec.ts:57:1 › real native session, draft node and existing sockets survive themes and rail/drawer resize 
+    tests\e2e\game-logos.spec.ts:75:1 › all seven game buttons have decoded local images in light/dark before task completion 
+  3 passed (1.7m)

@@ -1,0 +1,129 @@
+{
+  "planId": "antigravity-native60-canonical-direct-1-controls",
+  "targetTask": "T30",
+  "createdAt": "2026-10-12T02:37:00.000Z",
+  "nativeAcceptance": false,
+  "controls": [
+    {
+      "controlId": "CTL-01-PREFLIGHT",
+      "name": "Database and Network Preflight Verification",
+      "description": "Verifies that PostgreSQL and Redis containers are healthy and connected to fg-local_default before any fixture activity.",
+      "assertions": [
+        "assert(['postgres:','postgresql:'].includes(original.protocol))",
+        "assert(['localhost','127.0.0.1'].includes(original.hostname))",
+        "assert(Number.isInteger(publishedPort) && publishedPort > 0)",
+        "assert(pg.State.Running && pg.State.Health.Status === 'healthy')",
+        "assert(redis.State.Running && redis.State.Health.Status === 'healthy')",
+        "assert.equal(preNetwork.Name, 'fg-local_default')",
+        "assert(pg.NetworkSettings.Networks['fg-local_default'].Aliases.includes('fg-local-postgres-1'))"
+      ]
+    },
+    {
+      "controlId": "CTL-02-NETWORK-ATTACHMENT",
+      "name": "Direct Network Attachment Prior to Container Start",
+      "description": "Ensures the gateway container is attached to fg-local_default before boot using createDirectGateway helper.",
+      "assertions": [
+        "assert.equal(args[0], 'create')",
+        "assert(args.includes('--pull=never'))",
+        "assert.equal(info.Config.Labels['fg-owner'], 't30-gateway-' + id)",
+        "assert.equal(info.Config.User, 'node')",
+        "assert(info.HostConfig.ReadonlyRootfs)",
+        "assert(connected.NetworkSettings.Networks[network] && connected.NetworkSettings.Networks['fg-local_default'])",
+        "assert(info.State.Running, 'Gateway process exited')"
+      ]
+    },
+    {
+      "controlId": "CTL-03-ZERO-INSTRUMENTATION",
+      "name": "Strict Observer-Free Runtime Invocation",
+      "description": "Ensures that no preload script, startup wrapper, or ALS instrumentation is attached to the gateway process.",
+      "assertions": [
+        "assert(!args.includes('-r'))",
+        "assert(!args.includes('/gateway/preload.cjs'))",
+        "assert(!args.includes('/gateway/startup-entry.cjs'))",
+        "assert.deepEqual(args.slice(-3), ['node', '/gateway/app/gateway-main.js', '/gateway/input.json'])"
+      ]
+    },
+    {
+      "controlId": "CTL-04-GATEWAY-READINESS",
+      "name": "Bounded Gateway Health Polling",
+      "description": "Validates that the private gateway becomes ready via HTTP 200 within bounded deadline without leaking database credentials in logs.",
+      "assertions": [
+        "for (let i = 0; i < 40; i++) polling /health with 1000ms timeout and 250ms interval",
+        "assert(ready, 'Private gateway failed to become ready; inspect sanitized diagnostics only')",
+        "assert(port > 0)"
+      ]
+    },
+    {
+      "controlId": "CTL-05-HTTP-CSP-ASSETS",
+      "name": "HTTP Endpoints, CSP Headers, and Asset Digests",
+      "description": "Verifies that the NestJS API, Vite preview server, security headers, and static assets meet exact build-2 specifications.",
+      "assertions": [
+        "assert([200, 201].includes(postResponse.status))",
+        "assert(loaded.config.plugins.some(p => p?.name === 'fg-security-headers'))",
+        "assert.equal(review.afterSha256, 'f289b75ec0e057738811c7087496a3966468360d42cd43255f4933ccb65f684d')",
+        "assert.equal(createHash('sha256').update(fs.readFileSync('apps/web/dist/index.html')).digest('hex'), review.afterSha256)",
+        "assert.equal(review.activeAssets?.length, 2)",
+        "assert.equal(assetJsSha256, '1e2029945201b54f54e0cd95794c8a28f42cacfadf40e20a1ce749fa7728beb7')",
+        "assert.equal(assetCssSha256, '4b56270bfbb4ae498b170d8d2141ecaa82503a13f1653e897b8cf614053ba51b')"
+      ]
+    },
+    {
+      "controlId": "CTL-06-NATIVE-SIGNALING",
+      "name": "Private Native WebRTC Signaling Isolation",
+      "description": "Guarantees that public port 7880 is never exposed on the host and signaling is strictly routed through private gateway port 7883.",
+      "assertions": [
+        "assert.equal(sfuInspect.HostConfig.PortBindings?.['7880/tcp']?.length ?? 0, 0)",
+        "assert.equal(sfuInspect.NetworkSettings.Ports?.['7880/tcp']?.length ?? 0, 0)",
+        "assert(ws.startsWith('ws://127.0.0.1:'))",
+        "assert(fixture.turnPort > 0)"
+      ]
+    },
+    {
+      "controlId": "CTL-07-INSPECTOR-LIFECYCLE",
+      "name": "Retained Database Inspector Client Lifecycle",
+      "description": "Ensures that the dedicated inspector client connects, holds an identifiable backend PID, reports state, and cleanly releases without leaking pool clients or blocking queries.",
+      "assertions": [
+        "assert(inspectorClient)",
+        "assert(inspectorReserved)",
+        "assert(Number.isInteger(inspectorPid) && inspectorPid > 0)",
+        "inspectorClient.release(true)",
+        "assert(actualSocketEnded)",
+        "assert(poolEnded)",
+        "assert(inspectorHealthy)",
+        "assert.equal(inspectorFailureCount, 0)",
+        "assert.equal(inspectorWriteFailureCount, 0)"
+      ]
+    },
+    {
+      "controlId": "CTL-08-THREE-ACTOR-STATE",
+      "name": "Three-Actor Recruitment, Room, and Membership State",
+      "description": "Inspects the state of the sender, receiver, and third actor to confirm room membership and conversation membership prior to browser session launch.",
+      "assertions": [
+        "assert(card.roomId)",
+        "assert(play.id)",
+        "assert.equal(state.members, 3)",
+        "assert.equal(state.rooms, 1)",
+        "assert.equal(state.play_state, 'ACTIVE')",
+        "assert.equal(other.visibility, 'PRIVATE')"
+      ]
+    },
+    {
+      "controlId": "CTL-09-DIRECT-CLEANUP",
+      "name": "Ephemeral Teardown and Direct Route Cleanup Verification",
+      "description": "Verifies that all test schemas, keys, containers, and networks are removed, while core PostgreSQL and Redis services remain intact.",
+      "assertions": [
+        "assert(report.schemaRemoved, 'Schema cascade drop failed')",
+        "assert(report.mediaRemoved, 'Media containers and network removal failed')",
+        "assert(report.presenceRemoved, 'Redis presence key removal failed')",
+        "assert(report.appClosed && report.webClosed, 'Application or web server close failed')",
+        "assert.equal(afterPg.Id, preMainPg.Id)",
+        "assert.deepEqual(afterPg.Config, preMainPg.Config)",
+        "assert.deepEqual(afterPg.NetworkSettings.Networks, preMainPg.NetworkSettings.Networks)",
+        "assert(afterPg.State.Running && afterPg.State.Health.Status === 'healthy')",
+        "assert.equal(afterNetwork.Id, preNetwork.Id)",
+        "assert.deepEqual(afterNetwork.Containers, preNetwork.Containers)",
+        "assert(result.mainServicesUnchanged && result.existingNetworkUnchanged, 'Direct route cleanup verification incomplete')"
+      ]
+    }
+  ]
+}

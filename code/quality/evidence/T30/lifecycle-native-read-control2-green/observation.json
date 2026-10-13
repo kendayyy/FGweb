@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-12T20:08:35.270Z",
+  "cases": [
+    {
+      "name": "Present native participants preserve open group without redundant room listing",
+      "sdkReads": 1
+    },
+    {
+      "name": "Empty existing room is freshly confirmed and remains available",
+      "sdkReads": 2
+    },
+    {
+      "name": "Absent native room closes group and deletes after commit",
+      "sdkReads": 2
+    },
+    {
+      "name": "Known participant-not-found plus confirmed room preserves empty group"
+    },
+    {
+      "name": "participant-error",
+      "exactFaultPropagated": true,
+      "noStateMutation": true
+    },
+    {
+      "name": "room-error",
+      "exactFaultPropagated": true,
+      "noStateMutation": true
+    },
+    {
+      "name": "Missing SQL group never calls native SDK"
+    },
+    {
+      "name": "Closed SQL group cleanup does not read native presence"
+    },
+    {
+      "name": "Actual canonical room SHARE/group UPDATE held during native read"
+    },
+    {
+      "name": "Actual locks released after native reconciliation commit"
+    }
+  ],
+  "presentReads": 1,
+  "realPg": true,
+  "nativeReadsControlled": true,
+  "nativeAbsenceContractEvidence": "quality/evidence/T30/sfu-room-presence-observation4.json"
+}

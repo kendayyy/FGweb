@@ -1,0 +1,408 @@
+{
+  "poolSummary": [
+    {
+      "service": "RoomsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 4,
+      "pids": [
+        7250,
+        7251,
+        7252,
+        7253
+      ]
+    },
+    {
+      "service": "TeamsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 5,
+      "pids": [
+        7268,
+        7269,
+        7270,
+        7271
+      ]
+    },
+    {
+      "service": "CallsService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 6,
+      "pids": [
+        7272,
+        7273,
+        7274,
+        7275,
+        7351,
+        7384,
+        7385,
+        7437,
+        7468
+      ]
+    },
+    {
+      "service": "CallLifecycleService",
+      "maxWaiting": 0,
+      "minIdle": 0,
+      "maxTotal": 2,
+      "pids": [
+        7278,
+        7294,
+        7414
+      ]
+    }
+  ],
+  "hostSummary": {
+    "path": "quality/evidence/T30/native-host-observation-60101f7d-2119-4c21-8c76-ee80f360f02c.json",
+    "minFreeGB": 0.9443130493164062,
+    "maxCpu": 100,
+    "dropped": 0
+  },
+  "controllerErrors": [
+    {
+      "status": 500,
+      "causes": [
+        {
+          "layer": 0,
+          "name": "Error",
+          "code": null,
+          "kind": "PG_CONNECT_TIMEOUT",
+          "sites": [
+            {
+              "source": "PG_POOL",
+              "line": 45,
+              "column": 11
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 34,
+              "column": 20
+            }
+          ]
+        },
+        {
+          "layer": 1,
+          "name": "Error",
+          "code": null,
+          "kind": "PG_CONNECTION_TERMINATED",
+          "sites": []
+        }
+      ],
+      "type": "controller-error",
+      "at": "2026-10-12T16:49:58.105Z",
+      "route": "API_OTHER",
+      "code": null,
+      "kind": "PG_CONNECT_TIMEOUT"
+    },
+    {
+      "status": 403,
+      "causes": [
+        {
+          "layer": 0,
+          "name": "HttpException",
+          "code": null,
+          "kind": "OTHER",
+          "sites": [
+            {
+              "source": "OWN_SERVICE",
+              "line": 21,
+              "column": 11
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 305,
+              "column": 46
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 301,
+              "column": 245
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 66,
+              "column": 28
+            }
+          ]
+        }
+      ],
+      "type": "controller-error",
+      "at": "2026-10-12T16:50:31.518Z",
+      "route": "API_OTHER",
+      "code": null,
+      "kind": "OTHER"
+    },
+    {
+      "status": 403,
+      "causes": [
+        {
+          "layer": 0,
+          "name": "HttpException",
+          "code": null,
+          "kind": "OTHER",
+          "sites": [
+            {
+              "source": "OWN_SERVICE",
+              "line": 21,
+              "column": 11
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 305,
+              "column": 46
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 301,
+              "column": 245
+            },
+            {
+              "source": "OWN_SERVICE",
+              "line": 66,
+              "column": 28
+            }
+          ]
+        }
+      ],
+      "type": "controller-error",
+      "at": "2026-10-12T16:50:31.788Z",
+      "route": "API_OTHER",
+      "code": null,
+      "kind": "OTHER"
+    }
+  ],
+  "slowMethods": [
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "lock",
+      "id": 557,
+      "ok": true,
+      "at": "2026-10-12T16:49:03.813Z",
+      "durationMs": 2489.97
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "transaction",
+      "id": 555,
+      "ok": true,
+      "at": "2026-10-12T16:49:03.983Z",
+      "durationMs": 2728.74
+    },
+    {
+      "type": "finish",
+      "service": "CallLifecycleService",
+      "method": "reconcilePass",
+      "id": 554,
+      "ok": true,
+      "at": "2026-10-12T16:49:03.983Z",
+      "durationMs": 2728.83
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "controlsGroup",
+      "id": 576,
+      "ok": true,
+      "at": "2026-10-12T16:49:04.546Z",
+      "durationMs": 2284.56
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "claim",
+      "id": 574,
+      "ok": true,
+      "at": "2026-10-12T16:49:05.000Z",
+      "durationMs": 2817.94
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "controlsGroup",
+      "id": 705,
+      "ok": true,
+      "at": "2026-10-12T16:49:10.648Z",
+      "durationMs": 2396.21
+    },
+    {
+      "type": "finish",
+      "service": "PublishingService",
+      "method": "claim",
+      "id": 703,
+      "ok": true,
+      "at": "2026-10-12T16:49:11.002Z",
+      "durationMs": 2808.87
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 1002,
+      "ok": true,
+      "at": "2026-10-12T16:49:31.626Z",
+      "durationMs": 4029.67
+    },
+    {
+      "type": "finish",
+      "service": "SessionGuard",
+      "method": "canActivate",
+      "id": 993,
+      "ok": true,
+      "at": "2026-10-12T16:49:31.840Z",
+      "durationMs": 4702.12
+    },
+    {
+      "type": "finish",
+      "service": "CallsService",
+      "method": "participants",
+      "id": 1126,
+      "ok": true,
+      "at": "2026-10-12T16:49:38.335Z",
+      "durationMs": 5621.25
+    }
+  ],
+  "sdkRemovals": [
+    {
+      "type": "owned-compiled-cjs-sdk",
+      "method": "removeParticipant",
+      "at": "2026-10-12T16:49:58.213Z",
+      "completedAt": "2026-10-12T16:49:58.264Z",
+      "durationMs": 50.92,
+      "ok": false,
+      "status": 404,
+      "code": "not_found",
+      "sites": [
+        {
+          "line": 99,
+          "column": 26
+        },
+        {
+          "line": 612,
+          "column": 27
+        }
+      ]
+    },
+    {
+      "type": "owned-compiled-cjs-sdk",
+      "method": "removeParticipant",
+      "at": "2026-10-12T16:49:58.139Z",
+      "completedAt": "2026-10-12T16:49:58.270Z",
+      "durationMs": 130.76,
+      "ok": true,
+      "status": null,
+      "code": null,
+      "sites": [
+        {
+          "line": 99,
+          "column": 26
+        },
+        {
+          "line": 385,
+          "column": 26
+        }
+      ]
+    },
+    {
+      "type": "owned-compiled-cjs-sdk",
+      "method": "removeParticipant",
+      "at": "2026-10-12T16:49:58.194Z",
+      "completedAt": "2026-10-12T16:49:58.272Z",
+      "durationMs": 78.05,
+      "ok": true,
+      "status": null,
+      "code": null,
+      "sites": [
+        {
+          "line": 99,
+          "column": 26
+        },
+        {
+          "line": 385,
+          "column": 26
+        }
+      ]
+    }
+  ],
+  "pgFailures": [
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-12T16:49:55.107Z",
+      "completedAt": "2026-10-12T16:49:58.109Z",
+      "durationMs": 3038.09,
+      "poolIndex": 0,
+      "backendPid": 7239,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-12T16:49:55.120Z",
+      "completedAt": "2026-10-12T16:49:58.126Z",
+      "durationMs": 3042.28,
+      "poolIndex": 0,
+      "backendPid": 7242,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-12T16:49:55.126Z",
+      "completedAt": "2026-10-12T16:49:58.128Z",
+      "durationMs": 3038.22,
+      "poolIndex": 0,
+      "backendPid": 7240,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-12T16:49:55.133Z",
+      "completedAt": "2026-10-12T16:49:58.135Z",
+      "durationMs": 3037.74,
+      "poolIndex": 0,
+      "backendPid": 7241,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "group-lock",
+      "startedAt": "2026-10-12T16:49:55.209Z",
+      "completedAt": "2026-10-12T16:49:58.211Z",
+      "durationMs": 3038.18,
+      "poolIndex": 0,
+      "backendPid": 7238,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "room-lock",
+      "startedAt": "2026-10-12T16:49:58.865Z",
+      "completedAt": "2026-10-12T16:50:01.868Z",
+      "durationMs": 3002.35,
+      "poolIndex": 0,
+      "backendPid": 7237,
+      "ok": false,
+      "sqlState": "57014"
+    },
+    {
+      "type": "query",
+      "kind": "room-lock",
+      "startedAt": "2026-10-12T16:49:58.998Z",
+      "completedAt": "2026-10-12T16:50:01.999Z",
+      "durationMs": 3001.61,
+      "poolIndex": 0,
+      "backendPid": 7236,
+      "ok": false,
+      "sqlState": "57014"
+    }
+  ]
+}

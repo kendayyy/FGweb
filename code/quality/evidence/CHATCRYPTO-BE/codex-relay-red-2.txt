@@ -1,0 +1,60 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:6740) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (39.109 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › returns current state only to members and includes the fixed public Matrix mapping
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      80 |  it('returns current state only to members and includes the fixed public Matrix mapping',async()=>{
+      81 |   const state=await request(base).get('/api/v1/crypto/conversations/dm/state').set('Cookie',cookie);
+    > 82 |   expect(state.status).toBe(200);expect(state.body.membershipRevision).toBe(2);expect(state.body.mode).toBe('E2EE');
+         |                        ^
+      83 |   expect(state.body.matrixUserId).toBe(machines[0].userId.toString());expect(state.body.eligibleDeviceIds).toEqual(['A']);
+      84 |   const outsider=await createSignedSessionCookie(secret,'outsider-session');
+      85 |   expect((await request(base).get('/api/v1/crypto/conversations/dm/state').set('Cookie',outsider)).status).toBe(403);
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:82:24)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › queries member keys and claims distinct signed prekeys exactly once under contention
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      88 |   const bob=await nativeDevice('bob','B');expect((await post('devices',bob,otherCookie)).status).toBe(201);
+      89 |   const payload={conversationId:'dm',membershipRevision:3,userIds:['bob']};
+    > 90 |   const query=await post('keys/query',payload);expect(query.status).toBe(201);expect(query.body.users[0].devices[0].deviceKeys).toEqual(bob.deviceKeys);
+         |                                                                     ^
+      91 |   expect((await post('keys/query',{...payload,userIds:['outsider']})).status).toBe(403);
+      92 |   expect((await post('keys/query',{...payload,membershipRevision:2})).status).toBe(409);
+      93 |   const claims=await Promise.all([1,2].map(()=>post('keys/claim',{conversationId:'dm',membershipRevision:3,deviceId:'A',targets:[{userId:'bob',deviceId:'B'}]})));
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:90:69)
+
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › queues native SAS metadata to the addressed member device, rejects dedup conflicts and foreign ACKs
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       98 |  it('queues native SAS metadata to the addressed member device, rejects dedup conflicts and foreign ACKs',async()=>{
+       99 |   const event={conversationId:'dm',membershipRevision:3,deviceId:'A',transactionId:'verify-1',recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:'verify-1',from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}};
+    > 100 |   expect((await post('verification',event)).status).toBe(201);expect((await post('verification',event)).status).toBe(201);
+          |                                                     ^
+      101 |   expect((await post('verification',{...event,content:{...event.content,timestamp:event.content.timestamp+1}})).status).toBe(409);
+      102 |   const sync=await request(base).get('/api/v1/crypto/sync?deviceId=B').set('Cookie',otherCookie);expect(sync.status).toBe(200);expect(sync.body.verification).toHaveLength(1);
+      103 |   expect(sync.body.verification[0].event).toEqual({eventType:event.eventType,content:event.content});
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:100:53)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 10 passed, 13 total
+Snapshots:   0 total
+Time:        39.705 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

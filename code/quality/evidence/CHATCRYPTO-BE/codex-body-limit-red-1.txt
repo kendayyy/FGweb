@@ -1,0 +1,30 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:22580) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-devices.integration.spec.ts (30.373 s)
+  ● Crypto device/recovery API with actual auth, WASM and isolated PostgreSQL › accepts genuine encrypted room-key backups larger than the old 100 KiB JSON default
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 413
+
+      110 |   expect(Buffer.byteLength(ciphertext)).toBeGreaterThan(100*1024);
+      111 |   const result=await request(base).put('/api/v1/crypto/recovery').set('Cookie',cookie).set('Origin',origin).send({version:1,format:'MATRIX_ENCRYPTED_EXPORT',ciphertext,expectedVersion:2});
+    > 112 |   expect(result.status).toBe(200);expect(result.body.ciphertext).toBe(ciphertext);
+          |                         ^
+      113 |   expect(sdk.OlmMachine.decryptExportedRoomKeys(result.body.ciphertext,'fixture-only-independent-recovery-code')).toBe(exportJson);
+      114 |  });
+      115 |  it('denies bans and does not resurrect a deleted session after unban',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-devices.integration.spec.ts:112:25)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 9 passed, 10 total
+Snapshots:   0 total
+Time:        30.9 s, estimated 36 s
+Ran all test suites matching apps/api/test/chat-crypto-devices.integration.spec.ts.

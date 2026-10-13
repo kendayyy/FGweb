@@ -66,6 +66,19 @@ describe('T13 approved Lobby behavior', () => {
     });
     afterEach(() => { client.clear(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
     const show = () => render(<QueryClientProvider client={client}><AuthProvider><MemoryRouter><App /></MemoryRouter></AuthProvider></QueryClientProvider>);
+    it('GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork', async () => {
+        show();
+        await screen.findByRole('combobox', { name: 'Chọn game' });
+        const rail = screen.getByRole('complementary', { name: 'Game và điều hướng' });
+        for (const game of games) {
+            const control = screen.getByRole('button', { name: game.title });
+            expect(control).toHaveAttribute('title', game.title);
+            expect(control.querySelector('img')).toHaveAttribute('src', expect.stringMatching(/^\/game-logos\//));
+        }
+        expect(rail.querySelector('.fg-brand-mark')).toBeInTheDocument();
+        expect(document.querySelector('.fg-app-header .fg-brand-mark')).toBeInTheDocument();
+        expect(document.querySelector('.fg-header-game-icon img')).toHaveAttribute('src', '/game-logos/league-of-legends.png');
+    });
     it('loads all seven games, guest sees history and cannot send', async () => {
         show();
         const selector = await screen.findByRole('combobox', { name: 'Chọn game' });

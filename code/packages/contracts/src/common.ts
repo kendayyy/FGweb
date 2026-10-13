@@ -49,6 +49,10 @@ export const ApiErrorResponseSchema = z.object({
 export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>;
 
 export const SocketEventNames = {
+  CRYPTO_SUBSCRIBE:'crypto.subscribe',
+  CRYPTO_UNSUBSCRIBE:'crypto.unsubscribe',
+  CRYPTO_MESSAGE_CREATED:'crypto.message.created',
+  CRYPTO_SYNC_AVAILABLE:'crypto.sync.available',
   CONVERSATION_SUBSCRIBE:'conversation.subscribe',
   CONVERSATION_UNSUBSCRIBE:'conversation.unsubscribe',
   MESSAGE_CREATED: 'message.created',

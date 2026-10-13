@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-11T05:02:01.889Z",
+  "reviewer": "Codex",
+  "proposals": [
+    {
+      "path": "quality/evidence/T30/antigravity-inspector-client-reservation-1/fixture-server-inspector-reserved.mjs",
+      "sha256": "09240fb6ca7ef468dbe9b9c45341dd9705a37b04e7c913e64ee677586e90a0d7"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-inspector-client-reservation-1/fixture-server-built-inspector-reserved.mjs",
+      "sha256": "2349e2f0b431cc00f335b86c42a142ba23dd0d9889a5bbdc2df4f74e21fc8b08"
+    },
+    {
+      "path": "quality/evidence/T30/antigravity-inspector-client-reservation-1/review-notes.md",
+      "sha256": "89016f41d6d99fb114a6b6eee280107d840e7caf7120dea6839c28af6f79c820"
+    }
+  ],
+  "findings": [
+    "Canonical imports legacy private-gateway-fixture.mjs instead of exact approved shaped gateway path; loses actual TURN shaping required frozen benchmark. Added shaperControl guard hides missing canonical capability. Restore original import and original media-stat operation.",
+    "inspectorReleased=true set before release; release exception swallowed. Flag may lie and unreturned client can hang pool.end. Must record release success/failure and aggregate error without skipping other cleanup.",
+    "Unexpected client end only sets inspectorFailed, no failureCount/health invalidation unless later inspect. Can falsely claim clean final health after last inspection; must record unexpected end and wait actual client end after own release.",
+    "once error handles only first event; further client errors may be unhandled. Keep safe on error listener for entire held lifetime, count failures and diagnostic write failures, no raw fields.",
+    "Inspector error diagnostic write failure swallowed; lifecycle report must carry failure/write counts and fail cleanup honestly. Inspection-failure file write throw can prevent failed IPC response; preserve notification and aggregate safe write failure.",
+    "No actual actualSocketEnded proof before process exit. Pool.end API completion is not necessarily underlying client end event; await real own end event with bounded existing cleanup budget.",
+    "Notes claim all setup clients idle-evicted and CPU contention caused startup timeout; actual Native32 did not sample inspector idle eviction/CPU or server saturation. Only new connection startup timeout mechanism verified."
+  ],
+  "executed": false,
+  "adopted": false,
+  "sourcePinsUnchanged": true,
+  "nativeApplicationAcceptance": false
+}

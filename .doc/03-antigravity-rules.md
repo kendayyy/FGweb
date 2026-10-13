@@ -1,5 +1,7 @@
 # FG — Rules cho Antigravity
 
+> **CODEX-ONLY-01 — 12/10/2026:** Tài liệu này giữ danh mục rule và quy trình lịch sử. Chỉ định mới của người dùng thay thế mọi bước mở/giao việc cho Antigravity hoặc dùng model Gemini/Anti2: các task FG chỉ dùng Codex trực tiếp, không dùng skill/dashboard/monitor Anti2, không gọi Antigravity và không tự bật/phục hồi cockpit-tools. Giữ nguyên các rule nghiệp vụ, scope, một task mỗi lần, gate, acceptance, evidence, headed UI/E2E và Telegram; xem AGENTS.md và task.md.
+
 Ngày tạo:04/10/2026. Các file là hướng dẫn agent, chưa triển khai ứng dụng hoặc cơ chế filesystem sandbox.
 
 ## Vị trí và kích hoạt
@@ -24,11 +26,13 @@ FGweb/
       08-testing-and-evidence.md
       09-voice-and-live.md
       10-operations-and-scale.md
+      11-session-history.md
   .doc/
     01-product-spec.md
     02-frontend-design.md
     03-antigravity-rules.md
     task.md
+    history.md
     mockups/
   code/
     AGENTS.md
@@ -50,10 +54,13 @@ FGweb/
 | [08-testing-and-evidence.md](../.agents/rules/08-testing-and-evidence.md) | always_on | FG requires real tests and evidence before each task passes. |
 | [09-voice-and-live.md](../.agents/rules/09-voice-and-live.md) | glob | FG voice/live limits, authority, lifecycle and selected video subscription. |
 | [10-operations-and-scale.md](../.agents/rules/10-operations-and-scale.md) | glob | FG infrastructure, scope-safe project outputs and verified thousand-user media capacity. |
+| [11-session-history.md](../.agents/rules/11-session-history.md) | always_on | Ghi mọi phiên coding/build/sửa/test vào .doc/history.md, giữ kết quả và evidence thật. |
 
 Rules chung luôn áp dụng; rules glob kích hoạt theo files của subsystem. Không đặt rule trong thư mục con của rules/ vì native scan không tự đệ quy theo tài liệu. Không nhúng cả task.md bằng file includes: tài liệu lớn cần được đọc riêng theo task để không làm rule bị cắt/tràn context.
 
 ## Kiểm trước buổi build
+
+**HISTORY-CHANGE-01:** đọc [history.md](./history.md) trước build/resume; tạo mục khi bắt đầu và cập nhật mọi vòng sửa/test/review, chốt thời gian/kết quả/blocker trước bàn giao. Ghi cả phiên thất bại/chưa hoàn tất theo mẫu; chỉ tóm tắt và link evidence tại code/, không secrets/raw logs, không thay ledger/PASS. Rule11 áp dụng mọi task; không bỏ ghi vì đang sửa lỗi lặp lại.
 
 **TEST-VISIBILITY-01, điều chỉnh07/10/2026:** Chỉ UI tương tác trên ứng dụng và E2E local mở browser/app headed để người dùng quan sát. Không cần hiện terminal/log; unit/component DOM giả lập, integration/API/DB/smoke/load được chạy nền. Đọc rule08 và task.md; mọi test vẫn lưu evidence/exit code thật. UI/E2E không có GUI/công cụ không mở được cửa sổ thì báo trước và ghi hạn chế. Người dùng đã yêu cầu cửa sổ UI/E2E nhìn thấy được, không cần xin lại; terminal/helper khác không cần hiện.
 

@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:30188) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (49.841 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › accepts explicitly disclosed imported text/image only for the original cohort and completed bindings
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 403
+
+      114 |   const selected={consent:true,conversationId:conversation,reason:'imported-selected-reason',selectedMessages:[{messageId:message,text:'imported-selected-text',source:'USER_DISCLOSED'}]},upload=(cookie:string)=>request(base).post('/api/v1/crypto/reports/attachments').set('Cookie',cookie).set('Origin',origin).field('metadata',JSON.stringify({consent:true,conversationId:conversation,messageId:message,clientUploadId:'report-import-picture',plaintextSize:picture.length})).attach('file',picture,{filename:'disclosed.png',contentType:'image/png'});
+      115 |   expect((await post(selected,cookies.bob)).status).toBe(403);expect((await upload(cookies.bob)).status).toBe(403);expect((await post(selected,cookies.outsider)).status).toBe(403);
+    > 116 |   const receipt=await upload(cookies.alice);expect(receipt.status).toBe(201);const sent=await post({...selected,selectedMessages:[{...selected.selectedMessages[0],reportAttachmentIds:[receipt.body.id]}]});expect(sent.status).toBe(201);
+          |                                                                    ^
+      117 |   const evidence=(await pool.query('SELECT * FROM chat_crypto_report_evidence WHERE report_id=$1',[sent.body.id])).rows[0];expect(evidence.source).toBe('USER_DISCLOSED');const decoded=JSON.parse((await reader.decrypt(evidence.envelope,{kind:'REPORT_TEXT',conversationId:conversation,objectId:evidence.id})).toString());expect(decoded.text).toBe('imported-selected-text');expect(decoded.authenticity).toBe('USER_SUPPLIED_UNVERIFIED');expect(JSON.stringify(evidence)).not.toContain('imported-selected-text');
+      118 |   await pool.query("UPDATE chat_crypto_legacy_stages SET phase='CLEANING',completed_at=NULL WHERE id=$1",[stage]);try{expect((await post(selected)).status).toBe(409);}finally{await pool.query("UPDATE chat_crypto_legacy_stages SET phase='RECONCILED',completed_at=clock_timestamp() WHERE id=$1",[stage]);}
+      119 |   await pool.query('UPDATE chat_crypto_legacy_stage_sources SET envelope_sha256=$2 WHERE stage_id=$1',[stage,digest('wrong-stage')]);try{expect((await post(selected)).status).toBe(409);}finally{await pool.query('UPDATE chat_crypto_legacy_stage_sources SET envelope_sha256=$2 WHERE stage_id=$1',[stage,envelopeSha]);}
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:116:68)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 37 passed, 38 total
+Snapshots:   0 total
+Time:        50.275 s, estimated 52 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"f092164aa6154ca1b210a0eb3f14bd41","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

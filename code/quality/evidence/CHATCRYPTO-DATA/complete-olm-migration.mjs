@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const file='packages/database/migrations/0012_huge_wind_dancer.sql',hash=s=>createHash('sha256').update(s).digest('hex');
+const generated=fs.readFileSync(file,'utf8');assert(!generated.includes('CREATE FUNCTION'));
+const source=fs.readFileSync('packages/database/src/crypto-olm-validation.sql','utf8');
+const reviewed=source+'\n--> statement-breakpoint\n'+generated;
+fs.writeFileSync(file,reviewed);
+fs.writeFileSync('quality/evidence/CHATCRYPTO-DATA/olm-migration-provenance.json',JSON.stringify({recordedAt:new Date().toISOString(),file,generatedSha256:hash(generated),reviewedSha256:hash(reviewed),validationSourceSha256:hash(source),changes:['Strict native Olm payload and signed one-time key constraints'],mainDatabaseMigrated:false},null,2)+'\n');
+console.log('Reviewed native Olm/signed public prekey migration.');

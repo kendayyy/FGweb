@@ -1,0 +1,46 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17048) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-reports.integration.spec.ts (65.579 s)
+  ● Consented report text over native HTTP/PostgreSQL/Transit TLS › closes the legacy upload activation gap before a plaintext file or draft is written
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 201
+
+      395 |   await pool.query('DELETE FROM chat_crypto_state WHERE conversation_id=$1',[lobby]);let activated=false;
+      396 |   const spy=jest.spyOn(chat,'assertLegacyRouteAllowed').mockImplementation(async(...args)=>{if(args[2]&&!activated){activated=true;await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES($1,'LOBBY_AEAD','RECONCILED','KNOWN')",[lobby]);}return original(...args);});
+    > 397 |   try{expect((await uploadLobby()).status).toBe(409);expect(activated).toBe(true);expect(fs.readdirSync(path.join(objectRoot,'legacy-images')).sort()).toEqual(files);expect((await pool.query('SELECT count(*) FROM pending_image_uploads')).rows[0].count).toBe(before);}
+          |                                            ^
+      398 |   finally{spy.mockRestore();await pool.query("INSERT INTO chat_crypto_state(conversation_id,mode,migration_state,history_status) VALUES($1,'LOBBY_AEAD','RECONCILED','KNOWN') ON CONFLICT DO NOTHING",[lobby]);}
+      399 |  });
+      400 | });
+
+      at Object.<anonymous> (test/chat-crypto-reports.integration.spec.ts:397:44)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 35 passed, 36 total
+Snapshots:   0 total
+Time:        66.17 s
+Ran all test suites matching apps/api/test/chat-crypto-reports.integration.spec.ts.
+{"run":"8b6d4dd9581943c3ac673e3290345231","version":"2.7.1","image":"ghcr.io/openbao/openbao@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf","tlsVerified":true,"untrustedTlsDenied":true,"transitRoundtrip":false,"nonceRandomized":false,"tamperDenied":false,"appCannotManageKeys":false,"appCannotReadReports":false,"keyExportDenied":false,"operatorRotationRewrap":false,"restartPersistence":false,"sealedDenied":false,"outageDenied":false,"appRoleSecretRevocation":false,"auditPlaintextAbsent":false,"mainDatabaseChanged":false,"mainEnvironmentChanged":false,"productionReady":false,"cleanup":true,"adapterRoundtrip":true,"adapterMaximumImage":true,"adapterOversizeDenied":true,"adapterUntrustedTlsDenied":true,"adapterRandomized":true,"adapterBindingDenied":true,"adapterTamperDenied":true,"adapterReportAclDenied":true,"adapterOperatorCannotDecrypt":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Native report HTTP tests failed; no success claim
+
+1 !== 0
+
+    at file:///E:/FGweb/code/quality/evidence/CHATCRYPTO-BE/report-native.mjs:77:89
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

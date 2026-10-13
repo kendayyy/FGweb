@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {audit} from './audit.mjs';
+const dir='quality/evidence/T02-FIX3',hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const report=audit(),ledger=JSON.parse(fs.readFileSync('quality/tasks.json')),task=ledger.followups.find(t=>t.id==='T02-FIX3');
+const labels=['image-pull-1','pin-image-1','matrix-4','browser-1','transit-9','compose-1','lint-3','diff-2','audit-2'];
+task.commands=labels.map(label=>{const r=JSON.parse(fs.readFileSync(`${dir}/codex-${label}.json`));assert.equal(r.exitCode,0,label);assert.equal(hash(r.evidencePath),r.evidenceSha256,label);return r;});
+task.status='PASS';task.completedAt=new Date().toISOString();task.review='Native TLS/Raft Transit/RBAC/rotation/restart/seal/outage + native SAS/Megolm/recovery/rotation + headed browser WASM/IndexedDB verified. Frozen parent/main environment/8 baselines/prior PASS preserved; owned key fixtures cleaned. See review.md for limits.';
+const closure={...report,status:'PASS',completedAt:task.completedAt,review:task.review,parentStillBlockedUntilSetupAdoption:true,next:'CHATCRYPTO-DATA resume with reviewed setup output adoption'};
+fs.writeFileSync(`${dir}/closure.json`,JSON.stringify(closure,null,2)+'\n');
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(`${p}/${e.name}`):[`${p}/${e.name}`]);
+const outputs=[...walk('infra/chat-crypto'),...walk(dir).filter(p=>!p.includes('/codex-close-'))];
+task.outputsHash={algorithm:'sha256',files:Object.fromEntries(outputs.map(p=>[p,hash(p)]))};task.evidencePaths=outputs.filter(p=>p.startsWith(dir));ledger.activeCheckpoint=null;
+fs.writeFileSync('quality/tasks.json',JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md',`\n- T02-FIX3 kết thúc ${new Date(task.completedAt).toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'})} +07:00: OpenBao2.7.1 exact digest/native TLS/Raft15 security flags đạt, transit9 thêm report-decrypt/operator-decrypt deny; SAS/Megolm/recovery/rotation10 native flags và headed browser WASM build/IndexedDB reload đạt. Giữ syntax/readiness/status/declarative-audit/WASM wrapper failures; fresh consumed IDs sửa đúng API, không bỏ security assertions. Compose/lint3/diff2/audit2 exit0; source/parent/env/8 baseline/old PASS giữ nguyên, private fixture TLS/key stores/container dọn. Manual setup PASS, DATA chỉ resume sau reviewed output adoption. Chưa FG crypto feature/prod custody/mobile/load/main migration. Evidence code/quality/evidence/T02-FIX3/closure.json.\n`);
+console.log(JSON.stringify(closure));

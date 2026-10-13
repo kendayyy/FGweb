@@ -3,6 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script id="fg-theme-init">
+      (function () {
+        var theme = 'dark';
+        try {
+          var saved = localStorage.getItem('fg.theme');
+          if (saved === 'light' || saved === 'dark') theme = saved;
+          else if (saved === 'system') {
+            try { if (typeof matchMedia === 'function' && !matchMedia('(prefers-color-scheme: dark)').matches) theme = 'light'; } catch (_) {}
+            try { localStorage.setItem('fg.theme', theme); } catch (_) {}
+          }
+        } catch (_) {}
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1f252c" />
     <title>FG</title>
   </head>
   <body>

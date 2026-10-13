@@ -1,0 +1,28 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:27096) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (34.406 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › binds public verification to the historical cohort and deduplicates context immutably
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+       96 |  it('binds public verification to the historical cohort and deduplicates context immutably',async()=>{await availableSource(async()=>{
+       97 |   const revision=Number((await pool.query("SELECT membership_revision FROM chat_crypto_state WHERE conversation_id='legacy'")).rows[0].membership_revision),transactionId='cohort-verification',input={conversationId:'legacy',membershipRevision:revision,deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}};
+    >  98 |   expect((await write('verification',input)).status).toBe(403);const qualified={...input,cohortId:'available'};expect((await write('verification',qualified)).status).toBe(201);expect((await write('verification',qualified)).status).toBe(201);
+          |                                                      ^
+       99 |   const rows=(await pool.query('SELECT id,cohort_id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows;expect(rows).toHaveLength(1);expect(rows[0].cohort_id).toBe('available');expect((await pool.query('SELECT id FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[rows[0].id])).rowCount).toBe(1);
+      100 |   expect((await write('verification',{...qualified,cohortId:'verified'})).status).toBe(409);expect((await write('verification',{...qualified,transactionId:'late-target',recipientUserId:'outsider',recipientDeviceId:'C',content:{...input.content,transaction_id:'late-target'}})).status).toBe(403);expect((await write('verification',{...qualified,transactionId:'new-device',recipientDeviceId:'AFTER_BOB_COHORT',content:{...input.content,transaction_id:'new-device'}})).status).toBe(403);expect((await write('verification',{...qualified,deviceId:'AFTER_COHORT',content:{...input.content,from_device:'AFTER_COHORT'}})).status).toBe(403);
+      101 |  });});
+
+      at test/chat-crypto-legacy.integration.spec.ts:98:54
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:85:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:96:103)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        34.898 s, estimated 40 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

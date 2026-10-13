@@ -1,0 +1,34 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |contracts| packages/contracts/test/chat-crypto-transport.test.ts (10 tests | 1 failed) 60ms
+   ❯ crypto transport ownership and native SAS support (10)
+     × accepts cross-signing signature IDs containing unpadded base64 key characters 27ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |contracts| packages/contracts/test/chat-crypto-transport.test.ts > crypto transport ownership and native SAS support > accepts cross-signing signature IDs containing unpadded base64 key characters
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/contracts/test/chat-crypto-transport.test.ts:7:166
+      5|   const key=Buffer.alloc(32,255).toString('base64').replace(/=+$/,''),…
+      6|   const signed=(usage:string)=>({user_id:'@a:fg.invalid',usage:[usage]…
+      7|   expect(c.UploadCrossSigningKeysSchema.safeParse({masterKey:signed('m…
+       |                                                                                                                                                                      ^
+      8|  });
+      9|  it('covers prekey replenishment, private legacy images and explicit r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  19:25:14
+   Duration  1.16s (transform 54%, import 38%, tests 7%, worker 1%)
+

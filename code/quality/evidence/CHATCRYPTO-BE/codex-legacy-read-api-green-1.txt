@@ -1,0 +1,29 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:17944) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (45.603 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      49 |  it('requires a verified historical cohort and current owned device/member; normal plaintext paths remain closed',async()=>{
+      50 |   expect((await request(base).get('/api/v1/crypto/conversations/legacy/legacy/batch').query({deviceId:'A',cohortId:'verified'})).status).toBe(401);expect((await batch('outsider')).status).toBe(403);expect((await batch('leaver')).status).toBe(403);expect((await batch('bob',{deviceId:'A'})).status).toBe(403);expect((await batch('alice',{cohortId:'missing'})).status).toBe(403);
+    > 51 |   expect((await request(base).get('/api/v1/conversations/legacy/messages').set('Cookie',cookies.get('alice')!)).status).toBe(403);expect((await request(base).get('/api/v1/images/'+imageId).set('Cookie',cookies.get('alice')!)).status).toBe(403);
+         |                                                                                                                                                                                                                                           ^
+      52 |  });
+      53 |  it('reads only explicitly mapped sources, with exact text/image digest and sub-millisecond cursor parity',async()=>{
+      54 |   const first=await batch('alice',{limit:1});expect(first.status).toBe(200);expect(first.body.items).toHaveLength(1);expect(first.body.items[0].sourceManifest).toEqual(manifests.get('msg-a'));expect(first.body.items[0].originalSha256).toBe(digests.get('msg-a'));expect(first.body.hasMore).toBe(true);expect(first.body.nextCursor).toBe('msg-a');
+
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:51:235)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        46.211 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

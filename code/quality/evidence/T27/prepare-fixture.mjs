@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+let helper=fs.readFileSync('quality/evidence/T26/private-gateway-fixture.mjs','utf8').replaceAll('.runtime/t26/','.runtime/t27/');
+assert(helper.includes('origin,turnTcp=false}'));
+helper=helper.replace('origin,turnTcp=false}','origin,turnTcp=false,webhookUrl}');
+const needle='keys:\\n  ${JSON.stringify(key)}: ${JSON.stringify(secret)}\\n`';
+assert(helper.includes(needle));
+helper=helper.replace(needle,'${webhookUrl?`webhook:\\n  api_key: ${JSON.stringify(key)}\\n  urls: [${JSON.stringify(webhookUrl)}]\\n`:\'\'}keys:\\n  ${JSON.stringify(key)}: ${JSON.stringify(secret)}\\n`');
+fs.writeFileSync('quality/evidence/T27/private-gateway-fixture.mjs',helper);
+console.log('Owned private native SFU fixture prepared with real signed webhook delivery');

@@ -1,0 +1,42 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:20940) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-legacy.integration.spec.ts (120.074 s)
+  ● Verified legacy source API with actual auth/PG/native devices/files › relays historical native Olm keys and roundtrips a Megolm source archive on both original devices
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "fixture cleanup finalize fault"
+    Received message:   "relation \"users\" does not exist"
+
+          259 |    const {stage,objects,completed}=await context(db);if(objects.some(object=>object.cleanup_state!=='REMOVED'))throw new ConflictException('Historical cleanup incomplete');
+          260 |    if(!completed){
+        > 261 |     const members=(await db.query(`SELECT u.id FROM users u WHERE EXISTS(SELECT 1 FROM conversations c WHERE c.id=$1 AND (c.user1_id=u.id OR c.user2_id=u.id OR EXISTS(SELECT 1 FROM rooms r JOIN room_members rm ON rm.room_id=r.id WHERE r.conversation_id=c.id AND rm.user_id=u.id) OR (NOT EXISTS(SELECT 1 FROM rooms r WHERE r.conversation_id=c.id) AND EXISTS(SELECT 1 FROM conversation_members cm WHERE cm.conversation_id=c.id AND cm.user_id=u.id)))) AND NOT COALESCE((SELECT a.action='BAN' FROM admin_actions a WHERE a.target_user_id=u.id AND a.action IN ('BAN','UNBAN') ORDER BY a.created_at DESC,a.id DESC LIMIT 1),false) ORDER BY u.id`,[id])).rows;
+              |                    ^
+          262 |     await db.query('UPDATE chat_crypto_membership_intervals SET end_revision=$2,left_at=clock_timestamp() WHERE conversation_id=$1 AND end_revision IS NULL',[id,stage.next_live_revision]);
+          263 |     for(const member of members)await db.query('INSERT INTO chat_crypto_membership_intervals(id,conversation_id,user_id,start_revision,joined_at) VALUES($1,$2,$3,$4,clock_timestamp())',[randomUUID(),id,member.id,stage.next_live_revision]);
+          264 |     await db.query("UPDATE chat_crypto_legacy_stages SET phase='RECONCILED',completed_at=clock_timestamp() WHERE id=$1",[stage.id]);await db.query("UPDATE chat_crypto_state SET migration_state='RECONCILED',membership_revision=$2 WHERE conversation_id=$1",[id,stage.next_live_revision]);
+
+      at ../../node_modules/pg/lib/client.js:694:17
+      at src/modules/chat-crypto/crypto-legacy.service.ts:261:20
+      at CryptoLegacyService.transaction (src/modules/chat-crypto/crypto-legacy.service.ts:43:17)
+      at test/chat-crypto-legacy.integration.spec.ts:301:381
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:46:212)
+      at test/chat-crypto-legacy.integration.spec.ts:293:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:100:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:164:115)
+      at Object.toThrow (../../node_modules/expect/build/index.js:2155:20)
+      at test/chat-crypto-legacy.integration.spec.ts:301:413
+      at withReaderClone (test/chat-crypto-legacy.integration.spec.ts:46:212)
+      at test/chat-crypto-legacy.integration.spec.ts:293:6
+      at availableSource (test/chat-crypto-legacy.integration.spec.ts:100:7)
+      at Object.<anonymous> (test/chat-crypto-legacy.integration.spec.ts:164:115)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        120.46 s
+Ran all test suites matching apps/api/test/chat-crypto-legacy.integration.spec.ts.

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-12T20:07:08.213Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "T30 real PG controlled RED10 identifies two native presence RPCs for nonempty snapshot under canonical lock. Actual pinned SFU returns empty participants for both empty/missing rooms: preserve room confirmation whenever snapshot empty/not_found; only nonempty snapshot skips redundant listRooms. Same canonical SQL/member locks/fresh lease/policy/coalescing/quota/unknown fault rollback; no deadlines changed.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/calls/call-lifecycle.service.ts",
+      "proposed": "quality/evidence/T30/lifecycle-native-read-reviewed1.ts",
+      "beforeSha256": "d32e443a6d2053555444e0755e4e3542d0ab89f3c10339f2d372ff8a906b4efd",
+      "afterSha256": "cf158955cf7f173e045360e5a0b71a3691549af248c0eb3720c72180d926a12f"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T30/lifecycle-native-read-adoption-plan1.json",
+    "sha256": "20869968d57d39a1392b3664ed189686eed87bdfc83c68a850807fcbb72d8c20"
+  },
+  "nativeAcceptancePending": true
+}

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/CHATCRYPTO-FE',hash=x=>createHash('sha256').update(x).digest('hex'),ledger=JSON.parse(fs.readFileSync('quality/tasks.json','utf8'));
+const task=ledger.tasks.find(t=>t.id==='CHATCRYPTO-FE');assert.equal(task.status,'IN_PROGRESS');
+const room='apps/web/src/features/rooms/RoomsPage.tsx';
+fs.writeFileSync(`${dir}/active-membership-room-original.tsx`,fs.readFileSync(room),{flag:'wx'});
+fs.writeFileSync(`${dir}/active-membership-before.json`,JSON.stringify({recordedAt:new Date().toISOString(),files:{[room]:hash(fs.readFileSync(room))},rows:Object.fromEntries(ledger.tasks.filter(t=>t.id!==task.id).map(t=>[t.id,hash(JSON.stringify(t))])),gate:task.gateRebaseline},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(`${dir}/active-membership-red-source.mjs`,fs.readFileSync(`${dir}/headed-active-membership.mjs`),{flag:'wx'});
+fs.writeFileSync(`${dir}/active-membership-scope-review.md`,'# Active room admission review before fix\n\nActual headed RED1 without owner route refresh commits a group message but the admitted member has no native key. Current state revision changes while caller peer metadata stays old; successful query of a subset is not proof of complete current group recipients. Add an authorized room member resolver callback to RoomsPage/PrivateChatPane and validate its exact unique IDs at a stable authoritative crypto revision before native sharing/sending. Cache only a successfully validated revision; recheck state after fetching roster, deny mismatch/changed revision and request parent public member refresh. Do not trust DOM/cached IDs, override native verification, send plaintext, forward old keys, or perform silent retry. Preserve draft on recipient changes, rotate native epoch and new transaction as already reviewed. DM static peer list remains unchanged. Capture current room source/old rows/gate before edit; exact reviewed callback/import/prop delta and native/headed active-admission proof required before pin. Historical group4 remains valid for its route-refresh scenario, not no-navigation admission. No full FE/PASS/BAN producer or later task.\n',{flag:'wx'});
+console.log('Reviewed actual active-room missing-recipient defect; source and rows captured before edit.');

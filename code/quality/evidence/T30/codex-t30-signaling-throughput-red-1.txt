@@ -1,0 +1,48 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:47056) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    {"task":"T30","measurement":"real-PG-guarded-websocket-ping-pong","messages":32,"durationMs":2695,"orderVerified":true,"fakeSfuAdapter":true,"nativeMediaAcceptance":false}
+
+      at Object.<anonymous> (test/t30-signaling-throughput.integration.spec.ts:412:15)
+
+FAIL apps/api/test/t30-signaling-throughput.integration.spec.ts (53.113 s)
+  ● T30 signaling gateway throughput and guard batching › enforces screen share quota denial returning NOT_ALLOWED without forwarding to upstream SFU
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Current screen quota required"
+    Received: "Current publication source denied"
+
+      569 |       if (denyResponse && denyResponse.message.case === 'requestResponse') {
+      570 |         expect(denyResponse.message.value.reason).toBe(RequestResponse_Reason.NOT_ALLOWED);
+    > 571 |         expect(denyResponse.message.value.message).toBe('Current screen quota required');
+          |                                                    ^
+      572 |       }
+      573 |
+      574 |       // Upstream SFU must NEVER have received this denied screen share track
+
+      at Object.<anonymous> (test/t30-signaling-throughput.integration.spec.ts:571:52)
+
+  ● T30 signaling gateway throughput and guard batching › overflowing bounded queue (>= 256 queued frames or > 1 MiB) immediately closes binding without leaking memory
+
+    eventually timed out after 8000ms
+
+      340 |     await new Promise((r) => setTimeout(r, interval));
+      341 |   }
+    > 342 |   throw new Error(`eventually timed out after ${timeout}ms`);
+          |         ^
+      343 | }
+      344 |
+      345 | jest.setTimeout(60000);
+
+      at eventually (test/t30-signaling-throughput.integration.spec.ts:342:9)
+      at Object.<anonymous> (test/t30-signaling-throughput.integration.spec.ts:768:7)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        55.744 s
+Ran all test suites within paths "apps/api/test/t30-signaling-throughput.integration.spec.ts".
