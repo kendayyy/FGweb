@@ -25,6 +25,11 @@ description: "Automatically commit and push each legitimately completed FG task 
 - Không sửa frozen evidence để che secrets hoặc làm lệch hash/checker.
   Loại tệp riêng tư khỏi bản public, giữ original local và ghi lý do nếu cần.
 - Commit có task ID và mô tả ngắn, ví dụ: "T31: complete reviewed task".
+  GITHUB-AUTHOR-01 (13/10/2026): user yêu cầu tác giả là kendayy; dùng local
+  user.name=kendayy và user.email=154690915+kendayyy@users.noreply.github.com.
+  Chỉ định đổi toàn bộ lịch sử Codex Lien là ngoại lệ riêng cho migration
+  authorship: backup trước, metadata-only, kiểm trees/mapping, push bằng
+  force-with-lease với remote SHA đã xác minh; không mở quyền force task mới.
   Push origin/master thông thường; không force-push/reset/rebase phá lịch sử.
 - Khi push bị từ chối, fetch/đối chiếu trước; chỉ tích hợp thay đổi remote
   được review trong scope. Không ghi đè thay đổi của người khác. Retry lỗi
