@@ -1,5 +1,7 @@
 # FG — Task Implementation Plan
 
+> **GITHUB-AUTO-PUSH-01 — 13/10/2026:** Người dùng cấp quyền thường trực tự commit/push mỗi task hoàn tất hợp lệ lên repo PUBLIC kendayyy/FGweb, origin/master, không hỏi lại từng lần. Sau gate acceptance/tests/review/checker, chốt ledger/evidence/history, kiểm staged scope và secrets, commit task rồi push và xác minh remote SHA; ghi kết quả thật trước bàn giao theo .agents/rules/12-github-auto-push.md. Giữ secrets/runtime/evidence riêng tư ở local và originals frozen; không thay PASS/checker/thứ tự hoặc tự deploy production. Lỗi push phải báo riêng, không ghi đã sync.
+
 > **CODEX-ONLY-01 — 12/10/2026:** Theo chỉ định mới của người dùng, toàn bộ task FG chỉ dùng Codex trực tiếp triển khai, review, áp dụng, kiểm thử và chốt. Tắt hoàn toàn việc dùng skill/dashboard/monitor Anti2; không dùng/giao việc cho Antigravity. Không tự bật, khởi động lại hoặc phục hồi cockpit-tools; quyền phục hồi tự động cũ đã bị thu hồi. Nội dung giao Antigravity/model Gemini bên dưới là quy trình lịch sử đã được chỉ định này thay thế. Tiếp tục T30 đang IN_PROGRESS, giữ thứ tự/scope/acceptance/checker/evidence/headed UI/E2E/Telegram và 80 PASS hiện có; không mở T31 trước PASS. Evidence cũ được giữ nguyên; driver mới phải tuân thủ chỉ định này.
 
 > **For agentic workers:** Thực hiện tuần tự, mỗi lần đúng một task theo giao thức dưới đây. Có thể dùng superpowers:executing-plans nếu môi trường có skill; Antigravity không cần skill đó để hiểu tài liệu này. Không tự tạo subagent hoặc chạy task song song.

@@ -21,6 +21,12 @@ Workspace mở tại E:/FGweb. Shell cài/build/test làm việc tại E:/FGweb/
 Hướng dẫn sử dụng và danh mục rule: .doc/03-antigravity-rules.md.
 Yêu cầu mới của người dùng có thể điều chỉnh project rules; ghi thay đổi được chỉ định vào tài liệu và task liên quan.
 
+## Tự động push GitHub — GITHUB-AUTO-PUSH-01, 13/10/2026
+- Người dùng yêu cầu tự động push mỗi khi chạy xong task. Đây là quyền thường trực cho Codex commit/push task đã hoàn tất hợp lệ lên repo PUBLIC https://github.com/kendayyy/FGweb, remote origin, nhánh master; không hỏi lại mỗi lần.
+- Áp dụng sau khi acceptance/tests/review/checker hiện hành xác nhận hoàn tất; chốt ledger/evidence/history trước commit. Task FAILED/BLOCKED/IN_PROGRESS hoặc phiên test kết thúc chưa là task hoàn tất, không tự đổi PASS để push.
+- Đọc và làm theo .agents/rules/12-github-auto-push.md. Kiểm staged diff/secrets trước mọi push public; chỉ stage thay đổi thuộc task đã chốt và tài liệu/evidence tương ứng, giữ secrets/runtime/logs riêng tư ở local, giữ nguyên evidence frozen.
+- Ghi command/time/exit/commit và xác minh remote SHA sau push trong evidence/history; báo lỗi push thật và xử lý retry an toàn, không force-push hoặc ghi đã đồng bộ khi chưa xác minh. Đây là backup GitHub, không tự deploy/publish production hoặc mở task tiếp theo trước gate.
+
 ## Chỉ dùng Codex — CODEX-ONLY-01, 12/10/2026
 - Chỉ định mới của người dùng: tắt hoàn toàn skill Anti2; các task chỉ dùng Codex, không dùng Antigravity; cockpit không được tự động bật.
 - Áp dụng cho toàn bộ task FG từ chỉ định này: Codex trực tiếp triển khai, review, áp dụng, kiểm thử và chốt. Không gọi skill/dashboard/monitor Anti2 hoặc CLI/app Antigravity, không giao việc cho Antigravity.
