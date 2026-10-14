@@ -1,3 +1,4 @@
+import {enqueueNotification} from '@fg/database';
 import { Injectable, OnModuleDestroy, OnModuleInit, HttpException,ConflictException,ServiceUnavailableException } from '@nestjs/common';
 import { Pool, PoolClient } from 'pg';
 import { randomUUID } from 'node:crypto';
@@ -244,7 +245,10 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         if(drafts.length&&(await db.query('SELECT id FROM chat_crypto_upload_drafts WHERE id=ANY($1::text[]) AND expires_at>clock_timestamp()',[ids])).rowCount!==drafts.length)chatError(ErrorCode.INVALID_INPUT,'Image expired');
         await db.query(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id,reply_to_id,type,encryption_mode,crypto_envelope,crypto_revision) VALUES($1,$2,$3,'',$4,$5,$6,'LOBBY_AEAD',$7,$8)`,[id,conversationId,actor.userId,input.clientMessageId,input.replyToId??null,ids.length?'IMAGE':'TEXT',envelope,state.membership_revision]);
         for(const draft of drafts){await db.query(`INSERT INTO attachments(id,message_id,conversation_id,url,file_name,file_size,mime_type,encryption_mode,crypto_envelope) VALUES($1,$2,$3,$4,'',$5,'application/octet-stream','LOBBY_AEAD',$6)`,[draft.id,id,conversationId,attachmentUrl(draft.id),draft.ciphertext_size,draft.envelope]);await db.query('UPDATE chat_crypto_upload_drafts SET message_id=$2,consumed_at=clock_timestamp() WHERE id=$1',[draft.id,id]);}
-        for(const target of targets)await db.query('INSERT INTO mentions(id,message_id,mentioned_user_id) VALUES($1,$2,$3)',[randomUUID(),id,target]);
+        for(const target of targets){
+            await db.query('INSERT INTO mentions(id,message_id,mentioned_user_id) VALUES($1,$2,$3)',[randomUUID(),id,target]);
+            await enqueueNotification(db,target,'MENTION',{conversationId,messageId:id,mentionerId:actor.userId},'lobby-mention:'+id+':'+target);
+        }
         await db.query(`INSERT INTO realtime_outbox(id,message_id,conversation_id,event_name) VALUES($1,$2,$3,'message.created')`,[randomUUID(),id,conversationId]);return this.dto(id,db);
     }
     async dispatch(publish: (messageId: string) => Promise<void>) {

@@ -5580,3 +5580,138 @@
 - Coding and build 2 — T32 — actual 2026-10-13T19:31:48.316Z–2026-10-13T19:32:00.137Z exit0: t32-git-push-1. Evidence code/quality/evidence/T32/codex-t32-git-push-1.json; primary SHA verified, bounded receipt backup pending.
 
 - Coding and build 2 — T32 — actual 2026-10-13T19:32:21.386Z–2026-10-13T19:32:22.494Z exit0: t32-primary-remote-verification-1. Evidence code/quality/evidence/T32/codex-t32-primary-remote-verification-1.json; primary SHA verified, bounded receipt backup pending.
+
+- Coding and build 2 — T32 — backup hoàn tất 2026-10-13T19:33:22.211Z: bounded receipt commit/push actual2026-10-13T19:33:04.856Z–2026-10-13T19:33:14.354Z exit0/0, remote master SHA b30a2ec1d141005c055fa2f203cf509ebfe2183d verified, primary 0b1a426ca3b9ee24fba223d088502b599b43a456 included. Final receipt/commands retained local to avoid recursive commits, source acceptance/frozen outputs unchanged. Evidence code/quality/evidence/T32/github-final-sync1.json. T33 may enter only through its reviewed stock gate.
+
+- Coding and build 2 — T33 — bắt đầu 2026-10-13T19:44:18.296Z: resume approved spec7/task after T32 PASS and verified master SHA b30a2ec1d141005c055fa2f203cf509ebfe2183d.83 priorPASS preserved; current notification tables/private crypto controller exist, general inbox/read/preferences and BullMQ worker remain to implement. Plan code/quality/evidence/T33/implementation-plan1.md; stock entry gate and exact scope/lineage review pending before business source edits. Codex-only inline, no frontend/main migration/SMTP-push activation.
+
+- Coding and build 2 — T33 — 2026-10-13T19:52:02.373Z: approved current spec lineage/83frozen PASS/new scope and snapshot pass stock gate before business changes. Initial old-spec stock failure preserved. T33 now IN_PROGRESS; RED API/real Redis-worker next, exact shared source transitions before adoption, no UI/main migration/delivery claim. Evidence code/quality/evidence/T33/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:01:52 +07:00: Approved T33 unread-count and safe per-event/channel partial preferences; retain existing full preference DTO and all old valid full request objects, add formal nonnegative read-count responses. No actor authority from input or forbidden email types. Evidence code/quality/evidence/T33/contracts1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:20:31 +07:00: Approved T33 general inbox/read/prefs and BullMQ require exact shared registration/source/realtime/transactional producer integration. Private predicate source byte-equivalent; origin/session/socket guards, crypto protocols/ciphers and existing private dispatcher remain intact. Lobby enqueue adds only metadata after existing AEAD mentions; general helper handles approved channel settings without sending PUSH/EMAIL. Worker start script uses existing installed monorepo dependencies; package-lock/external dependencies/cache remain unchanged. Evidence code/quality/evidence/T33/integration2-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:25:41 +07:00: Fresh T33 contracts compile of reviewed source in an owned sandbox. Exact changed/new compiled files only; canonical source/build stayed unchanged during compile, preserve historical assets/outputs and all83PASS/checker. Evidence code/quality/evidence/T33/contract-build1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:30:07 +07:00: Fresh T33 database compile of reviewed source in an owned sandbox. Exact changed/new compiled files only; canonical source/build stayed unchanged during compile, preserve historical assets/outputs and all83PASS/checker. Evidence code/quality/evidence/T33/database-build1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:40:26 +07:00: Actual full8type DTO RED: broad ROOM_INVITE branch stripped playSessionId from valid TEAM_INVITE before paired validation. Parse the more specific TEAM data branch first, preserving every existing schema and valid DTO; no weakened validation or private source check. Evidence code/quality/evidence/T33/source-identity1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:55:07.394Z–2026-10-13T19:56:55.563Z exit1: node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/api/jest.config.js --runInBand apps/api/test/notifications.integration.spec.ts. Evidence code/quality/evidence/T33/codex-t33-api-red-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:01:17.461Z–2026-10-13T20:01:17.809Z exit0: node quality/evidence/T33/prepare-authority-source1.mjs. Evidence code/quality/evidence/T33/codex-t33-authority-source-prepare-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:19:36.706Z–2026-10-13T20:19:37.598Z exit0: node quality/evidence/T33/prepare-build-drivers1.mjs. Evidence code/quality/evidence/T33/codex-t33-build-driver-prepare-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:58:04.701Z–2026-10-13T20:01:52.500Z exit0: node quality/evidence/T33/adopt-exact.mjs contracts1 quality/evidence/T33/contracts-adoption-plan1.json. Evidence code/quality/evidence/T33/codex-t33-contract-adoption-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:22:33.721Z–2026-10-13T20:22:45.414Z exit0: node quality/evidence/T33/build-source-sandbox1.mjs contracts. Evidence code/quality/evidence/T33/codex-t33-contract-build-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:43:51.234Z–2026-10-13T20:44:00.098Z exit0: node quality/evidence/T33/build-source-sandbox2.mjs contracts. Evidence code/quality/evidence/T33/codex-t33-contract-build-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:23:08.002Z–2026-10-13T20:25:41.610Z exit0: node quality/evidence/T33/adopt-exact.mjs contract-build1 quality/evidence/T33/contracts-build1-adoption-plan.json. Evidence code/quality/evidence/T33/codex-t33-contract-build-adoption-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:23:06.592Z–2026-10-13T20:23:06.808Z exit0: node quality/evidence/T33/propose-compiled1.mjs contracts. Evidence code/quality/evidence/T33/codex-t33-contract-build-proposal-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:44:08.972Z–2026-10-13T20:44:09.220Z exit0: node quality/evidence/T33/propose-compiled2.mjs contracts. Evidence code/quality/evidence/T33/codex-t33-contract-build-proposal-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:03:38.791Z–2026-10-13T20:03:41.498Z exit0: node node_modules/vitest/vitest.mjs run --root packages/contracts test/notification-preferences.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-contract-green-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:57:58.025Z–2026-10-13T19:57:58.225Z exit0: node quality/evidence/T33/propose-contracts1.mjs. Evidence code/quality/evidence/T33/codex-t33-contract-proposal-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:57:11.237Z–2026-10-13T19:57:15.109Z exit1: node node_modules/vitest/vitest.mjs run --root packages/contracts test/notification-preferences.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-contract-red-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:27:31.872Z–2026-10-13T20:27:40.020Z exit0: node quality/evidence/T33/build-source-sandbox1.mjs database. Evidence code/quality/evidence/T33/codex-t33-database-build-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:27:49.618Z–2026-10-13T20:30:07.417Z exit0: node quality/evidence/T33/adopt-exact.mjs database-build1 quality/evidence/T33/database-build1-adoption-plan.json. Evidence code/quality/evidence/T33/codex-t33-database-build-adoption-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:27:48.237Z–2026-10-13T20:27:48.512Z exit0: node quality/evidence/T33/propose-compiled1.mjs database. Evidence code/quality/evidence/T33/codex-t33-database-build-proposal-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:42:32.990Z–2026-10-13T20:42:54.645Z exit0: node node_modules/vitest/vitest.mjs run --root packages/contracts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-full-contract-green-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:36:57.524Z–2026-10-13T20:36:59.711Z exit1: node node_modules/vitest/vitest.mjs run --root packages/contracts test/notification-preferences.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-inbox-source-contract-red-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:16:36.764Z–2026-10-13T20:20:31.376Z exit0: node quality/evidence/T33/adopt-exact.mjs integration2 quality/evidence/T33/integration-adoption-plan2.json. Evidence code/quality/evidence/T33/codex-t33-integration-adoption-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:15:46.454Z–2026-10-13T20:15:46.665Z exit1: node quality/evidence/T33/propose-integration1.mjs. Evidence code/quality/evidence/T33/codex-t33-integration-proposal-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:16:29.208Z–2026-10-13T20:16:29.392Z exit0: node quality/evidence/T33/propose-integration2.mjs. Evidence code/quality/evidence/T33/codex-t33-integration-proposal-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:49:26.698Z–2026-10-13T19:52:02.663Z exit0: node quality/evidence/T33/start-reviewed-t33.mjs. Evidence code/quality/evidence/T33/codex-t33-reviewed-entry-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:38:10.598Z–2026-10-13T20:40:26.704Z exit0: node quality/evidence/T33/adopt-exact.mjs source-identity1 quality/evidence/T33/source-identity-adoption-plan1.json. Evidence code/quality/evidence/T33/codex-t33-source-identity-adoption-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:38:08.793Z–2026-10-13T20:38:09.018Z exit0: node quality/evidence/T33/propose-source-identity-fix1.mjs. Evidence code/quality/evidence/T33/codex-t33-source-identity-proposal-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T19:44:18.637Z–2026-10-13T19:44:19.315Z exit1: node scripts/verify-task.mjs T33. Evidence code/quality/evidence/T33/codex-t33-stock-entry-gate-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:31:00.624Z–2026-10-13T20:31:20.143Z exit1: node node_modules/vitest/vitest.mjs run --root apps/worker test/notification-outbox.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-worker-green-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:33:48.732Z–2026-10-13T20:34:04.045Z exit0: node node_modules/vitest/vitest.mjs run --root apps/worker test/notification-outbox.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-worker-green-2.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:08:41.980Z–2026-10-13T20:08:49.914Z exit1: node node_modules/vitest/vitest.mjs run --root apps/worker test/notification-outbox.test.ts --maxWorkers=1 --no-file-parallelism. Evidence code/quality/evidence/T33/codex-t33-worker-red-1.json; actual outcomes reviewed separately, acceptance pending and failures retained.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 03:46:39 +07:00: Fresh T33 contracts compile of reviewed source in an owned sandbox. Exact changed/new compiled files only; canonical source/build stayed unchanged during compile, preserve historical assets/outputs and all83PASS/checker. Evidence code/quality/evidence/T33/contract-build2-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:47:01.602Z–2026-10-13T20:47:55.555Z exit0: t33-api-green-1. Evidence code/quality/evidence/T33/codex-t33-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:51:48.412Z–2026-10-13T20:55:05.693Z exit1: t33-domain-regression-1. Evidence code/quality/evidence/T33/codex-t33-domain-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:55:27.256Z–2026-10-13T20:55:27.548Z exit1: t33-crypto-regression-2. Evidence code/quality/evidence/T33/codex-t33-crypto-regression-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:55:46.610Z–2026-10-13T20:57:24.166Z exit1: t33-crypto-regression-3. Evidence code/quality/evidence/T33/codex-t33-crypto-regression-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-13T20:57:59.453Z–2026-10-13T20:59:09.329Z exit1: t33-crypto-regression-4. Evidence code/quality/evidence/T33/codex-t33-crypto-regression-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — resume 2026-10-14T10:32:23.8672270+07:00: human continue; reviewed actual crypto-regression-4 exit1 (13/14, private mention REST/Socket generic text mismatch). Correct owned general service to preserve accepted private batch DTO and compare typed source binding; historical private tests/service behavior unchanged. Acceptance remains pending/IN_PROGRESS; no T34 or push.
+
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:32:24.083Z–2026-10-14T03:34:03.289Z exit1: t33-crypto-regression-5. Evidence code/quality/evidence/T33/codex-t33-crypto-regression-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:34:32.270Z–2026-10-14T03:35:28.730Z exit0: t33-api-build-1. Evidence code/quality/evidence/T33/codex-t33-api-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:35:38.228Z–2026-10-14T03:35:50.755Z exit1: t33-worker-build-1. Evidence code/quality/evidence/T33/codex-t33-worker-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:36:41.440Z–2026-10-14T03:37:42.128Z exit0: t33-crypto-regression-6. Evidence code/quality/evidence/T33/codex-t33-crypto-regression-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:38:01.246Z–2026-10-14T03:38:34.029Z exit0: t33-social-regression-2. Evidence code/quality/evidence/T33/codex-t33-social-regression-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:36:13.273Z–2026-10-14T03:36:23.076Z exit0: t33-worker-build-2. Evidence code/quality/evidence/T33/codex-t33-worker-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:38:50.907Z–2026-10-14T03:39:12.443Z exit0: t33-worker-green-3. Evidence code/quality/evidence/T33/codex-t33-worker-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:39:23.598Z–2026-10-14T03:40:03.162Z exit0: t33-api-green-2. Evidence code/quality/evidence/T33/codex-t33-api-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:40:21.883Z–2026-10-14T03:40:49.662Z exit1: t33-new-source-lint-1. Evidence code/quality/evidence/T33/codex-t33-new-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:41:33.905Z–2026-10-14T03:41:44.795Z exit0: t33-new-source-lint-2. Evidence code/quality/evidence/T33/codex-t33-new-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 10:46:31 +07:00: Fresh exact T33 API build2 and worker build2 after accepted private batch DTO preservation, unused initializer removal and named ioredis NodeNext import correction. Canonical builds untouched during compilation; no historical deletion, checker or83PASS changes. Evidence code/quality/evidence/T33/runtime-builds1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:42:19.841Z–2026-10-14T03:42:44.787Z exit0: t33-api-build-2. Evidence code/quality/evidence/T33/codex-t33-api-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:43:11.821Z–2026-10-14T03:43:12.776Z exit0: t33-runtime-build-proposal-1. Evidence code/quality/evidence/T33/codex-t33-runtime-build-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:43:14.461Z–2026-10-14T03:46:31.851Z exit0: t33-runtime-build-adoption-1. Evidence code/quality/evidence/T33/codex-t33-runtime-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:47:22.822Z–2026-10-14T03:47:49.371Z exit0: t33-compiled-smoke-1. Evidence code/quality/evidence/T33/codex-t33-compiled-smoke-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:48:14.533Z–2026-10-14T03:49:58.953Z exit0: t33-domain-regression-2. Evidence code/quality/evidence/T33/codex-t33-domain-regression-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — exact review 2026-10-14 10:52:21 +07:00: Append reviewed T33 notification API and spec traceability. Closure and acceptance evidence govern PASS; preserve historical coverage and frozen outputs. Evidence code/quality/evidence/T33/coverage1-adoption-review.json; actual task acceptance pending,83priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:50:34.256Z–2026-10-14T03:50:34.395Z exit0: t33-coverage-proposal-1. Evidence code/quality/evidence/T33/codex-t33-coverage-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:50:36.278Z–2026-10-14T03:52:21.512Z exit0: t33-coverage-adoption-1. Evidence code/quality/evidence/T33/codex-t33-coverage-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:53:20.573Z–2026-10-14T03:53:21.307Z exit0: t33-owned-presence-cleanup-1. Evidence code/quality/evidence/T33/codex-t33-owned-presence-cleanup-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:55:14.732Z: final integrity 33288 original files/83priorPASS/checker/env/baseline/exact transitions, contracts255/API20/worker10/original regressions100/compiled smoke5, current owned PG/Redis cleanup and historical schema preservation reviewed. Evidence code/quality/evidence/T33/final-local-integrity-review1.json; acceptance closure pending, no T34/production claim.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:54:27.266Z–2026-10-14T03:54:27.416Z exit0: t33-public-tools-prepare-1. Evidence code/quality/evidence/T33/codex-t33-public-tools-prepare-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:53:28.614Z–2026-10-14T03:55:14.821Z exit0: t33-final-local-integrity-review-1. Evidence code/quality/evidence/T33/codex-t33-final-local-integrity-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T33.
+
+- Coding and build 2 — T33 — actual 2026-10-14T03:55:47.329Z: Codex final acceptance review contracts255/API20/worker10/original regressions100/compiled smoke5, serialized commands/source/build/gate/83PASS/environment/current-owned cleanup/historical PG preservation. Evidence code/quality/evidence/T33/acceptance-review.md; local ledger closure and public backup pending, T34 not started.
+
+- Coding and build 2 — T33 — kết thúc acceptance 2026-10-14T03:56:40.783Z: Codex local PASS after contracts255/API20/worker10/original regressions100/compiled smoke5, new lint/fresh builds/current source ACL/private authority/83priorPASS/checker/env/baselines/exact transitions/owned PG+Redis cleanup and historical schema preservation. Retain14failed commands. Frozen1570outputs. No UI/mail/push/reminder-production/main migration/production/physical-device/1000claim. Evidence code/quality/evidence/T33/closure.json. Automatic public stage/privacy/normal master push pending; T34 not started.

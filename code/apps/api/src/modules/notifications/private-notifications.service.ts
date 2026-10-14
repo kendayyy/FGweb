@@ -1,17 +1,11 @@
+import {privateNotificationSourceAuthority as privateSourceAuthority} from '@fg/database';
 import {Injectable,OnModuleInit,OnModuleDestroy,ServiceUnavailableException} from '@nestjs/common';
 import {Pool,type PoolClient} from 'pg';
 import {DMNotificationDataSchema,MentionNotificationDataSchema,NotificationSchema,PaginationQuerySchema,ErrorCode,type NotificationDTO} from '@fg/contracts';
 import {ChatActor,chatError} from '../chat/chat.service.js';
 import {cryptoSchemaAvailable} from '../chat-crypto/crypto-schema-readiness.js';
 type Row=Record<string,unknown>;
-const privateSourceAuthority=`m.sender_id<>n.user_id AND m.encryption_mode='E2EE' AND s.mode='E2EE' AND s.migration_state='RECONCILED'
-   AND ((n.type='DM' AND c.kind='DM' AND n.dedup_key='crypto-dm:'||m.id) OR (n.type='MENTION' AND n.dedup_key='crypto-mention:'||m.id||':'||n.user_id AND EXISTS(SELECT 1 FROM mentions WHERE message_id=m.id AND mentioned_user_id=n.user_id)))
-   AND ((c.kind='DM' AND (c.user1_id=n.user_id OR c.user2_id=n.user_id)) OR (c.kind<>'LOBBY' AND c.kind<>'DM' AND (EXISTS(SELECT 1 FROM rooms r JOIN room_members rm ON rm.room_id=r.id WHERE r.conversation_id=c.id AND rm.user_id=n.user_id) OR (NOT EXISTS(SELECT 1 FROM rooms r WHERE r.conversation_id=c.id) AND EXISTS(SELECT 1 FROM conversation_members cm WHERE cm.conversation_id=c.id AND cm.user_id=n.user_id)))))
-   AND EXISTS(SELECT 1 FROM chat_crypto_membership_intervals i WHERE i.conversation_id=c.id AND i.user_id=n.user_id AND i.start_revision<=m.crypto_revision AND (i.end_revision IS NULL OR m.crypto_revision<i.end_revision))
-   AND NOT EXISTS(SELECT 1 FROM chat_crypto_legacy_migrations lm WHERE lm.message_id=m.id)
-   AND NOT EXISTS(SELECT 1 FROM blocks WHERE (blocker_id=n.user_id AND blocked_id=m.sender_id) OR (blocker_id=m.sender_id AND blocked_id=n.user_id))
-   AND NOT EXISTS(SELECT 1 FROM notification_preferences WHERE user_id=n.user_id AND notification_type=n.type AND in_app=false)
-   AND COALESCE((SELECT action FROM admin_actions WHERE target_user_id=n.user_id AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1),'UNBAN')<>'BAN'`;
+
 @Injectable()
 export class PrivateNotificationsService implements OnModuleInit,OnModuleDestroy{
  private pool!:Pool;private ready=false;

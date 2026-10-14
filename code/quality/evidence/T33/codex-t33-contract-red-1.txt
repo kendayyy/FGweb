@@ -1,0 +1,114 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/notification-preferences.test.ts (17 tests | 17 failed) 32ms
+   ❯ T33 safe partial notification preferences (17)
+     × accepts a single event/channel without inventing other saved settings 9ms
+     × accepts the existing full preference object 6ms
+     × rejects forbidden email for DM 1ms
+     × rejects forbidden email for MENTION 1ms
+     × rejects forbidden email for JOIN_REQUEST 1ms
+     × rejects forbidden email for JOIN_REQUEST_RESULT 1ms
+     × accepts approved email preference for FRIEND_INVITE 1ms
+     × accepts approved email preference for ROOM_INVITE 1ms
+     × accepts approved email preference for TEAM_INVITE 1ms
+     × accepts approved email preference for REMINDER_10MIN 1ms
+     × rejects empty or injected/non-boolean patch {} 1ms
+     × rejects empty or injected/non-boolean patch { DM: {} } 1ms
+     × rejects empty or injected/non-boolean patch { userId: 'another-user' } 1ms
+     × rejects empty or injected/non-boolean patch { FRIEND_INVITE: [Object] } 1ms
+     × rejects empty or injected/non-boolean patch { LOBBY: { push: true } } 1ms
+     × rejects empty or injected/non-boolean patch { DM: { push: 'yes' } } 1ms
+     × unread counts are nonnegative integers with no user authority field 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts a single event/channel without inventing other saved settings
+AssertionError: expected undefined to be defined
+ ❯ parse test/notification-preferences.test.ts:3:83
+      1| import {describe,it,expect} from 'vitest';import {z} from 'zod';import…
+      2| const proposed=contracts as typeof contracts&{NotificationPreferencesP…
+      3| const parse=(input:unknown)=>{expect(proposed.NotificationPreferencesP…
+       |                                                                                   ^
+      4| describe('T33 safe partial notification preferences',()=>{
+      5|  it('accepts a single event/channel without inventing other saved sett…
+ ❯ test/notification-preferences.test.ts:5:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts the existing full preference object
+AssertionError: expected undefined to be defined
+ ❯ parse test/notification-preferences.test.ts:3:83
+      1| import {describe,it,expect} from 'vitest';import {z} from 'zod';import…
+      2| const proposed=contracts as typeof contracts&{NotificationPreferencesP…
+      3| const parse=(input:unknown)=>{expect(proposed.NotificationPreferencesP…
+       |                                                                                   ^
+      4| describe('T33 safe partial notification preferences',()=>{
+      5|  it('accepts a single event/channel without inventing other saved sett…
+ ❯ test/notification-preferences.test.ts:6:203
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects forbidden email for DM
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects forbidden email for MENTION
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects forbidden email for JOIN_REQUEST
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects forbidden email for JOIN_REQUEST_RESULT
+AssertionError: expected undefined to be defined
+ ❯ parse test/notification-preferences.test.ts:3:83
+      1| import {describe,it,expect} from 'vitest';import {z} from 'zod';import…
+      2| const proposed=contracts as typeof contracts&{NotificationPreferencesP…
+      3| const parse=(input:unknown)=>{expect(proposed.NotificationPreferencesP…
+       |                                                                                   ^
+      4| describe('T33 safe partial notification preferences',()=>{
+      5|  it('accepts a single event/channel without inventing other saved sett…
+ ❯ test/notification-preferences.test.ts:7:111
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts approved email preference for FRIEND_INVITE
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts approved email preference for ROOM_INVITE
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts approved email preference for TEAM_INVITE
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > accepts approved email preference for REMINDER_10MIN
+AssertionError: expected undefined to be defined
+ ❯ parse test/notification-preferences.test.ts:3:83
+      1| import {describe,it,expect} from 'vitest';import {z} from 'zod';import…
+      2| const proposed=contracts as typeof contracts&{NotificationPreferencesP…
+      3| const parse=(input:unknown)=>{expect(proposed.NotificationPreferencesP…
+       |                                                                                   ^
+      4| describe('T33 safe partial notification preferences',()=>{
+      5|  it('accepts a single event/channel without inventing other saved sett…
+ ❯ test/notification-preferences.test.ts:8:130
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch {}
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch { DM: {} }
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch { userId: 'another-user' }
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch { FRIEND_INVITE: [Object] }
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch { LOBBY: { push: true } }
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > rejects empty or injected/non-boolean patch { DM: { push: 'yes' } }
+AssertionError: expected undefined to be defined
+ ❯ parse test/notification-preferences.test.ts:3:83
+      1| import {describe,it,expect} from 'vitest';import {z} from 'zod';import…
+      2| const proposed=contracts as typeof contracts&{NotificationPreferencesP…
+      3| const parse=(input:unknown)=>{expect(proposed.NotificationPreferencesP…
+       |                                                                                   ^
+      4| describe('T33 safe partial notification preferences',()=>{
+      5|  it('accepts a single event/channel without inventing other saved sett…
+ ❯ test/notification-preferences.test.ts:9:194
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  test/notification-preferences.test.ts > T33 safe partial notification preferences > unread counts are nonnegative integers with no user authority field
+AssertionError: expected undefined to be defined
+ ❯ test/notification-preferences.test.ts:10:147
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  17 failed (17)
+   Start at  02:57:12
+   Duration  2.30s (transform 59%, import 36%, worker 3%, tests 2%)
+

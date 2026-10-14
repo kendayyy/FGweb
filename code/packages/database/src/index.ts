@@ -22,3 +22,6 @@ export * from './schema/chat-crypto-report-audit.js';
 export * from './schema/chat-crypto-protocol-outbox.js';
 export * from './schema/chat-crypto-legacy-candidates.js';
 export * from './schema/chat-crypto-legacy-stages.js';
+
+export * from './notification-authority.js';
+export * from './notification-enqueue.js';

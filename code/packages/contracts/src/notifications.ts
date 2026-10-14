@@ -65,8 +65,8 @@ export const NotificationDataSchema = z.union([
   DMNotificationDataSchema,
   MentionNotificationDataSchema,
   FriendInviteNotificationDataSchema,
-  RoomInviteNotificationDataSchema,
   TeamInviteNotificationDataSchema,
+  RoomInviteNotificationDataSchema,
   JoinRequestNotificationDataSchema,
   JoinRequestResultNotificationDataSchema,
   Reminder10MinNotificationDataSchema,
@@ -184,3 +184,16 @@ export const WebPushSubscriptionSchema = z.object({
   }),
 });
 export type WebPushSubscriptionDTO = z.infer<typeof WebPushSubscriptionSchema>;
+
+// T33: partial per-event saves never manufacture changes to omitted channels.
+const AllowedPreferencePatchSchema = z.object({inApp:z.boolean().optional(),push:z.boolean().optional(),email:z.boolean().optional()}).strict().refine(value => Object.keys(value).length > 0, 'Choose at least one channel');
+const ForbiddenEmailPreferencePatchSchema = z.object({inApp:z.boolean().optional(),push:z.boolean().optional(),email:z.literal(false).optional()}).strict().refine(value => Object.keys(value).length > 0, 'Choose at least one channel');
+export const NotificationPreferencesPatchSchema = z.object({
+ DM:ForbiddenEmailPreferencePatchSchema.optional(),MENTION:ForbiddenEmailPreferencePatchSchema.optional(),
+ FRIEND_INVITE:AllowedPreferencePatchSchema.optional(),ROOM_INVITE:AllowedPreferencePatchSchema.optional(),TEAM_INVITE:AllowedPreferencePatchSchema.optional(),
+ JOIN_REQUEST:ForbiddenEmailPreferencePatchSchema.optional(),JOIN_REQUEST_RESULT:ForbiddenEmailPreferencePatchSchema.optional(),REMINDER_10MIN:AllowedPreferencePatchSchema.optional(),
+}).strict().refine(value => Object.keys(value).length > 0, 'Choose at least one notification type');
+export type NotificationPreferencesPatch = z.infer<typeof NotificationPreferencesPatchSchema>;
+export const NotificationUnreadCountSchema = z.object({unreadCount:z.number().int().min(0)}).strict();
+export type NotificationUnreadCountDTO = z.infer<typeof NotificationUnreadCountSchema>;
+export const NotificationReadAllResultSchema = z.object({updatedCount:z.number().int().min(0)}).strict();

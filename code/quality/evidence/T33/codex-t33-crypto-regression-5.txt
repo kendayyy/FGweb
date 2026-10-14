@@ -1,0 +1,242 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:15284) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (86.6 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › requires member session and owned active device, rejects plaintext legacy subscriptions for E2EE
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › broadcasts committed native ciphertext via opaque Redis IDs and recovers the same DTO through REST
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › wakes only the addressed device through durable Redis metadata and keeps REST sync authoritative
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › recovers an offline device from REST after a missed wakeup and reconnects without replaying plaintext
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds pending bus deliveries during a burst while REST remains the recovery path
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › filters a delayed old event for a new member while retaining their subscription for new ciphertext
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › applies the same subscription quota across encrypted and legacy channels
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › stops delivery and rejects resubscription after device revocation
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rejects an already subscribed banned session and permits a fresh subscription after unban
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › persists client-selected mention routing IDs atomically and binds duplicate retries without reading private text
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds database roundtrips for a thousand selected mentions while preserving prefs retry ACL and rollback
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › does not retain a disconnected socket whose subscription was waiting on a real epoch lock
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › rechecks membership and durable logout on an already connected socket
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      50 |  beforeAll(async()=>{
+      51 |   await sdk.initAsync();const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options',`-c search_path=${owned}`);
+    > 52 |   pool=new pg.Pool({connectionString:url.href,connectionTimeoutMillis:5000});await pool.query(`CREATE SCHEMA "${owned}"`);const db=await pool.connect();try{await migrate(drizzle(db),{migrationsFolder:'packages/database/migrations',migrationsSchema:owned});}finally{db.release();}
+         |                                                                              ^
+      53 |   for(const user of ['alice','bob','outsider']){
+      54 |    await pool.query(`INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$1,$2,true,now(),now())`,[user,user+'@example.invalid']);
+      55 |    await pool.query(`INSERT INTO "session"(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$1,now()+interval '1 day',now(),now())`,[user+'-session',user]);cookies.set(user,await createSignedSessionCookie(secret,user+'-session'));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:52:78)
+
+
+  ● Test suite failed to run
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      67 |  afterAll(async()=>{
+      68 |   for(const socket of sockets)socket.disconnect();bus?.disconnect();for(const machine of machines.values())machine.close();
+    > 69 |   try{await app?.close();}finally{try{if(pool){expect(owned).toMatch(/^crypto_be_[a-f0-9]{32}$/);await pool.query(`DROP SCHEMA IF EXISTS "${owned}" CASCADE`);}if(fs.existsSync(storage)){expect(fs.realpathSync(storage)).toBe(path.join(fs.realpathSync('.runtime/chatcrypto-be'),owned));fs.rmSync(storage,{recursive:true});}}finally{await pool?.end();process.env=previous;}}
+         |                                                                                                  ^
+      70 |  });
+      71 |  it('requires member session and owned active device, rejects plaintext legacy subscriptions for E2EE',async()=>{
+      72 |   expect((app.get(RealtimeGateway) as unknown as {crypto?:CryptoRelayService}).crypto).toBe(app.get(CryptoRelayService));
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:69:98)
+
+Test Suites: 1 failed, 1 total
+Tests:       14 failed, 14 total
+Snapshots:   0 total
+Time:        90.747 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

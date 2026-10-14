@@ -1,3 +1,4 @@
+import {enqueueNotification} from '@fg/database';
 import {Injectable} from '@nestjs/common';
 import type {PoolClient} from 'pg';
 import {randomUUID} from 'node:crypto';
@@ -57,9 +58,7 @@ export class PlaySessionsService {
  private async notification(db:PoolClient,user:string,j:Join,result?:'ACCEPTED'|'REJECTED'){
   const type=result?'JOIN_REQUEST_RESULT':'JOIN_REQUEST';
   const data=result?JoinRequestResultNotificationDataSchema.parse({requestId:j.id,recruitmentId:j.recruitment_id,result}):JoinRequestNotificationDataSchema.parse({requestId:j.id,recruitmentId:j.recruitment_id,applicantId:j.applicant_id});
-  const dedup=`join:${j.id}:${result??'pending'}`,id=randomUUID();
-  const row=await db.query('INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id',[id,user,type,result?'Kết quả xin vào đội':'Có người xin vào đội',result?'Yêu cầu vào đội đã được xét duyệt.':'Có yêu cầu mới cần xét duyệt.',JSON.stringify(data),dedup]);
-  if(row.rowCount)await db.query("INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key) VALUES($1,$2,$3,'IN_APP',$4)",[randomUUID(),id,user,dedup]);
+  await enqueueNotification(db,user,type,data,`join:${j.id}:${result??'pending'}`);
  }
  async listRoom(user:string,session:string,id:string,query:ListRoomPlaySessionsQuery):Promise<Page<PlaySessionDTO>>{
   return this.teams.transaction(async db=>{

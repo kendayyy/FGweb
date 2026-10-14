@@ -1,3 +1,4 @@
+import {NotificationsService} from '../notifications/notifications.service.js';
 import {PrivateNotificationsService} from '../notifications/private-notifications.service.js';
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, ConnectedSocket, MessageBody, OnGatewayInit, OnGatewayDisconnect } from '@nestjs/websockets';
 import { OnModuleDestroy, Logger, HttpException, Optional } from '@nestjs/common';
@@ -31,7 +32,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
     private readonly noticeSeen=new Map<string,Set<string>>();
     private readonly deliveries = new Set<Promise<void>>();
     private get channel() { return `fg:chat:${createHash('sha256').update(process.env.DATABASE_URL ?? '').digest('hex').slice(0, 24)}`; }
-    constructor(private readonly chat: ChatService,@Optional() private readonly crypto?:CryptoRelayService,@Optional() private readonly notices?:PrivateNotificationsService) { }
+    constructor(private readonly chat: ChatService,@Optional() private readonly crypto?:CryptoRelayService,@Optional() private readonly notices?:PrivateNotificationsService,@Optional() private readonly notifications?:NotificationsService) { }
     afterInit(server: Server) { server.use((socket, next) => { void this.validate(socket).then(actor => { socket.data.fgPrivateUserId=actor?.userId; return this.openBus(); }).then(() => next()).catch(() => next(new Error('Socket access denied'))); }); }
     private async validate(socket: Socket) { if (!originAllowed(socket.handshake.headers.origin))
         chatError(ErrorCode.FORBIDDEN, 'Origin denied'); return this.chat.actor(socket.handshake.headers); }
@@ -50,6 +51,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
                 return; if(id.length>512||this.deliveries.size>=64)return;
                 let work:Promise<void>;
                 if(/^N:[a-f0-9-]{36}$/.test(id))work=this.deliverNotice(id.slice(2));
+                else if(/^R:[a-f0-9-]{36}$/.test(id))work=this.deliverRead(id.slice(2));
                 else if(/^[a-f0-9-]{36}$/.test(id))work=this.deliver(id);
                 else{let input:unknown;try{input=JSON.parse(id);}catch{return;}const signal=CryptoProtocolWakeSignalSchema.safeParse(input);if(!signal.success)return;work=this.deliverProtocol(signal.data);}
                 const delivery = work.catch(() => this.logger.warn('Chat event delivery failed; recover using REST')); this.deliveries.add(delivery); void delivery.finally(() => this.deliveries.delete(delivery)); });
@@ -153,10 +155,17 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
         }
     }
     private async deliverNotice(id:string){
-        if(!this.notices)return;const recipient=await this.notices.recipient(id);if(!recipient)return;
+        const notifier=this.notifications??this.notices;if(!notifier)return;const recipient=await notifier.recipient(id);if(!recipient)return;
         for(const socket of [...this.server.sockets.sockets.values()]){
             if(!socket.connected||socket.data.fgPrivateUserId!==recipient||this.noticeSeen.get(socket.id)?.has(id))continue;
-            try{const notice=await this.notices.realtimeNotice(await this.validate(socket),id);if(!notice||!socket.connected||this.noticeSeen.get(socket.id)?.has(id))continue;const seen=this.noticeSeen.get(socket.id)??new Set<string>();seen.add(id);if(seen.size>256)seen.delete(seen.values().next().value!);this.noticeSeen.set(socket.id,seen);socket.emit(SocketEventNames.NOTIFICATION_CREATED,notice);}catch{/* Fresh ACL/session denial suppresses delivery. */}
+            try{const notice=await notifier.realtimeNotice(await this.validate(socket),id);if(!notice||!socket.connected||this.noticeSeen.get(socket.id)?.has(id))continue;const seen=this.noticeSeen.get(socket.id)??new Set<string>();seen.add(id);if(seen.size>256)seen.delete(seen.values().next().value!);this.noticeSeen.set(socket.id,seen);socket.emit(SocketEventNames.NOTIFICATION_CREATED,notice);}catch{/* Fresh ACL/session denial suppresses delivery. */}
+        }
+    }
+    private async deliverRead(id:string){
+        if(!this.notifications)return;const recipient=await this.notifications.recipient(id);if(!recipient)return;
+        for(const socket of [...this.server.sockets.sockets.values()]){
+            if(!socket.connected||socket.data.fgPrivateUserId!==recipient)continue;
+            try{const notice=await this.notifications.realtimeNotice(await this.validate(socket),id);if(notice?.isRead&&socket.connected)socket.emit(SocketEventNames.NOTIFICATION_READ,{notificationId:id});}catch{/* Fresh session/ACL denial suppresses read-state routing. */}
         }
     }
     private async deliver(id: string) {

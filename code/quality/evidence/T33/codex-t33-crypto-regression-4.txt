@@ -1,0 +1,50 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:50672) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (66.929 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › persists client-selected mention routing IDs atomically and binds duplicate retries without reading private text
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "body": "Có người nhắc tên bạn.",
+    +   "body": "Bạn có tin nhắn mới.",
+        "createdAt": "2026-10-13T20:58:57.025098Z",
+        "data": Object {
+          "conversationId": "group",
+          "mentionerId": "alice",
+          "messageId": "95d8ce42-42f5-47bc-8819-6c87221074e5",
+        },
+        "id": "f36f08b2-fab2-45b5-92b4-1d42ff867186",
+        "isRead": false,
+    -   "title": "Bạn được nhắc tên",
+    +   "title": "Tin nhắn mới",
+        "type": "MENTION",
+        "userId": "outsider",
+      }
+
+      168 |   const notice=(await pool.query("SELECT * FROM notifications WHERE user_id='outsider' AND type='MENTION' AND dedup_key=$1",['crypto-mention:'+sent.body.id+':outsider'])).rows[0];expect(notice).toBeDefined();expect(JSON.parse(notice.data)).toEqual({conversationId:'group',messageId:sent.body.id,mentionerId:'alice'});expect(notice.title).toBe('Tin nhắn mới');expect(notice.body).toBe('Bạn có tin nhắn mới.');expect(JSON.stringify(notice)).not.toContain('private-mention-original');expect((await pool.query('SELECT channel FROM notification_outbox WHERE notification_id=$1',[notice.id])).rows).toEqual([{channel:'IN_APP'}]);
+      169 |   expect((await post('conversations/group/messages',selection)).body.id).toBe(sent.body.id);expect((await pool.query('SELECT id FROM mentions WHERE message_id=$1',[sent.body.id])).rowCount).toBe(1);expect((await pool.query('SELECT id FROM notifications WHERE dedup_key=$1',[notice.dedup_key])).rowCount).toBe(1);expect((await post('conversations/group/messages',{...selection,mentionedUserIds:['bob']})).status).toBe(409);
+    > 170 |   const inbox=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(inbox.status).toBe(200);const mentions=createPageSchema(NotificationSchema).parse(inbox.body).items.filter(item=>item.type==='MENTION');expect(mentions).toHaveLength(1);expect(mentions[0]).toEqual(expect.objectContaining({id:notice.id,userId:'outsider',type:'MENTION',data:{conversationId:'group',messageId:sent.body.id,mentionerId:'alice'}}));await wait(()=>notices.length===1);expect(notices[0]).toEqual(mentions[0]);expect(JSON.stringify(notices)).not.toContain('private-mention-original');recipient.disconnect();
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+      171 |   const mentionInbox=async()=>{const response=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(response.status).toBe(200);return createPageSchema(NotificationSchema).parse(response.body).items.filter(item=>item.type==='MENTION');};
+      172 |   const relation=(await pool.query('DELETE FROM mentions WHERE message_id=$1 RETURNING *',[sent.body.id])).rows;try{expect(await mentionInbox()).toEqual([]);}finally{for(const row of relation)await pool.query('INSERT INTO mentions(id,message_id,mentioned_user_id,created_at) VALUES($1,$2,$3,$4)',[row.id,row.message_id,row.mentioned_user_id,row.created_at]);}
+      173 |   const preference=randomUUID();try{await pool.query("INSERT INTO notification_preferences(id,user_id,notification_type,in_app,push,email) VALUES($1,'outsider','MENTION',false,false,false)",[preference]);expect(await mentionInbox()).toEqual([]);}finally{await pool.query('DELETE FROM notification_preferences WHERE id=$1',[preference]);}
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:170:508)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 13 passed, 14 total
+Snapshots:   0 total
+Time:        67.891 s, estimated 89 s
+Ran all test suites matching apps/api/test/chat-crypto-realtime.integration.spec.ts.

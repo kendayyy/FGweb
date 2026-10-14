@@ -1,3 +1,4 @@
+import {enqueueNotification} from '@fg/database';
 import { Injectable } from '@nestjs/common';
 import type { PoolClient } from 'pg';
 import { randomUUID } from 'node:crypto';
@@ -84,12 +85,7 @@ export class InvitationsService {
     const data = i.target_type === 'ROOM'
       ? RoomInviteNotificationDataSchema.parse({ invitationId: i.id, roomId: i.room_id, senderId: i.sender_id })
       : TeamInviteNotificationDataSchema.parse({ invitationId: i.id, roomId: i.room_id, playSessionId: i.play_session_id, senderId: i.sender_id });
-    const dedup = `invitation:${i.id}:${phase}`, id = randomUUID();
-    const row = await db.query('INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id', [
-      id, user, type, phase === 'created' ? 'Lời mời mới' : phase === 'consented' ? 'Lời mời cần xét duyệt' : 'Kết quả lời mời',
-      phase === 'created' ? 'Bạn được mời tham gia nhóm.' : phase === 'consented' ? 'Người được mời đã đồng ý, cần xét duyệt.' : phase === 'ACCEPTED' ? 'Lời mời đã được chấp nhận.' : 'Lời mời đã bị từ chối.', JSON.stringify(data), dedup,
-    ]);
-    if (row.rowCount) await db.query("INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key) VALUES($1,$2,$3,'IN_APP',$4)", [randomUUID(), id, user, dedup]);
+    await enqueueNotification(db,user,type,data,`invitation:${i.id}:${phase}`);
   }
 
   private async admit(db: PoolClient, room: Room, i: Invite) {

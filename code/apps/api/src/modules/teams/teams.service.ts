@@ -1,3 +1,4 @@
+import {enqueueNotification} from '@fg/database';
 import {Injectable,OnModuleInit,OnModuleDestroy,HttpException} from '@nestjs/common';
 import {Pool,PoolClient} from 'pg';
 import {randomUUID} from 'node:crypto';
@@ -58,9 +59,7 @@ export class TeamsService implements OnModuleInit,OnModuleDestroy {
  private async card(db:PoolClient,id:string):Promise<Card>{const c=(await db.query<Card>('SELECT id,room_id,play_session_id,state,timing_type FROM recruitments WHERE id=$1',[id])).rows[0];if(!c)roomError(ErrorCode.NOT_FOUND,'Recruitment not found');return c;}
  private async play(db:PoolClient,id:string,mode:LockMode='FOR UPDATE'):Promise<Play>{const lockClause=mode==='FOR SHARE'?'FOR SHARE':'FOR UPDATE';const p=(await db.query<Play>(`${playSelect} WHERE p.id=$1 ${lockClause}`,[id])).rows[0];if(!p)roomError(ErrorCode.NOT_FOUND,'Play session not found');return p;}
  private async notify(db:PoolClient,userId:string,type:'JOIN_REQUEST'|'JOIN_REQUEST_RESULT',dedup:string,data:unknown){
-  const parsed=type==='JOIN_REQUEST'?JoinRequestNotificationDataSchema.parse(data):JoinRequestResultNotificationDataSchema.parse(data);
-  const id=randomUUID();const row=await db.query("INSERT INTO notifications(id,user_id,type,title,body,data,dedup_key) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(user_id,dedup_key) DO NOTHING RETURNING id",[id,userId,type,type==='JOIN_REQUEST'?'Có người xin vào đội':'Kết quả xin vào đội',type==='JOIN_REQUEST'?'Có yêu cầu mới cần xét duyệt.':'Yêu cầu vào đội của bạn đã được xét duyệt.',JSON.stringify(parsed),dedup]);
-  if(row.rowCount)await db.query("INSERT INTO notification_outbox(id,notification_id,user_id,channel,dedup_key) VALUES($1,$2,$3,'IN_APP',$4)",[randomUUID(),id,userId,dedup]);
+  await enqueueNotification(db,userId,type,data,dedup);
  }
  async apply(userId:string,sessionId:string,id:string):Promise<JoinRequestDTO>{return this.transaction(async db=>{
   const located=await this.card(db,id),room=await this.room(db,located.room_id);await this.lockUsers(db,[userId,room.owner_id]);await this.actor(db,userId,sessionId);

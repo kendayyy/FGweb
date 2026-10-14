@@ -1,0 +1,958 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:59280) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/chat-crypto-realtime.integration.spec.ts (69.931 s)
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › wakes only the addressed device through durable Redis metadata and keeps REST sync authoritative
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 503
+
+      89 |   const state=(await request(base).get('/api/v1/crypto/conversations/group/state').set('Cookie',cookies.get('alice')!)).body,transactionId='socket-wake';
+      90 |   const event={conversationId:'group',membershipRevision:state.membershipRevision,deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}};
+    > 91 |   expect((await post('verification',event)).status).toBe(201);const row=(await pool.query('SELECT id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows[0];
+         |                                                     ^
+      92 |   await wait(()=>wake.get(sockets[3])!.length===1);expect(wake.get(sockets[3])).toEqual([{conversationId:'group',deviceId:'B',membershipRevision:state.membershipRevision}]);for(const socket of sockets.slice(0,3))expect(wake.get(socket)).toEqual([]);
+      93 |   const signal=JSON.stringify({kind:'PROTOCOL_WAKE',queue:'VERIFICATION',eventId:row.id});expect(published).toContain(signal);await wait(async()=>Boolean((await pool.query('SELECT delivered_at FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[row.id])).rows[0].delivered_at));
+      94 |   const sync=await request(base).get('/api/v1/crypto/sync?deviceId=B').set('Cookie',cookies.get('bob')!);expect(sync.body.verification).toHaveLength(1);expect(sync.body.verification[0].event).toEqual({eventType:event.eventType,content:event.content});expect((await post('sync/ack',{deviceId:'B',eventIds:[row.id]},'bob')).status).toBe(201);
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:91:53)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › recovers an offline device from REST after a missed wakeup and reconnects without replaying plaintext
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 503
+
+       98 |   const bob=sockets[3],hints:unknown[]=[];bob.on(SocketEventNames.CRYPTO_SYNC_AVAILABLE,item=>hints.push(item));bob.disconnect();
+       99 |   const state=(await request(base).get('/api/v1/crypto/conversations/group/state').set('Cookie',cookies.get('alice')!)).body,transactionId='socket-offline';
+    > 100 |   expect((await post('verification',{conversationId:'group',membershipRevision:state.membershipRevision,deviceId:'A',transactionId,recipientUserId:'bob',recipientDeviceId:'B',eventType:'m.key.verification.request',content:{transaction_id:transactionId,from_device:'A',methods:['m.sas.v1'],timestamp:Date.now()}})).status).toBe(201);
+          |                                                                                                                                                                                                                                                                                                                                   ^
+      101 |   const row=(await pool.query('SELECT id FROM chat_crypto_protocol_events WHERE transaction_id=$1',[transactionId])).rows[0];await wait(async()=>Boolean((await pool.query('SELECT delivered_at FROM chat_crypto_protocol_outbox WHERE verification_event_id=$1',[row.id])).rows[0].delivered_at));expect(hints).toEqual([]);
+      102 |   await new Promise<void>((resolve,reject)=>{bob.once('connect',resolve);bob.once('connect_error',reject);bob.connect();});expect(await subscribe(bob,'B')).toMatchObject({ok:true});
+      103 |   const sync=await request(base).get('/api/v1/crypto/sync?deviceId=B').set('Cookie',cookies.get('bob')!);expect(sync.status).toBe(200);expect(sync.body.verification.map((item:{id:string})=>item.id)).toEqual([row.id]);expect(hints).toEqual([]);expect((await post('sync/ack',{deviceId:'B',eventIds:[row.id]},'bob')).status).toBe(201);
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:100:323)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › bounds pending bus deliveries during a burst while REST remains the recovery path
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      105 |  it('bounds pending bus deliveries during a burst while REST remains the recovery path',async()=>{
+      106 |   const relay=app.get(CryptoRelayService),original=relay.committedProtocolConversation.bind(relay);let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;}),spy=jest.spyOn(relay,'committedProtocolConversation').mockImplementation(async signal=>{await gate;return original(signal);});
+    > 107 |   const row=(await pool.query("SELECT id FROM chat_crypto_protocol_events WHERE transaction_id='socket-offline'")).rows[0],signal=JSON.stringify({kind:'PROTOCOL_WAKE',queue:'VERIFICATION',eventId:row.id}),channel='fg:chat:'+createHash('sha256').update(process.env.DATABASE_URL!).digest('hex').slice(0,24),before=published.filter(item=>item===signal).length;
+          |                                                                                                                                                                                                         ^
+      108 |   try{for(let i=0;i<100;i++)await bus.publish(channel,signal);await wait(()=>published.filter(item=>item===signal).length>=before+100);await new Promise(resolve=>setTimeout(resolve,100));expect(spy).toHaveBeenCalledTimes(64);}finally{release();await new Promise(resolve=>setTimeout(resolve,200));spy.mockRestore();}
+      109 |  });
+      110 |  it('filters a delayed old event for a new member while retaining their subscription for new ciphertext',async()=>{
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:107:201)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › stops delivery and rejects resubscription after device revocation
+
+    operation has timed out
+
+      at Timeout._onTimeout (../../node_modules/socket.io-client/build/esm-debug/socket.js:300:28)
+
+  ● Encrypted realtime with actual API/PG/Redis/Socket.IO/native WASM › delivers generic private in-app notifications without a conversation subscription and recovers them through authenticated REST
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 4
+
+      158 |   const originalData=(await pool.query('SELECT data FROM notifications WHERE id=$1',[offlineNotice.id])).rows[0].data;try{await pool.query('UPDATE notifications SET data=$2,title=$3,body=$3 WHERE id=$1',[offlineNotice.id,'{private-invalid','never-trust-private-row-preview']);const recovered=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(recovered.status).toBe(200);expect(recovered.body.items).toHaveLength(1);expect(JSON.stringify(recovered.body)).not.toContain('never-trust-private-row-preview');await quiet();}finally{await pool.query('UPDATE notifications SET data=$2 WHERE id=$1',[offlineNotice.id,originalData]);}
+      159 |   await bus.publish(busChannel,'N:'+offlineNotice.id);await wait(()=>items.length===2);expect(items[1]).toEqual(expect.objectContaining({id:offlineNotice.id,title:'Tin nhắn mới',body:'Bạn có tin nhắn mới.'}));expect(JSON.stringify(items)).not.toContain('never-trust-private-row-preview');expect((await request(base).get('/api/v1/notifications?limit=invalid').set('Cookie',cookies.get('outsider')!)).status).toBe(422);
+    > 160 |   await wait(()=>(app.get(RealtimeGateway) as unknown as {deliveries:Set<Promise<void>>}).deliveries.size===0);const notices=app.get(PrivateNotificationsService) as unknown as {actor:(db:pg.Pool|pg.PoolClient,actor:{userId:string;sessionId:string}|null)=>Promise<{userId:string;sessionId:string}>},originalActor=notices.actor.bind(notices);let checks=0;const lateActor=jest.spyOn(notices,'actor').mockImplementation(async(db,actor)=>{const result=await originalActor(db,actor);if(++checks===2)await pool.query("UPDATE chat_crypto_membership_intervals SET start_revision=2 WHERE conversation_id='notice-dm' AND user_id='outsider'");return result;});try{const late=await request(base).get('/api/v1/notifications').set('Cookie',cookies.get('outsider')!);expect(late.status).toBe(200);expect(checks).toBe(2);expect(late.body.items).toEqual([]);}finally{lateActor.mockRestore();for(const row of intervals)await pool.query('UPDATE chat_crypto_membership_intervals SET start_revision=$2 WHERE id=$1',[row.id,row.start_revision]);}target.disconnect();
+          |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^
+      161 |  });
+      162 |  it('persists client-selected mention routing IDs atomically and binds duplicate retries without reading private text',async()=>{
+      163 |   await pool.query("INSERT INTO \"user\"(id,name,email,email_verified,created_at,updated_at) VALUES('unjoined','unjoined','unjoined@example.invalid',true,now(),now())");
+
+      at Object.<anonymous> (test/chat-crypto-realtime.integration.spec.ts:160:797)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL apps/api/test/social.integration.spec.ts (18.556 s)
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › GET /api/v1/friends returns paginated ProfileDTO and leaks no private fields
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › GET /api/v1/friends/requests returns incoming/outgoing friend requests
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › POST /api/v1/friends/requests creates pending friend request (HTTP 200)
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › Opposite friend request send returns 422 INVALID_INPUT
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › PATCH /api/v1/friends/requests/:id/respond receiver accepts request
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › DELETE /api/v1/friends/:userId removes friendship
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › DELETE /api/v1/friends/requests/:id/cancel allows sender to cancel pending request
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › POST /api/v1/direct-conversations creates or gets DM without friendship (HTTP 200)
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › GET /api/v1/direct-conversations lists user DMs with peer ProfileDTO
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › POST /api/v1/blocks and GET /api/v1/blocks (HTTP 200)
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 1. 11 Social Endpoints & Payload Contracts › DELETE /api/v1/blocks/:userId removes caller block
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 2. Defect 1: Consistent Lock Ordering & Lock Barrier › Consistent lock ordering: holding pair lock queues eager send and eager respond, pg_locks NOT granted = 2
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 3. Defect 2: ACCEPT / CANCEL / REJECT Retries, Replay & Ownership › Idempotent repeated ACCEPT returns success: true without duplicate friendship
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 3. Defect 2: ACCEPT / CANCEL / REJECT Retries, Replay & Ownership › Opposite action (REJECT after ACCEPT) returns 422 INVALID_INPUT
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 3. Defect 2: ACCEPT / CANCEL / REJECT Retries, Replay & Ownership › Replaying old ACCEPT after friendship removal DOES NOT recreate friendship
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 4. Defect 3: Request State Machine & Fresh Request ID Renewal › Resending friend request after REJECT/CANCEL creates FRESH requestId
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 5. Defect 4: Session Revocation & Ban Recheck INSIDE Transaction › Revoked session or BAN while waiting on advisory lock fails with 401/403 and ZERO mutations
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 6. Defect 5: PostgreSQL Canonical Order (LEAST / GREATEST) › Demonstrates JS UTF-16 comparison differs from SQL LEAST/GREATEST on non-BMP supplementary character pair
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 7. Defect 6: Cursor Parsing & Malformed Input Handling › Malformed date/cursor returns 422 INVALID_INPUT rather than 500
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 8. Defect 8: Real Eager Advisory Lock Barrier (POST /blocks vs DM POST message) › Holds pair lock, queues eager POST /blocks and eager DM POST message, verifies pg_locks NOT granted waiters = 2
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Guest REST requests return 401
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Non-onboarded user mutations return 403 FORBIDDEN
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Banned user mutations return 403 FORBIDDEN
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › CSRF missing Origin header returns 403 FORBIDDEN
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Guest Socket.IO DM subscribe returns ok: false
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Real Socket.IO DM subscribe ACL: outsider denied, participant allowed
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › DM history remains accessible to participant after block
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Reverse block delete ownership: unblock removes ONLY caller->target block
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Self actions (friend request, DM, block) return 422 INVALID_INPUT
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+  ● T17-BE Social Integration, Locking & Concurrency › 9. Defect 9 & Additional Security & ACL Coverage › Unknown target user IDs return 404 NOT_FOUND
+
+    SMTP auth mail configuration is required
+
+      4 | export function authMailTransport():Transporter {
+      5 |  const {SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASSWORD,SMTP_FROM}=process.env;
+    > 6 |  if(!SMTP_HOST||!['465','587'].includes(SMTP_PORT??'')||!SMTP_USER||!SMTP_PASSWORD||!SMTP_FROM)throw new Error('SMTP auth mail configuration is required');
+        |                                                                                                      ^
+      7 |  return createTransport({host:SMTP_HOST,port:Number(SMTP_PORT),secure:SMTP_PORT==='465',requireTLS:SMTP_PORT!=='465',auth:{user:SMTP_USER,pass:SMTP_PASSWORD},connectionTimeout:15000,greetingTimeout:15000,socketTimeout:20000});
+      8 | }
+      9 | export async function sendAuthMail(transport:Transporter,from:string,to:string,kind:'VERIFY'|'RESET'|'ATTACH',url:string):Promise<void>{
+
+      at authMailTransport (src/modules/auth/auth-mail.ts:6:102)
+      at createFgAuth (src/modules/auth/auth.service.ts:31:37)
+      at AuthService.initAuth (src/modules/auth/auth.service.ts:149:25)
+      at AuthService.initDatabaseAndAuth (src/modules/auth/auth.service.ts:129:10)
+      at AuthService.onModuleInit (src/modules/auth/auth.service.ts:95:10)
+      at MapIterator.iteratee (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:20:43)
+      at MapIterator.next (../../node_modules/iterare/src/map.ts:9:39)
+      at IteratorWithOperators.next (../../node_modules/iterare/src/iterate.ts:19:28)
+          at Array.from (<anonymous>)
+      at IteratorWithOperators.toArray (../../node_modules/iterare/src/iterate.ts:227:22)
+      at callOperator (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:21:10)
+      at callModuleInitHook (../../node_modules/@nestjs/core/hooks/on-module-init.hook.js:37:27)
+      at NestApplication.callInitHook (../../node_modules/@nestjs/core/nest-application-context.js:258:13)
+      at NestApplication.init (../../node_modules/@nestjs/core/nest-application.js:126:9)
+      at NestApplication.listen (../../node_modules/@nestjs/core/nest-application.js:284:13)
+      at Object.<anonymous> (test/social.integration.spec.ts:144:5)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+
+Test Suites: 2 failed, 4 passed, 6 total
+Tests:       35 failed, 65 passed, 100 total
+Snapshots:   0 total
+Time:        195.971 s
+Ran all test suites matching apps/api/test/social.integration.spec.ts|apps/api/test/invitations.integration.spec.ts|apps/api/test/play-sessions.integration.spec.ts|apps/api/test/room-play-sessions.integration.spec.ts|apps/api/test/chat-crypto-realtime.integration.spec.ts|apps/api/test/chat-crypto-room-authority.integration.spec.ts.

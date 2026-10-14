@@ -1,3 +1,4 @@
+import {enqueueNotification} from '@fg/database';
 import { Injectable, OnModuleInit, OnModuleDestroy, HttpException } from '@nestjs/common';
 import { Pool, PoolClient } from 'pg';
 import { randomUUID } from 'node:crypto';
@@ -247,6 +248,7 @@ export class SocialService implements OnModuleInit, OnModuleDestroy {
 
       if (ownRow) {
         if (ownRow.status === 'PENDING') {
+          await enqueueNotification(client,targetUserId,'FRIEND_INVITE',{requestId:ownRow.id,senderId:actorId},'friend:'+ownRow.id);
           await client.query('COMMIT');
           return { requestId: ownRow.id, status: 'PENDING' };
         }
@@ -256,6 +258,7 @@ export class SocialService implements OnModuleInit, OnModuleDestroy {
           `UPDATE friend_requests SET id = $1, status = 'PENDING', created_at = clock_timestamp(), updated_at = clock_timestamp() WHERE id = $2`,
           [freshId, ownRow.id]
         );
+        await enqueueNotification(client,targetUserId,'FRIEND_INVITE',{requestId:freshId,senderId:actorId},'friend:'+freshId);
         await client.query('COMMIT');
         return { requestId: freshId, status: 'PENDING' };
       }
@@ -266,6 +269,7 @@ export class SocialService implements OnModuleInit, OnModuleDestroy {
         [newId, actorId, targetUserId]
       );
 
+      await enqueueNotification(client,targetUserId,'FRIEND_INVITE',{requestId:newId,senderId:actorId},'friend:'+newId);
       await client.query('COMMIT');
       return { requestId: newId, status: 'PENDING' };
     } catch (err) {

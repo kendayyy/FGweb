@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-13T19:49:27.377Z",
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "approval": "Human persistent continue all approved FG tasks sequentially, approved spec7/task T33 after verified T32 PASS/public backup.",
+  "scope": [
+    "apps/api/src/modules/notifications/**",
+    "apps/api/test/notifications.integration.spec.ts",
+    "apps/api/src/modules/social/social.service.ts",
+    "apps/api/src/modules/invitations/invitations.service.ts",
+    "apps/api/src/modules/teams/teams.service.ts",
+    "apps/api/src/modules/play-sessions/play-sessions.service.ts",
+    "apps/api/src/modules/chat/chat.service.ts",
+    "apps/api/src/modules/realtime/realtime.gateway.ts",
+    "apps/api/dist/**",
+    "apps/worker/src/**",
+    "apps/worker/test/notification-outbox.test.ts",
+    "apps/worker/package.json",
+    "apps/worker/dist/**",
+    "package-lock.json",
+    "packages/contracts/src/notifications.ts",
+    "packages/contracts/src/index.ts",
+    "packages/contracts/test/notification-preferences.test.ts",
+    "packages/contracts/dist/**",
+    "packages/database/src/notification-authority.ts",
+    "packages/database/src/notification-enqueue.ts",
+    "packages/database/src/index.ts",
+    "packages/database/dist/**",
+    "quality/api-contract.md",
+    "quality/spec-coverage.md",
+    "quality/evidence/T33/**",
+    ".runtime/t33/**",
+    ".cache/t33/**"
+  ],
+  "plan": {
+    "path": "quality/evidence/T33/implementation-plan1.md",
+    "sha256": "fb92ee9e975b9872546c5b6f0537c0a158866546ede085ebe8e3a9f1f28f73df"
+  },
+  "compatibility": "Keep existing private crypto authority byte-equivalent through reviewed shared extraction; generic private text/current ACL/session/ban/blocks, no protocol/encryption/schema change. Existing private GET route delegates general inbox without duplicate route; original private dispatch remains compatible. New worker handles IN_APP only; PUSH/EMAIL delivery and reminder production remain T35.",
+  "historicalPassUnchanged": 83,
+  "checkerUnchanged": true,
+  "noDelegation": true
+}

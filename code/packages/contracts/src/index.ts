@@ -18,7 +18,7 @@ import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequ
 import {PlaySessionActionRequestSchema,PlaySessionRequestDecisionSchema,ListRoomPlaySessionsQuerySchema} from './teams.js';
 import {CallActionRequestSchema} from './calls.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
-import { NotificationSchema, NotificationPreferencesSchema, WebPushSubscriptionSchema } from './notifications.js';
+import { NotificationSchema, NotificationPreferencesSchema, NotificationPreferencesPatchSchema, NotificationUnreadCountSchema, NotificationReadAllResultSchema, WebPushSubscriptionSchema } from './notifications.js';
 import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, ListFriendRequestsQuerySchema, PendingFriendRequestSchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
 import { ListGameOnlineUsersQuerySchema, UpdateCustomStatusRequestSchema, UpdateCustomStatusResponseSchema, SocketPresenceRequestSchema, SocketScopedPresenceChangedPayloadSchema } from './presence.js';
 import {CryptoApiEndpointRegistry,SocketCryptoConversationRequestSchema,EncryptedMessageSchema,SocketCryptoSyncAvailableSchema} from './chat-crypto.js';
@@ -216,9 +216,10 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
 
   { method: 'GET', path: '/api/v1/notifications', auth: 'Authenticated', responseSchema: createPageSchema(NotificationSchema) },
   { method: 'PATCH', path: '/api/v1/notifications/:id/read', auth: 'Authenticated', responseSchema: NotificationSchema },
-  { method: 'PATCH', path: '/api/v1/notifications/read-all', auth: 'Authenticated', responseSchema: z.object({ updatedCount: z.number() }) },
+  { method: 'PATCH', path: '/api/v1/notifications/read-all', auth: 'Authenticated', responseSchema: NotificationReadAllResultSchema },
+  { method: 'GET', path: '/api/v1/notifications/unread-count', auth: 'Authenticated', responseSchema: NotificationUnreadCountSchema },
   { method: 'GET', path: '/api/v1/notifications/preferences', auth: 'Authenticated', responseSchema: NotificationPreferencesSchema },
-  { method: 'PATCH', path: '/api/v1/notifications/preferences', auth: 'Authenticated', requestSchema: NotificationPreferencesSchema, responseSchema: NotificationPreferencesSchema },
+  { method: 'PATCH', path: '/api/v1/notifications/preferences', auth: 'Authenticated', requestSchema: NotificationPreferencesPatchSchema, responseSchema: NotificationPreferencesSchema },
   { method: 'POST', path: '/api/v1/push/subscriptions', auth: 'Authenticated', requestSchema: WebPushSubscriptionSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'DELETE', path: '/api/v1/push/subscriptions', auth: 'Authenticated', requestSchema: z.object({ endpoint: z.string().url() }), responseSchema: z.object({ success: z.boolean() }) },
 
