@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-14T04:49:44.232Z",
+  "reviewer": "Codex",
+  "source": {
+    "path": "apps/web/test/rooms.test.tsx",
+    "sha256": "bfbb37e28ef4b946bdd2d47b42ab258bb601bf04f1b26604b2311bf9036766a2"
+  },
+  "copy": {
+    "path": "quality/evidence/T34/regression-tests/rooms.test.tsx",
+    "sha256": "dfa6f100ca86c2f98c473756af938bc2e2875f512a919338977aa45b02e79127"
+  },
+  "reversible": true,
+  "originalTestsUnchanged": true,
+  "originalCases": 19,
+  "encryptedChatZeroSubscriptionAssertionPreserved": true,
+  "plaintextInjectionAndLockedHistoryAssertionsUnchanged": true,
+  "additionalAccountMetadataSocketOnly": true,
+  "metadataEmitAndSubscribeDenied": true,
+  "reason": "Original room test15 expected no sockets at all. Approved T34 adds an authenticated account-only notification hint socket, not a private chat subscription. Owned copy requires exactly one metadata-only socket with no ordinary/encrypted message listeners and no emit/emitWithAck calls, while preserving zero chat sockets, plaintext rejection/unlock and no private history fetch assertions. All other cases/assertions unchanged. Frozen T32 async-compatible call copy reused unchanged with its reverse-byte-exact proof.",
+  "edits": [
+    [
+      "    namespace: string;",
+      "    namespace: string;\n    readonly notificationOnly: boolean;"
+    ],
+    [
+      "      namespace: typeof urlOrOpts === 'string' ? urlOrOpts : '/',",
+      "      namespace: typeof urlOrOpts === 'string' ? urlOrOpts : '/',\n      get notificationOnly() { return handlers.has(SocketEventNames.NOTIFICATION_CREATED) && handlers.has(SocketEventNames.NOTIFICATION_READ) && ![SocketEventNames.MESSAGE_CREATED,SocketEventNames.CRYPTO_MESSAGE_CREATED,SocketEventNames.CRYPTO_SYNC_AVAILABLE].some(name=>handlers.has(name)); },"
+    ],
+    [
+      "      emit() {\n        return socket;\n      },",
+      "      emit: vi.fn((_event?: string, _data?: unknown) => socket),"
+    ],
+    [
+      "    expect(socketTransport.sockets.filter(s=>s.namespace==='/'&&!s.closed)).toEqual([]);",
+      "    const activeSockets=socketTransport.sockets.filter(s=>s.namespace==='/'&&!s.closed);\n    expect(activeSockets.filter(s=>!s.notificationOnly)).toEqual([]);\n    expect(activeSockets.filter(s=>s.notificationOnly)).toHaveLength(1);\n    for(const metadata of activeSockets.filter(s=>s.notificationOnly)){expect(metadata.emit).not.toHaveBeenCalled();expect(metadata.emitWithAck).not.toHaveBeenCalled();}"
+    ]
+  ],
+  "callCopy": {
+    "path": "quality/evidence/T32/regression-tests/call-controls.test.tsx",
+    "sha256": "8543f12d3a74107f31213b589ae1fe3c049559820226f6d7f5aedac523b8408b"
+  },
+  "callProof": {
+    "path": "quality/evidence/T32/call-regression-copy-review1.json",
+    "sha256": "f5563106675e46dd9ce36f6b0910f843280105a34c9e2ace18a47b4ed4d289e4"
+  },
+  "unresolvedSourceFindings": []
+}

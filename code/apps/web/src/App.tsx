@@ -14,8 +14,9 @@ import {ThemeProvider} from './features/theme/ThemeProvider.js';
 import {ThemeSwitcher} from './features/theme/ThemeSwitcher.js';
 import {TeamActivityPage} from './features/invitations/TeamActivityPage.js';
 import {CryptoDeviceProvider, CryptoDeviceSettings} from './features/crypto/CryptoDeviceProvider.js';
+import {NotificationsProvider,NotificationBell,NotificationsPage,NotificationTarget} from './features/notifications/index.js';
 
-export const App: React.FC = () => <ThemeProvider><CryptoDeviceProvider><AppContent/></CryptoDeviceProvider></ThemeProvider>;
+export const App: React.FC = () => <ThemeProvider><CryptoDeviceProvider><NotificationsProvider><AppContent/></NotificationsProvider></CryptoDeviceProvider></ThemeProvider>;
 const AppContent: React.FC = () => {
   const {user,isLoading,isError}=useAuth();
   const location=useLocation();
@@ -89,12 +90,14 @@ const AppContent: React.FC = () => {
           </nav>
         </div>
 
-        <div className="fg-app-header-actions"><ThemeSwitcher/><HeaderAuthWidget /></div>
+        <div className="fg-app-header-actions"><ThemeSwitcher/>{user&&<NotificationBell/>}<HeaderAuthWidget /></div>
       </header>}
 
       {/* Main Content Area */}
       <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>
         <Routes>
+          <Route path="/notifications" element={<ProtectedRoute><NotificationsPage/></ProtectedRoute>}/>
+          <Route path="/notifications/:notificationId" element={<ProtectedRoute><NotificationTarget/></ProtectedRoute>}/>
           <Route path="/crypto" element={<ProtectedRoute><CryptoDeviceSettings/></ProtectedRoute>}/>
           <Route path="/login" element={<LoginForm key="login" />} />
           <Route path="/register" element={<LoginForm key="register" />} />

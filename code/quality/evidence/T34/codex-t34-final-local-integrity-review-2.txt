@@ -1,0 +1,656 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  '// @vitest-environment jsdom\n' +
+    "import '@testing-library/jest-dom/vitest';\n" +
+    "import React from 'react';\n" +
+    "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\n" +
+    "import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';\n" +
+...
+    "import { RoomDTO, RoomMemberDTO, MessageDTO, MeDTO, MeDTOSchema, GameDTO, CreateRoomRequest, SocketEventNames } from '@fg/contracts';\n" +
++   "import { AuthProvider } from '../../../../apps/web/src/features/auth/index.js';\n" +
++   "import { App } from '../../../../apps/web/src/App.tsx';\n" +
+-   "import { AuthProvider } from '../src/features/auth/index.js';\n" +
+-   "import { App } from '../src/App.tsx';\n" +
+    '\n' +
+    '// Socket mock transport for tests\n' +
+    'const socketTransport = vi.hoisted(() => ({\n' +
+    '  sockets: [] as Array<{\n' +
+    '    namespace: string;\n' +
+...
+    '      <QueryClientProvider client={queryClient}>\n' +
++   '      '... 19015 more characters
+-   '        <MemoryRouter initialEntries={[ini'... 18979 more characters
+
+    at file:///E:/FGweb/code/quality/evidence/T34/audit-final-local2.mjs:8:402
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '// @vitest-environment jsdom\n' +
+    "import '@testing-library/jest-dom/vitest';\n" +
+    "import React from 'react';\n" +
+    "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\n" +
+    "import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';\n" +
+    "import { MemoryRouter } from 'react-router-dom';\n" +
+    "import { QueryClient, QueryClientProvider } from '@tanstack/react-query';\n" +
+    "import { RoomDTO, RoomMemberDTO, MessageDTO, MeDTO, MeDTOSchema, GameDTO, CreateRoomRequest, SocketEventNames } from '@fg/contracts';\n" +
+    "import { AuthProvider } from '../../../../apps/web/src/features/auth/index.js';\n" +
+    "import { App } from '../../../../apps/web/src/App.tsx';\n" +
+    '\n' +
+    '// Socket mock transport for tests\n' +
+    'const socketTransport = vi.hoisted(() => ({\n' +
+    '  sockets: [] as Array<{\n' +
+    '    namespace: string;\n' +
+    '    fire: (event: string, data?: unknown) => void;\n' +
+    '    closed: boolean;\n' +
+    '    emit: (event?: string, data?: unknown) => unknown;\n' +
+    '    emitWithAck: (event: string, body: unknown) => Promise<unknown>;\n' +
+    '  }>,\n' +
+    '  connected: true,\n' +
+    '}));\n' +
+    '\n' +
+    "vi.mock('socket.io-client', () => ({\n" +
+    '  io: (urlOrOpts?: unknown) => {\n' +
+    '    const handlers = new Map<string, Set<(data?: unknown) => void>>();\n' +
+    '    const socket = {\n' +
+    "      namespace: typeof urlOrOpts === 'string' ? urlOrOpts : '/',\n" +
+    '      connected: socketTransport.connected,\n' +
+    '      connect() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      closed: false,\n' +
+    '      on(event: string, callback: (data?: unknown) => void) {\n' +
+    '        const callbacks = handlers.get(event) ?? new Set();\n' +
+    '        callbacks.add(callback);\n' +
+    '        handlers.set(event, callbacks);\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      off(event: string, callback: (data?: unknown) => void) {\n' +
+    '        handlers.get(event)?.delete(callback);\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      disconnect() {\n' +
+    '        socket.closed = true;\n' +
+    '        socket.connected = false;\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      timeout() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      emit() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      emitWithAck: vi.fn(async (_event: string, body: unknown) => {\n' +
+    "        const convId = (body as { conversationId?: string })?.conversationId || '';\n" +
+    '        return { ok: true, conversationId: convId };\n' +
+    '      }),\n' +
+    '      fire(event: string, data?: unknown) {\n' +
+    '        for (const callback of handlers.get(event) ?? []) {\n' +
+    '          callback(data);\n' +
+    '        }\n' +
+    '      },\n' +
+    '    };\n' +
+    '    socketTransport.sockets.push(socket);\n' +
+    '    return socket;\n' +
+    '  },\n' +
+    '}));\n' +
+    '\n' +
+    '// Real-shaped games catalog with UUIDs\n' +
+    'const mockGamesCatalog: GameDTO[] = [\n' +
+    '  {\n' +
+    "    id: '17e6cab4-a5eb-47cc-b69f-22158aa22739',\n" +
+    "    title: 'Liên Minh Huyền Thoại',\n" +
+    "    lobbyRoomId: 'lobby-lol-uuid',\n" +
+    '  },\n' +
+    '  {\n' +
+    "    id: '28f7dcb5-b6fc-58dd-c70g-33269bb33840',\n" +
+    "    title: 'Valorant',\n" +
+    "    lobbyRoomId: 'lobby-val-uuid',\n" +
+    '  },\n' +
+    '];\n' +
+    '\n' +
+    '// Valid MeDTO fixtures (parsed via MeDTOSchema to guarantee contract integrity)\n' +
+    'const mockOwnerUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-owner',\n" +
+    "  displayName: 'Room Owner',\n" +
+    "  email: 'owner@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-owner',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'JUST_CHATTING',\n" +
+    '  onboardingComplete: true,\n' +
+    "  interestedGames: ['Liên Minh Huyền Thoại'],\n" +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockMemberUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-member',\n" +
+    "  displayName: 'Regular Member',\n" +
+    "  email: 'member@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-member',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'LOOKING_FOR_TEAM',\n" +
+    '  onboardingComplete: true,\n' +
+    "  interestedGames: ['Valorant'],\n" +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockIncompleteUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-incomplete',\n" +
+    "  displayName: 'Incomplete User',\n" +
+    "  email: 'incomplete@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-incomplete',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'JUST_CHATTING',\n" +
+    '  onboardingComplete: false,\n' +
+    '  interestedGames: [],\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockRoom1: RoomDTO = {\n' +
+    "  id: 'room-1',\n" +
+    "  conversationId: 'conv-room-1',\n" +
+    "  name: 'Đội LMHT Hàng Đấu',\n" +
+    "  description: 'Phòng leo rank Kim Cương',\n" +
+    "  gameId: '17e6cab4-a5eb-47cc-b69f-22158aa22739',\n" +
+    "  gameTitle: 'Liên Minh Huyền Thoại',\n" +
+    "  ownerId: 'user-owner',\n" +
+    '  owner: {\n' +
+    "    id: 'user-owner',\n" +
+    "    displayName: 'Room Owner',\n" +
+    "    customStatus: 'JUST_CHATTING',\n" +
+    '    avatarUrl: null,\n' +
+    '  },\n' +
+    '  settings: {\n' +
+    "    visibility: 'PUBLIC',\n" +
+    "    invitePolicy: 'OWNER_APPROVAL',\n" +
+    '    playerCapacity: 5,\n' +
+    '  },\n' +
+    '  memberCount: 3,\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    'const mockPrivateRoom: RoomDTO = {\n' +
+    "  id: 'room-private',\n" +
+    "  conversationId: 'conv-room-private',\n" +
+    "  name: 'Phòng Mật 18+',\n" +
+    "  description: 'Phòng riêng tư',\n" +
+    "  gameId: '28f7dcb5-b6fc-58dd-c70g-33269bb33840',\n" +
+    "  gameTitle: 'Valorant',\n" +
+    "  ownerId: 'user-owner',\n" +
+    '  owner: {\n' +
+    "    id: 'user-owner',\n" +
+    "    displayName: 'Room Owner',\n" +
+    "    customStatus: 'JUST_CHATTING',\n" +
+    '    avatarUrl: null,\n' +
+    '  },\n' +
+    '  settings: {\n' +
+    "    visibility: 'PRIVATE',\n" +
+    "    invitePolicy: 'DIRECT_MEMBER',\n" +
+    '    playerCapacity: 5,\n' +
+    '  },\n' +
+    '  memberCount: 1,\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    'const mockRoomMembers: RoomMemberDTO[] = [\n' +
+    '  {\n' +
+    "    roomId: 'room-1',\n" +
+    "    userId: 'user-owner',\n" +
+    "    user: { id: 'user-owner', displayName: 'Room Owner', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "    role: 'OWNER',\n" +
+    "    permissions: ['MANAGE_CHAT', 'MANAGE_CALLS', 'MANAGE_RECRUITMENT', 'MANAGE_MEMBERS', 'OWNER_TRANSFER', 'ROOM_DISSOLVE'],\n" +
+    "    joinedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '  },\n' +
+    '  {\n' +
+    "    roomId: 'room-1',\n" +
+    "    userId: 'user-member',\n" +
+    "    user: { id: 'user-member', displayName: 'Regular Member', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "    role: 'MEMBER',\n" +
+    '    permissions: [],\n' +
+    "    joinedAt: '2026-10-01T12:30:00.000Z',\n" +
+    '  },\n' +
+    '];\n' +
+    '\n' +
+    'const mockChatMessage: MessageDTO = {\n' +
+    "  id: 'msg-1',\n" +
+    "  conversationId: 'conv-room-1',\n" +
+    "  senderId: 'user-owner',\n" +
+    "  sender: { id: 'user-owner', displayName: 'Room Owner', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "  content: 'Private fixture message before revoke 35269f47',\n" +
+    '  attachments: [],\n' +
+    '  mentions: [],\n' +
+    '  mentionedUserIds: [],\n' +
+    "  createdAt: '2026-10-01T12:35:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    "describe('T19 — Rooms, Private Group Chat, and Room Management', () => {\n" +
+    '  let queryClient: QueryClient;\n' +
+    '  let fetchSpy: ReturnType<typeof vi.spyOn>;\n' +
+    '  let fetchHistoryCalls: string[];\n' +
+    '  let postRoomCalls: Array<{ url: string; body: CreateRoomRequest }>;\n' +
+    '\n' +
+    '  beforeEach(() => {\n' +
+    '    queryClient = new QueryClient({\n' +
+    '      defaultOptions: {\n' +
+    '        queries: { retry: false, gcTime: 0 },\n' +
+    '      },\n' +
+    '    });\n' +
+    '    fetchHistoryCalls = [];\n' +
+    '    postRoomCalls = [];\n' +
+    '    socketTransport.sockets = [];\n' +
+    '\n' +
+    "    fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {\n" +
+    "      const url = typeof input === 'string' ? input : input.toString();\n" +
+    "      const method = init?.method?.toUpperCase() || 'GET';\n" +
+    '\n' +
+    '      // Auth endpoint\n' +
+    "      if (url.includes('/api/v1/me')) {\n" +
+    "        return new Response(JSON.stringify(mockOwnerUser), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Games catalog\n' +
+    "      if (url.includes('/api/v1/games')) {\n" +
+    "        return new Response(JSON.stringify(mockGamesCatalog), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Create room POST\n' +
+    "      if (url.endsWith('/api/v1/rooms') && method === 'POST') {\n" +
+    "        const bodyData = JSON.parse((init?.body as string) || '{}');\n" +
+    '        postRoomCalls.push({ url, body: bodyData });\n' +
+    '        const created: RoomDTO = {\n' +
+    "          id: 'room-created-uuid',\n" +
+    "          conversationId: 'conv-created-uuid',\n" +
+    '          name: bodyData.name,\n' +
+    '          description: bodyData.description,\n' +
+    '          gameId: bodyData.gameId,\n' +
+    '          gameTitle: bodyData.gameTitle,\n' +
+    "          ownerId: 'user-owner',\n" +
+    '          settings: {\n' +
+    "            visibility: bodyData.visibility || 'PUBLIC',\n" +
+    "            invitePolicy: bodyData.invitePolicy || 'OWNER_APPROVAL',\n" +
+    '            playerCapacity: bodyData.playerCapacity || 5,\n' +
+    '          },\n' +
+    '          memberCount: 1,\n' +
+    '          createdAt: new Date().toISOString(),\n' +
+    '          updatedAt: new Date().toISOString(),\n' +
+    '        };\n' +
+    "        return new Response(JSON.stringify(created), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Own Rooms list\n' +
+    "      if (url.includes('/api/v1/rooms/own') || (url.endsWith('/api/v1/rooms') && method === 'GET')) {\n" +
+    '        return new Response(\n' +
+    '          JSON.stringify({\n' +
+    '            items: [mockRoom1, mockPrivateRoom],\n' +
+    '            hasMore: false,\n' +
+    '          }),\n' +
+    "          { status: 200, headers: { 'Content-Type': 'application/json' } }\n" +
+    '        );\n' +
+    '      }\n' +
+    '\n' +
+    '      // Single Room detail\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/room-1$/)) {\n' +
+    "        return new Response(JSON.stringify(mockRoom1), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/room-private$/)) {\n' +
+    "        return new Response(JSON.stringify(mockPrivateRoom), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Room members\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/.*\\/members$/)) {\n' +
+    "        return new Response(JSON.stringify(mockRoomMembers), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Conversation messages history\n' +
+    "      if (url.includes('/api/v1/conversations/') && url.includes('/messages')) {\n" +
+    '        fetchHistoryCalls.push(url);\n' +
+    '        return new Response(\n' +
+    '          JSON.stringify({\n' +
+    '            items: [mockChatMessage],\n' +
+    '            hasMore: false,\n' +
+    '          }),\n' +
+    "          { status: 200, headers: { 'Content-Type': 'application/json' } }\n" +
+    '        );\n' +
+    '      }\n' +
+    '\n' +
+    "      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '    });\n' +
+    '  });\n' +
+    '\n' +
+    '  afterEach(() => {\n' +
+    '    fetchSpy.mockRestore();\n' +
+    '  });\n' +
+    '\n' +
+    "  const renderAppAt = (initialRoute = '/rooms') => {\n" +
+    '    return render(\n' +
+    '      <QueryClientProvider client={queryClient}>\n' +
+    '      '... 19015 more characters,
+  expected: '// @vitest-environment jsdom\n' +
+    "import '@testing-library/jest-dom/vitest';\n" +
+    "import React from 'react';\n" +
+    "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\n" +
+    "import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';\n" +
+    "import { MemoryRouter } from 'react-router-dom';\n" +
+    "import { QueryClient, QueryClientProvider } from '@tanstack/react-query';\n" +
+    "import { RoomDTO, RoomMemberDTO, MessageDTO, MeDTO, MeDTOSchema, GameDTO, CreateRoomRequest, SocketEventNames } from '@fg/contracts';\n" +
+    "import { AuthProvider } from '../src/features/auth/index.js';\n" +
+    "import { App } from '../src/App.tsx';\n" +
+    '\n' +
+    '// Socket mock transport for tests\n' +
+    'const socketTransport = vi.hoisted(() => ({\n' +
+    '  sockets: [] as Array<{\n' +
+    '    namespace: string;\n' +
+    '    fire: (event: string, data?: unknown) => void;\n' +
+    '    closed: boolean;\n' +
+    '    emit: (event?: string, data?: unknown) => unknown;\n' +
+    '    emitWithAck: (event: string, body: unknown) => Promise<unknown>;\n' +
+    '  }>,\n' +
+    '  connected: true,\n' +
+    '}));\n' +
+    '\n' +
+    "vi.mock('socket.io-client', () => ({\n" +
+    '  io: (urlOrOpts?: unknown) => {\n' +
+    '    const handlers = new Map<string, Set<(data?: unknown) => void>>();\n' +
+    '    const socket = {\n' +
+    "      namespace: typeof urlOrOpts === 'string' ? urlOrOpts : '/',\n" +
+    '      connected: socketTransport.connected,\n' +
+    '      connect() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      closed: false,\n' +
+    '      on(event: string, callback: (data?: unknown) => void) {\n' +
+    '        const callbacks = handlers.get(event) ?? new Set();\n' +
+    '        callbacks.add(callback);\n' +
+    '        handlers.set(event, callbacks);\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      off(event: string, callback: (data?: unknown) => void) {\n' +
+    '        handlers.get(event)?.delete(callback);\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      disconnect() {\n' +
+    '        socket.closed = true;\n' +
+    '        socket.connected = false;\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      timeout() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      emit() {\n' +
+    '        return socket;\n' +
+    '      },\n' +
+    '      emitWithAck: vi.fn(async (_event: string, body: unknown) => {\n' +
+    "        const convId = (body as { conversationId?: string })?.conversationId || '';\n" +
+    '        return { ok: true, conversationId: convId };\n' +
+    '      }),\n' +
+    '      fire(event: string, data?: unknown) {\n' +
+    '        for (const callback of handlers.get(event) ?? []) {\n' +
+    '          callback(data);\n' +
+    '        }\n' +
+    '      },\n' +
+    '    };\n' +
+    '    socketTransport.sockets.push(socket);\n' +
+    '    return socket;\n' +
+    '  },\n' +
+    '}));\n' +
+    '\n' +
+    '// Real-shaped games catalog with UUIDs\n' +
+    'const mockGamesCatalog: GameDTO[] = [\n' +
+    '  {\n' +
+    "    id: '17e6cab4-a5eb-47cc-b69f-22158aa22739',\n" +
+    "    title: 'Liên Minh Huyền Thoại',\n" +
+    "    lobbyRoomId: 'lobby-lol-uuid',\n" +
+    '  },\n' +
+    '  {\n' +
+    "    id: '28f7dcb5-b6fc-58dd-c70g-33269bb33840',\n" +
+    "    title: 'Valorant',\n" +
+    "    lobbyRoomId: 'lobby-val-uuid',\n" +
+    '  },\n' +
+    '];\n' +
+    '\n' +
+    '// Valid MeDTO fixtures (parsed via MeDTOSchema to guarantee contract integrity)\n' +
+    'const mockOwnerUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-owner',\n" +
+    "  displayName: 'Room Owner',\n" +
+    "  email: 'owner@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-owner',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'JUST_CHATTING',\n" +
+    '  onboardingComplete: true,\n' +
+    "  interestedGames: ['Liên Minh Huyền Thoại'],\n" +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockMemberUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-member',\n" +
+    "  displayName: 'Regular Member',\n" +
+    "  email: 'member@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-member',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'LOOKING_FOR_TEAM',\n" +
+    '  onboardingComplete: true,\n' +
+    "  interestedGames: ['Valorant'],\n" +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockIncompleteUser: MeDTO = MeDTOSchema.parse({\n' +
+    "  id: 'user-incomplete',\n" +
+    "  displayName: 'Incomplete User',\n" +
+    "  email: 'incomplete@fg.test',\n" +
+    '  emailVerified: true,\n' +
+    "  discordId: 'discord-incomplete',\n" +
+    '  avatarUrl: null,\n' +
+    "  customStatus: 'JUST_CHATTING',\n" +
+    '  onboardingComplete: false,\n' +
+    '  interestedGames: [],\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '});\n' +
+    '\n' +
+    'const mockRoom1: RoomDTO = {\n' +
+    "  id: 'room-1',\n" +
+    "  conversationId: 'conv-room-1',\n" +
+    "  name: 'Đội LMHT Hàng Đấu',\n" +
+    "  description: 'Phòng leo rank Kim Cương',\n" +
+    "  gameId: '17e6cab4-a5eb-47cc-b69f-22158aa22739',\n" +
+    "  gameTitle: 'Liên Minh Huyền Thoại',\n" +
+    "  ownerId: 'user-owner',\n" +
+    '  owner: {\n' +
+    "    id: 'user-owner',\n" +
+    "    displayName: 'Room Owner',\n" +
+    "    customStatus: 'JUST_CHATTING',\n" +
+    '    avatarUrl: null,\n' +
+    '  },\n' +
+    '  settings: {\n' +
+    "    visibility: 'PUBLIC',\n" +
+    "    invitePolicy: 'OWNER_APPROVAL',\n" +
+    '    playerCapacity: 5,\n' +
+    '  },\n' +
+    '  memberCount: 3,\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    'const mockPrivateRoom: RoomDTO = {\n' +
+    "  id: 'room-private',\n" +
+    "  conversationId: 'conv-room-private',\n" +
+    "  name: 'Phòng Mật 18+',\n" +
+    "  description: 'Phòng riêng tư',\n" +
+    "  gameId: '28f7dcb5-b6fc-58dd-c70g-33269bb33840',\n" +
+    "  gameTitle: 'Valorant',\n" +
+    "  ownerId: 'user-owner',\n" +
+    '  owner: {\n' +
+    "    id: 'user-owner',\n" +
+    "    displayName: 'Room Owner',\n" +
+    "    customStatus: 'JUST_CHATTING',\n" +
+    '    avatarUrl: null,\n' +
+    '  },\n' +
+    '  settings: {\n' +
+    "    visibility: 'PRIVATE',\n" +
+    "    invitePolicy: 'DIRECT_MEMBER',\n" +
+    '    playerCapacity: 5,\n' +
+    '  },\n' +
+    '  memberCount: 1,\n' +
+    "  createdAt: '2026-10-01T12:00:00.000Z',\n" +
+    "  updatedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    'const mockRoomMembers: RoomMemberDTO[] = [\n' +
+    '  {\n' +
+    "    roomId: 'room-1',\n" +
+    "    userId: 'user-owner',\n" +
+    "    user: { id: 'user-owner', displayName: 'Room Owner', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "    role: 'OWNER',\n" +
+    "    permissions: ['MANAGE_CHAT', 'MANAGE_CALLS', 'MANAGE_RECRUITMENT', 'MANAGE_MEMBERS', 'OWNER_TRANSFER', 'ROOM_DISSOLVE'],\n" +
+    "    joinedAt: '2026-10-01T12:00:00.000Z',\n" +
+    '  },\n' +
+    '  {\n' +
+    "    roomId: 'room-1',\n" +
+    "    userId: 'user-member',\n" +
+    "    user: { id: 'user-member', displayName: 'Regular Member', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "    role: 'MEMBER',\n" +
+    '    permissions: [],\n' +
+    "    joinedAt: '2026-10-01T12:30:00.000Z',\n" +
+    '  },\n' +
+    '];\n' +
+    '\n' +
+    'const mockChatMessage: MessageDTO = {\n' +
+    "  id: 'msg-1',\n" +
+    "  conversationId: 'conv-room-1',\n" +
+    "  senderId: 'user-owner',\n" +
+    "  sender: { id: 'user-owner', displayName: 'Room Owner', customStatus: 'JUST_CHATTING', avatarUrl: null },\n" +
+    "  content: 'Private fixture message before revoke 35269f47',\n" +
+    '  attachments: [],\n' +
+    '  mentions: [],\n' +
+    '  mentionedUserIds: [],\n' +
+    "  createdAt: '2026-10-01T12:35:00.000Z',\n" +
+    '};\n' +
+    '\n' +
+    "describe('T19 — Rooms, Private Group Chat, and Room Management', () => {\n" +
+    '  let queryClient: QueryClient;\n' +
+    '  let fetchSpy: ReturnType<typeof vi.spyOn>;\n' +
+    '  let fetchHistoryCalls: string[];\n' +
+    '  let postRoomCalls: Array<{ url: string; body: CreateRoomRequest }>;\n' +
+    '\n' +
+    '  beforeEach(() => {\n' +
+    '    queryClient = new QueryClient({\n' +
+    '      defaultOptions: {\n' +
+    '        queries: { retry: false, gcTime: 0 },\n' +
+    '      },\n' +
+    '    });\n' +
+    '    fetchHistoryCalls = [];\n' +
+    '    postRoomCalls = [];\n' +
+    '    socketTransport.sockets = [];\n' +
+    '\n' +
+    "    fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {\n" +
+    "      const url = typeof input === 'string' ? input : input.toString();\n" +
+    "      const method = init?.method?.toUpperCase() || 'GET';\n" +
+    '\n' +
+    '      // Auth endpoint\n' +
+    "      if (url.includes('/api/v1/me')) {\n" +
+    "        return new Response(JSON.stringify(mockOwnerUser), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Games catalog\n' +
+    "      if (url.includes('/api/v1/games')) {\n" +
+    "        return new Response(JSON.stringify(mockGamesCatalog), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Create room POST\n' +
+    "      if (url.endsWith('/api/v1/rooms') && method === 'POST') {\n" +
+    "        const bodyData = JSON.parse((init?.body as string) || '{}');\n" +
+    '        postRoomCalls.push({ url, body: bodyData });\n' +
+    '        const created: RoomDTO = {\n' +
+    "          id: 'room-created-uuid',\n" +
+    "          conversationId: 'conv-created-uuid',\n" +
+    '          name: bodyData.name,\n' +
+    '          description: bodyData.description,\n' +
+    '          gameId: bodyData.gameId,\n' +
+    '          gameTitle: bodyData.gameTitle,\n' +
+    "          ownerId: 'user-owner',\n" +
+    '          settings: {\n' +
+    "            visibility: bodyData.visibility || 'PUBLIC',\n" +
+    "            invitePolicy: bodyData.invitePolicy || 'OWNER_APPROVAL',\n" +
+    '            playerCapacity: bodyData.playerCapacity || 5,\n' +
+    '          },\n' +
+    '          memberCount: 1,\n' +
+    '          createdAt: new Date().toISOString(),\n' +
+    '          updatedAt: new Date().toISOString(),\n' +
+    '        };\n' +
+    "        return new Response(JSON.stringify(created), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Own Rooms list\n' +
+    "      if (url.includes('/api/v1/rooms/own') || (url.endsWith('/api/v1/rooms') && method === 'GET')) {\n" +
+    '        return new Response(\n' +
+    '          JSON.stringify({\n' +
+    '            items: [mockRoom1, mockPrivateRoom],\n' +
+    '            hasMore: false,\n' +
+    '          }),\n' +
+    "          { status: 200, headers: { 'Content-Type': 'application/json' } }\n" +
+    '        );\n' +
+    '      }\n' +
+    '\n' +
+    '      // Single Room detail\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/room-1$/)) {\n' +
+    "        return new Response(JSON.stringify(mockRoom1), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/room-private$/)) {\n' +
+    "        return new Response(JSON.stringify(mockPrivateRoom), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Room members\n' +
+    '      if (url.match(/\\/api\\/v1\\/rooms\\/.*\\/members$/)) {\n' +
+    "        return new Response(JSON.stringify(mockRoomMembers), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '      }\n' +
+    '\n' +
+    '      // Conversation messages history\n' +
+    "      if (url.includes('/api/v1/conversations/') && url.includes('/messages')) {\n" +
+    '        fetchHistoryCalls.push(url);\n' +
+    '        return new Response(\n' +
+    '          JSON.stringify({\n' +
+    '            items: [mockChatMessage],\n' +
+    '            hasMore: false,\n' +
+    '          }),\n' +
+    "          { status: 200, headers: { 'Content-Type': 'application/json' } }\n" +
+    '        );\n' +
+    '      }\n' +
+    '\n' +
+    "      return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });\n" +
+    '    });\n' +
+    '  });\n' +
+    '\n' +
+    '  afterEach(() => {\n' +
+    '    fetchSpy.mockRestore();\n' +
+    '  });\n' +
+    '\n' +
+    "  const renderAppAt = (initialRoute = '/rooms') => {\n" +
+    '    return render(\n' +
+    '      <QueryClientProvider client={queryClient}>\n' +
+    '        <MemoryRouter initialEntries={[ini'... 18979 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

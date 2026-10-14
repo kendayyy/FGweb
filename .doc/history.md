@@ -5717,3 +5717,158 @@
 - Coding and build 2 — T33 — kết thúc acceptance 2026-10-14T03:56:40.783Z: Codex local PASS after contracts255/API20/worker10/original regressions100/compiled smoke5, new lint/fresh builds/current source ACL/private authority/83priorPASS/checker/env/baselines/exact transitions/owned PG+Redis cleanup and historical schema preservation. Retain14failed commands. Frozen1570outputs. No UI/mail/push/reminder-production/main migration/production/physical-device/1000claim. Evidence code/quality/evidence/T33/closure.json. Automatic public stage/privacy/normal master push pending; T34 not started.
 
 - Coding and build 2 — T33 — GitHub primary sync 2026-10-14T03:58:49.234Z: commit actual2026-10-14T03:58:03.473Z–2026-10-14T03:58:10.033Z exit0, push actual2026-10-14T03:58:23.974Z–2026-10-14T03:58:34.090Z exit0. Remote master SHA verified 21937f54059f40558f8fe00eee87a19fa74474a2; actual refreshed staged scan2 clean, author kendayy verified, frozen acceptance outputs unchanged. Evidence code/quality/evidence/T33/github-primary-push-receipt1.json; one bounded receipt/history followup pending, no production deployment.
+
+- Coding and build 2 — T33 — backup hoàn tất 2026-10-14T04:00:46.499Z: bounded receipt commit/push actual2026-10-14T03:59:59.807Z–2026-10-14T04:00:33.099Z exit0/0, remote master SHA 700e3374928e9465eb916678a37cf1a44ac216a0 verified, primary 21937f54059f40558f8fe00eee87a19fa74474a2 included. Final receipt/commands retained local to avoid recursive commits, source acceptance/frozen outputs unchanged. Evidence code/quality/evidence/T33/github-final-sync1.json. T34 may enter only through its reviewed stock gate.
+
+- Coding and build 2 — T34 — bắt đầu review 2026-10-14T11:08:19.6236396+07:00: human persistent continue after T33 PASS and verified final master700e3374928e9465eb916678a37cf1a44ac216a0. Read spec7/design/taskT34/frontend/tests/current flows; ui-ux-pro-max verified contextual badge and effect cleanup guidance. Prepare implementation plan/scope/stock gate before app changes; no new UI success, T35, crypto/backend/schema/dependency changes or cockpit.
+
+
+- Coding and build 2 — T34 — 2026-10-14T04:10:34.470Z: approved current spec lineage/84frozen PASS/new scope and snapshot pass stock gate before business changes. Initial old-spec stock failure preserved. T34 now IN_PROGRESS; RED DOM notification tests next, exact App/Lobby/build review and genuine headed API/PG/Redis/Telegram verification before acceptance; no main migration/delivery claim. Evidence code/quality/evidence/T34/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:08:19.758Z–2026-10-14T04:08:20.210Z exit1: t34-stock-entry-gate-1. Evidence code/quality/evidence/T34/codex-t34-stock-entry-gate-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:09:02.659Z–2026-10-14T04:09:02.806Z exit0: t34-entry-driver-prepare-1. Evidence code/quality/evidence/T34/codex-t34-entry-driver-prepare-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:09:04.376Z–2026-10-14T04:10:34.631Z exit0: t34-reviewed-entry-1. Evidence code/quality/evidence/T34/codex-t34-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:15:33.750Z–2026-10-14T04:16:25.628Z exit1: t34-dom-red-1. Evidence code/quality/evidence/T34/codex-t34-dom-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:28:27.039Z–2026-10-14T04:28:36.569Z exit0: t34-dom-green-1. Evidence code/quality/evidence/T34/codex-t34-dom-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:29:43.481Z–2026-10-14T04:29:52.716Z exit1: t34-link-red-2. Evidence code/quality/evidence/T34/codex-t34-link-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:31:42.897Z–2026-10-14T04:31:43.048Z exit0: t34-owned-room-link-fix-1. Evidence code/quality/evidence/T34/codex-t34-owned-room-link-fix-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:31:45.052Z–2026-10-14T04:31:53.993Z exit0: t34-dom-green-2. Evidence code/quality/evidence/T34/codex-t34-dom-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 11:38:30 +07:00: T34 approved header/mobile bell, protected inbox/link routes and existing Lobby friends/DM/game deep links. New provider is actor scoped, cancels auth resources, updates counts without remounting App/crypto/call or repeatedly announcing unchanged polls. Existing layout/tokens/business controls unchanged; exact two-file integration,84PASS/checker preserved. Evidence code/quality/evidence/T34/app-integration1-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:35:33.564Z–2026-10-14T04:35:33.708Z exit0: t34-app-integration-proposal-1. Evidence code/quality/evidence/T34/codex-t34-app-integration-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:36:26.116Z–2026-10-14T04:38:30.433Z exit0: t34-app-integration-adoption-1. Evidence code/quality/evidence/T34/codex-t34-app-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:39:18.405Z–2026-10-14T04:39:34.733Z exit2: t34-web-types-1. Evidence code/quality/evidence/T34/codex-t34-web-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:41:07.630Z–2026-10-14T04:41:21.694Z exit0: t34-web-types-2. Evidence code/quality/evidence/T34/codex-t34-web-types-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:42:47.050Z–2026-10-14T04:43:56.003Z exit1: t34-app-regressions-1. Evidence code/quality/evidence/T34/codex-t34-app-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:49:43.880Z–2026-10-14T04:49:44.291Z exit0: t34-regression-copy-prepare-1. Evidence code/quality/evidence/T34/codex-t34-regression-copy-prepare-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:49:46.624Z–2026-10-14T04:50:54.434Z exit0: t34-app-regressions-2. Evidence code/quality/evidence/T34/codex-t34-app-regressions-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:57:08.753Z–2026-10-14T04:57:14.152Z exit1: t34-source-lint-1. Evidence code/quality/evidence/T34/codex-t34-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 12:01:03 +07:00: Replace new control-character regex in T34 notification deep-link validation with equivalent character-code checks. Preserve every rejection, opaque Unicode IDs, existing Lobby behavior and84PASS/checker. No lint suppression or weakened validation. Evidence code/quality/evidence/T34/lobby-id-lint1-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:58:23.103Z–2026-10-14T04:58:23.297Z exit0: t34-lobby-id-lint-proposal-1. Evidence code/quality/evidence/T34/codex-t34-lobby-id-lint-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T04:58:25.317Z–2026-10-14T05:01:03.959Z exit0: t34-lobby-id-lint-adoption-1. Evidence code/quality/evidence/T34/codex-t34-lobby-id-lint-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:03:32.663Z–2026-10-14T05:03:37.586Z exit0: t34-source-lint-2. Evidence code/quality/evidence/T34/codex-t34-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:05:01.753Z–2026-10-14T05:05:33.711Z exit0: t34-web-build-1. Evidence code/quality/evidence/T34/codex-t34-web-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:11:37.605Z–2026-10-14T05:11:54.453Z exit1: t34-direct-link-red-3. Evidence code/quality/evidence/T34/codex-t34-direct-link-red-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:15:55.845Z–2026-10-14T05:16:09.014Z exit0: t34-dom-green-3. Evidence code/quality/evidence/T34/codex-t34-dom-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Kết nối bot Telegram — TELEGRAM-BRIDGE-01 — 2026-10-14 12:24:00 +07:00: bắt đầu /ref owner restart bot graceful+watchdog+startup confirmation, giữ pairing/selected/offset/delivery uncertain; không restart Codex/task/không cockpit/Anti2/Antigravity. User scoped authorization command; 60s cooldown tránh loop.
+
+- Kết nối bot Telegram — TELEGRAM-BRIDGE-01 — 2026-10-14 12:26:33 +07:00: kết thúc /ref Ken-only restart graceful/confirmation/cooldown60s. RED2missingcommand tests exit1 preserved, GREEN76/76+scoped lint exit0; tests duplicate/freshness/guestdenial/pendinguncertain/selected preserved/no dispatch. Newruntime watchdogreload verifiednewPID/fresh app+Telegram health exit0; firsthealthprobe còn stale exit1 chờpoll rồi đạt, actual maintenance stop→watchdog, chưa actualTelegram /ref invocation/startupconfirmation E2E, không claim. Per-updatebatch break giữ updates sau chưa consume; confirming journal trướcsend tránhspamonlostreceipt. README/design/help/menu updated; không sửa FG T34 app/tests/ledger/PASS/checker/main/env/cockpit/Anti2/Antigravity. Evidence ref-red.log/ref-tests.log/ref-verification.json/ref-reload-before.json/ref-runtime.json. Operational bridge không checkpoint FG đãchốt, không stage/push taskIN_PROGRESS hoặc runtime/publiclogs.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:24:13.883Z–2026-10-14T05:24:28.086Z exit0: t34-final-types-3. Evidence code/quality/evidence/T34/codex-t34-final-types-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:25:44.061Z–2026-10-14T05:25:44.480Z exit0: t34-build-driver-prepare-2. Evidence code/quality/evidence/T34/codex-t34-build-driver-prepare-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:25:46.089Z–2026-10-14T05:26:05.869Z exit0: t34-web-build-2. Evidence code/quality/evidence/T34/codex-t34-web-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 12:29:30 +07:00: Fresh T34 web build2 after actual direct-link RED/actor-scope readiness fix. Exact built index/new assets only; preserve historical dist assets and84PASS/checker. Canonical source and previous build stayed unchanged during compile; no CSP/crypto/backend changes. Evidence code/quality/evidence/T34/built-web2-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:27:37.705Z–2026-10-14T05:27:38.460Z exit0: t34-built-web-proposal-2. Evidence code/quality/evidence/T34/codex-t34-built-web-proposal-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:27:39.850Z–2026-10-14T05:29:30.184Z exit0: t34-built-web-adoption-2. Evidence code/quality/evidence/T34/codex-t34-built-web-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:30:08.474Z–2026-10-14T05:30:53.308Z exit1: headed-t34-notifications-1. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:34:42.371Z–2026-10-14T05:34:42.569Z exit0: t34-socket-diagnostic-prepare-2. Evidence code/quality/evidence/T34/codex-t34-socket-diagnostic-prepare-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:34:44.143Z–2026-10-14T05:35:15.284Z exit1: headed-t34-notifications-2. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:37:26.310Z–2026-10-14T05:37:26.440Z exit0: t34-websocket-build-prepare-3. Evidence code/quality/evidence/T34/codex-t34-websocket-build-prepare-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:37:28.084Z–2026-10-14T05:37:51.143Z exit0: t34-web-build-3. Evidence code/quality/evidence/T34/codex-t34-web-build-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 12:40:16 +07:00: Fresh T34 web build2 after actual direct-link readiness and Origin-required WebSocket fixes. Exact built index/new assets only; preserve historical dist assets and84PASS/checker. Canonical source and previous build stayed unchanged during compile; no CSP/crypto/backend changes. Evidence code/quality/evidence/T34/built-web3-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:38:18.732Z–2026-10-14T05:38:19.678Z exit0: t34-built-web-proposal-3. Evidence code/quality/evidence/T34/codex-t34-built-web-proposal-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:38:21.842Z–2026-10-14T05:40:16.319Z exit0: t34-built-web-adoption-3. Evidence code/quality/evidence/T34/codex-t34-built-web-adoption-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:40:54.177Z–2026-10-14T05:41:41.134Z exit1: headed-t34-notifications-3. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:42:37.484Z–2026-10-14T05:42:37.659Z exit0: t34-fixture-diagnostic-prepare-4. Evidence code/quality/evidence/T34/codex-t34-fixture-diagnostic-prepare-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:42:39.757Z–2026-10-14T05:42:58.237Z exit1: t34-reminder-fixture-probe-4. Evidence code/quality/evidence/T34/codex-t34-reminder-fixture-probe-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:44:19.802Z–2026-10-14T05:44:19.982Z exit0: t34-fixture-capacity-prepare-5. Evidence code/quality/evidence/T34/codex-t34-fixture-capacity-prepare-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:44:22.209Z–2026-10-14T05:44:39.943Z exit0: t34-reminder-fixture-probe-5. Evidence code/quality/evidence/T34/codex-t34-reminder-fixture-probe-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:45:05.849Z–2026-10-14T05:45:53.239Z exit1: headed-t34-notifications-5. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:48:31.401Z–2026-10-14T05:48:31.589Z exit0: t34-auth-assertion-prepare-6. Evidence code/quality/evidence/T34/codex-t34-auth-assertion-prepare-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:48:32.986Z–2026-10-14T05:49:21.767Z exit0: headed-t34-notifications-6. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:50:10.095Z–2026-10-14T05:51:18.981Z exit1: t34-final-app-regressions-3. Evidence code/quality/evidence/T34/codex-t34-final-app-regressions-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:54:25.631Z–2026-10-14T05:54:48.049Z exit0: t34-call-regression-diagnostic-4. Evidence code/quality/evidence/T34/codex-t34-call-regression-diagnostic-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:56:23.186Z–2026-10-14T05:56:23.330Z exit0: t34-mobile-build-prepare-4. Evidence code/quality/evidence/T34/codex-t34-mobile-build-prepare-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:56:25.137Z–2026-10-14T05:56:51.466Z exit0: t34-web-build-4. Evidence code/quality/evidence/T34/codex-t34-web-build-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 12:59:31 +07:00: Fresh T34 web build2 after direct-link/WebSocket fixes and actual photo review of compact44px mobile bell. Exact built index/new assets only; preserve historical dist assets and84PASS/checker. Canonical source and previous build stayed unchanged during compile; no CSP/crypto/backend changes. Evidence code/quality/evidence/T34/built-web4-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:57:35.635Z–2026-10-14T05:57:36.513Z exit0: t34-built-web-proposal-4. Evidence code/quality/evidence/T34/codex-t34-built-web-proposal-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:57:37.865Z–2026-10-14T05:59:31.439Z exit0: t34-built-web-adoption-4. Evidence code/quality/evidence/T34/codex-t34-built-web-adoption-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T05:59:51.494Z–2026-10-14T06:00:44.994Z exit0: headed-t34-notifications-7. Evidence code/quality/evidence/T34/codex-headed-t34-notifications-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:02:17.412Z–2026-10-14T06:03:28.660Z exit0: t34-final-app-regressions-4. Evidence code/quality/evidence/T34/codex-t34-final-app-regressions-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:05:20.663Z–2026-10-14T06:05:35.227Z exit0: t34-final-lint-3. Evidence code/quality/evidence/T34/codex-t34-final-lint-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:12:45.536Z–2026-10-14T06:13:02.496Z exit0: t34-final-types-4. Evidence code/quality/evidence/T34/codex-t34-final-types-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:13:14.549Z–2026-10-14T06:13:15.080Z exit0: t34-owned-redis-cleanup-1. Evidence code/quality/evidence/T34/codex-t34-owned-redis-cleanup-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:13:28.684Z–2026-10-14T06:13:28.807Z exit0: t34-coverage-proposal-1. Evidence code/quality/evidence/T34/codex-t34-coverage-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — exact review 2026-10-14 13:16:20 +07:00: Append T34 approved frontend traceability with actual command/headed/Telegram/cleanup proofs and explicit limits; preserve historical coverage and84PASS/checker. Closure controls PASS. Evidence code/quality/evidence/T34/coverage1-adoption-review.json; actual task acceptance pending,84priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:13:42.793Z–2026-10-14T06:16:20.607Z exit0: t34-coverage-adoption-1. Evidence code/quality/evidence/T34/codex-t34-coverage-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:17:03.698Z–2026-10-14T06:18:04.152Z exit1: t34-final-local-integrity-review-1. Evidence code/quality/evidence/T34/codex-t34-final-local-integrity-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 2 — T34 — actual 2026-10-14T06:19:19.086Z: integrity1 failed on4 separate operational bridge /ref originals changed by chat Kết nối bot Telegram12:24–12:26+07, existing scoped user request/history/tests/runtime evidence verified read-only. None owned by84 historical PASS. Preserve their current files, exclude from T34 stage; exact current hashes observed in code/quality/evidence/T34/external-bridge-observation1.json. No T34 scope expansion/checker relaxation/source restoration or fabricated original-unchanged claim. Integrity2 will classify only these exact observed separate files.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:19:54.282Z: app thread inventory confirms current title Coding and build 3 (thread01a1340f-56a7-7a61-9ecd-fdaf2b9e2cbc). Earlier T34 helper entries used inherited label Coding and build 2; this new correction identifies the actual current chat without rewriting completed entries or execution timestamps. Continue T34 same sequential checkpoint; no task/PASS mutation.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:19:19.296Z–2026-10-14T06:21:04.893Z exit1: t34-final-local-integrity-review-2. Evidence code/quality/evidence/T34/codex-t34-final-local-integrity-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:21:46.593Z: integrity2 failed in new audit helper because reverse-copy comparison omitted the already reviewed relative import-path rebasing. Read original prepare-regression-copies1.mjs proof; copy/original hashes already matched. Integrity3 reverses both rebased imports and exact reviewed edits before byte comparison, preserves originals/assertions and failed audit log. Application/test source unchanged; no checker relaxation.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:23:38.350Z: final integrity 34520 originals/84priorPASS/checker/env/baselines/exact transitions;132regressions/13realheadedgroups/16finalcaptures/63fresh actual Telegram sent;95fresh build files/source pins and reversible test copies, all owned PG/Redis cleanup and historical schema reviewed. Evidence code/quality/evidence/T34/final-local-integrity-review1.json; closure pending.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:21:46.956Z–2026-10-14T06:23:38.443Z exit0: t34-final-local-integrity-review-3. Evidence code/quality/evidence/T34/codex-t34-final-local-integrity-review-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:23:50.563Z: Codex final local acceptance reviewed132regressions/13headedgroups/16finalphotos, actual Telegram receipts/lint/types/source+95buildfiles/gate/84PASS/reversible copies/current cleanup/historical schema preservation. Evidence code/quality/evidence/T34/acceptance-review.md; ledger closure/public backup pending, T35 not started.
+
+- Coding and build 3 — T34 — actual 2026-10-14T06:23:50.426Z–2026-10-14T06:23:50.586Z exit0: t34-final-acceptance-review-1. Evidence code/quality/evidence/T34/codex-t34-final-acceptance-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
+
+- Coding and build 3 — T34 — kết thúc acceptance 2026-10-14T09:24:42.127Z: Codex local PASS after 132regressions/13realheadedgroups/16finalphotos/actual Telegram receipts/lint/types/fresh95-file build/current guarded links/independent preferences/84priorPASS/checker/env/baselines/exact transitions/owned PG+Redis cleanup and historical schema preservation. Retain15failed commands. Frozen1867outputs. No physical-device/mail/push/reminder-production/main migration/production/physical-device/1000claim. Evidence code/quality/evidence/T34/closure.json. Automatic public stage/privacy/normal master push pending; T35 not started.
+
+- Coding and build 3 — T34 — actual 2026-10-14T09:21:11.490Z–2026-10-14T09:24:57.153Z exit0: t34-reviewed-close-1. Evidence code/quality/evidence/T34/codex-t34-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
