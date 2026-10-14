@@ -5874,3 +5874,199 @@
 - Coding and build 3 — T34 — actual 2026-10-14T09:21:11.490Z–2026-10-14T09:24:57.153Z exit0: t34-reviewed-close-1. Evidence code/quality/evidence/T34/codex-t34-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T34.
 
 - Coding and build 3 — T34 — GitHub primary sync 2026-10-14T09:27:38.598Z: commit actual2026-10-14T09:26:41.227Z–2026-10-14T09:26:45.722Z exit0, push actual2026-10-14T09:27:14.137Z–2026-10-14T09:27:25.433Z exit0. Remote master SHA verified b3aa532d70b5d38a0d23bdf2521ab0a1e56cc65d; actual refreshed staged scan2 clean, author kendayy verified, frozen acceptance outputs unchanged. Evidence code/quality/evidence/T34/github-primary-push-receipt1.json; one bounded receipt/history followup pending, no production deployment.
+
+- Coding and build 3 — T34 — backup hoàn tất 2026-10-14T09:28:45.606Z: bounded receipt commit/push actual2026-10-14T09:28:12.123Z–2026-10-14T09:28:37.115Z exit0/0, remote master SHA 95d253dbd849ce4422a656a02c3ced625428e42f verified, primary b3aa532d70b5d38a0d23bdf2521ab0a1e56cc65d included. Final receipt/commands retained local to avoid recursive commits, source acceptance/frozen outputs unchanged. Evidence code/quality/evidence/T34/github-final-sync1.json. T35 may enter only through its reviewed stock gate.
+
+- Coding and build 3 — T35 — bắt đầu planning/gate 2026-10-14T09:32:31.821Z: T34 PASS and verified master95d253dbd849ce4422a656a02c3ced625428e42f. Review approved spec/task/rules and current adapters/schema; prepare only task evidence helpers before stock gate. No application business changes or T36 entry.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:32:32.125Z–2026-10-14T09:32:32.702Z exit1: t35-stock-entry-gate-1. Evidence code/quality/evidence/T35/codex-t35-stock-entry-gate-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — 2026-10-14T09:35:55.728Z: approved current spec lineage/85frozen PASS/new scope and snapshot pass stock gate before business changes. Initial old-spec stock failure preserved. T35 now IN_PROGRESS; RED real PG/Redis delivery and authenticated subscription API tests next; actual transport receipts separate from local assertions. No main migration/PWA/production claim. Evidence code/quality/evidence/T35/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:33:08.277Z–2026-10-14T09:35:55.972Z exit0: t35-reviewed-entry-1. Evidence code/quality/evidence/T35/codex-t35-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:38:11.412Z–2026-10-14T09:38:50.416Z exit1: t35-delivery-red-1. Evidence code/quality/evidence/T35/codex-t35-delivery-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:40:55.941Z–2026-10-14T09:40:59.103Z exit1: t35-push-api-red-1. Evidence code/quality/evidence/T35/codex-t35-push-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:41:52.303Z–2026-10-14T09:43:38.108Z exit1: t35-push-api-red-2. Evidence code/quality/evidence/T35/codex-t35-push-api-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:44:45.445Z: worker RED13failed/3passed16 (missing delivery/reminder behavior), API RED2 eight failures (missing routes, one fixture column admin_user_id instead of actual actor_id). Original owned RED sources retained; corrected only actual schema column. Added scheduling-count assertion before existing bounded async observer so absent scheduler fails immediately; all delivery assertions/timeouts retained. Actual Chrome PC receiver designated by human reply, evidence device-designation1.json. No fake provider receipt.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:44:45.569Z–2026-10-14T09:44:47.695Z exit1: t35-push-contract-red-1. Evidence code/quality/evidence/T35/codex-t35-push-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:48:05.930Z–2026-10-14T09:48:07.795Z exit0: t35-shared-proposal-1. Evidence code/quality/evidence/T35/codex-t35-shared-proposal-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:48:47.794Z–2026-10-14T09:48:48.052Z exit0: t35-proposed-authority-review-1. Evidence code/quality/evidence/T35/codex-t35-proposed-authority-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:50:34.622Z: Ruling: malformed Push input uses existing locked INVALID_INPUT→422 mapping (common.ts), foreign endpoint ownership is FORBIDDEN→403. Earlier new test guessed400/409 before interface review; correct those expected statuses, preserve owned previous source2 and all reject/ownership/data-integrity assertions. No shared error-map change or assertion removal; focused RED3 verifies corrected actual contract before API implementation.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:41:52.303Z–2026-10-14T09:43:38.108Z exit1: t35-push-api-red-2. Evidence code/quality/evidence/T35/codex-t35-push-api-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 2 — T35 — exact review 2026-10-14 16:51:03 +07:00: T35 RED delivery/API/contracts require bounded provider/key DTOs, optional current channel source authority preserving exact IN_APP defaults/private predicate, and additive durable per-target receipt schema/migration. Ownership derives from existing outbox FK; no main migration/crypto protocol/checker change, preserve85PASS. Evidence code/quality/evidence/T35/shared1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:50:34.875Z–2026-10-14T09:51:13.843Z exit1: t35-push-api-red-3. Evidence code/quality/evidence/T35/codex-t35-push-api-red-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:48:56.737Z–2026-10-14T09:51:03.291Z exit0: t35-shared-adoption-1. Evidence code/quality/evidence/T35/codex-t35-shared-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:52:36.004Z–2026-10-14T09:52:37.947Z exit0: t35-push-contract-green-1. Evidence code/quality/evidence/T35/codex-t35-push-contract-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:52:49.451Z–2026-10-14T09:52:58.387Z exit0: t35-contracts-build-1. Evidence code/quality/evidence/T35/codex-t35-contracts-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 2 — T35 — exact review 2026-10-14 16:55:05 +07:00: Fresh T35 contracts source-copy build; exact compiled runtime/type integration for reviewed delivery contracts/schema/APIs/worker. Keep canonical source pinned and historical assets/85PASS/checker, no main/production activation. Evidence code/quality/evidence/T35/contracts-built1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:53:05.515Z–2026-10-14T09:55:05.371Z exit0: t35-contracts-built-adoption-1. Evidence code/quality/evidence/T35/codex-t35-contracts-built-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:56:25.340Z–2026-10-14T09:56:34.098Z exit0: t35-database-build-1. Evidence code/quality/evidence/T35/codex-t35-database-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 2 — T35 — exact review 2026-10-14 16:58:39 +07:00: Fresh T35 database source-copy build; exact compiled runtime/type integration for reviewed delivery contracts/schema/APIs/worker. Keep canonical source pinned and historical assets/85PASS/checker, no main/production activation. Evidence code/quality/evidence/T35/database-built1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T09:56:41.271Z–2026-10-14T09:58:39.417Z exit0: t35-database-built-adoption-1. Evidence code/quality/evidence/T35/codex-t35-database-built-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:01:08.163Z–2026-10-14T10:01:33.926Z exit1: t35-delivery-green-1. Evidence code/quality/evidence/T35/codex-t35-delivery-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:03:50.399Z: delivery GREEN1 actual14passed/2failed16. Real DB unique pair rejected two synthetic friend requests; independent PUSH/EMAIL test now uses one real event with two outbox channels, retaining expected one call per adapter. Real queue observer saw committed PROCESSING and exited prematurely; observer now includes PENDING/PROCESSING until same terminal SENT assertion, same deadline/timeouts/call count. Preserve GREEN1 owned test source/log; production not patched to bypass constraint/state.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:03:50.512Z–2026-10-14T10:04:07.676Z exit0: t35-delivery-green-2. Evidence code/quality/evidence/T35/codex-t35-delivery-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 2 — T35 — exact review 2026-10-14 17:08:55 +07:00: T35 real API RED requires authenticated per-device PushModule registration in canonical AppModule. Exact import/module-list insertion only, preserve prior modules/85PASS/checker/crypto, no frontend/production changes. Evidence code/quality/evidence/T35/api-integration1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:06:47.701Z–2026-10-14T10:08:55.332Z exit0: t35-api-integration-adoption-1. Evidence code/quality/evidence/T35/codex-t35-api-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:10:10.491Z–2026-10-14T10:10:29.547Z exit1: t35-delivery-extended-red-3. Evidence code/quality/evidence/T35/codex-t35-delivery-extended-red-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:12:48.875Z–2026-10-14T10:12:49.467Z exit0: t35-time-precision-probe-1. Evidence code/quality/evidence/T35/codex-t35-time-precision-probe-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:13:07.846Z: extended RED3 actual22passed/1failed23. Due still-authorized reminder exposed real microsecond truncation by pg Date→toISOString; pure PostgreSQL probe confirms source equality failure for fixed synthetic time. Producer now serializes native UTC ISO6; fixture expected metadata comes from the same actual stored timestamp, retains strict full DTO/SENT/one-call assertions. Old source/test kept. Exact source ACL/equality/default IN_APP/private predicate unchanged; no assertion timeout changes.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:13:07.955Z–2026-10-14T10:13:27.190Z exit0: t35-delivery-green-4. Evidence code/quality/evidence/T35/codex-t35-delivery-green-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:17:56.144Z–2026-10-14T10:18:18.535Z exit1: t35-delivery-recovery-config-red-5. Evidence code/quality/evidence/T35/codex-t35-delivery-recovery-config-red-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:22:13.131Z–2026-10-14T10:22:33.466Z exit1: t35-delivery-green-6. Evidence code/quality/evidence/T35/codex-t35-delivery-green-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:23:55.347Z: recovery/config RED5 actual25passed/2failed27. Helper1 syntax error was observed before GREEN6 and did not mutate worker; error observation/source hash retained without fabricated execution timestamp. Recorded helper2 requires stale claim and stale receipt, excludes fresh DISPATCHING target, refreshes heartbeat per target. VAPID adapter locally verifies canonical32-byte private/public keypair/contact before transport. Assertions/timeouts/source ACL unchanged; acceptance pending.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:23:55.230Z–2026-10-14T10:23:55.362Z exit0: t35-recovery-helper-correction-2. Evidence code/quality/evidence/T35/codex-t35-recovery-helper-correction-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:24:03.692Z–2026-10-14T10:24:27.607Z exit0: t35-delivery-green-7. Evidence code/quality/evidence/T35/codex-t35-delivery-green-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:28:30.776Z–2026-10-14T10:29:20.280Z exit0: t35-push-api-green-1. Evidence code/quality/evidence/T35/codex-t35-push-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:31:59.238Z–2026-10-14T10:32:29.287Z exit1: t35-reminder-fairness-red-8. Evidence code/quality/evidence/T35/codex-t35-reminder-fairness-red-8.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:40:18.307Z: fairness RED8 actual27passed/2failed29. First100 due rows repeatedly selected, starved later101st whether earlier recipients already notified or opted out. Scanner now selects current membership/channel-eligible recipients missing the exact UTC6/user/session dedup before LIMIT100; keeps SKIP LOCKED/transaction and original enqueue/source authority. Existing case assertions and deadlines preserved,101-session behavior only, not1,000capacity claim.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:40:18.312Z: current chat remains Coding and build 3/thread01a1340f-56a7-7a61-9ecd-fdaf2b9e2cbc. Some inherited exact-adoption helper entries used Coding and build 2; this correction preserves earlier entries/timestamps and fixes future helper label. Duplicate journal entries for push-api-red-2 refer to the same recorded run, not extra executions. No completed history rewrite or extra PASS/test claim.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:40:19.621Z–2026-10-14T10:40:43.165Z exit0: t35-delivery-green-9. Evidence code/quality/evidence/T35/codex-t35-delivery-green-9.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:46:49.424Z–2026-10-14T10:47:36.995Z exit1: t35-external-target-api-red-2. Evidence code/quality/evidence/T35/codex-t35-external-target-api-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:51:36.517Z: external target API RED2 actual8passed/1failed9 (404 missing endpoint). New protected GET push/notifications/:id requires current actor/session, owned accepted external target receipt and fresh channel/source ACL; generic shared DTO only, no IN_APP count/pref override or private preview. Synthetic ACCEPTED fixture is API authorization proof, not actual provider receipt. T36 consumer integration remains future task.
+
+- Coding and build 3 — T35 — exact review 2026-10-14 17:54:35 +07:00: T35 independent PUSH/EMAIL acceptance requires a fresh owned external-notification source endpoint for later T36 click routing even when IN_APP opted out. Only actual accepted target receipt/current actor+source+channel authority and generic DTO; no inbox preference bypass, private body/cache grant or frontend change. Evidence code/quality/evidence/T35/target-contract1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T10:51:37.748Z–2026-10-14T10:54:35.591Z exit0: t35-target-contract-adoption-1. Evidence code/quality/evidence/T35/codex-t35-target-contract-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:02:52.178Z–2026-10-14T11:03:31.331Z exit0: t35-push-api-green-3. Evidence code/quality/evidence/T35/codex-t35-push-api-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:10:00.731Z–2026-10-14T11:10:40.431Z exit1: t35-endpoint-canonical-api-red-4. Evidence code/quality/evidence/T35/codex-t35-endpoint-canonical-api-red-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:15:42.492Z–2026-10-14T11:16:23.667Z exit1: t35-device-owner-api-red-5. Evidence code/quality/evidence/T35/codex-t35-device-owner-api-red-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:17:13.764Z: device owner RED5 actual9passed/2failed11. URL host/protocol casing created a second physical endpoint identity, and same browser keypair could be bound to another actor under another URL. Registration/unregister now use canonical URL.href; per-device keypair and endpoint advisory locks plus stable ordered owned-row checks reject foreign reuse. Same-owner key rotation/idempotence retained. No endpoint/key lists returned, no source ACL/checker/85PASS changes.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:17:14.796Z–2026-10-14T11:17:57.540Z exit0: t35-push-api-green-6. Evidence code/quality/evidence/T35/codex-t35-push-api-green-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — exact review 2026-10-14 18:23:37 +07:00: T35 delivery/reminder features require lifecycle composition with unchanged T33 in-app worker. Exact guarded CLI/factory bootstrap; owned test import does not start main services, all pools/queues/timers close, config/receipts remain separate. No deployment/main migration/85PASS/checker changes. Evidence code/quality/evidence/T35/runtime-index1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T11:21:26.708Z–2026-10-14T11:23:37.756Z exit0: t35-runtime-index-adoption-1. Evidence code/quality/evidence/T35/codex-t35-runtime-index-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:10:17.889Z–2026-10-14T17:10:45.193Z exit1: t35-source-lint-2. Evidence code/quality/evidence/T35/codex-t35-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual resume observation 2026-10-14T17:11:38.697Z: previous lint1 left empty log without completion record; no ESLint recorder process observed. Duplicate-label retry was rejected before ESLint execution; retained original evidence. Lint2 found7 unused test helper/argument errors. Removed unused helper and consumed typed mock arguments, assertions retained. Evidence code/quality/evidence/T35/resume-observation1.json; lint3 pending; IN_PROGRESS,85 priorPASS unchanged.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:11:13.323Z–2026-10-14T17:11:26.895Z exit0: t35-source-lint-3. Evidence code/quality/evidence/T35/codex-t35-source-lint-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:11:45.222Z–2026-10-14T17:11:56.794Z exit0: t35-contracts-final-build-2. Evidence code/quality/evidence/T35/codex-t35-contracts-final-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — exact review 2026-10-15 00:15:40 +07:00: Fresh T35 contracts source-copy build; exact compiled runtime/type integration for reviewed delivery contracts/schema/APIs/worker. Keep canonical source pinned and historical assets/85PASS/checker, no main/production activation. Evidence code/quality/evidence/T35/contracts-final2-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:12:13.991Z–2026-10-14T17:15:40.281Z exit0: t35-contracts-final-adoption-2. Evidence code/quality/evidence/T35/codex-t35-contracts-final-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:17:15.628Z–2026-10-14T17:17:33.322Z exit0: t35-api-final-build-2. Evidence code/quality/evidence/T35/codex-t35-api-final-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:17:52.552Z–2026-10-14T17:17:59.580Z exit0: t35-worker-final-build-2. Evidence code/quality/evidence/T35/codex-t35-worker-final-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — exact review 2026-10-15 00:20:25 +07:00: Fresh serial API and worker TypeScript source-copy builds; exact compiled integration of reviewed T35 Push API, delivery adapters and guarded runtime factory. All source pins preserved;85 priorPASS/checker unchanged; no main/production activation. Task acceptance remains pending real provider and regression evidence. Evidence code/quality/evidence/T35/runtime-final2-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:18:22.042Z–2026-10-14T17:20:26.028Z exit0: t35-runtime-final-build-adoption-2. Evidence code/quality/evidence/T35/codex-t35-runtime-final-build-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:20:38.875Z–2026-10-14T17:20:43.681Z exit1: t35-populated-migration-1. Evidence code/quality/evidence/T35/codex-t35-populated-migration-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:21:15.887Z–2026-10-14T17:22:23.151Z exit0: t35-contracts-full-regression-1. Evidence code/quality/evidence/T35/codex-t35-contracts-full-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:22:40.946Z–2026-10-14T17:22:44.217Z exit0: t35-local-services-resume-1. Evidence code/quality/evidence/T35/codex-t35-local-services-resume-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:22:55.896Z–2026-10-14T17:22:57.886Z exit1: t35-populated-migration-2. Evidence code/quality/evidence/T35/codex-t35-populated-migration-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:23:19.330Z–2026-10-14T17:23:24.937Z exit0: t35-local-services-ready-1. Evidence code/quality/evidence/T35/codex-t35-local-services-ready-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:23:42.118Z–2026-10-14T17:23:53.364Z exit0: t35-populated-migration-3. Evidence code/quality/evidence/T35/codex-t35-populated-migration-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:24:04.045Z–2026-10-14T17:25:15.418Z exit0: t35-compiled-runtime-smoke-1. Evidence code/quality/evidence/T35/codex-t35-compiled-runtime-smoke-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:25:34.953Z–2026-10-14T17:26:03.229Z exit0: t35-delivery-final-regression-10. Evidence code/quality/evidence/T35/codex-t35-delivery-final-regression-10.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:26:13.057Z–2026-10-14T17:27:14.721Z exit0: t35-push-api-final-regression-7. Evidence code/quality/evidence/T35/codex-t35-push-api-final-regression-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:27:27.881Z–2026-10-14T17:27:43.667Z exit0: t35-notifications-worker-regression-1. Evidence code/quality/evidence/T35/codex-t35-notifications-worker-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:32:15.653Z: owned Jest15284/parent16416 exact command verified and stopped after broad workspace discovery yielded empty output/no completed assertions observed. Exit4294967295 retained in api-existing-regressions1 record. Restrict discovery roots to owned T35 copies; assertions, cases and timeouts unchanged. Initial/current config hashes preserved in code/quality/evidence/T35/regression-discovery-observation1.json. No PASS from stopped run.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:28:19.925Z–2026-10-14T17:31:44.226Z exit4294967295: t35-api-existing-regressions-1. Evidence code/quality/evidence/T35/codex-t35-api-existing-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:32:17.791Z–2026-10-14T17:36:20.401Z exit0: t35-api-existing-regressions-2. Evidence code/quality/evidence/T35/codex-t35-api-existing-regressions-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:36:48.210Z–2026-10-14T17:36:48.368Z exit0: t35-compiled-authority-review-1. Evidence code/quality/evidence/T35/codex-t35-compiled-authority-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:37:01.513Z–2026-10-14T17:37:16.105Z exit0: t35-telegram-runner-resume-1. Evidence code/quality/evidence/T35/codex-t35-telegram-runner-resume-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:37:12.271Z–2026-10-14T17:37:20.038Z exit0: t35-telegram-connection-smoke-1. Evidence code/quality/evidence/T35/codex-t35-telegram-connection-smoke-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:41:48.201Z: Telegram read-connection smoke passed, but launcher1 child stopped on stale lock2000 now belonging to svchost.exe. Verified no live runner; preserved stale lock under private .runtime/t35; unrelated service untouched. Launcher2 started actual runner15576 with matching lock. PowerShell launcher gone but recorder10136 waited on inherited detached pipe; verified owned recorder identity and stopped it, tool exit1/no completion JSON preserved, no invented exit0. Runner15576 remained alive. Evidence code/quality/evidence/T35/telegram-resume-observation1.json. No bridge source edits; fresh photo receipts pending.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:41:49.121Z–2026-10-14T17:42:28.030Z exit1: headed-t35-native-delivery-1. Evidence code/quality/evidence/T35/codex-headed-t35-native-delivery-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:44:04.452Z–2026-10-14T17:44:15.494Z exit0: t35-reminder-fixture-contract-1. Evidence code/quality/evidence/T35/codex-t35-reminder-fixture-contract-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:44:54.760Z: headed native1 overall exit1 at reminder fixture; actual first Push event/showNotification and SMTP invitation accepted,4fresh Telegram photos sent (private runner state observed), actual cleanup alltrue. Real DB-only fixture proof23503 rooms_owner_membership_fk reproduces autocommit failure; atomic transaction accepts same room/membership/session/roster without constraint changes. Fix receiver fixture transaction only; app/build sources and assertions unchanged. Evidence code/quality/evidence/T35/native-transaction-review3.json; T35 IN_PROGRESS, no receipt/PASS fabricated.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:44:56.131Z–2026-10-14T17:45:40.522Z exit0: headed-t35-native-delivery-2. Evidence code/quality/evidence/T35/codex-headed-t35-native-delivery-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — exact review 2026-10-15 00:50:16 +07:00: Append T35 implemented API/channel/reminder contracts and actual verification traceability; preserve all historical documentation and85priorPASS/checker. Actual inbox receipt and final acceptance/closure remain separate requirements; no T36/production claim. Evidence code/quality/evidence/T35/docs1-adoption-review.json; actual task acceptance pending,85priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:47:23.858Z–2026-10-14T17:50:16.358Z exit0: t35-docs-adoption-1. Evidence code/quality/evidence/T35/codex-t35-docs-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:51:09.457Z–2026-10-14T17:51:15.244Z exit1: t35-owned-redis-cleanup-1. Evidence code/quality/evidence/T35/codex-t35-owned-redis-cleanup-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:53:28.670Z: cleanup1 PG connection timeout retained; containers healthy. Cleanup2 guard rejected missing prefix in actual T33-compatible worker copy cleanup metadata (not a RED scaffold). Derive only that exact owned worker namespace from recorded schema and byte-reviewed connection URL construction plus unchanged worker hashing; require strict owned schema/queue names and source anchor. Other unknown prefix still rejected. No frozen cleanup/source modifications or broad Redis deletion. Initial driver archived; cleanup3 pending.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:52:20.202Z–2026-10-14T17:52:20.783Z exit1: t35-owned-redis-cleanup-2. Evidence code/quality/evidence/T35/codex-t35-owned-redis-cleanup-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:53:30.586Z–2026-10-14T17:53:32.000Z exit0: t35-owned-redis-cleanup-3. Evidence code/quality/evidence/T35/codex-t35-owned-redis-cleanup-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:57:26.818Z: local integrity 35353 original files/85priorPASS/checker/env/baselines/exact gate/build/source/reversible copies;436serial tests, runtime5/migration7,2actual native Push/2SMTP accepted,5final/9total fresh Telegram sent; owned PG/Redis/native cleanup and historical schema match. Evidence code/quality/evidence/T35/final-local-integrity-review1.json; email inbox receipt/final acceptance/closure/public backup pending.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:55:34.725Z–2026-10-14T17:57:27.205Z exit0: t35-final-local-integrity-review-1. Evidence code/quality/evidence/T35/codex-t35-final-local-integrity-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:59:55.029Z: direct human reply confirms both real invitation and reminder emails received (Inbox/Spam permitted by question). Separate code/quality/evidence/T35/email-inbox-receipt1.json pins native SMTP proof; original provider snapshot remains PENDING at its observation time. Connected Gmail profile differed from designated mailbox, so no messages were searched/read there; no raw addresses published. Local integrity35,353originals/85priorPASS/436tests/382compiledfiles/nativePush2/SMTP2/Telegram9 passed; final acceptance/closure/public backup pending.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:59:56.501Z: final Codex acceptance436serial tests/lint/382compiled source-pinned files/runtime5/migration7/actual native Push2/SMTP2/direct-human both-email receipt/Telegram9/35,353originals/85priorPASS/checker/env/baselines/gate/owned cleanup/historical schema reviewed. Evidence code/quality/evidence/T35/acceptance-review.md; ledger closure/public backup pending, T36 not started.
+
+- Coding and build 3 — T35 — actual 2026-10-14T17:59:56.277Z–2026-10-14T17:59:56.538Z exit0: t35-final-acceptance-review-1. Evidence code/quality/evidence/T35/codex-t35-final-acceptance-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
+
+- Coding and build 3 — T35 — kết thúc acceptance 2026-10-14T18:01:49.765Z: Codex local PASS after 436serialtests/lint/382compiledfiles/runtime5/migration7/nativePush2/SMTP2/humanbothEmailReceipt/Telegram9/currentSourceACL/UTCreminders/85priorPASS/checker/env/baselines/exact transitions/owned PG+Redis cleanup and historical schema preservation. Retain21failed commands. Frozen2309outputs. No product-PWA/physical-device/main migration/production/1000claim. Evidence code/quality/evidence/T35/closure.json. Automatic public stage/privacy/normal master push pending; T36 not started.
+
+- Coding and build 3 — T35 — actual 2026-10-14T18:00:43.523Z–2026-10-14T18:01:53.245Z exit0: t35-reviewed-close-1. Evidence code/quality/evidence/T35/codex-t35-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.

@@ -1,0 +1,36 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/worker
+
+ ❯ test/delivery.test.ts (16 tests | 2 failed) 15326ms
+   ❯ T35 actual PostgreSQL/Redis delivery and scheduled UTC sources (16)
+     × IN_APP off does not suppress independently enabled PUSH or EMAIL 53ms
+     × actual BullMQ duplicate scheduling eventually sends one target 205ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > IN_APP off does not suppress independently enabled PUSH or EMAIL
+error: duplicate key value violates unique constraint "friend_request_pair_unique"
+ ❯ ../../node_modules/pg-pool/index.js:45:11
+ ❯ notice test/delivery.test.ts:9:173
+
+ ❯ test/delivery.test.ts:22:149
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > actual BullMQ duplicate scheduling eventually sends one target
+AssertionError: expected 'PROCESSING' to be 'SENT' // Object.is equality
+
+Expected: "SENT"
+Received: "PROCESSING"
+
+ ❯ test/delivery.test.ts:26:415
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 14 passed (16)
+   Start at  17:01:08
+   Duration  24.83s (tests 62%, transform 24%, import 14%)
+

@@ -18,7 +18,7 @@ import { RecruitmentSchema, PlaySessionSchema, PlaySessionRosterSchema, JoinRequ
 import {PlaySessionActionRequestSchema,PlaySessionRequestDecisionSchema,ListRoomPlaySessionsQuerySchema} from './teams.js';
 import {CallActionRequestSchema} from './calls.js';
 import { CallGroupSchema, CallParticipantSchema, SetExternalLiveRequestSchema, ExternalLiveSchema, MuteParticipantRequestSchema, CallJoinSchema, ToggleSelfMicRequestSchema, ListCallParticipantsQuerySchema, RefreshPublishTokenSchema, KickCallParticipantSchema } from './calls.js';
-import { NotificationSchema, NotificationPreferencesSchema, NotificationPreferencesPatchSchema, NotificationUnreadCountSchema, NotificationReadAllResultSchema, WebPushSubscriptionSchema } from './notifications.js';
+import { NotificationSchema, NotificationPreferencesSchema, NotificationPreferencesPatchSchema, NotificationUnreadCountSchema, NotificationReadAllResultSchema, WebPushSubscriptionSchema, WebPushUnsubscribeSchema, WebPushConfigSchema } from './notifications.js';
 import { ReportSchema, BlockSchema, CreateReportRequestSchema, CreateBlockRequestSchema, SendFriendRequestSchema, ListFriendsQuerySchema, ListFriendRequestsQuerySchema, PendingFriendRequestSchema, RespondFriendRequestSchema, RemoveFriendSchema, CancelFriendRequestSchema, CreateDirectConversationSchema, ListDirectConversationsQuerySchema, ListAdminReportsQuerySchema, UpdateAdminReportSchema, ListAdminUsersQuerySchema, AdminUserActionRequestSchema } from './moderation.js';
 import { ListGameOnlineUsersQuerySchema, UpdateCustomStatusRequestSchema, UpdateCustomStatusResponseSchema, SocketPresenceRequestSchema, SocketScopedPresenceChangedPayloadSchema } from './presence.js';
 import {CryptoApiEndpointRegistry,SocketCryptoConversationRequestSchema,EncryptedMessageSchema,SocketCryptoSyncAvailableSchema} from './chat-crypto.js';
@@ -221,7 +221,9 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/notifications/preferences', auth: 'Authenticated', responseSchema: NotificationPreferencesSchema },
   { method: 'PATCH', path: '/api/v1/notifications/preferences', auth: 'Authenticated', requestSchema: NotificationPreferencesPatchSchema, responseSchema: NotificationPreferencesSchema },
   { method: 'POST', path: '/api/v1/push/subscriptions', auth: 'Authenticated', requestSchema: WebPushSubscriptionSchema, responseSchema: z.object({ success: z.boolean() }) },
-  { method: 'DELETE', path: '/api/v1/push/subscriptions', auth: 'Authenticated', requestSchema: z.object({ endpoint: z.string().url() }), responseSchema: z.object({ success: z.boolean() }) },
+  { method: 'DELETE', path: '/api/v1/push/subscriptions', auth: 'Authenticated', requestSchema: WebPushUnsubscribeSchema, responseSchema: z.object({ success: z.boolean() }) },
+  { method: 'GET', path: '/api/v1/push/config', auth: 'Authenticated', responseSchema: WebPushConfigSchema },
+  { method: 'GET', path: '/api/v1/push/notifications/:id', auth: 'Authenticated', responseSchema: NotificationSchema },
 
   { method: 'POST', path: '/api/v1/reports', auth: 'Authenticated', requestSchema: CreateReportRequestSchema, responseSchema: ReportSchema },
   { method: 'GET', path: '/api/v1/admin/reports', auth: 'Admin', requestSchema: ListAdminReportsQuerySchema, responseSchema: createPageSchema(ReportSchema) },

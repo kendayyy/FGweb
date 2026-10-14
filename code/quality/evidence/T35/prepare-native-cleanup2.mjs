@@ -1,0 +1,11 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';const file='quality/evidence/T35/native-delivery1.mjs',before=fs.readFileSync(file,'utf8');fs.writeFileSync('quality/evidence/T35/native-before-cleanup2.mjs',before,{flag:'wx'});let next=before;const edits=[
+ ["origin,apiBase;const checks=[];","origin,apiBase,phase='startup';const checks=[];"],
+ [" context=await chromium.launchPersistentContext", " phase='browser';context=await chromium.launchPersistentContext"],
+ [" const config=await api('GET','push/config');", " phase='subscription';const config=await api('GET','push/config');"],
+ [" assert.equal((await api('POST','friends/requests'", " phase='invitation';assert.equal((await api('POST','friends/requests'"],
+ [" const room=randomUUID(),conversation=randomUUID(),session=randomUUID();", " phase='reminder';const room=randomUUID(),conversation=randomUUID(),session=randomUUID();"],
+ ["}catch{if(page&&!page.isClosed())", "}catch(error){if(page&&!page.isClosed())"],
+ ["controlledError:'NATIVE_DELIVERY_PROBE_FAILED',outcomes", "controlledError:'NATIVE_DELIVERY_PROBE_FAILED',phase,errorName:/^[A-Za-z]{1,40}$/.test(String(error?.name))?error.name:'Error',outcomes"],
+ ["if(context){await context.close();", "if(subscription&&page&&!page.isClosed()&&!cleanup.nativeUnsubscribed){cleanup.nativeUnsubscribed=await page.evaluate(async()=>{const r=await navigator.serviceWorker.ready,s=await r.pushManager.getSubscription();return s?await s.unsubscribe():true;}).catch(()=>false);}if(context){await context.close();"],
+ ["fs.rmSync(profile,{recursive:true});", "fs.rmSync(profile,{recursive:true,maxRetries:5,retryDelay:250});"]
+];for(const[a,b]of edits){assert.equal(next.split(a).length,2,'Exact native edit anchor');next=next.replace(a,()=>b);}fs.writeFileSync(file,next);fs.writeFileSync('quality/evidence/T35/native-cleanup-review2.json',JSON.stringify({at:new Date().toISOString(),beforeSha256:createHash('sha256').update(before).digest('hex'),afterSha256:createHash('sha256').update(next).digest('hex'),edits,realProviderAssertionsUnchanged:true,controlledDiagnosticsOnly:true,noUIRunYet:true},null,2)+'\n',{flag:'wx'});console.log('Prepared failure-safe native unsubscribe and controlled phase/name diagnostics; no UI run occurred yet.');

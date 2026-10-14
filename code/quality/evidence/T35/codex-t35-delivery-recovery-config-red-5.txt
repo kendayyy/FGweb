@@ -1,0 +1,44 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/worker
+
+ ❯ test/delivery.test.ts (27 tests | 2 failed) 15622ms
+   ❯ T35 actual PostgreSQL/Redis delivery and scheduled UTC sources (24)
+     × a fresh target reservation is not recovered as stale even when the earlier outbox claim is old 190ms
+   ❯ T35 actual adapter boundaries with mocked transport outcomes, no provider receipt claim (3)
+     × invalid nonempty VAPID configuration is unavailable without touching external transport 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > a fresh target reservation is not recovered as stale even when the earlier outbox claim is old
+AssertionError: expected 'FAILED' to be 'PROCESSING' // Object.is equality
+
+Expected: "PROCESSING"
+Received: "FAILED"
+
+ ❯ test/delivery.test.ts:38:738
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual adapter boundaries with mocked transport outcomes, no provider receipt claim > invalid nonempty VAPID configuration is unavailable without touching external transport
+AssertionError: expected { status: 'accepted' } to deeply equal { status: 'failed' }
+
+- Expected
++ Received
+
+  {
+-   "status": "failed",
++   "status": "accepted",
+  }
+
+ ❯ test/delivery.test.ts:43:383
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 25 passed (27)
+   Start at  17:17:57
+   Duration  21.08s (tests 75%, import 19%, transform 5%)
+

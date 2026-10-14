@@ -1,0 +1,181 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/worker
+
+ ❯ test/delivery.test.ts (16 tests | 13 failed) 17351ms
+   ❯ T35 actual PostgreSQL/Redis delivery and scheduled UTC sources (16)
+     × dispatches current source once, uses trusted generic text/internal link and durable target receipt 158ms
+     × PUSH410 removes only its current owned endpoint without replaying a second accepted device 48ms
+     × definitive SMTP failure retries once then never repeats its accepted target 63ms
+     × an uncertain SMTP/provider result is terminal and never automatically replayed 44ms
+     × caps definitive rejection at three without storing provider details 48ms
+     × PUSH opt-out suppresses actual delivery 72ms
+     × IN_APP off does not suppress independently enabled PUSH or EMAIL 71ms
+     × current block and cancel suppress committed notification sources 348ms
+     × missing verified email reports unavailable rather than sent 66ms
+     × actual BullMQ duplicate scheduling eventually sends one target 5033ms
+     × UTC scheduled reminder is produced within ten-minute window and deduplicated across scanners 235ms
+     × member revoked after reminder enqueue is suppressed before external send 42ms
+     × rescheduled source invalidates old reminder identity 46ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > dispatches current source once, uses trusted generic text/internal link and durable target receipt
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ test/delivery.test.ts:16:245
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > PUSH410 removes only its current owned endpoint without replaying a second accepted device
+AssertionError: expected "vi.fn()" to be called 2 times, but got 0 times
+ ❯ test/delivery.test.ts:17:460
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > definitive SMTP failure retries once then never repeats its accepted target
+AssertionError: expected { status: 'PENDING', …(2) } to match object { status: 'PENDING', retry_count: 1 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "retry_count": 1,
++   "retry_count": 0,
+    "status": "PENDING",
+  }
+
+ ❯ test/delivery.test.ts:18:272
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > an uncertain SMTP/provider result is terminal and never automatically replayed
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ test/delivery.test.ts:19:242
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > caps definitive rejection at three without storing provider details
+AssertionError: expected "vi.fn()" to be called 3 times, but got 0 times
+ ❯ test/delivery.test.ts:20:223
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > PUSH opt-out suppresses actual delivery
+AssertionError: expected { status: 'PENDING', …(2) } to match object { status: 'FAILED', …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "last_error": "NOTICE_SUPPRESSED",
+-   "status": "FAILED",
++   "last_error": null,
++   "status": "PENDING",
+  }
+
+ ❯ test/delivery.test.ts:21:213
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > IN_APP off does not suppress independently enabled PUSH or EMAIL
+error: duplicate key value violates unique constraint "friend_request_pair_unique"
+ ❯ ../../node_modules/pg-pool/index.js:45:11
+ ❯ notice test/delivery.test.ts:9:173
+
+ ❯ test/delivery.test.ts:22:149
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > current block and cancel suppress committed notification sources
+AssertionError: expected 'PENDING' to be 'FAILED' // Object.is equality
+
+Expected: "FAILED"
+Received: "PENDING"
+
+ ❯ test/delivery.test.ts:23:317
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > missing verified email reports unavailable rather than sent
+AssertionError: expected { status: 'PENDING', …(2) } to match object { status: 'FAILED', …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "last_error": "EMAIL_UNAVAILABLE",
+-   "status": "FAILED",
++   "last_error": null,
++   "status": "PENDING",
+  }
+
+ ❯ test/delivery.test.ts:24:281
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > actual BullMQ duplicate scheduling eventually sends one target
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/delivery.test.ts:26:2
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > UTC scheduled reminder is produced within ten-minute window and deduplicated across scanners
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/delivery.test.ts:27:326
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > member revoked after reminder enqueue is suppressed before external send
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/delivery.test.ts:30:346
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/13]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > rescheduled source invalidates old reminder identity
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/delivery.test.ts:31:243
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/13]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  13 failed | 3 passed (16)
+   Start at  16:38:15
+   Duration  34.71s (tests 51%, import 47%, transform 1%)
+

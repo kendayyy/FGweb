@@ -1,0 +1,44 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/worker
+
+ ❯ test/delivery.test.ts (29 tests | 2 failed) 25323ms
+   ❯ T35 actual PostgreSQL/Redis delivery and scheduled UTC sources (26)
+     × bounded reminder batches do not starve later sessions; earlier recipients opted out=false 6282ms
+     × bounded reminder batches do not starve later sessions; earlier recipients opted out=true 2222ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > bounded reminder batches do not starve later sessions; earlier recipients opted out=false
+AssertionError: expected 100 to be 101 // Object.is equality
+
+- Expected
++ Received
+
+- 101
++ 100
+
+ ❯ test/delivery.test.ts:39:1873
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > bounded reminder batches do not starve later sessions; earlier recipients opted out=true
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/delivery.test.ts:39:1873
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 27 passed (29)
+   Start at  17:32:00
+   Duration  28.62s (tests 89%, import 8%, transform 2%)
+

@@ -1,0 +1,26 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/worker
+
+ ❯ test/delivery.test.ts (27 tests | 1 failed) 14768ms
+   ❯ T35 actual PostgreSQL/Redis delivery and scheduled UTC sources (24)
+     × a fresh target reservation is not recovered as stale even when the earlier outbox claim is old 185ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/delivery.test.ts > T35 actual PostgreSQL/Redis delivery and scheduled UTC sources > a fresh target reservation is not recovered as stale even when the earlier outbox claim is old
+AssertionError: expected 'FAILED' to be 'PROCESSING' // Object.is equality
+
+Expected: "PROCESSING"
+Received: "FAILED"
+
+ ❯ test/delivery.test.ts:38:738
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 26 passed (27)
+   Start at  17:22:14
+   Duration  18.76s (tests 81%, import 15%, transform 5%)
+

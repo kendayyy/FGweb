@@ -1,0 +1,1 @@
+import fs from 'node:fs';const d='quality/evidence/T35';fs.writeFileSync(d+'/build-source-sandbox1.mjs',fs.readFileSync('quality/evidence/T33/build-source-sandbox2.mjs','utf8').replaceAll('T33','T35').replaceAll('build2','build1'),{flag:'wx'});console.log('Prepared owned source-copy build driver; canonical source/dist never written by compile.');

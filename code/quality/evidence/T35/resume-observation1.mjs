@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+const at=new Date().toISOString(),file='quality/evidence/T35/codex-t35-source-lint-1.txt';
+const evidence={observedAt:at,chat:'Coding and build 3',task:'T35',previousLint:{file,size:fs.statSync(file).size,sha256:createHash('sha256').update(fs.readFileSync(file)).digest('hex'),completionRecordPresent:fs.existsSync(file.replace('.txt','.json')),result:'Interrupted; no confirmed result. Original empty log preserved.'},duplicateLabelRetry:{result:'Recorder rejected reuse before running ESLint; use lint-2 and lint-3 actual records.'},changes:'Remove unused copied API helper; retain explicitly typed mock argument tuple and consume args. No assertions or delivery implementation changed.',status:'IN_PROGRESS'};
+fs.writeFileSync('quality/evidence/T35/resume-observation1.json',JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});
+fs.appendFileSync('../.doc/history.md','\n- Coding and build 3 — T35 — actual resume observation '+at+': previous lint1 left empty log without completion record; no ESLint recorder process observed. Duplicate-label retry was rejected before ESLint execution; retained original evidence. Lint2 found7 unused test helper/argument errors. Removed unused helper and consumed typed mock arguments, assertions retained. Evidence code/quality/evidence/T35/resume-observation1.json; lint3 pending; IN_PROGRESS,85 priorPASS unchanged.\n');
+console.log(JSON.stringify({at,status:evidence.status}));

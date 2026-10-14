@@ -1,0 +1,59 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2984) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/push.integration.spec.ts (36.686 s)
+  ● T35 real push subscription ownership and privacy › cannot take over another users endpoint
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      22 |  it('registers an owned device idempotently and never returns its endpoint or keys',async()=>{const sub=subscription();for(let i=0;i<2;i++){const r=await api('post','push/subscriptions','b',sub);expect(r.status).toBe(201);expect(r.body).toEqual({success:true});expect(r.headers['cache-control']).toBe('no-store');}expect((await pool.query('SELECT user_id,endpoint,p256dh,auth FROM push_subscriptions')).rows).toEqual([{user_id:'b',endpoint:sub.endpoint,...{p256dh:sub.keys.p256dh,auth:sub.keys.auth}}]);});
+      23 |  it('same-owner key rotation preserves one row',async()=>{const sub=subscription();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);sub.keys=keys();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);expect((await pool.query('SELECT p256dh,auth FROM push_subscriptions')).rows).toEqual([{p256dh:sub.keys.p256dh,auth:sub.keys.auth}]);});
+    > 24 |  it('cannot take over another users endpoint',async()=>{const sub=subscription();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);expect((await api('post','push/subscriptions','c',{...sub,keys:keys()})).status).toBe(403);expect((await pool.query('SELECT user_id FROM push_subscriptions')).rows).toEqual([{user_id:'b'}]);});
+         |                                                                                                                                                  ^
+      25 |  it('unregisters only the currently authenticated owner',async()=>{const sub=subscription();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);expect((await api('delete','push/subscriptions','c',{endpoint:sub.endpoint})).status).toBe(404);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(1);const removed=await api('delete','push/subscriptions','b',{endpoint:sub.endpoint});expect(removed.status).toBe(200);expect(removed.body).toEqual({success:true});expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      26 |  it('requires actual session and trusted Origin for registration',async()=>{const sub=subscription();expect((await request(base).post('/api/v1/push/subscriptions').set('Origin',origin).send(sub)).status).toBe(401);expect((await request(base).post('/api/v1/push/subscriptions').set('Cookie',cookies.b).set('Origin','https://untrusted.fixture.invalid').send(sub)).status).toBe(403);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      27 |  it('refuses arbitrary/local/credential/redirect endpoints and invalid browser keys',async()=>{const sub=subscription();for(const endpoint of ['http://fcm.googleapis.com/wp/x','https://127.0.0.1/x','https://metadata.google.internal/x','https://fcm.googleapis.com.attacker.invalid/x','https://user:pass@fcm.googleapis.com/wp/x','https://fcm.googleapis.com:8443/wp/x','https://fcm.googleapis.com/wp/x#fragment'])expect((await api('post','push/subscriptions','b',{...sub,endpoint})).status).toBe(422);for(const invalid of [{...sub,unexpected:true},{...sub,keys:{p256dh:'bad',auth:'bad'}},{...sub,keys:{p256dh:'A'.repeat(87),auth:'A'.repeat(22)}}])expect((await api('post','push/subscriptions','b',invalid)).status).toBe(422);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+
+      at Object.<anonymous> (test/push.integration.spec.ts:24:146)
+
+  ● T35 real push subscription ownership and privacy › refuses arbitrary/local/credential/redirect endpoints and invalid browser keys
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 422
+    Received: 404
+
+      25 |  it('unregisters only the currently authenticated owner',async()=>{const sub=subscription();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);expect((await api('delete','push/subscriptions','c',{endpoint:sub.endpoint})).status).toBe(404);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(1);const removed=await api('delete','push/subscriptions','b',{endpoint:sub.endpoint});expect(removed.status).toBe(200);expect(removed.body).toEqual({success:true});expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      26 |  it('requires actual session and trusted Origin for registration',async()=>{const sub=subscription();expect((await request(base).post('/api/v1/push/subscriptions').set('Origin',origin).send(sub)).status).toBe(401);expect((await request(base).post('/api/v1/push/subscriptions').set('Cookie',cookies.b).set('Origin','https://untrusted.fixture.invalid').send(sub)).status).toBe(403);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+    > 27 |  it('refuses arbitrary/local/credential/redirect endpoints and invalid browser keys',async()=>{const sub=subscription();for(const endpoint of ['http://fcm.googleapis.com/wp/x','https://127.0.0.1/x','https://metadata.google.internal/x','https://fcm.googleapis.com.attacker.invalid/x','https://user:pass@fcm.googleapis.com/wp/x','https://fcm.googleapis.com:8443/wp/x','https://fcm.googleapis.com/wp/x#fragment'])expect((await api('post','push/subscriptions','b',{...sub,endpoint})).status).toBe(422);for(const invalid of [{...sub,unexpected:true},{...sub,keys:{p256dh:'bad',auth:'bad'}},{...sub,keys:{p256dh:'A'.repeat(87),auth:'A'.repeat(22)}}])expect((await api('post','push/subscriptions','b',invalid)).status).toBe(422);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^
+      28 |  it('public configuration exposes only availability and public VAPID key',async()=>{const response=await api('get','push/config');expect(response.status).toBe(200);expect(Object.keys(response.body).sort()).toEqual(['available','publicKey']);expect(response.body.available).toBe(true);expect(Buffer.from(response.body.publicKey,'base64url')).toHaveLength(65);expect(response.headers['cache-control']).toBe('no-store');});
+      29 |  it('ban and session revocation deny device changes',async()=>{const sub=subscription();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'a','b','BAN','Synthetic T35 ban')",[randomUUID()]);expect((await api('post','push/subscriptions','b',sub)).status).toBe(403);await pool.query("DELETE FROM session WHERE user_id='c'");expect((await api('post','push/subscriptions','c',subscription())).status).toBe(401);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      30 | });
+
+      at Object.<anonymous> (test/push.integration.spec.ts:27:489)
+
+  ● T35 real push subscription ownership and privacy › ban and session revocation deny device changes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      27 |  it('refuses arbitrary/local/credential/redirect endpoints and invalid browser keys',async()=>{const sub=subscription();for(const endpoint of ['http://fcm.googleapis.com/wp/x','https://127.0.0.1/x','https://metadata.google.internal/x','https://fcm.googleapis.com.attacker.invalid/x','https://user:pass@fcm.googleapis.com/wp/x','https://fcm.googleapis.com:8443/wp/x','https://fcm.googleapis.com/wp/x#fragment'])expect((await api('post','push/subscriptions','b',{...sub,endpoint})).status).toBe(422);for(const invalid of [{...sub,unexpected:true},{...sub,keys:{p256dh:'bad',auth:'bad'}},{...sub,keys:{p256dh:'A'.repeat(87),auth:'A'.repeat(22)}}])expect((await api('post','push/subscriptions','b',invalid)).status).toBe(422);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      28 |  it('public configuration exposes only availability and public VAPID key',async()=>{const response=await api('get','push/config');expect(response.status).toBe(200);expect(Object.keys(response.body).sort()).toEqual(['available','publicKey']);expect(response.body.available).toBe(true);expect(Buffer.from(response.body.publicKey,'base64url')).toHaveLength(65);expect(response.headers['cache-control']).toBe('no-store');});
+    > 29 |  it('ban and session revocation deny device changes',async()=>{const sub=subscription();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'a','b','BAN','Synthetic T35 ban')",[randomUUID()]);expect((await api('post','push/subscriptions','b',sub)).status).toBe(403);await pool.query("DELETE FROM session WHERE user_id='c'");expect((await api('post','push/subscriptions','c',subscription())).status).toBe(401);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+         |                                                                                                                                                                                                                                                                                                             ^
+      30 | });
+      31 |
+
+      at Object.<anonymous> (test/push.integration.spec.ts:29:301)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 5 skipped, 8 total
+Snapshots:   0 total
+Time:        37.309 s, estimated 96 s
+Ran all test suites matching apps/api/test/push.integration.spec.ts with tests matching "refuses|ban and|take over".

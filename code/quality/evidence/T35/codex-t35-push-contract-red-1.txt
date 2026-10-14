@@ -1,0 +1,69 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/notifications.test.ts (11 tests | 8 failed) 39ms
+   ❯ T35 bounded browser Push subscription DTO (11)
+     × rejects unsafe provider target http://fcm.googleapis.com/wp/x 11ms
+     × rejects unsafe provider target https://127.0.0.1/x 2ms
+     × rejects unsafe provider target https://fcm.googleapis.com.attacker.invalid/wp/x 2ms
+     × rejects unsafe provider target https://user:pass@fcm.googleapis.com/wp/x 2ms
+     × rejects unsafe provider target https://fcm.googleapis.com:8443/wp/x 2ms
+     × rejects unsafe provider target https://fcm.googleapis.com/wp/x#fragment 1ms
+     × rejects arbitrary/unknown object fields rather than silently stripping them 2ms
+     × requires canonical bounded browser public key and authentication secret bytes 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target http://fcm.googleapis.com/wp/x
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target https://127.0.0.1/x
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target https://fcm.googleapis.com.attacker.invalid/wp/x
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target https://user:pass@fcm.googleapis.com/wp/x
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target https://fcm.googleapis.com:8443/wp/x
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects unsafe provider target https://fcm.googleapis.com/wp/x#fragment
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/notifications.test.ts:5:368
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > rejects arbitrary/unknown object fields rather than silently stripping them
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/notifications.test.ts:6:250
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  test/notifications.test.ts > T35 bounded browser Push subscription DTO > requires canonical bounded browser public key and authentication secret bytes
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/notifications.test.ts:7:431
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 3 passed (11)
+   Start at  16:44:46
+   Duration  856ms (import 54%, transform 28%, worker 11%, tests 7%)
+

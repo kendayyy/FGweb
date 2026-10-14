@@ -25,3 +25,5 @@ export * from './schema/chat-crypto-legacy-stages.js';
 
 export * from './notification-authority.js';
 export * from './notification-enqueue.js';
+
+export * from './schema/notification-delivery-receipts.js';

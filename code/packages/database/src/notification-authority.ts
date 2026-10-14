@@ -9,12 +9,15 @@ export const privateNotificationSourceAuthority=`m.sender_id<>n.user_id AND m.en
    AND COALESCE((SELECT action FROM admin_actions WHERE target_user_id=n.user_id AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1),'UNBAN')<>'BAN'`;
 
 /** Fixed SQL aliases only. No input is interpolated into this authority predicate. */
-export function notificationAuthoritySql(cryptoReady:boolean):string {
+export function notificationAuthoritySql(cryptoReady:boolean,channel:'IN_APP'|'PUSH'|'EMAIL'='IN_APP'):string {
+ const preferenceColumn=channel==='IN_APP'?'in_app':channel==='PUSH'?'push':'email';
+ if(!['IN_APP','PUSH','EMAIL'].includes(channel))throw new Error('Invalid notification channel');
+ const privateAuthority=channel==='IN_APP'?privateNotificationSourceAuthority:privateNotificationSourceAuthority.replace('notification_type=n.type AND in_app=false','notification_type=n.type AND '+preferenceColumn+'=false');
  const data="(CASE WHEN pg_input_is_valid(n.data,'jsonb') THEN n.data::jsonb ELSE '{}'::jsonb END)";
  const value=(key:string)=>`${data}->>'${key}'`;
  const strings=(...keys:string[])=>keys.map(key=>`jsonb_typeof(${data}->'${key}')='string' AND length(${value(key)})>0`).join(' AND ');
  const unblocked=(sender:string)=>`NOT EXISTS(SELECT 1 FROM blocks b WHERE (b.blocker_id=n.user_id AND b.blocked_id=${sender}) OR (b.blocker_id=${sender} AND b.blocked_id=n.user_id))`;
- const privateSource=cryptoReady?`EXISTS(SELECT 1 FROM messages m JOIN conversations c ON c.id=m.conversation_id JOIN chat_crypto_state s ON s.conversation_id=c.id WHERE m.id=${value('messageId')} AND c.id=${value('conversationId')} AND m.sender_id=CASE WHEN n.type='DM' THEN ${value('senderId')} ELSE ${value('mentionerId')} END AND ${privateNotificationSourceAuthority})`:'FALSE';
+ const privateSource=cryptoReady?`EXISTS(SELECT 1 FROM messages m JOIN conversations c ON c.id=m.conversation_id JOIN chat_crypto_state s ON s.conversation_id=c.id WHERE m.id=${value('messageId')} AND c.id=${value('conversationId')} AND m.sender_id=CASE WHEN n.type='DM' THEN ${value('senderId')} ELSE ${value('mentionerId')} END AND ${privateAuthority})`:'FALSE';
  const lobbySource=cryptoReady?`EXISTS(SELECT 1 FROM messages m JOIN conversations c ON c.id=m.conversation_id JOIN chat_crypto_state s ON s.conversation_id=c.id WHERE m.id=${value('messageId')} AND c.id=${value('conversationId')} AND c.kind='LOBBY' AND m.sender_id=${value('mentionerId')} AND m.sender_id<>n.user_id AND m.encryption_mode='LOBBY_AEAD' AND s.mode='LOBBY_AEAD' AND s.migration_state='RECONCILED' AND n.dedup_key='lobby-mention:'||m.id||':'||n.user_id AND EXISTS(SELECT 1 FROM mentions mm WHERE mm.message_id=m.id AND mm.mentioned_user_id=n.user_id) AND ${unblocked('m.sender_id')})`:'FALSE';
  const invites=`EXISTS(SELECT 1 FROM invitations i JOIN rooms r ON r.id=i.room_id WHERE i.id=${value('invitationId')} AND i.room_id=${value('roomId')} AND i.sender_id=${value('senderId')} AND ((n.type='ROOM_INVITE' AND i.target_type='ROOM') OR (n.type='TEAM_INVITE' AND i.target_type='PLAY_SESSION' AND i.play_session_id=${value('playSessionId')} AND EXISTS(SELECT 1 FROM play_sessions ps WHERE ps.id=i.play_session_id AND ps.room_id=i.room_id AND ps.state<>'ENDED'))) AND EXISTS(SELECT 1 FROM room_members rm WHERE rm.room_id=i.room_id AND rm.user_id=i.sender_id) AND ${unblocked('i.sender_id')} AND (
   (n.dedup_key='invitation:'||i.id||':created' AND i.receiver_id=n.user_id AND i.status='PENDING') OR
@@ -28,8 +31,8 @@ export function notificationAuthoritySql(cryptoReady:boolean):string {
  return `jsonb_typeof(${data})='object'
  AND EXISTS(SELECT 1 FROM "user" u WHERE u.id=n.user_id)
  AND COALESCE((SELECT action FROM admin_actions WHERE target_user_id=n.user_id AND action IN ('BAN','UNBAN') ORDER BY created_at DESC,id DESC LIMIT 1),'UNBAN')<>'BAN'
- AND NOT EXISTS(SELECT 1 FROM notification_preferences p WHERE p.user_id=n.user_id AND p.notification_type=n.type AND p.in_app=false)
- AND EXISTS(SELECT 1 FROM notification_outbox o WHERE o.notification_id=n.id AND o.user_id=n.user_id AND o.channel='IN_APP' AND o.dedup_key=n.dedup_key AND o.scheduled_at<=clock_timestamp())
+ AND NOT EXISTS(SELECT 1 FROM notification_preferences p WHERE p.user_id=n.user_id AND p.notification_type=n.type AND p.${preferenceColumn}=false)
+ AND EXISTS(SELECT 1 FROM notification_outbox o WHERE o.notification_id=n.id AND o.user_id=n.user_id AND o.channel='${channel}' AND o.dedup_key=n.dedup_key AND o.scheduled_at<=clock_timestamp())
  AND CASE n.type
  WHEN 'DM' THEN ${strings('conversationId','messageId','senderId')} AND ${privateSource}
  WHEN 'MENTION' THEN ${strings('conversationId','messageId','mentionerId')} AND (${privateSource} OR ${lobbySource})

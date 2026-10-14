@@ -1,0 +1,1 @@
+import fs from 'node:fs';const d='quality/evidence/T35';for(const name of ['build-source-sandbox1.mjs','propose-built-package1.mjs'])fs.writeFileSync(d+'/'+name.replace('1.mjs','2.mjs'),fs.readFileSync(d+'/'+name,'utf8').replaceAll('-build1','-build2'),{flag:'wx'});console.log('Prepared final owned source-copy build2 drivers.');

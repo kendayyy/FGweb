@@ -1,0 +1,25 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:13908) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/push.integration.spec.ts (37.828 s)
+  ● T35 real push subscription ownership and privacy › URL host/protocol case variants cannot bypass endpoint ownership
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 201
+
+      29 |  it('ban and session revocation deny device changes',async()=>{const sub=subscription();await pool.query("INSERT INTO admin_actions(id,actor_id,target_user_id,action,reason) VALUES($1,'a','b','BAN','Synthetic T35 ban')",[randomUUID()]);expect((await api('post','push/subscriptions','b',sub)).status).toBe(403);await pool.query("DELETE FROM session WHERE user_id='c'");expect((await api('post','push/subscriptions','c',subscription())).status).toBe(401);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+      30 |  it('an accepted external notification stays guarded and resolvable when IN_APP is off',async()=>{const n=await seedNotice(),outbox=randomUUID();await pool.query("INSERT INTO notification_outbox(id,notification_id,user_id,channel,status,dedup_key) SELECT $1,id,user_id,'PUSH','SENT',dedup_key FROM notifications WHERE id=$2",[outbox,n.id]);await pool.query("INSERT INTO notification_delivery_receipts(id,outbox_id,target_hash,status,attempts) VALUES($1,$2,$3,'ACCEPTED',1)",[randomUUID(),outbox,'a'.repeat(64)]);expect((await api('patch','notifications/preferences','b',{FRIEND_INVITE:{inApp:false,push:true}})).status).toBe(200);expect((await notices()).body.items).toEqual([]);const target=await api('get','push/notifications/'+n.id);expect(target.status).toBe(200);expect(NotificationSchema.parse(target.body)).toMatchObject({id:n.id,userId:'b',type:'FRIEND_INVITE',data:{requestId:n.requestId,senderId:'a'}});expect(JSON.stringify(target.body)).not.toContain('Fixture private excerpt');expect(target.headers['cache-control']).toBe('no-store');expect((await api('get','push/notifications/'+n.id,'c')).status).toBe(404);await pool.query("INSERT INTO blocks(id,blocker_id,blocked_id) VALUES($1,'b','a')",[randomUUID()]);expect((await api('get','push/notifications/'+n.id)).status).toBe(404);});
+    > 31 |  it('URL host/protocol case variants cannot bypass endpoint ownership',async()=>{const sub=subscription();expect((await api('post','push/subscriptions','b',sub)).status).toBe(201);const alias={...sub,endpoint:sub.endpoint.replace('https://fcm.googleapis.com','HTTPS://FCM.GOOGLEAPIS.COM')};expect((await api('post','push/subscriptions','c',alias)).status).toBe(403);expect((await pool.query('SELECT user_id FROM push_subscriptions')).rows).toEqual([{user_id:'b'}]);expect((await api('delete','push/subscriptions','b',{endpoint:alias.endpoint})).status).toBe(200);expect((await pool.query('SELECT id FROM push_subscriptions')).rowCount).toBe(0);});
+         |                                                                                                                                                                                                                                                                                                                                                                     ^
+      32 | });
+      33 |
+
+      at Object.<anonymous> (test/push.integration.spec.ts:31:357)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 9 passed, 10 total
+Snapshots:   0 total
+Time:        38.462 s
+Ran all test suites matching apps/api/test/push.integration.spec.ts.

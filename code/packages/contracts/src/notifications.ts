@@ -176,13 +176,15 @@ export const NotificationPreferencesSchema = z.object({
 });
 export type NotificationPreferencesDTO = z.infer<typeof NotificationPreferencesSchema>;
 
-export const WebPushSubscriptionSchema = z.object({
-  endpoint: z.string().url(),
-  keys: z.object({
-    p256dh: z.string().min(1),
-    auth: z.string().min(1),
-  }),
-});
+export const WebPushEndpointSchema=z.string().min(1).max(2048).url().refine(value=>{
+ try{const u=new URL(value);if(value.trim()!==value||Array.from(value).some(c=>c.charCodeAt(0)<33||c.charCodeAt(0)===127)||u.protocol!=='https:'||u.username||u.password||u.hash||u.port||u.pathname==='/')return false;
+ if(u.hostname==='fcm.googleapis.com')return /^\/(wp|fcm\/send)\//.test(u.pathname);
+ return u.hostname==='updates.push.services.mozilla.com'||u.hostname==='web.push.apple.com'||/^[a-z0-9-]+\.notify\.windows\.com$/.test(u.hostname);
+ }catch{return false;}
+},'Supported HTTPS browser Push endpoint required');
+export const WebPushSubscriptionSchema=z.object({endpoint:WebPushEndpointSchema,keys:z.object({p256dh:z.string().regex(/^B[A-Za-z0-9_-]{86}$/),auth:z.string().regex(/^[A-Za-z0-9_-]{21}[AQgw]$/)}).strict()}).strict();
+export const WebPushUnsubscribeSchema=z.object({endpoint:WebPushEndpointSchema}).strict();
+export const WebPushConfigSchema=z.discriminatedUnion('available',[z.object({available:z.literal(true),publicKey:z.string().regex(/^B[A-Za-z0-9_-]{86}$/)}).strict(),z.object({available:z.literal(false)}).strict()]);
 export type WebPushSubscriptionDTO = z.infer<typeof WebPushSubscriptionSchema>;
 
 // T33: partial per-event saves never manufacture changes to omitted channels.

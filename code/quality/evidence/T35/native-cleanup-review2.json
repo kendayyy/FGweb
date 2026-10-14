@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-14T17:35:40.938Z",
+  "beforeSha256": "9d4288ac28ec1d454191d870d31608d4721b4bd78254889e227716b98c0477c9",
+  "afterSha256": "a8eca05c3fc3bb6b43461d0ac50c4a2c3bd3118a5c07517945d3e38f729cfe3c",
+  "edits": [
+    [
+      "origin,apiBase;const checks=[];",
+      "origin,apiBase,phase='startup';const checks=[];"
+    ],
+    [
+      " context=await chromium.launchPersistentContext",
+      " phase='browser';context=await chromium.launchPersistentContext"
+    ],
+    [
+      " const config=await api('GET','push/config');",
+      " phase='subscription';const config=await api('GET','push/config');"
+    ],
+    [
+      " assert.equal((await api('POST','friends/requests'",
+      " phase='invitation';assert.equal((await api('POST','friends/requests'"
+    ],
+    [
+      " const room=randomUUID(),conversation=randomUUID(),session=randomUUID();",
+      " phase='reminder';const room=randomUUID(),conversation=randomUUID(),session=randomUUID();"
+    ],
+    [
+      "}catch{if(page&&!page.isClosed())",
+      "}catch(error){if(page&&!page.isClosed())"
+    ],
+    [
+      "controlledError:'NATIVE_DELIVERY_PROBE_FAILED',outcomes",
+      "controlledError:'NATIVE_DELIVERY_PROBE_FAILED',phase,errorName:/^[A-Za-z]{1,40}$/.test(String(error?.name))?error.name:'Error',outcomes"
+    ],
+    [
+      "if(context){await context.close();",
+      "if(subscription&&page&&!page.isClosed()&&!cleanup.nativeUnsubscribed){cleanup.nativeUnsubscribed=await page.evaluate(async()=>{const r=await navigator.serviceWorker.ready,s=await r.pushManager.getSubscription();return s?await s.unsubscribe():true;}).catch(()=>false);}if(context){await context.close();"
+    ],
+    [
+      "fs.rmSync(profile,{recursive:true});",
+      "fs.rmSync(profile,{recursive:true,maxRetries:5,retryDelay:250});"
+    ]
+  ],
+  "realProviderAssertionsUnchanged": true,
+  "controlledDiagnosticsOnly": true,
+  "noUIRunYet": true
+}
