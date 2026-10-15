@@ -6412,3 +6412,15 @@
 - Coding and build 3 — T36-SUPPORT-DATA — end/acceptance 2026-10-15T14:31:47.054Z: PASS on authenticated-only human policy,305contracts +30real-PG serialized tests, lint/source-pinned exact package builds/9compiled smoke,87priorPASS,41historicaltables, baseline/checker/env/lock/gate and owned cleanup review. 345 outputs frozen. Transient connection failure cause remains unproven, failed attempts retained, fixture corrected without dropping assertions. API/frontend/admin/main migration untouched. Evidence code/quality/evidence/T36-SUPPORT-DATA/closure.json; public scoped privacy/normal GitHub backup pending before T37.
 
 - Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:31:46.549Z–2026-10-15T14:31:47.568Z exit0: support-reviewed-close-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — primary GitHub backup 2026-10-15T14:32:28.851Z: normal origin/master commit/push exit0/0, remote SHA d20386bac672d90e3254268e65c600103786d2d7 verified; primary d20386bac672d90e3254268e65c600103786d2d7. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup pending before T37. Evidence code/quality/evidence/T36-SUPPORT-DATA/github-primary-push-receipt1.json.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:31:56.001Z–2026-10-15T14:31:58.905Z exit0: support-public-stage-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-public-stage-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:31:59.065Z–2026-10-15T14:31:59.866Z exit0: support-public-staged-scan-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-public-staged-scan-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:06.679Z–2026-10-15T14:32:08.955Z exit0: support-git-commit-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-git-commit-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:13.265Z–2026-10-15T14:32:22.367Z exit0: support-git-push-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-git-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:26.850Z–2026-10-15T14:32:28.882Z exit0: support-github-primary-verification-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-github-primary-verification-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
