@@ -1,0 +1,1 @@
+import fs from 'node:fs';const d='quality/evidence/T38-FEED-BE';for(const name of ['record.mjs','journal-command1.mjs']){const code=fs.readFileSync('quality/evidence/T38-FEED-DATA/'+name,'utf8').replaceAll('T38-FEED-DATA','T38-FEED-BE');fs.writeFileSync(d+'/'+name,code,{flag:'wx'});}console.log('Prepared own command/history recorders.');

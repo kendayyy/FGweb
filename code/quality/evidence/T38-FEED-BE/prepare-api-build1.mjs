@@ -1,0 +1,1 @@
+import fs from 'node:fs';const d='quality/evidence/T38-FEED-BE',code=fs.readFileSync('quality/evidence/T38-FEED-DATA/build-source-sandbox1.mjs','utf8').replaceAll('quality/evidence/T38-FEED-DATA/','quality/evidence/T38-FEED-BE/');fs.writeFileSync(d+'/build-source-sandbox1.mjs',code,{flag:'wx'});console.log('Prepared owned source-pinned API build; not executed.');

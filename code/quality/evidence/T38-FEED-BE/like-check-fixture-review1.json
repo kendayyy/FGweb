@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T21:54:39.813Z",
+  "reviewer": "Codex",
+  "run": "feed-be-native-green-1",
+  "actualPassed": 38,
+  "actualFailed": 1,
+  "cause": "Verification SELECT requested nonexistent id on composite-key feed_likes; all preceding native ban/stale-cookie HTTP assertions passed.",
+  "change": "Use actual post_id projection, keep exact rowCount===0 assertion and every HTTP assertion unchanged.",
+  "before": {
+    "path": "quality/evidence/T38-FEED-BE/fixture-core-before-query-fix1.txt",
+    "sha256": "26a9150399e4a0d2e8cdfa8fecacdef24cc878370c34de3a133b86fb0e6dec79"
+  },
+  "after": {
+    "path": "apps/api/test/feed.integration.spec.ts",
+    "sha256": "8bdf6111d2ffc4c5989551a18030c76ca5774d19a1a7a6a090f404ff7db9dbcc"
+  },
+  "applicationSourceChanged": false,
+  "originalFailedEvidenceRetained": true
+}

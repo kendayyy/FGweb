@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-10-15T21:47:02.027Z",
+  "reviewer": "Codex",
+  "nativeRed": {
+    "path": "quality/evidence/T38-FEED-BE/codex-feed-be-native-red-1.json",
+    "sha256": "c318b64ae413dd11be00a998acc34cb5b44375e25254cc91a3290c24ba88819a",
+    "failed": 37,
+    "passed": 2,
+    "actualPostgresRedisFiles": true,
+    "expiryRollbackFileLossReproduced": true
+  },
+  "preflight": {
+    "path": "quality/evidence/T38-FEED-BE/proposal-preflight-result1.json",
+    "sha256": "2f62da05ec448e51f076d09dc10dbaffdd3fa333963450f6b8cdf3131909f185",
+    "canonicalSourcesUntouched": true
+  },
+  "newSourcePins": [
+    {
+      "path": "apps/api/src/modules/feed/feed-access.ts",
+      "sha256": "6a807fe3947ce5c6a717abc41e351864ca87aa9ed5b76ba1d7e72e2b643eba70"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed-exception.filter.ts",
+      "sha256": "dcd51ed87d8daedc691eca86d97f6374cec0050cfe9ae093329b346babb4c4e6"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed-infrastructure.module.ts",
+      "sha256": "69489fc0d7a8501770f0f2fe53f2cad996ade798eec1e0aa9633d255cb23850d"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed-rate.service.ts",
+      "sha256": "017b2d53eaee44db0fbced371bcce0e71a60387f322cd5f570de8f4ed6db7429"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed.controller.ts",
+      "sha256": "952090ec49b61d7218ed8c02dc381527027bf90edf081e53f4277dc24485dc82"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed.module.ts",
+      "sha256": "ca3e7c09dc151e708e3f9b0898af302e9c208c80175f381064a983a50d66e7b2"
+    },
+    {
+      "path": "apps/api/src/modules/feed/feed.service.ts",
+      "sha256": "e9a8f0662c564134bde49d70a18914e7e3c615ede712836ef0d17b4ee276842f"
+    },
+    {
+      "path": "apps/api/src/modules/feed/upload-purpose.filter.ts",
+      "sha256": "117db121ee6a66710efd27f563208f06a12023c531ef06e46070131e70e13f1c"
+    }
+  ],
+  "reason": "Implement approved Feed module with current session/verified/onboarding/ban/author/admin checks, stable filtered DTO/cursors and transactional comments/likes/images. Exact App/upload/moderation integration preserves legacy chat branch and old schemas, adds Feed purpose/file visibility/retention, corrects actual RED unlink-before-commit bug, and uses explicit UTC Feed draft timestamps without altering legacy timestamp cleanup semantics.39native tests include stronger UTC receipt/DB TTL assertions; actual GREEN/regressions/compiled/evidence acceptance pending,91priorPASS/frozen records unchanged.",
+  "unresolvedSourceFindings": [],
+  "files": [
+    {
+      "path": "apps/api/src/app.module.ts",
+      "proposed": "quality/evidence/T38-FEED-BE/proposed-integration1/apps/api/src/app.module.ts",
+      "beforeSha256": "edaca4394739a16678a98ea86e75e13af11ae917d50b955f655f93d98366eef7",
+      "afterSha256": "d24a961a33eb1eb9455a9770ea9989dfd4143404e7d8fa1fe8c191e5e41f0e05"
+    },
+    {
+      "path": "apps/api/src/modules/moderation/moderation.service.ts",
+      "proposed": "quality/evidence/T38-FEED-BE/proposed-integration1/apps/api/src/modules/moderation/moderation.service.ts",
+      "beforeSha256": "d9b99d4f10f245352735e36b68d96f5e7e16ae4df584a3feb930f37cced529c7",
+      "afterSha256": "e6fa9e4a5a46b8b2119eda3635b73783108f25b6813c72b2a584e94bfbdcd7ce"
+    },
+    {
+      "path": "apps/api/src/modules/uploads/uploads.controller.ts",
+      "proposed": "quality/evidence/T38-FEED-BE/proposed-integration1/apps/api/src/modules/uploads/uploads.controller.ts",
+      "beforeSha256": "5a1a65ede4e247dcaf564fd5f0b4e15bd6f887311d0ef99ff7d3a1bb24124ed8",
+      "afterSha256": "94193124f559d357cd0f8ec40e82dae47af8d6b37a8a2e7ace3857009f1316a8"
+    },
+    {
+      "path": "apps/api/src/modules/uploads/uploads.module.ts",
+      "proposed": "quality/evidence/T38-FEED-BE/proposed-integration1/apps/api/src/modules/uploads/uploads.module.ts",
+      "beforeSha256": "dd8efa86470c8fc45c378540dc8c10058abf2700377e4464db160ac8a761d7a8",
+      "afterSha256": "223a478e0b1c0a2020403baea29a58739318973466c0725cfd90f06c78acfb07"
+    },
+    {
+      "path": "apps/api/src/modules/uploads/uploads.service.ts",
+      "proposed": "quality/evidence/T38-FEED-BE/proposed-integration1/apps/api/src/modules/uploads/uploads.service.ts",
+      "beforeSha256": "374269cb2692c7ef036d6eb2ec7d68892542d1c2b4dafa95654114dda5d6847c",
+      "afterSha256": "3eb2c247a44e47c1c93960e3e580ac00ca6022b9c494004fd4363791c83b79e5"
+    }
+  ],
+  "planEvidence": {
+    "path": "quality/evidence/T38-FEED-BE/frontend-independent-integration-plan1.json",
+    "sha256": "61d527d22469c31485d3395f725db8820e9ce6f7f03a6a519cfc84817b8c5111"
+  },
+  "taskAcceptancePending": true
+}

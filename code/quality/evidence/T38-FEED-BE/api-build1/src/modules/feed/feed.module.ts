@@ -1,0 +1,2 @@
+import {Module} from '@nestjs/common';import {AuthModule} from '../auth/auth.module.js';import {ChatModule} from '../chat/chat.module.js';import {UploadsModule} from '../uploads/uploads.module.js';import {FeedInfrastructureModule} from './feed-infrastructure.module.js';import {FeedService} from './feed.service.js';import {FeedController} from './feed.controller.js';
+@Module({imports:[AuthModule,ChatModule,UploadsModule,FeedInfrastructureModule],providers:[FeedService],controllers:[FeedController]})export class FeedModule{}

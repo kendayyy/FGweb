@@ -6948,3 +6948,69 @@
 - Coding and build 3 — T38-FEED-DATA — end/acceptance 2026-10-15T21:07:21.491Z: PASS after direct Codex source/evidence review;358serialized tests,12actual compiled contract/schema smoke checks, 92 source-pinned compiled files;90priorPASS/41historicaltables/baselines/checker/env/lock/gate preserved; owned schemas/runtime absent, 362 outputs frozen. DATA only: root-depth/current API/storage/public asset ACL and actual UI remain subsequent owners; no main/production activation. Evidence code/quality/evidence/T38-FEED-DATA/closure.json and backend-handoff.md; scoped public backup pending before T38-FEED-BE.
 
 - Coding and build 3 — T38-FEED-DATA — primary GitHub backup 2026-10-15T21:08:55.285Z: normal origin/master commit/push exit0/0, remote SHA 82edd0aa47a80b798a380decfe7a54387c75f7f6 verified; primary 82edd0aa47a80b798a380decfe7a54387c75f7f6. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup pending before T38-FEED-BE. Evidence code/quality/evidence/T38-FEED-DATA/github-primary-push-receipt1.json.
+
+- Coding and build 3 — T38-FEED-DATA — final GitHub backup 2026-10-15T21:09:15.380Z: normal origin/master commit/push exit0/0, remote SHA 3957c0a54e94a6db246fba1f1239085f4a91b45f verified; primary 82edd0aa47a80b798a380decfe7a54387c75f7f6. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup complete, final verification local to avoid recursion; T38-FEED-BE may enter only through its reviewed gate. Evidence code/quality/evidence/T38-FEED-DATA/github-final-sync1.json.
+
+- Coding and build 3 — T38-FEED-BE — preparation start 2026-10-15T21:20:00.596Z: DATA PASS and verified remote 3957c0a54e94a6db246fba1f1239085f4a91b45f; read approved spec13/task/rules, locked DATA contracts/migration/handoff and actual App/upload/moderation/auth/session/block code. Plan current-authority Feed transactions, purpose-safe storage/sweep, Redis quotas and native fault/race tests; no business code before entry. Evidence code/quality/evidence/T38-FEED-BE/scope-review1.json.
+
+- Coding and build 3 — T38-FEED-BE — reviewed entry 2026-10-15T21:22:36.822Z: IN_PROGRESS; 40478 originals/91priorPASS/spec/checker/env/baselines pinned, stock gate accepted; no business code before entry. Native API/assets RED suites next; no main migration/UI/provisioning/production activation. Evidence code/quality/evidence/T38-FEED-BE/scope-review1.json.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:20:00.322Z–2026-10-15T21:22:37.029Z exit0: feed-be-reviewed-entry-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-reviewed-entry-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:30:28.224Z–2026-10-15T21:32:53.439Z exit1: feed-be-native-red-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-red-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:43:50.264Z–2026-10-15T21:43:50.474Z exit0: feed-be-integration-prepare-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-integration-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:45:07.893Z–2026-10-15T21:45:08.028Z exit0: feed-be-moderation-proposal-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-moderation-proposal-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:45:52.752Z–2026-10-15T21:46:15.223Z exit0: feed-be-proposal-types-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-proposal-types-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — proposal review 2026-10-15T21:47:02.027Z:39actual native tests yielded37RED/2baselineGREEN, owned cleanup alltrue. Reproduced expired-draft file lost on DB rollback; proposed commit-before-unlink, purpose-aware retention/ACL, UTC Feed TTL with unchanged legacy cleanup conversion. New Feed service/controller/access/Redis quota and exhaustive report targets; five exact original-source proposals passed115-file shadow TypeScript build without canonical mutation. Stronger native UTC assertions added, no assertions weakened. Evidence code/quality/evidence/T38-FEED-BE/frontend-independent-integration-plan1.json; exact adoption/GREEN pending.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:47:01.704Z–2026-10-15T21:47:02.052Z exit0: feed-be-integration-review-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-integration-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — exact review 2026-10-16 04:51:20 +07:00: Implement approved Feed module with current session/verified/onboarding/ban/author/admin checks, stable filtered DTO/cursors and transactional comments/likes/images. Exact App/upload/moderation integration preserves legacy chat branch and old schemas, adds Feed purpose/file visibility/retention, corrects actual RED unlink-before-commit bug, and uses explicit UTC Feed draft timestamps without altering legacy timestamp cleanup semantics.39native tests include stronger UTC receipt/DB TTL assertions; actual GREEN/regressions/compiled/evidence acceptance pending,91priorPASS/frozen records unchanged. Evidence code/quality/evidence/T38-FEED-BE/backend-integration1-adoption-review.json; actual task acceptance pending,91priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:47:34.719Z–2026-10-15T21:51:20.920Z exit0: feed-be-source-integration-adoption-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-source-integration-adoption-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:49:12.115Z–2026-10-15T21:49:12.482Z exit0: feed-be-native-regressions-prepare-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-regressions-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:51:47.823Z–2026-10-15T21:53:25.119Z exit1: feed-be-native-green-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-green-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — fixture correction 2026-10-15T21:54:39.813Z: actual native run1 yielded38GREEN/1failed verification query, not a runtime permission failure. Correct nonexistent feed_likes.id to post_id; preserve zero-row and all HTTP assertions, raw failed evidence and before-source copy. Native assets16/16 including real rollback/file loss fix and UTC TTL passed. Evidence code/quality/evidence/T38-FEED-BE/like-check-fixture-review1.json; fresh full run pending.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:54:39.555Z–2026-10-15T21:54:39.838Z exit0: feed-be-like-check-fixture-fix-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-like-check-fixture-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:54:41.511Z–2026-10-15T21:56:09.998Z exit1: feed-be-native-green-2. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-green-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — additional fixture correction 2026-10-15T21:57:54.056Z: native run2 actual39GREEN/1failed added legacy compatibility fixture before upload. Correct chat_crypto_state.id to conversation_id, matching frozen schema; preserve zero-state assertion, every old transport/Feed denial assertion and failed source/log. No application change. Evidence code/quality/evidence/T38-FEED-BE/legacy-state-fixture-review1.json; fresh full40 pending.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:57:53.786Z–2026-10-15T21:57:54.447Z exit0: feed-be-legacy-state-fixture-fix-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-legacy-state-fixture-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T21:57:55.568Z–2026-10-15T21:59:22.515Z exit0: feed-be-native-green-3. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-green-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:00:14.999Z–2026-10-15T22:02:33.633Z exit0: feed-be-native-regression-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-native-regression-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:04:03.591Z–2026-10-15T22:04:25.065Z exit0: feed-be-api-types-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-api-types-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:05:12.270Z–2026-10-15T22:05:29.395Z exit0: feed-be-source-lint-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-source-lint-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:06:50.355Z–2026-10-15T22:07:13.586Z exit0: feed-be-api-build-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-api-build-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:08:01.443Z–2026-10-15T22:08:02.613Z exit0: feed-be-compiled-docs-proposal-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-compiled-docs-proposal-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:12:15.723Z–2026-10-15T22:12:15.975Z exit0: feed-be-closure-drivers-prepare-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-closure-drivers-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — exact review 2026-10-16 05:13:37 +07:00: Integrate actual source-pinned API build after40native Feed/57native regressions/types/lint; preserve prior compiled metadata and append truthful backend API/spec traceability with explicit frontend/crypto/main/media limits. Actual canonical compiled runtime/integrity remains completion gate;91priorPASS/frozen source/evidence unchanged except exact approved handoffs. Evidence code/quality/evidence/T38-FEED-BE/compiled-traceability1-adoption-review.json; actual task acceptance pending,91priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:10:28.475Z–2026-10-15T22:13:37.335Z exit0: feed-be-compiled-traceability-adoption-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-compiled-traceability-adoption-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:13:51.712Z–2026-10-15T22:14:25.535Z exit0: feed-be-compiled-runtime-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-compiled-runtime-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — final integrity 2026-10-15T22:17:20.258Z: 40478 originals/91priorPASS/41historicaltables/checker/env/lock/baselines/exact gate preserved;97serialized native tests and20actual canonical compiled HTTP/PG/Redis/file smoke checks, 345 source-pinned compiled files; owned cleanup retained. Backend only; actual Feed UI remains next owner; no main/production activation. Evidence code/quality/evidence/T38-FEED-BE/final-integrity-review1.json; closure pending.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:14:56.809Z–2026-10-15T22:17:20.341Z exit0: feed-be-final-integrity-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-final-integrity-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-BE — end/acceptance 2026-10-15T22:17:25.453Z: PASS after direct Codex source/evidence review;97serialized native tests,20actual canonical compiled HTTP/PG/Redis/file smoke checks, 345 source-pinned compiled files;91priorPASS/41historicaltables/baselines/checker/env/lock/gate preserved; owned schemas/runtime absent, 959 outputs frozen. Backend only: actual Feed UI remains the subsequent owner; no main/production activation. Evidence code/quality/evidence/T38-FEED-BE/closure.json and frontend-handoff.md; scoped public backup pending before T38-FEED-FE.
+
+- Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:17:24.898Z–2026-10-15T22:17:27.590Z exit0: feed-be-reviewed-close-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-reviewed-close-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.

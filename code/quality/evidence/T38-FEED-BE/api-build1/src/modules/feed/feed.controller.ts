@@ -1,0 +1,18 @@
+import {Controller,Get,Post,Patch,Put,Delete,Param,Query,Body,Req,Res,Header,UseFilters,UseGuards} from '@nestjs/common';import type {Request,Response} from 'express';import {CsrfGuard} from '../../common/csrf.guard.js';import {SessionGuard,type AuthenticatedRequest} from '../../common/session.guard.js';import {RequireOnboardedGuard} from '../auth/onboarded.guard.js';import {ChatService} from '../chat/chat.service.js';import {FeedService} from './feed.service.js';import {FeedExceptionFilter} from './feed-exception.filter.js';
+const actor=(r:AuthenticatedRequest)=>({userId:r.user!.id,sessionId:r.session!.id});
+@Controller('api/v1/feed')@UseFilters(FeedExceptionFilter)
+export class FeedController{
+ constructor(private readonly feed:FeedService,private readonly chat:ChatService){}
+ @Get('posts')@Header('Cache-Control','private, no-store')async list(@Req()r:Request,@Query()query:Record<string,unknown>){return this.feed.list(await this.chat.actor(r.headers),query);}
+ @Get('posts/:id')@Header('Cache-Control','private, no-store')async get(@Req()r:Request,@Param('id')id:string){return this.feed.get(await this.chat.actor(r.headers),id);}
+ @Post('posts')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')create(@Req()r:AuthenticatedRequest,@Body()body:unknown){return this.feed.create(actor(r),body);}
+ @Patch('posts/:id')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')update(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.update(actor(r),id,body);}
+ @Delete('posts/:id')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')remove(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.remove(actor(r),id,body);}
+ @Put('posts/:id/like')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')like(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.like(actor(r),id,body,true);}
+ @Delete('posts/:id/like')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')unlike(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.like(actor(r),id,body,false);}
+ @Get('posts/:id/comments')@Header('Cache-Control','private, no-store')async comments(@Req()r:Request,@Param('id')id:string,@Query()query:Record<string,unknown>){return this.feed.comments(await this.chat.actor(r.headers),id,query);}
+ @Post('posts/:id/comments')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')comment(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.createComment(actor(r),id,body);}
+ @Patch('comments/:id')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')updateComment(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.updateComment(actor(r),id,body);}
+ @Delete('comments/:id')@UseGuards(CsrfGuard,SessionGuard,RequireOnboardedGuard)@Header('Cache-Control','private, no-store')removeComment(@Req()r:AuthenticatedRequest,@Param('id')id:string,@Body()body:unknown){return this.feed.removeComment(actor(r),id,body);}
+ @Get('images/:id/content')async image(@Req()r:Request,@Param('id')id:string,@Res()response:Response){const bytes=await this.feed.image(await this.chat.actor(r.headers),id);response.setHeader('Cache-Control','private, no-store');response.setHeader('X-Content-Type-Options','nosniff');response.type('image/webp').send(bytes);}
+}

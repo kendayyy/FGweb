@@ -1,19 +1,20 @@
-import { Controller, Post, Get, Param, Body, Req, Res, UploadedFile, UseGuards, UseInterceptors, UseFilters } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Req, Res, Header, UploadedFile, UseGuards, UseInterceptors, UseFilters } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Request, Response } from 'express';
 import { MAX_IMAGE_SIZE_BYTES, AttachmentUrlSchema } from '@fg/contracts';
 import { UploadsService } from './uploads.service.js';
 import { ChatService } from '../chat/chat.service.js';
-import { ChatExceptionFilter } from '../chat/chat.exception-filter.js';
+import {UploadPurposeExceptionFilter} from '../feed/upload-purpose.filter.js';
 import { attachmentUrl } from '../chat/attachment-dto.js';
 import { CsrfGuard } from '../../common/csrf.guard.js';
 import { SessionGuard } from '../../common/session.guard.js';
 import { RequireOnboardedGuard } from '../auth/onboarded.guard.js';
 @Controller('api/v1')
-@UseFilters(ChatExceptionFilter)
+@UseFilters(UploadPurposeExceptionFilter)
 export class UploadsController {
     constructor(private readonly uploads: UploadsService, private readonly chat: ChatService) { }
     @Post('uploads/images')
+    @Header('Cache-Control','private, no-store')
     @UseGuards(CsrfGuard, SessionGuard, RequireOnboardedGuard)
     @UseInterceptors(FileInterceptor('file', { limits: { fileSize: MAX_IMAGE_SIZE_BYTES, files: 1, fields: 1, parts: 2 } }))
     async upload(

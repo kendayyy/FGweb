@@ -1,14 +1,16 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger,ConflictException,ServiceUnavailableException } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger,Optional,ConflictException,ServiceUnavailableException } from '@nestjs/common';
 import { Pool } from 'pg';
 import { randomUUID,createHash } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as sharpModule from 'sharp';
-import { UploadImageRequestSchema, UploadImageMetadataSchema, MAX_IMAGE_PIXELS, MAX_IMAGE_SIZE_BYTES, IMAGE_DRAFT_TTL_MS, ErrorCode } from '@fg/contracts';
+import { FeedUploadImageRequestSchema,FeedUploadReceiptSchema,UploadImageRequestSchema, UploadImageMetadataSchema, MAX_IMAGE_PIXELS, MAX_IMAGE_SIZE_BYTES, IMAGE_DRAFT_TTL_MS, ErrorCode } from '@fg/contracts';
 import { ChatService, ChatActor, chatError } from '../chat/chat.service.js';
 import { attachmentDTO } from '../chat/attachment-dto.js';
 import {LobbyCipher} from '../chat-crypto/lobby-cipher.js';
 import {lockCryptoObjectWrite} from '../chat-crypto/crypto-object-store.js';
+import {FeedRateService} from '../feed/feed-rate.service.js';
+import {currentFeedActor} from '../feed/feed-access.js';
 const sharp = (sharpModule as typeof sharpModule & {
     default: typeof sharpModule;
 }).default ?? sharpModule;
@@ -20,8 +22,9 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
     private timer?: ReturnType<typeof setInterval>;
     private sweeping?: Promise<void>;
     private opening?: Promise<void>;
+    private feedInstalled=false;
     private readonly logger = new Logger(UploadsService.name);
-    constructor(private readonly chat: ChatService,private readonly lobbyCipher:LobbyCipher) { }
+    constructor(private readonly chat: ChatService,private readonly lobbyCipher:LobbyCipher,@Optional() private readonly feedRate?:FeedRateService) { }
     async onModuleInit() {
         const cwd = process.cwd();
         const codeRoot = path.basename(cwd) === 'api' && path.basename(path.dirname(cwd)) === 'apps' ? path.resolve(cwd, '../..') : cwd;
@@ -34,6 +37,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         if (!real.startsWith(realRoot + path.sep))
             throw new Error('Image storage cannot escape through a link');
         this.pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 4, connectionTimeoutMillis: 5000, statement_timeout: 10000 });
+        this.feedInstalled=Boolean((await this.pool.query("SELECT to_regclass('feed_content_audit') IS NOT NULL AS ready")).rows[0].ready);
     }
     private async ready() {
         if (this.opening)
@@ -74,11 +78,14 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         if (!actor)
             chatError(ErrorCode.LOGIN_REQUIRED, 'Login required');
         await this.ready();
-        const parsed = UploadImageRequestSchema.safeParse({ ...typeof body === 'object' && body !== null ? body : {}, file: file && { bytes: file.buffer, fileName: file.originalname, mimeType: file.mimetype } });
+        const feed=typeof body==='object'&&body!==null&&'purpose'in body&&body.purpose==='FEED_POST';
+        const normalized={ ...typeof body === 'object' && body !== null ? body : {}, file: file && { bytes: file.buffer, fileName: file.originalname, mimeType: file.mimetype } };
+        const parsed = feed?FeedUploadImageRequestSchema.safeParse(normalized):UploadImageRequestSchema.safeParse(normalized);
         if (!parsed.success)
             chatError(ErrorCode.INVALID_INPUT, 'Invalid upload');
-        const input = parsed.data, conversation = await this.chat.authorize(input.conversationId, actor, undefined, true);
-        const state=await this.chat.assertLegacyRouteAllowed(conversation);
+        const input = parsed.data;let conversation:string|undefined,state:{mode?:string}|undefined;
+        if(feed){if(!this.feedInstalled||!this.feedRate)throw new ServiceUnavailableException('Feed upload unavailable');await this.feedActor(actor);await this.feedRate.take(actor.userId,'upload');}
+        else{conversation=await this.chat.authorize(UploadImageRequestSchema.parse(input).conversationId,actor,undefined,true);state=await this.chat.assertLegacyRouteAllowed(conversation);}
         const bytes = Buffer.from(input.file.bytes);
         let actual: string | null = null;
         if (bytes.subarray(0, 3).equals(Buffer.from([255, 216, 255])))
@@ -102,6 +109,8 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         }
         if (encoded.length > MAX_IMAGE_SIZE_BYTES)
             chatError(ErrorCode.INVALID_INPUT, 'Encoded image exceeds size limit');
+        if(feed)return this.uploadFeed(encoded,actor);
+        if(!conversation)chatError(ErrorCode.INVALID_INPUT,'Image context required');
         if(state?.mode==='LOBBY_AEAD')return this.uploadLobby(conversation,encoded,actor);
         const id = randomUUID(), destination = this.file(id), temporary = path.join(this.directory, `${id}.tmp`), now = new Date(), expires = new Date(now.getTime() + IMAGE_DRAFT_TTL_MS);
         const baseName = path.basename(input.file.fileName.replaceAll('\\', '/')).replace(/\.[^.]*$/, '').split('').filter(character => character.charCodeAt(0) >= 32).join('').slice(0, 240) || 'image';
@@ -128,6 +137,16 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
             client.release();
         }
     }
+    private async feedActor(actor:NonNullable<ChatActor>){const db=await this.pool.connect();try{await db.query('BEGIN');await db.query("SET LOCAL TIME ZONE 'UTC'");await currentFeedActor(db,actor,true);await db.query('COMMIT');}catch(error){await db.query('ROLLBACK');throw error;}finally{db.release();}}
+    private async uploadFeed(encoded:Buffer,actor:NonNullable<ChatActor>){
+        const id=randomUUID(),temporary=path.join(this.directory,id+'.tmp'),destination=this.file(id),db=await this.pool.connect();
+        try{await db.query('BEGIN ISOLATION LEVEL READ COMMITTED');await db.query("SET LOCAL TIME ZONE 'UTC'");await currentFeedActor(db,actor,true);await db.query("SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_feed_upload',current_schema(),$1::text)::text,0))",[actor.userId]);if(Number((await db.query("SELECT count(*) AS count FROM pending_image_uploads WHERE uploader_id=$1 AND purpose='FEED_POST' AND expires_at>(clock_timestamp() AT TIME ZONE 'UTC')",[actor.userId])).rows[0].count)>=40)chatError(ErrorCode.RATE_LIMITED,'Feed draft limit');
+            await fs.writeFile(temporary,encoded,{flag:'wx'});await fs.rename(temporary,destination);
+            const row=(await db.query(`INSERT INTO pending_image_uploads(id,uploader_id,conversation_id,purpose,file_name,file_size,mime_type,created_at,expires_at) VALUES($1,$2,NULL,'FEED_POST','image.webp',$3,'image/webp',clock_timestamp() AT TIME ZONE 'UTC',(clock_timestamp()+($4::bigint*interval '1 millisecond')) AT TIME ZONE 'UTC') RETURNING to_char(expires_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS expires_iso`,[id,actor.userId,encoded.length,IMAGE_DRAFT_TTL_MS])).rows[0];await currentFeedActor(db,actor,true);await db.query('COMMIT');return FeedUploadReceiptSchema.parse({id,purpose:'FEED_POST',fileSize:encoded.length,mimeType:'image/webp',expiresAt:row.expires_iso});
+        }catch(error){await db.query('ROLLBACK').catch(()=>undefined);let untracked=false;try{untracked=!(await db.query('SELECT id FROM pending_image_uploads WHERE id=$1 UNION ALL SELECT id FROM feed_post_images WHERE id=$1 LIMIT 1',[id])).rowCount;}catch{/* Retain uncertain bytes for a later verified orphan sweep. */}if(untracked){await fs.rm(temporary,{force:true}).catch(()=>undefined);await fs.rm(destination,{force:true}).catch(()=>undefined);}throw error;}finally{encoded.fill(0);db.release();}
+    }
+    async readFeedFile(id:string,expectedSize:number){let bytes:Buffer;try{const stat=await fs.stat(this.file(id));if(!stat.isFile()||stat.size!==expectedSize||stat.size<1||stat.size>MAX_IMAGE_SIZE_BYTES)throw new Error('Unavailable Feed image');bytes=await fs.readFile(this.file(id));}catch{throw new ServiceUnavailableException('Feed image unavailable');}if(bytes.length!==expectedSize||bytes.toString('ascii',0,4)!=='RIFF'||bytes.toString('ascii',8,12)!=='WEBP'){bytes.fill(0);throw new ServiceUnavailableException('Feed image unavailable');}return bytes;}
+    async assertFeedFile(id:string,expectedSize:number){const bytes=await this.readFeedFile(id,expectedSize);bytes.fill(0);}
     private async uploadLobby(conversation:string,encoded:Buffer,actor:NonNullable<ChatActor>){
         const id=randomUUID(),key=id+'.bin',client=await this.pool.connect();let stored=false;
         try{
@@ -160,7 +179,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         if(attached?.message_id)await this.chat.assertMessageVisible(attached.message_id);
         if(attached?.encryption_mode==='LOBBY_AEAD')return this.lobbyImage(id,actor,attached);
         if(!attached&&(await this.pool.query("SELECT to_regclass('chat_crypto_upload_drafts') IS NOT NULL AS installed")).rows[0]?.installed){const encrypted=(await this.pool.query("SELECT id FROM chat_crypto_upload_drafts WHERE id=$1 AND encryption_mode='LOBBY_AEAD'",[id])).rows[0];if(encrypted)return this.lobbyImage(id,actor,undefined);}
-        const draft = attached ? null : (await this.pool.query('SELECT * FROM pending_image_uploads WHERE id=$1 AND expires_at>now()', [id])).rows[0];
+        const draft = attached ? null : (await this.pool.query("SELECT * FROM pending_image_uploads WHERE id=$1 AND expires_at>now()"+(this.feedInstalled?" AND purpose='CHAT_IMAGE'":""), [id])).rows[0];
         const row = attached ?? draft;
         if (!row)
             chatError(ErrorCode.NOT_FOUND, 'Image not found');
@@ -186,12 +205,13 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
     }
     async cleanup(now: Date = new Date()) {
         const client = await this.pool.connect();
+        const expiredIds:string[]=[];
         try {
             await client.query('BEGIN');
-            const expired = (await client.query('SELECT id FROM pending_image_uploads WHERE expires_at<=$1 ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED', [now])).rows;
+            const expired = (await client.query(this.feedInstalled?"SELECT id FROM pending_image_uploads WHERE (purpose='FEED_POST' AND expires_at<=($1::timestamptz AT TIME ZONE 'UTC')) OR (purpose='CHAT_IMAGE' AND expires_at<=$2::timestamp) ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED":'SELECT id FROM pending_image_uploads WHERE expires_at<=$1 ORDER BY expires_at,id LIMIT 100 FOR UPDATE SKIP LOCKED',this.feedInstalled?[now.toISOString(),now]:[now])).rows;
             for (const draft of expired) {
-                await fs.rm(this.file(draft.id), { force: true });
                 await client.query('DELETE FROM pending_image_uploads WHERE id=$1', [draft.id]);
+                expiredIds.push(draft.id);
             }
             await client.query('COMMIT');
         }
@@ -202,6 +222,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         finally {
             client.release();
         }
+        for(const id of expiredIds)await fs.rm(this.file(id),{force:true});
         const files = await fs.readdir(this.directory);
         for (const name of files) {
             const id = name.slice(0, 36);
@@ -219,7 +240,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
             }
             if (!stat.isFile() || stat.mtimeMs > now.getTime() - IMAGE_DRAFT_TTL_MS)
                 continue;
-            const tracked = await this.pool.query('SELECT id FROM attachments WHERE id=$1 UNION ALL SELECT id FROM pending_image_uploads WHERE id=$1 LIMIT 1', [id]);
+            const tracked = await this.pool.query('SELECT id FROM attachments WHERE id=$1 UNION ALL SELECT id FROM pending_image_uploads WHERE id=$1'+(this.feedInstalled?' UNION ALL SELECT id FROM feed_post_images WHERE id=$1':'')+' LIMIT 1', [id]);
             if (!tracked.rowCount)
                 await fs.rm(file, { force: true });
         }

@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-15T21:20:00.596Z",
+  "reviewer": "Codex",
+  "scope": [
+    "apps/api/src/modules/feed/**",
+    "apps/api/src/app.module.ts",
+    "apps/api/src/modules/uploads/uploads.service.ts",
+    "apps/api/src/modules/uploads/uploads.module.ts",
+    "apps/api/src/modules/uploads/uploads.controller.ts",
+    "apps/api/src/modules/moderation/moderation.service.ts",
+    "apps/api/test/feed.integration.spec.ts",
+    "apps/api/test/feed-assets.integration.spec.ts",
+    "apps/api/dist/**",
+    "quality/api-contract.md",
+    "quality/spec-coverage.md",
+    "quality/evidence/T38-FEED-BE/**",
+    ".runtime/t38-feed-be/**",
+    ".cache/t38-feed-be/**"
+  ],
+  "authorization": "User requests all approved FG tasks completed sequentially; approved spec13/task Feed BE and PASS DATA contracts/migration, Codex only.",
+  "plan": {
+    "path": "quality/evidence/T38-FEED-BE/implementation-plan1.md",
+    "sha256": "0fb3bad91e88441b172621a564a3d9b30de466ba7a1cf94b6900b3bc8effe784"
+  },
+  "dataHandoff": {
+    "path": "quality/evidence/T38-FEED-DATA/backend-handoff.md",
+    "sha256": "d020f82bd34e52e6c09cf93a1b31939ce2a2ca73cfcb4d63f5f4211372bca0db"
+  },
+  "priorGitSync": {
+    "path": "quality/evidence/T38-FEED-DATA/github-final-sync1.json",
+    "sha256": "ad626097e696703ec0c0133803182e6c31bc4e7febebdc93f632441d2e2e3aee",
+    "remoteSHA": "3957c0a54e94a6db246fba1f1239085f4a91b45f"
+  },
+  "technicalRulings": [
+    "No Auth/Social/Chat/crypto/DB/contracts source changes; import current shared access helpers and frozen DATA DTOs.",
+    "Acyclic Feed/Uploads/infrastructure modules; purpose-specific actor/file visibility and retention.",
+    "Actual API/PG/Redis/filesystem fixtures; session-first/BAN/content lock ordering tested, no UI/E2EE/capacity claim.",
+    "No main migration, real admin provisioning or production activation."
+  ],
+  "preserve": 91,
+  "unresolvedSourceFindings": [],
+  "acceptancePending": true
+}

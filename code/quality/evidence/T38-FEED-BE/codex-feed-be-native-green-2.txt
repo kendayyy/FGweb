@@ -1,0 +1,36 @@
+
+> @fg/api@0.1.0 test
+> node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand --config ../../quality/evidence/T38-FEED-BE/jest-native1.config.cjs --runTestsByPath test/feed.integration.spec.ts test/feed-assets.integration.spec.ts
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:1404) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL test/feed-assets.integration.spec.ts (30.025 s)
+  ● real purpose-safe Feed images and storage fault boundaries › preserves the old upload transport on an isolated unmigrated public Lobby compatibility fixture
+
+    error: column "id" does not exist
+
+       7 |  const file=(id:string)=>path.join(f.runtime,'uploads',id+'.webp');
+       8 |  const binary=(id:string,user:string|null=null,legacy=false)=>f.api('get',legacy?'attachments/'+id+'/content':'feed/images/'+id+'/content',user).buffer(true).parse((response,done)=>{const chunks:Buffer[]=[];response.on('data',chunk=>chunks.push(Buffer.from(chunk)));response.on('end',()=>done(null,Buffer.concat(chunks)));response.on('error',error=>done(error,undefined));});
+    >  9 |  it('preserves the old upload transport on an isolated unmigrated public Lobby compatibility fixture',async()=>{const lobby=(await f.pool.query('SELECT id FROM lobbies WHERE game_id=$1',[f.gameId])).rows[0].id,conversation=randomUUID();await f.pool.query("INSERT INTO conversations(id,kind,lobby_id) VALUES($1,'LOBBY',$2)",[conversation,lobby]);expect((await f.pool.query('SELECT id FROM chat_crypto_state WHERE conversation_id=$1',[conversation])).rowCount).toBe(0);const r=await f.api('post','uploads/images','owner').field('conversationId',conversation).attach('file',png,{filename:'legacy.png',contentType:'image/png'});expect(r.status).toBe(201);const receipt=AttachmentSchema.parse(r.body);expect(receipt).not.toHaveProperty('purpose');expect((await f.pool.query('SELECT purpose,conversation_id FROM pending_image_uploads WHERE id=$1',[receipt.id])).rows[0]).toEqual({purpose:'CHAT_IMAGE',conversation_id:conversation});const bytes=await binary(receipt.id,'owner',true);expect(bytes.status).toBe(200);expect((await sharp(bytes.body as Buffer).metadata()).format).toBe('webp');expect((await binary(receipt.id,null,true)).status).toBe(403);expect((await binary(receipt.id,null)).status).toBe(404);expect((await f.api('post','feed/posts','owner',{clientPostId:randomUUID(),gameTitle:'Valorant',type:'SHARE',body:'Forbidden legacy claim',imageIds:[receipt.id]})).status).toBe(422);});
+         |                                                                                                                                                                                                                                                                                                                                                                  ^
+      10 |  it('processes genuine PNG/JPEG/WebP, binds durable images and serves real public WebP',async()=>{for(const[bytes,name,mime]of [[png,'fixture.png','image/png'],[jpeg,'fixture.jpg','image/jpeg'],[webp,'fixture.webp','image/webp']] as const){const receipt=await upload(bytes,'owner',name,mime);const row=(await f.pool.query('SELECT purpose,conversation_id,uploader_id,file_size,mime_type FROM pending_image_uploads WHERE id=$1',[receipt.id])).rows[0];expect(row).toEqual({purpose:'FEED_POST',conversation_id:null,uploader_id:'owner',file_size:receipt.fileSize,mime_type:'image/webp'});const post=await f.post('Image post','owner',{imageIds:[receipt.id]});expect(post.images.map(image=>image.id)).toEqual([receipt.id]);const content=await binary(receipt.id);expect(content.status).toBe(200);expect(content.headers['content-type']).toContain('image/webp');expect(content.headers['cache-control']).toContain('no-store');expect(content.headers['x-content-type-options']).toBe('nosniff');expect((await sharp(content.body as Buffer).metadata()).format).toBe('webp');expect((await sharp(content.body as Buffer).metadata()).width).toBe(16);expect((await f.pool.query('SELECT id FROM pending_image_uploads WHERE id=$1',[receipt.id])).rowCount).toBe(0);expect((await f.api('get','feed/posts/'+post.id,null)).body.images[0].url).toBe('/api/v1/feed/images/'+receipt.id+'/content');}});
+      11 |  it('keeps unbound drafts private with no public or chat URL even for their owner',async()=>{const receipt=await upload();expect(receipt).not.toHaveProperty('url');for(const user of [null,'owner','peer']){expect((await binary(receipt.id,user)).status).toBe(404);expect((await f.api('get','attachments/'+receipt.id,user)).status).toBe(404);}expect(fs.existsSync(file(receipt.id))).toBe(true);});
+      12 |  it('denies guest/unverified/nononboarded upload writes',async()=>{for(const[user,status]of [[null,401],['unverified',403],['fresh',403]] as const)expect((await f.upload(png,user)).status).toBe(status);expect((await f.pool.query('SELECT id FROM pending_image_uploads')).rowCount).toBe(0);});
+
+      at ../../node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (test/feed-assets.integration.spec.ts:9:354)
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 39 passed, 40 total
+Snapshots:   0 total
+Time:        85.752 s, estimated 94 s
+Ran all test suites within paths "test/feed.integration.spec.ts", "test/feed-assets.integration.spec.ts".
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\api
+npm error workspace @fg/api@0.1.0
+npm error location E:\FGweb\code\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand --config ../../quality/evidence/T38-FEED-BE/jest-native1.config.cjs --runTestsByPath test/feed.integration.spec.ts test/feed-assets.integration.spec.ts

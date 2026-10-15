@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-15T21:57:54.056Z",
+  "reviewer": "Codex",
+  "run": "feed-be-native-green-2",
+  "passed": 39,
+  "failed": 1,
+  "cause": "Additional legacy upload fixture used id instead of actual chat_crypto_state.conversation_id primary key; it failed before exercising upload.",
+  "change": "Correct projection only; rowCount===0/legacy transport/Feed denial assertions retained. No application source changes.",
+  "before": {
+    "path": "quality/evidence/T38-FEED-BE/fixture-assets-before-state-query-fix1.txt",
+    "sha256": "9718cd7f3bc8b0b8ffb46d6206940d65d635e4179b449744a6fa5795e5b2705d"
+  },
+  "after": {
+    "path": "apps/api/test/feed-assets.integration.spec.ts",
+    "sha256": "13b637f70d0245d642c0a9d02bf8789bef15b1fbffca2b7a4c764a0bb1de863d"
+  },
+  "schema": {
+    "path": "packages/database/src/schema/chat-crypto.ts",
+    "sha256": "bccfdb3f3e2ff43d531283aafa46c7e780a7a43920a85792dcf8c6db361f2c1d"
+  },
+  "assertionsUnchanged": true
+}
