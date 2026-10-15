@@ -6332,3 +6332,15 @@
 - Coding and build 3 — T36 — acceptance closure 2026-10-15T13:50:34.691Z: PASS on reviewed183fresh serial tests/lint/types/pinned96-file build/real desktop native/update/HTTPS94Telegram/86priorPASS and explicit human physical manual acceptance after disclosure. Mobile backend correlation remains unverified, no phone screenshot and Android OS unknown; never claim server-confirmed mobile Push. Failed/BLOCKED evidence preserved. Frozen1113outputs. Public privacy/normal master backup pending; T36-SUPPORT-DATA not opened. Evidence code/quality/evidence/T36/closure.json.
 
 - Coding and build 3 — T36 — actual 2026-10-15T13:50:34.007Z–2026-10-15T13:50:46.335Z exit0: t36-reviewed-close-1. Evidence code/quality/evidence/T36/codex-t36-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — primary GitHub backup 2026-10-15T13:53:20.846Z: normal origin/master commit/push exit0/0; verified remoteSHA 0ac41f501bed8e5bb62eb5259c613b75df778cd1; primary 0ac41f501bed8e5bb62eb5259c613b75df778cd1. Staged blobs match clean privacy scan and frozen task outputs unchanged. Human manual acceptance / unmatched mobile backend limitation retained. Bounded receipt followup pending; next task not opened. Evidence code/quality/evidence/T36/github-primary-push-receipt1.json.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:51:02.741Z–2026-10-15T13:51:13.563Z exit0: t36-public-stage-1. Evidence code/quality/evidence/T36/codex-t36-public-stage-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:51:48.261Z–2026-10-15T13:51:49.712Z exit0: t36-public-staged-scan-1. Evidence code/quality/evidence/T36/codex-t36-public-staged-scan-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:52:08.829Z–2026-10-15T13:52:13.506Z exit0: t36-git-commit-1. Evidence code/quality/evidence/T36/codex-t36-git-commit-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:52:23.144Z–2026-10-15T13:52:40.992Z exit0: t36-git-push-1. Evidence code/quality/evidence/T36/codex-t36-git-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:53:16.615Z–2026-10-15T13:53:20.870Z exit0: t36-github-primary-verification-1. Evidence code/quality/evidence/T36/codex-t36-github-primary-verification-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
