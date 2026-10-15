@@ -1,0 +1,136 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/pwa-worker.test.ts (11 tests | 9 failed) 164ms
+   ❯ T36 public shell and native click privacy policy (11)
+     × allows only exact build-listed public shell and versioned assets 26ms
+     × rejects credentialed/query/external/private manifest entries 7ms
+     × does not turn API navigation into offline app-shell auth success 3ms
+     × normalizes a bounded same-origin notification target 5ms
+     × untrusted/private preview payload falls back to generic FG text 6ms
+     × known trusted invitation text is retained without caching any payload 8ms
+     × click focuses same-origin app and posts guarded route without reloading active client 9ms
+     × click opens a guarded target when no same-origin app client exists 4ms
+     × malicious click target falls back to authenticated inbox 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > allows only exact build-listed public shell and versioned assets
+AssertionError: expected [] to deeply equal [ …(4) ]
+
+- Expected
++ Received
+
+- [
+-   "https://fg.fixture.invalid/index.html",
+-   "https://fg.fixture.invalid/assets/index-AbCd1234.js",
+-   "https://fg.fixture.invalid/assets/app-EfGh5678.css",
+-   "https://fg.fixture.invalid/brand/icon-192.png",
+- ]
++ []
+
+ ❯ apps/web/test/pwa-worker.test.ts:5:159
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > rejects credentialed/query/external/private manifest entries
+AssertionError: expected [Function] to throw an error
+ ❯ apps/web/test/pwa-worker.test.ts:6:375
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > does not turn API navigation into offline app-shell auth success
+AssertionError: expected null to be 'https://fg.fixture.invalid/index.html' // Object.is equality
+
+- Expected:
+"https://fg.fixture.invalid/index.html"
+
++ Received:
+null
+
+ ❯ apps/web/test/pwa-worker.test.ts:8:197
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > normalizes a bounded same-origin notification target
+AssertionError: expected null to be '/notifications/notice-1' // Object.is equality
+
+- Expected:
+"/notifications/notice-1"
+
++ Received:
+null
+
+ ❯ apps/web/test/pwa-worker.test.ts:9:132
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > untrusted/private preview payload falls back to generic FG text
+AssertionError: expected '/notifications' to be '/notifications/n' // Object.is equality
+
+Expected: "/notifications/n"
+Received: "/notifications"
+
+ ❯ apps/web/test/pwa-worker.test.ts:11:399
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > known trusted invitation text is retained without caching any payload
+AssertionError: expected { title: 'FG', …(3) } to match object { title: 'Lời mời kết bạn', …(2) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "body": "Bạn có lời mời kết bạn mới.",
+-   "title": "Lời mời kết bạn",
+-   "url": "/notifications/n",
++   "body": "Bạn có thông báo mới.",
++   "title": "FG",
++   "url": "/notifications",
+  }
+
+ ❯ apps/web/test/pwa-worker.test.ts:12:225
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > click focuses same-origin app and posts guarded route without reloading active client
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ apps/web/test/pwa-worker.test.ts:13:505
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > click opens a guarded target when no same-origin app client exists
+AssertionError: expected "vi.fn()" to be called with arguments: [ Array(1) ]
+
+Number of calls: 0
+
+ ❯ apps/web/test/pwa-worker.test.ts:14:291
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > malicious click target falls back to authenticated inbox
+AssertionError: expected "vi.fn()" to be called with arguments: [ Array(1) ]
+
+Number of calls: 0
+
+ ❯ apps/web/test/pwa-worker.test.ts:15:291
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 2 passed (11)
+   Start at  01:36:28
+   Duration  724ms (tests 47%, transform 38%, import 12%, worker 3%)
+

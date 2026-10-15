@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const dir='quality/evidence/T36',ledgerPath='quality/tasks.json';
+const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const original=fs.readFileSync(ledgerPath,'utf8'),ledger=JSON.parse(original),task=ledger.tasks.find(t=>t.id==='T36');
+assert.equal(task.status,'BLOCKED');
+const at=new Date().toISOString();
+const review={at,reviewer:'Codex',authorization:'Human explicitly requests configuring the temporary tunnel and creating the complete usable HTTPS FG test link in the current chat.',task:'T36',priorStatus:task.status,priorBlockedReason:task.blockedReason,priorRow:task,priorLedgerSha256:hash(ledgerPath),scope:['quality/evidence/T36/**','.runtime/t36/**','.cache/t36/**'],design:'Run the existing canonical FG build and real compiled Nest API on loopback with an isolated migrated schema, salted scrypt verified synthetic non-admin testers, unique BullMQ namespace and native VAPID Push. Connect a pinned official portable cloudflared utility to that one test HTTP listener. Set canonical HTTPS auth/public origin, preserve CSRF and Secure cookies. Separate authenticated loopback-only control listener for test producers. No public debug, credential, fixture-control or mail relay routes. Keep private credentials under ignored .runtime, never in evidence. Keep application FG manifest/title/assets unchanged. Verify actual HTTPS and real login with headed Chrome and fresh Telegram captures before handing off.',physicalAcceptanceStillRequired:true,productionPublication:false,nextTaskOpened:false,productSourceChanges:false,unresolvedSourceFindings:[]};
+fs.writeFileSync(dir+'/https-tunnel-scope-review1.json',JSON.stringify(review,null,2)+'\n',{flag:'wx'});
+task.status='IN_PROGRESS';
+task.resumedAt=at;
+task.resumeReason='Authorized HTTPS tunnel preparation and verification within T36; real physical-device acceptance remains pending.';
+task.evidencePaths.push(dir+'/https-tunnel-scope-review1.json');
+assert.equal(fs.readFileSync(ledgerPath,'utf8'),original);
+fs.writeFileSync(ledgerPath,JSON.stringify(ledger,null,2)+'\n');
+fs.appendFileSync('../.doc/history.md','\n- '+at+': T36 resumes IN_PROGRESS solely for explicitly authorized HTTPS test tunnel preparation. Prior BLOCKED row/reason preserved in code/'+dir+'/https-tunnel-scope-review1.json; other rows unchanged. No acceptance waiver, next task, production activation or application-source change.\n');
+console.log(JSON.stringify({task:'T36',status:task.status,otherRowsUnchanged:true,physicalAcceptancePending:true}));

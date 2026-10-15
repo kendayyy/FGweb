@@ -1,0 +1,117 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/pwa.test.ts (14 tests | 9 failed) 1063ms
+   ❯ T36 explicit Push consent and owned device lifecycle (14)
+     × explicit default-permission gesture requests before asynchronous configuration and binds actual browser DTO 15ms
+     × denied permission never prompts again on click/focus-style refresh 6ms
+     × granted permission still requires explicit owned-device registration 2ms
+     × unavailable VAPID configuration is truthful and does not create subscription 2ms
+     × failed registration removes owned native subscription and never says subscribed 1ms
+     × disable revokes authenticated API endpoint and native browser subscription 3ms
+     × failed server revoke still cleans native device and reports incomplete revoke 3ms
+     × late permission result after actor change cannot bind previous actor 1ms
+     × late native subscribe after actor change is cleaned without late registration 1014ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > explicit default-permission gesture requests before asynchronous configuration and binds actual browser DTO
+AssertionError: expected [] to deeply equal [ 'permission', 'config', 'register' ]
+
+- Expected
++ Received
+
+- [
+-   "permission",
+-   "config",
+-   "register",
+- ]
++ []
+
+ ❯ apps/web/test/pwa.test.ts:11:187
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > denied permission never prompts again on click/focus-style refresh
+AssertionError: expected 'idle' to be 'denied' // Object.is equality
+
+Expected: "denied"
+Received: "idle"
+
+ ❯ apps/web/test/pwa.test.ts:13:365
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > granted permission still requires explicit owned-device registration
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ apps/web/test/pwa.test.ts:14:313
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > unavailable VAPID configuration is truthful and does not create subscription
+AssertionError: expected 'idle' to be 'error' // Object.is equality
+
+Expected: "error"
+Received: "idle"
+
+ ❯ apps/web/test/pwa.test.ts:16:338
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > failed registration removes owned native subscription and never says subscribed
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ apps/web/test/pwa.test.ts:17:257
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > disable revokes authenticated API endpoint and native browser subscription
+AssertionError: expected "vi.fn()" to be called with arguments: [ …(2) ]
+
+Number of calls: 0
+
+ ❯ apps/web/test/pwa.test.ts:18:204
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > failed server revoke still cleans native device and reports incomplete revoke
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ apps/web/test/pwa.test.ts:19:259
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > late permission result after actor change cannot bind previous actor
+TypeError: resolve is not a function
+ ❯ apps/web/test/pwa.test.ts:20:328
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  |web| apps/web/test/pwa.test.ts > T36 explicit Push consent and owned device lifecycle > late native subscribe after actor change is cleaned without late registration
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ apps/web/test/pwa.test.ts:21:382
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 5 passed (14)
+   Start at  01:27:49
+   Duration  3.55s (environment 59%, tests 34%, transform 5%, import 2%)
+

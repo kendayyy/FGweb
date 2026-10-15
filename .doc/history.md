@@ -6072,3 +6072,263 @@
 - Coding and build 3 — T35 — actual 2026-10-14T18:00:43.523Z–2026-10-14T18:01:53.245Z exit0: t35-reviewed-close-1. Evidence code/quality/evidence/T35/codex-t35-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T35.
 
 - Coding and build 3 — T35 — GitHub primary sync 2026-10-14T18:08:27.623Z: commit actual2026-10-14T18:06:29.307Z–2026-10-14T18:06:33.211Z exit0, push actual2026-10-14T18:06:38.578Z–2026-10-14T18:06:50.762Z exit0. Remote master SHA verified 803e1a56203319215cd1209317c8dc07a2c79e88; actual staged scan3 clean, author kendayy verified, frozen acceptance outputs unchanged. Evidence code/quality/evidence/T35/github-primary-push-receipt1.json; one bounded receipt/history followup pending, no production deployment.
+
+- Coding and build 3 — T35 — backup hoàn tất 2026-10-14T18:10:20.308Z: bounded receipt commit/push actual2026-10-14T18:09:42.859Z–2026-10-14T18:10:12.082Z exit0/0, remote master SHA b364e1a632084a6dd826f989181b4a4d23670b55 verified, primary 803e1a56203319215cd1209317c8dc07a2c79e88 included. Final receipt/commands retained local to avoid recursive commits, source acceptance/frozen outputs unchanged. Evidence code/quality/evidence/T35/github-final-sync1.json. T36 may enter only through its reviewed stock gate.
+
+- Coding and build 3 — T36 — bắt đầu planning/gate 2026-10-14T18:16:23.804Z: T35 reviewed PASS436tests/nativePush2/SMTP2/direct-human inbox/Telegram9; verified final masterb364e1a632084a6dd826f989181b4a4d23670b55. Read approved spec7/task36/design/rules; inline Codex, unchanged approved FG design/icons. Current E:/FGweb/code and origin/master flow retained per user, scoped source-copy previews/exact adoption and owned test schemas provide isolation without moving workspace. Physical iPhone+Android and HTTPS test origin requested asynchronously; no PWA/device PASS inferred. Only evidence helpers before stock gate; no app changes.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:16:26.079Z–2026-10-14T18:16:27.023Z exit1: t36-stock-entry-gate-1. Evidence code/quality/evidence/T36/codex-t36-stock-entry-gate-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — 2026-10-14T18:23:13.099Z: approved current spec lineage/86frozen PASS/new scope and snapshot pass stock gate before business changes. Initial old-spec stock failure preserved. T36 now IN_PROGRESS; RED PWA gesture/cache/logout/target tests next; genuine headed local verification and physical iPhone+Android/HTTPS receipts required, no desktop waiver or production claim. Evidence code/quality/evidence/T36/scope-review1.json and entry-gate-manifest1.json.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:23:51.278Z: human replies chua co to physical iPhone+Android/HTTPS test availability question. No device model/OS or test origin supplied. Continue all independent implementation/local verification; original physical acceptance unchanged, no desktop waiver or invented public deployment. Evidence code/quality/evidence/T36/device-availability1.json; device/origin receipt remains real dependency for full PASS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:19:06.889Z–2026-10-14T18:23:13.445Z exit0: t36-reviewed-entry-1. Evidence code/quality/evidence/T36/codex-t36-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:25:51.056Z–2026-10-14T18:26:25.510Z exit1: t36-pwa-controller-interface-red-1. Evidence code/quality/evidence/T36/codex-t36-pwa-controller-interface-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:27:47.939Z–2026-10-14T18:27:53.021Z exit1: t36-pwa-controller-behavior-red-2. Evidence code/quality/evidence/T36/codex-t36-pwa-controller-behavior-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:30:22.591Z–2026-10-14T18:30:27.973Z exit0: t36-pwa-controller-green-3. Evidence code/quality/evidence/T36/codex-t36-pwa-controller-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:35:40.935Z–2026-10-14T18:35:43.172Z exit1: t36-worker-policy-interface-red-1. Evidence code/quality/evidence/T36/codex-t36-worker-policy-interface-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:36:27.401Z–2026-10-14T18:36:29.436Z exit1: t36-worker-policy-behavior-red-2. Evidence code/quality/evidence/T36/codex-t36-worker-policy-behavior-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:38:33.736Z–2026-10-14T18:38:36.798Z exit1: t36-worker-policy-green-3. Evidence code/quality/evidence/T36/codex-t36-worker-policy-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:39:42.150Z–2026-10-14T18:39:44.124Z exit0: t36-worker-policy-green-4. Evidence code/quality/evidence/T36/codex-t36-worker-policy-green-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:43:05.013Z–2026-10-14T18:43:07.453Z exit1: t36-cache-runtime-interface-red-1. Evidence code/quality/evidence/T36/codex-t36-cache-runtime-interface-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:44:30.558Z: source worker policy green4 has11/11 cases after correcting nonexistent contracts notificationText export with public-phrase-only browser whitelist; backend source unchanged. Exact cache-runtime test path was created before scope addition; RED interface1 failed collection, no runtime integration. Explicit reviewed cache-test scope extension passes current stock gate/86PASS without checker change before implementation. Evidence code/quality/evidence/T36/cache-test-scope-review2.json.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:44:30.055Z–2026-10-14T18:45:29.919Z exit0: t36-cache-test-scope-review-2. Evidence code/quality/evidence/T36/codex-t36-cache-test-scope-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:50:02.692Z–2026-10-14T18:50:04.843Z exit1: t36-cache-runtime-behavior-red-2. Evidence code/quality/evidence/T36/codex-t36-cache-runtime-behavior-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:50:29.955Z–2026-10-14T18:50:31.975Z exit0: t36-cache-runtime-green-3. Evidence code/quality/evidence/T36/codex-t36-cache-runtime-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:51:23.020Z–2026-10-14T18:51:32.572Z exit1: t36-auth-revoke-phase-red-1. Evidence code/quality/evidence/T36/codex-t36-auth-revoke-phase-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 01:54:18 +07:00: T36 reviewed manual service-worker public-shell build and separate authenticated Push revoke phase; preserve canonical manifest, existing security headers and all post-logout cleanup. No auto reload/claim/permission prompt or backend changes. Evidence code/quality/evidence/T36/pwa-integration1-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-15T01:54:19.8702951+07:00: installation.ts implementation preceded new lifecycle assertions during independent preparation while exact integration gate pending. This is not a test-first RED claim. Three meaningful lifecycle checks added for gesture-only prompt, acceptance versus installation receipt, and stale dismissal; actual verification pending. No PASS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:52:13.320Z–2026-10-14T18:54:18.429Z exit0: t36-pwa-integration-adoption-1. Evidence code/quality/evidence/T36/codex-t36-pwa-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:54:32.497Z–2026-10-14T18:54:37.201Z exit1: t36-browser-push-transport-red-2. Evidence code/quality/evidence/T36/codex-t36-browser-push-transport-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:55:13.206Z–2026-10-14T18:55:22.448Z exit1: t36-local-pwa-green-5. Evidence code/quality/evidence/T36/codex-t36-local-pwa-green-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:56:23.969Z–2026-10-14T18:56:34.833Z exit1: t36-pwa-interface-red-6. Evidence code/quality/evidence/T36/codex-t36-pwa-interface-red-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:56:44.859Z–2026-10-14T18:56:56.290Z exit1: t36-pwa-interface-behavior-red-7. Evidence code/quality/evidence/T36/codex-t36-pwa-interface-behavior-red-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:58:14.882Z–2026-10-14T18:58:23.926Z exit0: t36-local-pwa-green-8. Evidence code/quality/evidence/T36/codex-t36-local-pwa-green-8.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:59:07.860Z–2026-10-14T18:59:23.531Z exit1: t36-push-revocation-race-red-9. Evidence code/quality/evidence/T36/codex-t36-push-revocation-race-red-9.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T18:59:43.338Z–2026-10-14T18:59:47.328Z exit0: t36-push-revocation-race-green-10. Evidence code/quality/evidence/T36/codex-t36-push-revocation-race-green-10.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:00:15.552Z–2026-10-14T19:00:27.428Z exit1: t36-push-target-red-11. Evidence code/quality/evidence/T36/codex-t36-push-target-red-11.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:01:09.717Z–2026-10-14T19:01:15.245Z exit0: t36-push-target-green-12. Evidence code/quality/evidence/T36/codex-t36-push-target-green-12.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 02:03:26 +07:00: T36 integrate existing FG layout with installation/offline guidance and explicit per-device Push controls, plus current external Push target fallback only after in-app404. Keep original inbox/unread/preferences/current-source ACL, epoch/abort guards and approved theme/sidebar. Evidence code/quality/evidence/T36/pwa-ui-integration2-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:01:24.196Z–2026-10-14T19:03:27.062Z exit0: t36-pwa-ui-integration-adoption-2. Evidence code/quality/evidence/T36/codex-t36-pwa-ui-integration-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:03:33.988Z–2026-10-14T19:03:52.718Z exit2: t36-web-types-1. Evidence code/quality/evidence/T36/codex-t36-web-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:04:23.942Z–2026-10-14T19:04:42.683Z exit0: t36-web-types-2. Evidence code/quality/evidence/T36/codex-t36-web-types-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:05:54.579Z–2026-10-14T19:06:51.795Z exit0: t36-web-public-shell-build-1. Evidence code/quality/evidence/T36/codex-t36-web-public-shell-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 02:09:30 +07:00: T36 adopt source-pinned fresh public PWA build with injected exact public shell list; worker is manual registration, no skipWaiting/claim/reload. Previous frozen build artifacts remain pinned; current HTML/assets/SW bytes match fresh build, env/package lock/canonical brand unchanged. Evidence code/quality/evidence/T36/web-build1-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:07:26.753Z–2026-10-14T19:09:30.811Z exit0: t36-web-build-adoption-1. Evidence code/quality/evidence/T36/codex-t36-web-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:09:55.830Z–2026-10-14T19:10:01.590Z exit1: t36-auth-loading-push-red-13. Evidence code/quality/evidence/T36/codex-t36-auth-loading-push-red-13.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:10:17.824Z–2026-10-14T19:10:26.276Z exit0: t36-pwa-auth-loading-green-14. Evidence code/quality/evidence/T36/codex-t36-pwa-auth-loading-green-14.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:10:51.310Z–2026-10-14T19:11:33.330Z exit1: t36-original-app-regressions-1. Evidence code/quality/evidence/T36/codex-t36-original-app-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:12:32.204Z–2026-10-14T19:13:18.729Z exit0: t36-original-app-regressions-2. Evidence code/quality/evidence/T36/codex-t36-original-app-regressions-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:14:07.738Z–2026-10-14T19:14:22.372Z exit0: t36-web-types-3. Evidence code/quality/evidence/T36/codex-t36-web-types-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:15:31.246Z–2026-10-14T19:16:00.564Z exit0: t36-web-public-shell-build-2. Evidence code/quality/evidence/T36/codex-t36-web-public-shell-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 02:18:27 +07:00: T36 adopt source-pinned fresh public PWA build with injected exact public shell list; worker is manual registration, no skipWaiting/claim/reload. Previous frozen build artifacts remain pinned; current HTML/assets/SW bytes match fresh build, env/package lock/canonical brand unchanged. Evidence code/quality/evidence/T36/web-build2-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:16:22.441Z–2026-10-14T19:18:27.090Z exit0: t36-web-build-adoption-2. Evidence code/quality/evidence/T36/codex-t36-web-build-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:19:17.465Z–2026-10-14T19:19:56.723Z exit0: t36-room-call-regressions-1. Evidence code/quality/evidence/T36/codex-t36-room-call-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:20:06.285Z–2026-10-14T19:21:07.294Z exit1: headed-t36-pwa-1. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:22:32.823Z–2026-10-14T19:23:37.544Z exit1: headed-t36-pwa-2. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:25:30.870Z–2026-10-14T19:26:30.205Z exit1: headed-t36-pwa-3. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:29:03.553Z–2026-10-14T19:30:04.866Z exit1: headed-t36-pwa-4. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:32:13.852Z–2026-10-14T19:32:56.219Z exit1: headed-t36-pwa-5. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:34:54.980Z–2026-10-14T19:35:57.472Z exit1: headed-t36-pwa-6. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:38:10.048Z–2026-10-14T19:38:41.641Z exit0: headed-t36-pwa-update-1. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-update-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:40:14.103Z–2026-10-14T19:41:06.440Z exit1: headed-t36-pwa-7. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:42:27.921Z–2026-10-14T19:43:35.256Z exit1: headed-t36-pwa-8. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-8.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:47:52.938Z–2026-10-14T19:47:59.421Z exit1: t36-fg-transport-status-red-15. Evidence code/quality/evidence/T36/codex-t36-fg-transport-status-red-15.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:48:15.016Z–2026-10-14T19:48:23.070Z exit0: t36-pwa-transport-status-green-16. Evidence code/quality/evidence/T36/codex-t36-pwa-transport-status-green-16.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:48:43.258Z–2026-10-14T19:48:56.914Z exit0: t36-web-types-4. Evidence code/quality/evidence/T36/codex-t36-web-types-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:49:15.231Z–2026-10-14T19:49:47.162Z exit1: t36-web-lint-1. Evidence code/quality/evidence/T36/codex-t36-web-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:50:25.821Z–2026-10-14T19:50:29.865Z exit0: t36-web-lint-2. Evidence code/quality/evidence/T36/codex-t36-web-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:50:39.670Z–2026-10-14T19:50:47.882Z exit0: t36-pwa-final-unit-17. Evidence code/quality/evidence/T36/codex-t36-pwa-final-unit-17.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:50:56.345Z–2026-10-14T19:51:19.184Z exit0: t36-web-public-shell-build-3. Evidence code/quality/evidence/T36/codex-t36-web-public-shell-build-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 02:55:09 +07:00: T36 adopt source-pinned fresh public PWA build with injected exact public shell list; worker is manual registration, no skipWaiting/claim/reload. Previous frozen build artifacts remain pinned; current HTML/assets/SW bytes match fresh build, env/package lock/canonical brand unchanged. Evidence code/quality/evidence/T36/web-build3-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:52:05.212Z–2026-10-14T19:55:09.607Z exit0: t36-web-build-adoption-3. Evidence code/quality/evidence/T36/codex-t36-web-build-adoption-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:56:02.068Z–2026-10-14T19:56:57.693Z exit0: headed-t36-pwa-9. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-9.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:57:54.469Z–2026-10-14T19:58:35.863Z exit0: t36-original-app-regressions-3. Evidence code/quality/evidence/T36/codex-t36-original-app-regressions-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:58:42.025Z–2026-10-14T19:58:55.739Z exit0: t36-web-types-5. Evidence code/quality/evidence/T36/codex-t36-web-types-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T19:59:19.220Z–2026-10-14T19:59:52.760Z exit1: headed-t36-pwa-update-2. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-update-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:02:04.862Z–2026-10-14T20:02:37.530Z exit0: headed-t36-pwa-update-3. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-update-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:04:32.447Z–2026-10-14T20:06:04.031Z exit0: headed-t36-pwa-update-4. Evidence code/quality/evidence/T36/codex-headed-t36-pwa-update-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 03:09:39 +07:00: T36 trace local implementation and actual test/native/worker-update evidence while explicitly retaining physical iPhone/Android/HTTPS/human-dialog/OS-click acceptance pending; preserve all previous traceability paragraphs and86PASS. No backend/spec/checker changes or PASS claim. Evidence code/quality/evidence/T36/traceability1-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:06:40.319Z–2026-10-14T20:09:39.615Z exit0: t36-traceability-adoption-1. Evidence code/quality/evidence/T36/codex-t36-traceability-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:10:41.012Z–2026-10-14T20:10:43.452Z exit0: t36-owned-resources-audit-1. Evidence code/quality/evidence/T36/codex-t36-owned-resources-audit-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:12:54.211Z: local integrity 36341 originals/86priorPASS/checker/env/lock/baselines/current exact gate and96fresh build files;183serial tests, actual native2Push/9checks and update5checks, final13+5fresh photos/85 total Telegram sent, owned schema/Redis/private profile cleanup and historical schema preserved. Retained failed attempts/update intermittency. Physical iPhone/Android/HTTPS/human native dialog/OS notification click missing; IN_PROGRESS, no PASS/next task/automatic public push. Evidence code/quality/evidence/T36/local-integrity-review1.json.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:10:50.892Z–2026-10-14T20:12:54.257Z exit0: t36-local-integrity-audit-1. Evidence code/quality/evidence/T36/codex-t36-local-integrity-audit-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 03:16:46 +07:00: T36 all independent local implementation/checks/integrity/owned cleanup completed. Human has no physical iPhone/Android or HTTPS origin; no mobile/native human acceptance waiver. Change only T36 trace status to BLOCKED to match imminent actual ledger blocker; preserve requirements, all prior trace and86PASS. No PASS/next task/automatic public push. Evidence code/quality/evidence/T36/blocked-traceability1-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:14:33.714Z–2026-10-14T20:16:47.060Z exit0: t36-blocked-traceability-adoption-1. Evidence code/quality/evidence/T36/codex-t36-blocked-traceability-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+### Coding and build 3 — T36 — local work completed; physical acceptance BLOCKED
+
+- Actual end 2026-10-14T20:17:17.943Z / 2026-10-15 03:17:17 +07:00. Ledger confirms BLOCKED,86priorPASS and all other rows unchanged; T36-SUPPORT-DATA remains NOT_STARTED.
+-183serial tests (51PWA/89original app/43frozen compatible room-call), lint/types/current96-file build, actual native2Push including zero FG window clients, current-source ACL/revoke/offline/authenticated DELETE-before-logout and waiting update/draft checks verified.85fresh Telegram photos sent;13owned run resources/26Redis namespaces/private profiles removed;41historical tables preserved. Failed runs and one unclassified update intermittency retained; latest two update repeats pass unchanged assertions.
+- Blocker: Chưa có iPhone/Android thật và URL HTTPS kiểm thử được chỉ định; còn thiếu nghiệm thu cài đặt, quyền native và OS notification click/focus. Chrome PC/local đã kiểm chứng không thay thế bằng chứng thiết bị thật; chưa có waiver. Không chuyển task/đổi PASS/tự push task chưa hoàn tất. Actual scope/status evidence code/quality/evidence/T36/blocked-readiness1.json and blocked-ledger-receipt1.json; original full local integrity snapshot remains preserved with its earlier IN_PROGRESS timestamp. No main migration, production publication, service purchase, Antigravity/Anti2/cockpit or1,000-call/live claim.
+
+- Coding and build 3 — T36 — actual 2026-10-14T20:17:17.062Z–2026-10-14T20:17:18.072Z exit0: t36-physical-blocker-record-1. Evidence code/quality/evidence/T36/codex-t36-physical-blocker-record-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+### Coding and build 3 — T36 — user confirms waiting for devices and HTTPS
+
+- Recorded 2026-10-15T12:05:28.2725314+07:00 (UTC+07:00); human reply explicitly selects: “Giữ thứ tự, chờ thiết bị và HTTPS”. Preserve T36 BLOCKED and T36-SUPPORT-DATA NOT_STARTED; no acceptance waiver or change to sequential gates.
+- This update records the current decision only: no application changes, new test/build run, commit/push or production publication. Evidence: code/quality/evidence/T36/user-wait-device-decision1.json. Existing local verification and frozen evidence remain as previously recorded; resume physical acceptance when real iPhone, Android and HTTPS test origin are available.
+
+### Coding and build 3 — T36 — HTTPS tunnel for human device testing
+
+- Start observed 2026-10-15 19:59:19 +07:00. Human explicitly requests configuring a temporary HTTPS tunnel and creating a usable FG test link. Continue only T36, preserve physical acceptance and prior evidence; no production publication or next task. Prepare isolated database/runtime, canonical FG build, secure real login and native Push.
+- Initial inspection: Docker daemon is stopped and cloudflared is not on PATH. Combined preparation command was rejected by automatic approval review before execution; no changes from that command. Reassess individual prerequisite actions before starting runtime. No new tests run yet.
+
+- 2026-10-15T13:01:46.774Z: T36 resumes IN_PROGRESS solely for explicitly authorized HTTPS test tunnel preparation. Prior BLOCKED row/reason preserved in code/quality/evidence/T36/https-tunnel-scope-review1.json; other rows unchanged. No acceptance waiver, next task, production activation or application-source change.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:01:46.471Z–2026-10-15T13:01:47.202Z exit0: t36-https-preparation-1. Evidence code/quality/evidence/T36/codex-t36-https-preparation-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:01:53.602Z–2026-10-15T13:05:01.256Z exit0: t36-https-entry-check-1. Evidence code/quality/evidence/T36/codex-t36-https-entry-check-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:06:13.083Z–2026-10-15T13:06:13.342Z exit0: t36-https-server-syntax-1. Evidence code/quality/evidence/T36/codex-t36-https-server-syntax-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:06:13.512Z–2026-10-15T13:06:13.662Z exit0: t36-https-headed-syntax-1. Evidence code/quality/evidence/T36/codex-t36-https-headed-syntax-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T20:10:36.2480565+07:00: Human reports iPhone 15 Plus / iOS 27 for upcoming physical acceptance. Declaration only, not observed installation/permission/delivery/click evidence; Android still unspecified. Receipt code/quality/evidence/T36/physical-device-declaration2.json.
+
+
+- 2026-10-15T13:11:48.093Z: HTTPS run1 failed at native Push because public index response was no-store; actual header diagnosis preserved. Real login/Secure HttpOnly cookie and HTTP privacy/CSRF assertions passed first. Revised isolated server2 public index cache header only; kept API/private responses no-store and preserved executed server1/driver1. Driver2 exact native titles match existing approved invite/reminder phrases and require both. No application/checker changes or relaxed deadlines.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:08:53.905Z–2026-10-15T13:10:14.211Z exit1: headed-t36-https-check-1. Evidence code/quality/evidence/T36/codex-headed-t36-https-check-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:11:47.976Z–2026-10-15T13:11:48.116Z exit0: t36-https-revision-2. Evidence code/quality/evidence/T36/codex-t36-https-revision-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:08:06.542Z–2026-10-15T13:08:06.718Z exit0: t36-https-headed-syntax-2. Evidence code/quality/evidence/T36/codex-t36-https-headed-syntax-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:11:58.577Z–2026-10-15T13:11:58.707Z exit0: t36-https-server-syntax-2. Evidence code/quality/evidence/T36/codex-t36-https-server-syntax-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:11:58.823Z–2026-10-15T13:11:58.942Z exit0: t36-https-headed-syntax-3. Evidence code/quality/evidence/T36/codex-t36-https-headed-syntax-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:12:31.248Z–2026-10-15T13:15:18.376Z exit0: headed-t36-https-check-2. Evidence code/quality/evidence/T36/codex-headed-t36-https-check-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:15:51.673Z–2026-10-15T13:17:53.682Z exit0: t36-https-final-gate-1. Evidence code/quality/evidence/T36/codex-t36-https-final-gate-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+### Coding and build 3 — T36 — HTTPS link ready; physical acceptance pending
+
+- End 2026-10-15T13:18:44.264Z / 2026-10-15 20:18:44 +07:00. Actual isolated FG HTTPS link https://referenced-suffering-instrumentation-comments.trycloudflare.com verified with 6 headed/HTTP groups: secure real password login, current user, canonical FG manifest/SW, private API/CSRF/control boundaries, native Push subscription, two actual background invite/reminder receipts,390px viewport and logout. This is desktop Chrome verification, not physical iPhone/Android or OS notification-click acceptance.
+- Failed HTTPS run1 preserved; runtime2 fixes only public index cache header. Application sources/canonical compiled build/env/lock and86priorPASS unchanged. 6/6 final-run Telegram photos confirmed sent at handoff audit. Evidence code/quality/evidence/T36/https-test-handoff1.json. Credentials remain only in ignored local runtime, never docs/evidence.
+- Human reports iPhone15Plus/iOS27; physical actions not observed yet, Android unspecified. T36 remains BLOCKED for those receipts, T36-SUPPORT-DATA NOT_STARTED. Server/tunnel deliberately remain running for human testing and expire 2026-10-16T13:12:03.083Z; no production publication, main migration, incomplete task commit/push or next task.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:18:42.317Z–2026-10-15T13:18:44.863Z exit0: t36-https-handoff-1. Evidence code/quality/evidence/T36/codex-t36-https-handoff-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T13:26:06.698Z: T36 human reports FG successfully added to the iPhone Home Screen. Human receipt code/quality/evidence/T36/iphone-home-screen-human-receipt1.json confirms this installation step only; standalone launch, native permission, background delivery/click/focus and Android acceptance remain unconfirmed. No PASS or next task.
+
+- 2026-10-15T13:30:02.235Z: Human reports correct iPhone notification content/all good and all Android checks good. Read-only backend correlation confirms real iOS login on iphone fixture, but no active Push subscriptions and producers/delivery history still contains only the earlier pc test case/two accepted deliveries. Preserve human reports without inventing a matched mobile Push run; ask which origin/account and Android model/OS. Evidence code/quality/evidence/T36/human-mobile-report2.json. T36 remains BLOCKED, no next task/PASS/push.
+
+- 2026-10-15T13:32:07.140Z: Human confirms exact active HTTPS origin and per-device FG iPhone/FG Android accounts; Android model reported Redmi Pad (OS not supplied). Receipt code/quality/evidence/T36/mobile-origin-device-confirmation3.json. Rechecked backend correlation separately: 0 active subscriptions, producer actors pc, 2 delivery attempts. No invented matched phone Push receipts or PASS. Earlier inline recording attempt failed to parse before writes; this file preserves the successful actual observation.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:32:07.049Z–2026-10-15T13:32:07.227Z exit0: t36-mobile-confirmation-3. Evidence code/quality/evidence/T36/codex-t36-mobile-confirmation-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T13:34:06.140Z: Human reports exact FG Push registered status. Codex investigates API controller/database and canonical frontend acknowledgment path before proposing any fix. Independent read-only lookup checks only exact owned tester IDs across tables, without endpoints/keys/session tokens; receipt code/quality/evidence/T36/mobile-subscription-diagnosis4.json. No application/runtime change or PASS. Earlier inline diagnostic failed at shell quoting before execution; this script records actual completed lookup.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:34:05.576Z–2026-10-15T13:34:06.187Z exit0: t36-mobile-diagnosis-4. Evidence code/quality/evidence/T36/codex-t36-mobile-diagnosis-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T13:35:21.393Z: T36 static registration-path review and direct owned-ID lookup remain inconsistent with human subscribed-state report; no root cause proven. Source review code/quality/evidence/T36/mobile-registration-source-review4.json. Request one actual device view/transition for correlation; preserve BLOCKED and prior evidence, no speculative application change or repeat PC regression.
+
+### Coding and build 3 — T36 — human-directed final closure
+
+- Start 2026-10-15T13:40:07.333Z / 2026-10-15 20:40:07 +07:00. Human directs “chốt t36 tiếp tục làm” after successful manual iPhone15Plus/iOS27 and Redmi Pad reports, correct origin/accounts and subscribed UI. Preserve these as human manual acceptance; backend correlation remains unverified, Android version unknown and no phone screenshot provided. No fabricated mobile provider/OS receipt. Explicit acceptance instruction and prior BLOCKED row frozen in code/quality/evidence/T36/human-final-acceptance1.json.
+- Resume IN_PROGRESS for scoped verification, review, gate, truthful acceptance closure and required public Git backup. Preserve checker/spec/all86priorPASS/failed evidence; do not open next task before valid closure and verified push.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:40:06.683Z–2026-10-15T13:40:07.619Z exit0: t36-human-closure-preparation-1. Evidence code/quality/evidence/T36/codex-t36-human-closure-preparation-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:40:07.965Z–2026-10-15T13:40:56.311Z exit0: t36-closure-pwa-tests-1. Evidence code/quality/evidence/T36/codex-t36-closure-pwa-tests-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:41:22.253Z–2026-10-15T13:42:06.418Z exit0: t36-closure-original-regressions-1. Evidence code/quality/evidence/T36/codex-t36-closure-original-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:42:20.256Z–2026-10-15T13:42:48.723Z exit0: t36-closure-room-call-1. Evidence code/quality/evidence/T36/codex-t36-closure-room-call-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:43:30.326Z–2026-10-15T13:43:58.268Z exit0: t36-closure-lint-1. Evidence code/quality/evidence/T36/codex-t36-closure-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:43:58.480Z–2026-10-15T13:44:16.731Z exit0: t36-closure-types-1. Evidence code/quality/evidence/T36/codex-t36-closure-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:44:16.856Z–2026-10-15T13:44:17.275Z exit0: t36-https-profile-cleanup-1. Evidence code/quality/evidence/T36/codex-t36-https-profile-cleanup-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — exact review 2026-10-15 20:47:01 +07:00: Human explicitly directs T36 closure based on reported successful physical manual acceptance after disclosed backend-correlation gap. Update only T36 trace to current evidence and limitations; no invented mobile provider receipt, changed requirement/checker or prior PASS. Closure remains governed by final acceptance review and ledger. Evidence code/quality/evidence/T36/final-traceability2-adoption-review.json; actual task acceptance pending,86priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:44:53.498Z–2026-10-15T13:47:01.804Z exit0: t36-final-traceability-adoption-2. Evidence code/quality/evidence/T36/codex-t36-final-traceability-adoption-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T13:50:15.701Z: Final T36 integrity review: 36341 original files /86priorPASS /checker/env/lock/baselines/exact gate preserved;183fresh serial tests, current96-file source-pinned build, local desktop native/update and HTTPS checks, 94 actual Telegram sent receipts and 41 historical tables unchanged. Human manual acceptance and disclosed mobile correlation limitation remain separate from automated desktop proof. Final review code/quality/evidence/T36/final-integrity-review2.json; ledger closure pending.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:48:05.559Z–2026-10-15T13:50:15.748Z exit0: t36-final-integrity-audit-2. Evidence code/quality/evidence/T36/codex-t36-final-integrity-audit-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- 2026-10-15T13:50:33.767Z: Codex final acceptance review code/quality/evidence/T36/acceptance-review.md accepts183fresh tests/lint/types/pinned96-file build/native/update/HTTPS/current integrity and direct human manual closure after disclosure. Mobile provider correlation remains unverified and Android OS/photos absent; not converted into automated mobile proof. Ledger closure and public backup pending.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:50:33.603Z–2026-10-15T13:50:33.794Z exit0: t36-final-acceptance-review-2. Evidence code/quality/evidence/T36/codex-t36-final-acceptance-review-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — acceptance closure 2026-10-15T13:50:34.691Z: PASS on reviewed183fresh serial tests/lint/types/pinned96-file build/real desktop native/update/HTTPS94Telegram/86priorPASS and explicit human physical manual acceptance after disclosure. Mobile backend correlation remains unverified, no phone screenshot and Android OS unknown; never claim server-confirmed mobile Push. Failed/BLOCKED evidence preserved. Frozen1113outputs. Public privacy/normal master backup pending; T36-SUPPORT-DATA not opened. Evidence code/quality/evidence/T36/closure.json.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:50:34.007Z–2026-10-15T13:50:46.335Z exit0: t36-reviewed-close-1. Evidence code/quality/evidence/T36/codex-t36-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.

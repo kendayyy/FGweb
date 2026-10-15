@@ -1,5 +1,6 @@
 import {InitialLoading} from './components/ui/InitialLoading.js';
 import React from 'react';
+import {PwaProvider,PwaControls} from './pwa/PwaProvider.js';
 import {FGLogo} from './components/ui/FGLogo.js';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import {AuthHeader} from './features/auth/AuthFields.js';
@@ -16,7 +17,7 @@ import {TeamActivityPage} from './features/invitations/TeamActivityPage.js';
 import {CryptoDeviceProvider, CryptoDeviceSettings} from './features/crypto/CryptoDeviceProvider.js';
 import {NotificationsProvider,NotificationBell,NotificationsPage,NotificationTarget} from './features/notifications/index.js';
 
-export const App: React.FC = () => <ThemeProvider><CryptoDeviceProvider><NotificationsProvider><AppContent/></NotificationsProvider></CryptoDeviceProvider></ThemeProvider>;
+export const App: React.FC = () => <ThemeProvider><PwaProvider><CryptoDeviceProvider><NotificationsProvider><AppContent/></NotificationsProvider></CryptoDeviceProvider></PwaProvider></ThemeProvider>;
 const AppContent: React.FC = () => {
   const {user,isLoading,isError}=useAuth();
   const location=useLocation();
@@ -92,6 +93,7 @@ const AppContent: React.FC = () => {
 
         <div className="fg-app-header-actions"><ThemeSwitcher/>{user&&<NotificationBell/>}<HeaderAuthWidget /></div>
       </header>}
+      <PwaControls/>
 
       {/* Main Content Area */}
       <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>

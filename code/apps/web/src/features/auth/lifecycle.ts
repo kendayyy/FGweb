@@ -33,3 +33,11 @@ export async function runAuthCleanups(): Promise<void> {
     throw new Error(`Auth resource cleanup failed: ${errors.map((e) => e.message).join('; ')}`);
   }
 }
+
+// Authenticated per-device revoke must precede session invalidation.
+const beforeSignOutHandlers = new Set<CleanupHandler>();
+export function registerBeforeAuthSignOut(handler:CleanupHandler):()=>void{beforeSignOutHandlers.add(handler);return()=>{beforeSignOutHandlers.delete(handler);};}
+export async function runBeforeAuthSignOut():Promise<void>{
+ const errors:unknown[]=[];for(const handler of [...beforeSignOutHandlers]){try{await handler();}catch(error){errors.push(error);}}
+ if(errors.length)throw new Error('Authenticated resource revoke incomplete');
+}

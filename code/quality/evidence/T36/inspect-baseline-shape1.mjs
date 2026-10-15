@@ -1,0 +1,1 @@
+import fs from 'node:fs';const before=JSON.parse(fs.readFileSync('quality/evidence/T36/before.json'));console.log(JSON.stringify(Object.fromEntries(Object.entries(before).map(([key,value])=>[key,Array.isArray(value)?{type:'array',length:value.length}:value&&typeof value==='object'?{type:'object',keys:Object.keys(value).length}:{type:typeof value}]))));

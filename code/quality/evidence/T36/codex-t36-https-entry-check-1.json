@@ -1,0 +1,10 @@
+{
+  "command": "node --input-type=module -e import fs from 'node:fs'; import {checkGate} from './scripts/verify-task.mjs'; const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')); const task=ledger.tasks.find(t=>t.id==='T36'); checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:task.specSha256,requestedPaths:['quality/evidence/T36/https-tunnel-scope-review1.json','.runtime/t36/tunnel']}); console.log('T36 reviewed entry gate accepted; physical acceptance pending');",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-15T13:01:53.602Z",
+  "completedAt": "2026-10-15T13:05:01.256Z",
+  "exitCode": 0,
+  "signal": null,
+  "evidencePath": "quality/evidence/T36/codex-t36-https-entry-check-1.txt",
+  "evidenceSha256": "a46aee54031a3fbfe1fc5d97fdce68671ced4621cb7d316e9741fc252b3ac3bf"
+}

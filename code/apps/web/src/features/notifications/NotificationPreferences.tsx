@@ -1,3 +1,4 @@
+import {PushControls} from '../../pwa/PwaProvider.js';
 import {useEffect,useRef,useState} from 'react';import {NotificationTypeSchema,type NotificationType,type NotificationPreferencesDTO,type NotificationPreferencesPatch} from '@fg/contracts';
 import {Button} from '../../components/ui/Button.js';import {registerAuthCleanup} from '../auth/lifecycle.js';
 import {getNotificationPreferences,saveNotificationPreferences} from './api.js';
@@ -19,6 +20,7 @@ function Preferences({actorId,onSaved}:{actorId:string;onSaved:()=>Promise<void>
   finally{controllers.current.delete(controller);if(active.current&&loadVersion.current===version)setSaving(false);}
  }
  return <section className="fg-notification-preferences" aria-labelledby="notification-preferences-title"><div className="fg-notification-section-heading"><div><h2 id="notification-preferences-title">Tùy chọn thông báo</h2><p>Bật từng kênh cho từng loại thông báo.</p></div></div><p className="fg-notification-permission">{permissionStatus}</p><p className="fg-notification-help">Cài đặt website không thay quyền của trình duyệt hoặc hệ điều hành. Email chỉ dành cho lời mời và nhắc lịch chơi.</p>
+  <PushControls/>
   {error&&<p ref={errorRef} role="alert" tabIndex={-1} className="fg-notification-error">{error}</p>}
   {!draft&&!error&&<p role="status">Đang tải tùy chọn…</p>}
   {!draft&&error&&<Button variant="outline" onClick={()=>setReload(n=>n+1)}>Thử lại tùy chọn</Button>}

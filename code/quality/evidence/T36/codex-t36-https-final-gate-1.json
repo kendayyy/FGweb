@@ -1,0 +1,10 @@
+{
+  "command": "node --input-type=module -e import fs from 'node:fs'; import {checkGate} from './scripts/verify-task.mjs'; const ledger=JSON.parse(fs.readFileSync('quality/tasks.json')); const task=ledger.tasks.find(t=>t.id==='T36'); checkGate({root:process.cwd(),tasks:ledger.tasks,id:task.id,specHash:task.specSha256,requestedPaths:['quality/evidence/T36/serve-https-test2.mjs','quality/evidence/T36/check-https-headed2.mjs','.runtime/t36/tunnel']}); console.log('T36 final scope/checker/pins gate accepted; physical acceptance pending');",
+  "cwd": "E:\\FGweb\\code",
+  "startedAt": "2026-10-15T13:15:51.673Z",
+  "completedAt": "2026-10-15T13:17:53.682Z",
+  "exitCode": 0,
+  "signal": null,
+  "evidencePath": "quality/evidence/T36/codex-t36-https-final-gate-1.txt",
+  "evidenceSha256": "3747d24c525174d3ad8865e285521cfbf96c58b4bb781b9c7035d45806cb570d"
+}

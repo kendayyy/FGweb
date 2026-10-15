@@ -1,0 +1,53 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/pwa-auth-target.test.tsx (3 tests | 3 failed) 13ms
+   ❯ T36 authenticated Push revoke phase (3)
+     × runs authenticated revoke before session logout, leaving resource cleanup afterwards 6ms
+     × attempts every authenticated cleanup and reports failure without pretending revoke succeeded 1ms
+     × unregistered authenticated cleanup does not run or change post-logout handlers 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/pwa-auth-target.test.tsx > T36 authenticated Push revoke phase > runs authenticated revoke before session logout, leaving resource cleanup afterwards
+TypeError: registerBeforeAuthSignOut is not a function
+ ❯ apps/web/test/pwa-auth-target.test.tsx:7:41
+      5| describe('T36 authenticated Push revoke phase',()=>{
+      6|  it('runs authenticated revoke before session logout, leaving resource…
+      7|   const order:string[]=[];removers.push(registerBeforeAuthSignOut(asyn…
+       |                                         ^
+      8|   await runBeforeAuthSignOut();order.push('server-session-logout');awa…
+      9|   expect(order).toEqual(['authenticated-push-delete','server-session-l…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |web| apps/web/test/pwa-auth-target.test.tsx > T36 authenticated Push revoke phase > attempts every authenticated cleanup and reports failure without pretending revoke succeeded
+TypeError: registerBeforeAuthSignOut is not a function
+ ❯ apps/web/test/pwa-auth-target.test.tsx:12:36
+     10|  });
+     11|  it('attempts every authenticated cleanup and reports failure without …
+     12|   const last=vi.fn();removers.push(registerBeforeAuthSignOut(()=>{thro…
+       |                                    ^
+     13|   await expect(runBeforeAuthSignOut()).rejects.toThrow();expect(last).…
+     14|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |web| apps/web/test/pwa-auth-target.test.tsx > T36 authenticated Push revoke phase > unregistered authenticated cleanup does not run or change post-logout handlers
+TypeError: registerBeforeAuthSignOut is not a function
+ ❯ apps/web/test/pwa-auth-target.test.tsx:16:45
+     14|  });
+     15|  it('unregistered authenticated cleanup does not run or change post-lo…
+     16|   const before=vi.fn(),after=vi.fn(),remove=registerBeforeAuthSignOut(…
+       |                                             ^
+     17|   await runBeforeAuthSignOut();expect(before).not.toHaveBeenCalled();e…
+     18|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  01:51:24
+   Duration  8.34s (environment 99%, transform 1%)
+

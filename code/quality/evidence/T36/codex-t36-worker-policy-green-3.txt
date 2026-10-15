@@ -1,0 +1,34 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/pwa-worker.test.ts (11 tests | 2 failed) 84ms
+   ❯ T36 public shell and native click privacy policy (11)
+     × untrusted/private preview payload falls back to generic FG text 8ms
+     × known trusted invitation text is retained without caching any payload 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > untrusted/private preview payload falls back to generic FG text
+TypeError: notificationText is not a function
+ ❯ apps/web/src/pwa/worker-policy.ts:19:157
+
+ ❯ notificationPresentation apps/web/src/pwa/worker-policy.ts:19:147
+ ❯ apps/web/test/pwa-worker.test.ts:11:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |web| apps/web/test/pwa-worker.test.ts > T36 public shell and native click privacy policy > known trusted invitation text is retained without caching any payload
+TypeError: notificationText is not a function
+ ❯ apps/web/src/pwa/worker-policy.ts:19:157
+
+ ❯ notificationPresentation apps/web/src/pwa/worker-policy.ts:19:147
+ ❯ apps/web/test/pwa-worker.test.ts:12:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 9 passed (11)
+   Start at  01:38:35
+   Duration  1.61s (import 52%, transform 40%, tests 7%, worker 1%)
+

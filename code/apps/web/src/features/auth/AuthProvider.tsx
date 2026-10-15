@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useRef, useCallback } from 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { MeDTO } from '@fg/contracts';
 import { fetchMe, signInWithDiscord, signOutServer, validateDiscordOAuthUrl } from './api.js';
-import { runAuthCleanups } from './lifecycle.js';
+import { runAuthCleanups, runBeforeAuthSignOut } from './lifecycle.js';
 
 export interface AuthContextType {
   user: MeDTO | null;
@@ -61,6 +61,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     let serverError: Error | null = null;
     let cleanupError: Error | null = null;
+
+    try {
+      await runBeforeAuthSignOut();
+    } catch (err) {
+      cleanupError = err instanceof Error ? err : new Error(String(err));
+    }
 
     try {
       await signOutServer();

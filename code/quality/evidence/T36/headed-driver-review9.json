@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-14T19:42:25.585Z",
+  "reviewer": "Codex",
+  "sourceSha256": "95685aa049b4d8267f499859566c92c6c58b13d0f871fd61033b1c3c1ec6c318",
+  "newSha256": "393713b5baf52260e0b21118a571f44c48d35efaabde40e906e2820463f5ed62",
+  "reason": "Run7 proves two actual native notifications and zero FG window clients at background receipt. Explicit worker-message probe called WindowClient.focus outside real notificationclick lifetime, which lacks the platform window-interaction grant. Remove focus only from this test probe; currently visible FG gets real worker postMessage, while production notificationclick focus handler remains untouched and covered by unit tests. No OS click/focus acceptance claim. Add public pathname-only failure diagnostic, all ACL/delivery/logout checks retained.",
+  "unresolvedSourceFindings": [],
+  "originalRunAndProductHandlerUnchanged": true,
+  "actualOSClickStillPending": true
+}

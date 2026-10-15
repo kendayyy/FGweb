@@ -1,0 +1,92 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ |web| apps/web/test/pwa-cache-runtime.test.ts (7 tests | 6 failed) 210ms
+   ❯ T36 actual cache orchestration unit boundary (7)
+     × precache fetches only declared public resources without credentials or redirects 15ms
+     × rejects private or JSON responses and removes partial own cache 145ms
+     × offline navigation returns public shell without storing original private URL/query 24ms
+     × online navigation response is never cached even if personalized 4ms
+     × activation removes only obsolete FG public-shell caches, never other app/private storage 6ms
+     × distinct build/source identity produces distinct public cache version 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > precache fetches only declared public resources without credentials or redirects
+AssertionError: expected "vi.fn()" to be called 2 times, but got 0 times
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:6:160
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > rejects private or JSON responses and removes partial own cache
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:7:322
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > offline navigation returns public shell without storing original private URL/query
+AssertionError: expected undefined to be 200 // Object.is equality
+
+- Expected:
+200
+
++ Received:
+undefined
+
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:8:318
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > online navigation response is never cached even if personalized
+AssertionError: expected undefined to be 'Fixture personalized navigation' // Object.is equality
+
+- Expected:
+"Fixture personalized navigation"
+
++ Received:
+undefined
+
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:9:321
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > activation removes only obsolete FG public-shell caches, never other app/private storage
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:11:384
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  |web| apps/web/test/pwa-cache-runtime.test.ts > T36 actual cache orchestration unit boundary > distinct build/source identity produces distinct public cache version
+AssertionError: expected 'placeholder' not to be 'placeholder' // Object.is equality
+ ❯ apps/web/test/pwa-cache-runtime.test.ts:12:253
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  01:50:03
+   Duration  798ms (tests 48%, transform 39%, import 9%, worker 3%)
+

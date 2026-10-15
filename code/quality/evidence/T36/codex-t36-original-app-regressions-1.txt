@@ -1,0 +1,114 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/lobby.test.tsx (10 tests | 10 failed) 182ms
+   ❯ T13 approved Lobby behavior (10)
+     × GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork 89ms
+     × loads all seven games, guest sees history and cannot send 11ms
+     × changes game without mixing histories and ignores a response arriving after game switch 8ms
+     × merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50 7ms
+     × ignores old socket events after changing game and disposes its connection 8ms
+     × authenticated composer persists through API, merges server/event duplicates and renders HTML as text 14ms
+     × uses the server canonical conversation ID when it differs from the opaque Lobby ID 6ms
+     × keeps authenticated send disabled until the server resolves the conversation 11ms
+     × opens mobile game navigation, closes on game selection and Escape 12ms
+     × has accessible Chat/Find-team tabs and honest loading/error states 12ms
+ ❯ test/auth-email.test.tsx (17 tests | 17 failed) 444ms
+   ❯ AUTH02-FE email forms and honest states (17)
+     × offers both methods with labeled fields and accessible password toggle 111ms
+     × unverified signin displays failure and verification route without authenticated success 31ms
+     × registration keeps generic check-email state and never treats signup as login 25ms
+     × does not claim mail delivery from malformed HTTP200 19ms
+     × mail failure retains email and allows retry without fake sent 16ms
+     × reset without token refuses submission and offers a fresh link 14ms
+     × password settings requires current password and renders wrong-password failure 44ms
+     × Discord existing verification alone offers new email proof rather than direct set password 17ms
+     × signin response does not redirect or expose cached private data when actual identity fails 21ms
+     × forged verified query never creates a session or claims verified success 28ms
+     × mismatch retains passwords and prevents a registration request 19ms
+     × pending mail disables repeat submission and recovers after a delivery error 14ms
+     × a late signup response cannot overwrite the new login screen 17ms
+     × verification consumes the shared GET query once and never creates authenticated state 16ms
+     × expired or replayed verification is a friendly FG error with a working resend form 16ms
+     × malformed verification success does not claim the email was verified 13ms
+     × clears password inputs when the account identity changes on the same settings route 19ms
+ ❯ test/auth-admin.test.tsx (5 tests | 5 failed) 206ms
+   ❯ AUTH-ADMIN-SINGLE shared login and password policy (5)
+     × accepts email or username in the existing login card without native email validation 99ms
+     × sends the alias with credential proof only and shows genuine failed-login state 32ms
+     × keeps ordinary email signin on its native endpoint without a new composition gate 27ms
+     × rejects missing uppercase or special locally and shows the new policy 23ms
+     × accepts128 astral code points unchanged and retains generic unverified registration 21ms
+ ❯ test/auth.test.tsx (9 tests | 2 failed) 486ms
+   ❯ T09 Auth Features & Guards (9)
+     ❯ Denied OAuth / Error state and recovery (1)
+       × displays error UI when OAuth returns error parameter or API fails, allowing retry 31ms
+     ❯ Guest access & CTA (1)
+       × allows guest to view public lobby shell with Discord login CTA 7ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 34 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/auth-admin.test.tsx > AUTH-ADMIN-SINGLE shared login and password policy > accepts email or username in the existing login card without native email validation
+ FAIL  test/auth-admin.test.tsx > AUTH-ADMIN-SINGLE shared login and password policy > sends the alias with credential proof only and shows genuine failed-login state
+ FAIL  test/auth-admin.test.tsx > AUTH-ADMIN-SINGLE shared login and password policy > keeps ordinary email signin on its native endpoint without a new composition gate
+ FAIL  test/auth-admin.test.tsx > AUTH-ADMIN-SINGLE shared login and password policy > rejects missing uppercase or special locally and shows the new policy
+ FAIL  test/auth-admin.test.tsx > AUTH-ADMIN-SINGLE shared login and password policy > accepts128 astral code points unchanged and retains generic unverified registration
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > offers both methods with labeled fields and accessible password toggle
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > unverified signin displays failure and verification route without authenticated success
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > registration keeps generic check-email state and never treats signup as login
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > does not claim mail delivery from malformed HTTP200
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > mail failure retains email and allows retry without fake sent
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > reset without token refuses submission and offers a fresh link
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > password settings requires current password and renders wrong-password failure
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > Discord existing verification alone offers new email proof rather than direct set password
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > signin response does not redirect or expose cached private data when actual identity fails
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > forged verified query never creates a session or claims verified success
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > mismatch retains passwords and prevents a registration request
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > pending mail disables repeat submission and recovers after a delivery error
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > a late signup response cannot overwrite the new login screen
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > verification consumes the shared GET query once and never creates authenticated state
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > expired or replayed verification is a friendly FG error with a working resend form
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > malformed verification success does not claim the email was verified
+ FAIL  test/auth-email.test.tsx > AUTH02-FE email forms and honest states > clears password inputs when the account identity changes on the same settings route
+ FAIL  test/auth.test.tsx > T09 Auth Features & Guards > Denied OAuth / Error state and recovery > displays error UI when OAuth returns error parameter or API fails, allowing retry
+ FAIL  test/auth.test.tsx > T09 Auth Features & Guards > Guest access & CTA > allows guest to view public lobby shell with Discord login CTA
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > GAME-LOGO-FE uses local game images with full accessible game names and shared FG artwork
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > loads all seven games, guest sees history and cannot send
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > changes game without mixing histories and ignores a response arriving after game switch
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > merges duplicate realtime/reconnect history by message ID and recovers a gap beyond50
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > ignores old socket events after changing game and disposes its connection
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > authenticated composer persists through API, merges server/event duplicates and renders HTML as text
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > uses the server canonical conversation ID when it differs from the opaque Lobby ID
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > keeps authenticated send disabled until the server resolves the conversation
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > opens mobile game navigation, closes on game selection and Escape
+ FAIL  test/lobby.test.tsx > T13 approved Lobby behavior > has accessible Chat/Find-team tabs and honest loading/error states
+TypeError: window.matchMedia is not a function
+ ❯ standalone src/pwa/browser-bridge.ts:11:52
+      9|  try{return await response.json() as unknown;}catch{throw new Error('P…
+     10| }
+     11| export function standalone():boolean{return window.matchMedia('(displa…
+       |                                                    ^
+     12| export function iphoneHomeScreenRequired():boolean{return(/iPad|iPhone…
+     13| export function userGesture():boolean{return navigator.userActivation?…
+ ❯ src/pwa/PwaProvider.tsx:28:6
+ ❯ Object.react_stack_bottom_frame ../../node_modules/react-dom/cjs/react-dom-client.development.js:28656:20
+ ❯ runWithFiberInDEV ../../node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ commitHookEffectListMount ../../node_modules/react-dom/cjs/react-dom-client.development.js:13748:29
+ ❯ commitHookPassiveMountEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:13835:11
+ ❯ commitPassiveMountOnFiber ../../node_modules/react-dom/cjs/react-dom-client.development.js:16906:13
+ ❯ recursivelyTraversePassiveMountEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:16851:13
+ ❯ commitPassiveMountOnFiber ../../node_modules/react-dom/cjs/react-dom-client.development.js:17183:11
+ ❯ recursivelyTraversePassiveMountEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:16851:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/34]⎯
+
+
+ Test Files  4 failed | 4 passed (8)
+      Tests  34 failed | 55 passed (89)
+   Start at  02:10:52
+   Duration  40.87s (environment 52%, import 16%, tests 14%, transform 9%, setup 8%, worker 1%)
+
+Environment  jsdom was created 8 times · 19.35s total, 52% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
