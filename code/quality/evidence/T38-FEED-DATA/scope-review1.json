@@ -1,0 +1,57 @@
+{
+  "at": "2026-10-15T20:40:26.270Z",
+  "reviewer": "Codex",
+  "scope": [
+    "packages/contracts/src/feed.ts",
+    "packages/contracts/src/moderation.ts",
+    "packages/contracts/src/index.ts",
+    "packages/contracts/test/feed.test.ts",
+    "packages/database/src/schema/feed.ts",
+    "packages/database/src/schema/moderation.ts",
+    "packages/database/src/schema/pending-uploads.ts",
+    "packages/database/src/index.ts",
+    "packages/database/migrations/0027_community_feed.sql",
+    "packages/database/migrations/meta/_journal.json",
+    "packages/database/test/feed.test.ts",
+    "packages/contracts/dist/**",
+    "packages/database/dist/**",
+    "quality/api-contract.md",
+    "quality/spec-coverage.md",
+    "quality/evidence/T38-FEED-DATA/**",
+    ".runtime/t38-feed-data/**",
+    ".cache/t38-feed-data/**"
+  ],
+  "authorization": "User requests continued completion in approved order, Codex only; spec13/task T38-FEED-DATA and previously approved Feed mockup03.",
+  "plan": {
+    "path": "quality/evidence/T38-FEED-DATA/implementation-plan1.md",
+    "sha256": "191fa666b324643536509830549387197afd29b51b9cbbeedb1709e516075598"
+  },
+  "sources": [
+    {
+      "path": "../.doc/01-product-spec.md",
+      "sha256": "921f0d95979d5c4abb90a943b5cf8e862ef131f7558b378961ec31bb15ba967d"
+    },
+    {
+      "path": "../.doc/02-frontend-design.md",
+      "sha256": "540f51a3a85b66bb163d8bf8ce2ddba15c2c6758e8344ecd52409136eaac27f6"
+    },
+    {
+      "path": "../.doc/task.md",
+      "sha256": "29dba14c4488e3b0aa1b16e79d65dfd0b56e240293cfb2d3d676d4b8442eff19"
+    }
+  ],
+  "priorGitSync": {
+    "path": "quality/evidence/T38/github-final-sync1.json",
+    "sha256": "5c70f2f8b39274c1293baaa9fd7209fcd09c00373560a4175f051fca1f64ac76",
+    "remoteSHA": "b91430f52655a729c5733d239a18faf0f825dde9"
+  },
+  "technicalRulings": [
+    "FEED_POST requires purpose-aware existing pending image staging with legacy CHAT_IMAGE default; nullable conversation only for Feed, no private chat reclassification.",
+    "Current DATA contracts lock future producer/consumer handoffs; no Feed API/frontend runtime claim.",
+    "Composite same-post parent FK plus explicit root-only lock/check obligation in BE.",
+    "All migrations only disposable schemas; main and historical test schema remain unchanged."
+  ],
+  "preserve": 90,
+  "unresolvedSourceFindings": [],
+  "acceptancePending": true
+}

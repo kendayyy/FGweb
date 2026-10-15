@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { IdSchema, IsoDateTimeSchema } from './common.js';
 import { UserSummarySchema } from './profiles.js';
 
-export const ReportTargetTypeSchema = z.enum(['USER', 'MESSAGE']);
+export const ReportTargetTypeSchema = z.enum(['USER', 'MESSAGE', 'FEED_POST', 'FEED_COMMENT']);
 export type ReportTargetType = z.infer<typeof ReportTargetTypeSchema>;
 
 export const ReportStatusSchema = z.enum(['PENDING', 'RESOLVED', 'DISMISSED']);

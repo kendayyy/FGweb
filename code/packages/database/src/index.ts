@@ -31,3 +31,5 @@ export * from './schema/notification-delivery-receipts.js';
 export * from './schema/support.js';
 
 export * from './schema/moderation-support.js';
+
+export * from './schema/feed.js';

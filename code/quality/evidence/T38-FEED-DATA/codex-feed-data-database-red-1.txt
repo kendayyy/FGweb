@@ -1,0 +1,182 @@
+
+> @fg/database@0.1.0 test
+> vitest run test/feed.test.ts --maxWorkers=1 --no-file-parallelism
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/feed.test.ts (15 tests | 15 failed) 24988ms
+   ❯ additive Feed schema on actual PostgreSQL (15)
+     × migrates a fresh schema with all five Feed tables 14ms
+     × preserves all populated old projections through upgrade and retry with only additive defaults 269ms
+     × requires real game/author and a trimmed bounded type/body 6ms
+     × deduplicates post retry identity per author without trusting caller ids 3ms
+     × distinguishes Feed drafts from chat without weakening old ownership/context/MIME 4ms
+     × binds each processed image to the exact post author and caps positions at four 3ms
+     × rejects duplicate positions, oversize/non-WebP images and traversal filenames 4ms
+     × makes concurrent two-connection PUT-like retries one durable relation 4ms
+     × keeps like foreign keys tied to real people/posts 4ms
+     × enforces same-post parent FK and prevents self-reference 4ms
+     × bounds comments and deduplicates per-author/post retry identity 3ms
+     × extends report FK/shape for posts/comments while rejecting mixed or nonexistent targets 3ms
+     × retains deleted sources/replies and records an exact real-actor moderation audit 3ms
+     × rolls back image consumption and post tombstone with its audit 3ms
+     × indexes the stable feed/comment tuple and each supported game/type filter 37ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 15 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > migrates a fresh schema with all five Feed tables
+AssertionError: expected null to be 'feed_posts' // Object.is equality
+
+- Expected:
+"feed_posts"
+
++ Received:
+null
+
+ ❯ test/feed.test.ts:14:241
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > preserves all populated old projections through upgrade and retry with only additive defaults
+error: column "purpose" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/feed.test.ts:15:271
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > requires real game/author and a trimmed bounded type/body
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:16:75
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > deduplicates post retry identity per author without trusting caller ids
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/feed.test.ts:17:107
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > distinguishes Feed drafts from chat without weakening old ownership/context/MIME
+error: column "purpose" of relation "pending_image_uploads" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/feed.test.ts:18:98
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > binds each processed image to the exact post author and caps positions at four
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:19:104
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > rejects duplicate positions, oversize/non-WebP images and traversal filenames
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:20:103
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > makes concurrent two-connection PUT-like retries one durable relation
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:21:95
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > keeps like foreign keys tied to real people/posts
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:22:75
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > enforces same-post parent FK and prevents self-reference
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:23:82
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > bounds comments and deduplicates per-author/post retry identity
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:24:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > extends report FK/shape for posts/comments while rejecting mixed or nonexistent targets
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:25:113
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > retains deleted sources/replies and records an exact real-actor moderation audit
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:26:106
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > rolls back image consumption and post tombstone with its audit
+error: relation "feed_posts" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ post test/feed.test.ts:7:78
+
+ ❯ test/feed.test.ts:27:88
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/15]⎯
+
+ FAIL  test/feed.test.ts > additive Feed schema on actual PostgreSQL > indexes the stable feed/comment tuple and each supported game/type filter
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/feed.test.ts:28:464
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/15]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  15 failed (15)
+   Start at  03:45:17
+   Duration  30.07s (tests 84%, import 15%, transform 1%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\database
+npm error workspace @fg/database@0.1.0
+npm error location E:\FGweb\code\packages\database
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/feed.test.ts --maxWorkers=1 --no-file-parallelism

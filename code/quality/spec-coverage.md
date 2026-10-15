@@ -277,3 +277,12 @@ Validation: 74 new DOM tests within the final 455-test web regression; 57 native
 The two frozen old call/room tests use reviewed compatibility copies, preserving original assertions; originals and failed runs remain unchanged. The successful support run's first 1440-light capture shows the real initial loader; stable 1440-light evidence is explicitly from the preceding run with identical support/UI sources. Other seven final viewport/theme captures show stable content. Telegram delivery receipts are audited separately from UI assertions.
 
 Private decrypted retraction has DOM integration coverage and backend native ACL coverage; the cross-window headed deletion fixture is explicitly legacy compatibility history, not an E2EE or physical-device proof. No real kingame provisioning, main migration, production activation or 1,000-call capacity claim. See quality/evidence/T38/acceptance-review.md and final-integrity-review1.json.
+
+
+## T38-FEED-DATA — spec13 data checkpoint
+
+Strict shared Feed contracts/registry cover public projections, approved game/type filters, plain text limits, four owned image identities, retry keys, stable cursors/pages, counts/liked state, one-level reply handoff, tombstone DTOs and existing upload/report extensions. Migration0027 and matching Drizzle schema preserve legacy chat/report/support rows while adding purpose-aware drafts and relational Feed constraints/indexes/audits.
+
+Evidence:336/336 contracts tests (24new Feed groups),16/16 actual PostgreSQL Feed migration/constraint tests and6/6 unchanged-assertion owned legacy chat-upload regressions;358 serialized tests without duplicate focused runs. Fresh/pre0027 upgrade/retry, old-column fingerprints/defaults, two-connection like collision, FK/image caps, legacy USER/MESSAGE report compatibility, soft-delete/audit/rollback and owned cleanup are verified. Type/lint/source-pinned compiled package evidence and final integrity live under quality/evidence/T38-FEED-DATA/.
+
+This is the contracts/database checkpoint. Real Feed API/current authority/root-depth checks, processing/storage/cleanup/public asset ACL and moderation/report behavior remain T38-FEED-BE; actual UI/mockup03 and headed screenshots remain T38-FEED-FE. DATA neither applies main migrations nor claims future acceptance. Voice/live/PWA/email and1,000 concurrent media target remain unchanged.

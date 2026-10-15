@@ -1,0 +1,2 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const d='quality/evidence/T38-FEED-DATA',original=fs.readFileSync('quality/evidence/T38/build-source-sandbox1.mjs','utf8'),next=original.replaceAll('quality/evidence/T38/','quality/evidence/T38-FEED-DATA/');assert.notEqual(next,original);fs.writeFileSync(d+'/build-source-sandbox1.mjs',next,{flag:'wx'});console.log('Prepared owned source-pinned contracts/database builds; not executed.');

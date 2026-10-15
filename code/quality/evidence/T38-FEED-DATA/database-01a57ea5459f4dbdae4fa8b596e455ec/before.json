@@ -1,0 +1,1087 @@
+{
+  "at": "2026-10-15T20:45:39.311Z",
+  "schema": "t38_feed_data_legacy_01a57ea5459f4dbdae4fa8b596e455ec",
+  "oldColumns": {
+    "account": [
+      "id",
+      "account_id",
+      "provider_id",
+      "user_id",
+      "access_token",
+      "refresh_token",
+      "id_token",
+      "access_token_expires_at",
+      "refresh_token_expires_at",
+      "scope",
+      "password",
+      "created_at",
+      "updated_at"
+    ],
+    "active_play_slots": [
+      "user_id",
+      "play_session_id",
+      "session_state",
+      "slot_index",
+      "created_at"
+    ],
+    "admin_actions": [
+      "id",
+      "actor_id",
+      "target_user_id",
+      "action",
+      "reason",
+      "created_at"
+    ],
+    "attachments": [
+      "id",
+      "message_id",
+      "conversation_id",
+      "url",
+      "file_name",
+      "file_size",
+      "mime_type",
+      "created_at",
+      "encryption_mode",
+      "crypto_envelope"
+    ],
+    "blocks": [
+      "id",
+      "blocker_id",
+      "blocked_id",
+      "created_at"
+    ],
+    "call_admissions": [
+      "id",
+      "call_member_id",
+      "session_id",
+      "created_at",
+      "expires_at",
+      "connected_at",
+      "disconnected_at",
+      "revoked_at"
+    ],
+    "call_groups": [
+      "id",
+      "room_id",
+      "state",
+      "created_at",
+      "ended_at"
+    ],
+    "call_members": [
+      "id",
+      "call_group_id",
+      "room_id",
+      "user_id",
+      "seat_index",
+      "is_muted",
+      "joined_at",
+      "left_at",
+      "call_state",
+      "active"
+    ],
+    "call_publish_slots": [
+      "id",
+      "call_group_id",
+      "user_id",
+      "ordinal",
+      "is_call_active",
+      "created_at"
+    ],
+    "call_restrictions": [
+      "id",
+      "call_group_id",
+      "target_user_id",
+      "restriction_type",
+      "issued_by",
+      "reason",
+      "created_at"
+    ],
+    "chat_crypto_cohort_members": [
+      "cohort_id",
+      "conversation_id",
+      "user_id"
+    ],
+    "chat_crypto_devices": [
+      "user_id",
+      "device_id",
+      "device_keys",
+      "ed25519_key",
+      "curve25519_key",
+      "created_at",
+      "revoked_at"
+    ],
+    "chat_crypto_history_cohorts": [
+      "id",
+      "conversation_id",
+      "verified_at",
+      "verification_basis"
+    ],
+    "chat_crypto_identity_keys": [
+      "user_id",
+      "public_keys",
+      "revision",
+      "updated_at"
+    ],
+    "chat_crypto_legacy_attestations": [
+      "candidate_id",
+      "cohort_id",
+      "user_id",
+      "device_id",
+      "attestation",
+      "created_at"
+    ],
+    "chat_crypto_legacy_candidate_images": [
+      "candidate_id",
+      "attachment_id",
+      "draft_id",
+      "plaintext_sha256",
+      "ciphertext_sha256"
+    ],
+    "chat_crypto_legacy_candidates": [
+      "id",
+      "message_id",
+      "conversation_id",
+      "cohort_id",
+      "membership_revision",
+      "original_sha256",
+      "envelope_sha256",
+      "importer_user_id",
+      "importer_device_id",
+      "envelope",
+      "prepared_at"
+    ],
+    "chat_crypto_legacy_migrations": [
+      "message_id",
+      "conversation_id",
+      "cohort_id",
+      "original_sha256",
+      "state",
+      "prepared_at",
+      "reconciled_at"
+    ],
+    "chat_crypto_legacy_stage_objects": [
+      "stage_id",
+      "message_id",
+      "candidate_id",
+      "attachment_id",
+      "draft_id",
+      "plaintext_sha256",
+      "ciphertext_sha256",
+      "cleanup_state",
+      "removed_at"
+    ],
+    "chat_crypto_legacy_stage_sources": [
+      "stage_id",
+      "message_id",
+      "candidate_id",
+      "cohort_id",
+      "conversation_id",
+      "membership_revision",
+      "original_sha256",
+      "envelope_sha256"
+    ],
+    "chat_crypto_legacy_stages": [
+      "id",
+      "conversation_id",
+      "seed_cohort_id",
+      "reviewer_user_id",
+      "reviewer_device_id",
+      "membership_revision",
+      "next_live_revision",
+      "source_count",
+      "attachment_count",
+      "required_claims",
+      "manifest_sha256",
+      "phase",
+      "created_at",
+      "converted_at",
+      "completed_at"
+    ],
+    "chat_crypto_membership_intervals": [
+      "id",
+      "conversation_id",
+      "user_id",
+      "start_revision",
+      "end_revision",
+      "joined_at",
+      "left_at"
+    ],
+    "chat_crypto_one_time_keys": [
+      "user_id",
+      "device_id",
+      "key_id",
+      "signed_key",
+      "created_at",
+      "claimed_at"
+    ],
+    "chat_crypto_outbound_sessions": [
+      "session_id",
+      "conversation_id",
+      "sender_user_id",
+      "sender_device_id",
+      "membership_revision",
+      "created_at"
+    ],
+    "chat_crypto_protocol_events": [
+      "id",
+      "conversation_id",
+      "membership_revision",
+      "sender_user_id",
+      "sender_device_id",
+      "recipient_user_id",
+      "recipient_device_id",
+      "transaction_id",
+      "event",
+      "created_at",
+      "expires_at",
+      "acknowledged_at",
+      "cohort_id"
+    ],
+    "chat_crypto_protocol_outbox": [
+      "id",
+      "to_device_event_id",
+      "verification_event_id",
+      "created_at",
+      "delivered_at"
+    ],
+    "chat_crypto_recovery_backups": [
+      "user_id",
+      "backup_version",
+      "ciphertext",
+      "updated_at"
+    ],
+    "chat_crypto_report_audit": [
+      "id",
+      "actor_id",
+      "report_id",
+      "action",
+      "attachment_id",
+      "created_at"
+    ],
+    "chat_crypto_report_evidence": [
+      "id",
+      "report_id",
+      "reporter_id",
+      "consented_at",
+      "envelope",
+      "source",
+      "created_at",
+      "expires_at"
+    ],
+    "chat_crypto_report_upload_sources": [
+      "upload_id",
+      "source_message_id",
+      "retry_fingerprint"
+    ],
+    "chat_crypto_state": [
+      "conversation_id",
+      "mode",
+      "membership_revision",
+      "migration_state",
+      "history_status",
+      "updated_at"
+    ],
+    "chat_crypto_to_device_events": [
+      "id",
+      "conversation_id",
+      "membership_revision",
+      "sender_user_id",
+      "sender_device_id",
+      "recipient_user_id",
+      "recipient_device_id",
+      "transaction_id",
+      "content",
+      "created_at",
+      "expires_at",
+      "acknowledged_at",
+      "cohort_id"
+    ],
+    "chat_crypto_upload_drafts": [
+      "id",
+      "uploader_id",
+      "conversation_id",
+      "device_id",
+      "client_upload_id",
+      "membership_revision",
+      "encryption_mode",
+      "object_key",
+      "ciphertext_size",
+      "ciphertext_sha256",
+      "envelope",
+      "message_id",
+      "report_evidence_id",
+      "created_at",
+      "expires_at",
+      "consumed_at",
+      "cohort_id"
+    ],
+    "conversation_members": [
+      "id",
+      "conversation_id",
+      "user_id",
+      "joined_at"
+    ],
+    "conversations": [
+      "id",
+      "kind",
+      "lobby_id",
+      "user1_id",
+      "user2_id",
+      "created_at",
+      "updated_at"
+    ],
+    "external_lives": [
+      "id",
+      "call_group_id",
+      "provider",
+      "url",
+      "title",
+      "configured_by",
+      "is_call_active",
+      "created_at",
+      "video_id",
+      "channel_name"
+    ],
+    "friend_requests": [
+      "id",
+      "sender_id",
+      "receiver_id",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "friendships": [
+      "id",
+      "user1_id",
+      "user2_id",
+      "created_at"
+    ],
+    "game_interests": [
+      "id",
+      "user_id",
+      "game_id",
+      "created_at"
+    ],
+    "game_profiles": [
+      "id",
+      "user_id",
+      "game_id",
+      "in_game_name",
+      "rank",
+      "role",
+      "play_hours",
+      "play_style",
+      "created_at",
+      "updated_at"
+    ],
+    "games": [
+      "id",
+      "title",
+      "description",
+      "icon_url",
+      "banner_url",
+      "created_at",
+      "updated_at"
+    ],
+    "invitations": [
+      "id",
+      "target_type",
+      "sender_id",
+      "receiver_id",
+      "room_id",
+      "play_session_id",
+      "status",
+      "created_at",
+      "recipient_accepted_at"
+    ],
+    "join_requests": [
+      "id",
+      "recruitment_id",
+      "applicant_id",
+      "status",
+      "created_at"
+    ],
+    "lobbies": [
+      "id",
+      "game_id",
+      "name",
+      "created_at",
+      "updated_at"
+    ],
+    "mentions": [
+      "id",
+      "message_id",
+      "mentioned_user_id",
+      "created_at"
+    ],
+    "messages": [
+      "id",
+      "conversation_id",
+      "sender_id",
+      "type",
+      "content",
+      "client_message_id",
+      "reply_to_id",
+      "created_at",
+      "updated_at",
+      "encryption_mode",
+      "crypto_envelope",
+      "crypto_revision"
+    ],
+    "moderation_audit": [
+      "id",
+      "actor_id",
+      "target_user_id",
+      "action",
+      "report_id",
+      "message_id",
+      "reason",
+      "created_at"
+    ],
+    "moderation_message_tombstones": [
+      "message_id",
+      "audit_id",
+      "created_at"
+    ],
+    "moderation_outbox": [
+      "id",
+      "audit_id",
+      "attempts",
+      "created_at",
+      "delivered_at"
+    ],
+    "notification_delivery_receipts": [
+      "id",
+      "outbox_id",
+      "target_hash",
+      "status",
+      "attempts",
+      "created_at",
+      "updated_at"
+    ],
+    "notification_outbox": [
+      "id",
+      "notification_id",
+      "user_id",
+      "channel",
+      "status",
+      "retry_count",
+      "max_retries",
+      "dedup_key",
+      "last_error",
+      "scheduled_at",
+      "sent_at",
+      "created_at"
+    ],
+    "notification_preferences": [
+      "id",
+      "user_id",
+      "notification_type",
+      "in_app",
+      "push",
+      "email",
+      "created_at",
+      "updated_at"
+    ],
+    "notifications": [
+      "id",
+      "user_id",
+      "type",
+      "title",
+      "body",
+      "data",
+      "is_read",
+      "dedup_key",
+      "created_at"
+    ],
+    "pending_image_uploads": [
+      "id",
+      "uploader_id",
+      "conversation_id",
+      "file_name",
+      "file_size",
+      "mime_type",
+      "created_at",
+      "expires_at"
+    ],
+    "permission_grants": [
+      "id",
+      "room_id",
+      "user_id",
+      "grantee_role",
+      "permission",
+      "granted_at",
+      "granted_by"
+    ],
+    "play_sessions": [
+      "id",
+      "room_id",
+      "host_user_id",
+      "player_capacity",
+      "timing_type",
+      "scheduled_at",
+      "state",
+      "created_at",
+      "updated_at"
+    ],
+    "profiles": [
+      "user_id",
+      "display_name",
+      "avatar_url",
+      "bio",
+      "custom_status",
+      "created_at",
+      "updated_at"
+    ],
+    "push_subscriptions": [
+      "id",
+      "user_id",
+      "endpoint",
+      "p256dh",
+      "auth",
+      "created_at"
+    ],
+    "realtime_outbox": [
+      "id",
+      "message_id",
+      "conversation_id",
+      "event_name",
+      "attempts",
+      "created_at",
+      "delivered_at"
+    ],
+    "recruitments": [
+      "id",
+      "room_id",
+      "game_id",
+      "game_title",
+      "play_session_id",
+      "title",
+      "mode",
+      "player_capacity",
+      "current_players",
+      "timing_type",
+      "scheduled_at",
+      "requirement_text",
+      "experience_name",
+      "experience_url",
+      "state",
+      "created_at",
+      "updated_at"
+    ],
+    "reports": [
+      "id",
+      "reporter_id",
+      "target_type",
+      "target_id",
+      "reported_user_id",
+      "reported_message_id",
+      "reason",
+      "details",
+      "status",
+      "created_at",
+      "updated_at"
+    ],
+    "room_members": [
+      "id",
+      "room_id",
+      "user_id",
+      "role",
+      "joined_at"
+    ],
+    "rooms": [
+      "id",
+      "name",
+      "description",
+      "game_id",
+      "owner_id",
+      "owner_role",
+      "visibility",
+      "invite_policy",
+      "player_capacity",
+      "conversation_id",
+      "conversation_kind",
+      "created_at",
+      "updated_at"
+    ],
+    "session": [
+      "id",
+      "expires_at",
+      "token",
+      "created_at",
+      "updated_at",
+      "ip_address",
+      "user_agent",
+      "user_id"
+    ],
+    "support_audit": [
+      "id",
+      "request_id",
+      "actor_id",
+      "actor_role",
+      "action",
+      "from_status",
+      "to_status",
+      "request_version",
+      "note_id",
+      "created_at"
+    ],
+    "support_messages": [
+      "id",
+      "request_id",
+      "sequence",
+      "author_role",
+      "author_id",
+      "client_message_id",
+      "body",
+      "created_at"
+    ],
+    "support_notes": [
+      "id",
+      "request_id",
+      "author_id",
+      "client_note_id",
+      "body",
+      "created_at",
+      "updated_at"
+    ],
+    "support_outbox": [
+      "id",
+      "ordinal",
+      "request_id",
+      "kind",
+      "message_id",
+      "note_id",
+      "attempts",
+      "created_at",
+      "delivered_at"
+    ],
+    "support_read_cursors": [
+      "request_id",
+      "reader_id",
+      "reader_role",
+      "last_read_message_id",
+      "last_read_sequence",
+      "read_at"
+    ],
+    "support_requests": [
+      "id",
+      "owner_id",
+      "client_request_id",
+      "kind",
+      "title",
+      "status",
+      "version",
+      "last_message_sequence",
+      "created_at",
+      "updated_at",
+      "last_activity_at",
+      "resolved_at"
+    ],
+    "team_members": [
+      "id",
+      "play_session_id",
+      "user_id",
+      "slot_index",
+      "player_capacity",
+      "is_host",
+      "joined_at"
+    ],
+    "user": [
+      "id",
+      "name",
+      "email",
+      "email_verified",
+      "image",
+      "created_at",
+      "updated_at"
+    ],
+    "verification": [
+      "id",
+      "identifier",
+      "value",
+      "expires_at",
+      "created_at",
+      "updated_at"
+    ],
+    "webhook_events": [
+      "id",
+      "event_id",
+      "event_type",
+      "payload",
+      "processed_at"
+    ]
+  },
+  "fingerprint": [
+    {
+      "table": "account",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "active_play_slots",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "admin_actions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "attachments",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "blocks",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "call_admissions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "call_groups",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "call_members",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "call_publish_slots",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "call_restrictions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_cohort_members",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_devices",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_history_cohorts",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_identity_keys",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_attestations",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_candidate_images",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_candidates",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_migrations",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_stage_objects",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_stage_sources",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_legacy_stages",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_membership_intervals",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_one_time_keys",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_outbound_sessions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_protocol_events",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_protocol_outbox",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_recovery_backups",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_report_audit",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_report_evidence",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_report_upload_sources",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_state",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_to_device_events",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "chat_crypto_upload_drafts",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "conversation_members",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "conversations",
+      "count": 1,
+      "digest": "fcd68b16247feee972a5bb46f28dcd64"
+    },
+    {
+      "table": "external_lives",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "friend_requests",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "friendships",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "game_interests",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "game_profiles",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "games",
+      "count": 1,
+      "digest": "34318e403a7fbc6a09ee5ee321b70ed0"
+    },
+    {
+      "table": "invitations",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "join_requests",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "lobbies",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "mentions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "messages",
+      "count": 1,
+      "digest": "b34b5bdadcaf783caa59132c477fa57f"
+    },
+    {
+      "table": "moderation_audit",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "moderation_message_tombstones",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "moderation_outbox",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "notification_delivery_receipts",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "notification_outbox",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "notification_preferences",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "notifications",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "pending_image_uploads",
+      "count": 1,
+      "digest": "a79cfd50071aee3c33305fe19b7bcc01"
+    },
+    {
+      "table": "permission_grants",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "play_sessions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "profiles",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "push_subscriptions",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "realtime_outbox",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "recruitments",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "reports",
+      "count": 1,
+      "digest": "e047b07be3825c9d341fc707706253b3"
+    },
+    {
+      "table": "room_members",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "rooms",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "session",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_audit",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_messages",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_notes",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_outbox",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_read_cursors",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "support_requests",
+      "count": 1,
+      "digest": "c9c96d6dcf081ae2e43ee57ddce66a1e"
+    },
+    {
+      "table": "team_members",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "user",
+      "count": 3,
+      "digest": "1f31547edf5750d5b426f9e059e4008a"
+    },
+    {
+      "table": "verification",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "table": "webhook_events",
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+  ]
+}

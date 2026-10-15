@@ -1,0 +1,37 @@
+{
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Actual PostgreSQL15RED confirms missing Feed tables, purpose column/report targets/indexes. Add migration0027 and matching Drizzle schema/journal; preserve all pre0027 columns/rows with CHAT_IMAGE default, precise Feed image ownership/position, concurrent-like unique key, same-post parent/report/audit FKs. No main migration/API/FE activation; root-only service locking and image cleanup/public ACL remain explicit BE handoff.",
+  "files": [
+    {
+      "path": "packages/database/src/index.ts",
+      "proposed": "quality/evidence/T38-FEED-DATA/proposed-database/packages/database/src/index.ts",
+      "beforeSha256": "58fe6606e66ca0d915a1d25c1974582b012a848afeb70cc09b09a55bd2985041",
+      "afterSha256": "aa05588b9508fca1b27c4e09b476fe6e99bc417b0f92aa964e57470f4e828783"
+    },
+    {
+      "path": "packages/database/src/schema/pending-uploads.ts",
+      "proposed": "quality/evidence/T38-FEED-DATA/proposed-database/packages/database/src/schema/pending-uploads.ts",
+      "beforeSha256": "03c2a92fd79ab522af8a7928dc9ac9349e13e0314f61bfa44f186f106a915981",
+      "afterSha256": "4fce2083e2b4edd87d7a41f85c3177ddba8c73807aec55ab5eb1d6c31c5f9429"
+    },
+    {
+      "path": "packages/database/src/schema/moderation.ts",
+      "proposed": "quality/evidence/T38-FEED-DATA/proposed-database/packages/database/src/schema/moderation.ts",
+      "beforeSha256": "9bf1e48f3c1a5f119108525c05b15493677de8061de9718d1d199e73e447466b",
+      "afterSha256": "7fb3e2295098aee2c3013d618325222a48ed79c74c6e199da74361b71af180c9"
+    },
+    {
+      "path": "packages/database/migrations/meta/_journal.json",
+      "proposed": "quality/evidence/T38-FEED-DATA/proposed-database/packages/database/migrations/meta/_journal.json",
+      "beforeSha256": "644f1c380308f7f85a45f66eef6c0e84ff913f8b8a411600752811d293317948",
+      "afterSha256": "85c6cb2e6fb8daf8d2305180593d436b837411879f42fdfbbceab27ab2c4b173"
+    },
+    {
+      "path": "packages/database/migrations/0027_community_feed.sql",
+      "proposed": "quality/evidence/T38-FEED-DATA/proposed-database/packages/database/migrations/0027_community_feed.sql",
+      "beforeSha256": null,
+      "afterSha256": "16e620676c39bc0afccf7ed0d7a6078d9c225bef4288d60523551cdcd1bd97bb"
+    }
+  ]
+}

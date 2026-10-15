@@ -1,0 +1,259 @@
+
+> @fg/contracts@0.1.0 test
+> vitest run test/feed.test.ts --maxWorkers=1 --no-file-parallelism
+
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/feed.test.ts (24 tests | 24 failed) 70ms
+   ❯ Feed shared public contracts and integration boundaries (24)
+     × creates plain text without inventing a mandatory title or roster fields 11ms
+     × requires a retry identity, a known game and exact post type 2ms
+     × accepts each of the three approved post types 2ms
+     × enforces trimmed1–5000 Unicode code points and preserves literal markup 2ms
+     × allows no more than four unique staged image identities 1ms
+     × rejects forged author, caller image URLs, title and capacity/slot fields 1ms
+     × patches only explicit editable fields without resetting omitted images 1ms
+     × publishes only nickname/avatar/game data and rejects private author fields 1ms
+     × requires genuine counts/liked state and coherent update clocks 1ms
+     × exposes only canonical same-origin bound Feed image paths 1ms
+     × rejects duplicate or over-limit image projections 1ms
+     × defaults to20 with known server filters and bounded cursor transport 1ms
+     × locks a decoded stable timestamp/id/filter cursor payload 1ms
+     × requires stable page coherence rather than fake pagination success 2ms
+     × accepts a root or one-level reply identity without caller depth/author 1ms
+     × enforces1–1000 code point comment bodies and body-only editing 6ms
+     × uses a null-body tombstone placeholder while retaining reply context 1ms
+     × binds comment pages and cursor payload to the exact post 1ms
+     × requires real idempotent like state and bounded optional delete reason 1ms
+     × stages Feed uploads through a strict purpose branch, never fake conversation context 1ms
+     × keeps drafts owner-private with expiry and no prematurely public URL 1ms
+     × extends report targets while preserving legacy USER/MESSAGE 14ms
+     × registers all Feed read/write endpoints with exact authority 6ms
+     × extends only the existing authenticated upload registry branch 5ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 24 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > creates plain text without inventing a mandatory title or roster fields
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:9:97
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > requires a retry identity, a known game and exact post type
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:10:80
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > accepts each of the three approved post types
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:11:66
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > enforces trimmed1–5000 Unicode code points and preserves literal markup
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:12:92
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > allows no more than four unique staged image identities
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:13:76
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > rejects forged author, caller image URLs, title and capacity/slot fields
+AssertionError: CreateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:14:93
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > patches only explicit editable fields without resetting omitted images
+AssertionError: UpdateFeedPostRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:15:91
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > publishes only nickname/avatar/game data and rejects private author fields
+AssertionError: FeedPostSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:16:95
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > requires genuine counts/liked state and coherent update clocks
+AssertionError: FeedPostSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:17:83
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > exposes only canonical same-origin bound Feed image paths
+AssertionError: FeedImageSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:18:78
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > rejects duplicate or over-limit image projections
+AssertionError: FeedPostSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:19:70
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > defaults to20 with known server filters and bounded cursor transport
+AssertionError: ListFeedPostsQuerySchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:20:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > locks a decoded stable timestamp/id/filter cursor payload
+AssertionError: FeedPostCursorPayloadSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:21:78
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > requires stable page coherence rather than fake pagination success
+AssertionError: FeedPostPageSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:22:87
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > accepts a root or one-level reply identity without caller depth/author
+AssertionError: CreateFeedCommentRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:23:91
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > enforces1–1000 code point comment bodies and body-only editing
+AssertionError: UpdateFeedCommentRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:24:83
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > uses a null-body tombstone placeholder while retaining reply context
+AssertionError: FeedCommentSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:25:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > binds comment pages and cursor payload to the exact post
+AssertionError: FeedCommentPageSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:26:77
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > requires real idempotent like state and bounded optional delete reason
+AssertionError: FeedLikeStateSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:27:90
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > stages Feed uploads through a strict purpose branch, never fake conversation context
+AssertionError: FeedUploadImageRequestSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:28:105
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > keeps drafts owner-private with expiry and no prematurely public URL
+AssertionError: FeedUploadReceiptSchema must be exported: expected undefined to be defined
+ ❯ schema test/feed.test.ts:5:77
+
+ ❯ test/feed.test.ts:29:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > extends report targets while preserving legacy USER/MESSAGE
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/feed.test.ts:30:252
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > registers all Feed read/write endpoints with exact authority
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/feed.test.ts:31:794
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/24]⎯
+
+ FAIL  test/feed.test.ts > Feed shared public contracts and integration boundaries > extends only the existing authenticated upload registry branch
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ test/feed.test.ts:32:461
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/24]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  24 failed (24)
+   Start at  03:43:34
+   Duration  1.56s (transform 48%, import 42%, tests 8%, worker 2%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\packages\contracts
+npm error workspace @fg/contracts@0.1.0
+npm error location E:\FGweb\code\packages\contracts
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/feed.test.ts --maxWorkers=1 --no-file-parallelism

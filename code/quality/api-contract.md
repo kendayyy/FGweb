@@ -558,3 +558,14 @@ Support forms and private support chat require authentication. The client valida
 Delete actions require confirmation and reason; current authoritative tombstones suppress source, reply previews and late history/decode results. Private E2EE reports retain explicit user-selected evidence disclosure, never automatic private history access. Block controls explain actual relationship policy and disable new DM while blocked.
 
 Evidence: quality/evidence/T38/final-integrity-review1.json and acceptance-review.md. T38 introduces no main database migration or production activation.
+
+
+## T38-FEED-DATA — locked Feed interfaces and schema handoff
+
+Feed registry declares public GET /feed/posts, GET /feed/posts/:id and GET /feed/posts/:id/comments; authenticated POST /feed/posts, PUT/DELETE /feed/posts/:id/like and POST comments; author-only PATCH post/comment and author-or-current-sole-admin DELETE post/comment. Paths are under /api/v1. A separate public GET /feed/images/:id/content reads only a visible bound Feed image in the BE implementation. The existing authenticated multipart POST /uploads/images accepts a strict FEED_POST branch; legacy conversation/file request/Attachment response remain compatible. Feed drafts return only id/purpose/size/WebP/expiry, with no public URL. These are DATA contracts, not implemented API success.
+
+Create/patch uses one of seven gameTitle values and FIND_PLAYMATES/SHARE/DISCUSSION, trimmed literal text1–5000 code points and0–4 unique staged image IDs. clientPostId/clientCommentId identify retries. Comments have1–1000 code points and an optional root parent in the same post. DTOs expose strict public nickname/avatar/game projections, canonical relative Feed image paths, genuine counts/likedByMe and UTC clocks; deleted root placeholders have null body. Cursor transport is bounded base64url; decoded payloads lock(createdAt,id) and query/post scope,20 default/max50, never updatedAt ordering.
+
+Migration0027 adds posts/images/likes/comments/content audit, stable filter/cursor indexes, unique likes/retry identities, same-author image binding and position0–3, same-post comment/audit references, and additive report target FKs/shape for FEED_POST/FEED_COMMENT. Existing CHAT_IMAGE draft context remains required via purpose check; only FEED_POST has null conversation. Prior columns/rows are preserved through upgrade/retry.
+
+The BE owner must implement current auth/ban/block/author/admin checks, root-only parent lock/check, actual image validation/re-encode/expiry/owner/finalization, Feed-aware object retention/sweep, deleted-post direct-asset denial, exhaustive moderation target switch, audit/report binding and rate limits. See quality/evidence/T38-FEED-DATA/backend-handoff.md. No main migration, API/frontend activation or public asset ACL claim in DATA.

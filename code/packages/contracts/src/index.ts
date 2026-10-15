@@ -1,3 +1,5 @@
+import {FeedApiEndpointRegistry,FeedUploadImageRequestSchema,FeedUploadReceiptSchema} from './feed.js';
+export * from './feed.js';
 import {AdminUserListItemSchema,DeleteMessageRequestSchema} from './moderation.js';
 import {SupportApiEndpointRegistry} from './support.js';
 export * from './support.js';
@@ -85,6 +87,8 @@ export const SocketEventSchemaMap = {
 } as const;
 
 export type EndpointAuthLevel =
+  | 'FeedContentAuthor'
+  | 'FeedContentAuthorOrAdmin'
   | 'Public'
   | 'Authenticated'
   | 'RoomMember'
@@ -109,6 +113,7 @@ export interface ApiEndpointDefinition {
 }
 
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
+  ...FeedApiEndpointRegistry,
   ...SupportApiEndpointRegistry,
   ...CryptoApiEndpointRegistry,
   {method:'POST',path:'/api/auth/sign-up/email',auth:'Public',requestSchema:SignUpEmailRequestSchema,responseSchema:SignUpEmailResponseSchema},
@@ -139,7 +144,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/games/:gameId/lobby/messages', auth: 'Public', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'POST', path: '/api/v1/conversations/:id/messages', auth: 'Authenticated', requestSchema: CreateMessageRequestSchema, responseSchema: MessageSchema },
   { method: 'DELETE', path: '/api/v1/conversations/:id/messages/:messageId', auth: 'MessageAuthorOrModerator', requestSchema: DeleteMessageRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
-  { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', requestSchema: UploadImageRequestSchema,requestFormat:'multipart', responseSchema: AttachmentSchema },
+  { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', requestSchema: z.union([UploadImageRequestSchema,FeedUploadImageRequestSchema]),requestFormat:'multipart', responseSchema: z.union([AttachmentSchema,FeedUploadReceiptSchema]) },
   { method: 'GET', path: '/api/v1/attachments/:id', auth: 'ConversationRead', responseSchema: AttachmentUrlSchema },
   { method: 'GET', path: '/api/v1/attachments/:id/content', auth: 'ConversationRead', responseSchema: ImageContentSchema,responseFormat:'binary' },
 
