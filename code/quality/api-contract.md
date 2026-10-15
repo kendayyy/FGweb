@@ -489,3 +489,38 @@ The BullMQ worker processes only due committed IN_APP IDs, locks the PostgreSQL 
 Existing T35 routes are consumed without backend/schema changes: explicit gesture permission and strict native JSON projection, current same-origin no-store config/register/revoke, authenticated DELETE before session sign-out, and current external notification fallback only after in-app404. External DTO actor/id and existing source ACL must pass; preferences/unread are not changed by Push registration or external opening.
 
 SW caches only reviewed public build shell/assets fetched without credentials; no private API/navigation response, chat/media/token or subscription keys cached. Unknown Push text becomes generic, target URLs are guarded same-origin notification IDs. Updates wait without forced reload/claim, preserving current clients/drafts. Local headed Native Chrome evidence is distinct from human native dialog, OS click/focus and installed physical iPhone/Android over HTTPS, which remain required and unavailable. See code/quality/evidence/T36/source-review1.md and device-availability1.json.
+
+
+## T36-SUPPORT-DATA — authenticated private support data boundary
+
+SUPPORT-AUTH-ONLY-01 (human decision15/10/2026): signed-in accounts alone may submit FEEDBACK/BUG forms or CHAT. Guests cannot submit or read private support; a login URL grants no data authority. This checkpoint declares shared schemas and additive migration0025 only. T37 implements API/session/ban/owner/sole-server-admin checks and realtime revocation; no support route is claimed operational here.
+
+All routes below are under /api/v1 and use strict shared Support schemas. Actor, owner, admin role, timestamps, sequence, current status/revision and unread state come from the server. Unknown client fields are rejected. Authenticated user routes must verify the current owner on every request; Admin routes must verify the unique configured server admin, never helper/displayName/email/client role.
+
+| Method | Path | Authority | Request → response |
+| --- | --- | --- | --- |
+| POST | /support/requests | Authenticated | SupportCreateRequest → SupportCreateResponse |
+| GET | /support/requests | Authenticated owner | SupportListQuery → SupportUserRequestPage |
+| GET | /support/requests/:id | Authenticated owner | path id → SupportUserDetail |
+| GET | /support/requests/:id/messages | Authenticated owner | SupportMessageQuery → SupportMessagePage |
+| POST | /support/requests/:id/messages | Authenticated owner | SupportSendMessageRequest → SupportSendMessageResponse |
+| POST | /support/requests/:id/read | Authenticated owner | SupportReadRequest → SupportReadState |
+| GET | /admin/support/requests | Admin | SupportListQuery → SupportAdminRequestPage |
+| GET | /admin/support/requests/:id | Admin | path id → SupportAdminDetail |
+| GET | /admin/support/requests/:id/messages | Admin | SupportMessageQuery → SupportMessagePage |
+| POST | /admin/support/requests/:id/messages | Admin | SupportSendMessageRequest → SupportSendMessageResponse |
+| POST | /admin/support/requests/:id/read | Admin | SupportReadRequest → SupportReadState |
+| PATCH | /admin/support/requests/:id/status | Admin | SupportStatusPatch → SupportAdminRequest |
+| GET | /admin/support/requests/:id/notes | Admin | SupportInternalPageQuery → SupportNotePage |
+| POST | /admin/support/requests/:id/notes | Admin | SupportCreateNoteRequest → SupportNote |
+| GET | /admin/support/requests/:id/audit | Admin | SupportInternalPageQuery → SupportAuditPage |
+
+Forms have a trimmed1–160 Unicode-code-point title, CHAT has server title “Chat hỗ trợ”; all bodies are trimmed1–4000 code points and plain text. No attachment/HTML/AI feature is added. Bounded clientRequestId/clientMessageId/clientNoteId are scoped idempotency keys. NEW/IN_PROGRESS/RESOLVED status changes carry expectedVersion; server transactions must serialize revisions and message ordinals, return the existing outcome on retries and reject stale conflicting updates. Read requests supply a message id only; server derives its same-request sequence, applies a monotonic per-reader cursor and computes unread from authorized messages. No user request can set actor/role/cursor ordinal directly.
+
+SupportUserRequest/UserDetail and user events are strict and contain no internal notes/audit or account email. AdminDetail alone adds bounded note/audit pages and an owner display-name summary without credentials/email. Message pages are bounded100, ascending and parent-consistent; request pages max50. Receipt text is exactly “FG đã nhận tin nhắn của bạn.”, emitted only after durable commit in T37. The one initial SYSTEM receipt has null actor/client id, never AI text or a time promise; authored USER/ADMIN messages require real actors. Creation response correlates owner/request/message/receipt identities. Subsequent send receipts acknowledge that authored message, not a second bot message.
+
+Separate support realtime namespace: support.subscribe/unsubscribe carry only requestId; support.admin.subscribe/unsubscribe carry an empty strict body. Server emissions support.message.created and support.request.updated expose user-safe DTOs only; support.admin.request.updated and support.admin.note.created remain admin-only. Current session/ban/owner/admin authorization and revoke on logout/ban/role change belong to T37, including before each emission. Event names or stored role labels do not grant subscriptions. Existing chat/crypto socket contracts remain unchanged.
+
+Migration0025 creates support_requests/messages/notes/read_cursors/audit. Owner/client uniqueness and request/author/client uniqueness deduplicate writes; positive int32 message ordinals are unique per request, with one fixed SYSTEM receipt. Composite cursor FK binds request/message/id/sequence; note-audit FK binds request/note/author. Audit requires explicit non-null statuses/revision for CREATED/STATUS_CHANGED, distinct transition statuses, unique revision and no copied note body. Notes are separate from user messages. Request-owned children cascade; actor FKs restrict deletion to retain history. UTC timestamps and owner/status/activity/message/note/audit indexes support bounded reads. These constraints preserve relationships; application ACL and transactional allocation remain mandatory in T37.
+
+Verification lives in quality/evidence/T36-SUPPORT-DATA/: observed contract/real-PG REDs, strict contracts, disposable fresh/populated pre0025 migration/retry/legacy fingerprints, concurrent uniqueness/rollback/cursor/audit/cascade/SQL-NULL checks, serial regressions and source-pinned exact package builds. Main database migration, admin provisioning, backend/frontend implementation and production activation are outside this checkpoint. closure.json governs completion.

@@ -6344,3 +6344,71 @@
 - Coding and build 3 — T36 — actual 2026-10-15T13:52:23.144Z–2026-10-15T13:52:40.992Z exit0: t36-git-push-1. Evidence code/quality/evidence/T36/codex-t36-git-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
 
 - Coding and build 3 — T36 — actual 2026-10-15T13:53:16.615Z–2026-10-15T13:53:20.870Z exit0: t36-github-primary-verification-1. Evidence code/quality/evidence/T36/codex-t36-github-primary-verification-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+- Coding and build 3 — T36 — final GitHub backup 2026-10-15T13:54:18.064Z: normal origin/master commit/push exit0/0; verified remoteSHA b0c7424822623a62dfa26fc284a5a37233d17fdb; primary 0ac41f501bed8e5bb62eb5259c613b75df778cd1. Staged blobs match clean privacy scan and frozen task outputs unchanged. Human manual acceptance / unmatched mobile backend limitation retained. Bounded receipt followup complete; final verification retained local to avoid commit recursion. Next task may enter only through its reviewed gate. Evidence code/quality/evidence/T36/github-final-sync1.json.
+
+- Coding and build 3 — T36 — actual 2026-10-15T13:54:13.565Z–2026-10-15T13:54:18.094Z exit0: t36-github-final-sync-1. Evidence code/quality/evidence/T36/codex-t36-github-final-sync-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36.
+
+### Coding and build 3 — T36-SUPPORT-DATA — scope preparation only
+
+- Start 2026-10-15T13:55:59.640Z / 2026-10-15 20:55:59 +07:00 after T36 PASS/verified remote b0c7424822623a62dfa26fc284a5a37233d17fdb. Read spec16/design13/task support handoff/rules and current contracts/database patterns. Guest form/chat policy explicitly remains open and was asked asynchronously; do not select it silently. Task remains NOT_STARTED pending business decision and exact scope/rebaseline. No application/schema/migration written. Preparation evidence code/quality/evidence/T36-SUPPORT-DATA/scope-preparation1.json.
+
+- End scope preparation 2026-10-15T13:56:48.515Z: task remains NOT_STARTED. Stock entry command quality/evidence/T36-SUPPORT-DATA/codex-support-stock-entry-gate-1.json exit1, read-only diagnosis “spec baseline changed” (legacy task spec lineage awaits reviewed adoption, checker unchanged). Guest policy question pending; no default selected, contracts/schema/migration/backend/frontend untouched. Corrected preparation code/quality/evidence/T36-SUPPORT-DATA/scope-preparation2.json removes a local placeholder question identifier, not a real receipt. Current preparation result code/quality/evidence/T36-SUPPORT-DATA/preparation-result1.json.
+
+### Coding and build 3 — T36-SUPPORT-DATA — authenticated-only policy and reviewed entry
+
+- Start 2026-10-15T14:04:25.902Z / 2026-10-15 21:04:25 +07:00. Human explicitly chooses only authenticated accounts for form/chat. Apply only this policy to spec/task metadata and baseline/lineage; prepare exact scope and preserve87priorPASS before business code. No API/frontend/main migration or new admin provision.
+
+- 2026-10-15T14:07:30.257Z: Authenticated-only spec/task sentences and matching baseline reviewed; exact scope/current lineage/87frozen PASS and stock gate accepted. 37313 original files pinned in code/quality/evidence/T36-SUPPORT-DATA/before.json. Task IN_PROGRESS before business code; RED contracts/database tests next. Preserve previous stock legacy-spec failure and no API/frontend/main migration.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:04:25.689Z–2026-10-15T14:07:30.401Z exit0: support-reviewed-entry-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:10:25.205Z–2026-10-15T14:10:28.087Z exit1: support-contract-red-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — exact review 2026-10-15 21:14:18 +07:00: Observed39contract REDs for missing authenticated support boundary. Add only new support exports and15declared authenticated/admin endpoints to central registry; no existing contract/event removal or API implementation. Evidence code/quality/evidence/T36-SUPPORT-DATA/contracts-integration1-adoption-review.json; actual task acceptance pending,87priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:12:18.074Z–2026-10-15T14:14:19.054Z exit0: support-contract-integration-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-contract-integration-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:15:52.658Z–2026-10-15T14:15:54.717Z exit0: support-contract-green-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-contract-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:16:05.744Z–2026-10-15T14:16:28.505Z exit1: support-database-red-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — exact review 2026-10-15 21:21:24 +07:00: Observed12real PostgreSQL REDs for absent support storage; export additive five-table schema and append0025journal entry without editing prior migrations. Preserve ownership/compiled baseline and real migration legacy data. Evidence code/quality/evidence/T36-SUPPORT-DATA/database-integration1-adoption-review.json; actual task acceptance pending,87priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:19:25.869Z–2026-10-15T14:21:24.987Z exit0: support-database-integration-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-integration-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:22:37.429Z–2026-10-15T14:23:19.353Z exit1: support-database-green-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:23:52.287Z–2026-10-15T14:23:53.668Z exit0: support-db-connection-diagnosis-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-db-connection-diagnosis-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:24:01.596Z–2026-10-15T14:24:27.049Z exit1: support-database-green-2. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:24:48.287Z–2026-10-15T14:25:14.696Z exit0: support-database-green-3. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:25:15.531Z–2026-10-15T14:25:19.793Z exit0: support-source-lint-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:25:45.158Z–2026-10-15T14:25:53.755Z exit0: support-contracts-build-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-contracts-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:25:53.865Z–2026-10-15T14:26:04.694Z exit0: support-database-build-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:26:12.816Z–2026-10-15T14:26:33.091Z exit0: support-contracts-regression-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-contracts-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:26:33.245Z–2026-10-15T14:27:38.556Z exit0: support-database-regression-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-database-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — exact review 2026-10-15 21:29:29 +07:00: Exact source-pinned support contracts/database compiled exports and DATA-only API/coverage mapping; preserve existing APIs/crypto and87priorPASS, no main migration or production activation. Evidence code/quality/evidence/T36-SUPPORT-DATA/traceability-build1-adoption-review.json; actual task acceptance pending,87priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:27:54.739Z–2026-10-15T14:28:00.327Z exit0: support-source-lint-2. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:27:10.660Z–2026-10-15T14:29:29.360Z exit0: support-traceability-build-adoption-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-traceability-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:29:40.179Z–2026-10-15T14:29:41.740Z exit0: support-compiled-smoke-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-compiled-smoke-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — final integrity 2026-10-15T14:31:27.647Z: 37313 original files checked;87priorPASS/checker/env/lock/baselines/exact gate preserved;335serial tests, 86 source-pinned canonical build files and9compiled metadata smoke checks. 41 historical tables unchanged; all five owned support test schema pairs absent, including independent recovery after pre-connect timeout. Evidence code/quality/evidence/T36-SUPPORT-DATA/final-integrity-review1.json; acceptance closure pending.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:31:28.900Z–2026-10-15T14:31:32.934Z exit0: support-evidence-lint-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-evidence-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:29:42.134Z–2026-10-15T14:31:27.748Z exit0: support-final-integrity-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-final-integrity-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — end/acceptance 2026-10-15T14:31:47.054Z: PASS on authenticated-only human policy,305contracts +30real-PG serialized tests, lint/source-pinned exact package builds/9compiled smoke,87priorPASS,41historicaltables, baseline/checker/env/lock/gate and owned cleanup review. 345 outputs frozen. Transient connection failure cause remains unproven, failed attempts retained, fixture corrected without dropping assertions. API/frontend/admin/main migration untouched. Evidence code/quality/evidence/T36-SUPPORT-DATA/closure.json; public scoped privacy/normal GitHub backup pending before T37.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:31:46.549Z–2026-10-15T14:31:47.568Z exit0: support-reviewed-close-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.

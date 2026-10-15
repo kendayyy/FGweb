@@ -1,3 +1,5 @@
+import {SupportApiEndpointRegistry} from './support.js';
+export * from './support.js';
 import {CallModerationRequestSchema,CallControlSuccessSchema} from './calls.js';
 import { z } from 'zod';
 import {
@@ -106,6 +108,7 @@ export interface ApiEndpointDefinition {
 }
 
 export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
+  ...SupportApiEndpointRegistry,
   ...CryptoApiEndpointRegistry,
   {method:'POST',path:'/api/auth/sign-up/email',auth:'Public',requestSchema:SignUpEmailRequestSchema,responseSchema:SignUpEmailResponseSchema},
   {method:'POST',path:'/api/auth/sign-in/email',auth:'Public',requestSchema:SignInEmailRequestSchema,responseSchema:SignInEmailResponseSchema},

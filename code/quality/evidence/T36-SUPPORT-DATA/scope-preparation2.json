@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-15T13:55:59.640Z",
+  "task": "T36-SUPPORT-DATA",
+  "phase": "READ_ONLY_SCOPE_PREPARATION",
+  "ledgerStatus": "NOT_STARTED",
+  "predecessor": {
+    "task": "T36",
+    "status": "PASS",
+    "verifiedRemoteSHA": "b0c7424822623a62dfa26fc284a5a37233d17fdb"
+  },
+  "guestDecision": "PENDING_HUMAN_REPLY",
+  "sourceRequirements": {
+    "spec": "../.doc/01-product-spec.md section16",
+    "task": "../.doc/task.md support handoff",
+    "scopePreparationRequired": "Decide guest form/chat behavior with user and pin exact contracts/schema/migration/test files before opening;private owner/admin response shapes,notes only admin,real migration preserve old data"
+  },
+  "intendedArtifactsAfterDecision": [
+    "packages/contracts/src/support.ts",
+    "packages/contracts/src/index.ts",
+    "packages/contracts/test/support.test.ts",
+    "packages/database/src/schema/support.ts",
+    "packages/database/src/index.ts",
+    "packages/database/migrations/0025_support_requests.sql",
+    "packages/database/migrations/meta/**",
+    "packages/database/test/support-migration.test.ts",
+    "quality/api-contract.md",
+    "quality/spec-coverage.md"
+  ],
+  "invariants": [
+    "Only current owner and sole server-authorized admin can access private request/message payloads.",
+    "User response schemas cannot contain notes or internal audit/private admin fields.",
+    "Support notes remain separate admin-only records, not user-visible chat messages.",
+    "Bot acknowledgment means durable receipt only; never AI answer or promised resolution time.",
+    "Request/message/read/status/audit identity and idempotency constraints need real fresh and populated PostgreSQL migration proof.",
+    "No API/frontend/admin provisioning, main migration, source/business code or schema written during this preparation.",
+    "Do not mark task active or choose guest policy until human decision and exact reviewed entry scope/lineage gate."
+  ],
+  "priorPASS": 87,
+  "rootSpecSha256": "cfd000d30d9ea52d16239e7de45d34515b86daccddc1f46063c525eee0b3710a",
+  "rootDesignSha256": "540f51a3a85b66bb163d8bf8ce2ddba15c2c6758e8344ecd52409136eaac27f6",
+  "checkerSha256": "21280218b35f77fd48097615a65e679e801ac4d6b8f183782854a42eb36f1391",
+  "envSha256": "c085045a92b1699a519f4297bff10b2c1dc0bb9bfb0ad22e470cefdabe64c3b1",
+  "recordedCorrectionAt": "2026-10-15T13:56:48.515Z",
+  "guestQuestionText": "T36-SUPPORT-DATA cần chốt quyền hỗ trợ của khách chưa đăng nhập: chỉ tài khoản đăng nhập; khách gửi form/chat cần đăng nhập; hoặc khách gửi form và chat.",
+  "questionReceiptId": null,
+  "correction": "The pending question label in preparation1 was an agent-local placeholder, not an actual tool call identifier. No human reply has been recorded for this decision."
+}

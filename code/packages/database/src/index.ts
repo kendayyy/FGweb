@@ -27,3 +27,5 @@ export * from './notification-authority.js';
 export * from './notification-enqueue.js';
 
 export * from './schema/notification-delivery-receipts.js';
+
+export * from './schema/support.js';

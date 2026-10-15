@@ -1,0 +1,149 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/support-migration.test.ts (12 tests | 12 failed) 19561ms
+   ❯ support additive migration and relational privacy boundaries (12)
+     × creates all five tables on a real fresh database 20ms
+     × upgrades populated pre0025 data without changing legacy rows and reruns idempotently 770ms
+     × requires a real authenticated owner and valid request/state/title shape 4ms
+     × deduplicates concurrent create retries per owner, allowing another owner its own key 85ms
+     × keeps authored-message retry and sequence allocation atomic 3ms
+     × limits system messages to one fixed receipt, without an actor or arbitrary AI text 4ms
+     × enforces Unicode lengths and rejects whitespace-only authored bodies 3ms
+     × keeps notes separate from messages and deduplicates note retries 3ms
+     × ties read cursors to exact message identity/sequence within the same request 3ms
+     × validates processing audit and prevents cross-request or wrong-author note references 3ms
+     × rolls back request/status/message/audit work together 3ms
+     × uses UTC timestamps and indexed owner/status/message read paths 3ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > creates all five tables on a real fresh database
+AssertionError: expected null to be 'support_requests' // Object.is equality
+
+- Expected:
+"support_requests"
+
++ Received:
+null
+
+ ❯ test/support-migration.test.ts:35:253
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > upgrades populated pre0025 data without changing legacy rows and reruns idempotently
+AssertionError: expected +0 to be 5 // Object.is equality
+
+- Expected
++ Received
+
+- 5
++ 0
+
+ ❯ test/support-migration.test.ts:36:437
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > requires a real authenticated owner and valid request/state/title shape
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:37:98
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > deduplicates concurrent create retries per owner, allowing another owner its own key
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/support-migration.test.ts:38:658
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > keeps authored-message retry and sequence allocation atomic
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:39:86
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > limits system messages to one fixed receipt, without an actor or arbitrary AI text
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:40:109
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > enforces Unicode lengths and rejects whitespace-only authored bodies
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:41:95
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > keeps notes separate from messages and deduplicates note retries
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:42:91
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > ties read cursors to exact message identity/sequence within the same request
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:43:106
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > validates processing audit and prevents cross-request or wrong-author note references
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:44:112
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > rolls back request/status/message/audit work together
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:45:80
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/12]⎯
+
+ FAIL  test/support-migration.test.ts > support additive migration and relational privacy boundaries > uses UTC timestamps and indexed owner/status/message read paths
+error: relation "support_requests" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ request test/support-migration.test.ts:11:97
+
+ ❯ test/support-migration.test.ts:46:90
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/12]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  12 failed (12)
+   Start at  21:16:06
+   Duration  21.66s (tests 91%, import 7%, transform 1%)
+

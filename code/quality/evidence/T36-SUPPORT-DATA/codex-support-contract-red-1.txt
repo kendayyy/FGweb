@@ -1,0 +1,257 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/support.test.ts (39 tests | 39 failed) 73ms
+   ❯ authenticated-only support contracts and private payload boundaries (39)
+     × exports an explicit authenticated-only policy 25ms
+     × accepts a bounded BUG form and trims only outer content 2ms
+     × accepts a bounded FEEDBACK form and trims only outer content 1ms
+     × accepts chat without a client-defined title 1ms
+     × rejects forged or guest field ownerId 1ms
+     × rejects forged or guest field userId 1ms
+     × rejects forged or guest field role 1ms
+     × rejects forged or guest field admin 1ms
+     × rejects forged or guest field email 1ms
+     × rejects forged or guest field status 1ms
+     × rejects forged or guest field notes 1ms
+     × rejects forged or guest field audit 1ms
+     × rejects empty or whitespace content "" 1ms
+     × rejects empty or whitespace content " " 1ms
+     × rejects empty or whitespace content "\t\n" 1ms
+     × uses Unicode code points for title and message bounds without truncation 1ms
+     × rejects an invalid idempotency identity 1ms
+     × rejects an invalid idempotency identity 1ms
+     × rejects an invalid idempotency identity 1ms
+     × rejects an invalid idempotency identity 1ms
+     × does not accept a client sender/sequence/role for message creation 1ms
+     × requires optimistic revision for status changes and no client internal fields 1ms
+     × accepts user request state and rejects impossible read/status/time shape 1ms
+     × rejects admin/private property notes from the user request DTO 1ms
+     × rejects admin/private property audit from the user request DTO 1ms
+     × rejects admin/private property ownerEmail from the user request DTO 1ms
+     × rejects admin/private property internalNotes from the user request DTO 1ms
+     × rejects admin/private property owner from the user request DTO 1ms
+     × accepts an admin owner summary without email and with matching identity 1ms
+     × keeps notes and audit exclusively in the strict admin detail shape 1ms
+     × requires real message authors and reserves system messages to durable receipt text 1ms
+     × validates fixed receipt semantics without promise or extra private data 1ms
+     × requires read message identity and derives reader/sequence on the server 1ms
+     × enforces read cursor empty/nonempty identity shape 1ms
+     × bounds/coerces pagination and rejects foreign owner selectors 1ms
+     × preserves per-request ordered message pages and rejects mixed/duplicate identities 1ms
+     × validates audit action/status/note relationships and never accepts private note bodies 1ms
+     × keeps user realtime payloads separate from admin note events and validates request identity 1ms
+     × declares authenticated user routes and admin-only internal routes in the central registry 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 39 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > exports an explicit authenticated-only policy
+AssertionError: expected undefined to deeply equal { forms: 'AUTHENTICATED', …(4) }
+
+- Expected:
+{
+  "admin": "SOLE_SERVER_ADMIN",
+  "chat": "AUTHENTICATED",
+  "forms": "AUTHENTICATED",
+  "guestPrivateRead": false,
+  "userRead": "CURRENT_OWNER",
+}
+
++ Received:
+undefined
+
+ ❯ test/support.test.ts:14:95
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > accepts a bounded BUG form and trims only outer content
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > accepts a bounded FEEDBACK form and trims only outer content
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:15:101
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > accepts chat without a client-defined title
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:16:64
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field ownerId
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field userId
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field role
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field admin
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field email
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field status
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field notes
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects forged or guest field audit
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:17:128
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects empty or whitespace content ""
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects empty or whitespace content " "
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects empty or whitespace content "\t\n"
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:18:82
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > uses Unicode code points for title and message bounds without truncation
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:19:93
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects an invalid idempotency identity
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects an invalid idempotency identity
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects an invalid idempotency identity
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects an invalid idempotency identity
+AssertionError: missing support contract SupportCreateRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:20:117
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > does not accept a client sender/sequence/role for message creation
+AssertionError: missing support contract SupportSendMessageRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:21:87
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > requires optimistic revision for status changes and no client internal fields
+AssertionError: missing support contract SupportStatusPatchSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:22:98
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > accepts user request state and rejects impossible read/status/time shape
+AssertionError: missing support contract SupportUserRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:23:93
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects admin/private property notes from the user request DTO
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects admin/private property audit from the user request DTO
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects admin/private property ownerEmail from the user request DTO
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects admin/private property internalNotes from the user request DTO
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > rejects admin/private property owner from the user request DTO
+AssertionError: missing support contract SupportUserRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:24:141
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > accepts an admin owner summary without email and with matching identity
+AssertionError: missing support contract SupportAdminRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:25:92
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > keeps notes and audit exclusively in the strict admin detail shape
+AssertionError: missing support contract SupportAdminDetailSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:26:197
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > requires real message authors and reserves system messages to durable receipt text
+AssertionError: missing support contract SupportMessageSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:27:103
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > validates fixed receipt semantics without promise or extra private data
+AssertionError: missing support contract SupportReceiptSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:28:92
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > requires read message identity and derives reader/sequence on the server
+AssertionError: missing support contract SupportReadRequestSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:29:93
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > enforces read cursor empty/nonempty identity shape
+AssertionError: missing support contract SupportReadStateSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:30:71
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > bounds/coerces pagination and rejects foreign owner selectors
+AssertionError: missing support contract SupportListQuerySchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:31:82
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > preserves per-request ordered message pages and rejects mixed/duplicate identities
+AssertionError: missing support contract SupportMessagePageSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:32:103
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > validates audit action/status/note relationships and never accepts private note bodies
+AssertionError: missing support contract SupportAuditSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:33:107
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > keeps user realtime payloads separate from admin note events and validates request identity
+AssertionError: missing support contract SupportMessageCreatedEventSchema: expected undefined to be defined
+ ❯ schema test/support.test.ts:5:96
+
+ ❯ test/support.test.ts:34:115
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/39]⎯
+
+ FAIL  test/support.test.ts > authenticated-only support contracts and private payload boundaries > declares authenticated user routes and admin-only internal routes in the central registry
+AssertionError: expected undefined to be defined
+ ❯ test/support.test.ts:35:215
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/39]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  39 failed (39)
+   Start at  21:10:26
+   Duration  1.48s (transform 49%, import 41%, tests 8%, worker 2%)
+
