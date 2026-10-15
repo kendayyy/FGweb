@@ -1,0 +1,32 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:10612) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/moderation.integration.spec.ts (45.782 s)
+  ● T37 real report/moderation/ban producer and ACL › returns real UTC report timestamps consistently across create/list/resolve
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 10000
+    Received:   25199943
+
+      38 |  it('blocks both metadata and real image bytes after their source is removed',async()=>{const message=await seed(),attachment=randomUUID(),bytes=await sharp({create:{width:2,height:2,channels:3,background:{r:20,g:60,b:100}}}).webp().toBuffer();fs.writeFileSync(path.join(runtime,'uploads',attachment+'.webp'),bytes);await pool.query("INSERT INTO attachments(id,message_id,conversation_id,url,file_name,file_size,mime_type) VALUES($1,$2,$3,$4,'fixture.webp',$5,'image/webp')",[attachment,message,lobby,'/api/v1/attachments/'+attachment+'/content',bytes.length]);expect((await api('get','attachments/'+attachment+'/content')).status).toBe(200);expect((await api('delete','conversations/'+lobby+'/messages/'+message,'admin',{})).status).toBe(200);for(const suffix of ['', '/content'])expect((await api('get','attachments/'+attachment+suffix)).status).toBe(404);});
+      39 |
+    > 40 |  it('returns real UTC report timestamps consistently across create/list/resolve',async()=>{const at=Date.now(),created=await report('other','USER');expect(created.status).toBe(201);expect(Math.abs(Date.parse(created.body.createdAt)-at)).toBeLessThan(10000);const listed=await api('get','admin/reports','admin');expect(listed.status).toBe(200);expect(Date.parse(listed.body.items.find((row:{id:string})=>row.id===created.body.id).createdAt)).toBe(Date.parse(created.body.createdAt));const resolved=await api('patch','admin/reports/'+created.body.id,'admin',{status:'RESOLVED'});expect(resolved.status).toBe(200);expect(Date.parse(resolved.body.createdAt)).toBe(Date.parse(created.body.createdAt));});
+         |                                                                                                                                                                                                                                              ^
+      41 | });
+      42 |
+
+      at Object.<anonymous> (test/moderation.integration.spec.ts:40:238)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 20 skipped, 21 total
+Snapshots:   0 total
+Time:        46.211 s, estimated 49 s
+Ran all test suites matching apps/api/test/moderation.integration.spec.ts with tests matching "UTC".

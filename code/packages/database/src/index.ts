@@ -29,3 +29,5 @@ export * from './notification-enqueue.js';
 export * from './schema/notification-delivery-receipts.js';
 
 export * from './schema/support.js';
+
+export * from './schema/moderation-support.js';

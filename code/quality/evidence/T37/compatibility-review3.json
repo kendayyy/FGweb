@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-15T15:36:10.400Z",
+  "reviewer": "Codex",
+  "failures": [
+    "codex-t37-database-regression-1.json",
+    "codex-t37-api-regressions-1.json"
+  ],
+  "databaseReason": "All65original legacy table fingerprints are unchanged; exclude only three new empty0026tables from the old census and name the original five support tables. Keep full original counts/digests/constraints; new tables separately tested.",
+  "realtimeReason": "New T37 requirement physically disconnects banned/logged-out sockets. A disconnected socket cannot return an ack. Assert actual disconnect plus a fresh authenticated connection denial, then reconnect only after fixture UNBAN and retain original successful subscribe assertion. Other privacy/device/history/lock assertions unchanged. This old consumer uses bare fixture BAN; actual producer/stale-session history proof remains native T37 suite.",
+  "priorPreparation": "prepare-database-compat2.mjs guard rejected an ambiguous support census needle before writing any copy; version3 uses exact pg_tables scope",
+  "reviews": [
+    {
+      "source": "quality/evidence/T37/regression-support-migration.test.ts",
+      "sourceSha256": "88533b4e7e831f134e1762b5f7cfb0b84e13c58b3e3e1e3d0e5987697625624d",
+      "target": "quality/evidence/T37/compat-support-migration3.test.ts",
+      "targetSha256": "fe9e340d947d0fac520b73e255a28da170c5ba3d6d1eb815ca7af381d68a9ce7",
+      "changes": [
+        {
+          "before": "tablename NOT LIKE 'support_%' ORDER BY tablename",
+          "after": "tablename NOT LIKE 'support_%' AND tablename NOT IN('moderation_audit','moderation_message_tombstones','moderation_outbox') ORDER BY tablename"
+        },
+        {
+          "before": "FROM pg_tables WHERE schemaname=$1 AND tablename LIKE 'support_%'",
+          "after": "FROM pg_tables WHERE schemaname=$1 AND tablename IN('support_requests','support_messages','support_notes','support_read_cursors','support_audit')"
+        }
+      ],
+      "reverseByteExact": true
+    },
+    {
+      "source": "quality/evidence/T37/regression-chat-crypto-realtime.integration.spec.ts",
+      "sourceSha256": "a51c47edddddb1cc3710d62fbc53266e7d794bbeae921b41069038feaabb1581",
+      "target": "quality/evidence/T37/compat-chat-crypto-realtime3.integration.spec.ts",
+      "targetSha256": "2e4c32ef0c2848b8127145270913ef4fafdd988c6c99ccaa0e5d08efb6b336f8",
+      "changes": [
+        {
+          "before": "expect(await subscribe(outsider,'C')).toMatchObject({ok:false});",
+          "after": "await wait(()=>!outsider.connected);expect(outsider.connected).toBe(false);await expect(connect('outsider')).rejects.toThrow('Socket access denied');"
+        },
+        {
+          "before": "expect(await subscribe(outsider,'C')).toMatchObject({ok:true});",
+          "after": "await new Promise<void>((resolve,reject)=>{outsider.once('connect',resolve);outsider.once('connect_error',reject);outsider.connect();});expect(await subscribe(outsider,'C')).toMatchObject({ok:true});"
+        },
+        {
+          "before": "expect(await subscribe(alice,'A')).toMatchObject({ok:false});",
+          "after": "await wait(()=>!alice.connected);expect(alice.connected).toBe(false);await expect(connect('alice')).rejects.toThrow('Socket access denied');",
+          "last": true
+        }
+      ],
+      "reverseByteExact": true
+    }
+  ],
+  "frozenSourcesChanged": false,
+  "acceptancePending": true
+}

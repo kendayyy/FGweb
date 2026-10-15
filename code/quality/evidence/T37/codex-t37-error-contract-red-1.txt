@@ -1,0 +1,45 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/contracts
+
+ ❯ test/moderation-support.test.ts (7 tests | 3 failed) 58ms
+   ❯ T37 structured backend conflict and availability errors (3)
+     × accepts CONFLICT with its real HTTP status 14ms
+     × accepts SERVICE_UNAVAILABLE with its real HTTP status 2ms
+     × accepts INTERNAL_ERROR with its real HTTP status 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/moderation-support.test.ts > T37 structured backend conflict and availability errors > accepts CONFLICT with its real HTTP status
+ FAIL  test/moderation-support.test.ts > T37 structured backend conflict and availability errors > accepts SERVICE_UNAVAILABLE with its real HTTP status
+ FAIL  test/moderation-support.test.ts > T37 structured backend conflict and availability errors > accepts INTERNAL_ERROR with its real HTTP status
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "LOGIN_REQUIRED",
+      "FORBIDDEN",
+      "NOT_FOUND",
+      "CAPACITY_FULL",
+      "ACTIVE_PLAY_CONFLICT",
+      "CALL_CLOSED",
+      "PUBLISH_LIMIT",
+      "INVALID_INPUT",
+      "RATE_LIMITED"
+    ],
+    "path": [
+      "code"
+    ],
+    "message": "Invalid option: expected one of \"LOGIN_REQUIRED\"|\"FORBIDDEN\"|\"NOT_FOUND\"|\"CAPACITY_FULL\"|\"ACTIVE_PLAY_CONFLICT\"|\"CALL_CLOSED\"|\"PUBLISH_LIMIT\"|\"INVALID_INPUT\"|\"RATE_LIMITED\""
+  }
+]
+ ❯ test/moderation-support.test.ts:12:190
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  22:43:31
+   Duration  1.48s (transform 46%, import 46%, tests 6%, worker 2%)
+

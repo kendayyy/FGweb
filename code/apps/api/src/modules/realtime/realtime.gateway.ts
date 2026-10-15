@@ -1,3 +1,4 @@
+import {ModerationService} from '../moderation/moderation.service.js';
 import {NotificationsService} from '../notifications/notifications.service.js';
 import {PrivateNotificationsService} from '../notifications/private-notifications.service.js';
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, ConnectedSocket, MessageBody, OnGatewayInit, OnGatewayDisconnect } from '@nestjs/websockets';
@@ -32,8 +33,8 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
     private readonly noticeSeen=new Map<string,Set<string>>();
     private readonly deliveries = new Set<Promise<void>>();
     private get channel() { return `fg:chat:${createHash('sha256').update(process.env.DATABASE_URL ?? '').digest('hex').slice(0, 24)}`; }
-    constructor(private readonly chat: ChatService,@Optional() private readonly crypto?:CryptoRelayService,@Optional() private readonly notices?:PrivateNotificationsService,@Optional() private readonly notifications?:NotificationsService) { }
-    afterInit(server: Server) { server.use((socket, next) => { void this.validate(socket).then(actor => { socket.data.fgPrivateUserId=actor?.userId; return this.openBus(); }).then(() => next()).catch(() => next(new Error('Socket access denied'))); }); }
+    constructor(private readonly chat: ChatService,@Optional() private readonly crypto?:CryptoRelayService,@Optional() private readonly notices?:PrivateNotificationsService,@Optional() private readonly notifications?:NotificationsService,@Optional() private readonly moderation?:ModerationService) { }
+    afterInit(server: Server) { server.use((socket, next) => { void this.validate(socket).then(actor => { socket.data.fgPrivateUserId=actor?.userId; return this.openBus(); }).then(() => next()).catch(() => next(new Error('Socket access denied'))); }); void this.openBus().catch(()=>this.logger.warn('Realtime bus unavailable; authenticated connections retry')); }
     private async validate(socket: Socket) { if (!originAllowed(socket.handshake.headers.origin))
         chatError(ErrorCode.FORBIDDEN, 'Origin denied'); return this.chat.actor(socket.handshake.headers); }
     private async openBus() {
@@ -51,14 +52,15 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
                 return; if(id.length>512||this.deliveries.size>=64)return;
                 let work:Promise<void>;
                 if(/^N:[a-f0-9-]{36}$/.test(id))work=this.deliverNotice(id.slice(2));
+                else if(/^M:[a-f0-9-]{36}$/.test(id))work=this.deliverModeration(id.slice(2));
                 else if(/^R:[a-f0-9-]{36}$/.test(id))work=this.deliverRead(id.slice(2));
                 else if(/^[a-f0-9-]{36}$/.test(id))work=this.deliver(id);
                 else{let input:unknown;try{input=JSON.parse(id);}catch{return;}const signal=CryptoProtocolWakeSignalSchema.safeParse(input);if(!signal.success)return;work=this.deliverProtocol(signal.data);}
                 const delivery = work.catch(() => this.logger.warn('Chat event delivery failed; recover using REST')); this.deliveries.add(delivery); void delivery.finally(() => this.deliveries.delete(delivery)); });
             await Promise.all([this.publisher.connect(), this.subscriber.connect()]);
             await this.subscriber.subscribe(this.channel);
-            this.timer = setInterval(() => { if (this.closing || this.dispatching || (!this.subscriptions.size&&!this.cryptoSubscriptions.size&&!this.server.sockets.sockets.size))
-                return; this.dispatching = this.chat.dispatch(async (id) => { await this.publisher!.publish(this.channel, id); }).then(async()=>{await this.crypto?.dispatchProtocol(async signal=>{await this.publisher!.publish(this.channel,JSON.stringify(signal));});await this.notices?.dispatch(async id=>{await this.publisher!.publish(this.channel,'N:'+id);});}).catch(() => this.logger.warn('Chat outbox unavailable; durable jobs will retry')).finally(() => { this.dispatching = undefined; }); }, 100);
+            this.timer = setInterval(() => { if (this.closing || this.dispatching || (!this.subscriptions.size&&!this.cryptoSubscriptions.size&&!this.server.sockets.sockets.size&&!this.server.of('/presence').sockets.size&&!this.server.of('/support').sockets.size))
+                return; this.dispatching = this.chat.dispatch(async (id) => { await this.publisher!.publish(this.channel, id); }).then(async()=>{await this.revalidateSockets();await this.crypto?.dispatchProtocol(async signal=>{await this.publisher!.publish(this.channel,JSON.stringify(signal));});await this.notices?.dispatch(async id=>{await this.publisher!.publish(this.channel,'N:'+id);});}).catch(() => this.logger.warn('Chat outbox unavailable; durable jobs will retry')).finally(() => { this.dispatching = undefined; }); }, 100);
             this.timer.unref();
         })();
         try {
@@ -167,6 +169,10 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayDisconnect, OnMo
             if(!socket.connected||socket.data.fgPrivateUserId!==recipient)continue;
             try{const notice=await this.notifications.realtimeNotice(await this.validate(socket),id);if(notice?.isRead&&socket.connected)socket.emit(SocketEventNames.NOTIFICATION_READ,{notificationId:id});}catch{/* Fresh session/ACL denial suppresses read-state routing. */}
         }
+    }
+    private async revalidateSockets(){for(const namespace of [this.server.sockets,this.server.of('/presence'),this.server.of('/support')])for(const socket of namespace.sockets.values()){try{await this.validate(socket);}catch{socket.disconnect(true);}}}
+    private async deliverModeration(id:string){const event=await this.moderation?.committedEvent(id);if(!event)return;if(event.action==='BAN'){await this.revalidateSockets();return;}if(event.action!=='DELETE_MESSAGE'||typeof event.message_id!=='string'||typeof event.conversation_id!=='string')return;const conversationId=event.conversation_id;
+      for(const socket of this.server.sockets.sockets.values()){const channels=this.subscriptions.get(socket.id),encrypted=this.cryptoSubscriptions.get(socket.id)?.get(conversationId);if(!channels?.has(conversationId)&&!encrypted)continue;try{const actor=await this.validate(socket);await this.chat.authorize(conversationId,actor);if(encrypted){if(!this.crypto)continue;await this.crypto.realtimeSubscription(actor,conversationId,encrypted.deviceId,encrypted.cohortId);}else await this.chat.assertLegacyRouteAllowed(conversationId);if(socket.connected)socket.emit(SocketEventNames.MESSAGE_DELETED,{messageId:event.message_id,conversationId});}catch{channels?.delete(conversationId);this.cryptoSubscriptions.get(socket.id)?.delete(conversationId);}}
     }
     private async deliver(id: string) {
         const encrypted=await this.crypto?.committedCiphertext(id);

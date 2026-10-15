@@ -1,0 +1,338 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:2216) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/support.integration.spec.ts (65.554 s)
+  ● T37 real private support API and realtime › creates an owned form and fixed durable receipt without private admin fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:19:102)
+
+  ● T37 real private support API and realtime › creates CHAT with its server title and rejects client title or actor injection
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:20:104)
+
+  ● T37 real private support API and realtime › denies guests both form/chat writes and private reads
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 404
+
+      19 |  it('creates an owned form and fixed durable receipt without private admin fields',async()=>{const r=await create();expect(r.receipt.text).toBe(SUPPORT_RECEIPT_TEXT);expect(r.request).toMatchObject({ownerId:'owner',status:'NEW',version:1,unreadCount:0});expect(r.message.body).toBe('Nội dung riêng của chủ yêu cầu');const row=(await pool.query('SELECT owner_id FROM support_requests WHERE id=$1',[r.request.id])).rows[0];expect(row.owner_id).toBe('owner');expect(JSON.stringify(r)).not.toMatch(/notes|audit|@t37/);});
+      20 |  it('creates CHAT with its server title and rejects client title or actor injection',async()=>{const r=await create('CHAT');expect(r.request.title).toBe('Chat hỗ trợ');for(const extra of [{title:'fake'},{ownerId:'other'},{role:'ADMIN'}])expect((await api('post','support/requests','owner',{kind:'CHAT',clientRequestId:randomUUID(),body:'Tin mới',...extra})).status).toBe(422);});
+    > 21 |  it('denies guests both form/chat writes and private reads',async()=>{for(const kind of ['BUG','CHAT'])expect((await request(base).post('/api/v1/support/requests').set('Origin',origin).send({kind,clientRequestId:randomUUID(),title:'Báo lỗi',body:'Tin mới'})).status).toBe(401);expect((await request(base).get('/api/v1/support/requests')).status).toBe(401);});
+         |                                                                                                                                                                                                                                                                            ^
+      22 |  it('keeps another owner away from detail, history, write and read state',async()=>{const r=await create(),id=r.request.id;for(const route of ['','/messages'])expect((await api('get','support/requests/'+id+route,'other')).status).toBe(404);expect((await message(id,'other')).status).toBe(404);expect((await api('post','support/requests/'+id+'/read','other',{lastReadMessageId:r.message.id})).status).toBe(404);});
+      23 |  it('retries concurrent creates once and rejects changed payload under the same key',async()=>{const key=randomUUID(),body={kind:'BUG',clientRequestId:key,title:'FG',body:'Nội dung'};const pair=await Promise.all([api('post','support/requests','owner',body),api('post','support/requests','owner',body)]);expect(pair.map(r=>r.status)).toEqual([201,201]);expect(pair[0].body.request.id).toBe(pair[1].body.request.id);expect((await pool.query('SELECT id FROM support_requests')).rowCount).toBe(1);expect((await pool.query("SELECT id FROM support_messages WHERE author_role='SYSTEM'")).rowCount).toBe(1);expect((await api('post','support/requests','owner',{...body,body:'Nội dung khác'})).status).toBe(409);});
+      24 |  it('deduplicates authored sends and rejects a changed body retry',async()=>{const r=await create(),key=randomUUID();const first=await message(r.request.id,'owner','Tin giữ nguyên',key),again=await message(r.request.id,'owner','Tin giữ nguyên',key);expect([first.status,again.status]).toEqual([201,201]);expect(first.body.message.id).toBe(again.body.message.id);expect((await message(r.request.id,'owner','Đổi tin',key)).status).toBe(409);expect((await pool.query("SELECT id FROM support_messages WHERE request_id=$1 AND author_role='USER'",[r.request.id])).rowCount).toBe(2);});
+
+      at Object.<anonymous> (test/support.integration.spec.ts:21:268)
+
+  ● T37 real private support API and realtime › keeps another owner away from detail, history, write and read state
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:22:93)
+
+  ● T37 real private support API and realtime › retries concurrent creates once and rejects changed payload under the same key
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   201,
+    -   201,
+    +   404,
+    +   404,
+      ]
+
+      21 |  it('denies guests both form/chat writes and private reads',async()=>{for(const kind of ['BUG','CHAT'])expect((await request(base).post('/api/v1/support/requests').set('Origin',origin).send({kind,clientRequestId:randomUUID(),title:'Báo lỗi',body:'Tin mới'})).status).toBe(401);expect((await request(base).get('/api/v1/support/requests')).status).toBe(401);});
+      22 |  it('keeps another owner away from detail, history, write and read state',async()=>{const r=await create(),id=r.request.id;for(const route of ['','/messages'])expect((await api('get','support/requests/'+id+route,'other')).status).toBe(404);expect((await message(id,'other')).status).toBe(404);expect((await api('post','support/requests/'+id+'/read','other',{lastReadMessageId:r.message.id})).status).toBe(404);});
+    > 23 |  it('retries concurrent creates once and rejects changed payload under the same key',async()=>{const key=randomUUID(),body={kind:'BUG',clientRequestId:key,title:'FG',body:'Nội dung'};const pair=await Promise.all([api('post','support/requests','owner',body),api('post','support/requests','owner',body)]);expect(pair.map(r=>r.status)).toEqual([201,201]);expect(pair[0].body.request.id).toBe(pair[1].body.request.id);expect((await pool.query('SELECT id FROM support_requests')).rowCount).toBe(1);expect((await pool.query("SELECT id FROM support_messages WHERE author_role='SYSTEM'")).rowCount).toBe(1);expect((await api('post','support/requests','owner',{...body,body:'Nội dung khác'})).status).toBe(409);});
+         |                                                                                                                                                                                                                                                                                                                                              ^
+      24 |  it('deduplicates authored sends and rejects a changed body retry',async()=>{const r=await create(),key=randomUUID();const first=await message(r.request.id,'owner','Tin giữ nguyên',key),again=await message(r.request.id,'owner','Tin giữ nguyên',key);expect([first.status,again.status]).toEqual([201,201]);expect(first.body.message.id).toBe(again.body.message.id);expect((await message(r.request.id,'owner','Đổi tin',key)).status).toBe(409);expect((await pool.query("SELECT id FROM support_messages WHERE request_id=$1 AND author_role='USER'",[r.request.id])).rowCount).toBe(2);});
+      25 |  it('separates internal notes/audit from every user detail/list/message response',async()=>{const r=await create(),id=r.request.id;expect((await api('post','admin/support/requests/'+id+'/notes','admin',{clientNoteId:randomUUID(),body:'SECRET_ADMIN_NOTE_FIXTURE'})).status).toBe(201);const admin=await detail(id,'admin');expect(admin.status).toBe(200);expect(SupportAdminDetailSchema.parse(admin.body).notes.items[0].body).toBe('SECRET_ADMIN_NOTE_FIXTURE');for(const route of ['support/requests','support/requests/'+id,'support/requests/'+id+'/messages']){const result=await api('get',route);expect(result.status).toBe(200);expect(JSON.stringify(result.body)).not.toMatch(/SECRET_ADMIN_NOTE_FIXTURE|clientNoteId|notes|audit/);}expect(SupportUserDetailSchema.safeParse((await detail(id)).body).success).toBe(true);});
+      26 |  it('rejects regular users/helpers on all admin note/status/list routes',async()=>{const r=await create();for(const user of ['owner','helper']){expect((await api('get','admin/support/requests',user)).status).toBe(403);expect((await api('post','admin/support/requests/'+r.request.id+'/notes',user,{clientNoteId:randomUUID(),body:'Forged note'})).status).toBe(403);expect((await api('patch','admin/support/requests/'+r.request.id+'/status',user,{status:'RESOLVED',expectedVersion:1})).status).toBe(403);}});
+
+      at Object.<anonymous> (test/support.integration.spec.ts:23:334)
+
+  ● T37 real private support API and realtime › deduplicates authored sends and rejects a changed body retry
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:24:86)
+
+  ● T37 real private support API and realtime › separates internal notes/audit from every user detail/list/message response
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:25:101)
+
+  ● T37 real private support API and realtime › rejects regular users/helpers on all admin note/status/list routes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:26:92)
+
+  ● T37 real private support API and realtime › optimistically changes status once, allows an exact retry and rejects stale conflicts
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:27:111)
+
+  ● T37 real private support API and realtime › tracks current-reader unread and keeps read retries monotonic across tabs
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:28:99)
+
+  ● T37 real private support API and realtime › rejects a read message from another request and forged sequence
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:29:89)
+
+  ● T37 real private support API and realtime › paginates owned lists and ordered message history without skipping ties
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:30:109)
+
+  ● T37 real private support API and realtime › enforces Unicode bounds, strict query/body and trusted Origin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:31:87)
+
+  ● T37 real private support API and realtime › rolls back a send and its receipt when durable outbox insertion fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:32:95)
+
+  ● T37 real private support API and realtime › checks current ban/session and unique admin configuration on every API call
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:33:101)
+
+  ● T37 real private support API and realtime › emits committed messages to two owner tabs with no internal note event
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:34:96)
+
+  ● T37 real private support API and realtime › denies cross-owner subscriptions and clears owner sockets when their session is revoked
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:35:113)
+
+  ● T37 real private support API and realtime › stops admin subscriptions after server role removal without delivering internal notes
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+       5 |  const saved={...process.env},run=randomUUID().replaceAll('-',''),schema='t37_support_'+run,evidence=path.join(root,'quality/evidence/T37','support-api-'+run),runtime=path.join(root,'.runtime/t37',run),cookies:Record<string,string>={},sockets:Socket[]=[];let pool:pg.Pool,app:INestApplication,base:string,created=false;
+       6 |  const api=(method:'get'|'post'|'patch',route:string,user='owner',body?:object)=>{const r=request(base)[method]('/api/v1/'+route).set('Cookie',cookies[user]).set('Origin',origin);return body===undefined?r:r.send(body);};
+    >  7 |  const create=async(kind='BUG',clientRequestId=randomUUID())=>{const r=await api('post','support/requests','owner',{kind,clientRequestId,...(kind==='CHAT'?{}:{title:'FG kiểm thử hỗ trợ'}),body:'Nội dung riêng của chủ yêu cầu'});expect(r.status).toBe(201);return SupportCreateResponseSchema.parse(r.body);};
+         |                                                                                                                                                                                                                                                      ^
+       8 |  const message=(id:string,user='owner',body='Tin tiếp theo',clientMessageId=randomUUID())=>api('post',(user==='admin'?'admin/':'')+'support/requests/'+id+'/messages',user,{body,clientMessageId});
+       9 |  const detail=(id:string,user='owner')=>api('get',(user==='admin'?'admin/':'')+'support/requests/'+id,user);
+      10 |  async function connect(user='owner'){const socket=io(base+'/support',{path:'/socket.io',transports:['websocket'],forceNew:true,reconnection:false,extraHeaders:{Cookie:cookies[user],Origin:origin}});sockets.push(socket);await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Support socket connection deadline')),5000);socket.once('connect',()=>{clearTimeout(timer);resolve();});socket.once('connect_error',()=>{clearTimeout(timer);reject(new Error('Support namespace unavailable or unauthorized'));});});return socket;}
+
+      at create (test/support.integration.spec.ts:7:246)
+      at Object.<anonymous> (test/support.integration.spec.ts:36:111)
+
+Test Suites: 1 failed, 1 total
+Tests:       18 failed, 18 total
+Snapshots:   0 total
+Time:        70.407 s
+Ran all test suites matching apps/api/test/support.integration.spec.ts.

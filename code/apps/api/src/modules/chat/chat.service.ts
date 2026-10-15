@@ -30,12 +30,16 @@ export async function lockSocialPair(db: Queryable, firstId: string, secondId: s
 @Injectable()
 export class ChatService implements OnModuleInit, OnModuleDestroy {
     private pool!: Pool;
+    private moderationReady=false;
     constructor(private readonly auth: AuthService,private readonly lobbyCipher:LobbyCipher) { }
-    onModuleInit() { this.pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 8, connectionTimeoutMillis: 5000, statement_timeout: 10000 }); }
+    async onModuleInit() { this.pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 8, connectionTimeoutMillis: 5000, statement_timeout: 10000 }); this.moderationReady=Boolean((await this.pool.query("SELECT to_regclass('moderation_message_tombstones') IS NOT NULL AS ready")).rows[0].ready); }
     async onModuleDestroy() {
         if (this.pool)
             await this.pool.end();
     }
+    visibleMessageSql(alias=''){if(!/^[a-z]*$/.test(alias))throw new Error('Invalid internal message alias');return this.moderationReady?'AND NOT EXISTS(SELECT 1 FROM moderation_message_tombstones removed WHERE removed.message_id='+ (alias?alias+'.':'') +'id)':'';}
+    async isMessageRemoved(id:string,db:Queryable=this.pool){return this.moderationReady&&Boolean((await db.query('SELECT 1 FROM moderation_message_tombstones WHERE message_id=$1',[id])).rowCount);}
+    async assertMessageVisible(id:string,db:Queryable=this.pool){if(await this.isMessageRemoved(id,db))chatError(ErrorCode.NOT_FOUND,'Message unavailable');}
     async actor(headers: IncomingHttpHeaders): Promise<ChatActor> {
         const data = await this.auth.getAuthInstance().api.getSession({ headers: fromNodeHeaders(headers), query: { disableCookieCache: true } });
         if (!data) {
@@ -134,6 +138,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         if(state?.mode==='LOBBY_AEAD'&&state.migration_state!=='RECONCILED')throw new ConflictException('Lobby migration required');return state;
     }
     private async dto(id: string, db: Queryable = this.pool, includeReply = true): Promise<MessageDTO> {
+        await this.assertMessageVisible(id,db);
         const row = (await db.query(`SELECT m.*,to_char(m.created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso,to_char(m.updated_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS updated_iso,u.name,u.image,p.display_name,p.avatar_url,p.custom_status FROM messages m JOIN "user" u ON u.id=m.sender_id LEFT JOIN profiles p ON p.user_id=u.id WHERE m.id=$1`, [id])).rows[0];
         if (!row)
             chatError(ErrorCode.NOT_FOUND, 'Message not found');
@@ -142,7 +147,8 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         const images = (await db.query('SELECT * FROM attachments WHERE message_id=$1 AND conversation_id=$2 ORDER BY created_at,id', [id, row.conversation_id])).rows;
         const mentioned = (await db.query(`SELECT u.id,u.name,u.image,p.display_name,p.avatar_url,p.custom_status FROM mentions m JOIN "user" u ON u.id=m.mentioned_user_id LEFT JOIN profiles p ON p.user_id=u.id WHERE m.message_id=$1 ORDER BY u.id`, [id])).rows;
         const summary = (user: typeof row) => ({ id: user.id, displayName: user.display_name ?? user.name, avatarUrl: user.avatar_url ?? user.image ?? null, customStatus: user.custom_status ?? 'JUST_CHATTING' });
-        const replyToMessage = includeReply && row.reply_to_id ? await this.dto(row.reply_to_id, db, false) : undefined;
+        const replyToId=row.reply_to_id&&!await this.isMessageRemoved(row.reply_to_id,db)?row.reply_to_id:null;
+        const replyToMessage = includeReply && replyToId ? await this.dto(replyToId, db, false) : undefined;
         let content=row.content;let attachments:MessageDTO['attachments'];
         if(state?.mode==='LOBBY_AEAD'||row.encryption_mode==='LOBBY_AEAD'){
             if(state?.mode!=='LOBBY_AEAD'||row.encryption_mode!=='LOBBY_AEAD')throw new ServiceUnavailableException('Lobby ciphertext required');
@@ -150,7 +156,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
             if(payload.attachments.length!==images.length||images.some(image=>image.encryption_mode!=='LOBBY_AEAD'||!payload.attachments.some(a=>a.id===image.id)))throw new ServiceUnavailableException('Lobby attachment integrity failed');
             content=payload.content;attachments=payload.attachments.map(a=>attachmentDTO({id:a.id,file_name:a.fileName,file_size:a.fileSize,mime_type:a.mimeType}));
         }else attachments=images.map(attachmentDTO);
-        return MessageSchema.parse({ id: row.id, conversationId: row.conversation_id, senderId: row.sender_id, sender: summary({ ...row, id: row.sender_id }), content, attachments, mentions: mentioned.map(summary), mentionedUserIds: mentioned.map(user => user.id), replyToId: row.reply_to_id, ...replyToMessage ? { replyToMessage } : {}, createdAt: row.created_iso, updatedAt: row.updated_iso });
+        return MessageSchema.parse({ id: row.id, conversationId: row.conversation_id, senderId: row.sender_id, sender: summary({ ...row, id: row.sender_id }), content, attachments, mentions: mentioned.map(summary), mentionedUserIds: mentioned.map(user => user.id), replyToId, ...replyToMessage ? { replyToMessage } : {}, createdAt: row.created_iso, updatedAt: row.updated_iso });
     }
     async history(id: string, query: ListMessagesQuery, actor: ChatActor): Promise<Page<MessageDTO>> {
         const conversationId = await this.authorize(id, actor);
@@ -159,7 +165,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         const rows = (await this.pool.query<{
             id: string;
             created_iso: string;
-        }>(`SELECT id,to_char(created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso FROM messages WHERE conversation_id=$1 ${cursor ? 'AND (created_at,id)<($3::timestamp,$4::text)' : ''} ORDER BY created_at DESC,id DESC LIMIT $2`, cursor ? [conversationId, query.limit + 1, cursor.createdAt, cursor.id] : [conversationId, query.limit + 1])).rows;
+        }>(`SELECT id,to_char(created_at,'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_iso FROM messages WHERE conversation_id=$1 ${this.visibleMessageSql()} ${cursor ? 'AND (created_at,id)<($3::timestamp,$4::text)' : ''} ORDER BY created_at DESC,id DESC LIMIT $2`, cursor ? [conversationId, query.limit + 1, cursor.createdAt, cursor.id] : [conversationId, query.limit + 1])).rows;
         const hasMore = rows.length > query.limit;
         const selected = rows.slice(0, query.limit);
         const last = selected.at(-1);
@@ -184,6 +190,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
             }>(`INSERT INTO messages(id,conversation_id,sender_id,content,client_message_id) VALUES($1,$2,$3,$4,$5) ON CONFLICT(sender_id,conversation_id,client_message_id) DO NOTHING RETURNING id`, [randomUUID(), conversationId, actor.userId, input.content.trim(), input.clientMessageId])).rows[0];
             const messageId = inserted?.id ?? (await client.query('SELECT id FROM messages WHERE sender_id=$1 AND conversation_id=$2 AND client_message_id=$3', [actor.userId, conversationId, input.clientMessageId])).rows[0].id;
             if (inserted) {
+                if(input.replyToId)await this.assertMessageVisible(input.replyToId,client);
                 if (input.replyToId) {
                     const parent = await client.query('SELECT id FROM messages WHERE id=$1 AND conversation_id=$2 FOR KEY SHARE', [input.replyToId, conversationId]);
                     if (!parent.rowCount)
@@ -233,6 +240,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         await db.query(`SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_lobby_message',$1::text,$2::text,$3::text)::text,0::bigint))`,[actor.userId,conversationId,input.clientMessageId]);
         const existing=(await db.query('SELECT id FROM messages WHERE sender_id=$1 AND conversation_id=$2 AND client_message_id=$3',[actor.userId,conversationId,input.clientMessageId])).rows[0];
         if(existing){const saved=await this.dto(existing.id,db);if(saved.content!==input.content.trim()||saved.replyToId!==(input.replyToId??null)||JSON.stringify(saved.attachments.map(a=>a.id).sort())!==JSON.stringify([...input.attachmentIds].sort())||JSON.stringify(saved.mentionedUserIds.slice().sort())!==JSON.stringify([...new Set(input.mentionedUserIds)].sort()))throw new ConflictException('Message retry differs');return saved;}
+        if(input.replyToId)await this.assertMessageVisible(input.replyToId,db);
         if(input.replyToId&&!(await db.query('SELECT id FROM messages WHERE id=$1 AND conversation_id=$2 FOR KEY SHARE',[input.replyToId,conversationId])).rowCount)chatError(ErrorCode.INVALID_INPUT,'Reply must belong to this conversation');
         const ids=[...new Set(input.attachmentIds)].sort();if(ids.length>4||ids.length!==input.attachmentIds.length)chatError(ErrorCode.INVALID_INPUT,'Invalid image selection');
         const drafts=ids.length?(await db.query(`SELECT * FROM chat_crypto_upload_drafts WHERE id=ANY($1::text[]) ORDER BY id FOR UPDATE`,[ids])).rows:[];

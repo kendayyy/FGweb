@@ -1,0 +1,23 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:19528) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL apps/api/test/support.integration.spec.ts (47.304 s)
+  ● T37 real private support API and realtime › revokes selected admin authority even while durable delivery is waiting
+
+    Authority revoke stalled behind durable delivery
+
+      44 |  it('revokes selected admin authority even while durable delivery is waiting',async()=>{
+      45 |   const r=await create(),s=await connect('admin');expect((await ack(s,events.SUBSCRIBE,{requestId:r.request.id})).ok).toBe(true);const service=app.get(SupportService),original=service.dispatch.bind(service);let release!:()=>void;const gate=new Promise<void>(resolve=>{release=resolve;}),paused=jest.spyOn(service,'dispatch').mockImplementation(async publish=>{await gate;return original(publish);});
+    > 46 |   try{const deadline=Date.now()+5000;while(paused.mock.calls.length===0){if(Date.now()>deadline)throw new Error('Actual dispatcher barrier deadline');await new Promise(resolve=>setTimeout(resolve,20));}const disconnected=new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Authority revoke stalled behind durable delivery')),8000);s.once('disconnect',()=>{clearTimeout(timer);resolve();});});void disconnected.catch(()=>{});process.env.ADMIN_USER_IDS='';await disconnected;expect(s.connected).toBe(false);}finally{release();paused.mockRestore();}
+         |                                                                                                                                                                                                                                                                                                     ^
+      47 |  });
+      48 | });
+      49 |
+
+      at Timeout._onTimeout (test/support.integration.spec.ts:46:293)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 21 skipped, 22 total
+Snapshots:   0 total
+Time:        47.922 s
+Ran all test suites matching apps/api/test/support.integration.spec.ts with tests matching "revokes selected admin authority even".

@@ -26,6 +26,9 @@ export enum ErrorCode {
   PUBLISH_LIMIT = 'PUBLISH_LIMIT',
   INVALID_INPUT = 'INVALID_INPUT',
   RATE_LIMITED = 'RATE_LIMITED',
+  CONFLICT = 'CONFLICT',
+  SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
 }
 
 export const ErrorCodeToHttpStatus: Record<ErrorCode, number> = {
@@ -38,6 +41,9 @@ export const ErrorCodeToHttpStatus: Record<ErrorCode, number> = {
   [ErrorCode.PUBLISH_LIMIT]: 409,
   [ErrorCode.INVALID_INPUT]: 422,
   [ErrorCode.RATE_LIMITED]: 429,
+  [ErrorCode.CONFLICT]: 409,
+  [ErrorCode.SERVICE_UNAVAILABLE]: 503,
+  [ErrorCode.INTERNAL_ERROR]: 500,
 };
 
 export const ApiErrorResponseSchema = z.object({

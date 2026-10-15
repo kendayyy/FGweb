@@ -1,0 +1,71 @@
+
+ RUN  v5.0.3 E:/FGweb/code/packages/database
+
+ ❯ test/moderation-support-migration.test.ts (5 tests | 5 failed) 23845ms
+   ❯ T37 additive durable support and moderation migration (5)
+     × creates four durable delivery/audit/tombstone tables on a fresh schema 18ms
+     × preserves all pre0026 rows including support bodies when upgraded and retried 642ms
+     × ties support delivery identifiers to the exact parent and event shape 4ms
+     × keeps note delivery private and deduplicated without copying its body 3ms
+     × requires a real audit actor/target and binds moderation delivery to one audit 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/moderation-support-migration.test.ts > T37 additive durable support and moderation migration > creates four durable delivery/audit/tombstone tables on a fresh schema
+AssertionError: expected null to be 'support_outbox' // Object.is equality
+
+- Expected:
+"support_outbox"
+
++ Received:
+null
+
+ ❯ test/moderation-support-migration.test.ts:8:268
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  test/moderation-support-migration.test.ts > T37 additive durable support and moderation migration > preserves all pre0026 rows including support bodies when upgraded and retried
+AssertionError: expected +0 to be 4 // Object.is equality
+
+- Expected
++ Received
+
+- 4
++ 0
+
+ ❯ test/moderation-support-migration.test.ts:9:513
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  test/moderation-support-migration.test.ts > T37 additive durable support and moderation migration > ties support delivery identifiers to the exact parent and event shape
+error: relation "support_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/moderation-support-migration.test.ts:10:87
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  test/moderation-support-migration.test.ts > T37 additive durable support and moderation migration > keeps note delivery private and deduplicated without copying its body
+error: relation "support_outbox" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/moderation-support-migration.test.ts:11:87
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  test/moderation-support-migration.test.ts > T37 additive durable support and moderation migration > requires a real audit actor/target and binds moderation delivery to one audit
+error: relation "moderation_audit" does not exist
+ ❯ ../../node_modules/pg/lib/client.js:694:17
+ ❯ test/moderation-support-migration.test.ts:12:112
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  21:41:55
+   Duration  25.64s (tests 94%, import 5%, transform 1%)
+

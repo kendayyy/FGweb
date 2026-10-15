@@ -1,0 +1,83 @@
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+(node:10620) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL quality/evidence/T37/auth-session-race.integration.spec.ts (24.528 s)
+  ● T37 actual credential session creation versus actual BAN › drains a real in-flight INSERT before BAN completes, and UNBAN cannot revive its cookie
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      17 |  const wait=async(fn:()=>Promise<boolean>)=>{const end=Date.now()+10000;while(!await fn()){if(Date.now()>end)throw new Error('Actual SQL boundary deadline');await new Promise(r=>setTimeout(r,20));}};
+      18 |  beforeAll(async()=>{
+    > 19 |   fs.mkdirSync(evidence,{recursive:true});fs.mkdirSync(runtime,{recursive:true});const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options','-c search_path='+schema);pool=new pg.Pool({connectionString:url.href,max:8,statement_timeout:20000});await pool.query('CREATE SCHEMA "'+schema+'"');created=true;await migrate(drizzle(pool),{migrationsFolder:'packages/database/migrations',migrationsSchema:schema});
+         |                                                                                                                                                                                                                                                                                                              ^
+      20 |   for(const id of ['admin','bob']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,id==='admin'?'kingame':id,id+'@t37.fixture.invalid']);await pool.query('INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,\'credential\',$2,$3,now(),now())',[id+'-credential',id,await hashFgPassword(password)]);}
+      21 |   const token=randomUUID();await pool.query('INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES(\'admin-session\',\'admin\',$1,now()+interval \'1 hour\',now(),now())',[token]);adminCookie=await createSignedSessionCookie(secret,token);
+      22 |   Object.assign(process.env,env,{DATABASE_URL:url.href,PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret,ADMIN_USER_IDS:'admin',LIVEKIT_SERVER_URL:'',LIVEKIT_ADMISSION_URL:'',FG_UPLOADS_DIR:path.join(runtime,'uploads'),FG_CRYPTO_OBJECTS_DIR:path.join(runtime,'objects')});delete process.env.ADMIN_DISCORD_IDS;
+
+      at node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (quality/evidence/T37/auth-session-race.integration.spec.ts:19:302)
+
+  ● T37 actual credential session creation versus actual BAN › denies an actual credential login while BAN is current without creating a session
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      17 |  const wait=async(fn:()=>Promise<boolean>)=>{const end=Date.now()+10000;while(!await fn()){if(Date.now()>end)throw new Error('Actual SQL boundary deadline');await new Promise(r=>setTimeout(r,20));}};
+      18 |  beforeAll(async()=>{
+    > 19 |   fs.mkdirSync(evidence,{recursive:true});fs.mkdirSync(runtime,{recursive:true});const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options','-c search_path='+schema);pool=new pg.Pool({connectionString:url.href,max:8,statement_timeout:20000});await pool.query('CREATE SCHEMA "'+schema+'"');created=true;await migrate(drizzle(pool),{migrationsFolder:'packages/database/migrations',migrationsSchema:schema});
+         |                                                                                                                                                                                                                                                                                                              ^
+      20 |   for(const id of ['admin','bob']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,id==='admin'?'kingame':id,id+'@t37.fixture.invalid']);await pool.query('INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,\'credential\',$2,$3,now(),now())',[id+'-credential',id,await hashFgPassword(password)]);}
+      21 |   const token=randomUUID();await pool.query('INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES(\'admin-session\',\'admin\',$1,now()+interval \'1 hour\',now(),now())',[token]);adminCookie=await createSignedSessionCookie(secret,token);
+      22 |   Object.assign(process.env,env,{DATABASE_URL:url.href,PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret,ADMIN_USER_IDS:'admin',LIVEKIT_SERVER_URL:'',LIVEKIT_ADMISSION_URL:'',FG_UPLOADS_DIR:path.join(runtime,'uploads'),FG_CRYPTO_OBJECTS_DIR:path.join(runtime,'objects')});delete process.env.ADMIN_DISCORD_IDS;
+
+      at node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (quality/evidence/T37/auth-session-race.integration.spec.ts:19:302)
+
+  ● T37 actual credential session creation versus actual BAN › rechecks BAN after login waits for the actual in-flight ban transaction
+
+    connect ECONNREFUSED 127.0.0.1:55432
+
+      17 |  const wait=async(fn:()=>Promise<boolean>)=>{const end=Date.now()+10000;while(!await fn()){if(Date.now()>end)throw new Error('Actual SQL boundary deadline');await new Promise(r=>setTimeout(r,20));}};
+      18 |  beforeAll(async()=>{
+    > 19 |   fs.mkdirSync(evidence,{recursive:true});fs.mkdirSync(runtime,{recursive:true});const env=parseEnv(fs.readFileSync('.env.local','utf8')),url=new URL(env.DATABASE_URL);url.searchParams.set('options','-c search_path='+schema);pool=new pg.Pool({connectionString:url.href,max:8,statement_timeout:20000});await pool.query('CREATE SCHEMA "'+schema+'"');created=true;await migrate(drizzle(pool),{migrationsFolder:'packages/database/migrations',migrationsSchema:schema});
+         |                                                                                                                                                                                                                                                                                                              ^
+      20 |   for(const id of ['admin','bob']){await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,id==='admin'?'kingame':id,id+'@t37.fixture.invalid']);await pool.query('INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,\'credential\',$2,$3,now(),now())',[id+'-credential',id,await hashFgPassword(password)]);}
+      21 |   const token=randomUUID();await pool.query('INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES(\'admin-session\',\'admin\',$1,now()+interval \'1 hour\',now(),now())',[token]);adminCookie=await createSignedSessionCookie(secret,token);
+      22 |   Object.assign(process.env,env,{DATABASE_URL:url.href,PUBLIC_ORIGIN:origin,BETTER_AUTH_URL:origin,BETTER_AUTH_SECRET:secret,ADMIN_USER_IDS:'admin',LIVEKIT_SERVER_URL:'',LIVEKIT_ADMISSION_URL:'',FG_UPLOADS_DIR:path.join(runtime,'uploads'),FG_CRYPTO_OBJECTS_DIR:path.join(runtime,'objects')});delete process.env.ADMIN_DISCORD_IDS;
+
+      at node_modules/pg-pool/index.js:45:11
+      at Object.<anonymous> (quality/evidence/T37/auth-session-race.integration.spec.ts:19:302)
+
+
+  ● Test suite failed to run
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      24 |   fs.writeFileSync(evidence+'/setup.json',JSON.stringify({at:new Date().toISOString(),schema,realProductionApp:true,actualBetterAuthCredentialHttp:true,realSaltedScrypt:true,testOnlyInsertBarrier:true,mainMigration:false})+'\n',{flag:'wx'});
+      25 |  });
+    > 26 |  afterAll(async()=>{const cleanup={appClosed:false,schemaRemoved:false,poolEnded:false,runtimeRemoved:false};try{await app?.close();cleanup.appClosed=true;}finally{if(created){expect(schema).toMatch(/^t37_auth_[a-f0-9]{32}$/);await pool.query('DROP SCHEMA "'+schema+'" CASCADE');cleanup.schemaRemoved=(await pool.query('SELECT 1 FROM pg_namespace WHERE nspname=$1',[schema])).rowCount===0;}await pool?.end();cleanup.poolEnded=true;if(fs.existsSync(runtime)){expect(path.dirname(runtime)).toBe(path.resolve('.runtime/t37'));expect(fs.realpathSync(runtime)).toBe(runtime);fs.rmSync(runtime,{recursive:true});}cleanup.runtimeRemoved=!fs.existsSync(runtime);process.env=saved;fs.writeFileSync(evidence+'/cleanup.json',JSON.stringify({at:new Date().toISOString(),schema,cleanup})+'\n',{flag:'wx'});expect(Object.values(cleanup).every(Boolean)).toBe(true);}});
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^
+      27 |  it('drains a real in-flight INSERT before BAN completes, and UNBAN cannot revive its cookie',async()=>{
+      28 |   const holder=await pool.connect();let pendingLogin:Promise<request.Response>|undefined,pendingBan:Promise<request.Response>|undefined;let blockedAtInsert:boolean,banCommittedBeforeRelease=false,gateObserved=false;
+      29 |   await pool.query("CREATE FUNCTION t37_pause_session_insert() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.user_id='bob' THEN PERFORM pg_advisory_xact_lock(hashtextextended('t37_auth_insert_'||TG_TABLE_SCHEMA,0)); END IF; RETURN NEW; END $$; CREATE TRIGGER t37_pause_session_insert BEFORE INSERT ON session FOR EACH ROW EXECUTE FUNCTION t37_pause_session_insert()");
+
+      at Object.<anonymous> (quality/evidence/T37/auth-session-race.integration.spec.ts:26:840)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        24.964 s, estimated 43 s
+Ran all test suites.

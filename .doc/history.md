@@ -6424,3 +6424,211 @@
 - Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:13.265Z–2026-10-15T14:32:22.367Z exit0: support-git-push-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-git-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
 
 - Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:26.850Z–2026-10-15T14:32:28.882Z exit0: support-github-primary-verification-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-github-primary-verification-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — final GitHub backup 2026-10-15T14:33:05.955Z: normal origin/master commit/push exit0/0, remote SHA 645696169d0373aec1c891bd8253c9f9bb30a4d5 verified; primary d20386bac672d90e3254268e65c600103786d2d7. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup complete, final verification local to avoid recursion; T37 may enter only through its reviewed gate. Evidence code/quality/evidence/T36-SUPPORT-DATA/github-final-sync1.json.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:37.944Z–2026-10-15T14:32:39.248Z exit0: support-receipt-stage-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-receipt-stage-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:39.378Z–2026-10-15T14:32:39.956Z exit0: support-public-staged-scan-2. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-public-staged-scan-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:45.561Z–2026-10-15T14:32:45.929Z exit0: support-git-receipt-commit-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-git-receipt-commit-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:32:50.663Z–2026-10-15T14:32:55.198Z exit0: support-git-receipt-push-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-git-receipt-push-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+- Coding and build 3 — T36-SUPPORT-DATA — actual 2026-10-15T14:33:03.952Z–2026-10-15T14:33:05.984Z exit0: support-github-final-sync-1. Evidence code/quality/evidence/T36-SUPPORT-DATA/codex-support-github-final-sync-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T36-SUPPORT-DATA.
+
+### Coding and build 3 — T37 — scope and producer preparation
+
+- Start 2026-10-15T14:36:05.2718676Z / 2026-10-15 21:36:05 +07:00 after T36-SUPPORT-DATA PASS and verified6456961. Read approved support/moderation/crypto-ban handoff, auth/admin guards, existing relay/membership and call lifecycle. Pin exact plan/scope and88priorPASS before RED implementation; no business code or main migration yet. Plan code/quality/evidence/T37/implementation-plan1.md.
+
+- Coding and build 3 — T37 — reviewed entry 2026-10-15T14:37:52.401Z: IN_PROGRESS after T36-SUPPORT-DATA PASS and verified GitHub6456961. Exact backend/moderation/support/ban0026scope; 37597 originals/88priorPASS/spec/checker/env pinned, stock gate accepted. No business code before entry, no main migration/UI/admin provisioning/delegation. Evidence code/quality/evidence/T37/scope-review1.json; RED tests next.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:36:05.457Z–2026-10-15T14:37:52.566Z exit0: t37-reviewed-entry-1. Evidence code/quality/evidence/T37/codex-t37-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:39:53.571Z–2026-10-15T14:41:10.042Z exit1: t37-support-api-red-1. Evidence code/quality/evidence/T37/codex-t37-support-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:41:54.220Z–2026-10-15T14:42:20.953Z exit1: t37-migration-red-1. Evidence code/quality/evidence/T37/codex-t37-migration-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T14:46:57.223Z: Observed18support API404REDs and5missing-table PostgreSQL REDs; both clean owned teardown. Implement new support service/controllers/gateway and0026durable schema; add exact support-note parent identity scope amendment before reviewed integration. Evidence code/quality/evidence/T37/support-note-parent-scope1.json; acceptance pending.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 21:49:11 +07:00: Observed18actual API404REDs and5missing-table PG REDs. Wire only new support module and additive0026durable delivery/moderation schema with exact matching note identity/journal/exports; no existing route removed or main migration. Evidence code/quality/evidence/T37/support-integration1-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:47:50.699Z–2026-10-15T14:47:57.823Z exit0: t37-support-source-lint-1. Evidence code/quality/evidence/T37/codex-t37-support-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:46:57.361Z–2026-10-15T14:49:11.774Z exit0: t37-support-integration-1. Evidence code/quality/evidence/T37/codex-t37-support-integration-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:50:14.363Z–2026-10-15T14:50:41.429Z exit0: t37-migration-green-1. Evidence code/quality/evidence/T37/codex-t37-migration-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:50:51.619Z–2026-10-15T14:51:09.896Z exit0: t37-api-types-1. Evidence code/quality/evidence/T37/codex-t37-api-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:51:30.868Z–2026-10-15T14:52:28.568Z exit0: t37-support-api-green-1. Evidence code/quality/evidence/T37/codex-t37-support-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:52:29.003Z–2026-10-15T14:53:14.769Z exit1: t37-moderation-api-red-1. Evidence code/quality/evidence/T37/codex-t37-moderation-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:55:25.833Z–2026-10-15T14:56:08.994Z exit1: t37-moderation-crypto-red-1. Evidence code/quality/evidence/T37/codex-t37-moderation-crypto-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T14:56:51.758Z–2026-10-15T14:57:01.632Z exit1: t37-admin-contract-red-1. Evidence code/quality/evidence/T37/codex-t37-admin-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:05:22.948Z–2026-10-15T15:05:23.091Z exit0: t37-moderation-proposals-2. Evidence code/quality/evidence/T37/codex-t37-moderation-proposals-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T15:07:09.5102143Z: Support18/18 real API/PG/socket cases GREEN; moderation17/17 and native SDK5/5 REDs plus admin-state4/4 REDs preserved. Implemented new moderation/controller/job modules, post-commit identifier delivery, session-first ban ordering and slot release before active-member changes. Exact shared integrations pending gate. Private undeclared crypto source is never decrypted by moderation; native tests use actual WASM ciphertext and encrypted recovery. No main migration or frontend run. Evidence code/quality/evidence/T37/.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 22:08:57 +07:00: Observed17moderation API REDs,5native WASM producer REDs and4admin contract REDs. Integrate moderation module, durable identifier signals/current socket revoke, tombstone-aware normal history/object paths and explicit admin banned-state DTO; preserve crypto evidence/ciphertext and88priorPASS. No main migration/production/UI. Evidence code/quality/evidence/T37/moderation-integration2-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:05:49.969Z–2026-10-15T15:08:57.885Z exit0: t37-moderation-integration-2. Evidence code/quality/evidence/T37/codex-t37-moderation-integration-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:09:33.818Z–2026-10-15T15:09:50.992Z exit0: t37-api-types-2. Evidence code/quality/evidence/T37/codex-t37-api-types-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:09:51.149Z–2026-10-15T15:09:53.257Z exit0: t37-admin-contract-green-1. Evidence code/quality/evidence/T37/codex-t37-admin-contract-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:10:24.646Z–2026-10-15T15:11:43.889Z exit1: t37-support-review-red-1. Evidence code/quality/evidence/T37/codex-t37-support-review-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:11:44.071Z–2026-10-15T15:12:34.802Z exit0: t37-moderation-api-green-1. Evidence code/quality/evidence/T37/codex-t37-moderation-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:12:35.029Z–2026-10-15T15:13:32.696Z exit1: t37-moderation-crypto-green-1. Evidence code/quality/evidence/T37/codex-t37-moderation-crypto-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T15:15:18.936Z: Real support review RED18pass/2fail confirmed selected-admin role revocation and delayed note beyond first100. Fix current-admin authorization for selected channels and exact parent/note lookup, preserve all20assertions. Evidence code/quality/evidence/T37/support-review-fix1.json; GREEN pending.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:15:19.164Z–2026-10-15T15:16:24.207Z exit0: t37-support-api-green-2. Evidence code/quality/evidence/T37/codex-t37-support-api-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:16:24.349Z–2026-10-15T15:17:09.383Z exit1: t37-moderation-crypto-red-2. Evidence code/quality/evidence/T37/codex-t37-moderation-crypto-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:19:12.127Z–2026-10-15T15:19:59.641Z exit1: t37-report-utc-red-1. Evidence code/quality/evidence/T37/codex-t37-report-utc-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:20:26.947Z–2026-10-15T15:20:35.076Z exit2: t37-api-types-3. Evidence code/quality/evidence/T37/codex-t37-api-types-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:21:37.702Z–2026-10-15T15:21:54.255Z exit0: t37-api-types-4. Evidence code/quality/evidence/T37/codex-t37-api-types-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:23:02.116Z–2026-10-15T15:23:08.372Z exit1: t37-source-lint-2. Evidence code/quality/evidence/T37/codex-t37-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:23:08.598Z–2026-10-15T15:23:58.751Z exit0: t37-moderation-api-green-2. Evidence code/quality/evidence/T37/codex-t37-moderation-api-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:23:58.930Z–2026-10-15T15:24:36.176Z exit0: t37-moderation-crypto-green-2. Evidence code/quality/evidence/T37/codex-t37-moderation-crypto-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:25:15.813Z–2026-10-15T15:25:26.185Z exit0: t37-source-lint-3. Evidence code/quality/evidence/T37/codex-t37-source-lint-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:25:26.348Z–2026-10-15T15:27:04.221Z exit1: t37-native-media-ban-1. Evidence code/quality/evidence/T37/codex-t37-native-media-ban-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:27:46.340Z–2026-10-15T15:28:54.664Z exit0: t37-native-media-ban-2. Evidence code/quality/evidence/T37/codex-t37-native-media-ban-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:30:07.019Z–2026-10-15T15:30:28.055Z exit0: t37-contracts-regression-1. Evidence code/quality/evidence/T37/codex-t37-contracts-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:30:28.159Z–2026-10-15T15:31:56.679Z exit1: t37-database-regression-1. Evidence code/quality/evidence/T37/codex-t37-database-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:31:56.867Z–2026-10-15T15:32:16.253Z exit0: t37-worker-regression-1. Evidence code/quality/evidence/T37/codex-t37-worker-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:32:16.402Z–2026-10-15T15:36:11.574Z exit1: t37-api-regressions-1. Evidence code/quality/evidence/T37/codex-t37-api-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:37:58.733Z–2026-10-15T15:39:35.442Z exit0: t37-database-regression-2. Evidence code/quality/evidence/T37/codex-t37-database-regression-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:39:35.609Z–2026-10-15T15:42:56.952Z exit1: t37-api-regressions-2. Evidence code/quality/evidence/T37/codex-t37-api-regressions-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:43:30.252Z–2026-10-15T15:43:33.058Z exit1: t37-error-contract-red-1. Evidence code/quality/evidence/T37/codex-t37-error-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:43:33.209Z–2026-10-15T15:44:34.808Z exit1: t37-error-api-red-1. Evidence code/quality/evidence/T37/codex-t37-error-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:44:35.197Z–2026-10-15T15:47:58.242Z exit0: t37-api-regressions-3. Evidence code/quality/evidence/T37/codex-t37-api-regressions-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 22:51:55 +07:00: Real error schema/API RED requires exact generic conflict/availability/internal enum statuses for new support/moderation; preserve all old codes/statuses/filters and88priorPASS. Evidence code/quality/evidence/T37/common-errors1-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:49:27.059Z–2026-10-15T15:51:55.849Z exit0: t37-error-contract-adoption-1. Evidence code/quality/evidence/T37/codex-t37-error-contract-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 22:54:56 +07:00: Exact source-pinned contracts/database compiled exports for reviewed0026schema, admin banned-state DTO and generic error codes before wiring new-route filters. Preserve88priorPASS/canonical unrelated artifacts; no main/production activation. Evidence code/quality/evidence/T37/package-builds1-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:52:31.574Z–2026-10-15T15:52:43.603Z exit0: t37-contracts-build-1. Evidence code/quality/evidence/T37/codex-t37-contracts-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:52:43.840Z–2026-10-15T15:52:53.181Z exit0: t37-database-build-1. Evidence code/quality/evidence/T37/codex-t37-database-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:52:53.729Z–2026-10-15T15:54:56.842Z exit0: t37-contracts-error-build-adoption-1. Evidence code/quality/evidence/T37/codex-t37-contracts-error-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T15:55:24.856Z: Final original API regression120/120 GREEN, contracts309/309, DB35/35 and worker10/10 after reversible current-requirement compatibility reviews. Generic error schema/API REDs confirmed409misclassifiedFORBIDDEN; install T37-owned structured filter after exact shared enum/source/build review. Legacy filters unchanged; new filter/full backend verification pending. Evidence code/quality/evidence/T37/error-filter-install1.json.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:55:24.961Z–2026-10-15T15:55:48.020Z exit0: t37-api-final-types-1. Evidence code/quality/evidence/T37/codex-t37-api-final-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:55:48.149Z–2026-10-15T15:56:10.830Z exit0: t37-contracts-final-1. Evidence code/quality/evidence/T37/codex-t37-contracts-final-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T15:56:10.939Z–2026-10-15T15:57:50.300Z exit0: t37-backend-final-1. Evidence code/quality/evidence/T37/codex-t37-backend-final-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:05:29.417Z–2026-10-15T16:06:22.510Z exit1: t37-auth-session-race-red-1. Evidence code/quality/evidence/T37/codex-t37-auth-session-race-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:07:25.002Z: Actual credential session/BAN race RED confirms remaining session1and stale cookie200afterUNBAN. Prepare exact AuthService scope/adapter transaction gate +matching moderation per-user lock; no production trigger or main migration. Evidence code/quality/evidence/T37/auth-session-gate-scope1.json; acceptance pending.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 23:11:12 +07:00: Fix native credential/BAN race: serialize actual session INSERT commit and ban/unban per-user before session drain, preserving old session-first operation lock order. Observed stale cookie200afterUNBAN must become401. Evidence code/quality/evidence/T37/auth-session-gate1-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:07:25.221Z–2026-10-15T16:11:12.374Z exit0: t37-auth-session-gate-adoption-1. Evidence code/quality/evidence/T37/codex-t37-auth-session-gate-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:12:03.297Z–2026-10-15T16:12:27.375Z exit0: t37-api-session-types-1. Evidence code/quality/evidence/T37/codex-t37-api-session-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:12:27.588Z–2026-10-15T16:13:11.563Z exit0: t37-auth-session-race-green-1. Evidence code/quality/evidence/T37/codex-t37-auth-session-race-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:13:11.810Z–2026-10-15T16:14:17.412Z exit0: t37-auth-regressions-1. Evidence code/quality/evidence/T37/codex-t37-auth-regressions-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:14:17.714Z–2026-10-15T16:16:05.441Z exit0: t37-backend-final-2. Evidence code/quality/evidence/T37/codex-t37-backend-final-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:16:05.799Z–2026-10-15T16:17:05.671Z exit0: t37-native-media-ban-3. Evidence code/quality/evidence/T37/codex-t37-native-media-ban-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:17:06.099Z–2026-10-15T16:17:13.282Z exit1: t37-source-lint-4. Evidence code/quality/evidence/T37/codex-t37-source-lint-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:17:34.346Z–2026-10-15T16:18:34.009Z exit1: t37-session-order-red-1. Evidence code/quality/evidence/T37/codex-t37-session-order-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:19:27.150Z: Native concurrency RED3/3 proves support500duringBAN lock inversion,11forms past10budget and61messages past60budget. Fix task-owned current actor session-first lock order and actor-wide create/send transaction budget gate. Retain all raw failures; no assertions/quotas lowered, no production triggers/main migration. Evidence code/quality/evidence/T37/session-order-fix-review1.json; GREEN pending.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:19:27.251Z–2026-10-15T16:20:15.078Z exit0: t37-session-order-green-1. Evidence code/quality/evidence/T37/codex-t37-session-order-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:26:48.486Z–2026-10-15T16:27:02.677Z exit0: t37-api-session-types-2. Evidence code/quality/evidence/T37/codex-t37-api-session-types-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:27:02.871Z–2026-10-15T16:27:28.669Z exit1: t37-auth-session-race-green-2. Evidence code/quality/evidence/T37/codex-t37-auth-session-race-green-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:27:59.936Z: Final auth revalidation interrupted before schema creation: PostgreSQL ECONNREFUSED127.0.0.1:55432; Docker Desktop daemon named pipe absent and desktop/backend processes absent. Start installed Docker Desktop hidden, recover existing local PG/Redis only; no cockpit/main migration. Preserve failed codex-t37-auth-session-race-green-2 and independent cleanup later.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:27:59.649Z–2026-10-15T16:28:11.336Z exit1: t37-local-service-recovery-1. Evidence code/quality/evidence/T37/codex-t37-local-service-recovery-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:29:12.201Z: Docker daemon recovered; initial compose recovery rejected due env-file selection, preserved exit1. Existing exact fg-local-postgres-1/redis-1 restarted without recreation/migration; real SELECT1 and RedisPING succeed. No cockpit, unrelated containers not changed. Evidence code/quality/evidence/T37/local-service-recovery2.json; rerun final verification next.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:28:32.535Z–2026-10-15T16:29:12.240Z exit0: t37-local-service-recovery-2. Evidence code/quality/evidence/T37/codex-t37-local-service-recovery-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:29:25.100Z–2026-10-15T16:29:56.166Z exit0: t37-auth-session-race-green-3. Evidence code/quality/evidence/T37/codex-t37-auth-session-race-green-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:29:56.641Z–2026-10-15T16:32:02.142Z exit1: t37-backend-final-3. Evidence code/quality/evidence/T37/codex-t37-backend-final-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:32:24.657Z–2026-10-15T16:33:05.128Z exit1: t37-selected-admin-revoke-diagnostic-1. Evidence code/quality/evidence/T37/codex-t37-selected-admin-revoke-diagnostic-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:33:41.674Z–2026-10-15T16:34:28.460Z exit0: t37-selected-admin-revoke-diagnostic-2. Evidence code/quality/evidence/T37/codex-t37-selected-admin-revoke-diagnostic-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:34:47.965Z: Selected admin disconnect timeout reproduced once in isolation then diagnostic rerun1/1GREEN, exact incidental cause unproven. Source review shows revocation loop coupled to awaited durable dispatch; add deterministic pending-dispatch authority test without changing old deadlines/assertions. Evidence selected diagnostic records retained; no claim transient failure resolved yet.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:34:48.059Z–2026-10-15T16:35:37.226Z exit1: t37-revoke-dispatch-barrier-red-1. Evidence code/quality/evidence/T37/codex-t37-revoke-dispatch-barrier-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:35:59.204Z: Deterministic pending-dispatch RED proves authority loop starves behind durable delivery. Split task-owned support gateway into independent single-flight auth/delivery work and await both during teardown; no deadline/assertion relaxation. Earlier incidental selected-role timeout cause remains unproven. Evidence code/quality/evidence/T37/independent-revocation-review1.json; GREEN pending.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:35:59.347Z–2026-10-15T16:37:38.590Z exit0: t37-backend-final-4. Evidence code/quality/evidence/T37/codex-t37-backend-final-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:37:43.495Z–2026-10-15T16:37:59.924Z exit0: t37-api-session-types-3. Evidence code/quality/evidence/T37/codex-t37-api-session-types-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:38:00.236Z–2026-10-15T16:38:58.481Z exit0: t37-native-media-ban-4. Evidence code/quality/evidence/T37/codex-t37-native-media-ban-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:38:58.786Z–2026-10-15T16:39:05.488Z exit1: t37-source-lint-5. Evidence code/quality/evidence/T37/codex-t37-source-lint-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:39:25.732Z–2026-10-15T16:39:31.372Z exit0: t37-source-lint-6. Evidence code/quality/evidence/T37/codex-t37-source-lint-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:39:31.601Z–2026-10-15T16:39:54.246Z exit0: t37-api-build-1. Evidence code/quality/evidence/T37/codex-t37-api-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — exact review 2026-10-15 23:43:12 +07:00: Exact source-pinned contracts/database/API compiled integration and truthful T37API/coverage mapping after scoped verification. Preserve frozen predecessors and88priorPASS; no main/production activation. Evidence code/quality/evidence/T37/traceability-build1-adoption-review.json; actual task acceptance pending,88priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:40:20.605Z–2026-10-15T16:43:12.969Z exit0: t37-traceability-build-adoption-1. Evidence code/quality/evidence/T37/codex-t37-traceability-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:43:13.139Z–2026-10-15T16:43:40.332Z exit0: t37-compiled-runtime-1. Evidence code/quality/evidence/T37/codex-t37-compiled-runtime-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:43:41.055Z–2026-10-15T16:45:50.055Z exit1: t37-final-integrity-1. Evidence code/quality/evidence/T37/codex-t37-final-integrity-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:46:25.920Z: Compiled production smoke10/10GREEN. Integrity run1failed323vs321API dist census: two frozen compiler metadata files must remain; all generated outputs matched. Review exact extras against both before-task/pre-build pins; keep originals unchanged, rerun auditor with explicit verified extras instead of deleting metadata. Evidence code/quality/evidence/T37/retained-build-metadata-review1.json.
+
+- Coding and build 3 — T37 — final integrity 2026-10-15T16:48:19.317Z: 37597 originals checked;88priorPASS/checker/env/lock/baseline/gate preserved; 564 serial tests, 409 source-pinned compiled files and10compiled smoke checks. Native credential/BAN race reproduced then fixed in both orders; 41 historical tables unchanged, owned schemas/runtime absent. Evidence code/quality/evidence/T37/final-integrity-review1.json; closure pending.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:46:26.052Z–2026-10-15T16:48:19.374Z exit0: t37-final-integrity-2. Evidence code/quality/evidence/T37/codex-t37-final-integrity-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — actual 2026-10-15T16:48:33.247Z–2026-10-15T16:48:36.701Z exit1: t37-reviewed-close-1. Evidence code/quality/evidence/T37/codex-t37-reviewed-close-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T37.
+
+- Coding and build 3 — T37 — 2026-10-15T16:49:08.172Z: Integrity GREEN37597originals/88priorPASS/41tables/409compiled/564serial+10smoke. Closure1prepared receipt but Windows ledger write returnedUNKNOWN; actual ledger remains IN_PROGRESS. Preserve draft closure as closure-pre-ledger-write-failure1.json and failed command; add bounded same-bytes ledger retry for transient UNKNOWN/EPERM/EBUSY only. No runtime/source or acceptance change.
+
+- Coding and build 3 — T37 — end/acceptance 2026-10-15T16:49:16.309Z: PASS after direct Codex source/evidence review, 564 serialized tests and10compiled production smoke checks, 409 source-pinned compiled files,88priorPASS/41historicaltables/baseline/checker/env/lock/exact gate preserved and owned cleanup verified. Actual credential/BAN stale-session race RED retained and both lock-order GREENs confirmed. 1466 outputs frozen; no frontend/main/production/media-quality claim. Evidence code/quality/evidence/T37/closure.json; scoped public privacy/GitHub backup pending before T38.

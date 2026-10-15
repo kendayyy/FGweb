@@ -1,0 +1,4 @@
+import fs from 'node:fs';import {spawnSync} from 'node:child_process';import assert from 'node:assert/strict';
+const d='quality/evidence/T37';assert.equal(JSON.parse(fs.readFileSync(d+'/codex-t37-api-build-1.json')).exitCode,0);
+const simple=args=>{const r=spawnSync(process.execPath,args,{stdio:'inherit',windowsHide:true});assert.equal(r.status,0,args.join(' ')+' failed');};const record=(label,args)=>{simple([d+'/record.mjs',label,process.execPath,...args]);simple([d+'/journal-command1.mjs',label]);};
+simple([d+'/prepare-traceability-build1.mjs']);record('t37-traceability-build-adoption-1',[d+'/adopt-exact.mjs','traceability-build1',d+'/traceability-build-plan1.json']);record('t37-compiled-runtime-1',[d+'/compiled-runtime-smoke2.mjs']);record('t37-final-integrity-1',[d+'/audit-integrity1.mjs']);simple([d+'/write-acceptance1.mjs']);

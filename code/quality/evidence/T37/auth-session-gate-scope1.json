@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-15T16:07:24.774Z",
+  "reviewer": "Codex",
+  "path": "apps/api/src/modules/auth/auth.service.ts",
+  "beforeSha256": "cdfa73044ea3bef68a39e6c2ea4f819d7c9fd76ab452fe9f0b1020622cbb998c",
+  "observed": "Real BetterAuth credential INSERT paused in owned PG trigger; BAN committed first, INSERT resumed, one stale session survived and old cookie returned200afterUNBAN.",
+  "red": "quality/evidence/T37/codex-t37-auth-session-race-red-1.json",
+  "remedy": "Per-user transaction advisory gate covering actual Drizzle session INSERT and ban-state recheck; same gate acquired before BAN session drain. Preserve hooks, native adapter, password checks, early session drain/lock ordering and default sequential adapter transaction semantics.",
+  "productionTriggers": false,
+  "mainMigration": false,
+  "unresolvedSourceFindings": [],
+  "acceptancePending": true
+}

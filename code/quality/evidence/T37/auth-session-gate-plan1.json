@@ -1,0 +1,19 @@
+{
+  "reviewer": "Codex",
+  "unresolvedSourceFindings": [],
+  "reason": "Fix native credential/BAN race: serialize actual session INSERT commit and ban/unban per-user before session drain, preserving old session-first operation lock order. Observed stale cookie200afterUNBAN must become401.",
+  "files": [
+    {
+      "path": "apps/api/src/modules/auth/auth.service.ts",
+      "proposed": "quality/evidence/T37/auth-session-gated1.ts",
+      "beforeSha256": "cdfa73044ea3bef68a39e6c2ea4f819d7c9fd76ab452fe9f0b1020622cbb998c",
+      "afterSha256": "717c5328c51b92a713cca285c64e75b9ff72deababddeac17d536c20295c40c4"
+    },
+    {
+      "path": "apps/api/src/modules/moderation/moderation.service.ts",
+      "proposed": "quality/evidence/T37/moderation-auth-session-gated1.ts",
+      "beforeSha256": "80f7210d95da8e16222d3d679da0e72ae848dbf82d850d7ce0c008fa5d628745",
+      "afterSha256": "10c7afc0d8d6bf58a1b9d206488627c27f7f13b5b07e2385816fba8444a3621e"
+    }
+  ]
+}

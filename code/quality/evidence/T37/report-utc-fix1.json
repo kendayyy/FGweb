@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-15T15:20:26.809Z",
+  "red": "codex-t37-report-utc-red-1.json",
+  "observedDriftMilliseconds": 25199943,
+  "cause": "Legacy reports.created_at is timestamp without time zone; pg Date interprets its wall time using the Windows+07local timezone",
+  "fix": "Explicit SQL UTC ISO projection on every report create/retry/list/resolve path; preserve microseconds and avoid driver-local Date conversion",
+  "beforeSha256": "30fc62617cc5008df5769040957b1b1092e57222c29764352a7e148c2d668d09",
+  "afterSha256": "f81a6f84f08dd6902f27908de436b79fae33baa11504604d278cbfbb06406965",
+  "assertionsRemoved": 0,
+  "acceptancePending": true
+}

@@ -1,3 +1,5 @@
+import {ModerationModule} from './modules/moderation/moderation.module.js';
+import {SupportModule} from './modules/support/support.module.js';
 import {PushModule} from './modules/push/push.module.js';
 import { ExternalLiveModule } from './modules/external-live/external-live.module.js';
 import {PrivateNotificationsModule} from './modules/notifications/private-notifications.module.js';
@@ -19,6 +21,6 @@ import { PlaySessionsModule } from './modules/play-sessions/play-sessions.module
 import { CallsModule } from './modules/calls/calls.module.js';
 
 @Module({
-  imports: [PushModule,PrivateNotificationsModule,CryptoCustodyModule, ChatCryptoModule, AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule, PlaySessionsModule, CallsModule, ExternalLiveModule],
+  imports: [ModerationModule,SupportModule,PushModule,PrivateNotificationsModule,CryptoCustodyModule, ChatCryptoModule, AuthModule, ProfilesModule, ChatModule, RealtimeModule, UploadsModule, PresenceModule, SocialModule, RoomsModule, RecruitmentsModule, TeamsModule, InvitationsModule, PlaySessionsModule, CallsModule, ExternalLiveModule],
 })
 export class AppModule {}

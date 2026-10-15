@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-15T15:15:19.045Z",
+  "priorRun": "codex-t37-moderation-crypto-green-1.json",
+  "observed": "5pass/2fail: renewal left the short session valid; PG correctly refused plaintext in RECONCILED state",
+  "verifiedLibrary": {
+    "path": "node_modules/better-auth/dist/api/routes/session.mjs",
+    "sha256": "1751e7c2a86169f89e2964a9e35475c0a761a09fa2e8efbc16176af51bdc6a01",
+    "behavior": "The locked getSession renews a short remembered session; a real signed dont_remember preference uses its non-renewing branch"
+  },
+  "corrections": [
+    "Use the existing real signed cookie helper for the genuine non-renewing session preference in the expiry case only; do not change auth implementation/timeouts/401 assertion",
+    "Set the owned legacy fixture to LEGACY_PENDING before inserting its source, preserving the actual plaintext write guard"
+  ],
+  "assertionsRemoved": 0,
+  "sourceImplementationChanged": false,
+  "beforeSha256": "dde1674adf8e35fdf3f3911d736bddb944880be69f25095585fab5c4985e9f46",
+  "afterSha256": "43f112d8e801eb45f20c12682568bb8aae31266e5a6429f9ce6898bfc14ffc25"
+}

@@ -1,3 +1,4 @@
+import {AdminUserListItemSchema} from './moderation.js';
 import {SupportApiEndpointRegistry} from './support.js';
 export * from './support.js';
 import {CallModerationRequestSchema,CallControlSuccessSchema} from './calls.js';
@@ -231,6 +232,6 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'POST', path: '/api/v1/reports', auth: 'Authenticated', requestSchema: CreateReportRequestSchema, responseSchema: ReportSchema },
   { method: 'GET', path: '/api/v1/admin/reports', auth: 'Admin', requestSchema: ListAdminReportsQuerySchema, responseSchema: createPageSchema(ReportSchema) },
   { method: 'PATCH', path: '/api/v1/admin/reports/:id', auth: 'Admin', requestSchema: UpdateAdminReportSchema, responseSchema: ReportSchema },
-  { method: 'GET', path: '/api/v1/admin/users', auth: 'Admin', requestSchema: ListAdminUsersQuerySchema, responseSchema: createPageSchema(PrivateProfileSchema) },
+  { method: 'GET', path: '/api/v1/admin/users', auth: 'Admin', requestSchema: ListAdminUsersQuerySchema, responseSchema: createPageSchema(AdminUserListItemSchema) },
   { method: 'PATCH', path: '/api/v1/admin/users/:id/ban', auth: 'Admin', requestSchema: AdminUserActionRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
 ];

@@ -30,16 +30,31 @@ export function createFgAuth(db: NodePgDatabase<typeof schema>, options: FgAuthO
   const isHttps = options.baseURL.startsWith('https://');
   const mail=options.mailTransport??authMailTransport(),from=options.mailFrom??process.env.SMTP_FROM!;
   const security=createAuthSecurity(db,mail,from,options.baseURL);
-  return betterAuth({
-    database: drizzleAdapter(db, {
-      provider: 'pg',
-      schema: {
-        user: schema.user,
-        session: schema.session,
-        account: schema.account,
-        verification: schema.verification,
+  const adapterConfig = {provider:'pg' as const,schema:{user:schema.user,session:schema.session,account:schema.account,verification:schema.verification}};
+  const database:ReturnType<typeof drizzleAdapter> = authOptions => {
+    const adapter=drizzleAdapter(db,adapterConfig)(authOptions);
+    const guarded:typeof adapter={...adapter,
+      create:async input=>{
+        if(input.model!=='session')return adapter.create(input);
+        const userId=input.data.userId;
+        if(typeof userId!=='string')throw new APIError('BAD_REQUEST',{message:'Session user required'});
+        // Hold the same per-user gate as BAN until the real INSERT commits.
+        // The earlier database hook alone cannot cover an in-flight SQL write.
+        return db.transaction(async tx=>{
+          await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(json_build_array('fg_auth_session',current_schema(),${userId}::text)::text,0))`);
+          const [latest]=await tx.select({action:schema.adminActions.action}).from(schema.adminActions).where(and(eq(schema.adminActions.targetUserId,userId),inArray(schema.adminActions.action,['BAN','UNBAN']))).orderBy(desc(schema.adminActions.createdAt),desc(schema.adminActions.id)).limit(1);
+          if(latest?.action==='BAN')throw new APIError('FORBIDDEN',{code:'ACCOUNT_BANNED',message:'Tài khoản đã bị khóa.'});
+          return drizzleAdapter(tx,adapterConfig)(authOptions).create(input);
+        });
       },
-    }),
+      // Preserve the configured adapter's default sequential fallback, while
+      // ensuring session creates inside Better Auth callbacks use this gate.
+      transaction:async callback=>callback(guarded),
+    };
+    return guarded;
+  };
+  return betterAuth({
+    database,
     baseURL: options.baseURL,
     secret: options.secret,
     disabledPaths: ['/get-access-token', '/refresh-token','/set-password'],

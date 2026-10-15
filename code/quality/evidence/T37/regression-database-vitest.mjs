@@ -1,0 +1,1 @@
+export default {test:{include:['quality/evidence/T37/regression-support-migration.test.ts','quality/evidence/T37/regression-identity.test.ts','quality/evidence/T37/regression-social-chat.test.ts','packages/database/test/moderation-support-migration.test.ts'],environment:'node',testTimeout:30000,hookTimeout:30000,fileParallelism:false,maxWorkers:1}};

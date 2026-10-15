@@ -148,6 +148,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
         if(state?.mode!=='LOBBY_AEAD')throw new ServiceUnavailableException('Lobby ciphertext required');
         if(!attached){if(draft.consumed_at||draft.expires_at.getTime()<=Date.now())chatError(ErrorCode.NOT_FOUND,'Image not found');if(draft.uploader_id!==actor?.userId)chatError(ErrorCode.FORBIDDEN,'Draft belongs to uploader');}
         else{
+            await this.chat.assertMessageVisible(attached.message_id);
             const message=(await this.pool.query('SELECT * FROM messages WHERE id=$1',[attached.message_id])).rows[0];
             if(!message||!draft.consumed_at||draft.message_id!==message.id||draft.conversation_id!==message.conversation_id||attached.conversation_id!==message.conversation_id||draft.uploader_id!==message.sender_id||message.encryption_mode!=='LOBBY_AEAD'||JSON.stringify(attached.crypto_envelope)!==JSON.stringify(draft.envelope))throw new ServiceUnavailableException('Lobby attachment integrity failed');
             const payload=await this.lobbyCipher.decodeMessage(message);if(!payload.attachments.some(a=>a.id===id))throw new ServiceUnavailableException('Lobby attachment selection failed');
@@ -156,6 +157,7 @@ export class UploadsService implements OnModuleInit, OnModuleDestroy {
     }
     async image(id: string, actor: ChatActor) {
         const attached = (await this.pool.query('SELECT * FROM attachments WHERE id=$1', [id])).rows[0];
+        if(attached?.message_id)await this.chat.assertMessageVisible(attached.message_id);
         if(attached?.encryption_mode==='LOBBY_AEAD')return this.lobbyImage(id,actor,attached);
         if(!attached&&(await this.pool.query("SELECT to_regclass('chat_crypto_upload_drafts') IS NOT NULL AS installed")).rows[0]?.installed){const encrypted=(await this.pool.query("SELECT id FROM chat_crypto_upload_drafts WHERE id=$1 AND encryption_mode='LOBBY_AEAD'",[id])).rows[0];if(encrypted)return this.lobbyImage(id,actor,undefined);}
         const draft = attached ? null : (await this.pool.query('SELECT * FROM pending_image_uploads WHERE id=$1 AND expires_at>now()', [id])).rows[0];

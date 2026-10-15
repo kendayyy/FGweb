@@ -1,0 +1,58 @@
+jest-haste-map: Haste module naming collision: fg-root
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\package.json
+    * <rootDir>\.runtime\t30-linux-api1\import-probe1\package.json
+
+jest-haste-map: Haste module naming collision: @fg/api
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\apps\api\package.json
+    * <rootDir>\.runtime\t30-linux-api1\import-probe1\apps\api\package.json
+
+jest-haste-map: Haste module naming collision: @bufbuild/protobuf
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\.runtime\t30-linux-api1\protocol-addon1\@bufbuild\protobuf\package.json
+    * <rootDir>\.runtime\t30-linux-dependencies\closure2\@bufbuild\protobuf\package.json
+
+jest-haste-map: Haste module naming collision: @fg/database
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\packages\database\package.json
+    * <rootDir>\.runtime\t30-linux-api1\seed\packages\database\package.json
+
+jest-haste-map: Haste module naming collision: @livekit/protocol
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\.runtime\t30-linux-dependencies\closure2\@livekit\protocol\package.json
+    * <rootDir>\.runtime\t30-linux-api1\protocol-addon1\@livekit\protocol\package.json
+
+jest-haste-map: Haste module naming collision: @fg/contracts
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\packages\contracts\package.json
+    * <rootDir>\.runtime\t30-linux-api1\seed\packages\contracts\package.json
+
+jest-haste-map: Haste module naming collision: @fg/web
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\apps\web\package.json
+    * <rootDir>\.runtime\t30-linux-api1\seed\apps\web\package.json
+
+jest-haste-map: Haste module naming collision: @fg/worker
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\apps\worker\package.json
+    * <rootDir>\.runtime\t30-linux-api1\seed\apps\worker\package.json
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151002: [0mUsing hybrid module kind (Node16/18/Next) is only supported in "isolatedModules: true". Please set "isolatedModules: true" in your tsconfig.json. To disable this message, you can set "diagnostics.ignoreCodes" to include 151002 in your ts-jest config. See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/options/diagnostics
+FAIL quality/evidence/T37/native-ban.integration.spec.ts
+  ● Test suite failed to run
+
+    The name `@livekit/protocol` was looked up in the Haste module map. It cannot be resolved, because there exists several different files, or packages, that provide a module for that particular name and platform. The platform is generic (no extension). You must delete or exclude files until there remains only one of these:
+
+      * `E:\FGweb\code\.runtime\t30-linux-api1\protocol-addon1\@livekit\protocol\package.json` (package)
+      * `E:\FGweb\code\.runtime\t30-linux-dependencies\closure2\@livekit\protocol\package.json` (package)
+
+      at ModuleMap._assertNoDuplicates (node_modules/jest-haste-map/build/index.js:244:11)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        15.931 s
+Ran all test suites matching quality/evidence/T37/native-ban.integration.spec.ts.
+(node:22408) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

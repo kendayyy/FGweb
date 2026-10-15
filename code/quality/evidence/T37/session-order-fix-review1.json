@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-15T16:19:27.150Z",
+  "reviewer": "Codex",
+  "observedRed": {
+    "supportAfterSessionDrain500": true,
+    "concurrentCreatePersisted11": true,
+    "concurrentMessagePersisted61": true
+  },
+  "red": "quality/evidence/T37/codex-t37-session-order-red-1.json",
+  "files": [
+    {
+      "path": "apps/api/src/modules/support/support-access.ts",
+      "beforeSha256": "a1b1520761f898685cf0ece8c50e7d7d05434d78ba493b6b8929d1ff6afde039",
+      "afterSha256": "752f700880618605cf900a2fd9a9efb2cfa306d9da95f3d71f34c7ec026e110d",
+      "original": "quality/evidence/T37/support-access-session-order1-before.ts"
+    },
+    {
+      "path": "apps/api/src/modules/support/support.service.ts",
+      "beforeSha256": "6303e45cec6c891f5559a08fd8a35bf0ce18bbc01e67a0fef979f01556c112f1",
+      "afterSha256": "8a4254d99df81e4ba471bb6dac083d94c5840de8e45683f83cfdae3f21fb1309",
+      "original": "quality/evidence/T37/support-write-budget1-before.ts"
+    }
+  ],
+  "remedy": "Acquire current session share before user share; serialize create/send budget checks and commits by actor under one transaction advisory gate before request/client locks. Preserve idempotent retry before budget, strict ACL, atomic receipts/outbox, quotas10/60 and every assertion.",
+  "scopeAlreadyTaskOwned": true,
+  "productionTriggers": false,
+  "acceptancePending": true
+}

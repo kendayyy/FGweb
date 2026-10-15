@@ -28,7 +28,7 @@ export const supportMessages=pgTable('support_messages',{
 export const supportNotes=pgTable('support_notes',{
  id:text('id').primaryKey(),requestId:text('request_id').notNull().references(()=>supportRequests.id,{onDelete:'cascade'}),authorId:text('author_id').notNull().references(()=>user.id,{onDelete:'restrict'}),clientNoteId:text('client_note_id').notNull(),body:text('body').notNull(),createdAt:timestamp('created_at',{withTimezone:true,mode:'date'}).notNull().defaultNow(),updatedAt:timestamp('updated_at',{withTimezone:true,mode:'date'}).notNull().defaultNow(),
 },t=>[
- unique('support_note_author_client_unique').on(t.requestId,t.authorId,t.clientNoteId),unique('support_note_audit_identity_unique').on(t.requestId,t.id,t.authorId),
+ unique('support_note_author_client_unique').on(t.requestId,t.authorId,t.clientNoteId),unique('support_note_delivery_identity_unique').on(t.requestId,t.id),unique('support_note_audit_identity_unique').on(t.requestId,t.id,t.authorId),
  check('support_note_identity_check',sql`char_length(id) BETWEEN 1 AND 128 AND id ~ '[^[:space:]]' AND id !~ '[[:cntrl:]]' AND char_length(client_note_id) BETWEEN 1 AND 128 AND client_note_id ~ '[^[:space:]]' AND client_note_id !~ '[[:cntrl:]]'`),
  check('support_note_body_time_check',sql`char_length(body) BETWEEN 1 AND 4000 AND body ~ '[^[:space:]]' AND updated_at>=created_at`),index('support_note_request_created_idx').on(t.requestId,t.createdAt,t.id),
 ]);

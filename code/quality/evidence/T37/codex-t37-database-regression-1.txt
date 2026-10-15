@@ -1,0 +1,53 @@
+
+ RUN  v5.0.3 E:/FGweb/code
+
+ ❯ quality/evidence/T37/regression-support-migration.test.ts (14 tests | 1 failed) 23340ms
+   ❯ support additive migration and relational privacy boundaries (14)
+     × upgrades populated pre0025 data without changing legacy rows and reruns idempotently 1320ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  quality/evidence/T37/regression-support-migration.test.ts > support additive migration and relational privacy boundaries > upgrades populated pre0025 data without changing legacy rows and reruns idempotently
+AssertionError: expected [ { table: 'account', …(2) }, …(67) ] to deeply equal [ { table: 'account', …(2) }, …(64) ]
+
+- Expected
++ Received
+
+@@ -230,10 +230,25 @@
+      "table": "messages",
+    },
+    {
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
++     "table": "moderation_audit",
++   },
++   {
++     "count": 0,
++     "digest": "d41d8cd98f00b204e9800998ecf8427e",
++     "table": "moderation_message_tombstones",
++   },
++   {
++     "count": 0,
++     "digest": "d41d8cd98f00b204e9800998ecf8427e",
++     "table": "moderation_outbox",
++   },
++   {
++     "count": 0,
++     "digest": "d41d8cd98f00b204e9800998ecf8427e",
+      "table": "notification_delivery_receipts",
+    },
+    {
+      "count": 0,
+      "digest": "d41d8cd98f00b204e9800998ecf8427e",
+
+ ❯ quality/evidence/T37/regression-support-migration.test.ts:36:276
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 34 passed (35)
+   Start at  22:30:29
+   Duration  86.84s (tests 91%, import 7%, transform 1%)
+

@@ -1,0 +1,2 @@
+import fs from 'node:fs';
+const d='quality/evidence/T37';for(const name of ['build-source-sandbox2.mjs','propose-built-package2.mjs'])fs.writeFileSync(d+'/'+name.replace('2.mjs','1.mjs'),fs.readFileSync('quality/evidence/T35/'+name,'utf8').replaceAll('quality/evidence/T35',d).replaceAll('-build2','-build1').replaceAll('Fresh T35','Fresh T37').replaceAll('delivery contracts/schema/APIs/worker','moderation/support/ban contracts/schema/API').replaceAll('85PASS','88PASS'),{flag:'wx'});console.log('Prepared owned source-pinned T37 build drivers.');

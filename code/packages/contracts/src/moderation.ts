@@ -1,3 +1,4 @@
+import {PrivateProfileSchema} from './profiles.js';
 import { z } from 'zod';
 import { IdSchema, IsoDateTimeSchema } from './common.js';
 import { UserSummarySchema } from './profiles.js';
@@ -121,3 +122,7 @@ export const AdminUserActionRequestSchema = z.object({
   reason: z.string().max(300).optional(),
 });
 export type AdminUserActionRequest = z.infer<typeof AdminUserActionRequestSchema>;
+
+// Sole-admin response only; never a public or current-user role grant.
+export const AdminUserListItemSchema=PrivateProfileSchema.extend({banned:z.boolean()}).strict();
+export type AdminUserListItem=z.infer<typeof AdminUserListItemSchema>;

@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-15T15:43:30.047Z",
+  "reviewer": "Codex",
+  "failure": "codex-t37-api-regressions-2.json",
+  "observed": "119/120pass; the remaining positive notification recovery followed explicit fixture BAN/session faults that now physically disconnected its socket",
+  "source": "quality/evidence/T37/compat-chat-crypto-realtime3.integration.spec.ts",
+  "sourceSha256": "2e4c32ef0c2848b8127145270913ef4fafdd988c6c99ccaa0e5d08efb6b336f8",
+  "target": "quality/evidence/T37/compat-chat-crypto-realtime4.integration.spec.ts",
+  "targetSha256": "61632acbd922b0f6ed26f3f69b16d76fc8fa8390867a732c92bd97554a1d6014",
+  "change": {
+    "before": "await bus.publish(busChannel,'N:'+offlineNotice.id);await wait(()=>items.length===2);",
+    "after": "if(!target.connected)await new Promise<void>((resolve,reject)=>{target.once('connect',resolve);target.once('connect_error',reject);target.connect();});await bus.publish(busChannel,'N:'+offlineNotice.id);await wait(()=>items.length===2);"
+  },
+  "reverseByteExact": true,
+  "assertionsRemoved": 0,
+  "privacyQuietAndPositiveDeliveryAssertionsUnchanged": true,
+  "reason": "Reconnect only after every fault/session/ACL restoration and before the final explicitly allowed bus wake. Keep every denial, generic-text, dedup and reauthorization assertion.",
+  "frozenSourceChanged": false,
+  "acceptancePending": true
+}
