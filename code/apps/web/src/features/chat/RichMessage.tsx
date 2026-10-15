@@ -3,12 +3,13 @@ import type { MessageDTO, AttachmentDTO } from '@fg/contracts';
 import { Reply, X, Image } from 'lucide-react';
 import { downloadImage } from './api.js';
 import './rich-chat.css';
-export function RichMessage({ message, onReply }: {
+export function RichMessage({ message, onReply, actions }: {
     message: MessageDTO;
+    actions?: React.ReactNode;
     onReply?: (message: MessageDTO) => void;
 }) {
     const [image, setImage] = useState<AttachmentDTO | null>(null);
-    return <><div className="fg-rich-message">{message.replyToMessage && <div className="fg-reply-preview"><span>{message.replyToMessage.sender.displayName}<small>{message.replyToMessage.content || 'Ảnh'}</small></span></div>}{message.content && <p className="fg-message-bubble">{message.content}</p>}{message.mentions.length > 0 && <div className="fg-message-mentions">{message.mentions.map(person => <span key={person.id}>@{person.displayName}</span>)}</div>}{message.attachments.length > 0 && <div className="fg-image-buttons">{message.attachments.map(attachment => <button type="button" key={attachment.id} aria-label={`Xem ảnh ${attachment.fileName}`} onClick={() => setImage(attachment)}><Image size={20}/><span>{attachment.fileName}</span></button>)}</div>}{onReply && <button type="button" className="fg-reply-action" aria-label={`Trả lời tin nhắn của ${message.sender.displayName}`} onClick={() => onReply(message)}><Reply size={16}/><span>Trả lời</span></button>}</div>{image && <ImageModal key={image.id} image={image} onClose={() => setImage(null)}/>}</>;
+    return <><div className="fg-rich-message">{message.replyToMessage && <div className="fg-reply-preview"><span>{message.replyToMessage.sender.displayName}<small>{message.replyToMessage.content || 'Ảnh'}</small></span></div>}{message.content && <p className="fg-message-bubble">{message.content}</p>}{message.mentions.length > 0 && <div className="fg-message-mentions">{message.mentions.map(person => <span key={person.id}>@{person.displayName}</span>)}</div>}{message.attachments.length > 0 && <div className="fg-image-buttons">{message.attachments.map(attachment => <button type="button" key={attachment.id} aria-label={`Xem ảnh ${attachment.fileName}`} onClick={() => setImage(attachment)}><Image size={20}/><span>{attachment.fileName}</span></button>)}</div>}{onReply && <button type="button" className="fg-reply-action" aria-label={`Trả lời tin nhắn của ${message.sender.displayName}`} onClick={() => onReply(message)}><Reply size={16}/><span>Trả lời</span></button>}{actions}</div>{image && <ImageModal key={image.id} image={image} onClose={() => setImage(null)}/>}</>;
 }
 function ImageModal({ image, onClose }: {
     image: AttachmentDTO;

@@ -547,3 +547,14 @@ Actual Better Auth session creation acquires the same per-user PostgreSQL transa
 Support current-authority transactions lock the session before the user, matching BAN's early session drain. Create/send serialize actor budget checks through commit before client/request locks, so concurrent different client/request IDs cannot exceed their10/60endpoint budgets. Support socket authority revalidation runs independently of durable dispatch, so a held delivery job does not stall admin-role revocation. Original deadlines, ownership and per-emission checks remain.
 
 Migration0026 adds support_outbox, moderation_audit, moderation_outbox and moderation_message_tombstones plus the exact support-note composite identity. Fresh/populated migrations preserve existing rows and private evidence; no main migration or production activation. Source-pinned contracts/database/API builds and the compiled production graph are verified separately. All failed runs, actual REDs, reversible compatibility copies and cleanup/source/gate reviews are retained under quality/evidence/T37/. closure.json controls task completion; frontend/admin UI remains T38.
+
+
+## T38 — reviewed moderation/support/admin frontend integration
+
+The existing authenticated DELETE /conversations/:id/messages/:messageId accepts a strict optional reason (1–300 characters, nonblank). The compatible empty object retains the previous default reason. The first successful transaction persists actor, target, source and supplied/default reason; an idempotent retry does not overwrite that audit. Existing author/scoped MANAGE_CHAT/sole-admin ACL and migration interlocks remain enforced.
+
+Support forms and private support chat require authentication. The client validates strict owner/admin projections, current parent/author identifiers, versions and durable receipts. Only a current server-validated sole admin with a successful ADMIN_SUBSCRIBE acknowledgement can use the protected admin views; names and client role hints grant no authority. Logout, role revocation and disconnection clear sensitive views. Internal notes are excluded from owner payloads and UI.
+
+Delete actions require confirmation and reason; current authoritative tombstones suppress source, reply previews and late history/decode results. Private E2EE reports retain explicit user-selected evidence disclosure, never automatic private history access. Block controls explain actual relationship policy and disable new DM while blocked.
+
+Evidence: quality/evidence/T38/final-integrity-review1.json and acceptance-review.md. T38 introduces no main database migration or production activation.

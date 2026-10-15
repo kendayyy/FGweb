@@ -1,0 +1,38 @@
+
+Running 1 test using 1 worker
+
+(node:17160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('button', { name: 'Nhắn tin', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Nhắn tin', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Nhắn tin', exact: true })
+        14 × locator resolved to <button type="button" aria-disabled="false" data-testid="btn-open-dm" class="fg-btn fg-btn-primary">Nhắn tin</button>
+           - unexpected value "enabled"
+
+
+      29 |     phase='owner-realtime';current=owner;await owner.bringToFront();await expect(owner.getByLabel('Lịch sử hỗ trợ').getByText('T38_SYNTHETIC_ADMIN_REPLY',{exact:true})).toBeVisible();await expect(owner.getByRole('button',{name:'Mở yêu cầu Chat hỗ trợ'})).toContainText('Đang xử lý');await expect(owner.getByText('T38_SYNTHETIC_INTERNAL_NOTE',{exact:true})).toHaveCount(0);const userDetail=await owner.request.get(origin+'/api/v1/support/requests/'+requestId);expect(userDetail.status()).toBe(200);expect(JSON.stringify(await userDetail.json())).not.toContain('T38_SYNTHETIC_INTERNAL_NOTE');await owner.getByRole('button',{name:'Đánh dấu đã đọc'}).click();await capture(owner,'Người gửi nhận phản hồi','Socket/REST đồng bộ phản hồi và trạng thái thật; notes không có trong DOM hoặc API người gửi.');checks.push('actual owner realtime canonical state and note isolation');
+      30 |     phase='offline-draft';await owner.getByRole('textbox',{name:'Tin nhắn hỗ trợ',exact:true}).fill('T38_OFFLINE_RETAINED_DRAFT');await owner.context().setOffline(true);await expect(owner.getByRole('button',{name:'Gửi tin nhắn',exact:true})).toBeDisabled();await expect(owner.getByRole('textbox',{name:'Tin nhắn hỗ trợ',exact:true})).toHaveValue('T38_OFFLINE_RETAINED_DRAFT');await capture(owner,'Mất mạng giữ bản nháp','Kết nối mạng thật bị ngắt; gửi bị khóa và bản nháp được giữ.');await owner.context().setOffline(false);await expect(owner.getByRole('button',{name:'Gửi tin nhắn',exact:true})).toBeEnabled();await owner.getByRole('button',{name:'Gửi tin nhắn',exact:true}).click();await expect(owner.getByLabel('Lịch sử hỗ trợ').getByText('T38_OFFLINE_RETAINED_DRAFT',{exact:true})).toBeVisible();checks.push('actual offline/reconnect and retained draft committed once');
+    > 31 |     phase='report-create';await owner.goto(origin+'/users/'+actors.other.id);await expect(owner.getByText('Chặn sẽ ẩn tin Lobby của người này và ngăn DM, lời mời mới. Chặn không xóa lịch sử đã nhận hoặc loại ai khỏi phòng chung.',{exact:true})).toBeVisible();await owner.getByTestId('btn-block').click();await expect(owner.getByTestId('btn-unblock')).toBeVisible();await expect(owner.getByRole('button',{name:'Nhắn tin',exact:true})).toBeDisabled();const blocks=await owner.request.get(origin+'/api/v1/blocks');expect(blocks.status()).toBe(200);expect((await blocks.json()).some((row:{blockedId:string})=>row.blockedId===actors.other.id)).toBe(true);await owner.getByTestId('btn-unblock').click();await expect(owner.getByTestId('btn-block')).toBeVisible();checks.push('actual block/unblock persisted with policy warning and disabled new DM');await owner.getByRole('button',{name:'Báo cáo người dùng',exact:true}).click();let dialog=owner.getByRole('dialog');await dialog.getByRole('textbox',{name:'Lý do báo cáo',exact:true}).fill('T38_SYNTHETIC_REPORT_REASON');await dialog.getByRole('button',{name:'Gửi báo cáo',exact:true}).click();await expect(dialog.getByRole('status')).toBeVisible();await dialog.getByRole('button',{name:'Đóng',exact:true}).click();const reports=(await pool.query('SELECT id,status,reporter_id FROM reports')).rows;expect(reports).toHaveLength(1);expect(reports[0].reporter_id).toBe(actors.owner.id);await capture(owner,'Báo cáo người dùng','Form tạo báo cáo thật gắn đúng người báo và đối tượng; không chia sẻ chat riêng.');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^
+      32 |     phase='report-process';current=admin;await admin.goto(origin+'/admin/reports');await admin.getByRole('button',{name:'Mở báo cáo '+reports[0].id}).click();await admin.getByRole('button',{name:'Đánh dấu đã xử lý'}).click();await expect(admin.getByLabel('Báo cáo được chọn')).toContainText('Đã xử lý');expect((await pool.query('SELECT status FROM reports WHERE id=$1',[reports[0].id])).rows[0].status).toBe('RESOLVED');await capture(admin,'Xử lý báo cáo thật','Admin xử lý; DOM và trạng thái PostgreSQL đều xác nhận RESOLVED.');checks.push('actual user report and persisted admin resolution');
+      33 |     phase='visual';await admin.goto(origin+'/admin/support/'+requestId);
+      34 |     for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:390,height:844},{width:360,height:800}]){
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:31:435
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

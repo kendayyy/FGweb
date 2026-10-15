@@ -1,0 +1,34 @@
+import fs from 'node:fs';import {createHash} from 'node:crypto';
+const dir='quality/evidence/T38/',files=[],hash=s=>createHash('sha256').update(s).digest('hex');
+function propose(path,changes){const before=fs.readFileSync(path),original=before.toString();let next=original;for(const[from,to]of changes){if(!next.includes(from))throw Error('Missing exact integration target '+path+' '+from);next=next.replace(from,to);}const proposed=dir+'integrate1-'+path.split('/').at(-1);fs.writeFileSync(proposed,next,{flag:'wx'});files.push({path,proposed,beforeSha256:hash(before),afterSha256:hash(next)});}
+propose('apps/web/src/App.tsx',[
+ ["import React from 'react';","import React from 'react';\nimport {AdminAccessProvider} from './features/admin/AdminAccess.js';\nimport {AdminShell} from './features/admin/AdminShell.js';\nimport {AdminReportsPage} from './features/admin/AdminReportsPage.js';\nimport {AdminUsersPage} from './features/admin/AdminUsersPage.js';\nimport {SupportPage} from './features/support/SupportPage.js';"],
+ ['<NotificationsProvider><AppContent/></NotificationsProvider>','<NotificationsProvider><AdminAccessProvider><AppContent/></AdminAccessProvider></NotificationsProvider>'],
+ ['<Routes>','<Routes>\n          <Route path="/support" element={<SupportPage/>}/>\n          <Route path="/support/:requestId" element={<SupportPage/>}/>\n          <Route path="/admin" element={<AdminShell/>}>\n            <Route index element={<SupportPage admin/>}/>\n            <Route path="support/:requestId" element={<SupportPage admin/>}/>\n            <Route path="reports" element={<AdminReportsPage/>}/>\n            <Route path="users" element={<AdminUsersPage/>}/>\n          </Route>']]);
+propose('apps/web/src/features/auth/HeaderAuthWidget.tsx',[
+ ["import { Button }", "import {AdminNavLink} from '../admin/AdminAccess.js';\nimport { Button }"],
+ ['{renderUserLink()}','{renderUserLink()}\n          {inRouter?<Link className="fg-btn fg-btn-ghost" to="/support">Hỗ trợ</Link>:<a className="fg-btn fg-btn-ghost" href="/support">Hỗ trợ</a>}\n          <AdminNavLink/>'],
+ ["<div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>","<div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap:'wrap' }}>"]]);
+propose('apps/web/src/features/chat/RichMessage.tsx',[
+ ['{ message, onReply }','{ message, onReply, actions }'],
+ ['    message: MessageDTO;','    message: MessageDTO;\n    actions?: React.ReactNode;'],
+ ['</button>}</div>{image','</button>}{actions}</div>{image']]);
+propose('apps/web/src/features/friends/PeerSocialControls.tsx',[
+ ["import { createDirectConversation }", "import {ReportUserButton} from '../moderation/MessageActions.js';\nimport { createDirectConversation }"],
+ ['      data-testid="peer-social-controls"\n    >','      data-testid="peer-social-controls"\n    >\n      <ReportUserButton actorId={actorId??undefined} targetId={targetUser.id} label={targetUser.displayName}/>\n      <p style={{width:"100%",fontSize:13,color:"var(--text-sub)",lineHeight:1.6,margin:"4px 0"}}>Chặn sẽ ẩn tin Lobby của người này và ngăn DM, lời mời mới. Chặn không xóa lịch sử đã nhận hoặc loại ai khỏi phòng chung.</p>']]);
+propose('apps/web/src/features/lobby/useLobbyChat.ts',[
+ ["import { reconcileMessages }", "import {MessageRetractions,RETRACTION_EVENT} from '../moderation/retractions.js';\nimport { reconcileMessages }"],
+ ["    const [conversationResolved", "    const retractions=useMemo(()=>new Map<string,MessageRetractions>(),[actorKey,game.id]);\n    const stateFor=useCallback((id:string)=>{let state=retractions.get(id);if(!state){state=new MessageRetractions(id);retractions.set(id,state);}return state;},[retractions]);\n    const [deletionRevision,setDeletionRevision]=useState(0);\n    const [conversationResolved"],
+ ['reconcileMessages(conversationId, query.data?.items ?? [], extra), [conversationId, query.data, extra]','stateFor(conversationId).legacy(reconcileMessages(conversationId, query.data?.items ?? [], extra)), [conversationId, query.data, extra, stateFor, deletionRevision]'],
+ ['setExtra(previous => reconcileMessages(canonical.current, previous, items));','setExtra(previous => stateFor(canonical.current).legacy(reconcileMessages(canonical.current, previous, items)));'],
+ ['    }, []);','    }, [stateFor]);'],
+ ["        socket.on('connect', connected);","        const deleted=(value:unknown)=>{if(!current()||!stateFor(canonical.current).accept(value))return;setExtra(previous=>stateFor(canonical.current).legacy(previous));setDeletionRevision(n=>n+1);};\n        const localDeleted=(event:Event)=>deleted((event as CustomEvent).detail);\n        window.addEventListener(RETRACTION_EVENT,localDeleted);\n        socket.on(SocketEventNames.MESSAGE_DELETED,deleted);\n        socket.on('connect', connected);"],
+ ["            socket.off('connect', connected);","            window.removeEventListener(RETRACTION_EVENT,localDeleted);\n            socket.off(SocketEventNames.MESSAGE_DELETED,deleted);\n            socket.off('connect', connected);"],
+ ['    }, [game.lobbyRoomId, merge, recover, actorKey]);','    }, [game.lobbyRoomId, merge, recover, actorKey, stateFor]);'],
+ ['    return { messages,','    return { deletionRevision, isMessageRemoved:(id:string)=>stateFor(conversationId).has(id), messages,']]);
+propose('apps/web/src/features/lobby/LobbyPage.tsx',[
+ ["import {InitialLoading}","import {MessageActions} from '../moderation/MessageActions.js';\nimport {LifeBuoy} from 'lucide-react';\nimport {InitialLoading}"],
+ ['<nav className="fg-sidebar-footer">','<nav className="fg-sidebar-footer"><Link to="/support" aria-label="Hỗ trợ" title="Hỗ trợ"><LifeBuoy size={18} aria-hidden="true"/><span>Hỗ trợ</span></Link>'],
+ ['    const candidates = Array.from','    useEffect(()=>{if(reply&&chat.isMessageRemoved(reply.id))setReply(null);},[reply,chat.deletionRevision,chat.conversationId]);\n    const candidates = Array.from'],
+ ['<RichMessage message={message} onReply={canSend ? setReply : undefined}/>','<RichMessage message={message} onReply={canSend ? setReply : undefined} actions={<MessageActions actorId={!auth.isError&&!auth.isSigningOut?auth.user?.id:undefined} conversationId={message.conversationId} messageId={message.id} senderId={message.senderId} senderName={message.sender.displayName}/>}/>']]);
+fs.writeFileSync(dir+'frontend-integration-plan1.json',JSON.stringify({reviewer:'Codex',unresolvedSourceFindings:[],reason:'Wire approved T38 support/admin routes and current authority navigation, preserve pure RichMessage compatibility, actual block policy/report action, canonical Lobby message deletion and stale-history/reply suppression. Actual hook RED3/3 integration failures retained; all prior outputs/evidence remain frozen except exact reviewed source transitions.',files},null,2),{flag:'wx'});

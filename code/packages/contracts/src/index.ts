@@ -1,4 +1,4 @@
-import {AdminUserListItemSchema} from './moderation.js';
+import {AdminUserListItemSchema,DeleteMessageRequestSchema} from './moderation.js';
 import {SupportApiEndpointRegistry} from './support.js';
 export * from './support.js';
 import {CallModerationRequestSchema,CallControlSuccessSchema} from './calls.js';
@@ -138,7 +138,7 @@ export const ApiEndpointRegistry: ApiEndpointDefinition[] = [
   { method: 'GET', path: '/api/v1/lobby/messages', auth: 'Public', requestSchema: LobbyMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'GET', path: '/api/v1/games/:gameId/lobby/messages', auth: 'Public', requestSchema: ListMessagesQuerySchema, responseSchema: createPageSchema(MessageSchema) },
   { method: 'POST', path: '/api/v1/conversations/:id/messages', auth: 'Authenticated', requestSchema: CreateMessageRequestSchema, responseSchema: MessageSchema },
-  { method: 'DELETE', path: '/api/v1/conversations/:id/messages/:messageId', auth: 'MessageAuthorOrModerator', responseSchema: z.object({ success: z.boolean() }) },
+  { method: 'DELETE', path: '/api/v1/conversations/:id/messages/:messageId', auth: 'MessageAuthorOrModerator', requestSchema: DeleteMessageRequestSchema, responseSchema: z.object({ success: z.boolean() }) },
   { method: 'POST', path: '/api/v1/uploads/images', auth: 'Authenticated', requestSchema: UploadImageRequestSchema,requestFormat:'multipart', responseSchema: AttachmentSchema },
   { method: 'GET', path: '/api/v1/attachments/:id', auth: 'ConversationRead', responseSchema: AttachmentUrlSchema },
   { method: 'GET', path: '/api/v1/attachments/:id/content', auth: 'ConversationRead', responseSchema: ImageContentSchema,responseFormat:'binary' },

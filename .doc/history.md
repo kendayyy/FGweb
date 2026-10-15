@@ -6634,3 +6634,253 @@
 - Coding and build 3 — T37 — end/acceptance 2026-10-15T16:49:16.309Z: PASS after direct Codex source/evidence review, 564 serialized tests and10compiled production smoke checks, 409 source-pinned compiled files,88priorPASS/41historicaltables/baseline/checker/env/lock/exact gate preserved and owned cleanup verified. Actual credential/BAN stale-session race RED retained and both lock-order GREENs confirmed. 1466 outputs frozen; no frontend/main/production/media-quality claim. Evidence code/quality/evidence/T37/closure.json; scoped public privacy/GitHub backup pending before T38.
 
 - Coding and build 3 — T37 — primary GitHub backup 2026-10-15T16:50:20.938Z: normal origin/master commit/push exit0/0, remote SHA d39ee30b6a88e6875df8672c149ef7b95105d121 verified; primary d39ee30b6a88e6875df8672c149ef7b95105d121. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup pending before T38. Evidence code/quality/evidence/T37/github-primary-push-receipt1.json.
+
+- Coding and build 3 — T37 — final GitHub backup 2026-10-15T16:50:36.867Z: normal origin/master commit/push exit0/0, remote SHA b5af312c8e2adbae1c4d7b95d1c0430eca7a2473 verified; primary d39ee30b6a88e6875df8672c149ef7b95105d121. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup complete, final verification local to avoid recursion; T38 may enter only through its reviewed gate. Evidence code/quality/evidence/T37/github-final-sync1.json.
+
+- Coding and build 3 — T38 — preparation start 2026-10-15T16:56:03.671Z: T37PASS/verified remoteb5af312c8e2adbae1c4d7b95d1c0430eca7a2473; read approved spec/design/mockup05/rules and current frontend/contracts/producer. Plan private support/admin/report/retraction, server capability probe and exact optional delete-reason audit gap; no business code before stock entry gate. Evidence code/quality/evidence/T38/scope-review1.json.
+
+- Coding and build 3 — T38 — reviewed entry 2026-10-15T16:58:00.694Z: IN_PROGRESS; 38692 originals/89priorPASS/spec/checker/env/approved mockup hashes pinned, stock gate accepted. No frontend/API/contract business code before entry, no UI run or main migration/provisioning/delegation. Evidence code/quality/evidence/T38/scope-review1.json; RED tests next.
+
+- Coding and build 3 — T38 — actual 2026-10-15T16:56:03.391Z–2026-10-15T16:58:01.235Z exit0: t38-reviewed-entry-1. Evidence code/quality/evidence/T38/codex-t38-reviewed-entry-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T16:59:18.292Z–2026-10-15T16:59:25.634Z exit1: t38-delete-contract-red-1. Evidence code/quality/evidence/T38/codex-t38-delete-contract-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T16:59:25.880Z–2026-10-15T17:00:34.526Z exit1: t38-delete-api-red-1. Evidence code/quality/evidence/T38/codex-t38-delete-api-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:02:40.562Z: RED3shared-schema +5/7real DELETE API failures confirm supplied reasons422, while old{}and invalid-field rejection remain correct. Prepare exact optional reason contract/registry/producer adoption; persist first committed reason in atomic audit, preserve all old authority/migration/rollback gates. Evidence code/quality/evidence/T38/delete-integration-plan1.json.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:01:58.351Z–2026-10-15T17:02:36.124Z exit1: t38-moderation-ui-red-1. Evidence code/quality/evidence/T38/codex-t38-moderation-ui-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 00:05:05 +07:00: Approved T38reason/confirmation acceptance requires persisting the supplied delete reason. Actual shared-schema RED3/3 and production DELETE API RED5/7 prove missing interface; add optional bounded nonblank reason, preserve strict{}compatibility, actor/target/source audit, tombstone idempotency, ACL, migration interlock and rollback.89priorPASS/frozen evidence unchanged. Evidence code/quality/evidence/T38/delete-reason1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:02:40.669Z–2026-10-15T17:05:05.785Z exit0: t38-delete-source-adoption-1. Evidence code/quality/evidence/T38/codex-t38-delete-source-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:06:29.961Z–2026-10-15T17:06:47.241Z exit0: t38-contracts-build-1. Evidence code/quality/evidence/T38/codex-t38-contracts-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:07:23.641Z–2026-10-15T17:07:34.940Z exit1: t38-support-client-red-1. Evidence code/quality/evidence/T38/codex-t38-support-client-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 00:10:53 +07:00: Fresh T38 contracts source-copy build; exact compiled runtime/type integration for reviewed compatible delete-reason request/registry. Keep canonical source pinned and historical assets/89PASS/checker, no main/production activation. Evidence code/quality/evidence/T38/contracts-build1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:07:51.776Z–2026-10-15T17:10:53.181Z exit0: t38-contracts-build-adoption-1. Evidence code/quality/evidence/T38/codex-t38-contracts-build-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:11:49.245Z–2026-10-15T17:11:51.116Z exit0: t38-delete-contract-green-1. Evidence code/quality/evidence/T38/codex-t38-delete-contract-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:11:51.523Z–2026-10-15T17:12:34.670Z exit0: t38-delete-api-green-1. Evidence code/quality/evidence/T38/codex-t38-delete-api-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:12:35.177Z–2026-10-15T17:12:46.054Z exit0: t38-moderation-support-dom-1. Evidence code/quality/evidence/T38/codex-t38-moderation-support-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:13:31.267Z–2026-10-15T17:13:35.601Z exit1: t38-admin-ui-red-1. Evidence code/quality/evidence/T38/codex-t38-admin-ui-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:14:57.953Z–2026-10-15T17:15:05.442Z exit1: t38-admin-access-dom-1. Evidence code/quality/evidence/T38/codex-t38-admin-access-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:15:51.003Z: Contracts3/3, native DELETE audit7/7 and moderation/support DOM25/25GREEN. Admin access DOM4passed4failed due incomplete Socket.IO fixture removeAllListeners; add matching real cleanup method, keep every original assertion and production source unchanged. Evidence code/quality/evidence/T38/admin-socket-fixture-review1.json; rerun pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:15:51.220Z–2026-10-15T17:15:59.787Z exit0: t38-admin-access-dom-2. Evidence code/quality/evidence/T38/codex-t38-admin-access-dom-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:16:00.080Z–2026-10-15T17:16:17.126Z exit0: t38-web-types-1. Evidence code/quality/evidence/T38/codex-t38-web-types-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:21:05.788Z–2026-10-15T17:21:10.634Z exit1: t38-support-view-red-1. Evidence code/quality/evidence/T38/codex-t38-support-view-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:27:21.745Z–2026-10-15T17:27:30.179Z exit1: t38-support-view-dom-1. Evidence code/quality/evidence/T38/codex-t38-support-view-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:27:30.392Z–2026-10-15T17:27:47.149Z exit2: t38-web-types-2. Evidence code/quality/evidence/T38/codex-t38-web-types-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:28:45.012Z: Support DOM16passed3failed due duplicate accessible label; web types2failed on structural user/admin narrowing. Rename region, retain composer label and all tests; parse existing strict shared admin schemas for typed private projections. Evidence code/quality/evidence/T38/support-label-types-review1.json; rerun pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:28:45.125Z–2026-10-15T17:28:53.318Z exit0: t38-support-view-dom-2. Evidence code/quality/evidence/T38/codex-t38-support-view-dom-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:28:53.666Z–2026-10-15T17:29:08.914Z exit0: t38-web-types-3. Evidence code/quality/evidence/T38/codex-t38-web-types-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:31:29.389Z–2026-10-15T17:31:39.203Z exit1: t38-admin-support-dom-1. Evidence code/quality/evidence/T38/codex-t38-admin-support-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:33:11.078Z–2026-10-15T17:33:18.281Z exit1: t38-mobile-pane-dom-red-1. Evidence code/quality/evidence/T38/codex-t38-mobile-pane-dom-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:34:05.851Z: Admin support12/14GREEN, conflict status not refreshed and text matcher saw typed textarea as sent content; mobile pane RED confirms create remains visible behind inbox. Fix409canonical reload and authorized inactive-pane visibility without losing draft; scope assertions to history and strengthen actual aborted late request. Evidence code/quality/evidence/T38/support-conflict-mobile-review1.json; rerun pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:34:05.960Z–2026-10-15T17:34:21.383Z exit0: t38-support-admin-dom-2. Evidence code/quality/evidence/T38/codex-t38-support-admin-dom-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:39:16.311Z–2026-10-15T17:39:21.536Z exit1: t38-admin-action-ui-red-1. Evidence code/quality/evidence/T38/codex-t38-admin-action-ui-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:41:56.880Z–2026-10-15T17:42:02.911Z exit1: t38-retraction-red-1. Evidence code/quality/evidence/T38/codex-t38-retraction-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:45:33.183Z–2026-10-15T17:45:38.649Z exit0: t38-retraction-green-1. Evidence code/quality/evidence/T38/codex-t38-retraction-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:48:05.350Z–2026-10-15T17:48:12.796Z exit1: t38-admin-actions-dom-1. Evidence code/quality/evidence/T38/codex-t38-admin-actions-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:48:13.068Z–2026-10-15T17:48:19.705Z exit2: t38-web-types-4. Evidence code/quality/evidence/T38/codex-t38-web-types-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:52:17.848Z: Resume actual failed admin DOM transform and web type run: missing JSX expression delimiter in two new components. Correct delimiter only; original failure records retained. Evidence code/quality/evidence/T38/jsx-syntax-review1.json; rerun pending, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:52:17.946Z–2026-10-15T17:52:27.602Z exit0: t38-admin-actions-dom-2. Evidence code/quality/evidence/T38/codex-t38-admin-actions-dom-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:52:27.828Z–2026-10-15T17:52:45.847Z exit0: t38-web-types-5. Evidence code/quality/evidence/T38/codex-t38-web-types-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:53:20.150Z–2026-10-15T17:53:29.736Z exit1: t38-admin-offline-pagination-red-1. Evidence code/quality/evidence/T38/codex-t38-admin-offline-pagination-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T17:54:15.170Z: Admin20DOM and web types GREEN after delimiter fix. New two behavior REDs confirm offline open-dialog mutation and notes/audit cursor rewind after refresh. Fix current online guard and retain furthest older-page cursors. Evidence code/quality/evidence/T38/offline-pagination-review1.json; rerun pending, no PASS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:54:15.278Z–2026-10-15T17:54:24.882Z exit0: t38-admin-offline-pagination-green-1. Evidence code/quality/evidence/T38/codex-t38-admin-offline-pagination-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:55:22.379Z–2026-10-15T17:55:28.538Z exit1: t38-lobby-retraction-red-1. Evidence code/quality/evidence/T38/codex-t38-lobby-retraction-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 00:58:32 +07:00: Wire approved T38 support/admin routes and current authority navigation, preserve pure RichMessage compatibility, actual block policy/report action, canonical Lobby message deletion and stale-history/reply suppression. Actual hook RED3/3 integration failures retained; all prior outputs/evidence remain frozen except exact reviewed source transitions. Evidence code/quality/evidence/T38/frontend-integration1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:56:05.140Z–2026-10-15T17:58:33.017Z exit0: t38-frontend-integration-adoption-1. Evidence code/quality/evidence/T38/codex-t38-frontend-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:58:45.767Z–2026-10-15T17:58:51.784Z exit1: t38-private-retraction-red-1. Evidence code/quality/evidence/T38/codex-t38-private-retraction-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 01:01:27 +07:00: Approved T38 actual private room/DM deletion integration: existing shared event context, local confirmed ID-only event, cache/late-decode suppression, reply/report/image cleanup, preserve explicit E2EE disclosure and ciphertext; room owner/helper MANAGE_CHAT hints only, existing server authority unchanged. Scoped DOM RED retained separately before adoption. Evidence code/quality/evidence/T38/private-integration1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T17:59:07.545Z–2026-10-15T18:01:27.817Z exit0: t38-private-integration-adoption-1. Evidence code/quality/evidence/T38/codex-t38-private-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:01:28.057Z–2026-10-15T18:01:56.491Z exit0: t38-moderation-support-integrated-dom-1. Evidence code/quality/evidence/T38/codex-t38-moderation-support-integrated-dom-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:01:56.790Z–2026-10-15T18:02:16.341Z exit0: t38-web-types-6. Evidence code/quality/evidence/T38/codex-t38-web-types-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:02:27.741Z–2026-10-15T18:05:25.542Z exit1: t38-web-regression-1. Evidence code/quality/evidence/T38/codex-t38-web-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:05:25.791Z–2026-10-15T18:05:33.088Z exit1: t38-source-lint-1. Evidence code/quality/evidence/T38/codex-t38-source-lint-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:07:00.300Z: Integrated T38DOM68/68 and web types GREEN. Full original web447passed/2failed; two historical async/notifications fixture compatibility cases already addressed in T32/T34, originals retained. Copy reviewed semantic assertions for fresh T38run, no source weakening. Source lint found prefer-const/unused-type in new files, correct only those. Evidence code/quality/evidence/T38/regression-compatibility-review1.json; rerun pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:07:00.406Z–2026-10-15T18:07:33.518Z exit0: t38-reviewed-call-room-regression-1. Evidence code/quality/evidence/T38/codex-t38-reviewed-call-room-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:07:33.840Z–2026-10-15T18:07:40.526Z exit0: t38-source-lint-2. Evidence code/quality/evidence/T38/codex-t38-source-lint-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:08:09.005Z–2026-10-15T18:08:17.858Z exit1: t38-current-message-admin-red-1. Evidence code/quality/evidence/T38/codex-t38-current-message-admin-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:08:37.061Z: Fresh reviewed call/room43/43 and source lint GREEN. Added current-admin delete dialog RED2/2, fix role-loss dismissal and confirmation online guard in new T38component; original failure retained. Evidence code/quality/evidence/T38/current-admin-delete-review1.json; rerun pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:08:37.165Z–2026-10-15T18:08:56.630Z exit0: t38-current-message-admin-green-1. Evidence code/quality/evidence/T38/codex-t38-current-message-admin-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:08:56.854Z–2026-10-15T18:09:56.854Z exit0: t38-web-build-1. Evidence code/quality/evidence/T38/codex-t38-web-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:09:57.383Z–2026-10-15T18:10:27.437Z exit0: t38-api-build-1. Evidence code/quality/evidence/T38/codex-t38-api-build-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:10:50.876Z–2026-10-15T18:13:45.004Z exit0: t38-native-regression-1. Evidence code/quality/evidence/T38/codex-t38-native-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:13:45.667Z–2026-10-15T18:14:11.357Z exit0: t38-contracts-regression-1. Evidence code/quality/evidence/T38/codex-t38-contracts-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 01:17:58 +07:00: Fresh source-pinned T38 API/web owned builds: integrate compatible delete-reason producer and approved moderation/support/admin frontend, preserve prior hashed assets, source/checker/environment/89PASS frozen evidence. Real headed verification remains pending; no main migration or production activation. Evidence code/quality/evidence/T38/compiled-integration1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:14:39.389Z–2026-10-15T18:17:58.908Z exit0: t38-compiled-integration-adoption-1. Evidence code/quality/evidence/T38/codex-t38-compiled-integration-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:17:59.143Z–2026-10-15T18:18:20.519Z exit0: t38-compiled-runtime-1. Evidence code/quality/evidence/T38/codex-t38-compiled-runtime-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:18:21.024Z–2026-10-15T18:18:21.734Z exit0: t38-headed-preflight-1. Evidence code/quality/evidence/T38/codex-t38-headed-preflight-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:18:22.031Z–2026-10-15T18:18:29.017Z exit0: t38-headed-discovery-1. Evidence code/quality/evidence/T38/codex-t38-headed-discovery-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Kết nối bot Telegram — TELEGRAM-BRIDGE-01 — 2026-10-16 01:35:30 +07:00: user tiếp tục; native smoke Telegram/Desktop true9FGsessions/no webhook exit0, scheduler Running. Kiểm tra /ref và currentruntime read-only, không đổi phiên user chọn hoặc restart build; currentFG Coding and build3/T38 theo history, bot default auto-follow build2 giữ cho đến user chỉđịnh.
+
+- Kết nối bot Telegram — TELEGRAM-BRIDGE-01 — 2026-10-16 01:35:30 +07:00: kết thúc kiểm tra resume, verified runner identity/native smoke exit0. Evidence resume-20261016.json. Không có lỗi kết nối hiện tại cần sửa; không code/testFG/ledger/PASS/commit/push hoặc cockpit/Anti2/Antigravity.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:48:42.162Z–2026-10-15T18:48:52.821Z exit1: headed-t38-support-1. Evidence code/quality/evidence/T38/codex-headed-t38-support-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:49:31.573Z: Headed attempt1 failed before app/fixture setup due Playwright compiled ESM/CJS transform; no screenshot/UI proof. Real compiled smoke passed separately. Isolate real backend in plain Node child/IPC, preserve UI assertions and failed evidence. Evidence code/quality/evidence/T38/headed-native-process-review1.json; retry pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:49:31.665Z–2026-10-15T18:49:42.431Z exit1: headed-t38-support-2. Evidence code/quality/evidence/T38/codex-headed-t38-support-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:50:39.888Z: Headed attempt2 failed before schema/app: actual PostgreSQL ECONNREFUSED and Docker daemon absent; private-safe diagnostic recorded. Start installed Docker Desktop hidden and restore configured PG/Redis, no cockpit. Correct no-schema cleanup boolean/IPC EPIPE handling. Evidence code/quality/evidence/T38/local-services-outage-review1.json; T38 IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:50:59.339Z–2026-10-15T18:51:51.469Z exit0: t38-local-services-recovery-1. Evidence code/quality/evidence/T38/codex-t38-local-services-recovery-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:51:51.691Z–2026-10-15T18:55:06.822Z exit1: headed-t38-support-3. Evidence code/quality/evidence/T38/codex-headed-t38-support-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:56:05.300Z: Headed3actual guest/create/cross-owner checks and3captures, timed out180s at admin-support. Independently verified3sessions/admin then removed owned schema/runtime after context-close skipped cleanup. Add HTTP status/phase diagnostics, bounded navigation/action waits, robust finally/child-disconnect cleanup; keep assertions. Evidence code/quality/evidence/T38/headed-navigation-diagnostics-review1.json; retry pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:56:05.427Z–2026-10-15T18:56:51.465Z exit1: headed-t38-support-4. Evidence code/quality/evidence/T38/codex-headed-t38-support-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:57:01.829Z–2026-10-15T18:58:07.421Z exit1: headed-t38-support-5. Evidence code/quality/evidence/T38/codex-headed-t38-support-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T18:58:40.204Z: Headed4generic404alert locator matched two regions; scoped exact thread404, no-content/API404 retained. Headed5real admin note/reply committed, screenshot shows status select; exact wrapping-label locator mismatched native options. Switch to exact combobox accessible role, preserve all assertions. Both runs cleaned schema/runtime; evidence headed-alert-scope-review1.json/headed-status-locator-review1.json.
+
+- Coding and build 3 — T38 — actual 2026-10-15T18:58:40.339Z–2026-10-15T18:59:40.429Z exit1: headed-t38-support-6. Evidence code/quality/evidence/T38/codex-headed-t38-support-6.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:00:07.081Z–2026-10-15T19:00:20.970Z exit1: t38-support-route-red-1. Evidence code/quality/evidence/T38/codex-t38-support-route-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:00:33.937Z–2026-10-15T19:00:43.090Z exit1: t38-support-browser-offline-red-1. Evidence code/quality/evidence/T38/codex-t38-support-browser-offline-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T19:00:59.584Z: Headed6passed admin status/owner realtime/note privacy, failed actual offline send remains enabled before socket disconnect. Focused browser-offline RED and new route-change RED confirm two source defects. Gate writes on browser network events; synchronize URL request selection, preserve actor/request drafts. Evidence code/quality/evidence/T38/support-route-offline-review1.json; fresh tests/build/headed pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:00:59.720Z–2026-10-15T19:01:18.926Z exit0: t38-support-route-offline-green-1. Evidence code/quality/evidence/T38/codex-t38-support-route-offline-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:01:31.179Z–2026-10-15T19:01:58.330Z exit0: t38-web-build-2. Evidence code/quality/evidence/T38/codex-t38-web-build-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:02:05.697Z–2026-10-15T19:02:06.202Z exit0: t38-headed-preflight-2. Evidence code/quality/evidence/T38/codex-t38-headed-preflight-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:02:06.418Z–2026-10-15T19:02:58.795Z exit1: headed-t38-support-7. Evidence code/quality/evidence/T38/codex-headed-t38-support-7.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T19:03:29.302Z: Headed7browser offline send now disabled; exact filled-textarea wrapping-label locator failed while screenshot shows composer. Replace with exact native textbox accessible role, retain value and network assertions; no source/build change. Evidence code/quality/evidence/T38/headed-textbox-locator-review1.json; retry pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:03:29.405Z–2026-10-15T19:04:32.170Z exit1: headed-t38-support-8. Evidence code/quality/evidence/T38/codex-headed-t38-support-8.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:05:14.310Z–2026-10-15T19:05:27.963Z exit1: t38-block-controls-red-1. Evidence code/quality/evidence/T38/codex-t38-block-controls-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:05:43.617Z–2026-10-15T19:05:50.075Z exit1: t38-block-controls-red-2. Evidence code/quality/evidence/T38/codex-t38-block-controls-red-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T19:06:07.157Z: Headed8actual offline/reconnect/draft GREEN, blocked peer DM button remained enabled. Focused firstREDfixture missing BlockDTOid corrected; valid-schema RED2confirms enabled control. Propose exact blocked/busy DM native disabled+click guard, keep backend ACL/history/room behavior. Evidence code/quality/evidence/T38/block-controls-plan1.json; adoption/test/build/headed pending.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 02:08:44 +07:00: Actual headed8 and focused valid-schema DOM RED prove blocked peer still offers enabled new DM. Disable/guard only blocked or busy DM control; keep server ACL/relationship queries/block warning/existing history and room policy. Initial focused fixture missing BlockDTOid retained separately and corrected without assertion changes. Evidence code/quality/evidence/T38/block-controls1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:06:07.318Z–2026-10-15T19:08:44.712Z exit0: t38-block-controls-adoption-1. Evidence code/quality/evidence/T38/codex-t38-block-controls-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:08:44.948Z–2026-10-15T19:09:03.617Z exit0: t38-block-controls-green-1. Evidence code/quality/evidence/T38/codex-t38-block-controls-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:09:14.763Z–2026-10-15T19:09:43.083Z exit0: t38-web-build-3. Evidence code/quality/evidence/T38/codex-t38-web-build-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:09:51.018Z–2026-10-15T19:09:51.414Z exit0: t38-headed-preflight-3. Evidence code/quality/evidence/T38/codex-t38-headed-preflight-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:09:51.611Z–2026-10-15T19:11:02.204Z exit1: headed-t38-support-9. Evidence code/quality/evidence/T38/codex-headed-t38-support-9.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:11:43.016Z–2026-10-15T19:11:50.091Z exit1: t38-admin-cancel-focus-red-1. Evidence code/quality/evidence/T38/codex-t38-admin-cancel-focus-red-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T19:12:04.413Z: Headed9passed support/offline/block/report and8viewport/theme screenshots; cancel no-write passed but focus did not return to disabled/re-enabled opener. Focused actual DOM RED confirms. Capture opener before modal, restore after commit; assertions unchanged. Evidence code/quality/evidence/T38/admin-cancel-focus-review1.json; fresh test/build/headed pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:12:04.511Z–2026-10-15T19:12:15.329Z exit0: t38-admin-cancel-focus-green-1. Evidence code/quality/evidence/T38/codex-t38-admin-cancel-focus-green-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:12:15.689Z–2026-10-15T19:12:40.023Z exit0: t38-web-build-4. Evidence code/quality/evidence/T38/codex-t38-web-build-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:12:59.607Z–2026-10-15T19:13:00.078Z exit0: t38-headed-preflight-4. Evidence code/quality/evidence/T38/codex-t38-headed-preflight-4.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:13:00.359Z–2026-10-15T19:14:16.782Z exit0: headed-t38-support-10. Evidence code/quality/evidence/T38/codex-headed-t38-support-10.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — 2026-10-15T19:14:58.303Z: Headed10full support/admin actual Chrome GREEN,13behavior groups,20captures, source-pinned web4/API/PG/Redis; fourviewports/twothemes, focus/BAN/UNBAN/current-role/logout checked. Add independent actual two-context legacy Lobby deletion test using existing compatibility history, no new plaintext send/crypto downgrade/E2EE claim; actual author reason/audit/source/socket/reply/history assertions. Evidence t38-ui-40498fcb94c04150b6df3e5259442685/result.json; task closure pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:14:58.404Z–2026-10-15T19:14:58.826Z exit0: t38-headed-preflight-5. Evidence code/quality/evidence/T38/codex-t38-headed-preflight-5.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:14:59.081Z–2026-10-15T19:15:40.241Z exit0: headed-t38-deletion-1. Evidence code/quality/evidence/T38/codex-headed-t38-deletion-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:15:55.403Z–2026-10-15T19:18:30.063Z exit0: t38-web-final-regression-1. Evidence code/quality/evidence/T38/codex-t38-web-final-regression-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:18:30.255Z–2026-10-15T19:18:52.321Z exit0: t38-web-types-final-1. Evidence code/quality/evidence/T38/codex-t38-web-types-final-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T19:18:52.557Z–2026-10-15T19:19:20.698Z exit0: t38-source-lint-final-1. Evidence code/quality/evidence/T38/codex-t38-source-lint-final-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:22:13.345Z–2026-10-15T20:22:26.654Z exit0: t38-prepare-final-adoption-1. Evidence code/quality/evidence/T38/codex-t38-prepare-final-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:23:54.359Z–2026-10-15T20:23:54.796Z exit0: t38-delivery-visual-review-1. Evidence code/quality/evidence/T38/codex-t38-delivery-visual-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — exact review 2026-10-16 03:26:06 +07:00: Integrate exact source-pinned web build4 verified by final455/types/lint and actual headed support/deletion runs; retain prior hashed assets and append current API/spec traceability with explicit evidence limits. No prior PASS/evidence mutation, main migration or production activation. Evidence code/quality/evidence/T38/final-build-docs1-adoption-review.json; actual task acceptance pending,89priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:22:35.781Z–2026-10-15T20:26:06.348Z exit0: t38-final-build-docs-adoption-1. Evidence code/quality/evidence/T38/codex-t38-final-build-docs-adoption-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:25:14.924Z–2026-10-15T20:26:07.970Z exit0: t38-required-moderation-1. Evidence code/quality/evidence/T38/codex-t38-required-moderation-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:26:36.315Z–2026-10-15T20:27:25.002Z exit1: t38-final-integrity-1. Evidence code/quality/evidence/T38/codex-t38-final-integrity-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — integrity review 2026-10-15T20:28:17.299Z: final-integrity-1 failed on authorized live Telegram demo-latest projection. Exact immutable event/image hashes and actual sent receipt match; pointer is not any frozen prior output. Preserve original failure; narrow audit correction validates this mandated producer side effect, no source/checker/gate relaxation. Evidence code/quality/evidence/T38/live-demo-pointer-review1.json; task remains IN_PROGRESS.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:28:17.110Z–2026-10-15T20:28:17.447Z exit0: t38-live-demo-pointer-review-1. Evidence code/quality/evidence/T38/codex-t38-live-demo-pointer-review-1.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:28:27.608Z–2026-10-15T20:30:07.666Z exit1: t38-final-integrity-2. Evidence code/quality/evidence/T38/codex-t38-final-integrity-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:30:42.920Z–2026-10-15T20:30:45.658Z exit1: t38-local-services-recovery-2. Evidence code/quality/evidence/T38/codex-t38-local-services-recovery-2.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:31:07.320Z–2026-10-15T20:32:07.724Z exit0: t38-local-services-recovery-3. Evidence code/quality/evidence/T38/codex-t38-local-services-recovery-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — final integrity 2026-10-15T20:34:59.153Z: 38692 originals checked;89priorPASS/41historicaltables/checker/env/lock/baseline/gate preserved;827serialized tests, 445 current compiled files,11compiled smoke checks;2actual headed tests/19groups/24captures, 70 actual Telegram deliveries across retained runs. Owned schemas absent; only private Playwright diagnostics remain excluded from public. Evidence code/quality/evidence/T38/final-integrity-review1.json; closure pending.
+
+- Coding and build 3 — T38 — actual 2026-10-15T20:32:36.405Z–2026-10-15T20:34:59.263Z exit0: t38-final-integrity-3. Evidence code/quality/evidence/T38/codex-t38-final-integrity-3.json (command/log/hash preserved); test outcomes reviewed separately, no automatic PASS/T38.
+
+- Coding and build 3 — T38 — end/acceptance 2026-10-15T20:35:21.942Z: PASS after direct Codex source/evidence review,827serialized tests,11compiled smoke checks,2actual headed tests/19groups/24captures; 70 actual Telegram deliveries across retained runs. 445 current compiled files;89priorPASS/41historicaltables/baseline/checker/env/lock/exact gate preserved, owned schemas absent, private Playwright diagnostics excluded. 1921 outputs frozen; scope/limits in code/quality/evidence/T38/acceptance-review.md and closure.json. Scoped public privacy/GitHub backup pending before T38-FEED-DATA.

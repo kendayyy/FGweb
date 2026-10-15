@@ -266,3 +266,14 @@ All failed command records remain; full-suite timeout and missing crypto provide
 
 
 | Sole-admin moderation/report processing, authenticated private support/notes/status/read/realtime and actual BAN/UNBAN epoch/session/call revocation | T37 | Real production API/PostgreSQL/Redis support/moderation; native WASM epoch/history-gap/recovery/rollback/lock waits and removed image denial; isolated native SFU/gateway admission/slot/other-peer/rollback checks; current contract/DB/worker/API regressions, source-pinned builds and compiled production smoke | code/quality/evidence/T37/acceptance-review.md and closure.json govern completion. Failed attempts and original frozen tests retained; owned compatibility copies name original migration tables and model physical socket reconnect after restored authority. Generic error DTO extension and private pending-migration interlock reviewed explicitly. No admin provisioning, frontend/UI test, main migration, production activation, WebRTC audible-quality or1,000-media claim. |
+
+
+## T38 — moderation, support and sole-admin frontend
+
+Approved support/admin layout and FG tokens are implemented with authenticated support forms/chat, durable receipts, versions/conflicts, offline draft retention, private internal notes, reports, block policy, reason/confirmation, BAN/UNBAN and current server authority. Responsive panes support 1440/1280/390/360 widths in light/dark modes. Message retraction preserves reply records while removing source and stale previews across contexts.
+
+Validation: 74 new DOM tests within the final 455-test web regression; 57 native API tests; 312 existing contracts tests plus 3 new delete-reason contract tests (827 serialized tests, without duplicate focused runs). Two actual headed Chrome runs check 19 behavior groups with 24 viewport captures using compiled app, PostgreSQL and Redis. Eleven compiled runtime smoke checks additionally pass. Source-pinned web build4 is integrated into canonical output retaining prior hashed assets.
+
+The two frozen old call/room tests use reviewed compatibility copies, preserving original assertions; originals and failed runs remain unchanged. The successful support run's first 1440-light capture shows the real initial loader; stable 1440-light evidence is explicitly from the preceding run with identical support/UI sources. Other seven final viewport/theme captures show stable content. Telegram delivery receipts are audited separately from UI assertions.
+
+Private decrypted retraction has DOM integration coverage and backend native ACL coverage; the cross-window headed deletion fixture is explicitly legacy compatibility history, not an E2EE or physical-device proof. No real kingame provisioning, main migration, production activation or 1,000-call capacity claim. See quality/evidence/T38/acceptance-review.md and final-integrity-review1.json.

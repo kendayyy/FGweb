@@ -1,0 +1,6 @@
+import {useId,useLayoutEffect,type ReactNode} from 'react';import {createPortal} from 'react-dom';import {X} from 'lucide-react';import {useDialogFocusTrap} from '../friends/useDialogFocusTrap.js';import './moderation.css';
+export function ModalFrame({title,busy=false,onClose,children}:{title:string;busy?:boolean;onClose:()=>void;children:ReactNode}){
+ const id=useId(),ref=useDialogFocusTrap<HTMLDivElement>(true,()=>{if(!busy)onClose();});
+ useLayoutEffect(()=>{const root=document.getElementById('root'),prior=root?.inert,opener=document.activeElement as HTMLElement|null;if(root)root.inert=true;return()=>{if(root)root.inert=prior??false;if(opener?.isConnected&&!opener.hasAttribute('disabled'))opener.focus();};},[]);
+ return createPortal(<div className="fg-action-backdrop" onMouseDown={event=>{if(!busy&&event.target===event.currentTarget)onClose();}}><div ref={ref} tabIndex={-1} className="fg-action-dialog" role="dialog" aria-modal="true" aria-labelledby={id} aria-busy={busy}><header><h2 id={id}>{title}</h2><button type="button" className="fg-action-close" aria-label="Đóng hộp thoại" onClick={onClose} disabled={busy}><X size={20} aria-hidden="true"/></button></header>{children}</div></div>,document.body);
+}

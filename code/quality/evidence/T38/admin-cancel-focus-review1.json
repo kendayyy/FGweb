@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-15T19:12:04.406Z",
+  "reviewer": "Codex",
+  "red": [
+    "headed-t38-support-9: cancel no-write passed, opener focus absent",
+    "t38-admin-cancel-focus-red-1"
+  ],
+  "cause": "Account opener becomes disabled while modal open; layout teardown precedes re-enabled background button, so immediate restore is skipped.",
+  "fix": "Capture actual opener before selecting account and restore focus in post-commit effect after dialog closed/button enabled; retain background inert and pending protections.",
+  "testsUnchanged": true,
+  "acceptancePending": true
+}

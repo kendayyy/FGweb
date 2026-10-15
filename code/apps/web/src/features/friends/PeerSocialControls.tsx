@@ -12,6 +12,7 @@ import {
   createBlock,
   deleteBlock,
 } from './api.js';
+import {ReportUserButton} from '../moderation/MessageActions.js';
 import { createDirectConversation } from '../direct-messages/api.js';
 
 export interface PeerSocialControlsProps {
@@ -315,6 +316,8 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
       }}
       data-testid="peer-social-controls"
     >
+      <ReportUserButton actorId={actorId??undefined} targetId={targetUser.id} label={targetUser.displayName}/>
+      <p style={{width:"100%",fontSize:13,color:"var(--text-sub)",lineHeight:1.6,margin:"4px 0"}}>Chặn sẽ ẩn tin Lobby của người này và ngăn DM, lời mời mới. Chặn không xóa lịch sử đã nhận hoặc loại ai khỏi phòng chung.</p>
       {actionError && (
         <div
           role="alert"
@@ -345,9 +348,10 @@ export const PeerSocialControls: React.FC<PeerSocialControlsProps> = ({
           cursor: isLoading ? 'not-allowed' : 'pointer',
           opacity: isLoading ? 0.7 : 1,
         }}
-        aria-disabled={isLoading}
+        disabled={isLoading||isBlocked}
+        aria-disabled={isLoading||isBlocked}
         onClick={() => {
-          if (isLoading) return;
+          if (isLoading||isBlocked) return;
           handleOpenDM();
         }}
         data-testid="btn-open-dm"

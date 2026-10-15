@@ -1,0 +1,27 @@
+
+Running 1 test using 1 worker
+
+(node:28132) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: browserContext.close: Target page, context or browser has been closed
+
+      40 |     fs.writeFileSync(dir+'/result.json',JSON.stringify({runId,startedAt,completedAt:new Date().toISOString(),checks,captureIds:captures,actualHeadedChrome:true,chromeVersion:browser.version(),actualPostgresRedis:true,syntheticFixturesOnly:true,actualKingameProvisioned:false,taskAcceptancePending:true},null,2)+'\n',{flag:'wx'});
+      41 |   }catch(error){if(current&&!current.isClosed())await capture(current,'Lỗi kiểm thử '+phase,'Nhóm thao tác chưa đạt; giữ lỗi và không chốt PASS.','FAILED').catch(()=>{});fs.writeFileSync(dir+'/failure.json',JSON.stringify({at:new Date().toISOString(),phase,checks,captureIds:captures,taskAcceptancePending:true},null,2)+'\n',{flag:'wx'});throw error;}
+    > 42 |   finally{for(const context of contexts)await context.close();await fixture?.close();fs.writeFileSync(dir+'/browser-cleanup.json',JSON.stringify({at:new Date().toISOString(),ownedContextsClosed:true,captureIds:captures})+'\n',{flag:'wx'});}
+         |                                         ^
+      43 | });
+      44 |
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:42:41
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

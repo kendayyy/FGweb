@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useInRouterContext } from 'react-router-dom';
 import { useAuth } from './AuthProvider.js';
+import {AdminNavLink} from '../admin/AdminAccess.js';
 import { Button } from '../../components/ui/Button.js';
 
 export const HeaderAuthWidget: React.FC = () => {
@@ -116,8 +117,10 @@ export const HeaderAuthWidget: React.FC = () => {
           {inRouter?<Link className="fg-btn fg-btn-primary" to="/login">Đăng nhập</Link>:<a className="fg-btn fg-btn-primary" href="/login">Đăng nhập</a>}
         </div>
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap:'wrap' }}>
           {renderUserLink()}
+          {inRouter?<Link className="fg-btn fg-btn-ghost" to="/support">Hỗ trợ</Link>:<a className="fg-btn fg-btn-ghost" href="/support">Hỗ trợ</a>}
+          <AdminNavLink/>
           {inRouter?<Link className="fg-btn fg-btn-ghost" to="/auth/password">Mật khẩu</Link>:<a className="fg-btn fg-btn-ghost" href="/auth/password">Mật khẩu</a>}
 
           <Button

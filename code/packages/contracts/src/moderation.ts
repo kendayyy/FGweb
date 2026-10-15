@@ -126,3 +126,7 @@ export type AdminUserActionRequest = z.infer<typeof AdminUserActionRequestSchema
 // Sole-admin response only; never a public or current-user role grant.
 export const AdminUserListItemSchema=PrivateProfileSchema.extend({banned:z.boolean()}).strict();
 export type AdminUserListItem=z.infer<typeof AdminUserListItemSchema>;
+
+// T38 confirmation reason; strict empty-body calls remain backward compatible.
+export const DeleteMessageRequestSchema=z.object({reason:z.string().min(1).max(300).refine(value=>value.trim().length>0,'Reason must not be blank').optional()}).strict();
+export type DeleteMessageRequest=z.infer<typeof DeleteMessageRequestSchema>;

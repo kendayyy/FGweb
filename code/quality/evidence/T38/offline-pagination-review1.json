@@ -1,0 +1,15 @@
+{
+  "time": "2026-10-15T17:54:15.166Z",
+  "reviewer": "Codex",
+  "red": "t38-admin-offline-pagination-red-1: two actual behavior failures, 20 skipped",
+  "cause": [
+    "Opened account dialog omitted current online authority check although row buttons checked it.",
+    "Refresh reset pagination to newest cursor while retaining visited cursors, preventing progress to older notes/audit."
+  ],
+  "changes": [
+    "Check current admin connection before dialog mutation.",
+    "Retain furthest pagination cursor once older pages have loaded, while merging newly refreshed first page."
+  ],
+  "testsUnchanged": true,
+  "acceptancePending": true
+}

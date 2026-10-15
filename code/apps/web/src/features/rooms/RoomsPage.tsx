@@ -566,7 +566,7 @@ const RoomsPageInner: React.FC<RoomsPageInnerProps> = ({ user, routeRoomId }) =>
 
             <section className={`fg-rooms-chat-panel ${mobileTab === 'chat' ? 'fg-mobile-visible' : ''}`}>
               <div className="fg-rooms-chat-header"><span>Trò chuyện nhóm</span></div>
-              {conversationId && <PrivateChatPane key={actorUserId + ':' + conversationId} conversationId={conversationId} actorId={actorUserId}
+              {conversationId && <PrivateChatPane key={actorUserId + ':' + conversationId} conversationId={conversationId} actorId={actorUserId} canManageRoom={isOwner||(isHelper&&helperPermissions.includes('MANAGE_CHAT'))}
                 participants={membersList.map(member=>({id:member.userId,displayName:member.user?.displayName??'Thành viên'}))}
                 onAccessDenied={denyCryptoRoom} onParticipantsChanged={refreshCryptoMembers} resolveParticipants={resolveCryptoMembers}/>}
             </section>

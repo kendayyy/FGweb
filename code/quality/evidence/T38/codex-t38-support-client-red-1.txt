@@ -1,0 +1,33 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/support.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/support.test.tsx [ test/support.test.tsx ]
+Error: Failed to resolve import "../src/features/support/api.js" from "apps/web/test/support.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: E:/FGweb/code/apps/web/test/support.test.tsx:1:135
+  1  |  import { beforeEach, describe, it, expect, vi } from "vitest";
+  2  |  import { SUPPORT_RECEIPT_TEXT } from "@fg/contracts";
+  3  |  import { SupportClient } from "../src/features/support/api.js";
+     |                                 ^
+  4  |  const now = (/* @__PURE__ */ new Date()).toISOString(), ticket = { id: "request-a", ownerId: "actor-a", kind: "CHAT", title: "Chat hỗ trợ", status: "NEW", version: 1, lastMessageSequence: 2, lastReadSequence: 0, unreadCount: 1, createdAt: now, updatedAt: now, lastActivityAt: now, resolvedAt: null };
+  5  |  const authored = { id: "message-a", requestId: "request-a", sequence: 1, authorRole: "USER", authorId: "actor-a", clientMessageId: "client-a", body: "Owned synthetic draft", createdAt: now };
+ ❯ TransformPluginContext._formatLog ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42658:41
+ ❯ TransformPluginContext.error ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42655:16
+ ❯ normalizeUrl ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40634:23
+ ❯ ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40753:37
+ ❯ TransformPluginContext.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40680:7
+ ❯ EnvironmentPluginContainer.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42453:18
+ ❯ loadAndTransform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:35845:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  00:07:24
+   Duration  10.01s (setup 57%, environment 25%, transform 18%)
+

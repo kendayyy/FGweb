@@ -1,0 +1,1 @@
+import fs from 'node:fs';const state=JSON.parse(fs.readFileSync('.runtime/telegram-bridge/state.json','utf8'));const rows=Object.entries(state.demoStream??{}).filter(([name])=>name.includes('t38-ui-'));console.log(JSON.stringify({t38Events:rows.map(([event,status])=>({event,status}))}));

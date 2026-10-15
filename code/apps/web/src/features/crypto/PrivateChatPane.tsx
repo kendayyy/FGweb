@@ -1,3 +1,5 @@
+import {MessageActions} from '../moderation/MessageActions.js';
+import {MessageRetractions,RETRACTION_EVENT} from '../moderation/retractions.js';
 import {InitialLoading} from '../../components/ui/InitialLoading.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -17,9 +19,10 @@ interface Participant { id: string; displayName: string }
 type Row = DecodedCryptoRow;
 const api = new CryptoApi();
 
-export function PrivateChatPane({ conversationId, actorId, participants, onAccessDenied, onParticipantsChanged, resolveParticipants }: { conversationId: string; actorId: string; participants: Participant[]; onAccessDenied?: () => void; onParticipantsChanged?: () => Promise<void>; resolveParticipants?: (signal: AbortSignal) => Promise<string[]> }) {
+export function PrivateChatPane({ conversationId, actorId, participants, onAccessDenied, onParticipantsChanged, resolveParticipants, canManageRoom=false }: { conversationId: string; actorId: string; participants: Participant[]; canManageRoom?:boolean; onAccessDenied?: () => void; onParticipantsChanged?: () => Promise<void>; resolveParticipants?: (signal: AbortSignal) => Promise<string[]> }) {
   const device = useCryptoDevice();
   const identity = `${actorId}:${conversationId}:${device.deviceId ?? 'locked'}`;
+  const retractions=useMemo(()=>new MessageRetractions(conversationId),[identity,conversationId]);
   const [rows, setRows] = useState<Row[]>([]), [recipients, setRecipients] = useState<RecipientDevice[]>([]);
   const [error, setError] = useState(''), [loading, setLoading] = useState(true), [online, setOnline] = useState(false);
   const [migrationRequired, setMigrationRequired] = useState(false);
@@ -60,8 +63,8 @@ export function PrivateChatPane({ conversationId, actorId, participants, onAcces
         let cursor = tail.current;
         for (let pageIndex = 0; pageIndex < 10; pageIndex++) {
           const page = await client!.history(cursor);
-          const missing = page.items.filter(message => { const row = cache.current.get(message.id); return !row?.content && !row?.legacy; });
-          for (const row of await client!.decodePage(missing)) { if (!alive || session.signal.aborted) return; cache.current.set(row.message.id, row); }
+          const missing = page.items.filter(message => { if(retractions.has(message.id))return false; const row = cache.current.get(message.id); return !row?.content && !row?.legacy; });
+          for (const row of await client!.decodePage(missing)) { if (!alive || session.signal.aborted) return; if(!retractions.has(row.message.id))cache.current.set(row.message.id, row); }
           if (!page.hasMore) break;
           if (!page.nextCursor || page.nextCursor === cursor) throw new CryptoConversationError('INVALID_CONTEXT');
           cursor = page.nextCursor; tail.current = cursor;
@@ -90,11 +93,14 @@ export function PrivateChatPane({ conversationId, actorId, participants, onAcces
       const parsed = EncryptedMessageSchema.safeParse(raw);
       if (parsed.success && parsed.data.conversationId === conversationId) void tick();
     });
-    function stop() { alive = false; active.current = false; cache.current.clear(); socket.disconnect(); if (timer) clearTimeout(timer); setRows([]); setRecipients([]); if (session.signal.aborted) { imageDraft.current.forEach(image => image.ciphertext.fill(0)); setImages([]); } }
+    const deleted=(value:unknown)=>{if(!alive||session.signal.aborted||!retractions.accept(value))return;for(const id of cache.current.keys())if(retractions.has(id))cache.current.delete(id);setRows(previous=>previous.filter(row=>!retractions.has(row.message.id)));setReply(previous=>previous&&retractions.has(previous.message.id)?null:previous);setReportIds(previous=>previous.filter(id=>!retractions.has(id)));setReportPreview(previous=>previous?.some(row=>retractions.has(row.id))?null:previous);};
+    const localDeleted=(event:Event)=>deleted((event as CustomEvent).detail);
+    socket.on(SocketEventNames.MESSAGE_DELETED,deleted);window.addEventListener(RETRACTION_EVENT,localDeleted);
+    function stop() { window.removeEventListener(RETRACTION_EVENT,localDeleted);socket.off(SocketEventNames.MESSAGE_DELETED,deleted);alive = false; active.current = false; cache.current.clear(); socket.disconnect(); if (timer) clearTimeout(timer); setRows([]); setRecipients([]); if (session.signal.aborted) { imageDraft.current.forEach(image => image.ciphertext.fill(0)); setImages([]); } }
     function visibility() { if (timer) clearTimeout(timer); if (!document.hidden) void tick(); }
     session.signal.addEventListener('abort', stop, { once: true }); document.addEventListener('visibilitychange', visibility); void tick();
     return () => { stop(); session.signal.removeEventListener('abort', stop); document.removeEventListener('visibilitychange', visibility); };
-  }, [identity, client, device.status, device.session, device.deviceId, conversationId, denied, onParticipantsChanged, participantKey]);
+  }, [identity, client, device.status, device.session, device.deviceId, conversationId, denied, onParticipantsChanged, participantKey, retractions]);
   async function send() {
     if (!client || pending.current || preparingImages || (!draft && !images.length) || device.status !== 'READY') return;
     const input = { body: draft, ...(mentioned.length ? { mentionedUserIds: mentioned } : {}), ...(reply?.content ? { reply: { messageId: reply.message.id, previewText: reply.content.body } } : {}) };
@@ -142,11 +148,12 @@ export function PrivateChatPane({ conversationId, actorId, participants, onAcces
         <strong>{name(row.message.senderId)}</strong>
         {row.recovered && <p className="fg-crypto-help">Lịch sử từ bản khôi phục · thiết bị gửi chưa được xác minh hiện tại.</p>}
         {row.legacy && <><p className="fg-crypto-help">Lịch sử cũ đã nhập và kiểm tra nguồn · tên tác giả gốc là thông tin lưu trước mã hóa, không phải xác minh SAS của tác giả.</p><p>{row.legacy.source.content}</p><time dateTime={row.legacy.source.createdAt}>{new Date(row.legacy.source.createdAt).toLocaleString('vi-VN')}</time>{row.legacy.images.map((image, index) => <LegacyImage key={image.attachmentId} conversationId={conversationId} image={image} source={row.legacy!.source.attachments[index]} sessionSignal={device.session!.signal}/>)}</>}
-        {row.content ? <>{row.content.fg.reply && <blockquote>{row.content.fg.reply.previewText}</blockquote>}<p>{row.content.body}</p>
+        {row.content ? <>{row.content.fg.reply && !retractions.has(row.content.fg.reply.messageId) && <blockquote>{row.content.fg.reply.previewText}</blockquote>}<p>{row.content.body}</p>
           {row.content.msgtype === 'm.image' && row.content.images.map(image => <PrivateImage key={image.attachmentId} conversationId={conversationId} image={image} sessionSignal={device.session!.signal}/>)}
           {(row.content.fg.mentionedUserIds ?? []).map(id => <span key={id}>@{name(id)} </span>)}
           <button className="fg-btn fg-btn-outline" type="button" onClick={() => setReply(row)}>Trả lời {name(row.message.senderId)}</button></> : !row.legacy && <p>{row.error}</p>}
         {(row.content || row.legacy) && <label><input type="checkbox" aria-label="Chọn tin để báo cáo" checked={reportIds.includes(row.message.id)} disabled={Boolean(reportPreview) || (!reportIds.includes(row.message.id) && reportIds.length >= 20)} onChange={event => setReportIds(previous => event.target.checked ? [...previous, row.message.id] : previous.filter(id => id !== row.message.id))}/>Chọn báo cáo</label>}
+        <MessageActions actorId={actorId} conversationId={conversationId} messageId={row.message.id} senderId={row.message.senderId} senderName={name(row.message.senderId)} canManageRoom={canManageRoom} reportable={false}/>
       </article>)}
     </div>
     {reportIds.length > 0 && !reportPreview && <button type="button" className="fg-btn fg-btn-outline" onClick={() => setReportPreview(rows.flatMap(row => reportIds.includes(row.message.id) && (row.content || row.legacy) ? [{ id: row.message.id, content: (row.content ?? row.legacy)! }] : []))}>Xem trước báo cáo ({reportIds.length})</button>}

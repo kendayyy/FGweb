@@ -1,0 +1,540 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/admin.test.tsx (14 tests | 2 failed) 3189ms
+   ❯ T38 admin support inbox with strict private projections (6)
+     × sends an actual admin reply rather than a fabricated support answer 155ms
+     × reloads authoritative state after a version conflict instead of showing the rejected selection 1232ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/admin.test.tsx > T38 admin support inbox with strict private projections > sends an actual admin reply rather than a fabricated support answer
+AssertionError: expected <textarea rows="3"></textarea> to be null
+
+- Expected:
+null
+
++ Received:
+<textarea
+  rows="3"
+>
+  ADMIN_REAL_REPLY_FIXTURE
+</textarea>
+
+ ❯ test/admin.test.tsx:32:275
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/admin.test.tsx > T38 admin support inbox with strict private projections > reloads authoritative state after a version conflict instead of showing the rejected selection
+Error: expect(element).toHaveValue(IN_PROGRESS)
+
+Expected the element to have value:
+  IN_PROGRESS
+Received:
+  NEW
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<section[39m
+        [33mclass[39m=[32m"fg-support-page is-admin"[39m
+      [36m>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"fg-support-heading"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<h1>[39m
+              [0mGóp ý & Hỗ trợ[0m
+            [36m</h1>[39m
+            [36m<p>[39m
+              [0mTiếp nhận và phản hồi cộng đồng[0m
+            [36m</p>[39m
+          [36m</div>[39m
+        [36m</header>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"fg-support-workspace"[39m
+        [36m>[39m
+          [36m<aside[39m
+            [33maria-label[39m=[32m"Hộp thư hỗ trợ"[39m
+            [33mclass[39m=[32m"fg-support-inbox"[39m
+          [36m>[39m
+            [36m<header>[39m
+              [36m<h2>[39m
+                [0mHộp thư[0m
+              [36m</h2>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+                [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mTải lại[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</header>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"fg-support-search"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-search"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"18"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"18"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m21 21-4.34-4.34"[39m
+                [36m/>[39m
+                [36m<circle[39m
+                  [33mcx[39m=[32m"11"[39m
+                  [33mcy[39m=[32m"11"[39m
+                  [33mr[39m=[32m"8"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-sr-only"[39m
+              [36m>[39m
+                [0mTìm trong các yêu cầu đã tải[0m
+              [36m</span>[39m
+              [36m<input[39m
+                [33maria-label[39m=[32m"Tìm trong các yêu cầu đã tải"[39m
+                [33mplaceholder[39m=[32m"Tìm trong danh sách đã tải…"[39m
+                [33mvalue[39m=[32m""[39m
+              [36m/>[39m
+            [36m</label>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-support-filters"[39m
+            [36m>[39m
+              [36m<label>[39m
+                [0mTrạng thái[0m
+                [36m<select>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m>[39m
+                    [0mTất cả[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"NEW"[39m
+                  [36m>[39m
+                    [0mMới[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"IN_PROGRESS"[39m
+                  [36m>[39m
+                    [0mĐang xử lý[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"RESOLVED"[39m
+                  [36m>[39m
+                    [0mĐã giải quyết[0m
+                  [36m</option>[39m
+                [36m</select>[39m
+              [36m</label>[39m
+              [36m<label>[39m
+                [0mLoại yêu cầu[0m
+                [36m<select>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m>[39m
+                    [0mTất cả[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"FEEDBACK"[39m
+                  [36m>[39m
+                    [0mGóp ý[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"BUG"[39m
+                  [36m>[39m
+                    [0mBáo lỗi[0m
+                  [36m</option>[39m
+                  [36m<option[39m
+                    [33mvalue[39m=[32m"CHAT"[39m
+                  [36m>[39m
+                    [0mChat hỗ trợ[0m
+                  [36m</option>[39m
+                [36m</select>[39m
+              [36m</label>[39m
+            [36m</div>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"fg-support-check"[39m
+            [36m>[39m
+              [36m<input[39m
+                [33mtype[39m=[32m"checkbox"[39m
+              [36m/>[39m
+              [0mChỉ yêu cầu chưa đọc trong danh sách[0m
+            [36m</label>[39m
+            [36m<ul>[39m
+              [36m<li>[39m
+                [36m<button[39m
+                  [33maria-current[39m=[32m"true"[39m
+                  [33maria-label[39m=[32m"Mở yêu cầu Chat hỗ trợ"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"fg-support-avatar"[39m
+                  [36m>[39m
+                    [0mF[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"fg-support-item"[39m
+                  [36m>[39m
+                    [36m<strong>[39m
+                      [0mFG Synthetic Owner[0m
+                    [36m</strong>[39m
+                    [36m<span>[39m
+                      [0mChat hỗ trợ[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"fg-support-status NEW"[39m
+                    [36m>[39m
+                      [0mMới[0m
+                    [36m</span>[39m
+                    [36m<time[39m
+                      [33mdatetime[39m=[32m"2026-10-15T17:31:35.831Z"[39m
+                    [36m>[39m
+                      [0m00:31 16-10[0m
+                    [36m</time>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33maria-label[39m=[32m"1 tin chưa đọc"[39m
+                    [33mclass[39m=[32m"fg-support-unread"[39m
+                  [36m>[39m
+                    [0m1[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+              [36m</li>[39m
+            [36m</ul>[39m
+          [36m</aside>[39m
+          [36m<section[39m
+            [33maria-label[39m=[32m"Cuộc hỗ trợ"[39m
+            [33mclass[39m=[32m"fg-support-thread"[39m
+          [36m>[39m
+            [36m<header[39m
+              [33mclass[39m=[32m"fg-support-thread-heading"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h2>[39m
+                  [0mChat hỗ trợ[0m
+                [36m</h2>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-support-status NEW"[39m
+                [36m>[39m
+                  [0mMới[0m
+                [36m</span>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"fg-support-connection"[39m
+                [36m>[39m
+                  [0mĐã kết nối[0m
+                [36m</span>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"fg-btn fg-btn-outline "[39m
+                  [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mTải lại cuộc hỗ trợ[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</header>[39m
+            [36m<div[39m
+              [33maria-label[39m=[32m"Lịch sử hỗ trợ"[39m
+              [33mclass[39m=[32m"fg-support-messages"[39m
+            [36m>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"fg-support-message "[39m
+                [33mdata-message-id[39m=[32m"message-owner"[39m
+              [36m>[39m
+                [36m<strong>[39m
+                  [0mFG Synthetic Owner[0m
+                [36m</strong>[39m
+                [36m<p>[39m
+                  [0mUSER_SUPPORT_PRIVATE_FIXTURE[0m
+                [36m</p>[39m
+                [36m<time[39m
+                  [33mdatetime[39m=[32m"2026-10-15T17:31:35.831Z"[39m
+                [36m>[39m
+                  [0m00:31 16-10[0m
+                [36m</time>[39m
+              [36m</article>[39m
+              [36m<article[39m
+                [33mclass[39m=[32m"fg-support-message is-system"[39m
+                [33mdata-message-id[39m=[32m"message-system"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-bot"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"18"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"18"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 8V4H8"[39m
+                  [36m/>[39m
+                  [36m<rect[39m
+                    [33mheight[39m=[32m"12"[39m
+                    [33mrx[39m=[32m"2"[39m
+                    [33mwidth[39m=[32m"16"[39m
+                    [33mx[39m=[32m"4"[39m
+                    [33my[39m=[32m"8"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M2 14h2"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M20 14h2"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M15 13v2"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M9 13v2"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [36m<p>[39m
+                  [0mFG đã nhận tin nhắn của bạn.[0m
+                [36m</p>[39m
+                [36m<time[39m
+                  [33mdatetime[39m=[32m"2026-10-15T17:31:35.831Z"[39m
+                [36m>[39m
+                  [0m00:31 16-10[0m
+                [36m</time>[39m
+              [36m</article>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-support-read"[39m
+            [36m>[39m
+              [36m<span>[39m
+                [0m1[0m
+                [0m tin chưa đọc theo server[0m
+              [36m</span>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-ghost "[39m
+                [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mĐánh dấu đã đọc[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<form[39m
+              [33mclass[39m=[32m"fg-support-composer"[39m
+              [33mnovalidate[39m=[32m""[39m
+            [36m>[39m
+              [36m<label>[39m
+                [0mTin nhắn hỗ trợ[0m
+                [36m<textarea[39m
+                  [33mrows[39m=[32m"3"[39m
+                [36m/>[39m
+              [36m</label>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"fg-action-error"[39m
+                [33mrole[39m=[32m"alert"[39m
+              [36m>[39m
+                [0mDữ liệu đã thay đổi. Tải lại nội dung trước khi thử tiếp.[0m
+              [36m</p>[39m
+              [36m<footer>[39m
+                [36m<small>[39m
+                  [0mKhông gửi mật khẩu hoặc mã khôi phục.[0m
+                [36m</small>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"fg-btn fg-btn-primary "[39m
+                  [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+                  [33mtype[39m=[32m"submit"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mGửi phản hồi[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+              [36m</footer>[39m
+            [36m</form>[39m
+          [36m</section>[39m
+          [36m<aside[39m
+            [33maria-label[39m=[32m"Chi tiết và ghi chú nội bộ"[39m
+            [33mclass[39m=[32m"fg-support-detail"[39m
+          [36m>[39m
+            [36m<h2>[39m
+              [0mChi tiết yêu cầu[0m
+            [36m</h2>[39m
+            [36m<dl>[39m
+              [36m<dt>[39m
+                [0mMã yêu cầu[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [36m<code>[39m
+                  [0msupport-admin-a[0m
+                [36m</code>[39m
+              [36m</dd>[39m
+              [36m<dt>[39m
+                [0mNgười gửi[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [0mFG Synthetic Owner[0m
+              [36m</dd>[39m
+              [36m<dt>[39m
+                [0mLoại yêu cầu[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [0mChat hỗ trợ[0m
+              [36m</dd>[39m
+              [36m<dt>[39m
+                [0mTiếp nhận lúc[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [36m<time[39m
+                  [33mdatetime[39m=[32m"2026-10-15T17:31:35.831Z"[39m
+                [36m>[39m
+                  [0m00:31 16-10[0m
+                [36m</time>[39m
+              [36m</dd>[39m
+            [36m</dl>[39m
+            [36m<label>[39m
+              [0mTrạng thái yêu cầu[0m
+              [36m<select>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"NEW"[39m
+                [36m>[39m
+                  [0mMới[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"IN_PROGRESS"[39m
+                [36m>[39m
+                  [0mĐang xử lý[0m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"RESOLVED"[39m
+                [36m>[39m
+                  [0mĐã giải quyết[0m
+                [36m</option>[39m
+              [36m</select>[39m
+            [36m</label>[39m
+            [36m<section[39m
+              [33mclass[39m=[32m"fg-support-internal"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-lock"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"17"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"17"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<rect[39m
+                    [33mheight[39m=[32m"11"[39m
+                    [33mrx[39m=[32m"2"[39m
+                    [33mry[39m=[32m"2"[39m
+                    [33mwidth[39m=[32m"18"[39m
+                    [33mx[39m=[32m"3"[39m
+                    [33my[39m=[32m"11"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M7 11V7a5 5 0 0 1 10 0v4"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [0mGhi chú nội bộ[0m
+              [36m</h3>[39m
+              [36m<p>[39m
+                [0mChỉ quản trị xem[0m
+              [36m</p>[39m
+              [36m<label>[39m
+                [0mNội dung ghi chú nội bộ[0m
+                [36m<textarea[39m
+                  [33mrows[39m=[32m"4"[39m
+                [36m/>[39m
+              [36m</label>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"fg-btn fg-btn-outline "[39m
+                [33mstyle[39m=[32m"min-height: 44px; padding: 0px 16px; font-size: 14px;"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mLưu ghi chú[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</section>[39m
+            [36m<section[39m
+              [33mclass[39m=[32m"fg-support-audit"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"lucide lucide-info"[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"17"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-linecap[39m=[32m"round"[39m
+                  [33mstroke-linejoin[39m=[32m"round"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"17"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<circle[39m
+                    [33mcx[39m=[32m"12"[39m
+                    [33mcy[39m=[32m"12"[39m
+                    [33mr[39m=[32m"10"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 16v-4"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 8h.01"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [0mLịch sử xử lý[0m
+              [36m</h3>[39m
+              [36m<ol>[39m
+                [36m<li>[39m
+                  [36m<time[39m
+                    [33mdatetime[39m=[32m"2026-10-15T17:31:35.831Z"[39m
+                  [36m>[39m
+                    [0m00:31 16-10[0m
+                  [36m</time>[39m
+                  [36m<span>[39m
+                    [0mTạo yêu cầu[0m
+                  [36m</span>[39m
+                [36m</li>[39m
+              [36m</ol>[39m
+            [36m</section>[39m
+          [36m</aside>[39m
+        [36m</div>[39m
+      [36m</section>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ test/admin.test.tsx:33:392
+
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 12 passed (14)
+   Start at  00:31:30
+   Duration  8.26s (tests 41%, environment 34%, transform 12%, import 8%, setup 5%)
+

@@ -1,0 +1,1 @@
+import fs from 'node:fs';const d='quality/evidence/T38';let s=fs.readFileSync(d+'/pre-headed-review1.mjs','utf8').replaceAll('web-build-inputs1','web-build-inputs3').replaceAll('pre-headed-review1.json','pre-headed-review3.json');fs.writeFileSync(d+'/pre-headed-review3.mjs',s,{flag:'wx'});

@@ -1,0 +1,40 @@
+
+Running 1 test using 1 worker
+
+(node:9596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+
+(node:9596) Warning: Failed to load the ES module: E:\FGweb\code\packages\contracts\dist\index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    SyntaxError: Cannot use import statement outside a module
+
+       at ..\..\packages\database\dist\seed-games.js:9
+
+       7 |     for (const title of ALLOWED_GAMES) {
+       8 |         let [existingGame] = await db
+    >  9 |             .select()
+         |                  ^
+      10 |             .from(games)
+      11 |             .where(eq(games.title, title))
+      12 |             .limit(1);
+        at Object.<anonymous> (E:\FGweb\code\packages\database\dist\seed-games.js:9:18)
+        at Object.<anonymous> (E:\FGweb\code\packages\database\dist\index.js:149:18)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\modules\auth\auth.service.ts:33:26)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\common\session.guard.ts:38:43)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\modules\auth\auth.controller.ts:8:60)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\modules\auth\auth.module.ts:7:1)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\modules\moderation\moderation.module.ts:1:254)
+        at Object.<anonymous> (E:\FGweb\code\apps\api\src\app.module.ts:5:1)
+        at startFixture (E:\FGweb\code\quality\evidence\T38\headed-fixture1.mjs:20:21)
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:17:19
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

@@ -1,0 +1,599 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/admin.test.tsx (8 tests | 4 failed) 1718ms
+   ❯ T38 authoritative admin menu, routes and current revocation (8)
+     × shows admin navigation only after actual endpoint and namespace authorization 425ms
+     × denies a namespace acknowledgement even after a successful HTTP probe 1034ms
+     × clears protected content immediately when server role loss disconnects its namespace 62ms
+     × clears admin content and disconnects resources on authenticated cleanup 50ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > shows admin navigation only after actual endpoint and namespace authorization
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > denies a namespace acknowledgement even after a successful HTTP probe
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > clears protected content immediately when server role loss disconnects its namespace
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > clears admin content and disconnects resources on authenticated cleanup
+TypeError: socket?.removeAllListeners is not a function
+ ❯ dispose src/features/admin/AdminAccess.tsx:17:82
+     15|   const who=actorId,controller=new AbortController(),client=new Suppor…
+     16|   const current=()=>alive&&!controller.signal.aborted&&owner.current==…
+     17|   const dispose=()=>{alive=false;controller.abort();clearInterval(time…
+       |                                                                                  ^
+     18|   const deny=(message='Quyền quản trị không còn khả dụng.')=>{if(!curr…
+     19|   revokeRef.current=()=>deny();setState(empty(who,true));
+ ❯ src/features/admin/AdminAccess.tsx:29:84
+ ❯ Object.react_stack_bottom_frame ../../node_modules/react-dom/cjs/react-dom-client.development.js:28668:13
+ ❯ runWithFiberInDEV ../../node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ commitHookEffectListUnmount ../../node_modules/react-dom/cjs/react-dom-client.development.js:13815:17
+ ❯ commitHookPassiveUnmountEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:13846:11
+ ❯ commitPassiveUnmountEffectsInsideOfDeletedTree_begin ../../node_modules/react-dom/cjs/react-dom-client.development.js:17754:13
+ ❯ recursivelyTraversePassiveUnmountEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:17575:13
+ ❯ commitPassiveUnmountOnFiber ../../node_modules/react-dom/cjs/react-dom-client.development.js:17617:11
+ ❯ flushPassiveEffects ../../node_modules/react-dom/cjs/react-dom-client.development.js:20130:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > denies a namespace acknowledgement even after a successful HTTP probe
+TestingLibraryElementError: Unable to find role="heading" and name "Không có quyền quản trị"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<button>[39m
+      [0mKiểm lại quyền[0m
+    [36m</button>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-initial-loading fg-initial-loading--bootstrap"[39m
+      [33mdata-hidden[39m=[32m"false"[39m
+      [33mdata-visible[39m=[32m"true"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-live[39m=[32m"polite"[39m
+        [33mclass[39m=[32m"fg-initial-loading-body"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"fg-sr-only"[39m
+        [36m>[39m
+          [0mĐang kiểm tra quyền quản trị[0m
+        [36m</span>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-loading-skeleton"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-loading-stage"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"fg-loading-float"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-loading-turn"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-3.75px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-2.5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-1.25px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(0px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(1.25px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(2.5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(3.75px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-face"[39m
+                [33mstyle[39m=[32m"transform: translateZ(5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"fg-loading-shadow"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Đang kiểm tra quyền quản trị"[39m
+          [33mclass[39m=[32m"fg-loading-progress"[39m
+          [33mrole[39m=[32m"progressbar"[39m
+        [36m>[39m
+          [36m<span />[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<button>[39m
+      [0mKiểm lại quyền[0m
+    [36m</button>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"fg-initial-loading fg-initial-loading--bootstrap"[39m
+      [33mdata-hidden[39m=[32m"false"[39m
+      [33mdata-visible[39m=[32m"true"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-live[39m=[32m"polite"[39m
+        [33mclass[39m=[32m"fg-initial-loading-body"[39m
+        [33mrole[39m=[32m"status"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"fg-sr-only"[39m
+        [36m>[39m
+          [0mĐang kiểm tra quyền quản trị[0m
+        [36m</span>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-loading-skeleton"[39m
+        [36m>[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+          [36m<i />[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"fg-loading-stage"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"fg-loading-float"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"fg-loading-turn"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-3.75px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-2.5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(-1.25px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(0px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(1.25px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(2.5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-depth"[39m
+                [33mstyle[39m=[32m"transform: translateZ(3.75px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"fg-loading-face"[39m
+                [33mstyle[39m=[32m"transform: translateZ(5px);"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"fg-brand-mark"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mheight[39m=[32m"144"[39m
+                  [33mviewBox[39m=[32m"0 0 128 128"[39m
+                  [33mwidth[39m=[32m"144"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-f"[39m
+                    [33md[39m=[32m"M0 103V24L18 6H89L68 27H21V40H51L31 61H21V84Z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33mclass[39m=[32m"fg-brand-g"[39m
+                    [33md[39m=[32m"M68 34H113L125 46V56H62V98H103V87H71L91 66H125V99L105 120H52L40 108V62Z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"fg-loading-shadow"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Đang kiểm tra quyền quản trị"[39m
+          [33mclass[39m=[32m"fg-loading-progress"[39m
+          [33mrole[39m=[32m"progressbar"[39m
+        [36m>[39m
+          [36m<span />[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper ../../node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/admin.test.tsx:12:138
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > clears protected content immediately when server role loss disconnects its namespace
+TypeError: socket?.removeAllListeners is not a function
+ ❯ dispose src/features/admin/AdminAccess.tsx:17:82
+     15|   const who=actorId,controller=new AbortController(),client=new Suppor…
+     16|   const current=()=>alive&&!controller.signal.aborted&&owner.current==…
+     17|   const dispose=()=>{alive=false;controller.abort();clearInterval(time…
+       |                                                                                  ^
+     18|   const deny=(message='Quyền quản trị không còn khả dụng.')=>{if(!curr…
+     19|   revokeRef.current=()=>deny();setState(empty(who,true));
+ ❯ deny src/features/admin/AdminAccess.tsx:18:84
+ ❯ src/features/admin/AdminAccess.tsx:25:103
+ ❯ test/admin.test.tsx:13:229
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act ../../node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> ../../node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ test/admin.test.tsx:13:177
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  test/admin.test.tsx > T38 authoritative admin menu, routes and current revocation > clears admin content and disconnects resources on authenticated cleanup
+Error: Auth resource cleanup failed: socket?.removeAllListeners is not a function
+ ❯ Module.runAuthCleanups src/features/auth/lifecycle.ts:33:11
+     31|
+     32|   if (errors.length > 0) {
+     33|     throw new Error(`Auth resource cleanup failed: ${errors.map((e) =>…
+       |           ^
+     34|   }
+     35| }
+ ❯ test/admin.test.tsx:15:177
+ ❯ ../../node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ process.env.NODE_ENV.exports.act ../../node_modules/react/cjs/react.development.js:890:22
+ ❯ Proxy.<anonymous> ../../node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ test/admin.test.tsx:15:164
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  00:14:59
+   Duration  6.06s (environment 44%, tests 31%, import 11%, transform 9%, setup 5%)
+

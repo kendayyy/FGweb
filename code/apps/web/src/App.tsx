@@ -1,5 +1,10 @@
 import {InitialLoading} from './components/ui/InitialLoading.js';
 import React from 'react';
+import {AdminAccessProvider} from './features/admin/AdminAccess.js';
+import {AdminShell} from './features/admin/AdminShell.js';
+import {AdminReportsPage} from './features/admin/AdminReportsPage.js';
+import {AdminUsersPage} from './features/admin/AdminUsersPage.js';
+import {SupportPage} from './features/support/SupportPage.js';
 import {PwaProvider,PwaControls} from './pwa/PwaProvider.js';
 import {FGLogo} from './components/ui/FGLogo.js';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
@@ -17,7 +22,7 @@ import {TeamActivityPage} from './features/invitations/TeamActivityPage.js';
 import {CryptoDeviceProvider, CryptoDeviceSettings} from './features/crypto/CryptoDeviceProvider.js';
 import {NotificationsProvider,NotificationBell,NotificationsPage,NotificationTarget} from './features/notifications/index.js';
 
-export const App: React.FC = () => <ThemeProvider><PwaProvider><CryptoDeviceProvider><NotificationsProvider><AppContent/></NotificationsProvider></CryptoDeviceProvider></PwaProvider></ThemeProvider>;
+export const App: React.FC = () => <ThemeProvider><PwaProvider><CryptoDeviceProvider><NotificationsProvider><AdminAccessProvider><AppContent/></AdminAccessProvider></NotificationsProvider></CryptoDeviceProvider></PwaProvider></ThemeProvider>;
 const AppContent: React.FC = () => {
   const {user,isLoading,isError}=useAuth();
   const location=useLocation();
@@ -98,6 +103,14 @@ const AppContent: React.FC = () => {
       {/* Main Content Area */}
       <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>
         <Routes>
+          <Route path="/support" element={<SupportPage/>}/>
+          <Route path="/support/:requestId" element={<SupportPage/>}/>
+          <Route path="/admin" element={<AdminShell/>}>
+            <Route index element={<SupportPage admin/>}/>
+            <Route path="support/:requestId" element={<SupportPage admin/>}/>
+            <Route path="reports" element={<AdminReportsPage/>}/>
+            <Route path="users" element={<AdminUsersPage/>}/>
+          </Route>
           <Route path="/notifications" element={<ProtectedRoute><NotificationsPage/></ProtectedRoute>}/>
           <Route path="/notifications/:notificationId" element={<ProtectedRoute><NotificationTarget/></ProtectedRoute>}/>
           <Route path="/crypto" element={<ProtectedRoute><CryptoDeviceSettings/></ProtectedRoute>}/>

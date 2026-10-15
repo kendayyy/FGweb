@@ -1,0 +1,2 @@
+import fs from 'node:fs';
+const old=fs.readFileSync('quality/evidence/T36/build-web3.mjs','utf8');if(/Antigravity|cockpit|Anti2/i.test(old))throw Error('Forbidden old helper');const next=old.replaceAll('T36','T38').replaceAll('web-build3','web-build1').replaceAll('web-build-inputs3','web-build-inputs1').replaceAll('web-build-result3','web-build-result1');fs.writeFileSync('quality/evidence/T38/build-web1.mjs',next,{flag:'wx'});

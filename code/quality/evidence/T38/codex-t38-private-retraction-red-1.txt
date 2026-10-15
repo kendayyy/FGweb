@@ -1,0 +1,74 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/moderation-retraction.test.tsx (11 tests | 2 failed) 963ms
+   ❯ T38 actual decrypted private chat retraction (2)
+     × closes image, reply draft and explicit report preview when the selected source is removed 528ms
+     × never re-inserts a deleted message from a late decrypt/history response 148ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/moderation-retraction.test.tsx > T38 actual decrypted private chat retraction > closes image, reply draft and explicit report preview when the selected source is removed
+AssertionError: expected <article …(2)>…(5)</article> to be null
+
+- Expected:
+null
+
++ Received:
+<article
+  class="fg-private-message"
+  data-message-id="private-original"
+>
+  <strong>
+    FG Peer
+  </strong>
+  <p>
+    BODY_private-original
+  </p>
+  <span>
+    OWNED_PRIVATE_IMAGE_FIXTURE
+  </span>
+  <button
+    class="fg-btn fg-btn-outline"
+    type="button"
+  >
+    Trả lời 
+    FG Peer
+  </button>
+  <label>
+    <input
+      aria-label="Chọn tin để báo cáo"
+      disabled=""
+      type="checkbox"
+    />
+    Chọn báo cáo
+  </label>
+</article>
+
+ ❯ test/moderation-retraction.test.tsx:40:726
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/moderation-retraction.test.tsx > T38 actual decrypted private chat retraction > never re-inserts a deleted message from a late decrypt/history response
+AssertionError: expected <p></p> to be null
+
+- Expected:
+null
+
++ Received:
+<p>
+  BODY_private-late
+</p>
+
+ ❯ test/moderation-retraction.test.tsx:41:628
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 9 passed (11)
+   Start at  00:58:46
+   Duration  4.92s (environment 46%, tests 21%, transform 16%, import 10%, setup 7%, worker 1%)
+

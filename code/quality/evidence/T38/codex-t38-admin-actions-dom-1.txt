@@ -1,0 +1,34 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/admin.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/admin.test.tsx [ test/admin.test.tsx ]
+Error: Transform failed with 1 error:
+E:/FGweb/code/apps/web/src/features/admin/DisclosedEvidence.tsx:7:2349: ERROR: Expected "}" but found "onSuccess"
+  Plugin: vite:esbuild
+  File: E:/FGweb/code/apps/web/src/features/admin/DisclosedEvidence.tsx:7:2349
+  
+  Expected "}" but found "onSuccess"
+  7  |   return <section className="fg-admin-evidence" aria-label="Bằng chứng được chia sẻ"><h3>Bằng chứng người dùng chủ động chia sẻ</h3><p className="fg-admin-warning">Nội dung do người dùng cung cấp; chưa được xác minh tính xác thực. Đây không phải quyền đọc toàn bộ chat riêng.</p>{loading&&<p role="status">Đang đọc bằng chứng theo quyền hiện tại…</p>}{error&&<p role="alert" className="fg-action-error">{error}</p>}{data?.selectedMessages.map((row,index)=><article key={row.evidenceId}><h4>Tin được chọn {index+1}</h4><p className="fg-admin-evidence-text">{row.text||'Tin có ảnh được người dùng chọn'}</p><small>Tham chiếu tin: <code>{row.messageId}</code></small><div className="fg-admin-row-actions">{row.reportAttachmentIds.map((id,imageIndex)=><Button key={id} variant="outline" disabled={!access.online} onClick={()=>setImage(id)}>Xem ảnh bằng chứng {imageIndex+1}</Button>)}{removed.has(row.messageId)?<p role="status">Tin gốc đã được xóa khỏi hội thoại; bằng chứng đã chia sẻ vẫn được giữ theo audit.</p>:<Button variant="destructive" disabled={!access.online} onClick={()=>setDeleting({conversationId:row.conversationId,messageId:row.messageId})}>Xóa tin gốc đã báo cáo</Button>}</div></article>)}{image&&<div className="fg-admin-evidence-image"><Button variant="ghost" onClick={()=>setImage(null)}>Đóng ảnh bằng chứng</Button><EvidenceImage key={reportId+':'+image} reportId={reportId} attachmentId={image} allowed={allowed}/></div>}{deleting&&<ActionDialog title="Xóa tin nhắn" message="Xóa tin gốc và ảnh đính kèm khỏi hội thoại. Bằng chứng đã được người dùng chia sẻ vẫn được giữ riêng theo audit; nội dung chat khác không được mở." confirmLabel="Xác nhận xóa tin" onClose={()=>setDeleting(null)} onConfirm={async(reason,signal)=>{if(!access.online)throw new ActionApiError(0);try{await deleteMessage(deleting.conversationId,deleting.messageId,reason,signal);if(!signal.aborted){publishMessageRetraction(deleting.conversationId,deleting.messageId);setRemoved(previous=>new Set([...previous,deleting.messageId]));}}catch(problem){if(problem instanceof ActionApiError&&[401,403].includes(problem.status))access.revoke();throw problem;}} onSuccess={()=>setDeleting(null)}/>}</section>;
+  8  |  }
+  9  |  function EvidenceImage({reportId,attachmentId,allowed}:{reportId:string;attachmentId:string;allowed:string[]}){const access=useAdminAccess(),[url,setUrl]=useState<string|null>(null),[error,setError]=useState('');useEffect(()=>{const controller=new AbortController();let owned:string|undefined;void disclosedImage(reportId,attachmentId,allowed,controller.signal).then(blob=>{if(controller.signal.aborted)return;owned=URL.createObjectURL(blob);setUrl(owned);}).catch(problem=>{if(controller.signal.aborted)return;if(problem instanceof ActionApiError&&[401,403].includes(problem.status))access.revoke();else setError(actionError(problem));});return()=>{controller.abort();if(owned)URL.revokeObjectURL(owned);};},[reportId,attachmentId,access.revoke]);return error?<p role="alert" className="fg-action-error">{error}</p>:url?<img src={url} alt="Ảnh bằng chứng được người dùng chia sẻ"/>:<p role="status">Đang đọc ảnh bằng chứng…</p>;}
+     |                                                                                                                                                           ^
+  10 |  
+  
+ ❯ failureErrorWithLog ../../node_modules/esbuild/lib/main.js:1752:15
+ ❯ ../../node_modules/esbuild/lib/main.js:1019:50
+ ❯ responseCallbacks.<computed> ../../node_modules/esbuild/lib/main.js:886:9
+ ❯ handleIncomingPacket ../../node_modules/esbuild/lib/main.js:941:12
+ ❯ Socket.readFromStdout ../../node_modules/esbuild/lib/main.js:864:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  00:48:06
+   Duration  5.77s (environment 78%, setup 19%, transform 3%, worker 1%)
+

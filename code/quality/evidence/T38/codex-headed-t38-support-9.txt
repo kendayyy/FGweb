@@ -1,0 +1,38 @@
+
+Running 1 test using 1 worker
+
+(node:3792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('.fg-admin-users>li').filter({ has: getByText('FG Test Peer', { exact: true }) }).getByRole('button', { name: 'Khóa tài khoản FG Test Peer' })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" locator('.fg-admin-users>li').filter({ has: getByText('FG Test Peer', { exact: true }) }).getByRole('button', { name: 'Khóa tài khoản FG Test Peer' }) with timeout 5000ms
+      - waiting for locator('.fg-admin-users>li').filter({ has: getByText('FG Test Peer', { exact: true }) }).getByRole('button', { name: 'Khóa tài khoản FG Test Peer' })
+        13 × locator resolved to <button class="fg-btn fg-btn-destructive " aria-label="Khóa tài khoản FG Test Peer">…</button>
+           - unexpected value "inactive"
+
+
+      36 |     }
+      37 |     checks.push('actual four viewport/two theme render, mobile explicit panes and no document overflow');
+    > 38 |     phase='ban';await admin.setViewportSize({width:1440,height:900});await admin.goto(origin+'/admin/users');const peerRow=admin.locator('.fg-admin-users>li').filter({has:admin.getByText('FG Test Peer',{exact:true})});await peerRow.getByRole('button',{name:'Khóa tài khoản FG Test Peer'}).click();dialog=admin.getByRole('dialog',{name:'Khóa tài khoản'});await dialog.getByRole('textbox',{name:'Lý do xử lý',exact:true}).fill('T38_SYNTHETIC_BAN_REASON');await dialog.getByRole('button',{name:'Hủy',exact:true}).click();expect((await pool.query('SELECT id FROM session WHERE user_id=$1',[actors.other.id])).rowCount).toBe(1);await expect(peerRow.getByRole('button',{name:'Khóa tài khoản FG Test Peer'})).toBeFocused();await peerRow.getByRole('button',{name:'Khóa tài khoản FG Test Peer'}).click();dialog=admin.getByRole('dialog',{name:'Khóa tài khoản'});await dialog.getByRole('textbox',{name:'Lý do xử lý',exact:true}).fill('T38_SYNTHETIC_BAN_REASON');await dialog.getByRole('button',{name:'Xác nhận khóa',exact:true}).click();await expect(peerRow.getByRole('button',{name:'Mở khóa tài khoản FG Test Peer'})).toBeVisible();expect((await pool.query('SELECT id FROM session WHERE user_id=$1',[actors.other.id])).rowCount).toBe(0);await capture(admin,'Xác nhận khóa và thu hồi phiên','Hủy không ghi thay đổi, focus trở về nút; xác nhận có lý do thu hồi phiên thật.');checks.push('actual cancel/no-write/focus return and reasoned BAN session revocation');await peerRow.getByRole('button',{name:'Mở khóa tài khoản FG Test Peer'}).click();dialog=admin.getByRole('dialog',{name:'Mở khóa tài khoản'});await dialog.getByRole('textbox',{name:'Lý do xử lý',exact:true}).fill('T38_SYNTHETIC_UNBAN_REASON');await dialog.getByRole('button',{name:'Xác nhận mở khóa',exact:true}).click();await expect(peerRow.getByRole('button',{name:'Khóa tài khoản FG Test Peer'})).toBeVisible();expect((await pool.query('SELECT id FROM session WHERE user_id=$1',[actors.other.id])).rowCount).toBe(0);expect((await other.request.get(origin+'/api/v1/me')).status()).toBe(401);await capture(admin,'Mở khóa không phục hồi phiên cũ','Mở khóa thật và list cập nhật; cookie cũ vẫn bị từ chối, người dùng phải đăng nhập lại.');checks.push('actual UNBAN reflects list and never restores stale session');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      39 |     phase='current-role';await admin.goto(origin+'/admin/support/'+requestId);await expect(admin.locator('.fg-support-internal').getByText('T38_SYNTHETIC_INTERNAL_NOTE',{exact:true})).toBeVisible();await pool.query('UPDATE "user" SET name=$2 WHERE id=$1',[actors.admin.id,'former-admin']);await expect(admin.getByRole('heading',{name:'Không có quyền quản trị'})).toBeVisible();await expect(admin.getByText('T38_SYNTHETIC_INTERNAL_NOTE',{exact:true})).toHaveCount(0);await capture(admin,'Thu hồi quyền quản trị hiện hành','Đổi quyền persisted làm socket thu hồi; notes và trang bảo vệ được xóa ngay.');checks.push('actual current sole-admin namespace revocation clears private notes');
+      40 |     phase='logout';current=owner;await owner.goto(origin+'/support/'+requestId);await expect(owner.getByRole('textbox',{name:'Tin nhắn hỗ trợ',exact:true})).toBeVisible();await owner.getByTestId('logout-button').click();await expect(owner.getByTestId('guest-login-cta')).toBeVisible();await expect(owner.getByText('T38_SYNTHETIC_OWNER_REQUEST',{exact:true})).toHaveCount(0);await capture(owner,'Kết thúc: đăng xuất xóa nội dung riêng','Đăng xuất thật, nội dung hỗ trợ không còn; kết quả run chưa thay PASS task.','SUCCEEDED');checks.push('actual logout clears private support content');
+      41 |     fs.writeFileSync(dir+'/result.json',JSON.stringify({runId,startedAt,completedAt:new Date().toISOString(),checks,captureIds:captures,actualHeadedChrome:true,chromeVersion:browser.version(),actualPostgresRedis:true,syntheticFixturesOnly:true,actualKingameProvisioned:false,taskAcceptancePending:true},null,2)+'\n',{flag:'wx'});
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:38:703
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

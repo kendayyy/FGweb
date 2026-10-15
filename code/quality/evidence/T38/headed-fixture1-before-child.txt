@@ -1,0 +1,67 @@
+import 'reflect-metadata';
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {randomUUID} from 'node:crypto';
+import {parseEnv} from 'node:util';
+import pg from 'pg';
+import {drizzle} from 'drizzle-orm/node-postgres';
+import {migrate} from 'drizzle-orm/node-postgres/migrator';
+import {makeSignature} from 'better-auth/crypto';
+import express from 'express';
+import {ALLOWED_GAMES} from '@fg/contracts';
+
+// Synthetic owned credentials travel only in this process, never in public evidence.
+// Actual compiled AppModule, migrations, SessionGuard, PostgreSQL and Redis are used.
+export async function startFixture(runId,evidence){
+  assert(/^t38-[a-z0-9-]+$/.test(runId));
+  const require=createRequire(import.meta.url),{NestFactory}=require('@nestjs/core');
+  const {AppModule}=require('../../../apps/api/dist/app.module.js');
+  const {hashFgPassword}=require('../../../apps/api/dist/modules/auth/auth-password.js');
+  const saved={...process.env},env=parseEnv(fs.readFileSync('.env.local','utf8'));
+  const unique=randomUUID().replaceAll('-',''),schema='t38_headed_'+unique;
+  const runtime=path.resolve('.runtime/t38',unique),url=new URL(env.DATABASE_URL);
+  const secret=randomUUID()+randomUUID(),actors={};
+  url.searchParams.set('options','-c search_path='+schema);
+  const pool=new pg.Pool({connectionString:url.href,max:8,connectionTimeoutMillis:5000,statement_timeout:15000});
+  let app,created=false,closed=false;
+  fs.mkdirSync(runtime,{recursive:true});
+  async function close(){
+    if(closed)return;closed=true;
+    const cleanup={appClosed:false,schemaRemoved:false,poolEnded:false,runtimeRemoved:false};
+    try{await app?.close();cleanup.appClosed=true;}
+    finally{
+      try{if(created){assert(/^t38_headed_[a-f0-9]{32}$/.test(schema));await pool.query('DROP SCHEMA "'+schema+'" CASCADE');cleanup.schemaRemoved=(await pool.query('SELECT 1 FROM pg_namespace WHERE nspname=$1',[schema])).rowCount===0;}}
+      finally{await pool.end();cleanup.poolEnded=true;assert.equal(path.dirname(runtime),path.resolve('.runtime/t38'));if(fs.existsSync(runtime)){assert.equal(fs.realpathSync(runtime),runtime);fs.rmSync(runtime,{recursive:true,maxRetries:5,retryDelay:250});}cleanup.runtimeRemoved=!fs.existsSync(runtime);process.env=saved;fs.writeFileSync(evidence+'/fixture-cleanup.json',JSON.stringify({at:new Date().toISOString(),schema,cleanup,mainMigration:false},null,2)+'\n',{flag:'wx'});}
+    }
+    assert(Object.values(cleanup).every(Boolean),'Owned fixture cleanup incomplete');
+  }
+  try{
+    await pool.query('CREATE SCHEMA "'+schema+'"');created=true;
+    await migrate(drizzle(pool),{migrationsFolder:'packages/database/migrations',migrationsSchema:schema});
+    const games=[];
+    for(const title of ALLOWED_GAMES){const id=randomUUID(),lobby=randomUUID();await pool.query('INSERT INTO games(id,title) VALUES($1,$2)',[id,title]);await pool.query('INSERT INTO lobbies(id,game_id,name) VALUES($1,$2,$3)',[lobby,id,'Lobby '+title]);games.push({id,title,lobby});}
+    for(const key of ['admin','owner','other']){
+      const id=randomUUID(),token=randomUUID(),name=key==='admin'?'kingame':'FG '+(key==='owner'?'Test Owner':'Test Peer');
+      await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,name,key+'@t38.fixture.invalid']);
+      await pool.query('INSERT INTO profiles(user_id,display_name) VALUES($1,$2)',[id,name]);
+      await pool.query('INSERT INTO game_interests(id,user_id,game_id) VALUES($1,$2,$3)',[randomUUID(),id,games[0].id]);
+      await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 hour',now(),now())",[randomUUID(),id,token]);
+      actors[key]={id,cookie:token+'.'+await makeSignature(token,secret)};
+    }
+    await pool.query("INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,'credential',$2,$3,now(),now())",[randomUUID(),actors.admin.id,await hashFgPassword('Fixture!'+randomUUID())]);
+    Object.assign(process.env,env,{DATABASE_URL:url.href,BETTER_AUTH_SECRET:secret,ADMIN_USER_IDS:actors.admin.id,LIVEKIT_SERVER_URL:'',LIVEKIT_ADMISSION_URL:'',FG_UPLOADS_DIR:path.join(runtime,'uploads'),FG_CRYPTO_OBJECTS_DIR:path.join(runtime,'objects')});delete process.env.ADMIN_DISCORD_IDS;
+    // Reserve an ephemeral loopback listener before configuring exact trusted origin.
+    const net=await import('node:net'),reservation=net.createServer();await new Promise((resolve,reject)=>{reservation.once('error',reject);reservation.listen(0,'127.0.0.1',resolve);});const port=reservation.address().port;await new Promise(resolve=>reservation.close(resolve));
+    const origin='http://localhost:'+port;process.env.PUBLIC_ORIGIN=origin;process.env.BETTER_AUTH_URL=origin;
+    app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});
+    const http=app.getHttpAdapter().getInstance(),build=path.resolve('quality/evidence/T38/web-build1');
+    assert(fs.existsSync(build+'/index.html'),'Owned source-pinned frontend build required');
+    http.use(express.static(build,{index:false}));
+    http.use((req,res,next)=>{if(req.method==='GET'&&!req.path.startsWith('/api/')&&!req.path.startsWith('/socket.io/')){res.setHeader('Cache-Control','no-store');res.sendFile(build+'/index.html');}else next();});
+    await app.listen(port,'127.0.0.1');
+    fs.writeFileSync(evidence+'/fixture-setup.json',JSON.stringify({at:new Date().toISOString(),schema,origin,actualCompiledApp:true,actualPostgresRedis:true,syntheticVerifiedSoleAdmin:true,actualKingameProvisioned:false,mainMigration:false,productionActivation:false},null,2)+'\n',{flag:'wx'});
+    return{origin,actors,pool,games,close};
+  }catch(error){await close();throw error;}
+}

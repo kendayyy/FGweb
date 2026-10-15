@@ -3,9 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { io } from 'socket.io-client';
 import { GameDTO, MessageDTO, MessageSchema, CreateMessageRequest, SocketConversationAckSchema, SocketEventNames } from '@fg/contracts';
 import { fetchHistory, sendMessage } from './api.js';
+import {MessageRetractions,RETRACTION_EVENT} from '../moderation/retractions.js';
 import { reconcileMessages } from './reconcile.js';
 import { registerAuthCleanup } from '../auth/lifecycle.js';
 export function useLobbyChat(game: GameDTO, actorKey: string) {
+    const retractions=useMemo(()=>new Map<string,MessageRetractions>(),[actorKey,game.id]);
+    const stateFor=useCallback((id:string)=>{let state=retractions.get(id);if(!state){state=new MessageRetractions(id);retractions.set(id,state);}return state;},[retractions]);
+    const [deletionRevision,setDeletionRevision]=useState(0);
     const [conversationResolved, setConversationResolved] = useState(false);
     const [extra, setExtra] = useState<MessageDTO[]>([]), [connection, setConnection] = useState<'connecting' | 'connected' | 'offline'>('connecting');
     const [conversationId, setConversationId] = useState(game.lobbyRoomId), canonical = useRef(game.lobbyRoomId), generation = useRef(0), queuedRecovery = useRef(false);
@@ -13,7 +17,7 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
     const active = useRef(true), controllers = useRef(new Set<AbortController>()), recovering = useRef(false), pendingSend = useRef(false);
     const known = useRef(new Set<string>()), nextCursor = useRef<string | null>(null);
     const query = useQuery({ queryKey: ['lobby', game.id, actorKey], queryFn: ({ signal }) => fetchHistory(game.id, undefined, signal), retry: false, refetchOnWindowFocus: false });
-    const messages = useMemo(() => reconcileMessages(conversationId, query.data?.items ?? [], extra), [conversationId, query.data, extra]);
+    const messages = useMemo(() => stateFor(conversationId).legacy(reconcileMessages(conversationId, query.data?.items ?? [], extra)), [conversationId, query.data, extra, stateFor, deletionRevision]);
     // New live messages can sit above an unseen reconnect gap. Recover through the oldest loaded anchor.
     useEffect(() => { known.current = new Set(messages.length ? [messages[0].id] : []); }, [messages]);
     useEffect(() => {
@@ -34,8 +38,8 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
     }, [query.data]);
     const merge = useCallback((items: MessageDTO[]) => {
         if (active.current)
-            setExtra(previous => reconcileMessages(canonical.current, previous, items));
-    }, []);
+            setExtra(previous => stateFor(canonical.current).legacy(reconcileMessages(canonical.current, previous, items)));
+    }, [stateFor]);
     const recover = useCallback(async (): Promise<void> => {
         if (!active.current)
             return;
@@ -127,6 +131,10 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
             if (current())
                 setConnection('offline');
         };
+        const deleted=(value:unknown)=>{if(!current()||!stateFor(canonical.current).accept(value))return;setExtra(previous=>stateFor(canonical.current).legacy(previous));setDeletionRevision(n=>n+1);};
+        const localDeleted=(event:Event)=>deleted((event as CustomEvent).detail);
+        window.addEventListener(RETRACTION_EVENT,localDeleted);
+        socket.on(SocketEventNames.MESSAGE_DELETED,deleted);
         socket.on('connect', connected);
         socket.on(SocketEventNames.MESSAGE_CREATED, created);
         socket.on('disconnect', disconnected);
@@ -138,6 +146,8 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
             for (const controller of controllers.current)
                 controller.abort();
             controllers.current.clear();
+            window.removeEventListener(RETRACTION_EVENT,localDeleted);
+            socket.off(SocketEventNames.MESSAGE_DELETED,deleted);
             socket.off('connect', connected);
             socket.off(SocketEventNames.MESSAGE_CREATED, created);
             socket.off('disconnect', disconnected);
@@ -150,7 +160,7 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
         else
             socket.connect();
         return () => { unregister(); dispose(); };
-    }, [game.lobbyRoomId, merge, recover, actorKey]);
+    }, [game.lobbyRoomId, merge, recover, actorKey, stateFor]);
     const loadOlder = async () => {
         if (loadingOlder || !nextCursor.current || !active.current)
             return;
@@ -200,5 +210,5 @@ export function useLobbyChat(game: GameDTO, actorKey: string) {
                 setSending(false);
         }
     };
-    return { messages, conversationId, connection, conversationResolved, syncError, isLoading: query.isPending, isError: query.isError, hasOlder: Boolean(olderCursor), loadingOlder, loadOlder, retry: async () => { await query.refetch(); await recover(); }, send, sending };
+    return { deletionRevision, isMessageRemoved:(id:string)=>stateFor(conversationId).has(id), messages, conversationId, connection, conversationResolved, syncError, isLoading: query.isPending, isError: query.isError, hasOlder: Boolean(olderCursor), loadingOlder, loadOlder, retry: async () => { await query.refetch(); await recover(); }, send, sending };
 }

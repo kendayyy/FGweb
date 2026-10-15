@@ -1,0 +1,44 @@
+
+Running 1 test using 1 worker
+
+(node:15932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    Error: write EPIPE
+
+       at ..\..\quality\evidence\T38\headed-fixture1.mjs:79
+
+      77 |  const exited=new Promise(resolve=>child.once('exit',code=>{closed=true;for(const row of requests.values()){clearTimeout(row.timer);row.reject(new Error('Owned fixture process ended'));}requests.clear();resolve(code);}));
+      78 |  child.on('message',message=>{const row=requests.get(message.id);if(!row)return;requests.delete(message.id);clearTimeout(row.timer);if(message.ok)row.resolve(message.value);else row.reject(new Error('Owned fixture operation failed'));});
+    > 79 |  const rpc=(kind,body={})=>new Promise((resolve,reject)=>{if(closed){reject(new Error('Owned fixture closed'));return;}const id=randomUUID(),timer=setTimeout(()=>{requests.delete(id);reject(new Error('Owned fixture operation deadline'));},30000);requests.set(id,{resolve,reject,timer});child.send({kind,id,...body});});
+         |                                                                                                                                                                                                                                                                                                     ^
+      80 |  try{const setup=await rpc('start',{runId,evidence});return{...setup,pool:{query:(sql,params)=>rpc('query',{sql,params})},close:async()=>{if(!closed)await rpc('stop');assert.equal(await exited,0,'Owned fixture cleanup process failed');}};}catch(error){if(child.connected)await rpc('stop').catch(()=>{});await exited;throw error;}
+      81 | }
+      82 |
+        at E:\FGweb\code\quality\evidence\T38\headed-fixture1.mjs:79:293
+        at rpc (E:\FGweb\code\quality\evidence\T38\headed-fixture1.mjs:79:28)
+        at startFixture (E:\FGweb\code\quality\evidence\T38\headed-fixture1.mjs:80:278)
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:17:13
+
+    Error: Owned fixture operation failed
+
+       at ..\..\quality\evidence\T38\headed-fixture1.mjs:78
+
+      76 |  const requests=new Map();let closed=false;
+      77 |  const exited=new Promise(resolve=>child.once('exit',code=>{closed=true;for(const row of requests.values()){clearTimeout(row.timer);row.reject(new Error('Owned fixture process ended'));}requests.clear();resolve(code);}));
+    > 78 |  child.on('message',message=>{const row=requests.get(message.id);if(!row)return;requests.delete(message.id);clearTimeout(row.timer);if(message.ok)row.resolve(message.value);else row.reject(new Error('Owned fixture operation failed'));});
+         |                                                                                                                                                                                              ^
+      79 |  const rpc=(kind,body={})=>new Promise((resolve,reject)=>{if(closed){reject(new Error('Owned fixture closed'));return;}const id=randomUUID(),timer=setTimeout(()=>{requests.delete(id);reject(new Error('Owned fixture operation deadline'));},30000);requests.set(id,{resolve,reject,timer});child.send({kind,id,...body});});
+      80 |  try{const setup=await rpc('start',{runId,evidence});return{...setup,pool:{query:(sql,params)=>rpc('query',{sql,params})},close:async()=>{if(!closed)await rpc('stop');assert.equal(await exited,0,'Owned fixture cleanup process failed');}};}catch(error){if(child.connected)await rpc('stop').catch(()=>{});await exited;throw error;}
+      81 | }
+        at ChildProcess.<anonymous> (E:\FGweb\code\quality\evidence\T38\headed-fixture1.mjs:78:190)
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

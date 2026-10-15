@@ -1,0 +1,1 @@
+import fs from 'node:fs';const p='apps/web/test/moderation.test.tsx';let s=fs.readFileSync(p,'utf8');fs.writeFileSync('quality/evidence/T38/block-fixture-before1.txt',s,{flag:'wx'});s=s.replace("?[{blockerId:'actor-a'","?[{id:'block-a',blockerId:'actor-a'");fs.writeFileSync(p,s);

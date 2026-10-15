@@ -1,0 +1,37 @@
+
+Running 1 test using 1 worker
+
+(node:26976) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation
+  1) tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('alert')
+    Expected: visible
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert" class="fg-action-error">Nội dung không còn khả dụng với quyền hiện tại.</p> aka getByRole('complementary', { name: 'Hộp thư hỗ trợ' }).getByText('Nội dung không còn khả dụng v')
+        2) <p role="alert" class="fg-action-error">Nội dung không còn khả dụng với quyền hiện tại.</p> aka getByRole('region', { name: 'Cuộc hỗ trợ' }).getByText('Nội dung không còn khả dụng v')
+
+    Call log:
+      - Expect "toBeVisible" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      25 |     const created=(await pool.query('SELECT id,owner_id FROM support_requests')).rows;expect(created).toHaveLength(1);expect(created[0].owner_id).toBe(actors.owner.id);const requestId=created[0].id;
+      26 |     checks.push('actual blank/create/strict durable receipt and database owner');
+    > 27 |     phase='ownership';current=other;await other.goto(origin+'/support/'+requestId);await expect(other.getByRole('alert')).toBeVisible();await expect(other.getByText('T38_SYNTHETIC_OWNER_REQUEST',{exact:true})).toHaveCount(0);const forbidden=await other.request.get(origin+'/api/v1/support/requests/'+requestId);expect(forbidden.status()).toBe(404);await capture(other,'Từ chối tài khoản khác','URL và API thật trả từ chối truy cập yêu cầu của chủ khác; không hiện nội dung.');checks.push('actual cross-owner URL and API denial');
+         |                                                                                                                           ^
+      28 |     phase='admin-support';current=admin;record();expect((await admin.request.get(origin+'/api/v1/me')).status()).toBe(200);expect((await admin.request.get(origin+'/api/v1/admin/support/requests?limit=1')).status()).toBe(200);await admin.goto(origin+'/admin/support/'+requestId,{waitUntil:'domcontentloaded'});phase='admin-render';record();await expect(admin.getByRole('navigation',{name:'Mục quản trị'})).toBeVisible();await expect(admin.getByLabel('Lịch sử hỗ trợ').getByText('T38_SYNTHETIC_OWNER_REQUEST',{exact:true})).toBeVisible();await expect(admin.getByRole('button',{name:'Lưu ghi chú'})).toBeEnabled();await admin.getByLabel('Nội dung ghi chú nội bộ').fill('T38_SYNTHETIC_INTERNAL_NOTE');await admin.getByRole('button',{name:'Lưu ghi chú'}).click();await expect(admin.locator('.fg-support-internal').getByText('T38_SYNTHETIC_INTERNAL_NOTE',{exact:true})).toBeVisible();await admin.getByLabel('Tin nhắn hỗ trợ',{exact:true}).fill('T38_SYNTHETIC_ADMIN_REPLY');await admin.getByRole('button',{name:'Gửi phản hồi'}).click();await expect(admin.getByLabel('Lịch sử hỗ trợ').getByText('T38_SYNTHETIC_ADMIN_REPLY',{exact:true})).toBeVisible();await admin.getByLabel('Trạng thái yêu cầu',{exact:true}).selectOption('IN_PROGRESS');await expect(admin.getByLabel('Trạng thái yêu cầu',{exact:true})).toHaveValue('IN_PROGRESS');await capture(admin,'Hộp thư quản trị và ghi chú riêng','Admin thật phản hồi, lưu ghi chú riêng và cập nhật version/trạng thái trên backend.');checks.push('actual server-authorized admin inbox reply/internal note/status');
+      29 |     phase='owner-realtime';current=owner;await owner.bringToFront();await expect(owner.getByLabel('Lịch sử hỗ trợ').getByText('T38_SYNTHETIC_ADMIN_REPLY',{exact:true})).toBeVisible();await expect(owner.getByRole('button',{name:'Mở yêu cầu Chat hỗ trợ'})).toContainText('Đang xử lý');await expect(owner.getByText('T38_SYNTHETIC_INTERNAL_NOTE',{exact:true})).toHaveCount(0);const userDetail=await owner.request.get(origin+'/api/v1/support/requests/'+requestId);expect(userDetail.status()).toBe(200);expect(JSON.stringify(await userDetail.json())).not.toContain('T38_SYNTHETIC_INTERNAL_NOTE');await owner.getByRole('button',{name:'Đánh dấu đã đọc'}).click();await capture(owner,'Người gửi nhận phản hồi','Socket/REST đồng bộ phản hồi và trạng thái thật; notes không có trong DOM hoặc API người gửi.');checks.push('actual owner realtime canonical state and note isolation');
+      30 |     phase='offline-draft';await owner.getByLabel('Tin nhắn hỗ trợ',{exact:true}).fill('T38_OFFLINE_RETAINED_DRAFT');await owner.context().setOffline(true);await expect(owner.getByRole('button',{name:'Gửi tin nhắn',exact:true})).toBeDisabled();await expect(owner.getByLabel('Tin nhắn hỗ trợ',{exact:true})).toHaveValue('T38_OFFLINE_RETAINED_DRAFT');await capture(owner,'Mất mạng giữ bản nháp','Kết nối mạng thật bị ngắt; gửi bị khóa và bản nháp được giữ.');await owner.context().setOffline(false);await expect(owner.getByRole('button',{name:'Gửi tin nhắn',exact:true})).toBeEnabled();await owner.getByRole('button',{name:'Gửi tin nhắn',exact:true}).click();await expect(owner.getByLabel('Lịch sử hỗ trợ').getByText('T38_OFFLINE_RETAINED_DRAFT',{exact:true})).toBeVisible();checks.push('actual offline/reconnect and retained draft committed once');
+        at E:\FGweb\code\tests\e2e\moderation-support.spec.ts:27:123
+
+    Error Context: .runtime\t38\playwright-output\moderation-support-T38-act-f737a-iews-and-current-revocation\error-context.md
+
+
+  1 failed
+    tests\e2e\moderation-support.spec.ts:7:1 › T38 actual support ownership, admin actions, responsive views and current revocation 

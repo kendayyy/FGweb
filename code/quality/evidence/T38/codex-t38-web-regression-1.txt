@@ -1,0 +1,64 @@
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/call-controls.test.tsx (24 tests | 1 failed) 16390ms
+   ❯ T28 approved room call behavior (24)
+     × join is serialized under repeated clicks 270ms
+ ❯ test/rooms.test.tsx (19 tests | 1 failed) 4341ms
+   ❯ T19 — Rooms, Private Group Chat, and Room Management (19)
+     × 15. Reconnect and a plaintext group event cannot open locked encrypted history 74ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/call-controls.test.tsx > T28 approved room call behavior > join is serialized under repeated clicks
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ test/call-controls.test.tsx:73:305
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/rooms.test.tsx > T19 — Rooms, Private Group Chat, and Room Management > 15. Reconnect and a plaintext group event cannot open locked encrypted history
+AssertionError: expected [ { namespace: '/', …(10) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "closed": false,
++     "connect": [Function connect],
++     "connected": true,
++     "disconnect": [Function disconnect],
++     "emit": [Function emit],
++     "emitWithAck": [Function Mock],
++     "fire": [Function fire],
++     "namespace": "/",
++     "off": [Function off],
++     "on": [Function on],
++     "timeout": [Function timeout],
++   },
++ ]
+
+ ❯ test/rooms.test.tsx:629:77
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 29 passed (31)
+      Tests  2 failed | 447 passed (449)
+   Start at  01:02:29
+   Duration  175.81s (tests 43%, environment 32%, import 14%, setup 7%, transform 4%)
+
+Environment  jsdom was created 31 times · 53.27s total, 32% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
