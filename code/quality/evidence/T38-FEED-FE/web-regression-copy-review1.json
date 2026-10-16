@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-16T03:52:37.817Z",
+  "reviewer": "Codex",
+  "copies": [
+    {
+      "source": "quality/evidence/T38/regression-tests/call-controls.test.tsx",
+      "sourceSha256": "8543f12d3a74107f31213b589ae1fe3c049559820226f6d7f5aedac523b8408b",
+      "target": "quality/evidence/T38-FEED-FE/regression-tests/call-controls.test.tsx",
+      "targetSha256": "8543f12d3a74107f31213b589ae1fe3c049559820226f6d7f5aedac523b8408b"
+    },
+    {
+      "source": "quality/evidence/T38/regression-tests/rooms.test.tsx",
+      "sourceSha256": "dfa6f100ca86c2f98c473756af938bc2e2875f512a919338977aa45b02e79127",
+      "target": "quality/evidence/T38-FEED-FE/regression-tests/rooms.test.tsx",
+      "targetSha256": "dfa6f100ca86c2f98c473756af938bc2e2875f512a919338977aa45b02e79127"
+    }
+  ],
+  "historicalReview": {
+    "path": "quality/evidence/T38/regression-compatibility-review1.json",
+    "sha256": "d1b9b7c2f07e2206943eea3aea6b4be3906b15a720b048b7071b70feb9fa2360"
+  },
+  "previousAcceptedConfig": {
+    "path": "quality/evidence/T38/web-regression-final1.config.ts",
+    "sha256": "5b082a4f447e50c683235db503b8f83389387b7ba1a227bdbf6dd21c2d4ea10f"
+  },
+  "failedRawRun": {
+    "path": "quality/evidence/T38-FEED-FE/codex-feed-fe-web-regression-1.json",
+    "sha256": "1e2fffcc500e458f291e1bcb0110a60098af99eb47aed5689b3c47bf02a3d26c",
+    "passed": 477,
+    "failed": 7,
+    "total": 484
+  },
+  "causes": [
+    "Two already-reviewed legacy harness cases: async join checks before fetch settles; notifications socket misclassified as forbidden private subscription. Use byte-identical accepted T38 copies preserving exact assertions.",
+    "Five theme bootstrap fixtures read apps/web/index.html relative to code cwd; npm workspace changed cwd to apps/web and caused real ENOENT. Run native Vitest from code with owned config, no fixture/app changes."
+  ],
+  "assertionsUnchanged": true,
+  "frozenOriginalsUnchanged": true,
+  "allRemainingOriginalTestFilesIncluded": true,
+  "componentTestsIncluded": true,
+  "taskAcceptancePending": true
+}

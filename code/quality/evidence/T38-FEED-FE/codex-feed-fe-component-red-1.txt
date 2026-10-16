@@ -1,0 +1,44 @@
+
+> @fg/web@0.1.0 test
+> vitest run test/feed.test.tsx --maxWorkers 1 --no-file-parallelism
+
+
+ RUN  v5.0.3 E:/FGweb/code/apps/web
+
+ ❯ test/feed.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/feed.test.tsx [ test/feed.test.tsx ]
+Error: Failed to resolve import "../src/features/feed/api.js" from "test/feed.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: E:/FGweb/code/apps/web/test/feed.test.tsx:1:223
+  6  |  const __vi_import_1__ = await import("@testing-library/react");
+  7  |  const __vi_import_2__ = await import("react-router-dom");
+  8  |  const __vi_import_3__ = await import("../src/features/feed/api.js");
+     |                                       ^
+  9  |  const __vi_import_4__ = await import("../src/features/feed/FeedPage.js");
+  10 |  
+ ❯ TransformPluginContext._formatLog ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42658:41
+ ❯ TransformPluginContext.error ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42655:16
+ ❯ normalizeUrl ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40634:23
+ ❯ ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40753:37
+ ❯ TransformPluginContext.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:40680:7
+ ❯ EnvironmentPluginContainer.transform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:42453:18
+ ❯ loadAndTransform ../../node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:35845:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  05:23:22
+   Duration  48.21s (environment 86%, setup 14%)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path E:\FGweb\code\apps\web
+npm error workspace @fg/web@0.1.0
+npm error location E:\FGweb\code\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run test/feed.test.tsx --maxWorkers 1 --no-file-parallelism

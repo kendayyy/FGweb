@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-16T04:23:06.901Z",
+  "reviewer": "Codex",
+  "actualRed": {
+    "path": "quality/evidence/T38-FEED-FE/codex-feed-fe-headed-frame-red-1.json",
+    "sha256": "c50582ba2bcda9e38cb297db127d922d8bdabe1d46f29aa6d3802394ec957fea",
+    "failure": "Navigation actual viewport ratio0 at360x800, unchanged5s assertion timeout."
+  },
+  "priorFunctionalRun": {
+    "path": "quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-4.json",
+    "sha256": "f22856ade8ef12b4b034714ad3e34ae6663e1f2f1e8f21af39437ecf722d9a41",
+    "functionalPassed": true,
+    "visualAcceptance": false
+  },
+  "reason": "Actual headed frame RED observes bottom navigation viewport ratio0 despite CSS visible. Feed-only fixed-height flex frame removes duplicate global header on Feed routes; reuse existing ThemeSwitcher/HeaderAuthWidget in compact Feed header/account modal, retain room/invite/device/support/account paths and existing auth/admin providers. Other routes unchanged. Exact App-only proposal; source types/functional regression/real frame/visual acceptance pending,92priorPASS unchanged.",
+  "productChanges": "New Feed header reuses same theme/auth widgets; account actions move into focus-managed account modal, route frame fits viewport/PWA. No shared auth implementation or provider changes.",
+  "unitFixtureScope": "Feed-only DOM unit auth/notification/theme boundaries stubbed; shared auth/theme tests unchanged; actual theme/account/logout checked by native headed E2E.",
+  "captureCorrection": "Reset actual page/feed scroll to top for canonical overview screenshots, retaining all privacy masks. Prior clipped-input mask artifacts are preserved, never edited or relabelled.",
+  "sourcePins": [
+    {
+      "path": "apps/web/src/features/feed/FeedPage.tsx",
+      "sha256": "b7fc48d96d5ceafa3436b21506e189196dbcad4b76bb2439ebb7cd2c3ed1ed79"
+    },
+    {
+      "path": "apps/web/src/features/feed/feed.css",
+      "sha256": "304dbb19d4dc1b80fffdd5a86d4dd44df3df5fedee66176e98f4c509128a92cd"
+    },
+    {
+      "path": "apps/web/test/feed.test.tsx",
+      "sha256": "1482db19e508e0cffddbaa172da4fa2533b1011059b69d0a9e36e877704f7720"
+    },
+    {
+      "path": "tests/e2e/feed.spec.ts",
+      "sha256": "67304dcf94e67d417bf196343ae9e5d4ee8a94203aa9d3a23b2e1fef525bcece"
+    }
+  ],
+  "assertionsWeakened": false,
+  "mainMigration": false,
+  "acceptancePending": true
+}

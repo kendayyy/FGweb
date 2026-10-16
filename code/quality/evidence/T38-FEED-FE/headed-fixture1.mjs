@@ -1,0 +1,86 @@
+import {Redis} from 'ioredis';
+import 'reflect-metadata';
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {randomUUID} from 'node:crypto';
+import {parseEnv} from 'node:util';
+import pg from 'pg';
+import {drizzle} from 'drizzle-orm/node-postgres';
+import {migrate} from 'drizzle-orm/node-postgres/migrator';
+import {makeSignature} from 'better-auth/crypto';
+import express from 'express';
+import {fork} from 'node:child_process';
+import {ALLOWED_GAMES} from '@fg/contracts';
+
+// Synthetic owned credentials travel only in this process, never in public evidence.
+// Actual compiled AppModule, migrations, SessionGuard, PostgreSQL and Redis are used.
+async function startNativeFixture(runId,evidence){
+  assert(/^feed-fe-[a-z0-9-]+$/.test(runId));
+  const phases=[],mark=phase=>{phases.push({phase,at:new Date().toISOString()});fs.writeFileSync(evidence+'/fixture-phases.json',JSON.stringify({phases},null,2)+'\n');};mark('bootstrap-entered');
+  const require=createRequire(import.meta.url),{NestFactory}=require('@nestjs/core');
+  const {AppModule}=require('../../../apps/api/dist/app.module.js');
+  const {hashFgPassword}=require('../../../apps/api/dist/modules/auth/auth-password.js');
+  const saved={...process.env},env=parseEnv(fs.readFileSync('.env.local','utf8'));
+  const unique=randomUUID().replaceAll('-',''),schema='t38_feed_fe_headed_'+unique;
+  const runtime=path.resolve('.runtime/t38-feed-fe',unique),url=new URL(env.DATABASE_URL);
+  const secret=randomUUID()+randomUUID(),actors={},prefix='fg:feed:ui:'+unique,quota=new Redis(env.REDIS_URL,{lazyConnect:true,enableOfflineQueue:false,maxRetriesPerRequest:0,connectTimeout:3000,retryStrategy:()=>null});quota.on('error',()=>undefined);
+  url.searchParams.set('options','-c search_path='+schema);
+  const pool=new pg.Pool({connectionString:url.href,max:8,connectionTimeoutMillis:5000,statement_timeout:15000});
+  let app,created=false,closed=false;
+  fs.mkdirSync(runtime,{recursive:true});
+  async function close(){
+    if(closed)return;closed=true;
+    const cleanup={appClosed:false,schemaRemoved:!created,poolEnded:false,runtimeRemoved:false,redisKeysRemoved:false,redisClosed:false};
+    try{await app?.close();cleanup.appClosed=true;await quota.connect();let cursor='0';const keys=[];do{const found=await quota.scan(cursor,'MATCH',prefix+':*','COUNT',100);cursor=found[0];keys.push(...found[1]);}while(cursor!=='0');assert(keys.every(key=>key.startsWith(prefix+':')));if(keys.length)await quota.del(...keys);cleanup.redisKeysRemoved=(await quota.keys(prefix+':*')).length===0;await quota.quit();cleanup.redisClosed=true;}
+    finally{
+      try{if(created){assert(/^t38_feed_fe_headed_[a-f0-9]{32}$/.test(schema));await pool.query('DROP SCHEMA "'+schema+'" CASCADE');cleanup.schemaRemoved=(await pool.query('SELECT 1 FROM pg_namespace WHERE nspname=$1',[schema])).rowCount===0;}}
+      finally{await pool.end();cleanup.poolEnded=true;assert.equal(path.dirname(runtime),path.resolve('.runtime/t38-feed-fe'));if(fs.existsSync(runtime)){assert.equal(fs.realpathSync(runtime),runtime);fs.rmSync(runtime,{recursive:true,maxRetries:5,retryDelay:250});}cleanup.runtimeRemoved=!fs.existsSync(runtime);process.env=saved;fs.writeFileSync(evidence+'/fixture-cleanup.json',JSON.stringify({at:new Date().toISOString(),schema,cleanup,mainMigration:false},null,2)+'\n',{flag:'wx'});}
+    }
+    assert(Object.values(cleanup).every(Boolean),'Owned fixture cleanup incomplete');
+  }
+  try{
+    await pool.query('CREATE SCHEMA "'+schema+'"');created=true;mark('schema-created');
+    await migrate(drizzle(pool),{migrationsFolder:'packages/database/migrations',migrationsSchema:schema});mark('migrated');
+    const games=[];
+    for(const title of ALLOWED_GAMES){const id=randomUUID(),lobby=randomUUID();await pool.query('INSERT INTO games(id,title) VALUES($1,$2)',[id,title]);await pool.query('INSERT INTO lobbies(id,game_id,name) VALUES($1,$2,$3)',[lobby,id,'Lobby '+title]);games.push({id,title,lobby});}
+    for(const key of ['admin','owner','other']){
+      const id=randomUUID(),token=randomUUID(),name=key==='admin'?'kingame':'FG '+(key==='owner'?'Test Owner':'Test Peer');
+      await pool.query('INSERT INTO "user"(id,name,email,email_verified,created_at,updated_at) VALUES($1,$2,$3,true,now(),now())',[id,name,key+'@feed-fe.fixture.invalid']);
+      await pool.query('INSERT INTO profiles(user_id,display_name) VALUES($1,$2)',[id,name]);
+      await pool.query('INSERT INTO game_interests(id,user_id,game_id) VALUES($1,$2,$3)',[randomUUID(),id,games[0].id]);
+      await pool.query("INSERT INTO session(id,user_id,token,expires_at,created_at,updated_at) VALUES($1,$2,$3,now()+interval '1 hour',now(),now())",[randomUUID(),id,token]);
+      actors[key]={id,cookie:token+'.'+await makeSignature(token,secret)};
+    }
+    await pool.query("INSERT INTO account(id,account_id,provider_id,user_id,password,created_at,updated_at) VALUES($1,$2,'credential',$2,$3,now(),now())",[randomUUID(),actors.admin.id,await hashFgPassword('Fixture!'+randomUUID())]);
+    mark('actors-seeded');Object.assign(process.env,env,{DATABASE_URL:url.href,BETTER_AUTH_SECRET:secret,ADMIN_USER_IDS:actors.admin.id,LIVEKIT_SERVER_URL:'',LIVEKIT_ADMISSION_URL:'',FG_UPLOADS_DIR:path.join(runtime,'uploads'),FG_CRYPTO_OBJECTS_DIR:path.join(runtime,'objects'),FG_FEED_REDIS_PREFIX:prefix});delete process.env.ADMIN_DISCORD_IDS;
+    // Reserve an ephemeral loopback listener before configuring exact trusted origin.
+    const net=await import('node:net'),reservation=net.createServer();await new Promise((resolve,reject)=>{reservation.once('error',reject);reservation.listen(0,'127.0.0.1',resolve);});const port=reservation.address().port;await new Promise(resolve=>reservation.close(resolve));
+    const origin='http://localhost:'+port;process.env.PUBLIC_ORIGIN=origin;process.env.BETTER_AUTH_URL=origin;
+    app=await NestFactory.create(AppModule,{logger:false,abortOnError:false});mark('app-created');
+    const http=app.getHttpAdapter().getInstance(),build=path.resolve('quality/evidence/T38-FEED-FE/web-build5');
+    assert(fs.existsSync(build+'/index.html'),'Owned source-pinned frontend build required');
+    http.use(express.static(build,{index:false}));
+    http.use((req,res,next)=>{if(req.method==='GET'&&!req.path.startsWith('/api/')&&!req.path.startsWith('/socket.io/')){res.setHeader('Cache-Control','no-store');res.sendFile(build+'/index.html');}else next();});
+    await app.listen(port,'127.0.0.1');mark('listening');
+    fs.writeFileSync(evidence+'/fixture-setup.json',JSON.stringify({at:new Date().toISOString(),schema,origin,actualCompiledApp:true,actualPostgresRedis:true,syntheticVerifiedSoleAdmin:true,actualKingameProvisioned:false,mainMigration:false,productionActivation:false},null,2)+'\n',{flag:'wx'});
+    return{origin,actors,pool,games,close};
+  }catch(error){const redact=value=>{let text=String(value);for(const item of Object.values(env))if(item&&item.length>=8)text=text.split(item).join('[PRIVATE_CONFIG]');return text.replace(/postgres(?:ql)?:[^\s]+/g,'[DATABASE_URL]');};fs.writeFileSync(evidence+'/fixture-failure.json',JSON.stringify({at:new Date().toISOString(),name:error.name,code:error.code,diagnostic:redact(error.message),stack:redact(error.stack)},null,2)+'\n',{flag:'wx'});await close();throw error;}
+}
+
+if(process.env.FG_FEED_FE_FIXTURE_CHILD==='1'){
+ let fixture,queue=Promise.resolve();
+ const send=message=>{if(process.connected)process.send(message,()=>undefined);};
+ process.once('disconnect',()=>{queue=queue.then(()=>fixture?.close()).finally(()=>process.exit());});
+ process.on('message',message=>{queue=queue.then(async()=>{try{if(message.kind==='start'){fixture=await startNativeFixture(message.runId,message.evidence);send({id:message.id,ok:true,value:{origin:fixture.origin,actors:fixture.actors,games:fixture.games}});}else if(message.kind==='query'){const result=await fixture.pool.query(message.sql,message.params);send({id:message.id,ok:true,value:{rows:result.rows,rowCount:result.rowCount}});}else if(message.kind==='stop'){await fixture?.close();send({id:message.id,ok:true});if(process.connected)process.disconnect();}}catch{send({id:message.id,ok:false});if(message.kind==='start'){await fixture?.close();process.exitCode=1;if(process.connected)process.disconnect();}}});});
+}
+export async function startFixture(runId,evidence){
+ const child=fork(new URL('./headed-fixture1.mjs',import.meta.url),[],{env:{...process.env,FG_FEED_FE_FIXTURE_CHILD:'1'},stdio:['ignore','ignore','ignore','ipc'],windowsHide:true,execArgv:[]});
+ const requests=new Map();let closed=false;
+ child.on('error',()=>{});
+ const exited=new Promise(resolve=>child.once('exit',code=>{closed=true;for(const row of requests.values()){clearTimeout(row.timer);row.reject(new Error('Owned fixture process ended'));}requests.clear();resolve(code);}));
+ child.on('message',message=>{const row=requests.get(message.id);if(!row)return;requests.delete(message.id);clearTimeout(row.timer);if(message.ok)row.resolve(message.value);else row.reject(new Error('Owned fixture operation failed'));});
+ const rpc=(kind,body={})=>new Promise((resolve,reject)=>{if(closed){reject(new Error('Owned fixture closed'));return;}const id=randomUUID(),timer=setTimeout(()=>{requests.delete(id);reject(new Error('Owned fixture operation deadline'));},kind==='start'?90000:kind==='stop'?60000:30000);requests.set(id,{resolve,reject,timer});child.send({kind,id,...body},error=>{if(!error)return;clearTimeout(timer);requests.delete(id);reject(new Error('Owned fixture IPC unavailable'));});});
+ try{const setup=await rpc('start',{runId,evidence});return{...setup,pool:{query:(sql,params)=>rpc('query',{sql,params})},close:async()=>{if(!closed)await rpc('stop');assert.equal(await exited,0,'Owned fixture cleanup process failed');}};}catch(error){if(child.connected)await rpc('stop').catch(()=>{});await exited;throw error;}
+}

@@ -7016,3 +7016,175 @@
 - Coding and build 3 — T38-FEED-BE — actual 2026-10-15T22:17:24.898Z–2026-10-15T22:17:27.590Z exit0: feed-be-reviewed-close-1. Evidence code/quality/evidence/T38-FEED-BE/codex-feed-be-reviewed-close-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
 
 - Coding and build 3 — T38-FEED-BE — primary GitHub backup 2026-10-15T22:18:17.654Z: normal origin/master commit/push exit0/0, remote SHA 52a6efd46d0f8ebeba48aae61a827831b424cc3b verified; primary 52a6efd46d0f8ebeba48aae61a827831b424cc3b. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup pending before T38-FEED-FE. Evidence code/quality/evidence/T38-FEED-BE/github-primary-push-receipt1.json.
+
+- Coding and build 3 — T38-FEED-BE — final GitHub backup 2026-10-15T22:18:42.699Z: normal origin/master commit/push exit0/0, remote SHA 0efbf84ad32708a369a8065771a40a11f37f957f verified; primary 52a6efd46d0f8ebeba48aae61a827831b424cc3b. Actual scanned staged blobs match commit and frozen outputs unchanged. Bounded receipt followup complete, final verification local to avoid recursion; T38-FEED-FE may enter only through its reviewed gate. Evidence code/quality/evidence/T38-FEED-BE/github-final-sync1.json.
+
+- Coding and build 3 — T38-FEED-FE — preparation start 2026-10-15T22:20:11.013Z: BE PASS/verified remote 0efbf84ad32708a369a8065771a40a11f37f957f; read spec13/design10/task/rules and actual mockup03, locked contracts/backend handoff, shared App/Lobby/modal/social/DM/admin code. Apply executing-plans/TDD/verification and UI-UX guidance within approved layout. Preliminary optional UX search rejected unknown --top flag; no code/runtime changes, corrected command follows. Exact plan/scope prepared before business code. Evidence code/quality/evidence/T38-FEED-FE/scope-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — reviewed entry 2026-10-15T22:22:18.415Z: IN_PROGRESS; 41135 originals/92priorPASS/spec/mockup/checker/env/baselines pinned; stock gate accepted. Component RED next; no business code before entry. Evidence code/quality/evidence/T38-FEED-FE/scope-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-15T22:20:10.682Z–2026-10-15T22:22:18.655Z exit0: feed-fe-reviewed-entry-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-reviewed-entry-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-15T22:20:25.468Z–2026-10-15T22:20:25.982Z exit0: feed-fe-ux-focus-review-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-ux-focus-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-15T22:23:16.265Z–2026-10-15T22:24:10.744Z exit1: feed-fe-component-red-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-red-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:36:26.995Z–2026-10-16T03:37:27.427Z exit0: feed-fe-component-green-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:38:11.240Z–2026-10-16T03:38:24.975Z exit1: feed-fe-component-additional-red-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-additional-red-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:39:13.659Z–2026-10-16T03:39:13.873Z exit0: feed-fe-integration-proposals-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-integration-proposals-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:39:49.794Z–2026-10-16T03:40:17.285Z exit0: feed-fe-proposal-types-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-proposal-types-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — exact review 2026-10-16 10:45:46 +07:00: Integrate approved Feed routes/navigation and exhaustive public Feed report labels/admin source-delete actions; preserve legacy USER/MESSAGE consent/custody and server-current admin gate. Four exact original proposals, no contract/backend/theme changes. Component/real headed acceptance pending,92priorPASS unchanged. Evidence code/quality/evidence/T38-FEED-FE/frontend-integration1-adoption-review.json; actual task acceptance pending,92priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:40:42.411Z–2026-10-16T03:45:47.021Z exit0: feed-fe-source-integration-adoption-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-source-integration-adoption-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:43:31.449Z–2026-10-16T03:43:31.790Z exit0: feed-fe-headed-drivers-prepare-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-drivers-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — source review 2026-10-16T03:47:16.304Z: initial24component tests GREEN; additional29case run26GREEN/3RED reproduces two report-label errors and actual StrictMode aborted-controller/count issue. Exact four-original integration/type preflight accepted; new route controller lifecycle corrected. Review also changes mobile reverse-overflow to normal grid, actual headed validation pending. Initial missing-module RED explicitly ran zero assertions, not counted as functional tests. No assertion weakened; failed logs preserved. Evidence code/quality/evidence/T38-FEED-FE/initial-source-fixes-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:47:16.179Z–2026-10-16T03:47:16.333Z exit0: feed-fe-initial-fixes-review-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-initial-fixes-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:47:16.474Z–2026-10-16T03:47:27.903Z exit1: feed-fe-component-green-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — fixture correction 2026-10-16T03:48:09.921Z: fresh run28GREEN/1focus fixture failure after report and StrictMode fixes. Inspect frozen modal hook16ms focus scheduling; emulate focused trigger and await identical predicate with default waitFor. Escape/removal/return assertions unchanged, no app or timeout change. Failed record and before-source retained at code/quality/evidence/T38-FEED-FE/focus-fixture-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:48:09.793Z–2026-10-16T03:48:09.939Z exit0: feed-fe-focus-fixture-fix-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-focus-fixture-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:48:10.066Z–2026-10-16T03:48:26.178Z exit0: feed-fe-component-green-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:48:51.911Z–2026-10-16T03:51:48.707Z exit1: feed-fe-web-regression-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-regression-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:49:35.114Z–2026-10-16T03:49:35.270Z exit0: feed-fe-headed-source-review-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-source-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — raw web regression review 2026-10-16T03:52:37.823Z:477GREEN/7failed484;29Feed tests all pass. Two frozen original call/room harness assumptions already have accepted T38 compatibility copies; five theme tests fail actual workspace-cwd ENOENT. Preserve entire failed run, copy accepted T38 harnesses byte-identically and run all remaining originals plus Feed from code cwd with owned native config. No test assertion or application change. Evidence code/quality/evidence/T38-FEED-FE/web-regression-copy-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:52:37.685Z–2026-10-16T03:52:37.848Z exit0: feed-fe-web-regressions-prepare-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-regressions-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:52:38.124Z–2026-10-16T03:55:19.735Z exit0: feed-fe-web-regression-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-regression-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:55:43.549Z–2026-10-16T03:56:06.051Z exit0: feed-fe-web-types-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-types-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:56:22.232Z–2026-10-16T03:56:52.584Z exit1: feed-fe-source-lint-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-source-lint-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:57:05.419Z–2026-10-16T03:57:05.568Z exit0: feed-fe-unused-type-fix-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-unused-type-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:57:05.695Z–2026-10-16T03:57:10.409Z exit0: feed-fe-source-lint-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-source-lint-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:57:15.883Z–2026-10-16T03:58:13.200Z exit0: feed-fe-web-build-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-build-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:58:30.370Z–2026-10-16T03:58:30.947Z exit0: feed-fe-headed-preflight-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T03:58:40.956Z–2026-10-16T03:59:57.720Z exit1: feed-fe-headed-e2e-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:01:25.453Z–2026-10-16T04:01:30.338Z exit0: feed-fe-headed1-owned-cleanup-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed1-owned-cleanup-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — headed bootstrap recovery 2026-10-16T04:02:13.526Z: actual UI run1 failed before any app interaction/capture; native listener ready about50s after bootstrap exceeded30s RPC and exposed concurrent stop-before-assignment cleanup race. Verified listener absent and recovered only recorded disposable schema/UUID runtime. Serialize child IPC/disconnect lifecycle, trace phases and use measured startup90s/queued-stop60s bounds; query30s/suite240s/assertions unchanged. No application/build mutation or fake UI evidence. Evidence code/quality/evidence/T38-FEED-FE/headed-bootstrap-lifecycle-review1.json; fresh preflight/run pending.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:02:13.385Z–2026-10-16T04:02:13.547Z exit0: feed-fe-headed-bootstrap-fix-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-bootstrap-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:02:13.769Z–2026-10-16T04:02:14.656Z exit0: feed-fe-headed-preflight-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:02:58.497Z–2026-10-16T04:03:48.936Z exit1: feed-fe-headed-e2e-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — headed2 review 2026-10-16T04:05:28.493Z:3actual behavior groups/5viewport captures, real upload/filter/guest/nonowner checks passed; third-like immediate SQL probe raced request completion, add authoritative DOM wait and retain SQL count1 assertion. All fixture cleanup flags true. Inspect actual step2: generic span selector hides canonical game logos and flex-auto margins shrink feed; scoped CSS exclusion/width fix, headed7logos-visible assertions added. No JS/API/permission or timeout change; build2/new headed preflight pending. Evidence code/quality/evidence/T38-FEED-FE/headed-like-visual-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:05:28.332Z–2026-10-16T04:05:28.523Z exit0: feed-fe-headed-like-visual-fix-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-like-visual-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:05:28.636Z–2026-10-16T04:05:59.642Z exit0: feed-fe-web-build-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-build-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:06:38.500Z–2026-10-16T04:06:39.089Z exit0: feed-fe-headed-preflight-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:06:40.040Z–2026-10-16T04:07:33.631Z exit1: feed-fe-headed-e2e-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:08:26.310Z–2026-10-16T04:08:38.030Z exit1: feed-fe-concurrent-count-red-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-concurrent-count-red-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — concurrent count/source review 2026-10-16T04:09:57.467Z: new actual30case run29GREEN/1RED reproduces delayed like overwriting newer7comment count. Functional keyed like-field merge preserves current row fields and excludes stale filter keys. Headed3 passed4groups/6captures, SQL reply probe raced textarea text-echo wait; narrow to actual rendered list/post-body, keep every SQL assertion. Mobile drawer labels scoped visible and actual focus/room-link check added. Fresh focused/full regression/types/lint/build3/headed required. Evidence code/quality/evidence/T38-FEED-FE/concurrent-count-headed-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:09:57.264Z–2026-10-16T04:09:57.506Z exit0: feed-fe-concurrent-count-fix-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-concurrent-count-fix-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:09:57.647Z–2026-10-16T04:10:07.258Z exit0: feed-fe-component-green-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:10:29.397Z–2026-10-16T04:13:48.792Z exit0: feed-fe-web-regression-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-regression-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:14:56.969Z–2026-10-16T04:15:14.000Z exit0: feed-fe-web-types-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-types-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:15:19.024Z–2026-10-16T04:15:25.114Z exit0: feed-fe-source-lint-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-source-lint-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:15:30.487Z–2026-10-16T04:16:01.278Z exit0: feed-fe-web-build-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-build-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:16:08.790Z–2026-10-16T04:16:09.733Z exit0: feed-fe-headed-preflight-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:16:11.364Z–2026-10-16T04:17:53.173Z exit0: feed-fe-headed-e2e-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:20:30.025Z–2026-10-16T04:21:11.461Z exit1: feed-fe-headed-frame-red-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-frame-red-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — viewport source review 2026-10-16T04:23:06.915Z: headed4 functional workflow passed14groups/25captures but visual review did not accept mobile frame. New actual headed frame RED proves footer viewport ratio0 at360px. Prepare exact Feed-only App frame/header proposal; existing Theme/Auth widgets reused in account modal, global providers/other routes preserved. Keep original images, privacy-mask clipping artifacts and RED. Reset actual scroll for next overview frames and require footer fully in viewport. Evidence code/quality/evidence/T38-FEED-FE/viewport-frame-source-review1.json; proposal types/adoption and fresh tests pending.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:23:06.642Z–2026-10-16T04:23:06.938Z exit0: feed-fe-viewport-frame-proposal-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-viewport-frame-proposal-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:23:07.154Z–2026-10-16T04:23:25.907Z exit0: feed-fe-proposal-types-2. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-proposal-types-2.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — exact review 2026-10-16 11:26:37 +07:00: Actual headed frame RED observes bottom navigation viewport ratio0 despite CSS visible. Feed-only fixed-height flex frame removes duplicate global header on Feed routes; reuse existing ThemeSwitcher/HeaderAuthWidget in compact Feed header/account modal, retain room/invite/device/support/account paths and existing auth/admin providers. Other routes unchanged. Exact App-only proposal; source types/functional regression/real frame/visual acceptance pending,92priorPASS unchanged. Evidence code/quality/evidence/T38-FEED-FE/frame-integration1-adoption-review.json; actual task acceptance pending,92priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:23:57.680Z–2026-10-16T04:26:37.638Z exit0: feed-fe-frame-integration-adoption-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-frame-integration-adoption-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:25:10.294Z–2026-10-16T04:25:10.580Z exit0: feed-fe-frame-build-drivers-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-frame-build-drivers-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:26:33.228Z–2026-10-16T04:26:33.703Z exit0: feed-fe-owner-delete-e2e-review-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-owner-delete-e2e-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:26:45.069Z–2026-10-16T04:26:56.501Z exit0: feed-fe-component-green-5. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-5.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:27:04.997Z–2026-10-16T04:29:59.377Z exit0: feed-fe-web-regression-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-regression-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:31:09.238Z–2026-10-16T04:31:26.668Z exit0: feed-fe-web-types-3. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-types-3.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:32:43.125Z–2026-10-16T04:32:48.593Z exit0: feed-fe-source-lint-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-source-lint-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:32:55.320Z–2026-10-16T04:33:23.042Z exit0: feed-fe-web-build-4. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-build-4.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:34:27.424Z–2026-10-16T04:34:28.018Z exit0: feed-fe-headed-preflight-5. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-5.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:34:29.063Z–2026-10-16T04:36:46.009Z exit0: feed-fe-headed-e2e-5. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-5.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — final mobile CSS review 2026-10-16T04:39:45.687Z: headed5 passes2tests/19groups with frame nav fully visible; actual images still show squeezed two-line heading and clipped chip. Scope title flex to first child/theme44px, restore specific12px chips, compact create textarea48px/expand104px on focus without hiding label/controls; edit form/JS/auth unchanged. Add actual heading/chip geometry assertions. Fresh build5/headed6/visual required; previous frames preserved. Evidence code/quality/evidence/T38-FEED-FE/final-mobile-css-review1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:39:45.564Z–2026-10-16T04:39:45.704Z exit0: feed-fe-final-mobile-css-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-final-mobile-css-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:39:45.826Z–2026-10-16T04:40:13.945Z exit0: feed-fe-web-build-5. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-web-build-5.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:40:59.079Z–2026-10-16T04:40:59.746Z exit0: feed-fe-headed-preflight-6. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-preflight-6.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:41:00.827Z–2026-10-16T04:43:00.600Z exit1: feed-fe-headed-e2e-6. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-6.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — native services investigation 2026-10-16T04:44:32.815Z: headed6 has1actual main workflow GREEN/1frame startup failure in ChatService PG connection timeout, no frame captures/assertions. All failed fixture cleanup flags true. Earlier commentary incorrectly inferred frame PASS from runner advancement; promptly corrected, no PASS ledger/acceptance was changed. Read-only three fresh bounded PG pools/Redis ping recorded, no timeout/source/service changes. Evidence code/quality/evidence/T38-FEED-FE/native-services-probe1.json.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:44:31.850Z–2026-10-16T04:44:32.857Z exit0: feed-fe-native-services-probe-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-native-services-probe-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:44:39.681Z–2026-10-16T04:46:29.065Z exit0: feed-fe-headed-e2e-7. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-headed-e2e-7.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — current visual/delivery review 2026-10-16T04:51:00.965Z: actual headed7 passes2tests/19groups/34final captures. Directly inspected all8current required viewport/theme images plus drawer/account; mockup03 hierarchy/tokens/72px rail accepted, real nav/H1/chip bounds pass. All134retained task PNGs match immutable event/hash and actual Telegram sent receipts. Privacy-mask/earlier failure/startup limits explicit; live latest pointer exact reviewed mandated helper output, never frozen evidence rewrite. Evidence code/quality/evidence/T38-FEED-FE/delivery-visual-review1.json; compiled adoption/integrity/closure pending.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:50:58.932Z–2026-10-16T04:51:01.009Z exit0: feed-fe-delivery-visual-review-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-delivery-visual-review-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:51:09.769Z–2026-10-16T04:51:10.849Z exit0: feed-fe-final-docs-proposal-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-final-docs-proposal-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — exact review 2026-10-16 11:54:41 +07:00: Adopt exact source-pinned web build5 after485web/types/lint and2actual headed tests/19groups/current visual and actual Telegram delivery acceptance. Preserve old compiled extras/metadata and append truthful spec13 traceability;92priorPASS/source/evidence/checker/env/lock/baselines unchanged. Final integrity/cleanup/closure remains pending; no main/production activation. Evidence code/quality/evidence/T38-FEED-FE/final-build-docs1-adoption-review.json; actual task acceptance pending,92priorPASS unchanged, IN_PROGRESS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:51:12.201Z–2026-10-16T04:54:41.142Z exit0: feed-fe-final-build-docs-adoption-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-final-build-docs-adoption-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:53:23.879Z–2026-10-16T04:53:24.131Z exit0: feed-fe-owned-runtime-cleanup-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-owned-runtime-cleanup-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:55:38.520Z–2026-10-16T04:55:38.637Z exit0: feed-fe-review-format-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-review-format-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — final integrity 2026-10-16T04:58:13.025Z: 41135 originals/92priorPASS/41historicaltables/checker/env/lock/baselines/exact gate preserved;485serialized web tests,2actual headed tests/19groups/34final captures, all134retained images separately sent; 96source-pinned canonical web files, API frozen and owned cleanup absent. Only mandated live demo pointer changes through exact immutable event/sent receipt proof; no main/production/physical/media claim. Evidence code/quality/evidence/T38-FEED-FE/final-integrity-review1.json; closure pending.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:57:47.349Z–2026-10-16T04:57:47.515Z exit0: feed-fe-github-drivers-prepare-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-github-drivers-prepare-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:55:39.253Z–2026-10-16T04:58:13.165Z exit0: feed-fe-final-integrity-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-final-integrity-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.
+
+- Coding and build 3 — T38-FEED-FE — end/acceptance 2026-10-16T04:58:49.224Z: PASS after direct Codex source/evidence/visual review;485serialized web tests including30Feed cases,2actual headed native tests/19groups/34final captures; all134retained PNGs actually sent,96canonical source-pinned web files;92priorPASS/41historicaltables/checker/env/lock/baselines/gate preserved, owned schemas/Redis/runtime closed. 1250outputs frozen. No backend/crypto/main/production/physical/media claim; T36 untouched. Evidence code/quality/evidence/T38-FEED-FE/closure.json and qa-handoff.md; scoped public backup pending before T39.
+
+- Coding and build 3 — T38-FEED-FE — actual 2026-10-16T04:58:48.411Z–2026-10-16T04:58:53.104Z exit0: feed-fe-reviewed-close-1. Evidence code/quality/evidence/T38-FEED-FE/codex-feed-fe-reviewed-close-1.json (command/log/hash preserved); actual test outcomes reviewed separately, no automatic task PASS.

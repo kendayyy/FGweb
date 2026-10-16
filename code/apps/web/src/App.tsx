@@ -1,3 +1,4 @@
+import {FeedPage} from './features/feed/FeedPage.js';
 import {InitialLoading} from './components/ui/InitialLoading.js';
 import React from 'react';
 import {AdminAccessProvider} from './features/admin/AdminAccess.js';
@@ -26,12 +27,13 @@ export const App: React.FC = () => <ThemeProvider><PwaProvider><CryptoDeviceProv
 const AppContent: React.FC = () => {
   const {user,isLoading,isError}=useAuth();
   const location=useLocation();
+  const feedRoute=location.pathname==='/feed'||location.pathname.startsWith('/feed/posts/');
   const authPage=['/login','/register','/auth/verify','/auth/forgot','/auth/reset','/auth/add-password','/auth/password'].includes(location.pathname);
   if(isLoading&&!user&&!isError)return <InitialLoading pending layout="bootstrap" label="Đang kiểm tra phiên làm việc"/>;
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className={feedRoute?'fg-app-feed-frame':undefined} style={{minHeight:feedRoute?'100dvh':'100vh',height:feedRoute?'100dvh':undefined,display:'flex',flexDirection:'column'}}> 
       {/* Navigation Header */}
-      {authPage?<AuthHeader><ThemeSwitcher/></AuthHeader>:<header
+      {!feedRoute&&(authPage?<AuthHeader><ThemeSwitcher/></AuthHeader>:<header
         className="fg-app-header"
         style={{
           minHeight: '64px',
@@ -77,6 +79,7 @@ const AppContent: React.FC = () => {
             >
               Lobby
             </Link>
+            <Link to="/feed" style={{color:'var(--text-main)',fontSize:14,fontWeight:500,display:'inline-flex',alignItems:'center',minHeight:44}}>Bảng tin</Link>
             <Link
               to="/rooms"
               style={{
@@ -97,12 +100,14 @@ const AppContent: React.FC = () => {
         </div>
 
         <div className="fg-app-header-actions"><ThemeSwitcher/>{user&&<NotificationBell/>}<HeaderAuthWidget /></div>
-      </header>}
+      </header>)}
       <PwaControls/>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, backgroundColor: 'var(--bg-canvas)' }}>
+      <main style={{flex:1,minHeight:feedRoute?0:undefined,backgroundColor:'var(--bg-canvas)'}}> 
         <Routes>
+          <Route path="/feed" element={<FeedPage/>}/>
+          <Route path="/feed/posts/:id" element={<FeedPage/>}/>
           <Route path="/support" element={<SupportPage/>}/>
           <Route path="/support/:requestId" element={<SupportPage/>}/>
           <Route path="/admin" element={<AdminShell/>}>

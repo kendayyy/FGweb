@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-15T22:20:11.013Z",
+  "reviewer": "Codex",
+  "scope": [
+    "apps/web/src/features/feed/**",
+    "apps/web/src/App.tsx",
+    "apps/web/src/features/lobby/LobbyPage.tsx",
+    "apps/web/src/features/moderation/ReportDialog.tsx",
+    "apps/web/src/features/admin/AdminReportsPage.tsx",
+    "apps/web/test/feed.test.tsx",
+    "tests/e2e/feed.spec.ts",
+    "apps/web/dist/**",
+    "quality/spec-coverage.md",
+    "quality/evidence/T38-FEED-FE/**",
+    ".runtime/t38-feed-fe/**",
+    ".cache/t38-feed-fe/**"
+  ],
+  "authorization": "Standing user requests sequential FG completion; approved spec13/design10/mockup03, BE PASS and verified backup; Codex directly implements/reviews/tests without delegation.",
+  "plan": {
+    "path": "quality/evidence/T38-FEED-FE/implementation-plan1.md",
+    "sha256": "9e028c6147afa392b05bf9c05687162edc88c767a6422b2dda699eaecbdf9c79"
+  },
+  "backendHandoff": {
+    "path": "quality/evidence/T38-FEED-BE/frontend-handoff.md",
+    "sha256": "593d62ae2f2ed5283f39d334c5cc42aa270b2bcb56a9a652e43e0350628f2a4c"
+  },
+  "approvedMockup": {
+    "path": "../.doc/mockups/03-community-feed-desktop-mobile.png",
+    "sha256": "f75556f078ec2d52dbec9c617d087fc99d22a497393bcc0930224fb8562fa5ec"
+  },
+  "priorGitSync": {
+    "path": "quality/evidence/T38-FEED-BE/github-final-sync1.json",
+    "sha256": "12b24e7eb764dc12f2a4f5dba4ac192ec6aac930cacc42b5d59d96d6c50d9dcf",
+    "remoteSHA": "0efbf84ad32708a369a8065771a40a11f37f957f"
+  },
+  "technicalRulings": [
+    "Exact App/Lobby navigation and exhaustive ReportDialog/AdminReportsPage target integration; no broad web/src scope.",
+    "Reuse FG tokens/shared AppShell/game logos/modal/API/social/DM infrastructure, no redesign or new sockets.",
+    "DOM tests background; actual UI/E2E headed Chrome with authorized Telegram capture groups and receipts.",
+    "No backend/contract/DB/crypto source changes, main migration or production activation."
+  ],
+  "preserve": 92,
+  "unresolvedSourceFindings": [],
+  "acceptancePending": true
+}

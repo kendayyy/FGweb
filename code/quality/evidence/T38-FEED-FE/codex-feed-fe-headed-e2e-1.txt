@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:21856) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE actual multi-account Feed, image lifecycle, responsive layout and moderation
+  1) tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE actual multi-account Feed, image lifecycle, responsive layout and moderation 
+
+    Error: Owned fixture operation deadline
+
+       at ..\..\quality\evidence\T38-FEED-FE\headed-fixture1.mjs:82
+
+      80 |  const exited=new Promise(resolve=>child.once('exit',code=>{closed=true;for(const row of requests.values()){clearTimeout(row.timer);row.reject(new Error('Owned fixture process ended'));}requests.clear();resolve(code);}));
+      81 |  child.on('message',message=>{const row=requests.get(message.id);if(!row)return;requests.delete(message.id);clearTimeout(row.timer);if(message.ok)row.resolve(message.value);else row.reject(new Error('Owned fixture operation failed'));});
+    > 82 |  const rpc=(kind,body={})=>new Promise((resolve,reject)=>{if(closed){reject(new Error('Owned fixture closed'));return;}const id=randomUUID(),timer=setTimeout(()=>{requests.delete(id);reject(new Error('Owned fixture operation deadline'));},30000);requests.set(id,{resolve,reject,timer});child.send({kind,id,...body},error=>{if(!error)return;clearTimeout(timer);requests.delete(id);reject(new Error('Owned fixture IPC unavailable'));});});
+         |                                                                                                                                                                                               ^
+      83 |  try{const setup=await rpc('start',{runId,evidence});return{...setup,pool:{query:(sql,params)=>rpc('query',{sql,params})},close:async()=>{if(!closed)await rpc('stop');assert.equal(await exited,0,'Owned fixture cleanup process failed');}};}catch(error){if(child.connected)await rpc('stop').catch(()=>{});await exited;throw error;}
+      84 | }
+      85 |
+        at Timeout._onTimeout (E:\FGweb\code\quality\evidence\T38-FEED-FE\headed-fixture1.mjs:82:191)
+
+    Error Context: .runtime\t38-feed-fe\playwright-output\feed-T38-FEED-FE-actual-mu-51fce-nsive-layout-and-moderation\error-context.md
+
+
+  1 failed
+    tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE actual multi-account Feed, image lifecycle, responsive layout and moderation 

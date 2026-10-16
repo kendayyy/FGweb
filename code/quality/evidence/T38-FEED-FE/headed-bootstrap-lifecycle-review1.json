@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-16T04:02:13.515Z",
+  "reviewer": "Codex",
+  "before": {
+    "path": "quality/evidence/T38-FEED-FE/headed-fixture-before-bootstrap-fix1.txt",
+    "sha256": "beb3c36d1333113a2790aa8d31ada2940db8c29ea894532fa1ee3bf65a2a6716"
+  },
+  "after": {
+    "path": "quality/evidence/T38-FEED-FE/headed-fixture1.mjs",
+    "sha256": "909c0ab608d9a0423a276282ee889a01428992ea70d0d599c5c69b8f09be2793"
+  },
+  "observed": {
+    "run": "feed-fe-ui-1df88b7db6ab4345919404b1a312f587",
+    "directoryCreatedAt": "2026-10-16T03:59:07Z",
+    "actualAppListeningAt": "2026-10-16T03:59:57.195Z",
+    "uiAssertions": 0,
+    "captures": 0,
+    "exactOwnedRecovery": "quality/evidence/T38-FEED-FE/feed-fe-ui-1df88b7db6ab4345919404b1a312f587/recovered-cleanup.json"
+  },
+  "cause": "Measured cold native bootstrap approximately50s exceeded original30s start RPC; concurrent stop arrived before fixture assignment, leading to missing child cleanup. Listener absence and exact schema/runtime recovery verified separately.",
+  "fix": "Serialize child start/query/stop/disconnect on one promise queue; safe IPC sends after disconnect; timestamp native bootstrap phases. Start RPC bound90s covers measured cold50s with bounded margin, stop60s for queued cleanup, query remains30s. Suite240s, browser/API/DB/assertions/retries unchanged. No application/build source change or timeout-only workaround.",
+  "assertionsWeakened": false,
+  "freshHeadedRunPending": true
+}

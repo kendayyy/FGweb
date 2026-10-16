@@ -1,0 +1,38 @@
+
+Running 1 test using 1 worker
+
+(node:26476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE viewport frame keeps mobile navigation fully on screen
+  1) tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE viewport frame keeps mobile navigation fully on screen 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  getByRole('navigation', { name: 'Điều hướng điện thoại', exact: true })
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" getByRole('navigation', { name: 'Điều hướng điện thoại', exact: true }) with timeout 5000ms
+      - waiting for getByRole('navigation', { name: 'Điều hướng điện thoại', exact: true })
+        13 × locator resolved to <nav aria-label="Điều hướng điện thoại" class="fg-lobby-bottom fg-feed-bottom">…</nav>
+           - unexpected value "viewport ratio 0"
+
+
+      3 |  const runId='feed-fe-frame-'+randomUUID().replaceAll('-',''),dir='quality/evidence/T38-FEED-FE/'+runId,startedAt=new Date().toISOString();fs.mkdirSync(dir,{recursive:true});let fixture:Awaited<ReturnType<typeof startFixture>>|undefined,context:BrowserContext|undefined,page:Page|undefined,step=0;const checks:string[]=[],captures:string[]=[];
+      4 |  async function capture(title:string,status='RUNNING'){if(!page)return;await page.bringToFront();await page.evaluate(()=>document.fonts.ready);const result=await captureUiStep(page,{task:'T38-FEED-FE',runId,step:++step,title,action:title,result:'Quan sát viewport và bounding box thật; không suy diễn từ display/visibility.',startedAt,headed:true,privacySafe:true,status,maskSelectors:['[data-sensitive]','.fg-crypto-recovery-code']});captures.push(result.id);}
+    > 5 |  try{fixture=await startFixture(runId,dir);context=await browser.newContext({viewport:{width:360,height:800},reducedMotion:'reduce'});await context.addCookies([{name:'better-auth.session_token',value:fixture.actors.owner.cookie,url:fixture.origin,httpOnly:true,sameSite:'Lax'}]);page=await context.newPage();await page.goto(fixture.origin+'/feed');await expect(page.getByRole('heading',{name:'Bảng tin',exact:true})).toBeVisible();await capture('Khung viewport mobile ban đầu');for(const viewport of [{width:360,height:800},{width:390,height:844},{width:1280,height:800},{width:1440,height:900}]){await page.setViewportSize(viewport);await page.evaluate(()=>{window.scrollTo(0,0);const pane=document.querySelector('.fg-lobby-columns');if(pane)pane.scrollTop=0;});if(viewport.width<1024){const nav=page.getByRole('navigation',{name:'Điều hướng điện thoại',exact:true});await expect(nav).toBeInViewport({ratio:1});const box=await nav.boundingBox();expect(box).not.toBeNull();expect(box!.y).toBeGreaterThanOrEqual(0);expect(box!.y+box!.height).toBeLessThanOrEqual(viewport.height+1);}expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);checks.push('actual bounded frame '+viewport.width+'x'+viewport.height);await capture('Khung đầy đủ '+viewport.width+'×'+viewport.height);}await capture('Kết thúc kiểm tra viewport','SUCCEEDED');fs.writeFileSync(dir+'/result.json',JSON.stringify({runId,startedAt,completedAt:new Date().toISOString(),checks,captureIds:captures,actualHeadedChrome:true,chromeVersion:browser.version(),actualPostgresRedisFiles:true,syntheticFixturesOnly:true,taskAcceptancePending:true},null,2)+'\n',{flag:'wx'});}catch(error){await capture('Khung viewport chưa đạt','FAILED').catch(()=>{});fs.writeFileSync(dir+'/failure.json',JSON.stringify({at:new Date().toISOString(),checks,captureIds:captures,taskAcceptancePending:true},null,2)+'\n',{flag:'wx'});throw error;}finally{await context?.close();await fixture?.close();fs.writeFileSync(dir+'/browser-cleanup.json',JSON.stringify({at:new Date().toISOString(),ownedContextsClosed:true,captureIds:captures})+'\n',{flag:'wx'});}
+        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^
+      6 | });
+      7 | test('T38-FEED-FE actual multi-account Feed, image lifecycle, responsive layout and moderation',async({browser})=>{
+      8 |  const runId='feed-fe-ui-'+randomUUID().replaceAll('-',''),dir='quality/evidence/T38-FEED-FE/'+runId,startedAt=new Date().toISOString(),checks:string[]=[],captures:string[]=[],contexts:BrowserContext[]=[];fs.mkdirSync(dir,{recursive:true});let fixture:Awaited<ReturnType<typeof startFixture>>|undefined,current:Page|undefined,step=0,phase='startup';
+        at E:\FGweb\code\tests\e2e\feed.spec.ts:5:887
+
+    Error Context: .runtime\t38-feed-fe\playwright-output\feed-T38-FEED-FE-viewport--f446a--navigation-fully-on-screen\error-context.md
+
+
+  1 failed
+    tests\e2e\feed.spec.ts:2:1 › T38-FEED-FE viewport frame keeps mobile navigation fully on screen 

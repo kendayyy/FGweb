@@ -297,3 +297,16 @@ Evidence: codex-feed-be-native-green-3.json (40/40native cases), codex-feed-be-n
 The added old upload case is explicitly isolated unmigrated public Lobby compatibility data, without private plaintext sends, crypto-state downgrade or E2EE claim. Private native crypto/WASM regression evidence remains separate. API literal-text/JSON checks do not replace actual frontend XSS/rendering proof. No new headed UI run belongs to this backend-only task.
 
 Source types/lint, source-pinned canonical build, compiled runtime HTTP/PG/Redis/file smoke and final integrity/cleanup are recorded under quality/evidence/T38-FEED-BE/. T38-FEED-FE still owns mockup03 interface, report target labels/actions, actual loading/draft/guest/rendering and headed screenshots. Main migrations/production/release/media capacity are not activated or claimed here;1000concurrent media target remains unchanged.
+
+
+## T38-FEED-FE — spec13 actual frontend checkpoint
+
+Feed list/detail, server filters/cursors, actor-owned drafts/processed image publishing, authoritative likes/counts, chronological root replies/tombstones, author edit/delete/cancel and exact profile/DM/report destinations now use the frozen real backend. Public user content is React text. Obsolete query/identity responses are aborted/ignored; denied/deleted state clears. A reproduced delayed-like overwrite now merges only actual like fields into the current keyed row, preserving newer comment counts.
+
+The approved FG layout uses canonical game logos,72px desktop rail and280px filter panel; mobile filters, drawer and four-item bottom navigation remain within the actual viewport. The Feed-only100dvh frame accounts for the PWA bar, reuses ThemeSwitcher/HeaderAuthWidget and retains game/room/friend/notification/invitation/crypto/support/account access. Other routes/providers/auth implementation remain unchanged. Four viewports and both themes are directly inspected; privacy masks remain active and synthetic fixtures are not production content.
+
+Evidence:485/485serialized web tests, including30Feed cases, source types/lint and source-pinned build5;2actual headed Chrome tests with19behavior groups and34final-run viewport captures. Native API/PostgreSQL/Redis/files verify actual upload/post/filter/like/comment/reply/profile/DM/edit/author-delete/report/admin-source-delete/resolve/refresh/logout. A dedicated actual frame RED proved nav ratio0 before the Feed-only frame correction; final geometry requires full nav viewport/bounds, single-line mobile heading and all type chips fitting. All134retained task images have separate actual Telegram sent receipts.
+
+Frozen legacy call/room harnesses run through byte-identical previously accepted T38 compatibility copies; every other original web test remains included. Original failures and workspace-cwd theme ENOENT, all focused/failed/native runs and cleanup receipts are retained, without weakened assertions. Actual canonical compiled web adoption and final integrity are closure gates under quality/evidence/T38-FEED-FE/.
+
+No main migration, production/tunnel activation, physical PWA/E2EE or1,000media-capacity acceptance is claimed by these frontend tests. Existing T36 runtime/evidence and real voice/live/PWA/email requirements remain unchanged. See qa-handoff.md for T39 entry and actual command/config ownership.

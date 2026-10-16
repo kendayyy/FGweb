@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-16T03:48:09.915Z",
+  "reviewer": "Codex",
+  "before": {
+    "path": "quality/evidence/T38-FEED-FE/fixture-before-focus-sequence1.txt",
+    "sha256": "0150906c09f15c2ad5ab1f4a351f73fa9f620fd9bb88f09fcb9864c5a6fdfbf1"
+  },
+  "after": {
+    "path": "apps/web/test/feed.test.tsx",
+    "sha256": "cc06cca0c31aede7cf425a006fdc698cceb51e7724156153ee49603551769f59"
+  },
+  "actualFailedRun": {
+    "path": "quality/evidence/T38-FEED-FE/codex-feed-fe-component-green-2.json",
+    "sha256": "b259f0f2fae8201de004d7a627fcb413803b6536e375f30c52300a89d1d9647e",
+    "passed": 28,
+    "failed": 1,
+    "total": 29
+  },
+  "cause": "Shared frozen useDialogFocusTrap intentionally focuses after16ms; fixture asserted synchronously after dialog mount and fireEvent.click did not establish browser-equivalent trigger focus.",
+  "change": "Focus actual trigger before click, await the identical focus-in-dialog predicate with default waitFor; preserve exact Escape/dialog removal/focus-return assertions. No timeout increases, skipped assertions or application/shared-hook edits.",
+  "acceptancePending": true
+}
